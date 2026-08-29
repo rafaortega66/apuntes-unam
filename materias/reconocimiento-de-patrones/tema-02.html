@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tema 2 — Extracción de características</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<button class="viewswitch" role="switch" aria-label="Cambiar vista: por tema o por clase">
+<span class="vs-label vs-tema">Por tema</span>
+<span class="vs-track"><span class="vs-knob"></span></span>
+<span class="vs-label vs-clase">Por clase</span>
+</button>
+<div class="wrap">
+<a class="back" href="index.html">← Reconocimiento de Patrones</a>
+<div class="detail-head" style="border-color:#45B8A8">
+  <h2>Tema 2 — Extracción de características</h2>
+  <div class="files">
+    <a class="btn" href="files/Clase-02-Extraccion-de-caracteristicas-I.pdf" target="_blank">📄 Clase 2 — Extracción I (prof.)</a>
+    <a class="btn" href="files/Clase-03-Extraccion-de-caracteristicas-II.pdf" target="_blank">📄 Clase 3 — Extracción II (prof.)</a>
+  </div>
+  <p class="prof">Cubre las clases 2, 3 y 4. Slides del profesor + apuntes de clase.</p>
+</div>
+
+<div class="section-block"><h4>¿Qué es la extracción de características?</h4><p>Es el proceso que transforma un conjunto de <strong>datos crudos</strong> (imágenes, audio, series de tiempo…) en un <strong>vector de valores numéricos</strong> que describe de forma compacta la información relevante del patrón.</p>
+<pre><code>y ∈ ℝᴺ  →  x ∈ ℝᵈ ,   d ≪ N</code></pre>
+<p>En lugar de trabajar con los datos originales (alta dimensionalidad, ruidosos, redundantes), se representa cada muestra con un conjunto reducido de atributos que conserven la <strong>información discriminante</strong> necesaria para separar clases.</p></div>
+
+<div class="section-block"><h4>¿Por qué tener menos características?</h4><ul>
+<li>Un número finito <em>N</em> de muestras limita la dimensionalidad <em>n</em> para la que las estimaciones estadísticas son confiables.</li>
+<li>Características correlacionadas entre sí pueden degradar el desempeño.</li>
+<li>La complejidad del clasificador aumenta con el número <em>n</em> de características.</li>
+</ul>
+<p><strong>En qué consiste:</strong> analizar la naturaleza del dato → identificar propiedades relevantes del patrón → calcular medidas cuantitativas que las describan → construir un vector de características comparable entre muestras.</p>
+<p><strong>Se busca:</strong> discriminabilidad (separar clases), compacidad (reducir dimensión), robustez (ruido, variación intra-clase) y bajo costo computacional.</p></div>
+
+<div class="section-block"><h4>Características estadísticas</h4><p>Describen la distribución de los datos sin considerar explícitamente su estructura espacial o temporal.</p>
+<p><strong>Primer y segundo orden:</strong></p>
+<pre><code>μ  = (1/N) Σ xᵢ                    (media)
+σ² = (1/N) Σ (xᵢ − μ)²             (varianza)</code></pre>
+<p><strong>Orden superior:</strong></p>
+<pre><code>skewness       = (1/(N·σ³)) Σ (xᵢ − μ)³
+excess kurtosis = (1/(N·σ⁴)) Σ (xᵢ − μ)⁴ − 3</code></pre>
+<table><thead><tr><th></th><th>Skewness (asimetría)</th><th>Curtosis (exceso)</th></tr></thead><tbody>
+<tr><td>&gt; 0</td><td>cola alargada a la derecha</td><td>datos concentrados en la media, colas pesadas</td></tr>
+<tr><td>= 0</td><td>simétrica</td><td>como la normal</td></tr>
+<tr><td>&lt; 0</td><td>cola alargada a la izquierda</td><td>datos más dispersos, colas más ligeras</td></tr>
+</tbody></table>
+<p>Dos señales con la <strong>misma media</strong> pueden tener varianzas muy distintas; dos señales con <strong>misma media y varianza</strong> pueden separarse por skewness / curtosis.</p></div>
+
+<div class="section-block"><h4>Características locales: ventanas</h4><p>Lo anterior se aplica de forma <strong>global</strong> (tendencia general), pero también <strong>local</strong> (estructura espacial o temporal): la señal de tamaño <em>N</em> se divide en <em>L</em> ventanas.</p>
+<ul>
+<li><strong>Sin traslape</strong> — ej. tamaño de ventana L = 4, traslape 0 %.</li>
+<li><strong>Con traslape</strong> — ej. L = 4, traslape 50 %, paso = 2.</li>
+</ul>
+<p><strong>¿Qué hacer con todas las ventanas?</strong></p>
+<ol>
+<li><strong>Concatenación directa:</strong> <code>f = [f₁, f₂, f₃, …]</code>. Conserva la información local; desventaja: la dimensión crece rápido.</li>
+<li><strong>Estadísticas sobre estadísticas:</strong> para cada característica a lo largo de las ventanas se calcula <code>μ_μ, σ²_μ, μ_σ², σ²_σ², …</code></li>
+<li><strong>Pooling:</strong> ej. <code>maxₖ σ²ₖ</code>.</li>
+</ol>
+<table><thead><tr><th>Enfoque</th><th>Captura</th></tr></thead><tbody>
+<tr><td>Global</td><td>Tendencia general</td></tr>
+<tr><td>Local</td><td>Cambios y estructura</td></tr>
+<tr><td>Local + pooling</td><td>Estructura y robustez</td></tr>
+</tbody></table>
+<p><strong>Cuándo NO vale la pena usar ventanas locales:</strong> señales estacionarias, datos muy ruidosos, ventanas demasiado pequeñas, problemas donde la estructura local no es relevante.</p></div>
+
+<div class="section-block"><h4>Histograma</h4><p>Describe cómo se distribuyen los valores de una señal o dato, <strong>sin importar su posición exacta</strong>. No se usa como gráfica sino <strong>como vector de características</strong>. Aplica a imágenes, audio y otras señales.</p>
+<pre><code>h = [146, 870, 1159, 1394, 1348, 1334, 1289, …]</code></pre>
+<table><thead><tr><th>Ventajas</th><th>Desventajas</th></tr></thead><tbody>
+<tr><td>Simple; robusto al ruido</td><td>Pierde información espacial/temporal</td></tr>
+<tr><td>Invariante a permutaciones / traslaciones</td><td>Sensible al número de bins</td></tr>
+<tr><td>Dimensión controlable; funciona con pocos datos</td><td>No captura relaciones entre valores vecinos</td></tr>
+</tbody></table></div>
+
+<div class="section-block"><h4>Momentos geométricos (formas)</h4><p>Las medidas geométricas simples son insuficientes para formas complejas o para garantizar invariancia a traslación, escala o rotación. Los <strong>momentos geométricos</strong> describen cómo se distribuyen espacialmente los píxeles de un objeto.</p>
+<p><strong>Momentos espaciales</strong> — para una imagen <code>f(x,y)</code> (binaria o en escala de grises):</p>
+<pre><code>M(p,q) = Σx Σy  x^p · y^q · f(x, y)        con p, q ≥ 0
+
+Área (imagen binaria) = M(0,0)
+Centroide (x̄, ȳ) = ( M(1,0)/M(0,0) ,  M(0,1)/M(0,0) )</code></pre>
+<p>Dependen de la posición del objeto.</p>
+<p><strong>Momentos centrales</strong> — para eliminar la traslación:</p>
+<pre><code>μ(p,q) = Σx Σy  (x − x_c)^p · (y − y_c)^q · f(x, y)</code></pre>
+<p>Invariantes a <strong>traslación</strong>; describen la forma alrededor de su centro; aún dependen de la escala.</p>
+<p><strong>Momentos normalizados</strong> — a partir de los centrales, dividiendo por una potencia del momento de orden cero:</p>
+<pre><code>η_ij = μ_ij / μ₀₀^((i+j)/2 + 1)        con i + j ≥ 2</code></pre>
+<p>Invariantes a <strong>traslación y escala</strong>; aún variantes a rotación.</p>
+<p><strong>Momentos de Hu</strong> — 7 momentos invariantes a <strong>rotación, escala y traslación</strong>, calculados a partir de los normalizados. Es común aplicarles una escala logarítmica (los valores crudos son minúsculos, del orden de 1e-3 a 1e-15).</p></div>
+
+<div class="section-block"><h4>Textura: GLCM (Gray Level Co-occurrence Matrix)</h4><p>Si la forma describe la <em>silueta</em> del objeto, la <strong>textura</strong> describe la <em>organización interna</em> de los niveles de gris. La GLCM modela qué tan frecuentemente ciertos niveles de gris aparecen juntos.</p>
+<p>Para una imagen cuantizada con <em>N</em> niveles de gris, la GLCM es una matriz <em>N×N</em> donde cada elemento</p>
+<pre><code>P(i, j | d, θ)</code></pre>
+<p>indica cuántas veces un píxel de valor <em>i</em> aparece junto a un píxel de valor <em>j</em>, separados por una distancia <em>d</em> en una dirección <em>θ</em>. <strong>Parámetros:</strong> niveles de gris <em>N</em>, distancia <em>d</em>, dirección <em>θ</em>.</p>
+<p><strong>Cómo se calcula:</strong></p>
+<ol>
+<li>Definir distancia <em>d</em> y dirección <em>θ</em> (ej. d = 1, θ = 0° → de izquierda a derecha).</li>
+<li>Crear un arreglo <em>N×N</em> para la GLCM.</li>
+<li>Contar cuántas transiciones hay de un valor de intensidad a otro según <em>d</em> y <em>θ</em>.</li>
+<li>Hacerla <strong>simétrica</strong> respecto a la diagonal principal: sumar la matriz "oeste→este" con la "este→oeste".</li>
+<li><strong>Normalizar</strong>: dividir cada celda entre el total de conteos.</li>
+</ol>
+<p>A partir de la matriz normalizada se calculan estadísticos que forman el vector de características:</p>
+<ul>
+<li><strong>Grupo de contraste:</strong> Contraste, Dissimilarity, Homogeneity.</li>
+<li><strong>Relacionados al orden:</strong> Angular Second Moment (ASM) / Energía, Entropía.</li>
+<li><strong>Estadística descriptiva:</strong> Media, Varianza, Correlación.</li>
+</ul></div>
+
+<div class="section-block"><h4>HOG — Histogram of Oriented Gradients</h4><p>Descriptor que representa la <strong>forma</strong> de un objeto a partir de sus gradientes. Pasos:</p>
+<ol>
+<li><strong>Preprocesamiento:</strong> llevar la imagen a un tamaño estándar. Ejemplo bidimensional: <strong>64 × 128</strong>.</li>
+<li><strong>Cálculo de gradientes:</strong>
+<pre><code>Gx = I * [-1, 0, 1]        (derivada horizontal)
+Gy = I * [-1, 0, 1]ᵀ       (derivada vertical)
+
+Magnitud:    M = √(Gx² + Gy²)
+Orientación: θ = tan⁻¹(Gy / Gx)</code></pre></li>
+<li><strong>Histograma por celda:</strong> se acumula la <strong>magnitud</strong> (valor) en el bin de la <strong>orientación</strong> (posición). Bins cada 20°: <code>0, 20, 40, 60, 80, 100, 120, 140, 160</code>. Si la orientación &gt; 160 → orientación − 180 (histograma sin signo, 0–180°).</li>
+<li><strong>Normalización entre bloques:</strong> se agrupan celdas en bloques y se normaliza cada bloque (robustez ante iluminación y contraste).</li>
+<li><strong>Concatenación:</strong> se unen todos los histogramas normalizados → vector de características final.</li>
+</ol></div>
+
+<div class="section-block"><h4>Puntos clave: SIFT y SURF</h4><ul>
+<li><strong>SIFT</strong> (<em>Scale-Invariant Feature Transform</em>) — detecta un conjunto de puntos clave invariantes a la escala.</li>
+<li><strong>SURF</strong> (<em>Speeded-Up Robust Features</em>) — similar a SIFT pero más rápido.</li>
+</ul></div>
+
+<div class="section-block"><h4>Descriptores de audio</h4>
+<p><strong>Características temporales</strong> — se calculan sobre la señal en el tiempo.</p>
+<p><strong>Características espectrales</strong> — descomposición en frecuencias con la DFT:</p>
+<pre><code>X[k] = Σ (n = 0 … N-1)  x[n] · e^(-j·2πkn/N)</code></pre>
+<p>Métricas: <em>Spectral Bandwidth</em>, <em>Spectral Roll-off</em>, <em>Spectral Flux</em>, <em>Spectral Flatness</em>.</p>
+<p><strong>Características tiempo–frecuencia</strong> — escala <strong>Mel</strong>. Pipeline tipo <strong>MFCC</strong>:</p>
+<pre><code>Pre-énfasis → Framing (tramas) → Ventana → Transformada de Fourier
+→ Banco de filtros Mel → Logaritmo → Transformada Coseno Discreta (DCT)</code></pre>
+<p><strong>Delta</strong> y <strong>Delta-Delta</strong>: derivadas de 1.er y 2.º orden de los coeficientes; capturan la dinámica temporal.</p></div>
+
+<div class="section-block"><h4>Pendiente / siguiente</h4><ul>
+<li>Pregunta de clase: <em>¿cómo obtener un vector de características?</em> → siguiente tema del profesor: <strong>Tema 3 — Selección y reducción de dimensionalidad</strong>.</li>
+</ul></div>
+
+</div>
+</body>
+</html>
