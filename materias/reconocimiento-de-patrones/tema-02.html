@@ -151,6 +151,21 @@ Orientación: θ = arctan(Gy / Gx)     (dirección del borde en cada píxel)</co
 <p><strong>SIFT</strong> (<em>Scale-Invariant Feature Transform</em>) — describe características locales invariantes a escala, rotación, luminosidad y cambios moderados de perspectiva. Flujo: aplicar filtros <strong>gaussianos</strong> sucesivos (suavizar / emborronar) → <strong>Diferencia de Gaussianas (DoG)</strong> = restar imágenes suavizadas consecutivas para localizar <strong>puntos clave</strong> robustos → por cada punto clave, histograma de gradientes local → <strong>vector descriptor de 128 características</strong> por punto.</p>
 <p><strong>SURF</strong> (<em>Speeded-Up Robust Features</em>, ~2004) — evolución rápida de SIFT: robustez similar con mucho menos cómputo. Además del punto característico, identifica un <strong>radio / rango</strong> sobre el que ese punto aporta información. Usos de ambos: reconocimiento de objetos, seguimiento en video, reconocimiento facial, realidad aumentada.</p></div>
 
+<div class="section-block"><h4>Audio — en corto (sin fórmulas)</h4>
+<p>Un audio es un solo número (la amplitud) que cambia con el tiempo. Para clasificarlo no le pasamos la onda cruda al modelo, sino <strong>medidas que la resumen</strong>. Hay tres familias:</p>
+<ul>
+<li><strong>Temporales</strong> — se miden sobre la onda tal cual. Responden a "¿qué tan fuerte suena?" (<strong>Energía / RMS</strong>) y "¿qué tan 'áspero' o ruidoso es?" (<strong>ZCR</strong>: si la onda cruza el cero muchas veces → ruido; pocas → tono limpio).</li>
+<li><strong>Espectrales</strong> — primero se pasa la ventana a frecuencias (FFT) y ahí se mide: dónde está el "peso" del sonido (<strong>centroide</strong> = grave o agudo), qué tan repartidas están las frecuencias (<strong>ancho de banda</strong>), hasta qué frecuencia se junta casi toda la energía (<strong>roll-off</strong>), cuánto cambia el sonido de una ventana a la siguiente (<strong>flux</strong>) y si se parece más a un tono o a ruido plano (<strong>flatness</strong>).</li>
+<li><strong>Tiempo–frecuencia (MFCC)</strong> — el "retrato" más usado: describe el <strong>timbre</strong> (la forma del sonido) imitando cómo oye el oído humano. Son 12–13 números por ventana.</li>
+</ul>
+<p><strong>Delta (Δ) y Delta-Delta (ΔΔ) — la analogía del coche:</strong></p>
+<ul>
+<li>Los <strong>MFCC</strong> son como la <strong>posición</strong> del coche: dónde está el timbre en este instante.</li>
+<li>El <strong>Δ</strong> es la <strong>velocidad</strong>: qué tan rápido está cambiando ese timbre de una ventana a la siguiente (simplemente la resta ventana actual − ventana anterior).</li>
+<li>El <strong>ΔΔ</strong> es la <strong>aceleración</strong>: si ese cambio se está acelerando o frenando (la resta de los Δ consecutivos).</li>
+</ul>
+<p>¿Para qué? El timbre por sí solo no distingue bien dos sonidos parecidos; <em>cómo evoluciona</em> en el tiempo sí. Por eso al vector se le añaden Δ y ΔΔ.</p></div>
+
 <div class="section-block"><h4>Descriptores de audio — categorías</h4><p>En audio se analizan datos en <strong>una dimensión</strong>: amplitud vs. tiempo. Tres categorías: <strong>temporales</strong>, <strong>espectrales</strong> (frecuencia) y <strong>tiempo–frecuencia</strong>.</p></div>
 
 <div class="section-block"><h4>Audio · descriptores temporales</h4>
