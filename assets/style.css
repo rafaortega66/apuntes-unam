@@ -177,3 +177,18 @@ a.back {
   a.back { padding: 10px 0 8px; font-size: 13px; }
   .detail-head { top: 34px; }
 }
+
+/* ---- secciones plegables (details/summary) ---- */
+details.collapsible > summary {
+  cursor: pointer; list-style: none;
+  font-family: 'Fraunces', serif; font-size: 16px; font-weight: 600;
+  color: var(--ink); margin-bottom: 8px;
+  display: flex; align-items: center; gap: 8px;
+}
+details.collapsible > summary::-webkit-details-marker { display: none; }
+details.collapsible > summary::before {
+  content: '▸'; color: var(--ink-soft); font-size: 12px;
+  transition: transform .15s ease; flex: none;
+}
+details.collapsible[open] > summary::before { transform: rotate(90deg); }
+details.collapsible[open] > summary { margin-bottom: 12px; }
