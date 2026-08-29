@@ -9,7 +9,8 @@
       "Bash(gh repo *)",
       "Bash(git remote *)",
       "Bash(git push *)",
-      "Bash(gh api *)"
+      "Bash(gh api *)",
+      "WebFetch(domain:www.thegeekstuff.com)"
     ]
   }
 }

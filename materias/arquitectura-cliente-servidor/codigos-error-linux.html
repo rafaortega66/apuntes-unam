@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Los 131 códigos de error de Linux</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Arquitectura Cliente-Servidor</a>
+<div class="detail-head" style="border-color:#E8735C">
+  <h2>Los 131 códigos de error de Linux</h2>
+  <div class="links"><div class="link-item"><span class="label">Enlace</span><a href="https://www.thegeekstuff.com/2010/10/linux-error-codes/" target="_blank" rel="noopener">https://www.thegeekstuff.com/2010/10/linux-error-codes/</a></div></div>
+</div>
+
+<div class="section-block"><h4>Qué es</h4><p>En C, cuando una llamada al sistema falla, el sistema guarda un número de error en la variable global errno (declarada en errno.h). El artículo lista los 131 códigos de Linux, numerados del 1 al 131, con su nombre simbólico y su significado.</p></div>
+
+<div class="section-block"><h4>Cómo interpretarlos</h4><ul><li><strong>perror(msg)</strong>: imprime en la salida de error el mensaje que le pasas seguido de la descripción del errno actual.</li><li><strong>strerror(errno)</strong>: devuelve como cadena la descripción de ese código de error.</li></ul></div>
+
+<div class="section-block"><h4>Ejemplos de la tabla</h4><table><thead><tr><th>Nº</th><th>Nombre</th><th>Significado</th></tr></thead><tbody>
+<tr><td>2</td><td>ENOENT</td><td>No such file or directory</td></tr>
+<tr><td>12</td><td>ENOMEM</td><td>Out of memory</td></tr>
+<tr><td>13</td><td>EACCES</td><td>Permission denied</td></tr>
+<tr><td>17</td><td>EEXIST</td><td>File already exists</td></tr>
+</tbody></table><p>El artículo cierra con un ejemplo en C que abre un archivo inexistente y usa perror() / strerror() para mostrar el error.</p></div>
+
+</div>
+</body>
+</html>
