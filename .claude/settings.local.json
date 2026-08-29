@@ -10,7 +10,8 @@
       "Bash(git remote *)",
       "Bash(git push *)",
       "Bash(gh api *)",
-      "WebFetch(domain:www.thegeekstuff.com)"
+      "WebFetch(domain:www.thegeekstuff.com)",
+      "Bash(git rm *)"
     ]
   }
 }
