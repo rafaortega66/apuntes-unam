@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 01 — Introducción: Linux para administración</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<button class="viewswitch" role="switch" aria-label="Cambiar vista: por tema o por clase">
+<span class="vs-label vs-tema">Por tema</span>
+<span class="vs-track"><span class="vs-knob"></span></span>
+<span class="vs-label vs-clase">Por clase</span>
+</button>
+<div class="wrap">
+<a class="back" href="index.html">← Administración de Servicios de Internet</a>
+<div class="detail-head" style="border-color:#7C9CD6">
+  <h2>Clase 01 — Introducción: Linux para administración</h2>
+  <p class="prof">Apuntes de clase · 26-ago-2026 · corresponde al Tema 1 (Introducción)</p>
+</div>
+
+<div class="section-block"><h4>Jerarquía de directorios de Linux (FHS)</h4><table><thead><tr><th>Directorio</th><th>Para qué sirve</th></tr></thead><tbody>
+<tr><td><code>/root</code></td><td>Directorio personal del administrador (usuario <code>root</code>)</td></tr>
+<tr><td><code>/boot</code></td><td>Archivos de arranque del sistema</td></tr>
+<tr><td><code>/bin</code></td><td>Ejecutables (binarios esenciales)</td></tr>
+<tr><td><code>/dev</code></td><td>Dispositivos</td></tr>
+<tr><td><code>/etc</code></td><td>Archivos de configuración</td></tr>
+<tr><td><code>/home</code></td><td>Directorios personales de los usuarios</td></tr>
+<tr><td><code>/opt</code></td><td>Software opcional / de terceros</td></tr>
+<tr><td><code>/var</code></td><td>Datos variables (logs, colas, caché)</td></tr>
+</tbody></table><p><em>[?] En los apuntes hay una entrada extra antes de <code>/var</code> que no se lee bien (¿<code>/srv</code>, servicios?).</em></p></div>
+
+<div class="section-block"><h4>Distribuciones de Linux y su público</h4><table><thead><tr><th>Distribución</th><th>Enfocada a</th></tr></thead><tbody>
+<tr><td>Ubuntu</td><td>Principiantes</td></tr>
+<tr><td>Linux Mint</td><td>Principiantes (derivada de Ubuntu)</td></tr>
+<tr><td>Debian</td><td>Usuarios intermedios y servidores</td></tr>
+<tr><td>Fedora</td><td>Desarrolladores y entusiastas de tecnología</td></tr>
+<tr><td>CentOS / AlmaLinux</td><td>Administradores de servidores empresariales</td></tr>
+<tr><td>Red Hat (RHEL)</td><td>Empresarial, con soporte de pago / suscripción</td></tr>
+<tr><td>Arch Linux</td><td>Usuarios avanzados</td></tr>
+<tr><td>Kali Linux</td><td>Pruebas éticas (pentesting) y expertos en seguridad</td></tr>
+</tbody></table></div>
+
+<div class="section-block"><h4>Pendiente para el profesor</h4><ul><li>Preguntar el <strong>formato de las prácticas</strong>.</li></ul></div>
+
+</div>
+</body>
+</html>
