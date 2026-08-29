@@ -118,22 +118,96 @@
 <li>La próxima clase: teoría de <code>fork()</code> en C para crear procesos.</li>
 </ul></div>
 
-<div class="section-block"><h4>Clase 2 — permisos, bit setuid y fork()</h4>
-<p><strong>Permisos en notación octal.</strong> Cada terna <code>rwx</code> se codifica con 4-2-1:</p>
+<div class="section-block"><h4>Clase 2 — permisos, bit setuid, /etc/passwd y fork()</h4>
+<p>Destilado del transcript de la clase (NotebookLM). Sin lo administrativo.</p></div>
+
+<div class="section-block"><h4>Permisos UGO y chmod (notación decimal)</h4>
+<p>Regla mnemotécnica: <strong>"ugo"</strong> (como "Hugo" sin H) → <strong>U</strong>suario (dueño), <strong>G</strong>rupo, <strong>O</strong>tros. <code>chmod</code> = <em>change mode</em>.</p>
 <pre><code>  r  w  x
-  4  2  1        rwx = 4+2+1 = 7      rw- = 6      r-x = 5
-usuario(u) grupo(g) otros(o)   →   ej. -rw-r--r-- = 644</code></pre>
-<p><strong>Bits especiales</strong> (un cuarto dígito al frente en <code>chmod</code>):</p>
-<pre><code>chmod 4 g o   →  4 = setuid    2 = setgid    1 = sticky bit
-ejemplo:  chmod 4711 programa      (activa setuid + rwx u, x g, x o)</code></pre>
-<p><strong>ID real vs. ID efectivo</strong> (repaso; detalle completo más abajo):</p>
+  4  2  1        rwx = 4+2+1 = 7      rw- = 6      r-x = 5</code></pre>
 <ul>
-<li><strong>ID real</strong> → el dueño legítimo del proceso (quien lo lanzó).</li>
-<li><strong>ID efectivo</strong> → con el que el proceso realmente pide acceso: sirve para acceder a archivos de otros usuarios o ejecutar programas <em>setuid</em>. Al ejecutar un binario con bit <em>setuid</em>, el EUID pasa a ser el del <strong>dueño del archivo</strong>.</li>
+<li><code>chmod 777 archivo</code> — todos los permisos para u, g y o.</li>
+<li><code>chmod 644 archivo</code> — archivo editable no ejecutable: dueño <code>rw</code> (6), grupo y otros <code>r</code> (4).</li>
+<li><code>chmod 755 archivo</code> — ejecutable típico: dueño <code>rwx</code> (7), grupo y otros <code>r-x</code> (5).</li>
+</ul></div>
+
+<div class="section-block"><h4>Bit SetUID (chmod con 4 dígitos)</h4>
+<p>Al ejecutar un binario, el proceso normalmente pertenece a quien lo ejecuta. Con el <strong>bit SetUID</strong> activo, quien lo ejecuta <strong>toma temporalmente los privilegios del dueño del archivo</strong> mientras dura la ejecución.</p>
+<p>Se activa con un <strong>cuarto dígito a la izquierda</strong> en <code>chmod</code>, que indica sobre qué bloque:</p>
+<pre><code>4 = SetUID   (bloque de usuario)   ← el más usado
+2 = SetGID   (bloque de grupo)
+1 = sticky   (bloque de otros)
+ej.  chmod 4511 archivo</code></pre>
+<p><strong>⚠️ Riesgo de seguridad:</strong> si <code>root</code> pone SetUID a un ejecutable, cualquier usuario sin privilegios se vuelve <code>root</code> durante esa ejecución. Manejar con extrema precaución.</p></div>
+
+<div class="section-block"><h4>Usuarios en Linux · /etc/passwd · ID real vs. efectivo</h4>
+<ul>
+<li><strong>ID real</strong> → dueño legítimo del proceso / archivo; es el que asigna <code>/etc/passwd</code>. Se obtiene con <code>getuid()</code> (igual que <code>getpid()</code> / <code>getppid()</code>).</li>
+<li><strong>ID efectivo</strong> → el usuario que está corriendo el programa en ese instante. Se obtiene con <code>geteuid()</code> (la "e" = <em>effective</em>).</li>
 </ul>
-<p>El bit setuid es el tema de la <strong>Tarea 2</strong> (ver <a href="evaluacion.html" style="color:var(--indigo)">Evaluación</a>).</p>
-<p><strong>Repaso de <code>fork()</code>:</strong> crea un proceso nuevo, copia exacta del padre salvo el <code>PID</code> y el <code>PPID</code>. Devuelve el <strong>PID del hijo al padre</strong> y <strong>0 al hijo</strong>. Padre e hijo corren en paralelo y de forma asíncrona → si el código del hijo depende del padre (o al revés) hay <strong>condición de carrera</strong> ("deadlock" en los apuntes). <code>pid_t</code> es el tipo de dato del PID. Ejemplo visto en clase: PID de la shell/terminal ≈ 29750 / 28200 <em>(valores de esa corrida)</em>.</p>
-</div>
+<p><code>cat /etc/passwd</code> — campos separados por <code>:</code></p>
+<pre><code>username : x : UID : GID : nombre_real : /home/... : shell
+   |       |    |     |        |            |          |
+ el 1º   contraseña  id    id de     GECOS (si no    dir.   tipo de
+ es root  oculta   usuario  grupo    se puso, =user) home   shell</code></pre>
+<p>Usuarios de sistema con shell <code>nologin</code>: no pueden iniciar sesión interactiva (seguridad). <em>[inaudible: la ruta se oye como "etc/al passworden"]</em></p></div>
+
+<div class="section-block"><h4>Tarea 2 — probar el bit SetUID</h4>
+<p>Metodología: <strong>dos terminales</strong> (una como <code>root</code>, otra como usuario sin privilegios). Las instrucciones de pantalla dividida en Codespaces están en la carpeta del <strong>Tema 3</strong> del repo, aunque se usan desde el Tema 1. <code>whoami</code> muestra el usuario activo.</p>
+<p><code>fdisk</code> = comando solo-<code>root</code> para manipular la tabla de particiones (<code>man fdisk</code>). Sirve cualquier comando que pida privilegios. Pasos:</p>
+<pre><code># 1) como usuario NO root:
+fdisk -l                     # -> "permiso denegado"
+                             #    (en Fedora puede solo regresar el prompt vacío)
+
+# 2) como root, ver permisos actuales:
+ls -l /sbin/fdisk            # -> 755  (rwxr-xr-x)
+
+# 3) como root, activar SetUID:
+chmod 4511 /sbin/fdisk       # -> r-s--x--x  (la 's' en vez de 'x' = SetUID activo;
+                             #    el nombre se ve en rojo si hay color)
+
+# 4) como usuario NO root otra vez:
+fdisk -l                     # -> AHORA SÍ funciona: lista las particiones
+
+# 5) OBLIGATORIO: revertir de inmediato
+chmod 755 /sbin/fdisk        # (o los permisos que tuviera antes)</code></pre>
+<p><em>[inaudible: la ruta se dicta rápido como "diagonal se bin diagonal fis" → /sbin/fdisk]</em></p>
+<p><strong>Actividad 2:</strong> programa en C (<a href="files/prof-tema1/programa02_ids.c" download style="color:var(--indigo)">programa02_ids.c</a> en el repo) que imprime <code>getuid()</code> y <code>geteuid()</code>. Compilar <code>gcc programa02_ids.c -o programa02_ids</code>. Ejecutado normal → ID real == ID efectivo. Aplicando <code>chmod 4511</code> al binario y ejecutándolo con <strong>otro usuario</strong> → salen distintos.</p>
+<p><strong>⚠️ Para sacar 10:</strong> las capturas deben mostrar <strong>ID real ≠ ID efectivo</strong>.</p>
+<p><strong>⚠️ No entregar la Tarea 2 todavía</strong> — el profesor no pudo hacer la demo en el laboratorio; reactivará la fecha de entrega después. (Recomienda clonar el repo localmente con git en vez de usar Codespaces.)</p></div>
+
+<div class="section-block"><h4>fork() — creación de procesos</h4>
+<ul>
+<li>Mecanismo nativo del kernel de Linux para crear procesos.</li>
+<li>Es <strong>costoso</strong>: clona / duplica toda la estructura de memoria del proceso que lo llama.</li>
+<li>El <strong>proceso hijo</strong> es copia idéntica del padre en datos y variables, <strong>salvo su PID y su PPID</strong>.</li>
+<li>Tras <code>fork()</code>, padre e hijo corren <strong>en paralelo y asíncronos</strong> (ráfagas de CPU alternadas).</li>
+</ul>
+<p><strong>Retorno</strong> (tipo <code>pid_t</code>, encapsula un entero; se imprime con <code>%d</code> / <code>%i</code>):</p>
+<pre><code>al PADRE  ->  el PID del hijo   (entero != 0)
+al HIJO   ->  0</code></pre>
+<p>La variable donde guardas el retorno se duplica: en el padre vale el PID del hijo, en el hijo vale 0. Se separa el código con:</p>
+<pre><code>if (id_hijo != 0) {
+    // código exclusivo del padre
+} else {
+    // código exclusivo del hijo
+}</code></pre>
+<p>Sin <code>if</code>, todo lo que va después de <code>fork()</code> se ejecuta en ambos → sale <strong>duplicado</strong>. En <a href="files/prof-tema1/programa05_fork_v1.c" download style="color:var(--indigo)">programa05_fork_v1.c</a>: la línea de antes del <code>fork()</code> se imprime una vez; las dos de después, dos veces cada una.</p>
+<p><em>Nota semántica del profesor: antes del <code>fork()</code> lo llama "proceso main / principal"; "padre" solo cuando ya hay hijo.</em></p></div>
+
+<div class="section-block"><h4>⚠️ Deadlock (candado / abrazo mortal)</h4><p>Si el padre espera a que termine el hijo para continuar y a la vez el hijo espera a que termine el padre → bloqueo indefinido. Única salida: <code>Ctrl + C</code>.</p></div>
+
+<div class="section-block"><h4>Ejemplo de ejecución — programa05_fork_v2.c</h4><p>Valores de esa corrida (<a href="files/prof-tema1/programa05_fork_v2.c" download style="color:var(--indigo)">programa05_fork_v2.c</a>):</p><table><thead><tr><th>Dato</th><th>Valor</th></tr></thead><tbody>
+<tr><td>PID del padre</td><td><code>30405</code></td></tr>
+<tr><td>PID del hijo</td><td><code>30406</code> (el entero inmediato siguiente)</td></tr>
+<tr><td><code>id_hijo</code> en el padre</td><td><code>30406</code></td></tr>
+<tr><td><code>id_hijo</code> en el hijo</td><td><code>0</code></td></tr>
+<tr><td><code>getpid()</code> en el hijo</td><td><code>30406</code></td></tr>
+<tr><td><code>getppid()</code> en el padre</td><td>PID de la shell (<code>bash</code>) que lanzó el programa</td></tr>
+<tr><td><code>getppid()</code> en el hijo</td><td><code>30405</code> (su creador es el padre)</td></tr>
+</tbody></table><p>El <code>if</code> puede ser <code>!= 0</code> (padre primero) o <code>== 0</code> (hijo primero), a gusto del programador.</p></div>
+
+<div class="section-block"><h4>Para repasar (Clase 2)</h4><p>Tarea moral (sin entrega): leer con calma el <strong>PDF 2 del Tema 1</strong> (procesos).</p></div>
 <div class="section-block"><h4>Contexto histórico: origen de los sistemas operativos</h4><p>1944–1952: John Von Neumann propone el diseño de una computadora que almacena un programa y usa un procesador central (arquitectura de programa almacenado), junto con el sistema de numeración binaria. Esto permitió que la computadora se usara más allá de la ciencia: en economía, administración, producción, etc.
 
 1956: se crea el primer Sistema Operativo de la historia, para un IBM 704. Solo encadenaba la ejecución de un programa cuando el anterior terminaba.
