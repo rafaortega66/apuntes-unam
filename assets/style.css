@@ -159,16 +159,21 @@ ol.clases .tags {
 /* ---- cabecera persistente: enlace "atrás" + título quedan fijos arriba al hacer scroll ---- */
 a.back {
   position: sticky; top: 0; z-index: 211;
-  display: block; width: 100%; margin: 0;
+  display: block; width: 100%; margin: 0 0 -1px;
   background: var(--paper);
-  padding: 14px 0 8px;
+  padding: 14px 0 9px;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  /* fondo a sangre completa: tapa cualquier contenido que pase por detrás */
+  box-shadow: 0 0 0 100vw var(--paper);
+  clip-path: inset(0 -100vw);
 }
 .detail-head {
-  top: 39px;               /* justo debajo del enlace "atrás" fijo */
+  top: 38px;               /* justo debajo del enlace "atrás" fijo (se solapan 1px) */
   z-index: 210;
+  box-shadow: 0 0 0 100vw var(--paper);
+  clip-path: inset(0 -100vw 0 -100vw);
 }
 @media (max-width: 640px) {
-  a.back { padding: 10px 0 7px; font-size: 13px; }
+  a.back { padding: 10px 0 8px; font-size: 13px; }
   .detail-head { top: 34px; }
 }
