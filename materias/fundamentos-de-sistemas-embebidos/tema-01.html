@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 01 — ¿Qué es un sistema embebido?</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Fundamentos de Sistemas Embebidos</a>
+<div class="detail-head" style="border-color:#A98BD1">
+  <h2>Clase 01 — ¿Qué es un sistema embebido?</h2>
+  <p class="prof">Apuntes destilados del audio de clase (lo esencial, sin el detalle ejemplo por ejemplo)</p>
+</div>
+
+<div class="section-block"><h4>Idea central</h4><p>Un sistema embebido es un sistema DIGITAL (tiene microcontrolador o procesador) dedicado a UNA tarea específica, a diferencia de una computadora personal, que es de propósito general.
+
+Lo que se resuelve de forma puramente mecánica, analógica o electromecánica NO es un sistema embebido, aunque haga una función "inteligente".</p></div>
+
+<div class="section-block"><h4>El criterio que hay que saber aplicar</h4><p>Ante cualquier dispositivo, preguntarse: ¿de verdad necesita procesamiento digital, o basta con electrónica analógica / mecánica robusta?
+
+El profesor insistió: un ingeniero debe saber CUÁNDO poner un microcontrolador y cuándo no. Llamar "sistema embebido" a algo que es puramente físico es el error de fondo de la clase.</p></div>
+
+<div class="section-block"><h4>Ejemplos por categoría</h4><table><thead><tr><th>Sí es sistema embebido (digital)</th><th>No lo es (mecánico / analógico / electromecánico)</th></tr></thead><tbody>
+<tr><td>Control remoto (µC genera el tren de pulsos IR)</td><td>Semáforo electromecánico (plato giratorio con escobillas)</td></tr>
+<tr><td>Cámara de seguridad, oxímetro, termómetro digital</td><td>Alarma de incendios con transistor 2N2222 + buzzer</td></tr>
+<tr><td>Calculadora, piano digital, Apple Pencil</td><td>Termostato bimetálico (mercurio / nitinol)</td></tr>
+<tr><td>Frenos ABS, puerta automática con sensores</td><td>Microondas de perillas, lavadora de tina manual</td></tr>
+<tr><td>Cerradura electrónica, lector RFID / biométrico</td><td>Medidor electromecánico antiguo de CFE</td></tr>
+<tr><td>Roomba, bocinas inteligentes, audífonos Bluetooth</td><td>Radio analógico, walkie-talkie 80s, tornamesa</td></tr>
+</tbody></table><p>Casos "depende": marcapasos (digital sí / analógico no), multímetro (solo el digital), lector de código de barras (con USB sí; transceptor láser simple no), máquina expendedora (hay modelos solo mecánicos), bomba de insulina (en esencia es un motor de empuje).</p></div>
+
+<div class="section-block"><h4>Lazo de control abierto vs. cerrado (ejemplo: máquina de diálisis)</h4><ul><li><strong>Lazo abierto:</strong> se fija por tiempo (3 horas y se asume que la sangre quedó limpia), sin retroalimentación.</li><li><strong>Lazo cerrado:</strong> sensores miden en tiempo real. Conforme se filtran sales y ácido úrico, la conductividad de la sangre baja; el sistema usa ese dato para decidir cuándo detenerse.</li></ul></div>
+
+<div class="section-block"><h4>Propiedades de los materiales</h4><ul><li><strong>Dureza:</strong> resistencia a rayarse / a la fricción. Suele venir acompañada de fragilidad. Ej.: diamante (raya todo pero se hace añicos de un martillazo); aluminio (duro y quebradizo frente al acero).</li><li><strong>Tenacidad / extensibilidad:</strong> se dobla o deforma sin romperse. Ej.: acero (se raya fácil, pero es flexible → parrillas, estructuras).</li><li><strong>Ductilidad:</strong> se estira mucho sin fracturarse. Ej.: oro (muy dúctil pero blando); níquel y titanio (usados en termostatos bimetálicos).</li></ul></div>
+
+<div class="section-block"><h4>Motor eléctrico de CA (taladro, licuadora)</h4><p>No usa imanes permanentes: bobinas en el estator y en el rotor. Al energizar se forman polos N-S y el rotor empieza a girar.
+
+Escobillas + carbones: invierten la polaridad mecánicamente en cada media vuelta, para que los polos se repelan y el giro no se detenga al alinearse.
+
+El carbón se usa porque conduce bien y además es suave (lubricante sólido); metal rozando cobre se destruiría por fricción. El carbón se desgasta con el uso y se reemplaza barato en una tlapalería en vez de tirar la herramienta.</p></div>
+
+<div class="section-block"><h4>Cierre — definición formal de computadora</h4><p>Máquina que consta de: elementos de entrada, elementos de salida, procesador central y memoria. En esencia, algo que realiza cálculos. Con esto el profesor abrió el tema siguiente: procesadores.</p></div>
+
+<div class="section-block"><h4>⚠️ Énfasis para examen</h4><ul><li>Distinguir solución <strong>mecánica / analógica / electromecánica</strong> vs. <strong>sistema embebido digital</strong>. Es error grave llamar sistema embebido a algo puramente físico.</li><li>Definiciones precisas de <strong>dureza, tenacidad y ductilidad</strong> — no confundirlas.</li><li>Saber cuándo se justifica un microcontrolador y cuándo basta con electrónica analógica robusta.</li></ul></div>
+
+</div>
+</body>
+</html>
