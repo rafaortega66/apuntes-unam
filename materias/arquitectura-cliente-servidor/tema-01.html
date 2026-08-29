@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tema 01 — Procesos</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Arquitectura Cliente-Servidor</a>
+<div class="detail-head" style="border-color:#E8735C">
+  <h2>Tema 01 — Procesos</h2>
+  <div class="files">
+    <a class="btn" href="files/Tema-01-Procesos-diapositivas.pdf" target="_blank">📄 Presentación (diapositivas)</a>
+    <a class="btn" href="files/Tema-01-Procesos-manual.pdf" target="_blank">📄 Manual / guía de práctica</a>
+  </div>
+</div>
+<div class="section-block"><h4>Objetivo</h4><p>Entender los conceptos relacionados con los procesos, además de cómo identificarlos en un entorno Linux y las funciones system(), fork() y exec() para su creación.</p></div>
+<div class="section-block"><h4>Contexto histórico: origen de los sistemas operativos</h4><p>1944–1952: John Von Neumann propone el diseño de una computadora que almacena un programa y usa un procesador central (arquitectura de programa almacenado), junto con el sistema de numeración binaria. Esto permitió que la computadora se usara más allá de la ciencia: en economía, administración, producción, etc.
+
+1956: se crea el primer Sistema Operativo de la historia, para un IBM 704. Solo encadenaba la ejecución de un programa cuando el anterior terminaba.
+
+Década de 1960: revolución en los SO — aparecen los conceptos de sistema multitarea, multiusuario, multiprocesador y en tiempo real. En esta década nace UNIX, base de la mayoría de los SO actuales.</p></div>
+<div class="section-block"><h4>Origen de Unix</h4><p>Unix es un sistema operativo portable, multitarea y multiusuario, desarrollado por empleados de los laboratorios Bell de AT&amp;T (Ken Thompson, Dennis Ritchie y Douglas McIlroy).
+
+A finales de los 60, el MIT, los laboratorios Bell y General Electric trabajaban en un SO experimental llamado Multics, pensado para mejorar la seguridad e interactividad. AT&amp;T se desvinculó del proyecto, pero Ken Thompson siguió usando la máquina GE-645 para un juego llamado &quot;Space Travel&quot;; al resultar lento y caro, lo reescribió en ensamblador para un DEC PDP-7 junto con Dennis Ritchie.
+
+Esa experiencia, sumada a lo aprendido en Multics, llevó a Thompson y Ritchie (con Rudd Canaday y otros) a crear un nuevo SO con sistema de archivos y multitarea propios: UNICS (Uniplexed Information and Computing System), renombrado después a Unix.
+
+Hoy existen varias versiones desarrolladas por distintas compañías: SunOS, Ultrix, HP-UX, entre otras.</p></div>
+<div class="section-block"><h4>Cuatro filosofías de trabajo de Unix</h4><ul><li>Fue desarrollado por programadores, para programadores</li><li>Asume que el usuario sabe lo que hace</li><li>Todo lo ve y lo maneja como archivo</li><li>Si un comando no manda mensaje de error, se ejecutó satisfactoriamente</li></ul></div>
+<div class="section-block"><h4>¿Qué es Linux?</h4><p>Linux es un sistema operativo open source, diseñado y creado en 1991 por Linus Torvalds mientras estaba en la universidad, como una alternativa gratuita y libre a MINIX (que a su vez se basaba en los principios de Unix).
+
+Se lanzó bajo la Licencia Pública General (GPL) de GNU: cualquiera puede ejecutarlo, estudiarlo, compartirlo y modificarlo; el código modificado también puede redistribuirse (incluso venderse), siempre bajo la misma licencia. Esto lo distingue de sistemas propietarios como Unix o Windows, que están bloqueados y no se pueden modificar.
+
+&quot;Linux&quot; suele referirse al kernel de Linux junto con las herramientas, aplicaciones y servicios que lo acompañan (parte de ellos del proyecto GNU) — por eso la Free Software Foundation prefiere el nombre &quot;GNU/Linux&quot;.</p></div>
+<div class="section-block"><h4>¿Qué es un proceso?</h4><p>Un proceso es una instancia de un programa en ejecución. Mientras el ejecutable no se ejecute, es solamente un archivo ocupando espacio en disco.
+
+Un mismo archivo ejecutable puede generar varias instancias (varios procesos) al mismo tiempo: cada ejecución es un proceso distinto, aunque provenga del mismo programa.</p></div>
+<div class="section-block"><h4>Estructura de un proceso</h4><ul><li>Segmento de texto: contiene las instrucciones que entiende la CPU</li><li>Segmento de datos: contiene los datos que deben cargarse al iniciar el proceso</li><li>Segmento de pila: serie de marcos de pila que se apilan al llamar una función y se desapilan al retornar de ella; cada marco contiene los parámetros de la función, las variables locales y la información necesaria para restaurar el marco anterior</li></ul></div>
+<div class="section-block"><h4>Procesos padre e hijo en Linux</h4><p>Linux es un sistema de tiempo compartido que permite ejecutar varios procesos a la vez (multiproceso). El planificador es la parte del núcleo que gestiona la CPU y decide qué proceso la ocupa en cada instante.
+
+Todo proceso en Linux, excepto el primero (proceso init), se crea mediante una llamada a fork(). El proceso que llama a fork() es el proceso padre, y el que se crea es el proceso hijo. Un padre puede tener varios hijos, pero cada proceso tiene un único padre.</p></div>
+<div class="section-block"><h4>Identificación de procesos: PID y PPID</h4><p>Cada proceso en Linux se identifica con un PID (ID de proceso): un número entero positivo asignado al crearse.
+
+getpid() devuelve el PID del proceso que la invoca.
+getppid() devuelve el PID de su proceso padre (PPID).</p></div>
+<div class="section-block"><h4>Ejemplo 1 — Número de proceso (print-pid.c)</h4><pre><code>#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;  // Declara funciones parte del estándar POSIX
+
+int main () {
+    printf(&quot;The process ID is %d\n&quot;, getpid());
+    printf(&quot;The parent process ID is %d\n&quot;, (int) getppid());
+    return 0;
+}</code></pre></div>
+<div class="section-block"><h4>Otros identificadores de un proceso</h4><table><thead><tr><th>Atributo</th><th>Tipo</th><th>Función</th></tr></thead><tbody><tr><td>ID de proceso</td><td>pid_t</td><td>getpid(void)</td></tr><tr><td>ID de proceso padre</td><td>pid_t</td><td>getppid(void)</td></tr><tr><td>ID real del usuario</td><td>uid_t</td><td>getuid(void)</td></tr><tr><td>ID efectivo del usuario</td><td>uid_t</td><td>geteuid(void)</td></tr><tr><td>ID real de grupo</td><td>gid_t</td><td>getgid(void)</td></tr><tr><td>ID efectivo de grupo</td><td>gid_t</td><td>getegid(void)</td></tr></tbody></table></div>
+<div class="section-block"><h4>ID real vs. ID efectivo</h4><p>Cada proceso tiene dos IDs de usuario y dos de grupo, usados principalmente por seguridad (permisos de acceso a archivos).
+
+ID real de usuario/grupo: identifica al usuario real, tal como aparece en /etc/passwd.
+ID efectivo de usuario/grupo: se usa para acceder a archivos de otros usuarios, enviar señales a procesos o ejecutar programas &quot;setuid&quot;.
+
+Cuando un proceso ejecuta un programa &quot;setuid&quot;, el núcleo asigna al EUID del proceso el propietario de ese programa, y al EGID el grupo del propietario.</p></div>
+<div class="section-block"><h4>Ejemplo 2 — Identificadores de proceso (ids.c)</h4><pre><code>#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(void) {
+    printf(&quot;Real user ID: %d\n&quot;, getuid());
+    printf(&quot;Effective user ID: %d\n&quot;, geteuid());
+    printf(&quot;Real group ID: %d\n&quot;, getgid());
+    printf(&quot;Effective group ID: %d\n&quot;, getegid());
+    return 0;
+}</code></pre></div>
+<div class="section-block"><h4>Comando ps de Linux</h4><p>ps despliega los procesos en ejecución en el sistema. Sin opciones, muestra los del shell actual (la primera columna es el PID; normalmente aparecen el propio shell y el proceso ps).
+
+ps -e -o pid,ppid,command muestra todos los procesos del sistema (-e) especificando qué columnas mostrar (-o): PID, PPID y el comando.</p></div>
+<div class="section-block"><h4>Tres formas de crear procesos en Linux</h4><p>La primera es con system(), parte de las librerías estándar de C. Las otras dos son fork() y exec(), que es la manera nativa en que Linux crea procesos.</p></div>
+<div class="section-block"><h4>system()</h4><p>Ejecuta un comando desde un programa, como si se invocara desde un Shell. Invocar un programa con privilegios de root usando system() puede dar resultados distintos entre sistemas Linux, ya que depende de la versión del Shell utilizado.
+
+Sintaxis: int system(const char *string)</p></div>
+<div class="section-block"><h4>Ejemplo 3 — Uso de system() (system.c)</h4><pre><code>#include &lt;stdlib.h&gt;
+
+int main () {
+    int return_value;
+    return_value = system(&quot;ls -l /&quot;);
+    return return_value;
+}</code></pre></div>
+<div class="section-block"><h4>fork()</h4><p>Crea un nuevo proceso (el hijo) como copia del proceso padre, excepto por el PID y el PPID.
+
+Al llamar fork(), el núcleo:
+· Busca una entrada libre en la tabla de procesos y la reserva para el hijo.
+· Le asigna un PID único e invariable durante toda su vida.
+· Copia el contexto de nivel de usuario del padre al hijo.
+· Copia las tablas de control de archivos locales del padre al hijo.
+· Devuelve al padre el PID del hijo, y al hijo le devuelve 0.
+
+Mientras se crea el hijo, el padre sigue ejecutándose desde el punto donde se invocó fork(); el hijo también ejecuta el programa desde ese mismo punto.
+
+Sintaxis: pid_t fork(void)</p></div>
+<div class="section-block"><h4>Ejemplo 4 — Creación de procesos (fork.c)</h4><pre><code>#include &lt;stdio.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;unistd.h&gt;
+
+int main () {
+    pid_t child_pid;
+    printf(&quot;the main program process ID is %d\n&quot;, (int) getpid());
+    child_pid = fork();
+    if (child_pid != 0) {
+        printf(&quot;this is the parent process, with id %d\n&quot;, (int) getpid());
+        printf(&quot;the child's process ID is %d\n&quot;, (int) child_pid);
+    } else {
+        printf(&quot;this is the child process, with id %d\n&quot;, (int) getpid());
+    }
+    return 0;
+}</code></pre></div>
+<div class="section-block"><h4>⚠️ Condición de carrera (race condition)</h4><p>No se puede predecir si el proceso padre seguirá ejecutándose antes o después de que se cree el hijo (o viceversa), ya que ambos corren de forma asíncrona tras fork().
+
+Por eso no debe escribirse, en el proceso hijo, código que dependa del padre (o viceversa): hacerlo genera una condición de carrera con comportamiento impredecible en el programa.</p></div>
+<div class="section-block"><h4>exec()</h4><p>A diferencia de fork(), exec() reemplaza el programa que se está ejecutando en un proceso por otro programa. Cuando se llama exec(), el proceso invocador termina inmediatamente y comienza a ejecutarse el nuevo programa desde el inicio (si exec() no encontró error).
+
+Si exec() tiene éxito, no regresa al proceso que lo llamó (fue reemplazado por completo). Si falla, regresa -1.</p></div>
+<div class="section-block"><h4>Ejemplo 6 — Uso de exec (execs.c)</h4><pre><code>#include &lt;unistd.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+
+int main(void) {
+    char *args[] = {&quot;/bin/ls&quot;, NULL};
+    if (execve(&quot;/bin/ls&quot;, args, NULL) == -1) {
+        perror(&quot;execve&quot;);
+        exit(EXIT_FAILURE);
+    }
+    puts(&quot;shouldn't get here&quot;);
+    exit(EXIT_SUCCESS);
+}</code></pre></div>
+<div class="section-block"><h4>Familia de funciones exec()</h4><ul><li>execl(), execv(), execle(), execve() reciben una ruta (path) como primer argumento</li><li>execlp(), execvp() reciben el nombre de un archivo; si no contiene &quot;/&quot;, lo buscan en $PATH</li><li>Las funciones con &quot;l&quot; (execl, execle, execlp) reciben una lista de argumentos terminada en un apuntador NULL</li><li>Las funciones con &quot;v&quot; (execv, execve, execvp) reciben un arreglo de apuntadores terminado en una cadena NULL</li><li>execve() y execle() además permiten definir un ambiente propio (envp); las demás heredan el ambiente a través de la variable environ</li></ul></div>
+<div class="section-block"><h4>Sintaxis de la familia exec</h4><pre><code>int execl (char *path, char *arg0, char *arg1,... char *argN, (char *)0);
+int execv (char *path, char *argv[ ]);
+int execle(char *path, char *arg0, char *arg1,... char *argN, (char *)0, char *envp[ ]);
+int execve(char *path, char *argv[ ], char *envp[ ]);
+int execlp(char *file, char *arg0, char *arg1,... char *argN, (char *)0);
+int execvp(char *file, char *argv[ ]);</code></pre></div>
+<div class="section-block"><h4>Variables de ambiente</h4><p>putenv(const char *string) agrega o modifica una variable de ambiente.
+getenv(const char *name) consulta el valor de una variable de ambiente.
+
+Se usan típicamente junto con execve()/execle() para construir el ambiente (envp) que recibirá el nuevo programa.</p></div>
+<div class="section-block"><h4>Ejemplo 7 — Variables de ambiente (testenv.c)</h4><pre><code>#include &lt;unistd.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+
+int main(void) {
+    char envval[] = {&quot;MYPATH=/user/local/someapp/bin&quot;};
+    if (putenv(envval))
+        puts(&quot;putenv failed&quot;);
+    else
+        puts(&quot;putenv succeeded&quot;);
+
+    if (getenv(&quot;MYPATH&quot;))
+        printf(&quot;MYPATH=%s\n&quot;, getenv(&quot;MYPATH&quot;));
+    else
+        puts(&quot;MYPATH unassigned&quot;);
+
+    if (getenv(&quot;YOURPATH&quot;))
+        printf(&quot;YOURPATH=%s\n&quot;, getenv(&quot;YOURPATH&quot;));
+    else
+        puts(&quot;YOURPATH unassigned&quot;);
+    exit(EXIT_SUCCESS);
+}</code></pre></div>
+<div class="section-block"><h4>Compilación de los ejemplos</h4><p>cc myecho.c –o myecho
+cc execve.c –o execve
+./execve ./myecho
+
+(Analizar el resultado: execve reemplaza el proceso actual por myecho, pasando su propio nombre como argumento.)</p></div>
+<div class="section-block"><h4>Cuestionario — código a analizar (fork-exec.c)</h4><pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;unistd.h&gt;
+
+int spawn (char* program, char** arg_list) {
+    pid_t child_pid;
+    child_pid = fork ();
+    if (child_pid != 0)
+        return child_pid;
+    else {
+        execvp (program, arg_list);
+        fprintf (stderr, &quot;an error occurred in execvp\n&quot;);
+        abort ();
+    }
+}
+
+int main () {
+    char* arg_list[] = { &quot;ls&quot;, &quot;-l&quot;, &quot;/&quot;, NULL };
+    spawn (&quot;ls&quot;, arg_list);
+    printf (&quot;done with main program\n&quot;);
+    return 0;
+}</code></pre></div>
+<div class="section-block"><h4>Cuestionario</h4><p>Describe qué hace el código anterior (fork-exec.c) y qué resultados arroja.
+
+Pista: spawn() crea un proceso hijo con fork() y reemplaza ese hijo con el programa &quot;ls&quot; usando execvp(); el proceso padre continúa su ejecución normal e imprime &quot;done with main program&quot; — el orden entre esa impresión y la salida de ls no está garantizado.</p></div>
+<div class="section-block"><h4>Para repasar</h4><ul><li>¿Qué diferencia hay entre fork() y exec()?</li><li>¿Por qué el uso de fork() puede generar una condición de carrera (race condition)?</li><li>¿Qué representa el PID y qué el PPID de un proceso?</li><li>¿Cuál es la diferencia entre el ID real y el ID efectivo de usuario/grupo, y cuándo se usa cada uno?</li><li>¿Qué hace el comando ps -e -o pid,ppid,command y qué muestra cada columna?</li><li>¿Qué ocurre si execve() tiene éxito? ¿Y si falla?</li></ul></div>
+<div class="section-block"><h4>Referencias multimedia</h4><div class="links" style="margin-top:0"><div class="link-item"><span class="label">Árbol de las computadoras (The Computer Tree)</span><a href="https://upload.wikimedia.org/wikipedia/commons/8/8d/The_computer_tree-U.S._Army_diagram.png" target="_blank" rel="noopener">https://upload.wikimedia.org/wikipedia/commons/8/8d/The_computer_tree-U.S._Army_diagram.png</a></div><div class="link-item"><span class="label">Línea de tiempo de distribuciones Linux</span><a href="https://upload.wikimedia.org/wikipedia/commons/1/1b/Linux_Distribution_Timeline.svg" target="_blank" rel="noopener">https://upload.wikimedia.org/wikipedia/commons/1/1b/Linux_Distribution_Timeline.svg</a></div><div class="link-item"><span class="label">Infografía del kernel de Linux</span><a href="https://upload.wikimedia.org/wikipedia/commons/e/ec/Infografia_NucleoLinux.png" target="_blank" rel="noopener">https://upload.wikimedia.org/wikipedia/commons/e/ec/Infografia_NucleoLinux.png</a></div><div class="link-item"><span class="label">Entrevista TED a Linus Torvalds</span><a href="https://www.youtube.com/watch?v=MNXIXDbEmVc" target="_blank" rel="noopener">https://www.youtube.com/watch?v=MNXIXDbEmVc</a></div><div class="link-item"><span class="label">Historia de las &quot;guerras de los Unix&quot;</span><a href="https://architecnologia.es/una-historia-de-unix-los-litigios-sco-contra-todos" target="_blank" rel="noopener">https://architecnologia.es/una-historia-de-unix-los-litigios-sco-contra-todos</a></div></div></div>
+<div class="section-block"><h4>Bibliografía</h4><ul><li>Francisco Manuel Márquez García — &quot;Unix: programación avanzada&quot;. Editorial RA-MA</li><li>Richard Stevens — &quot;Advanced Unix Programming&quot;. Editorial Addison Wesley</li><li>Kurt Wall — &quot;Linux Programming by Example&quot;. Editorial QUE</li></ul></div>
+</div>
+</body>
+</html>
