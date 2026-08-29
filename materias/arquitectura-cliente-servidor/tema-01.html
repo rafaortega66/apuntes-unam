@@ -29,7 +29,96 @@
 </div>
 <div class="section-block"><h4>Objetivo</h4><p>Entender los conceptos relacionados con los procesos, además de cómo identificarlos en un entorno Linux y las funciones system(), fork() y exec() para su creación.</p></div>
 
-<div class="section-block"><h4>Apuntes de clase — 27-ago-2026 (permisos, bit setuid, repaso de fork)</h4>
+<div class="section-block"><h4>Clase 1 — Linux y procesos: la imagen de un proceso</h4>
+<p>Destilado del transcript de la clase (NotebookLM). Se omite lo administrativo; solo contenido de la materia.</p>
+<p><strong>Encuadre:</strong> la primera parte de la materia es "una continuación de sistemas operativos": primero procesos, después desarrollo de servidores. El curso se enfoca en <strong>un solo procesador</strong> (uniprocesador): no se ve programación multiprocesador ni multinúcleo. "Distribuido" aquí significa servidor en un host y cliente en otro, conectados por red.</p></div>
+
+<div class="section-block"><h4>Entorno de trabajo del curso</h4><ul>
+<li>Códigos del semestre → repositorio <strong>GitHub público</strong> (se puede hacer fork o rama en tu cuenta).</li>
+<li>Apuntes oficiales → <strong>GitHub Pages</strong> (HTTPS, alta disponibilidad). El sitio viejo <code>profesores.fi-b.unam.mx/~carlos/acs</code> es HTTP y está <strong>obsoleto</strong>.</li>
+<li><strong>GitHub Codespaces</strong>: contenedor en la nube; el <code>README.md</code> del Tema 1 explica cómo levantarlo. No hace falta traer computadora — compila y ejecuta incluso desde el celular. Dentro tienes <strong>root</strong> (<code>sudo</code> o <code>sudo su</code>). Si rompes el sistema (<code>rm -rf</code>), destruyes el Codespace y creas otro; los programas vuelven intactos. Cerrar la pestaña lo suspende; se reactiva con el botón verde.</li>
+<li>En equipo propio: cualquier distro de Linux sirve. En Windows → <strong>WSL</strong> (Linux dentro de Windows) o <strong>SSH</strong> a un servidor Linux remoto.</li>
+<li>Red UNAM: los rangos públicos <code>132.247.*.*</code> y <code>132.248.*.*</code> son de la UNAM a nivel mundial. Las IP privadas (p. ej. <code>192.168.x.x</code>) son internas y aisladas. El profesor se conectó por SSH a <code>132.248.77.168</code> <em>[inaudible: también se transcribe como 132.247.248.7.168]</em>.</li>
+<li>Documentación formal de funciones C en Linux: <strong>The Open Group</strong>. Buscar <code>"Open Group &lt;función&gt;"</code> (ej. <code>Open Group getpid</code>).</li>
+</ul></div>
+
+<div class="section-block"><h4>Imagen de un proceso</h4>
+<p>Definición del profesor: <em>"una fotografía o instantánea"</em>. Un ejecutable en ejecución crea un proceso que vive mientras la ejecución esté viva; al terminar o cerrar, el proceso muere.</p>
+<p><strong>Procesos en segundo plano</strong> (background) o <strong>demonios</strong> (daemon): no son visibles ni interactúas con ellos en la terminal. Cerrar la interfaz gráfica de un programa no siempre mata su proceso.</p></div>
+
+<div class="section-block"><h4>Segmentos de la imagen en memoria</h4>
+<p>Al ejecutar un binario, el SO carga en una zona de memoria independiente (espacio de direcciones propio) las áreas de código y datos.</p>
+<p><strong>Segmentos estáticos:</strong></p>
+<ul>
+<li><strong>text</strong> (texto / código): solo lectura; código máquina + constantes de tipo string (p. ej. las que se pasan a <code>printf</code>).</li>
+<li><strong>data</strong>: variables globales <strong>inicializadas</strong>.</li>
+<li><strong>BSS</strong> (<em>Block Started by Symbol</em>; el profesor lo dictó como "block started by single"): variables globales <strong>no inicializadas</strong>.</li>
+</ul>
+<p><strong>Segmentos dinámicos:</strong></p>
+<ul>
+<li><strong>heap</strong> (montículo): memoria dinámica en ejecución (<code>malloc</code>).</li>
+<li><strong>stack</strong> (pila): variables locales y parámetros de las llamadas a función.</li>
+<li>heap y stack <strong>crecen en sentidos opuestos</strong> ("uno crece a la izquierda y el otro a la derecha") para aprovechar el espacio.</li>
+</ul>
+<p><strong>Scope (ámbito)</strong> de una variable local = los límites de su función.</p>
+<p>Tarea futura (todavía no): investigar <strong>file descriptors</strong> y la <strong>asignación dinámica de memoria</strong> (<code>malloc</code>).</p>
+<p><strong>⚠️ Examen — BCP / PCB</strong> (<em>Process Control Block</em>, "bloque de control de proceso"): estructura administrativa del kernel donde se guardan los metadatos del proceso. El profesor lo marcó como muy importante.</p></div>
+
+<div class="section-block"><h4>Ejercicio: servidor sencillo en C (dos terminales)</h4><ul>
+<li>Objetivo: entender la estructura de la imagen (código, datos inicializados, BSS, montículo y pila) y diferenciarla del contexto del SO.</li>
+<li>Compilar dando al binario <strong>el mismo nombre</strong> que el <code>.c</code> (con <code>-o</code>); así <code>ls -l</code> agrupa fuente y binario. Sin <code>-o</code> se genera <code>a.out</code> (mala práctica: el nombre no dice nada).</li>
+<li><strong>Terminal 1:</strong> corre el servidor; usa <code>getchar()</code> para pausar y que el proceso no muera al instante — libera la memoria y muere hasta que pulsas Enter.</li>
+<li><strong>Terminal 2:</strong> monitorea el proceso en RAM.</li>
+<li>Ubicación de las variables: global inicializada → <code>data</code>; global no inicializada → <code>BSS</code>; local → <code>stack</code>; reservada con <code>malloc</code> → <code>heap</code>; strings literales de <code>printf</code> → <code>text</code>.</li>
+</ul></div>
+
+<div class="section-block"><h4>Comandos de análisis de procesos</h4>
+<p><strong><code>size servidor</code></strong> — <strong>análisis estático</strong> (mira el archivo en disco). Columnas: <code>text</code>, <code>data</code>, <code>bss</code>, <code>dec</code> (suma en decimal), <code>hex</code> (suma en hexadecimal), <code>filename</code>. Ejemplo: <code>1767 + 592 + 8 = 2367</code> dec = <code>0x93F</code> <em>[inaudible: la transcripción decía "3F"]</em>.</p>
+<p><strong>⚠️ Examen:</strong> ¿por qué <code>size</code> no muestra <code>heap</code> ni <code>stack</code>? Porque son <strong>dinámicos</strong>: solo existen en RAM cuando el proceso está vivo; <code>size</code> solo analiza el archivo estático en disco.</p>
+<p><strong><code>pmap &lt;PID&gt;</code></strong> (<em>Process Map</em>) — <strong>análisis dinámico</strong>: consulta las estructuras del kernel e imprime el mapa completo del proceso en RAM (stack, heap, librerías <code>.so</code>, direcciones físicas). El PID se obtiene con <code>getpid()</code> (de <code>&lt;unistd.h&gt;</code>).</p>
+<ul>
+<li>Los valores de <code>pmap</code> no cuadran con <code>size</code> porque el SO asigna memoria por <strong>páginas de 4 KB</strong>; toda sección se redondea a página completa → todos los valores son múltiplos de 4.</li>
+<li><strong>⚠️ Seguridad:</strong> las zonas dinámicas (stack, heap) tienen permisos <code>R</code> / <code>RW</code> pero <strong>nunca <code>X</code></strong> — para que no se pueda inyectar ni ejecutar código malicioso en el proceso.</li>
+</ul>
+<p><strong><code>cat /proc/&lt;PID&gt;/maps</code></strong> — mientras el proceso vive, el SO mantiene el directorio <code>/proc/&lt;PID&gt;/</code>; el archivo <code>maps</code> muestra direcciones hexadecimales, permisos de cada segmento y librerías dinámicas cargadas (información del PCB). Al pulsar Enter en la Terminal 1 termina <code>getchar()</code>, se libera el heap y el proceso muere.</p></div>
+
+<div class="section-block"><h4>Árbol de procesos · PID y PPID</h4><ul>
+<li>Todos los procesos forman un <strong>árbol jerárquico</strong>. La raíz tiene <strong>PID = 1</strong>: <code>init</code> en Unix clásico / distros viejas, <code>systemd</code> en distros modernas. De la raíz se derivan todos los demás procesos.</li>
+<li><strong>PID</strong> = identificador único del proceso. <strong>PPID</strong> = PID del proceso padre.</li>
+<li>Principio: <strong>todo comando lanzado en una terminal tiene como padre al proceso de esa terminal</strong> (<code>bash</code>). El PID de <code>bash</code> no cambia mientras sea la misma terminal; el de <code>ps</code> cambia cada vez, porque nace y muere en el instante.</li>
+</ul></div>
+
+<div class="section-block"><h4>Monitoreo: top y ps</h4>
+<p><strong><code>top</code></strong> — dinámico, se actualiza en pantalla; se sale con <code>q</code>.</p>
+<p><strong>Tiempo compartido (time-sharing):</strong> un proceso no acapara la RAM de principio a fin (sería una cola secuencial ineficiente). El <strong>planificador (scheduler)</strong> reparte pequeños lapsos de CPU entre los procesos según su <strong>prioridad</strong>, alternando tan rápido que da la ilusión de paralelismo.</p>
+<p><strong><code>ps</code></strong> — <strong>estático</strong> (no se actualiza). Sin opciones: solo los procesos de la terminal actual (normalmente <code>bash</code> + el propio <code>ps</code>).</p>
+<p><strong><code>ps aux</code></strong> — todos los procesos del sistema, ordenados por PID ascendente. Columnas: <code>USER PID %CPU %MEM VSZ RSS TTY STAT START TIME COMMAND</code>.</p>
+<ul>
+<li>Demonios: sin terminal asociada → <code>?</code> en la columna <code>TTY</code>; por convención su nombre termina en <code>d</code> (<code>systemd</code>, <code>kthreadd</code>, <code>watchdogd</code>).</li>
+<li><code>VSZ</code> = <em>Virtual Memory Size</em>, <code>RSS</code> = <em>Resident Set Size</em> (el profesor lo aclarará la próxima clase).</li>
+</ul>
+<p><strong><code>ps -e -o pid,ppid,user,stat,cmd</code></strong> — <code>-e</code> lista todos los procesos; <code>-o</code> elige las columnas a mostrar.</p>
+<p><strong>⚠️ Examen — sintaxis:</strong> las columnas tras <code>-o</code> van <strong>separadas por comas y SIN espacios</strong>; un espacio hace que la terminal devuelva error de sintaxis. Los estados de la columna <code>STAT</code> (<code>S</code>, <code>R</code>, <code>R+</code>, <code>Ss</code>…) se ven en clases posteriores.</p></div>
+
+<div class="section-block"><h4>El comando ls para administración y seguridad</h4><ul>
+<li><code>ls</code> a secas no da información útil. <code>ls -l</code> = formato largo (permisos, tamaño, dueño, fecha). <code>ls -la</code> = incluye archivos ocultos (los que empiezan con <code>.</code>).</li>
+<li>Recomendado: <strong><code>ls -ltr</code></strong> — <code>l</code> largo, <code>t</code> ordena por fecha de modificación (más reciente arriba), <code>r</code> invierte el orden (más reciente <strong>abajo</strong>, junto al prompt).</li>
+<li>Uso en seguridad: en un incidente de intrusión ves de inmediato el último archivo creado o modificado por un atacante, sin hacer scroll en un directorio con cientos de archivos.</li>
+</ul></div>
+
+<div class="section-block"><h4>Contexto — origen de "TTY"</h4><p><code>TTY</code> viene de los <strong>teletipos</strong> (teletype) de los años 1940-50: máquina de escribir mecánica + transmisión de datos a una computadora. Con los sistemas de tiempo compartido de los 60, las terminales lógicas (pantallas, ventanas) heredaron las siglas. Dato histórico que remarcó el profesor: <strong>las primeras programadoras fueron mujeres</strong>.</p></div>
+
+<div class="section-block"><h4>Sincronización: race condition y deadlock</h4><ul>
+<li>Los procesos compiten de forma concurrente por la CPU → <strong>condición de carrera</strong> (race condition).</li>
+<li><strong>Deadlock</strong> (bloqueo mutuo / "candado mortal"): "el proceso 1 dice: para continuar necesito que termine el proceso 2; y el proceso 2 dice: para continuar necesito que termine el proceso 1". No se debe estructurar un programa donde dos procesos dependen circularmente uno del otro.</li>
+</ul></div>
+
+<div class="section-block"><h4>Para repasar (tarea moral de la Clase 1)</h4><ul>
+<li>No hay tarea para entregar. <strong>Tarea moral:</strong> repasar el sitio web del curso y el <strong>PDF 2 del Tema 1</strong> ("ID de procesos") — es extenso, no verlo todo de golpe.</li>
+<li>La próxima clase: teoría de <code>fork()</code> en C para crear procesos.</li>
+</ul></div>
+
+<div class="section-block"><h4>Clase 2 — permisos, bit setuid y fork()</h4>
 <p><strong>Permisos en notación octal.</strong> Cada terna <code>rwx</code> se codifica con 4-2-1:</p>
 <pre><code>  r  w  x
   4  2  1        rwx = 4+2+1 = 7      rw- = 6      r-x = 5
@@ -44,7 +133,6 @@ ejemplo:  chmod 4711 programa      (activa setuid + rwx u, x g, x o)</code></pre
 </ul>
 <p>El bit setuid es el tema de la <strong>Tarea 2</strong> (ver <a href="evaluacion.html" style="color:var(--indigo)">Evaluación</a>).</p>
 <p><strong>Repaso de <code>fork()</code>:</strong> crea un proceso nuevo, copia exacta del padre salvo el <code>PID</code> y el <code>PPID</code>. Devuelve el <strong>PID del hijo al padre</strong> y <strong>0 al hijo</strong>. Padre e hijo corren en paralelo y de forma asíncrona → si el código del hijo depende del padre (o al revés) hay <strong>condición de carrera</strong> ("deadlock" en los apuntes). <code>pid_t</code> es el tipo de dato del PID. Ejemplo visto en clase: PID de la shell/terminal ≈ 29750 / 28200 <em>(valores de esa corrida)</em>.</p>
-<p><em>Nota de los apuntes: "no hay clase 2 todavía".</em></p>
 </div>
 <div class="section-block"><h4>Contexto histórico: origen de los sistemas operativos</h4><p>1944–1952: John Von Neumann propone el diseño de una computadora que almacena un programa y usa un procesador central (arquitectura de programa almacenado), junto con el sistema de numeración binaria. Esto permitió que la computadora se usara más allá de la ciencia: en economía, administración, producción, etc.
 
