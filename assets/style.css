@@ -155,3 +155,21 @@ ol.clases .tags {
 /* salida de programas (distinta del código fuente) */
 .section-block pre.salida { background: #10130E; border-color: rgba(120,180,120,0.18); }
 .section-block pre.salida code { color: #B9C6AE; }
+
+/* ---- back link: siempre visible (píldora fija, arriba a la izquierda) ---- */
+body { padding-top: 56px; }
+a.back {
+  position: fixed; top: 12px; left: 14px; z-index: 210; margin: 0;
+  display: inline-block; max-width: calc(100vw - 150px);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  background: var(--white); border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 999px; padding: 7px 14px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+  font-size: 13px; color: var(--ink); vertical-align: middle;
+}
+a.back:hover { color: var(--coral); border-color: var(--coral); }
+.detail-head { top: 48px; }
+@media (max-width: 640px) {
+  a.back { top: 8px; left: 8px; font-size: 12px; padding: 6px 11px; max-width: calc(100vw - 130px); }
+  .detail-head { top: 42px; }
+}
