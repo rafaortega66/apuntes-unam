@@ -159,10 +159,9 @@ ol.clases .tags {
 /* ---- cabecera persistente: enlace "atrás" + título quedan fijos arriba al hacer scroll ---- */
 a.back {
   position: sticky; top: 0; z-index: 211;
-  display: block; margin: 0;
+  display: block; width: 100%; margin: 0;
   background: var(--paper);
   padding: 14px 0 8px;
-  max-width: calc(100% - 140px);
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .detail-head {
