@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 01 — Extracción de características: HOG, GLCM y audio</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<button class="viewswitch" role="switch" aria-label="Cambiar vista: por tema o por clase">
+<span class="vs-label vs-tema">Por tema</span>
+<span class="vs-track"><span class="vs-knob"></span></span>
+<span class="vs-label vs-clase">Por clase</span>
+</button>
+<div class="wrap">
+<a class="back" href="index.html">← Reconocimiento de Patrones</a>
+<div class="detail-head" style="border-color:#45B8A8">
+  <h2>Clase 01 — Extracción de características: HOG, GLCM y audio</h2>
+  <p class="prof">Apuntes de clase · 28-ago-2026 · corresponde al Tema 1 (conceptos básicos / diseño de un sistema de RdP)</p>
+</div>
+
+<div class="section-block"><h4>Descriptores de imagen</h4><ul>
+<li><strong>GLCM</strong> (<em>Gray-Level Co-occurrence Matrix</em>) — matriz de co-ocurrencia de niveles de gris; describe la <strong>textura</strong>.</li>
+<li><strong>HOG</strong> (<em>Histogram of Oriented Gradients</em>) — descriptor que representa la <strong>forma</strong> de un objeto a partir de sus gradientes.</li>
+</ul></div>
+
+<div class="section-block"><h4>Algoritmo HOG, paso a paso</h4><ol>
+<li><strong>Preprocesamiento.</strong> Llevar la imagen a un tamaño estándar. Ejemplo bidimensional: <strong>64 × 128</strong>.</li>
+<li><strong>Cálculo de gradientes.</strong>
+<pre><code>Gx = I * [-1, 0, 1]        (derivada horizontal)
+Gy = I * [-1, 0, 1]ᵀ       (derivada vertical)
+
+Magnitud:    M = √(Gx² + Gy²)
+Orientación: θ = tan⁻¹(Gy / Gx)</code></pre></li>
+<li><strong>Histograma de gradientes por celda.</strong> Se acumula la <strong>magnitud</strong> (valor) en el bin de la <strong>orientación</strong> (posición). Bins cada 20°: <code>0, 20, 40, 60, 80, 100, 120, 140, 160</code>. Si la orientación &gt; 160 → orientación − 180 (histograma sin signo, 0–180°).</li>
+<li><strong>Normalización entre bloques.</strong> Se agrupan celdas en bloques y se normaliza cada bloque (robustez ante cambios de iluminación y contraste).</li>
+<li><strong>Concatenación.</strong> Se unen todos los histogramas normalizados → vector de características final.</li>
+</ol></div>
+
+<div class="section-block"><h4>Puntos clave</h4><ul>
+<li><strong>SIFT</strong> (<em>Scale-Invariant Feature Transform</em>) — detecta un conjunto de puntos clave invariantes a la escala.</li>
+<li><strong>SURF</strong> (<em>Speeded-Up Robust Features</em>) — similar a SIFT pero más rápido.</li>
+</ul></div>
+
+<div class="section-block"><h4>Descriptores de audio</h4>
+<p><strong>Características temporales</strong> — se calculan sobre la señal en el tiempo.</p>
+<p><strong>Características espectrales</strong> — descomposición en frecuencias con la DFT:</p>
+<pre><code>X[k] = Σ (n = 0 … N-1)  x[n] · e^(-j·2πkn/N)</code></pre>
+<p>Métricas: <em>Spectral Bandwidth</em>, <em>Spectral Roll-off</em>, <em>Spectral Flux</em>, <em>Spectral Flatness</em>.</p>
+<p><strong>Características tiempo–frecuencia</strong> — escala <strong>Mel</strong>. Pipeline tipo <strong>MFCC</strong>:</p>
+<pre><code>Pre-énfasis → Framing (tramas) → Ventana → Transformada de Fourier
+→ Banco de filtros Mel → Logaritmo → Transformada Coseno Discreta (DCT)</code></pre>
+<p><strong>Delta</strong> y <strong>Delta-Delta</strong>: derivadas de 1.er y 2.º orden de los coeficientes; capturan la dinámica temporal.</p>
+</div>
+
+<div class="section-block"><h4>Pendiente / siguiente clase</h4><ul>
+<li>Pregunta de clase: <em>¿cómo obtener un vector de características?</em> → siguiente tema: <strong>selección de características</strong>.</li>
+<li><em>[?] En la parte superior de la hoja hay unas líneas sueltas ("dibujos del jaguar", "puntas de hidrógeno", "calor específico del agua 99 %") que no parecen de esta materia; y junto a la DCT aparece "(1902?)" que no cuadra. Verificar con foto más nítida.</em></li>
+</ul></div>
+
+</div>
+</body>
+</html>
