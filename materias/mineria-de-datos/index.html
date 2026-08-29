@@ -5,8 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Minería de Datos</title>
 <link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
 </head>
 <body>
+<button class="viewswitch" role="switch" aria-label="Cambiar vista: por tema o por clase">
+<span class="vs-label vs-tema">Por tema</span>
+<span class="vs-track"><span class="vs-knob"></span></span>
+<span class="vs-label vs-clase">Por clase</span>
+</button>
 <div class="wrap">
 <a class="back" href="../../index.html">← Todas las materias</a>
 <div class="detail-head" style="border-color:#A98BD1">
@@ -20,6 +27,128 @@
 <div class="section-block"><h4>Programa de estudio (temario oficial)</h4><p><strong>Clave FI:</strong> 2933</p><p>Objetivo: el alumno evaluará los principios del enfoque del aprendizaje en máquinas para diseñar e implementar diversos algoritmos de minería de datos.</p>
 <table><thead><tr><th>Núm.</th><th>Tema</th><th>Horas</th></tr></thead><tbody><tr><td>1</td><td>Introducción al descubrimiento del conocimiento en bases de datos (KDD) y la minería de datos</td><td>8.0</td></tr><tr><td>2</td><td>Arquitectura de minería de datos</td><td>12.0</td></tr><tr><td>3</td><td>El proceso de minería de datos</td><td>18.0</td></tr><tr><td>4</td><td>Evaluación</td><td>14.0</td></tr><tr><td>5</td><td>Aplicación en la minería de datos</td><td>12.0</td></tr></tbody></table></div>
 <div class="section-block"><h4>Bibliografía básica</h4><ul><li>Hernández Orallo &amp; Ramírez — <em>Introducción a la minería de datos</em></li><li>Mitchell — <em>Machine Learning</em></li><li>Witten &amp; Frank — <em>Data Mining</em></li><li>Han, Kamber &amp; Pei — <em>Data Mining: Concepts and Techniques</em></li></ul></div>
+<div class="section-block"><h4>Contenido</h4>
+<div class="v-tema">
+<ul class="tree">
+<li class="t1"><span class="num">1</span>Introducción al descubrimiento del conocimiento en bases de datos (KDD) y la minería de datos <span class="hrs">8.0 h</span>
+<ul>
+<li><span class="num">1.1</span>Arquitectura del proceso de descubrimiento del conocimiento en base de datos (KDD).
+<ul>
+<li><span class="num">1.1.1</span>Entendimiento del dominio del negocio.
+</li>
+<li><span class="num">1.1.2</span>Identificación de los datos relevantes.
+</li>
+<li><span class="num">1.1.3</span>Limpieza de datos.
+</li>
+<li><span class="num">1.1.4</span>Transformación de datos.
+</li>
+<li><span class="num">1.1.5</span>Identificación de tareas de Minería de datos.
+</li>
+<li><span class="num">1.1.6</span>Implementación de algoritmos de minería de datos.
+</li>
+<li><span class="num">1.1.7</span>Interpretación y evaluación de datos.
+</li>
+</ul></li>
+<li><span class="num">1.2</span>El papel de la minería de datos dentro del KDD.
+</li>
+</ul></li>
+<li class="t1"><span class="num">2</span>Arquitectura de minería de datos <span class="hrs">12.0 h</span>
+<ul>
+<li><span class="num">2.1</span>Repositorios.
+</li>
+<li><span class="num">2.2</span>Servidores de datos.
+</li>
+<li><span class="num">2.3</span>Base de datos de conocimientos.
+</li>
+<li><span class="num">2.4</span>Proceso de minería de datos.
+</li>
+<li><span class="num">2.5</span>Evaluación.
+</li>
+</ul></li>
+<li class="t1"><span class="num">3</span>El proceso de minería de datos <span class="hrs">18.0 h</span>
+<ul>
+<li><span class="num">3.1</span>Aprendizaje supervisado y no supervisado.
+</li>
+<li><span class="num">3.2</span>Modelos predictivos.
+</li>
+<li><span class="num">3.3</span>Modelos descriptivos.
+</li>
+<li><span class="num">3.4</span>Métodos y algoritmos de minería de datos.
+<ul>
+<li><span class="num">3.4.1</span>Clasificación.
+</li>
+<li><span class="num">3.4.2</span>Regresión.
+</li>
+<li><span class="num">3.4.3</span>Agrupación.
+</li>
+<li><span class="num">3.4.4</span>Sumarización.
+</li>
+<li><span class="num">3.4.5</span>Modelos de dependencia, correlación.
+</li>
+<li><span class="num">3.4.6</span>Reglas de asociación.
+</li>
+<li><span class="num">3.4.7</span>Detección de cambios y desviaciones.
+</li>
+</ul></li>
+<li><span class="num">3.5</span>Proceso de minería de datos.
+<ul>
+<li><span class="num">3.5.1</span>Identificar el modelo predictivo o descriptivo.
+</li>
+<li><span class="num">3.5.2</span>Identificar el método.
+</li>
+<li><span class="num">3.5.3</span>Identificar el algoritmo.
+</li>
+<li><span class="num">3.5.4</span>Generar el modelo.
+</li>
+<li><span class="num">3.5.5</span>Validar el modelo.
+</li>
+<li><span class="num">3.5.6</span>Mejorar el modelo.
+</li>
+</ul></li></ul></li>
+<li class="t1"><span class="num">4</span>Evaluación <span class="hrs">14.0 h</span>
+<ul>
+<li><span class="num">4.1</span>Entrenamiento y verificación.
+</li>
+<li><span class="num">4.2</span>Predicción del rendimiento.
+</li>
+<li><span class="num">4.3</span>Validación cruzada.
+</li>
+<li><span class="num">4.4</span>Comparación de esquemas de minería de datos.
+</li>
+<li><span class="num">4.5</span>Predicción de probabilidades.
+</li>
+<li><span class="num">4.6</span>Conteo del costo.
+</li>
+<li><span class="num">4.7</span>Evaluación de predicción numérica.
+</li>
+<li><span class="num">4.8</span>El principio de la descripción de longitud mínima (LDM).
+</li>
+<li><span class="num">4.9</span>Aplicación de la LDM a agrupamientos.
+</li>
+</ul></li>
+<li class="t1"><span class="num">5</span>Aplicación en la minería de datos <span class="hrs">12.0 h</span>
+<ul>
+<li><span class="num">5.1</span>Inferencia de reglas rudimentarias.
+</li>
+<li><span class="num">5.2</span>Modelación estadística.
+</li>
+<li><span class="num">5.3</span>Construcción de árboles de decisión.
+</li>
+<li><span class="num">5.4</span>Algoritmos de cobertura: Reglas de construcción.
+</li>
+<li><span class="num">5.5</span>Reglas de asociación.
+</li>
+<li><span class="num">5.6</span>Modelos lineales.
+</li>
+<li><span class="num">5.7</span>Aprendizaje basado en ocurrencias.
+</li>
+</ul></li>
+</ul>
+</div>
+<div class="v-clase">
+<p class="empty">Las clases previas se agregan aquí cuando consigas la grabación o los apuntes (de un compañero o del profesor).</p>
+</div>
+</div>
 
 <div class="empty">Aún no hay apuntes aquí. Se va a ir llenando conforme avance el semestre.</div>
 </div>

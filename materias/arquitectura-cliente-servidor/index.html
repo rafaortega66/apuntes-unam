@@ -5,8 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Arquitectura Cliente-Servidor</title>
 <link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
 </head>
 <body>
+<button class="viewswitch" role="switch" aria-label="Cambiar vista: por tema o por clase">
+<span class="vs-label vs-tema">Por tema</span>
+<span class="vs-track"><span class="vs-knob"></span></span>
+<span class="vs-label vs-clase">Por clase</span>
+</button>
 <div class="wrap">
 <a class="back" href="../../index.html">← Todas las materias</a>
 <div class="detail-head" style="border-color:#E8735C">
@@ -22,6 +29,182 @@
 <div class="section-block"><h4>Programa de estudio (temario oficial)</h4><p><strong>Clave FI:</strong> 2946</p><p>Objetivo: el alumno aplicará los conocimientos de protocolos, criptografía y seguridad para desarrollar programas bajo la arquitectura cliente/servidor mediante un lenguaje de programación.</p>
 <table><thead><tr><th>Núm.</th><th>Tema</th><th>Horas</th></tr></thead><tbody><tr><td>1</td><td>Conceptos básicos</td><td>6.0</td></tr><tr><td>2</td><td>Creación de socket servidor y cliente</td><td>10.0</td></tr><tr><td>3</td><td>Servidores y clientes sincronizados</td><td>10.0</td></tr><tr><td>4</td><td>Sockets broadcasting y multicasting</td><td>8.0</td></tr><tr><td>5</td><td>Implantación de servidores con criptografía y código seguro</td><td>8.0</td></tr><tr><td>6</td><td>Herramientas para la comunicación entre servidores</td><td>6.0</td></tr></tbody></table></div>
 <div class="section-block"><h4>Bibliografía básica</h4><ul><li>Kurose &amp; Ross — <em>Computer Networking: A Top-Down Approach</em></li><li>Stevens — <em>UNIX Network Programming</em>, Vol. I y II</li><li>Walton — <em>Programación de sockets en Linux</em></li></ul></div>
+<div class="section-block"><h4>Contenido</h4>
+<div class="v-tema">
+<ul class="tree">
+<li class="t1"><span class="num">1</span>Conceptos básicos <span class="hrs">6.0 h</span>
+<ul>
+<li><span class="num">1.1</span>Definición de puerto.
+</li>
+<li><span class="num">1.2</span>Socket.
+<ul>
+<li><span class="num">1.2.1</span>Definición de socket.
+</li>
+<li><span class="num">1.2.2</span>Familia de sockets.
+</li>
+</ul></li>
+<li><span class="num">1.3</span>Concepto cliente/servidor.
+<ul>
+<li><span class="num">1.3.1</span>Proceso cliente.
+</li>
+<li><span class="num">1.3.2</span>Proceso servidor.
+</li>
+</ul></li>
+<li><span class="num">1.4</span>Definición de stream.
+</li>
+<li><span class="num">1.5</span>API de Berkeley.
+</li>
+<li><span class="num">1.6</span>Concurrencia, multiprogramación y multitarea.
+</li>
+<li><span class="num">1.7</span>Servidores interactivos y concurrentes.
+</li>
+<li><span class="num">1.8</span>Estándares.
+<ul>
+<li><span class="num">1.8.1</span>POSIX.
+</li>
+<li><span class="num">1.8.2</span>RFC.
+</li>
+</ul></li></ul></li>
+<li class="t1"><span class="num">2</span>Creación de socket servidor y cliente <span class="hrs">10.0 h</span>
+<ul>
+<li><span class="num">2.1</span>Socket en TCP.
+<ul>
+<li><span class="num">2.1.1</span>Servidor eco.
+</li>
+<li><span class="num">2.1.2</span>Cliente eco.
+</li>
+</ul></li>
+<li><span class="num">2.2</span>Socket en UDP.
+<ul>
+<li><span class="num">2.2.1</span>Servidor eco.
+</li>
+<li><span class="num">2.2.2</span>Cliente eco.
+</li>
+</ul></li>
+<li><span class="num">2.3</span>Concepto de hilos.
+<ul>
+<li><span class="num">2.3.1</span>Creación de servidor concurrente.
+</li>
+</ul></li>
+<li><span class="num">2.4</span>Definición de DAEMON.
+</li>
+</ul></li>
+<li class="t1"><span class="num">3</span>Servidores y clientes sincronizados <span class="hrs">10.0 h</span>
+<ul>
+<li><span class="num">3.1</span>Procesos.
+</li>
+<li><span class="num">3.2</span>Semáforos y sincronización.
+</li>
+<li><span class="num">3.3</span>Lectura y escritura de archivos.
+</li>
+<li><span class="num">3.4</span>Servidores orientados a conexión.
+<ul>
+<li><span class="num">3.4.1</span>HTTP.
+</li>
+<li><span class="num">3.4.2</span>FTP.
+</li>
+<li><span class="num">3.4.3</span>Otros servidores.
+</li>
+</ul></li>
+<li><span class="num">3.5</span>Servidores no orientados a conexión.
+<ul>
+<li><span class="num">3.5.1</span>Servidores P2P.
+</li>
+<li><span class="num">3.5.2</span>Otros servidores.
+</li>
+</ul></li>
+<li><span class="num">3.6</span>Desarrollo de aplicaciones.
+<ul>
+<li><span class="num">3.6.1</span>Generación de protocolos de la capa de aplicación.
+</li>
+</ul></li></ul></li>
+<li class="t1"><span class="num">4</span>Sockets broadcasting y multicasting <span class="hrs">8.0 h</span>
+<ul>
+<li><span class="num">4.1</span>Broadcast.
+<ul>
+<li><span class="num">4.1.1</span>Definición de broadcast.
+</li>
+<li><span class="num">4.1.2</span>Funcionamiento de broadcast.
+</li>
+<li><span class="num">4.1.3</span>Creación del socket broadcast.
+</li>
+</ul></li>
+<li><span class="num">4.2</span>Multicast.
+<ul>
+<li><span class="num">4.2.1</span>Definición de multicast.
+</li>
+<li><span class="num">4.2.2</span>Funcionamiento multicast.
+</li>
+<li><span class="num">4.2.3</span>Creación del socket multicast.
+</li>
+<li><span class="num">4.2.4</span>Ruteo multicast.
+</li>
+</ul></li></ul></li>
+<li class="t1"><span class="num">5</span>Implantación de servidores con criptografía y código seguro <span class="hrs">8.0 h</span>
+<ul>
+<li><span class="num">5.1</span>SSL y TLS.
+</li>
+<li><span class="num">5.2</span>Servidores con criptografía.
+<ul>
+<li><span class="num">5.2.1</span>Servidor HTTP.
+</li>
+<li><span class="num">5.2.2</span>Servidor FTP.
+</li>
+<li><span class="num">5.2.3</span>Servidor Secure Shell.
+</li>
+</ul></li>
+<li><span class="num">5.3</span>Clientes con criptografía.
+<ul>
+<li><span class="num">5.3.1</span>Cliente HTTP.
+</li>
+<li><span class="num">5.3.2</span>Cliente FTP.
+</li>
+<li><span class="num">5.3.3</span>Cliente Secure Shell.
+</li>
+</ul></li>
+<li><span class="num">5.4</span>Servidores y clientes implantando código seguro.
+</li>
+</ul></li>
+<li class="t1"><span class="num">6</span>Herramientas para la comunicación entre servidores <span class="hrs">6.0 h</span>
+<ul>
+<li><span class="num">6.1</span>Servidores Web.
+<ul>
+<li><span class="num">6.1.1</span>HTML.
+</li>
+<li><span class="num">6.1.2</span>Programación desde cliente.
+</li>
+<li><span class="num">6.1.3</span>Instalación.
+</li>
+<li><span class="num">6.1.4</span>Configuración.
+</li>
+</ul></li>
+<li><span class="num">6.2</span>Servidores de bases de datos.
+<ul>
+<li><span class="num">6.2.1</span>SQL.
+</li>
+</ul></li>
+<li><span class="num">6.3</span>Servidores de correos.
+</li>
+<li><span class="num">6.4</span>Conceptos.
+<ul>
+<li><span class="num">6.4.1</span>Frameworks.
+</li>
+<li><span class="num">6.4.2</span>Middleware.
+</li>
+<li><span class="num">6.4.3</span>Servidores de aplicaciones.
+</li>
+<li><span class="num">6.4.4</span>Servicios web.
+</li>
+</ul></li>
+<li><span class="num">6.5</span>Utilización de un framework en un servidor de aplicaciones.
+</li>
+</ul></li>
+</ul>
+</div>
+<div class="v-clase">
+<p class="empty">Las clases previas se agregan aquí cuando consigas la grabación o los apuntes (de un compañero o del profesor).</p>
+</div>
+</div>
 
 <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:18px;">Información de la materia</h3>
 

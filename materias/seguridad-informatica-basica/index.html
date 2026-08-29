@@ -5,8 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Seguridad Informática Básica</title>
 <link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
 </head>
 <body>
+<button class="viewswitch" role="switch" aria-label="Cambiar vista: por tema o por clase">
+<span class="vs-label vs-tema">Por tema</span>
+<span class="vs-track"><span class="vs-knob"></span></span>
+<span class="vs-label vs-clase">Por clase</span>
+</button>
 <div class="wrap">
 <a class="back" href="../../index.html">← Todas las materias</a>
 <div class="detail-head" style="border-color:#E8735C">
@@ -20,6 +27,321 @@
 <div class="section-block"><h4>Programa de estudio (temario oficial)</h4><p><strong>Clave FI:</strong> 2934</p><p>Objetivo: el alumno seleccionará los métodos y elementos que le permitan planificar el desarrollo de una arquitectura de seguridad enmarcada de manera ética, con base en la identificación y análisis de amenazas, vulnerabilidades y ataques en sistemas y redes de cómputo.</p>
 <table><thead><tr><th>Núm.</th><th>Tema</th><th>Horas</th></tr></thead><tbody><tr><td>1</td><td>Fundamentos teóricos</td><td>10.0</td></tr><tr><td>2</td><td>Amenazas y vulnerabilidades</td><td>10.0</td></tr><tr><td>3</td><td>Identificación de ataques y técnicas de intrusión</td><td>14.0</td></tr><tr><td>4</td><td>Políticas de seguridad informática de la organización</td><td>10.0</td></tr><tr><td>5</td><td>Análisis y gestión de los riesgos</td><td>10.0</td></tr><tr><td>6</td><td>Entorno social, ética informática e impacto económico de la seguridad informática</td><td>10.0</td></tr></tbody></table></div>
 <div class="section-block"><h4>Bibliografía básica</h4><ul><li>Daltabuit — <em>La seguridad de la información</em></li><li>López &amp; Quezada — <em>Fundamentos de seguridad informática</em> (FI-UNAM)</li><li>Gómez — <em>Enciclopedia de la seguridad informática</em></li><li>Anonymous — <em>Maximum Security</em></li></ul></div>
+<div class="section-block"><h4>Contenido</h4>
+<div class="v-tema">
+<ul class="tree">
+<li class="t1"><span class="num">1</span>Fundamentos teóricos <span class="hrs">10.0 h</span>
+<ul>
+<li><span class="num">1.1</span>Introducción.
+<ul>
+<li><span class="num">1.1.1</span>Concepto de la seguridad informática.
+</li>
+<li><span class="num">1.1.2</span>Evolución histórica de la seguridad informática.
+</li>
+<li><span class="num">1.1.3</span>Objetivos de la seguridad informática.
+</li>
+<li><span class="num">1.1.4</span>Principio de profundidad.
+</li>
+</ul></li>
+<li><span class="num">1.2</span>Normatividad de la seguridad informática.
+<ul>
+<li><span class="num">1.2.1</span>Normas de seguridad a través de la historia.
+</li>
+<li><span class="num">1.2.2</span>Criterios comunes / ISO 15408.
+</li>
+<li><span class="num">1.2.3</span>COBIT.
+</li>
+<li><span class="num">1.2.4</span>Serie ISO 27000.
+</li>
+</ul></li>
+<li><span class="num">1.3</span>Esquema de seguridad basado en criterios comunes: perfiles de protección.
+<ul>
+<li><span class="num">1.3.1</span>Definición y propósito.
+</li>
+<li><span class="num">1.3.2</span>Estructura.
+</li>
+</ul></li>
+<li><span class="num">1.4</span>Servicios de Seguridad.
+<ul>
+<li><span class="num">1.4.1</span>Confidencialidad.
+</li>
+<li><span class="num">1.4.2</span>Autenticación.
+</li>
+<li><span class="num">1.4.3</span>Integridad.
+</li>
+<li><span class="num">1.4.4</span>No repudio.
+</li>
+<li><span class="num">1.4.5</span>Control de acceso.
+</li>
+<li><span class="num">1.4.6</span>Disponibilidad.
+</li>
+</ul></li></ul></li>
+<li class="t1"><span class="num">2</span>Amenazas y vulnerabilidades <span class="hrs">10.0 h</span>
+<ul>
+<li><span class="num">2.1</span>Amenazas.
+<ul>
+<li><span class="num">2.1.1</span>Definición.
+</li>
+<li><span class="num">2.1.2</span>Fuentes de amenaza.
+</li>
+</ul></li>
+<li><span class="num">2.2</span>Vulnerabilidades.
+<ul>
+<li><span class="num">2.2.1</span>Definición.
+</li>
+<li><span class="num">2.2.2</span>Tipos de vulnerabilidades.
+</li>
+</ul></li></ul></li>
+<li class="t1"><span class="num">3</span>Identificación de ataques y técnicas de intrusión <span class="hrs">14.0 h</span>
+<ul>
+<li><span class="num">3.1</span>Ataques.
+<ul>
+<li><span class="num">3.1.1</span>Definición.
+</li>
+<li><span class="num">3.1.2</span>Ataques inherentes a las redes.
+</li>
+<li><span class="num">3.1.3</span>Tipos.
+</li>
+<li><span class="num">3.1.4</span>Etapas de un ataque.
+</li>
+</ul></li>
+<li><span class="num">3.2</span>Reconocimiento y Obtención de Información.
+<ul>
+<li><span class="num">3.2.1</span>Bases de datos públicas.
+</li>
+<li><span class="num">3.2.2</span>WEB.
+</li>
+<li><span class="num">3.2.3</span>DNS.
+</li>
+<li><span class="num">3.2.4</span>Keyloggers.
+</li>
+<li><span class="num">3.2.5</span>Ingeniería social.
+</li>
+<li><span class="num">3.2.6</span>Otros.
+</li>
+</ul></li>
+<li><span class="num">3.3</span>Identificación de vulnerabilidades.
+<ul>
+<li><span class="num">3.3.1</span>Ataques a redes telefónicas.
+</li>
+<li><span class="num">3.3.2</span>Ataques a la telefonía inalámbrica.
+</li>
+<li><span class="num">3.3.3</span>Barrido de puertos.
+</li>
+<li><span class="num">3.3.4</span>Identificación de firewalls.
+</li>
+<li><span class="num">3.3.5</span>Identificación de sistemas operativos / Fingerprinting.
+</li>
+<li><span class="num">3.3.6</span>Escaneo a redes inalámbricas.
+</li>
+<li><span class="num">3.3.7</span>Instalaciones físicas.
+</li>
+<li><span class="num">3.3.8</span>Configuración de servicios y servidores.
+</li>
+<li><span class="num">3.3.9</span>Software.
+</li>
+<li><span class="num">3.3.10</span>Otros.
+</li>
+</ul></li>
+<li><span class="num">3.4</span>Explotación y obtención de acceso a sistemas y redes.
+<ul>
+<li><span class="num">3.4.1</span>Introducción a Metasploit.
+</li>
+<li><span class="num">3.4.2</span>Metodología OSSSTM v.3.
+</li>
+<li><span class="num">3.4.3</span>Pentesting.
+</li>
+<li><span class="num">3.4.4</span>Manejo de exploits y análisis de vulnerabilidades en la red.
+</li>
+<li><span class="num">3.4.5</span>Promiscuidad en redes.
+</li>
+<li><span class="num">3.4.6</span>Robo de identidad.
+</li>
+<li><span class="num">3.4.7</span>Engaño a firewalls y detectores de intrusos.
+</li>
+<li><span class="num">3.4.8</span>Vulnerabilidades en el software.
+</li>
+<li><span class="num">3.4.9</span>Ataques a contraseñas.
+</li>
+<li><span class="num">3.4.10</span>Debilidad de los protocolos de red.
+</li>
+<li><span class="num">3.4.11</span>Ataques a servicios.
+</li>
+<li><span class="num">3.4.12</span>Negación de servicio.
+</li>
+<li><span class="num">3.4.13</span>Ataques a redes inalámbricas.
+</li>
+</ul></li>
+<li><span class="num">3.5</span>Mantener el acceso a sistemas comprometidos.
+<ul>
+<li><span class="num">3.5.1</span>Puertas traseras.
+</li>
+<li><span class="num">3.5.2</span>Caballos de Troya.
+</li>
+<li><span class="num">3.5.3</span>Rootkits.
+</li>
+<li><span class="num">3.5.4</span>Otros.
+</li>
+</ul></li>
+<li><span class="num">3.6</span>Eliminación de evidencias.
+<ul>
+<li><span class="num">3.6.1</span>Eliminación de evidencias.
+</li>
+<li><span class="num">3.6.2</span>Ocultar Información.
+</li>
+<li><span class="num">3.6.3</span>Estenografía.
+</li>
+<li><span class="num">3.6.4</span>Nuevos métodos.
+</li>
+</ul></li>
+<li><span class="num">3.7</span>Mecanismos de seguridad.
+<ul>
+<li><span class="num">3.7.1</span>Definición y objetivos.
+</li>
+<li><span class="num">3.7.2</span>Tipos de mecanismos de seguridad.
+</li>
+</ul></li></ul></li>
+<li class="t1"><span class="num">4</span>Políticas de seguridad informática de la organización <span class="hrs">10.0 h</span>
+<ul>
+<li><span class="num">4.1</span>Políticas de seguridad informática.
+<ul>
+<li><span class="num">4.1.1</span>Objetivo de una política de seguridad.
+</li>
+<li><span class="num">4.1.2</span>Misión y visión de la organización.
+</li>
+<li><span class="num">4.1.3</span>Principios fundamentales de las políticas de seguridad.
+</li>
+<li><span class="num">4.1.4</span>Modelos de seguridad.
+</li>
+<li><span class="num">4.1.5</span>Desarrollo de políticas orientadas a servicios de seguridad.
+</li>
+<li><span class="num">4.1.6</span>Publicación y difusión de las políticas de seguridad.
+</li>
+</ul></li>
+<li><span class="num">4.2</span>Procedimientos y planes de contingencia.
+<ul>
+<li><span class="num">4.2.1</span>Procedimientos preventivos.
+</li>
+<li><span class="num">4.2.2</span>Procedimientos correctivos.
+</li>
+<li><span class="num">4.2.3</span>Planes de contingencia.
+</li>
+</ul></li></ul></li>
+<li class="t1"><span class="num">5</span>Análisis y gestión de los riesgos <span class="hrs">10.0 h</span>
+<ul>
+<li><span class="num">5.1</span>Terminología básica.
+<ul>
+<li><span class="num">5.1.1</span>Activos.
+</li>
+<li><span class="num">5.1.2</span>Riesgo.
+</li>
+<li><span class="num">5.1.3</span>Aceptación.
+</li>
+<li><span class="num">5.1.4</span>Análisis del riesgo.
+</li>
+<li><span class="num">5.1.5</span>Manejo del riesgo.
+</li>
+<li><span class="num">5.1.6</span>Evaluación.
+</li>
+<li><span class="num">5.1.7</span>Impacto.
+</li>
+<li><span class="num">5.1.8</span>Pérdida esperada.
+</li>
+<li><span class="num">5.1.9</span>Vulnerabilidad.
+</li>
+<li><span class="num">5.1.10</span>Amenaza.
+</li>
+<li><span class="num">5.1.11</span>Riesgo residual.
+</li>
+<li><span class="num">5.1.12</span>Controles.
+</li>
+</ul></li>
+<li><span class="num">5.2</span>Análisis cuantitativo.
+</li>
+<li><span class="num">5.3</span>Análisis cualitativo.
+</li>
+<li><span class="num">5.4</span>Pasos del análisis de riesgo.
+<ul>
+<li><span class="num">5.4.1</span>Identificación y evaluación de los activos.
+</li>
+<li><span class="num">5.4.2</span>Identificación de amenazas.
+</li>
+<li><span class="num">5.4.3</span>Identificación de vulnerabilidades.
+</li>
+<li><span class="num">5.4.4</span>Impacto de la ocurrencia de una amenaza.
+</li>
+<li><span class="num">5.4.5</span>Controles en el lugar.
+</li>
+<li><span class="num">5.4.6</span>Riesgos residuales.
+</li>
+<li><span class="num">5.4.7</span>Identificación de los controles adicionales.
+</li>
+<li><span class="num">5.4.8</span>Preparación de un informe del análisis del riesgo.
+</li>
+</ul></li>
+<li><span class="num">5.5</span>Análisis costo-beneficio.
+<ul>
+<li><span class="num">5.5.1</span>Metodologías certificables
+</li>
+</ul></li></ul></li>
+<li class="t1"><span class="num">6</span>Entorno social, ética informática e impacto económico de la seguridad informática <span class="hrs">10.0 h</span>
+<ul>
+<li><span class="num">6.1</span>Delito informático.
+</li>
+<li><span class="num">6.2</span>Marco legal mexicano.
+<ul>
+<li><span class="num">6.2.1</span>Acceso ilícito a sistemas.
+</li>
+<li><span class="num">6.2.2</span>Código Penal.
+</li>
+<li><span class="num">6.2.3</span>Derechos de Autor.
+</li>
+<li><span class="num">6.2.4</span>Actualidad de la legislación sobre delitos informáticos.
+</li>
+<li><span class="num">6.2.5</span>Protección de la información.
+</li>
+<li><span class="num">6.2.6</span>Instituto Federal de Acceso a la Información.
+</li>
+</ul></li>
+<li><span class="num">6.3</span>Ley Modelo  (CNUDMI).
+</li>
+<li><span class="num">6.4</span>Legislaciones Internacionales.
+<ul>
+<li><span class="num">6.4.1</span>Legislación de Estados Unidos de América en Materia Informática.
+</li>
+<li><span class="num">6.4.2</span>Legislación de Australia en Materia Informática.
+</li>
+<li><span class="num">6.4.3</span>Legislación de España en Materia Informática.
+</li>
+<li><span class="num">6.4.4</span>Otras legislaciones.
+</li>
+</ul></li>
+<li><span class="num">6.5</span>Ética informática.
+<ul>
+<li><span class="num">6.5.1</span>Concepto de ética informática.
+</li>
+<li><span class="num">6.5.2</span>Códigos deontológico en informática.
+</li>
+<li><span class="num">6.5.3</span>Contenidos de la ética informática.
+</li>
+<li><span class="num">6.5.4</span>Actualidad de la ética informática.
+</li>
+<li><span class="num">6.5.5</span>Psicología del intruso.
+</li>
+<li><span class="num">6.5.6</span>Códigos de ética.
+</li>
+</ul></li>
+<li><span class="num">6.6</span>Impacto social de la seguridad informática.
+</li>
+<li><span class="num">6.7</span>Impacto económico de la seguridad informática.
+</li>
+</ul></li>
+</ul>
+</div>
+<div class="v-clase">
+<p class="empty">Las clases previas se agregan aquí cuando consigas la grabación o los apuntes (de un compañero o del profesor).</p>
+</div>
+</div>
 
 <div class="empty">Aún no hay apuntes aquí. Se va a ir llenando conforme avance el semestre.</div>
 </div>

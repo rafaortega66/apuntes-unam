@@ -5,8 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fundamentos de Sistemas Embebidos</title>
 <link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
 </head>
 <body>
+<button class="viewswitch" role="switch" aria-label="Cambiar vista: por tema o por clase">
+<span class="vs-label vs-tema">Por tema</span>
+<span class="vs-track"><span class="vs-knob"></span></span>
+<span class="vs-label vs-clase">Por clase</span>
+</button>
 <div class="wrap">
 <a class="back" href="../../index.html">← Todas las materias</a>
 <div class="detail-head" style="border-color:#A98BD1">
@@ -21,6 +28,95 @@ Martes · 13:00–15:00 · Salón T101</p>
 <div class="section-block"><h4>Programa de estudio (temario oficial)</h4><p><strong>Clave FI:</strong> 1858 · Antecedente: Microcomputadoras</p><p>Objetivo: el alumno integrará la utilidad de los sistemas embebidos en las aplicaciones actuales mediante la estructura completa de un sistema embebido, tanto en hardware (arquitecturas, plataformas y procesadores) como en software (sistema operativo, programación y aplicaciones).</p>
 <table><thead><tr><th>Núm.</th><th>Tema</th><th>Horas</th></tr></thead><tbody><tr><td>1</td><td>Introducción a los sistemas embebidos</td><td>3.0</td></tr><tr><td>2</td><td>Organización, arquitectura y plataformas de sistemas embebidos</td><td>12.0</td></tr><tr><td>3</td><td>Sistemas operativos para plataformas embebidas</td><td>11.0</td></tr><tr><td>4</td><td>Software y programación de sistemas embebidos</td><td>12.0</td></tr><tr><td>5</td><td>Desarrollo de un sistema embebido</td><td>10.0</td></tr></tbody></table></div>
 <div class="section-block"><h4>Bibliografía básica</h4><ul><li>Barr &amp; Massa — <em>Programming Embedded Systems with C and GNU Development Tools</em></li><li>Barry &amp; Crowley — <em>Modern Embedded Computing</em></li><li>Noergaard — <em>Embedded Systems Architecture</em></li><li>Valvano — <em>Embedded Systems: Introduction to ARM Cortex-M</em></li></ul></div>
+<div class="section-block"><h4>Contenido</h4>
+<div class="v-tema">
+<ul class="tree">
+<li class="t1"><span class="num">1</span><a href="tema-01.html">Introducción a los sistemas embebidos</a> <span class="hrs">3.0 h</span>
+<ul>
+<li><span class="num">1.1</span>Concepto de sistema embebido.
+</li>
+<li><span class="num">1.2</span>Introducción a las arquitecturas de sistemas embebidos.
+</li>
+<li><span class="num">1.3</span>Importancia de la arquitectura de un sistema embebido.
+</li>
+<li><span class="num">1.4</span>El modelo de un sistema embebido, tipos y tamaños de sistemas embebidos.
+</li>
+<li><span class="num">1.5</span>Ejemplos de sistemas embebidos.
+</li>
+</ul></li>
+<li class="t1"><span class="num">2</span>Organización, arquitectura y plataformas de sistemas embebidos <span class="hrs">12.0 h</span>
+<ul>
+<li><span class="num">2.1</span>Procesador.
+</li>
+<li><span class="num">2.2</span>Mapa de memoria del sistema.
+</li>
+<li><span class="num">2.3</span>Controlador de interrupciones.
+</li>
+<li><span class="num">2.4</span>Temporizadores.
+</li>
+<li><span class="num">2.5</span>Memoria volátil y no volátil. Direccionamientos.
+</li>
+<li><span class="num">2.6</span>Bus serie universal.
+</li>
+<li><span class="num">2.7</span>Interconexión de dispositivos.
+</li>
+<li><span class="num">2.8</span>Secuencia de arranque en plataformas embebidas.
+</li>
+<li><span class="num">2.9</span>Estudio de plataformas comerciales para sistemas embebidos (INTEL, ARM, etc.).
+</li>
+</ul></li>
+<li class="t1"><span class="num">3</span>Sistemas operativos para plataformas embebidas <span class="hrs">11.0 h</span>
+<ul>
+<li><span class="num">3.1</span>Interfaz de aplicación.
+</li>
+<li><span class="num">3.2</span>Procesos, tareas e hilos.
+</li>
+<li><span class="num">3.3</span>Tipos de scheduling.
+</li>
+<li><span class="num">3.4</span>Administración de memoria.
+</li>
+<li><span class="num">3.5</span>Relojes y temporizadores.
+</li>
+<li><span class="num">3.6</span>Modelos de manejadores de dispositivos.
+</li>
+<li><span class="num">3.7</span>Sistema de almacenamiento de archivos.
+</li>
+<li><span class="num">3.8</span>Administración de energía.
+</li>
+<li><span class="num">3.9</span>Linux embebido (herramientas, anatomía, kernel, depuración, drivers, administración de memoria).
+</li>
+<li><span class="num">3.10</span>Windows embebido.
+</li>
+<li><span class="num">3.11</span>Android.
+</li>
+</ul></li>
+<li class="t1"><span class="num">4</span>Software y programación de sistemas embebidos <span class="hrs">12.0 h</span>
+<ul>
+<li><span class="num">4.1</span>Programación en ensamblador.
+</li>
+<li><span class="num">4.2</span>Programación en alto nivel.
+</li>
+<li><span class="num">4.3</span>Ejemplos de manejadores de dispositivos (Device Drivers).
+</li>
+<li><span class="num">4.4</span>Software de aplicación y Middleware.
+</li>
+<li><span class="num">4.5</span>Programación de código en editores integrados IDE.
+</li>
+</ul></li>
+<li class="t1"><span class="num">5</span>Desarrollo de un sistema embebido <span class="hrs">10.0 h</span>
+<ul>
+<li><span class="num">5.1</span>Desarrollo de un sistema embebido con alguna plataforma comercial (INTEL Atom, ARM etc.).
+</li>
+</ul></li>
+</ul>
+</div>
+<div class="v-clase">
+<ol class="clases">
+<li><a href="tema-01.html"><strong>Clase 01</strong></a> — ¿Qué es un sistema embebido? Digital vs. mecánico/analógico, lazo abierto vs. cerrado, propiedades de materiales, motor de CA, definición formal de computadora. <span class="tags">Tema 1</span></li>
+</ol>
+<p class="empty">Las clases previas se agregan aquí cuando consigas la grabación o los apuntes (de un compañero o del profesor).</p>
+</div>
+</div>
 
 <div class="grid" style="margin-bottom:32px">
   <a class="card" style="--c:#A98BD1" href="tema-01.html"><h3>Clase 01 — ¿Qué es un sistema embebido?</h3><p>Digital vs. mecánico, lazo abierto/cerrado, materiales</p></a>

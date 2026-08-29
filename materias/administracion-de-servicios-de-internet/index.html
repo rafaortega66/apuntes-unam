@@ -5,8 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Administración de Servicios de Internet</title>
 <link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
 </head>
 <body>
+<button class="viewswitch" role="switch" aria-label="Cambiar vista: por tema o por clase">
+<span class="vs-label vs-tema">Por tema</span>
+<span class="vs-track"><span class="vs-knob"></span></span>
+<span class="vs-label vs-clase">Por clase</span>
+</button>
 <div class="wrap">
 <a class="back" href="../../index.html">← Todas las materias</a>
 <div class="detail-head" style="border-color:#7C9CD6">
@@ -20,6 +27,214 @@
 <div class="section-block"><h4>Programa de estudio (temario oficial)</h4><p><strong>Clave FI:</strong> 2945</p><p>Objetivo: el alumno diseñará las características, operación y configuración de los servicios de internet para aplicarlo en la administración de diferentes organizaciones.</p>
 <table><thead><tr><th>Núm.</th><th>Tema</th><th>Horas</th></tr></thead><tbody><tr><td>1</td><td>Introducción</td><td>4.0</td></tr><tr><td>2</td><td>Servidor de correo electrónico</td><td>8.0</td></tr><tr><td>3</td><td>Servidor de conexión remota</td><td>8.0</td></tr><tr><td>4</td><td>Servidores de aplicaciones y middleware</td><td>8.0</td></tr><tr><td>5</td><td>Servidor de archivos</td><td>8.0</td></tr><tr><td>6</td><td>Servidor de directorios</td><td>10.0</td></tr><tr><td>7</td><td>Servidor web</td><td>12.0</td></tr><tr><td>8</td><td>Otros servicios</td><td>6.0</td></tr></tbody></table></div>
 <div class="section-block"><h4>Bibliografía básica</h4><ul><li>Hunt — <em>TCP/IP Network Administration</em></li><li>Mann — <em>Linux TCP/IP Network Administration</em></li><li>Hunt — <em>Linux DNS Server Administration</em></li></ul></div>
+<div class="section-block"><h4>Contenido</h4>
+<div class="v-tema">
+<ul class="tree">
+<li class="t1"><span class="num">1</span>Introducción <span class="hrs">4.0 h</span>
+<ul>
+<li><span class="num">1.1</span>IEEE.
+</li>
+<li><span class="num">1.2</span>RFC.
+</li>
+<li><span class="num">1.3</span>The Internet Protocol Journal.
+</li>
+<li><span class="num">1.4</span>La Taxonomía de la ACM.
+</li>
+<li><span class="num">1.5</span>The Internet Engineering Taks Force (IIETF).
+</li>
+</ul></li>
+<li class="t1"><span class="num">2</span>Servidor de correo electrónico <span class="hrs">8.0 h</span>
+<ul>
+<li><span class="num">2.1</span>Protocolo smtp.
+<ul>
+<li><span class="num">2.1.1</span>RFC 2821.
+</li>
+<li><span class="num">2.1.2</span>Tipos.
+</li>
+</ul></li>
+<li><span class="num">2.2</span>Características de smtp.
+<ul>
+<li><span class="num">2.2.1</span>Configuración y ejecución de módulos.
+</li>
+<li><span class="num">2.2.2</span>Creación y configuración de dominios y usuarios virtuales.
+</li>
+<li><span class="num">2.2.3</span>Cifrado del protocolo.
+</li>
+<li><span class="num">2.2.4</span>Autenticación.
+</li>
+<li><span class="num">2.2.5</span>Configuración del tipo masquerade y antispam.
+</li>
+</ul></li>
+<li><span class="num">2.3</span>Protocolo pop3.
+<ul>
+<li><span class="num">2.3.1</span>RFC 1939.
+</li>
+<li><span class="num">2.3.2</span>Tipos.
+</li>
+</ul></li>
+<li><span class="num">2.4</span>Características del pop3.
+<ul>
+<li><span class="num">2.4.1</span>Configuración y ejecución de módulos.
+</li>
+<li><span class="num">2.4.2</span>Configuración de dominios y usuarios virtuales.
+</li>
+<li><span class="num">2.4.3</span>Cifrado del protocolo.
+</li>
+<li><span class="num">2.4.4</span>Autenticación.
+</li>
+</ul></li>
+<li><span class="num">2.5</span>Protocolo imap.
+<ul>
+<li><span class="num">2.5.1</span>RFC 3501.
+</li>
+<li><span class="num">2.5.2</span>Tipos.
+</li>
+</ul></li>
+<li><span class="num">2.6</span>Características de imap.
+<ul>
+<li><span class="num">2.6.1</span>Configuración y ejecución de módulos.
+</li>
+<li><span class="num">2.6.2</span>Configuración de dominios y usuarios virtuales.
+</li>
+<li><span class="num">2.6.3</span>Cifrado del protocolo.
+</li>
+<li><span class="num">2.6.4</span>Autenticación.
+</li>
+</ul></li></ul></li>
+<li class="t1"><span class="num">3</span>Servidor de conexión remota <span class="hrs">8.0 h</span>
+<ul>
+<li><span class="num">3.1</span>Protocolo telnet.
+<ul>
+<li><span class="num">3.1.1</span>Características.
+</li>
+<li><span class="num">3.1.2</span>RFC 854.
+</li>
+<li><span class="num">3.1.3</span>Tipos.
+</li>
+</ul></li>
+<li><span class="num">3.2</span>Protocolo ssh.
+<ul>
+<li><span class="num">3.2.1</span>Características.
+</li>
+<li><span class="num">3.2.2</span>RFC 854.
+</li>
+<li><span class="num">3.2.3</span>Tipos.
+</li>
+<li><span class="num">3.2.4</span>Transferencia de archivos y configuración de jaulas.
+</li>
+<li><span class="num">3.2.5</span>Creación y configuración de túneles.
+</li>
+</ul></li></ul></li>
+<li class="t1"><span class="num">4</span>Servidores de aplicaciones y middleware <span class="hrs">8.0 h</span>
+<ul>
+<li><span class="num">4.1</span>Características.
+</li>
+<li><span class="num">4.2</span>Tipos.
+</li>
+<li><span class="num">4.3</span>Configuración y administración.
+</li>
+<li><span class="num">4.4</span>Balanceo de carga.
+</li>
+<li><span class="num">4.5</span>Generación de un caso práctico.
+</li>
+</ul></li>
+<li class="t1"><span class="num">5</span>Servidor de archivos <span class="hrs">8.0 h</span>
+<ul>
+<li><span class="num">5.1</span>Protocolos.
+<ul>
+<li><span class="num">5.1.1</span>NFS.
+</li>
+<li><span class="num">5.1.2</span>Samba.
+</li>
+<li><span class="num">5.1.3</span>Distribuidos (cassandra, dropbox).
+</li>
+</ul></li>
+<li><span class="num">5.2</span>Configuración y administración.
+</li>
+<li><span class="num">5.3</span>Balanceo de carga.
+</li>
+<li><span class="num">5.4</span>Generación de un caso práctico.
+</li>
+</ul></li>
+<li class="t1"><span class="num">6</span>Servidor de directorios <span class="hrs">10.0 h</span>
+<ul>
+<li><span class="num">6.1</span>Protocolos.
+<ul>
+<li><span class="num">6.1.1</span>Domain Name Services (DNS, RFC 1034).
+</li>
+<li><span class="num">6.1.2</span>Network Information Services (NIS, RFC 3898).
+</li>
+<li><span class="num">6.1.3</span>Lightweight Directory Access Protocol (LDAP, RFC 4510).
+</li>
+</ul></li>
+<li><span class="num">6.2</span>Configuración y administración.
+</li>
+<li><span class="num">6.3</span>Seguridad y Cifrado.
+</li>
+<li><span class="num">6.4</span>Generación de un caso práctico.
+</li>
+</ul></li>
+<li class="t1"><span class="num">7</span>Servidor web <span class="hrs">12.0 h</span>
+<ul>
+<li><span class="num">7.1</span>Protocolo http.
+<ul>
+<li><span class="num">7.1.1</span>Características.
+</li>
+<li><span class="num">7.1.2</span>RFC 2616.
+</li>
+<li><span class="num">7.1.3</span>Tipos.
+</li>
+</ul></li>
+<li><span class="num">7.2</span>Configuración y ejecución de módulos.
+</li>
+<li><span class="num">7.3</span>Creación y configuración de host virtuales.
+</li>
+<li><span class="num">7.4</span>Cifrado del protocolo.
+<ul>
+<li><span class="num">7.4.1</span>Características.
+</li>
+<li><span class="num">7.4.2</span>SSL/TLS.
+</li>
+<li><span class="num">7.4.3</span>Configurar para migrar de un servidor http a https.
+</li>
+</ul></li>
+<li><span class="num">7.5</span>Autenticación.
+<ul>
+<li><span class="num">7.5.1</span>http_access.
+</li>
+<li><span class="num">7.5.2</span>Conexión con base de datos.
+</li>
+<li><span class="num">7.5.3</span>Conexión con servidor samba.
+</li>
+</ul></li>
+<li><span class="num">7.6</span>Proxy http.
+<ul>
+<li><span class="num">7.6.1</span>Características.
+</li>
+<li><span class="num">7.6.2</span>Configuración.
+</li>
+<li><span class="num">7.6.3</span>Generación de proxy http.
+</li>
+</ul></li></ul></li>
+<li class="t1"><span class="num">8</span>Otros servicios <span class="hrs">6.0 h</span>
+<ul>
+<li><span class="num">8.1</span>RFC 1700.
+</li>
+<li><span class="num">8.2</span>Servidor Proxy.
+</li>
+<li><span class="num">8.3</span>Servidor DHCP.
+</li>
+<li><span class="num">8.4</span>Servidor de transferencia de archivos.
+</li>
+<li><span class="num">8.5</span>Nuevas tendencias y servicios.
+</li>
+</ul></li>
+</ul>
+</div>
+<div class="v-clase">
+<p class="empty">Las clases previas se agregan aquí cuando consigas la grabación o los apuntes (de un compañero o del profesor).</p>
+</div>
+</div>
 
 <div class="empty">Aún no hay apuntes aquí. Se va a ir llenando conforme avance el semestre.</div>
 </div>
