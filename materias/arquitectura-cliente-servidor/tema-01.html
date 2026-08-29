@@ -28,6 +28,24 @@
   </div>
 </div>
 <div class="section-block"><h4>Objetivo</h4><p>Entender los conceptos relacionados con los procesos, además de cómo identificarlos en un entorno Linux y las funciones system(), fork() y exec() para su creación.</p></div>
+
+<div class="section-block"><h4>Apuntes de clase — 27-ago-2026 (permisos, bit setuid, repaso de fork)</h4>
+<p><strong>Permisos en notación octal.</strong> Cada terna <code>rwx</code> se codifica con 4-2-1:</p>
+<pre><code>  r  w  x
+  4  2  1        rwx = 4+2+1 = 7      rw- = 6      r-x = 5
+usuario(u) grupo(g) otros(o)   →   ej. -rw-r--r-- = 644</code></pre>
+<p><strong>Bits especiales</strong> (un cuarto dígito al frente en <code>chmod</code>):</p>
+<pre><code>chmod 4 g o   →  4 = setuid    2 = setgid    1 = sticky bit
+ejemplo:  chmod 4711 programa      (activa setuid + rwx u, x g, x o)</code></pre>
+<p><strong>ID real vs. ID efectivo</strong> (repaso; detalle completo más abajo):</p>
+<ul>
+<li><strong>ID real</strong> → el dueño legítimo del proceso (quien lo lanzó).</li>
+<li><strong>ID efectivo</strong> → con el que el proceso realmente pide acceso: sirve para acceder a archivos de otros usuarios o ejecutar programas <em>setuid</em>. Al ejecutar un binario con bit <em>setuid</em>, el EUID pasa a ser el del <strong>dueño del archivo</strong>.</li>
+</ul>
+<p>El bit setuid es el tema de la <strong>Tarea 2</strong> (ver <a href="evaluacion.html" style="color:var(--indigo)">Evaluación</a>).</p>
+<p><strong>Repaso de <code>fork()</code>:</strong> crea un proceso nuevo, copia exacta del padre salvo el <code>PID</code> y el <code>PPID</code>. Devuelve el <strong>PID del hijo al padre</strong> y <strong>0 al hijo</strong>. Padre e hijo corren en paralelo y de forma asíncrona → si el código del hijo depende del padre (o al revés) hay <strong>condición de carrera</strong> ("deadlock" en los apuntes). <code>pid_t</code> es el tipo de dato del PID. Ejemplo visto en clase: PID de la shell/terminal ≈ 29750 / 28200 <em>(valores de esa corrida)</em>.</p>
+<p><em>Nota de los apuntes: "no hay clase 2 todavía".</em></p>
+</div>
 <div class="section-block"><h4>Contexto histórico: origen de los sistemas operativos</h4><p>1944–1952: John Von Neumann propone el diseño de una computadora que almacena un programa y usa un procesador central (arquitectura de programa almacenado), junto con el sistema de numeración binaria. Esto permitió que la computadora se usara más allá de la ciencia: en economía, administración, producción, etc.
 
 1956: se crea el primer Sistema Operativo de la historia, para un IBM 704. Solo encadenaba la ejecución de un programa cuando el anterior terminaba.
