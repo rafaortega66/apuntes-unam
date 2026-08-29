@@ -11,7 +11,9 @@
       "Bash(git push *)",
       "Bash(gh api *)",
       "WebFetch(domain:www.thegeekstuff.com)",
-      "Bash(git rm *)"
+      "Bash(git rm *)",
+      "Bash(python3 -c ' *)",
+      "Bash(pip3 install *)"
     ]
   }
 }
