@@ -252,3 +252,11 @@ details.sec.contexto p, details.sec.contexto li { font-size: 13.5px; color: var(
   .viewswitch { gap: 0; }
 }
 .viewswitch { z-index: 260; }   /* siempre por encima de la barra "atrás" */
+
+/* tarjetas de tema (contenido del índice) */
+.grid-temas { margin-top: 4px; }
+.grid-temas .card h3 { font-size: 15px; }
+.grid-temas .card p { margin-top: 2px; }
+span.card.card-off { opacity: 0.5; cursor: default; }
+span.card.card-off:hover { transform: none; }
+span.card .off { color: var(--ink-soft); font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
