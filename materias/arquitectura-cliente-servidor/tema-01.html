@@ -27,26 +27,28 @@
     <a class="btn" href="files/prof-tema1/proceso_imagen.pdf" target="_blank">📄 Investigación de un proceso e imagen</a>
   </div>
 </div>
-<div class="section-block"><h4>Objetivo</h4><p>Entender los conceptos relacionados con los procesos, además de cómo identificarlos en un entorno Linux y las funciones system(), fork() y exec() para su creación.</p></div>
+<div class="encorto"><h4>En corto</h4><ul><li>Tema 1 = Linux y procesos: qué es un proceso y su “imagen” en memoria (text / data / BSS / heap / stack), y cómo se crean con <code>system()</code>, <code>fork()</code> y <code>exec()</code>.</li><li>Herramientas para inspeccionar procesos: <code>size</code>, <code>pmap</code>, <code>/proc/&lt;PID&gt;/maps</code>, <code>ps</code> / <code>ps aux</code> / <code>ps -eo</code>, <code>top</code>.</li><li><code>fork()</code> crea una copia del padre (salvo PID/PPID): devuelve el PID del hijo al padre y <code>0</code> al hijo.</li><li>Permisos octales (r=4, w=2, x=1); el bit <strong>setuid</strong> (<code>chmod 4xxx</code>) hace que el proceso tome el UID del dueño del archivo.</li><li>Incluye 25 programas en C del profesor con su salida, 5 diagramas y 3 PDFs de teoría.</li></ul></div>
+<div class="examen"><h4>🎯 Para el examen</h4><ul><li><strong>BCP / PCB</strong> (bloque de control de proceso): estructura del kernel con los metadatos del proceso.</li><li><code>size</code> no muestra heap ni stack porque son dinámicos (solo existen en RAM con el proceso vivo).</li><li><code>pmap</code>: la memoria se asigna por <strong>páginas de 4 KB</strong>; las zonas dinámicas (stack/heap) nunca tienen permiso <code>X</code> (anti-inyección de código).</li><li><code>ps -eo pid,ppid,…</code>: las columnas van separadas por comas <strong>sin espacios</strong> o hay error de sintaxis.</li><li>ID real vs. efectivo; con <em>setuid</em> el EUID pasa a ser el del dueño del archivo (Tarea 2).</li><li><code>fork()</code>: retorno <code>pid_t</code> (PID del hijo al padre / <code>0</code> al hijo); patrón <code>if(id_hijo!=0)</code>; riesgo de <strong>deadlock</strong>.</li></ul></div>
+<details class="section-block sec" id="objetivo" open><summary><span class="stitle">Objetivo</span></summary><p>Entender los conceptos relacionados con los procesos, además de cómo identificarlos en un entorno Linux y las funciones system(), fork() y exec() para su creación.</p></details>
 
-<div class="section-block"><h4>Clase 1 — Linux y procesos: la imagen de un proceso</h4>
+<details class="section-block sec" id="clase-1-linux-y-procesos-la-imagen-de-un"><summary><span class="stitle">Clase 1 — Linux y procesos: la imagen de un proceso</span></summary>
 <p>Destilado del transcript de la clase (NotebookLM). Se omite lo administrativo; solo contenido de la materia.</p>
-<p><strong>Encuadre:</strong> la primera parte de la materia es "una continuación de sistemas operativos": primero procesos, después desarrollo de servidores. El curso se enfoca en <strong>un solo procesador</strong> (uniprocesador): no se ve programación multiprocesador ni multinúcleo. "Distribuido" aquí significa servidor en un host y cliente en otro, conectados por red.</p></div>
+<p><strong>Encuadre:</strong> la primera parte de la materia es "una continuación de sistemas operativos": primero procesos, después desarrollo de servidores. El curso se enfoca en <strong>un solo procesador</strong> (uniprocesador): no se ve programación multiprocesador ni multinúcleo. "Distribuido" aquí significa servidor en un host y cliente en otro, conectados por red.</p></details>
 
-<div class="section-block"><h4>Entorno de trabajo del curso</h4><ul>
+<details class="section-block sec" id="entorno-de-trabajo-del-curso"><summary><span class="stitle">Entorno de trabajo del curso</span></summary><ul>
 <li>Códigos del semestre → repositorio <strong>GitHub público</strong> (se puede hacer fork o rama en tu cuenta).</li>
 <li>Apuntes oficiales → <strong>GitHub Pages</strong> (HTTPS, alta disponibilidad). El sitio viejo <code>profesores.fi-b.unam.mx/~carlos/acs</code> es HTTP y está <strong>obsoleto</strong>.</li>
 <li><strong>GitHub Codespaces</strong>: contenedor en la nube; el <code>README.md</code> del Tema 1 explica cómo levantarlo. No hace falta traer computadora — compila y ejecuta incluso desde el celular. Dentro tienes <strong>root</strong> (<code>sudo</code> o <code>sudo su</code>). Si rompes el sistema (<code>rm -rf</code>), destruyes el Codespace y creas otro; los programas vuelven intactos. Cerrar la pestaña lo suspende; se reactiva con el botón verde.</li>
 <li>En equipo propio: cualquier distro de Linux sirve. En Windows → <strong>WSL</strong> (Linux dentro de Windows) o <strong>SSH</strong> a un servidor Linux remoto.</li>
 <li>Red UNAM: los rangos públicos <code>132.247.*.*</code> y <code>132.248.*.*</code> son de la UNAM a nivel mundial. Las IP privadas (p. ej. <code>192.168.x.x</code>) son internas y aisladas. El profesor se conectó por SSH a <code>132.248.77.168</code> <em>[inaudible: también se transcribe como 132.247.248.7.168]</em>.</li>
 <li>Documentación formal de funciones C en Linux: <strong>The Open Group</strong>. Buscar <code>"Open Group &lt;función&gt;"</code> (ej. <code>Open Group getpid</code>).</li>
-</ul></div>
+</ul></details>
 
-<div class="section-block"><h4>Imagen de un proceso</h4>
+<details class="section-block sec" id="imagen-de-un-proceso"><summary><span class="stitle">Imagen de un proceso</span></summary>
 <p>Definición del profesor: <em>"una fotografía o instantánea"</em>. Un ejecutable en ejecución crea un proceso que vive mientras la ejecución esté viva; al terminar o cerrar, el proceso muere.</p>
-<p><strong>Procesos en segundo plano</strong> (background) o <strong>demonios</strong> (daemon): no son visibles ni interactúas con ellos en la terminal. Cerrar la interfaz gráfica de un programa no siempre mata su proceso.</p></div>
+<p><strong>Procesos en segundo plano</strong> (background) o <strong>demonios</strong> (daemon): no son visibles ni interactúas con ellos en la terminal. Cerrar la interfaz gráfica de un programa no siempre mata su proceso.</p></details>
 
-<div class="section-block"><h4>Segmentos de la imagen en memoria</h4>
+<details class="section-block sec" id="segmentos-de-la-imagen-en-memoria"><summary><span class="stitle">Segmentos de la imagen en memoria</span></summary>
 <p>Al ejecutar un binario, el SO carga en una zona de memoria independiente (espacio de direcciones propio) las áreas de código y datos.</p>
 <p><strong>Segmentos estáticos:</strong></p>
 <ul>
@@ -62,17 +64,17 @@
 </ul>
 <p><strong>Scope (ámbito)</strong> de una variable local = los límites de su función.</p>
 <p>Tarea futura (todavía no): investigar <strong>file descriptors</strong> y la <strong>asignación dinámica de memoria</strong> (<code>malloc</code>).</p>
-<p><strong>⚠️ Examen — BCP / PCB</strong> (<em>Process Control Block</em>, "bloque de control de proceso"): estructura administrativa del kernel donde se guardan los metadatos del proceso. El profesor lo marcó como muy importante.</p></div>
+<p><strong>⚠️ Examen — BCP / PCB</strong> (<em>Process Control Block</em>, "bloque de control de proceso"): estructura administrativa del kernel donde se guardan los metadatos del proceso. El profesor lo marcó como muy importante.</p></details>
 
-<div class="section-block"><h4>Ejercicio: servidor sencillo en C (dos terminales)</h4><ul>
+<details class="section-block sec" id="ejercicio-servidor-sencillo-en-c-dos-ter"><summary><span class="stitle">Ejercicio: servidor sencillo en C (dos terminales)</span></summary><ul>
 <li>Objetivo: entender la estructura de la imagen (código, datos inicializados, BSS, montículo y pila) y diferenciarla del contexto del SO.</li>
 <li>Compilar dando al binario <strong>el mismo nombre</strong> que el <code>.c</code> (con <code>-o</code>); así <code>ls -l</code> agrupa fuente y binario. Sin <code>-o</code> se genera <code>a.out</code> (mala práctica: el nombre no dice nada).</li>
 <li><strong>Terminal 1:</strong> corre el servidor; usa <code>getchar()</code> para pausar y que el proceso no muera al instante — libera la memoria y muere hasta que pulsas Enter.</li>
 <li><strong>Terminal 2:</strong> monitorea el proceso en RAM.</li>
 <li>Ubicación de las variables: global inicializada → <code>data</code>; global no inicializada → <code>BSS</code>; local → <code>stack</code>; reservada con <code>malloc</code> → <code>heap</code>; strings literales de <code>printf</code> → <code>text</code>.</li>
-</ul></div>
+</ul></details>
 
-<div class="section-block"><h4>Comandos de análisis de procesos</h4>
+<details class="section-block sec" id="comandos-de-analisis-de-procesos"><summary><span class="stitle">Comandos de análisis de procesos</span></summary>
 <p><strong><code>size servidor</code></strong> — <strong>análisis estático</strong> (mira el archivo en disco). Columnas: <code>text</code>, <code>data</code>, <code>bss</code>, <code>dec</code> (suma en decimal), <code>hex</code> (suma en hexadecimal), <code>filename</code>. Ejemplo: <code>1767 + 592 + 8 = 2367</code> dec = <code>0x93F</code> <em>[inaudible: la transcripción decía "3F"]</em>.</p>
 <p><strong>⚠️ Examen:</strong> ¿por qué <code>size</code> no muestra <code>heap</code> ni <code>stack</code>? Porque son <strong>dinámicos</strong>: solo existen en RAM cuando el proceso está vivo; <code>size</code> solo analiza el archivo estático en disco.</p>
 <p><strong><code>pmap &lt;PID&gt;</code></strong> (<em>Process Map</em>) — <strong>análisis dinámico</strong>: consulta las estructuras del kernel e imprime el mapa completo del proceso en RAM (stack, heap, librerías <code>.so</code>, direcciones físicas). El PID se obtiene con <code>getpid()</code> (de <code>&lt;unistd.h&gt;</code>).</p>
@@ -80,15 +82,15 @@
 <li>Los valores de <code>pmap</code> no cuadran con <code>size</code> porque el SO asigna memoria por <strong>páginas de 4 KB</strong>; toda sección se redondea a página completa → todos los valores son múltiplos de 4.</li>
 <li><strong>⚠️ Seguridad:</strong> las zonas dinámicas (stack, heap) tienen permisos <code>R</code> / <code>RW</code> pero <strong>nunca <code>X</code></strong> — para que no se pueda inyectar ni ejecutar código malicioso en el proceso.</li>
 </ul>
-<p><strong><code>cat /proc/&lt;PID&gt;/maps</code></strong> — mientras el proceso vive, el SO mantiene el directorio <code>/proc/&lt;PID&gt;/</code>; el archivo <code>maps</code> muestra direcciones hexadecimales, permisos de cada segmento y librerías dinámicas cargadas (información del PCB). Al pulsar Enter en la Terminal 1 termina <code>getchar()</code>, se libera el heap y el proceso muere.</p></div>
+<p><strong><code>cat /proc/&lt;PID&gt;/maps</code></strong> — mientras el proceso vive, el SO mantiene el directorio <code>/proc/&lt;PID&gt;/</code>; el archivo <code>maps</code> muestra direcciones hexadecimales, permisos de cada segmento y librerías dinámicas cargadas (información del PCB). Al pulsar Enter en la Terminal 1 termina <code>getchar()</code>, se libera el heap y el proceso muere.</p></details>
 
-<div class="section-block"><h4>Árbol de procesos · PID y PPID</h4><ul>
+<details class="section-block sec" id="arbol-de-procesos-pid-y-ppid"><summary><span class="stitle">Árbol de procesos · PID y PPID</span></summary><ul>
 <li>Todos los procesos forman un <strong>árbol jerárquico</strong>. La raíz tiene <strong>PID = 1</strong>: <code>init</code> en Unix clásico / distros viejas, <code>systemd</code> en distros modernas. De la raíz se derivan todos los demás procesos.</li>
 <li><strong>PID</strong> = identificador único del proceso. <strong>PPID</strong> = PID del proceso padre.</li>
 <li>Principio: <strong>todo comando lanzado en una terminal tiene como padre al proceso de esa terminal</strong> (<code>bash</code>). El PID de <code>bash</code> no cambia mientras sea la misma terminal; el de <code>ps</code> cambia cada vez, porque nace y muere en el instante.</li>
-</ul></div>
+</ul></details>
 
-<div class="section-block"><h4>Monitoreo: top y ps</h4>
+<details class="section-block sec" id="monitoreo-top-y-ps"><summary><span class="stitle">Monitoreo: top y ps</span></summary>
 <p><strong><code>top</code></strong> — dinámico, se actualiza en pantalla; se sale con <code>q</code>.</p>
 <p><strong>Tiempo compartido (time-sharing):</strong> un proceso no acapara la RAM de principio a fin (sería una cola secuencial ineficiente). El <strong>planificador (scheduler)</strong> reparte pequeños lapsos de CPU entre los procesos según su <strong>prioridad</strong>, alternando tan rápido que da la ilusión de paralelismo.</p>
 <p><strong><code>ps</code></strong> — <strong>estático</strong> (no se actualiza). Sin opciones: solo los procesos de la terminal actual (normalmente <code>bash</code> + el propio <code>ps</code>).</p>
@@ -98,30 +100,30 @@
 <li><code>VSZ</code> = <em>Virtual Memory Size</em>, <code>RSS</code> = <em>Resident Set Size</em> (el profesor lo aclarará la próxima clase).</li>
 </ul>
 <p><strong><code>ps -e -o pid,ppid,user,stat,cmd</code></strong> — <code>-e</code> lista todos los procesos; <code>-o</code> elige las columnas a mostrar.</p>
-<p><strong>⚠️ Examen — sintaxis:</strong> las columnas tras <code>-o</code> van <strong>separadas por comas y SIN espacios</strong>; un espacio hace que la terminal devuelva error de sintaxis. Los estados de la columna <code>STAT</code> (<code>S</code>, <code>R</code>, <code>R+</code>, <code>Ss</code>…) se ven en clases posteriores.</p></div>
+<p><strong>⚠️ Examen — sintaxis:</strong> las columnas tras <code>-o</code> van <strong>separadas por comas y SIN espacios</strong>; un espacio hace que la terminal devuelva error de sintaxis. Los estados de la columna <code>STAT</code> (<code>S</code>, <code>R</code>, <code>R+</code>, <code>Ss</code>…) se ven en clases posteriores.</p></details>
 
-<div class="section-block"><h4>El comando ls para administración y seguridad</h4><ul>
+<details class="section-block sec" id="el-comando-ls-para-administracion-y-segu"><summary><span class="stitle">El comando ls para administración y seguridad</span></summary><ul>
 <li><code>ls</code> a secas no da información útil. <code>ls -l</code> = formato largo (permisos, tamaño, dueño, fecha). <code>ls -la</code> = incluye archivos ocultos (los que empiezan con <code>.</code>).</li>
 <li>Recomendado: <strong><code>ls -ltr</code></strong> — <code>l</code> largo, <code>t</code> ordena por fecha de modificación (más reciente arriba), <code>r</code> invierte el orden (más reciente <strong>abajo</strong>, junto al prompt).</li>
 <li>Uso en seguridad: en un incidente de intrusión ves de inmediato el último archivo creado o modificado por un atacante, sin hacer scroll en un directorio con cientos de archivos.</li>
-</ul></div>
+</ul></details>
 
-<div class="section-block"><h4>Contexto — origen de "TTY"</h4><p><code>TTY</code> viene de los <strong>teletipos</strong> (teletype) de los años 1940-50: máquina de escribir mecánica + transmisión de datos a una computadora. Con los sistemas de tiempo compartido de los 60, las terminales lógicas (pantallas, ventanas) heredaron las siglas. Dato histórico que remarcó el profesor: <strong>las primeras programadoras fueron mujeres</strong>.</p></div>
+<details class="section-block sec contexto" id="contexto-origen-de-tty"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — origen de "TTY"</span></summary><p><code>TTY</code> viene de los <strong>teletipos</strong> (teletype) de los años 1940-50: máquina de escribir mecánica + transmisión de datos a una computadora. Con los sistemas de tiempo compartido de los 60, las terminales lógicas (pantallas, ventanas) heredaron las siglas. Dato histórico que remarcó el profesor: <strong>las primeras programadoras fueron mujeres</strong>.</p></details>
 
-<div class="section-block"><h4>Sincronización: race condition y deadlock</h4><ul>
+<details class="section-block sec" id="sincronizacion-race-condition-y-deadlock"><summary><span class="stitle">Sincronización: race condition y deadlock</span></summary><ul>
 <li>Los procesos compiten de forma concurrente por la CPU → <strong>condición de carrera</strong> (race condition).</li>
 <li><strong>Deadlock</strong> (bloqueo mutuo / "candado mortal"): "el proceso 1 dice: para continuar necesito que termine el proceso 2; y el proceso 2 dice: para continuar necesito que termine el proceso 1". No se debe estructurar un programa donde dos procesos dependen circularmente uno del otro.</li>
-</ul></div>
+</ul></details>
 
-<div class="section-block"><h4>Para repasar (tarea moral de la Clase 1)</h4><ul>
+<details class="section-block sec" id="para-repasar-tarea-moral-de-la-clase-1"><summary><span class="stitle">Para repasar (tarea moral de la Clase 1)</span></summary><ul>
 <li>No hay tarea para entregar. <strong>Tarea moral:</strong> repasar el sitio web del curso y el <strong>PDF 2 del Tema 1</strong> ("ID de procesos") — es extenso, no verlo todo de golpe.</li>
 <li>La próxima clase: teoría de <code>fork()</code> en C para crear procesos.</li>
-</ul></div>
+</ul></details>
 
-<div class="section-block"><h4>Clase 2 — permisos, bit setuid, /etc/passwd y fork()</h4>
-<p>Destilado del transcript de la clase (NotebookLM). Sin lo administrativo.</p></div>
+<details class="section-block sec" id="clase-2-permisos-bit-setuid-etc-passwd-y"><summary><span class="stitle">Clase 2 — permisos, bit setuid, /etc/passwd y fork()</span></summary>
+<p>Destilado del transcript de la clase (NotebookLM). Sin lo administrativo.</p></details>
 
-<div class="section-block"><h4>Permisos UGO y chmod (notación decimal)</h4>
+<details class="section-block sec" id="permisos-ugo-y-chmod-notacion-decimal"><summary><span class="stitle">Permisos UGO y chmod (notación decimal)</span></summary>
 <p>Regla mnemotécnica: <strong>"ugo"</strong> (como "Hugo" sin H) → <strong>U</strong>suario (dueño), <strong>G</strong>rupo, <strong>O</strong>tros. <code>chmod</code> = <em>change mode</em>.</p>
 <pre><code>  r  w  x
   4  2  1        rwx = 4+2+1 = 7      rw- = 6      r-x = 5</code></pre>
@@ -129,18 +131,18 @@
 <li><code>chmod 777 archivo</code> — todos los permisos para u, g y o.</li>
 <li><code>chmod 644 archivo</code> — archivo editable no ejecutable: dueño <code>rw</code> (6), grupo y otros <code>r</code> (4).</li>
 <li><code>chmod 755 archivo</code> — ejecutable típico: dueño <code>rwx</code> (7), grupo y otros <code>r-x</code> (5).</li>
-</ul></div>
+</ul></details>
 
-<div class="section-block"><h4>Bit SetUID (chmod con 4 dígitos)</h4>
+<details class="section-block sec" id="bit-setuid-chmod-con-4-digitos"><summary><span class="stitle">Bit SetUID (chmod con 4 dígitos)</span></summary>
 <p>Al ejecutar un binario, el proceso normalmente pertenece a quien lo ejecuta. Con el <strong>bit SetUID</strong> activo, quien lo ejecuta <strong>toma temporalmente los privilegios del dueño del archivo</strong> mientras dura la ejecución.</p>
 <p>Se activa con un <strong>cuarto dígito a la izquierda</strong> en <code>chmod</code>, que indica sobre qué bloque:</p>
 <pre><code>4 = SetUID   (bloque de usuario)   ← el más usado
 2 = SetGID   (bloque de grupo)
 1 = sticky   (bloque de otros)
 ej.  chmod 4511 archivo</code></pre>
-<p><strong>⚠️ Riesgo de seguridad:</strong> si <code>root</code> pone SetUID a un ejecutable, cualquier usuario sin privilegios se vuelve <code>root</code> durante esa ejecución. Manejar con extrema precaución.</p></div>
+<p><strong>⚠️ Riesgo de seguridad:</strong> si <code>root</code> pone SetUID a un ejecutable, cualquier usuario sin privilegios se vuelve <code>root</code> durante esa ejecución. Manejar con extrema precaución.</p></details>
 
-<div class="section-block"><h4>Usuarios en Linux · /etc/passwd · ID real vs. efectivo</h4>
+<details class="section-block sec" id="usuarios-en-linux-etc-passwd-id-real-vs-"><summary><span class="stitle">Usuarios en Linux · /etc/passwd · ID real vs. efectivo</span></summary>
 <ul>
 <li><strong>ID real</strong> → dueño legítimo del proceso / archivo; es el que asigna <code>/etc/passwd</code>. Se obtiene con <code>getuid()</code> (igual que <code>getpid()</code> / <code>getppid()</code>).</li>
 <li><strong>ID efectivo</strong> → el usuario que está corriendo el programa en ese instante. Se obtiene con <code>geteuid()</code> (la "e" = <em>effective</em>).</li>
@@ -150,9 +152,9 @@ ej.  chmod 4511 archivo</code></pre>
    |       |    |     |        |            |          |
  el 1º   contraseña  id    id de     GECOS (si no    dir.   tipo de
  es root  oculta   usuario  grupo    se puso, =user) home   shell</code></pre>
-<p>Usuarios de sistema con shell <code>nologin</code>: no pueden iniciar sesión interactiva (seguridad). <em>[inaudible: la ruta se oye como "etc/al passworden"]</em></p></div>
+<p>Usuarios de sistema con shell <code>nologin</code>: no pueden iniciar sesión interactiva (seguridad). <em>[inaudible: la ruta se oye como "etc/al passworden"]</em></p></details>
 
-<div class="section-block"><h4>Tarea 2 — probar el bit SetUID</h4>
+<details class="section-block sec" id="tarea-2-probar-el-bit-setuid"><summary><span class="stitle">Tarea 2 — probar el bit SetUID</span></summary>
 <p>Metodología: <strong>dos terminales</strong> (una como <code>root</code>, otra como usuario sin privilegios). Las instrucciones de pantalla dividida en Codespaces están en la carpeta del <strong>Tema 3</strong> del repo, aunque se usan desde el Tema 1. <code>whoami</code> muestra el usuario activo.</p>
 <p><code>fdisk</code> = comando solo-<code>root</code> para manipular la tabla de particiones (<code>man fdisk</code>). Sirve cualquier comando que pida privilegios. Pasos:</p>
 <pre><code># 1) como usuario NO root:
@@ -174,9 +176,9 @@ chmod 755 /sbin/fdisk        # (o los permisos que tuviera antes)</code></pre>
 <p><em>[inaudible: la ruta se dicta rápido como "diagonal se bin diagonal fis" → /sbin/fdisk]</em></p>
 <p><strong>Actividad 2:</strong> programa en C (<a href="files/prof-tema1/programa02_ids.c" download style="color:var(--indigo)">programa02_ids.c</a> en el repo) que imprime <code>getuid()</code> y <code>geteuid()</code>. Compilar <code>gcc programa02_ids.c -o programa02_ids</code>. Ejecutado normal → ID real == ID efectivo. Aplicando <code>chmod 4511</code> al binario y ejecutándolo con <strong>otro usuario</strong> → salen distintos.</p>
 <p><strong>⚠️ Para sacar 10:</strong> las capturas deben mostrar <strong>ID real ≠ ID efectivo</strong>.</p>
-<p><strong>⚠️ No entregar la Tarea 2 todavía</strong> — el profesor no pudo hacer la demo en el laboratorio; reactivará la fecha de entrega después. (Recomienda clonar el repo localmente con git en vez de usar Codespaces.)</p></div>
+<p><strong>⚠️ No entregar la Tarea 2 todavía</strong> — el profesor no pudo hacer la demo en el laboratorio; reactivará la fecha de entrega después. (Recomienda clonar el repo localmente con git en vez de usar Codespaces.)</p></details>
 
-<div class="section-block"><h4>fork() — creación de procesos</h4>
+<details class="section-block sec" id="fork-creacion-de-procesos"><summary><span class="stitle">fork() — creación de procesos</span></summary>
 <ul>
 <li>Mecanismo nativo del kernel de Linux para crear procesos.</li>
 <li>Es <strong>costoso</strong>: clona / duplica toda la estructura de memoria del proceso que lo llama.</li>
@@ -193,11 +195,11 @@ al HIJO   ->  0</code></pre>
     // código exclusivo del hijo
 }</code></pre>
 <p>Sin <code>if</code>, todo lo que va después de <code>fork()</code> se ejecuta en ambos → sale <strong>duplicado</strong>. En <a href="files/prof-tema1/programa05_fork_v1.c" download style="color:var(--indigo)">programa05_fork_v1.c</a>: la línea de antes del <code>fork()</code> se imprime una vez; las dos de después, dos veces cada una.</p>
-<p><em>Nota semántica del profesor: antes del <code>fork()</code> lo llama "proceso main / principal"; "padre" solo cuando ya hay hijo.</em></p></div>
+<p><em>Nota semántica del profesor: antes del <code>fork()</code> lo llama "proceso main / principal"; "padre" solo cuando ya hay hijo.</em></p></details>
 
-<div class="section-block"><h4>⚠️ Deadlock (candado / abrazo mortal)</h4><p>Si el padre espera a que termine el hijo para continuar y a la vez el hijo espera a que termine el padre → bloqueo indefinido. Única salida: <code>Ctrl + C</code>.</p></div>
+<details class="section-block sec" id="deadlock-candado-abrazo-mortal"><summary><span class="chip chip-examen">examen</span><span class="stitle">⚠️ Deadlock (candado / abrazo mortal)</span></summary><p>Si el padre espera a que termine el hijo para continuar y a la vez el hijo espera a que termine el padre → bloqueo indefinido. Única salida: <code>Ctrl + C</code>.</p></details>
 
-<div class="section-block"><h4>Ejemplo de ejecución — programa05_fork_v2.c</h4><p>Valores de esa corrida (<a href="files/prof-tema1/programa05_fork_v2.c" download style="color:var(--indigo)">programa05_fork_v2.c</a>):</p><table><thead><tr><th>Dato</th><th>Valor</th></tr></thead><tbody>
+<details class="section-block sec" id="ejemplo-de-ejecucion-programa05-fork-v2-"><summary><span class="stitle">Ejemplo de ejecución — programa05_fork_v2.c</span></summary><p>Valores de esa corrida (<a href="files/prof-tema1/programa05_fork_v2.c" download style="color:var(--indigo)">programa05_fork_v2.c</a>):</p><table><thead><tr><th>Dato</th><th>Valor</th></tr></thead><tbody>
 <tr><td>PID del padre</td><td><code>30405</code></td></tr>
 <tr><td>PID del hijo</td><td><code>30406</code> (el entero inmediato siguiente)</td></tr>
 <tr><td><code>id_hijo</code> en el padre</td><td><code>30406</code></td></tr>
@@ -205,54 +207,54 @@ al HIJO   ->  0</code></pre>
 <tr><td><code>getpid()</code> en el hijo</td><td><code>30406</code></td></tr>
 <tr><td><code>getppid()</code> en el padre</td><td>PID de la shell (<code>bash</code>) que lanzó el programa</td></tr>
 <tr><td><code>getppid()</code> en el hijo</td><td><code>30405</code> (su creador es el padre)</td></tr>
-</tbody></table><p>El <code>if</code> puede ser <code>!= 0</code> (padre primero) o <code>== 0</code> (hijo primero), a gusto del programador.</p></div>
+</tbody></table><p>El <code>if</code> puede ser <code>!= 0</code> (padre primero) o <code>== 0</code> (hijo primero), a gusto del programador.</p></details>
 
-<div class="section-block"><h4>Para repasar (Clase 2)</h4><p>Tarea moral (sin entrega): leer con calma el <strong>PDF 2 del Tema 1</strong> (procesos).</p></div>
-<div class="section-block"><h4>Contexto histórico: origen de los sistemas operativos</h4><p>1944–1952: John Von Neumann propone el diseño de una computadora que almacena un programa y usa un procesador central (arquitectura de programa almacenado), junto con el sistema de numeración binaria. Esto permitió que la computadora se usara más allá de la ciencia: en economía, administración, producción, etc.
+<details class="section-block sec" id="para-repasar-clase-2"><summary><span class="stitle">Para repasar (Clase 2)</span></summary><p>Tarea moral (sin entrega): leer con calma el <strong>PDF 2 del Tema 1</strong> (procesos).</p></details>
+<details class="section-block sec" id="contexto-historico-origen-de-los-sistema"><summary><span class="stitle">Contexto histórico: origen de los sistemas operativos</span></summary><p>1944–1952: John Von Neumann propone el diseño de una computadora que almacena un programa y usa un procesador central (arquitectura de programa almacenado), junto con el sistema de numeración binaria. Esto permitió que la computadora se usara más allá de la ciencia: en economía, administración, producción, etc.
 
 1956: se crea el primer Sistema Operativo de la historia, para un IBM 704. Solo encadenaba la ejecución de un programa cuando el anterior terminaba.
 
-Década de 1960: revolución en los SO — aparecen los conceptos de sistema multitarea, multiusuario, multiprocesador y en tiempo real. En esta década nace UNIX, base de la mayoría de los SO actuales.</p></div>
-<div class="section-block"><h4>Origen de Unix</h4><p>Unix es un sistema operativo portable, multitarea y multiusuario, desarrollado por empleados de los laboratorios Bell de AT&amp;T (Ken Thompson, Dennis Ritchie y Douglas McIlroy).
+Década de 1960: revolución en los SO — aparecen los conceptos de sistema multitarea, multiusuario, multiprocesador y en tiempo real. En esta década nace UNIX, base de la mayoría de los SO actuales.</p></details>
+<details class="section-block sec" id="origen-de-unix"><summary><span class="stitle">Origen de Unix</span></summary><p>Unix es un sistema operativo portable, multitarea y multiusuario, desarrollado por empleados de los laboratorios Bell de AT&amp;T (Ken Thompson, Dennis Ritchie y Douglas McIlroy).
 
 A finales de los 60, el MIT, los laboratorios Bell y General Electric trabajaban en un SO experimental llamado Multics, pensado para mejorar la seguridad e interactividad. AT&amp;T se desvinculó del proyecto, pero Ken Thompson siguió usando la máquina GE-645 para un juego llamado &quot;Space Travel&quot;; al resultar lento y caro, lo reescribió en ensamblador para un DEC PDP-7 junto con Dennis Ritchie.
 
 Esa experiencia, sumada a lo aprendido en Multics, llevó a Thompson y Ritchie (con Rudd Canaday y otros) a crear un nuevo SO con sistema de archivos y multitarea propios: UNICS (Uniplexed Information and Computing System), renombrado después a Unix.
 
-Hoy existen varias versiones desarrolladas por distintas compañías: SunOS, Ultrix, HP-UX, entre otras.</p></div>
-<div class="section-block"><h4>Cuatro filosofías de trabajo de Unix</h4><ul><li>Fue desarrollado por programadores, para programadores</li><li>Asume que el usuario sabe lo que hace</li><li>Todo lo ve y lo maneja como archivo</li><li>Si un comando no manda mensaje de error, se ejecutó satisfactoriamente</li></ul></div>
-<div class="section-block"><h4>¿Qué es Linux?</h4><p>Linux es un sistema operativo open source, diseñado y creado en 1991 por Linus Torvalds mientras estaba en la universidad, como una alternativa gratuita y libre a MINIX (que a su vez se basaba en los principios de Unix).
+Hoy existen varias versiones desarrolladas por distintas compañías: SunOS, Ultrix, HP-UX, entre otras.</p></details>
+<details class="section-block sec" id="cuatro-filosofias-de-trabajo-de-unix"><summary><span class="stitle">Cuatro filosofías de trabajo de Unix</span></summary><ul><li>Fue desarrollado por programadores, para programadores</li><li>Asume que el usuario sabe lo que hace</li><li>Todo lo ve y lo maneja como archivo</li><li>Si un comando no manda mensaje de error, se ejecutó satisfactoriamente</li></ul></details>
+<details class="section-block sec" id="que-es-linux"><summary><span class="stitle">¿Qué es Linux?</span></summary><p>Linux es un sistema operativo open source, diseñado y creado en 1991 por Linus Torvalds mientras estaba en la universidad, como una alternativa gratuita y libre a MINIX (que a su vez se basaba en los principios de Unix).
 
 Se lanzó bajo la Licencia Pública General (GPL) de GNU: cualquiera puede ejecutarlo, estudiarlo, compartirlo y modificarlo; el código modificado también puede redistribuirse (incluso venderse), siempre bajo la misma licencia. Esto lo distingue de sistemas propietarios como Unix o Windows, que están bloqueados y no se pueden modificar.
 
-&quot;Linux&quot; suele referirse al kernel de Linux junto con las herramientas, aplicaciones y servicios que lo acompañan (parte de ellos del proyecto GNU) — por eso la Free Software Foundation prefiere el nombre &quot;GNU/Linux&quot;.</p></div>
-<div class="section-block"><h4>¿Qué es un proceso?</h4><p>Un proceso es una instancia de un programa en ejecución. Mientras el ejecutable no se ejecute, es solamente un archivo ocupando espacio en disco.
+&quot;Linux&quot; suele referirse al kernel de Linux junto con las herramientas, aplicaciones y servicios que lo acompañan (parte de ellos del proyecto GNU) — por eso la Free Software Foundation prefiere el nombre &quot;GNU/Linux&quot;.</p></details>
+<details class="section-block sec" id="que-es-un-proceso"><summary><span class="stitle">¿Qué es un proceso?</span></summary><p>Un proceso es una instancia de un programa en ejecución. Mientras el ejecutable no se ejecute, es solamente un archivo ocupando espacio en disco.
 
-Un mismo archivo ejecutable puede generar varias instancias (varios procesos) al mismo tiempo: cada ejecución es un proceso distinto, aunque provenga del mismo programa.</p></div>
-<div class="section-block"><h4>Estructura de un proceso</h4><ul><li>Segmento de texto: contiene las instrucciones que entiende la CPU</li><li>Segmento de datos: contiene los datos que deben cargarse al iniciar el proceso</li><li>Segmento de pila: serie de marcos de pila que se apilan al llamar una función y se desapilan al retornar de ella; cada marco contiene los parámetros de la función, las variables locales y la información necesaria para restaurar el marco anterior</li></ul></div>
-<div class="section-block"><h4>Procesos padre e hijo en Linux</h4><p>Linux es un sistema de tiempo compartido que permite ejecutar varios procesos a la vez (multiproceso). El planificador es la parte del núcleo que gestiona la CPU y decide qué proceso la ocupa en cada instante.
+Un mismo archivo ejecutable puede generar varias instancias (varios procesos) al mismo tiempo: cada ejecución es un proceso distinto, aunque provenga del mismo programa.</p></details>
+<details class="section-block sec" id="estructura-de-un-proceso"><summary><span class="stitle">Estructura de un proceso</span></summary><ul><li>Segmento de texto: contiene las instrucciones que entiende la CPU</li><li>Segmento de datos: contiene los datos que deben cargarse al iniciar el proceso</li><li>Segmento de pila: serie de marcos de pila que se apilan al llamar una función y se desapilan al retornar de ella; cada marco contiene los parámetros de la función, las variables locales y la información necesaria para restaurar el marco anterior</li></ul></details>
+<details class="section-block sec" id="procesos-padre-e-hijo-en-linux"><summary><span class="stitle">Procesos padre e hijo en Linux</span></summary><p>Linux es un sistema de tiempo compartido que permite ejecutar varios procesos a la vez (multiproceso). El planificador es la parte del núcleo que gestiona la CPU y decide qué proceso la ocupa en cada instante.
 
-Todo proceso en Linux, excepto el primero (proceso init), se crea mediante una llamada a fork(). El proceso que llama a fork() es el proceso padre, y el que se crea es el proceso hijo. Un padre puede tener varios hijos, pero cada proceso tiene un único padre.</p></div>
-<div class="section-block"><h4>Identificación de procesos: PID y PPID</h4><p>Cada proceso en Linux se identifica con un PID (ID de proceso): un número entero positivo asignado al crearse.
+Todo proceso en Linux, excepto el primero (proceso init), se crea mediante una llamada a fork(). El proceso que llama a fork() es el proceso padre, y el que se crea es el proceso hijo. Un padre puede tener varios hijos, pero cada proceso tiene un único padre.</p></details>
+<details class="section-block sec" id="identificacion-de-procesos-pid-y-ppid"><summary><span class="stitle">Identificación de procesos: PID y PPID</span></summary><p>Cada proceso en Linux se identifica con un PID (ID de proceso): un número entero positivo asignado al crearse.
 
 getpid() devuelve el PID del proceso que la invoca.
-getppid() devuelve el PID de su proceso padre (PPID).</p></div>
-<div class="section-block"><h4>Ejemplo 1 — Número de proceso (print-pid.c)</h4><pre><code>#include &lt;stdio.h&gt;
+getppid() devuelve el PID de su proceso padre (PPID).</p></details>
+<details class="section-block sec" id="ejemplo-1-numero-de-proceso-print-pid-c"><summary><span class="stitle">Ejemplo 1 — Número de proceso (print-pid.c)</span></summary><pre><code>#include &lt;stdio.h&gt;
 #include &lt;unistd.h&gt;  // Declara funciones parte del estándar POSIX
 
 int main () {
     printf(&quot;The process ID is %d\n&quot;, getpid());
     printf(&quot;The parent process ID is %d\n&quot;, (int) getppid());
     return 0;
-}</code></pre></div>
-<div class="section-block"><h4>Otros identificadores de un proceso</h4><table><thead><tr><th>Atributo</th><th>Tipo</th><th>Función</th></tr></thead><tbody><tr><td>ID de proceso</td><td>pid_t</td><td>getpid(void)</td></tr><tr><td>ID de proceso padre</td><td>pid_t</td><td>getppid(void)</td></tr><tr><td>ID real del usuario</td><td>uid_t</td><td>getuid(void)</td></tr><tr><td>ID efectivo del usuario</td><td>uid_t</td><td>geteuid(void)</td></tr><tr><td>ID real de grupo</td><td>gid_t</td><td>getgid(void)</td></tr><tr><td>ID efectivo de grupo</td><td>gid_t</td><td>getegid(void)</td></tr></tbody></table></div>
-<div class="section-block"><h4>ID real vs. ID efectivo</h4><p>Cada proceso tiene dos IDs de usuario y dos de grupo, usados principalmente por seguridad (permisos de acceso a archivos).
+}</code></pre></details>
+<details class="section-block sec" id="otros-identificadores-de-un-proceso"><summary><span class="stitle">Otros identificadores de un proceso</span></summary><table><thead><tr><th>Atributo</th><th>Tipo</th><th>Función</th></tr></thead><tbody><tr><td>ID de proceso</td><td>pid_t</td><td>getpid(void)</td></tr><tr><td>ID de proceso padre</td><td>pid_t</td><td>getppid(void)</td></tr><tr><td>ID real del usuario</td><td>uid_t</td><td>getuid(void)</td></tr><tr><td>ID efectivo del usuario</td><td>uid_t</td><td>geteuid(void)</td></tr><tr><td>ID real de grupo</td><td>gid_t</td><td>getgid(void)</td></tr><tr><td>ID efectivo de grupo</td><td>gid_t</td><td>getegid(void)</td></tr></tbody></table></details>
+<details class="section-block sec" id="id-real-vs-id-efectivo"><summary><span class="stitle">ID real vs. ID efectivo</span></summary><p>Cada proceso tiene dos IDs de usuario y dos de grupo, usados principalmente por seguridad (permisos de acceso a archivos).
 
 ID real de usuario/grupo: identifica al usuario real, tal como aparece en /etc/passwd.
 ID efectivo de usuario/grupo: se usa para acceder a archivos de otros usuarios, enviar señales a procesos o ejecutar programas &quot;setuid&quot;.
 
-Cuando un proceso ejecuta un programa &quot;setuid&quot;, el núcleo asigna al EUID del proceso el propietario de ese programa, y al EGID el grupo del propietario.</p></div>
-<div class="section-block"><h4>Ejemplo 2 — Identificadores de proceso (ids.c)</h4><pre><code>#include &lt;stdio.h&gt;
+Cuando un proceso ejecuta un programa &quot;setuid&quot;, el núcleo asigna al EUID del proceso el propietario de ese programa, y al EGID el grupo del propietario.</p></details>
+<details class="section-block sec" id="ejemplo-2-identificadores-de-proceso-ids"><summary><span class="stitle">Ejemplo 2 — Identificadores de proceso (ids.c)</span></summary><pre><code>#include &lt;stdio.h&gt;
 #include &lt;unistd.h&gt;
 #include &lt;stdlib.h&gt;
 
@@ -262,22 +264,22 @@ int main(void) {
     printf(&quot;Real group ID: %d\n&quot;, getgid());
     printf(&quot;Effective group ID: %d\n&quot;, getegid());
     return 0;
-}</code></pre></div>
-<div class="section-block"><h4>Comando ps de Linux</h4><p>ps despliega los procesos en ejecución en el sistema. Sin opciones, muestra los del shell actual (la primera columna es el PID; normalmente aparecen el propio shell y el proceso ps).
+}</code></pre></details>
+<details class="section-block sec" id="comando-ps-de-linux"><summary><span class="stitle">Comando ps de Linux</span></summary><p>ps despliega los procesos en ejecución en el sistema. Sin opciones, muestra los del shell actual (la primera columna es el PID; normalmente aparecen el propio shell y el proceso ps).
 
-ps -e -o pid,ppid,command muestra todos los procesos del sistema (-e) especificando qué columnas mostrar (-o): PID, PPID y el comando.</p></div>
-<div class="section-block"><h4>Tres formas de crear procesos en Linux</h4><p>La primera es con system(), parte de las librerías estándar de C. Las otras dos son fork() y exec(), que es la manera nativa en que Linux crea procesos.</p></div>
-<div class="section-block"><h4>system()</h4><p>Ejecuta un comando desde un programa, como si se invocara desde un Shell. Invocar un programa con privilegios de root usando system() puede dar resultados distintos entre sistemas Linux, ya que depende de la versión del Shell utilizado.
+ps -e -o pid,ppid,command muestra todos los procesos del sistema (-e) especificando qué columnas mostrar (-o): PID, PPID y el comando.</p></details>
+<details class="section-block sec" id="tres-formas-de-crear-procesos-en-linux"><summary><span class="stitle">Tres formas de crear procesos en Linux</span></summary><p>La primera es con system(), parte de las librerías estándar de C. Las otras dos son fork() y exec(), que es la manera nativa en que Linux crea procesos.</p></details>
+<details class="section-block sec" id="system"><summary><span class="stitle">system()</span></summary><p>Ejecuta un comando desde un programa, como si se invocara desde un Shell. Invocar un programa con privilegios de root usando system() puede dar resultados distintos entre sistemas Linux, ya que depende de la versión del Shell utilizado.
 
-Sintaxis: int system(const char *string)</p></div>
-<div class="section-block"><h4>Ejemplo 3 — Uso de system() (system.c)</h4><pre><code>#include &lt;stdlib.h&gt;
+Sintaxis: int system(const char *string)</p></details>
+<details class="section-block sec" id="ejemplo-3-uso-de-system-system-c"><summary><span class="stitle">Ejemplo 3 — Uso de system() (system.c)</span></summary><pre><code>#include &lt;stdlib.h&gt;
 
 int main () {
     int return_value;
     return_value = system(&quot;ls -l /&quot;);
     return return_value;
-}</code></pre></div>
-<div class="section-block"><h4>fork()</h4><p>Crea un nuevo proceso (el hijo) como copia del proceso padre, excepto por el PID y el PPID.
+}</code></pre></details>
+<details class="section-block sec" id="fork"><summary><span class="stitle">fork()</span></summary><p>Crea un nuevo proceso (el hijo) como copia del proceso padre, excepto por el PID y el PPID.
 
 Al llamar fork(), el núcleo:
 · Busca una entrada libre en la tabla de procesos y la reserva para el hijo.
@@ -288,8 +290,8 @@ Al llamar fork(), el núcleo:
 
 Mientras se crea el hijo, el padre sigue ejecutándose desde el punto donde se invocó fork(); el hijo también ejecuta el programa desde ese mismo punto.
 
-Sintaxis: pid_t fork(void)</p></div>
-<div class="section-block"><h4>Ejemplo 4 — Creación de procesos (fork.c)</h4><pre><code>#include &lt;stdio.h&gt;
+Sintaxis: pid_t fork(void)</p></details>
+<details class="section-block sec" id="ejemplo-4-creacion-de-procesos-fork-c"><summary><span class="stitle">Ejemplo 4 — Creación de procesos (fork.c)</span></summary><pre><code>#include &lt;stdio.h&gt;
 #include &lt;sys/types.h&gt;
 #include &lt;unistd.h&gt;
 
@@ -304,14 +306,14 @@ int main () {
         printf(&quot;this is the child process, with id %d\n&quot;, (int) getpid());
     }
     return 0;
-}</code></pre></div>
-<div class="section-block"><h4>⚠️ Condición de carrera (race condition)</h4><p>No se puede predecir si el proceso padre seguirá ejecutándose antes o después de que se cree el hijo (o viceversa), ya que ambos corren de forma asíncrona tras fork().
+}</code></pre></details>
+<details class="section-block sec" id="condicion-de-carrera-race-condition"><summary><span class="chip chip-examen">examen</span><span class="stitle">⚠️ Condición de carrera (race condition)</span></summary><p>No se puede predecir si el proceso padre seguirá ejecutándose antes o después de que se cree el hijo (o viceversa), ya que ambos corren de forma asíncrona tras fork().
 
-Por eso no debe escribirse, en el proceso hijo, código que dependa del padre (o viceversa): hacerlo genera una condición de carrera con comportamiento impredecible en el programa.</p></div>
-<div class="section-block"><h4>exec()</h4><p>A diferencia de fork(), exec() reemplaza el programa que se está ejecutando en un proceso por otro programa. Cuando se llama exec(), el proceso invocador termina inmediatamente y comienza a ejecutarse el nuevo programa desde el inicio (si exec() no encontró error).
+Por eso no debe escribirse, en el proceso hijo, código que dependa del padre (o viceversa): hacerlo genera una condición de carrera con comportamiento impredecible en el programa.</p></details>
+<details class="section-block sec" id="exec"><summary><span class="stitle">exec()</span></summary><p>A diferencia de fork(), exec() reemplaza el programa que se está ejecutando en un proceso por otro programa. Cuando se llama exec(), el proceso invocador termina inmediatamente y comienza a ejecutarse el nuevo programa desde el inicio (si exec() no encontró error).
 
-Si exec() tiene éxito, no regresa al proceso que lo llamó (fue reemplazado por completo). Si falla, regresa -1.</p></div>
-<div class="section-block"><h4>Ejemplo 6 — Uso de exec (execs.c)</h4><pre><code>#include &lt;unistd.h&gt;
+Si exec() tiene éxito, no regresa al proceso que lo llamó (fue reemplazado por completo). Si falla, regresa -1.</p></details>
+<details class="section-block sec" id="ejemplo-6-uso-de-exec-execs-c"><summary><span class="stitle">Ejemplo 6 — Uso de exec (execs.c)</span></summary><pre><code>#include &lt;unistd.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;stdio.h&gt;
 
@@ -323,19 +325,19 @@ int main(void) {
     }
     puts(&quot;shouldn't get here&quot;);
     exit(EXIT_SUCCESS);
-}</code></pre></div>
-<div class="section-block"><h4>Familia de funciones exec()</h4><ul><li>execl(), execv(), execle(), execve() reciben una ruta (path) como primer argumento</li><li>execlp(), execvp() reciben el nombre de un archivo; si no contiene &quot;/&quot;, lo buscan en $PATH</li><li>Las funciones con &quot;l&quot; (execl, execle, execlp) reciben una lista de argumentos terminada en un apuntador NULL</li><li>Las funciones con &quot;v&quot; (execv, execve, execvp) reciben un arreglo de apuntadores terminado en una cadena NULL</li><li>execve() y execle() además permiten definir un ambiente propio (envp); las demás heredan el ambiente a través de la variable environ</li></ul></div>
-<div class="section-block"><h4>Sintaxis de la familia exec</h4><pre><code>int execl (char *path, char *arg0, char *arg1,... char *argN, (char *)0);
+}</code></pre></details>
+<details class="section-block sec" id="familia-de-funciones-exec"><summary><span class="stitle">Familia de funciones exec()</span></summary><ul><li>execl(), execv(), execle(), execve() reciben una ruta (path) como primer argumento</li><li>execlp(), execvp() reciben el nombre de un archivo; si no contiene &quot;/&quot;, lo buscan en $PATH</li><li>Las funciones con &quot;l&quot; (execl, execle, execlp) reciben una lista de argumentos terminada en un apuntador NULL</li><li>Las funciones con &quot;v&quot; (execv, execve, execvp) reciben un arreglo de apuntadores terminado en una cadena NULL</li><li>execve() y execle() además permiten definir un ambiente propio (envp); las demás heredan el ambiente a través de la variable environ</li></ul></details>
+<details class="section-block sec" id="sintaxis-de-la-familia-exec"><summary><span class="stitle">Sintaxis de la familia exec</span></summary><pre><code>int execl (char *path, char *arg0, char *arg1,... char *argN, (char *)0);
 int execv (char *path, char *argv[ ]);
 int execle(char *path, char *arg0, char *arg1,... char *argN, (char *)0, char *envp[ ]);
 int execve(char *path, char *argv[ ], char *envp[ ]);
 int execlp(char *file, char *arg0, char *arg1,... char *argN, (char *)0);
-int execvp(char *file, char *argv[ ]);</code></pre></div>
-<div class="section-block"><h4>Variables de ambiente</h4><p>putenv(const char *string) agrega o modifica una variable de ambiente.
+int execvp(char *file, char *argv[ ]);</code></pre></details>
+<details class="section-block sec" id="variables-de-ambiente"><summary><span class="stitle">Variables de ambiente</span></summary><p>putenv(const char *string) agrega o modifica una variable de ambiente.
 getenv(const char *name) consulta el valor de una variable de ambiente.
 
-Se usan típicamente junto con execve()/execle() para construir el ambiente (envp) que recibirá el nuevo programa.</p></div>
-<div class="section-block"><h4>Ejemplo 7 — Variables de ambiente (testenv.c)</h4><pre><code>#include &lt;unistd.h&gt;
+Se usan típicamente junto con execve()/execle() para construir el ambiente (envp) que recibirá el nuevo programa.</p></details>
+<details class="section-block sec" id="ejemplo-7-variables-de-ambiente-testenv-"><summary><span class="stitle">Ejemplo 7 — Variables de ambiente (testenv.c)</span></summary><pre><code>#include &lt;unistd.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;stdio.h&gt;
 
@@ -356,13 +358,13 @@ int main(void) {
     else
         puts(&quot;YOURPATH unassigned&quot;);
     exit(EXIT_SUCCESS);
-}</code></pre></div>
-<div class="section-block"><h4>Compilación de los ejemplos</h4><p>cc myecho.c –o myecho
+}</code></pre></details>
+<details class="section-block sec" id="compilacion-de-los-ejemplos"><summary><span class="stitle">Compilación de los ejemplos</span></summary><p>cc myecho.c –o myecho
 cc execve.c –o execve
 ./execve ./myecho
 
-(Analizar el resultado: execve reemplaza el proceso actual por myecho, pasando su propio nombre como argumento.)</p></div>
-<div class="section-block"><h4>Cuestionario — código a analizar (fork-exec.c)</h4><pre><code>#include &lt;stdio.h&gt;
+(Analizar el resultado: execve reemplaza el proceso actual por myecho, pasando su propio nombre como argumento.)</p></details>
+<details class="section-block sec" id="cuestionario-codigo-a-analizar-fork-exec"><summary><span class="stitle">Cuestionario — código a analizar (fork-exec.c)</span></summary><pre><code>#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;sys/types.h&gt;
 #include &lt;unistd.h&gt;
@@ -384,15 +386,15 @@ int main () {
     spawn (&quot;ls&quot;, arg_list);
     printf (&quot;done with main program\n&quot;);
     return 0;
-}</code></pre></div>
-<div class="section-block"><h4>Cuestionario</h4><p>Describe qué hace el código anterior (fork-exec.c) y qué resultados arroja.
+}</code></pre></details>
+<details class="section-block sec" id="cuestionario"><summary><span class="stitle">Cuestionario</span></summary><p>Describe qué hace el código anterior (fork-exec.c) y qué resultados arroja.
 
-Pista: spawn() crea un proceso hijo con fork() y reemplaza ese hijo con el programa &quot;ls&quot; usando execvp(); el proceso padre continúa su ejecución normal e imprime &quot;done with main program&quot; — el orden entre esa impresión y la salida de ls no está garantizado.</p></div>
-<div class="section-block"><h4>Para repasar</h4><ul><li>¿Qué diferencia hay entre fork() y exec()?</li><li>¿Por qué el uso de fork() puede generar una condición de carrera (race condition)?</li><li>¿Qué representa el PID y qué el PPID de un proceso?</li><li>¿Cuál es la diferencia entre el ID real y el ID efectivo de usuario/grupo, y cuándo se usa cada uno?</li><li>¿Qué hace el comando ps -e -o pid,ppid,command y qué muestra cada columna?</li><li>¿Qué ocurre si execve() tiene éxito? ¿Y si falla?</li></ul></div>
-<div class="section-block"><h4>Referencias multimedia</h4><div class="links" style="margin-top:0"><div class="link-item"><span class="label">Árbol de las computadoras (The Computer Tree)</span><a href="https://upload.wikimedia.org/wikipedia/commons/8/8d/The_computer_tree-U.S._Army_diagram.png" target="_blank" rel="noopener">https://upload.wikimedia.org/wikipedia/commons/8/8d/The_computer_tree-U.S._Army_diagram.png</a></div><div class="link-item"><span class="label">Línea de tiempo de distribuciones Linux</span><a href="https://upload.wikimedia.org/wikipedia/commons/1/1b/Linux_Distribution_Timeline.svg" target="_blank" rel="noopener">https://upload.wikimedia.org/wikipedia/commons/1/1b/Linux_Distribution_Timeline.svg</a></div><div class="link-item"><span class="label">Infografía del kernel de Linux</span><a href="https://upload.wikimedia.org/wikipedia/commons/e/ec/Infografia_NucleoLinux.png" target="_blank" rel="noopener">https://upload.wikimedia.org/wikipedia/commons/e/ec/Infografia_NucleoLinux.png</a></div><div class="link-item"><span class="label">Entrevista TED a Linus Torvalds</span><a href="https://www.youtube.com/watch?v=MNXIXDbEmVc" target="_blank" rel="noopener">https://www.youtube.com/watch?v=MNXIXDbEmVc</a></div><div class="link-item"><span class="label">Historia de las &quot;guerras de los Unix&quot;</span><a href="https://architecnologia.es/una-historia-de-unix-los-litigios-sco-contra-todos" target="_blank" rel="noopener">https://architecnologia.es/una-historia-de-unix-los-litigios-sco-contra-todos</a></div></div></div>
-<div class="section-block"><h4>Bibliografía</h4><ul><li>Francisco Manuel Márquez García — &quot;Unix: programación avanzada&quot;. Editorial RA-MA</li><li>Richard Stevens — &quot;Advanced Unix Programming&quot;. Editorial Addison Wesley</li><li>Kurt Wall — &quot;Linux Programming by Example&quot;. Editorial QUE</li></ul></div>
-<div class="section-block"><h4>Programas del profesor — Tema 1</h4><p>Código descargado del sitio del profesor (<a href="https://cromanzamitiz.github.io/arquitectura-cliente-servidor/tema1/" target="_blank" rel="noopener" style="color:var(--indigo)">tema1</a>). Cada programa está guardado como archivo real en <code>files/prof-tema1/</code>. Las salidas son <strong>representativas en Linux</strong> — los PID y los listados de <code>ls</code> varían en cada corrida.</p><p style="font-size:13px;color:var(--ink-soft)">Compilar: <code>cc programaXX_nombre.c -o programaXX</code> &nbsp;·&nbsp; ejecutar: <code>./programaXX</code></p></div>
-<div class="section-block"><h4>system()</h4>
+Pista: spawn() crea un proceso hijo con fork() y reemplaza ese hijo con el programa &quot;ls&quot; usando execvp(); el proceso padre continúa su ejecución normal e imprime &quot;done with main program&quot; — el orden entre esa impresión y la salida de ls no está garantizado.</p></details>
+<details class="section-block sec" id="para-repasar"><summary><span class="stitle">Para repasar</span></summary><ul><li>¿Qué diferencia hay entre fork() y exec()?</li><li>¿Por qué el uso de fork() puede generar una condición de carrera (race condition)?</li><li>¿Qué representa el PID y qué el PPID de un proceso?</li><li>¿Cuál es la diferencia entre el ID real y el ID efectivo de usuario/grupo, y cuándo se usa cada uno?</li><li>¿Qué hace el comando ps -e -o pid,ppid,command y qué muestra cada columna?</li><li>¿Qué ocurre si execve() tiene éxito? ¿Y si falla?</li></ul></details>
+<details class="section-block sec" id="referencias-multimedia"><summary><span class="stitle">Referencias multimedia</span></summary><div class="links" style="margin-top:0"><div class="link-item"><span class="label">Árbol de las computadoras (The Computer Tree)</span><a href="https://upload.wikimedia.org/wikipedia/commons/8/8d/The_computer_tree-U.S._Army_diagram.png" target="_blank" rel="noopener">https://upload.wikimedia.org/wikipedia/commons/8/8d/The_computer_tree-U.S._Army_diagram.png</a></div><div class="link-item"><span class="label">Línea de tiempo de distribuciones Linux</span><a href="https://upload.wikimedia.org/wikipedia/commons/1/1b/Linux_Distribution_Timeline.svg" target="_blank" rel="noopener">https://upload.wikimedia.org/wikipedia/commons/1/1b/Linux_Distribution_Timeline.svg</a></div><div class="link-item"><span class="label">Infografía del kernel de Linux</span><a href="https://upload.wikimedia.org/wikipedia/commons/e/ec/Infografia_NucleoLinux.png" target="_blank" rel="noopener">https://upload.wikimedia.org/wikipedia/commons/e/ec/Infografia_NucleoLinux.png</a></div><div class="link-item"><span class="label">Entrevista TED a Linus Torvalds</span><a href="https://www.youtube.com/watch?v=MNXIXDbEmVc" target="_blank" rel="noopener">https://www.youtube.com/watch?v=MNXIXDbEmVc</a></div><div class="link-item"><span class="label">Historia de las &quot;guerras de los Unix&quot;</span><a href="https://architecnologia.es/una-historia-de-unix-los-litigios-sco-contra-todos" target="_blank" rel="noopener">https://architecnologia.es/una-historia-de-unix-los-litigios-sco-contra-todos</a></div></div></details>
+<details class="section-block sec" id="bibliografia"><summary><span class="stitle">Bibliografía</span></summary><ul><li>Francisco Manuel Márquez García — &quot;Unix: programación avanzada&quot;. Editorial RA-MA</li><li>Richard Stevens — &quot;Advanced Unix Programming&quot;. Editorial Addison Wesley</li><li>Kurt Wall — &quot;Linux Programming by Example&quot;. Editorial QUE</li></ul></details>
+<details class="section-block sec" id="programas-del-profesor-tema-1"><summary><span class="stitle">Programas del profesor — Tema 1</span></summary><p>Código descargado del sitio del profesor (<a href="https://cromanzamitiz.github.io/arquitectura-cliente-servidor/tema1/" target="_blank" rel="noopener" style="color:var(--indigo)">tema1</a>). Cada programa está guardado como archivo real en <code>files/prof-tema1/</code>. Las salidas son <strong>representativas en Linux</strong> — los PID y los listados de <code>ls</code> varían en cada corrida.</p><p style="font-size:13px;color:var(--ink-soft)">Compilar: <code>cc programaXX_nombre.c -o programaXX</code> &nbsp;·&nbsp; ejecutar: <code>./programaXX</code></p></details>
+<details class="section-block sec" id="system"><summary><span class="stitle">system()</span></summary>
 <p style="margin-top:14px"><strong><a href="files/prof-tema1/programa04_system_v1.c" download style="color:var(--indigo)">programa04_system_v1.c</a></strong> — Ejemplo mínimo de <code>system("ls -l /")</code>: el shell ejecuta el comando y <code>return_value</code> recibe el estado devuelto por el shell (0 si todo salió bien).</p>
 <pre><code>#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
@@ -443,8 +445,8 @@ ls: cannot access 'no_existe': No such file or directory
 Termina proceso hijo, return_value=512
 WIFEXITED(return_value)=1
 WEXITSTATUS(...)=2</code></pre>
-</div>
-<div class="section-block"><h4>fork()</h4>
+</details>
+<details class="section-block sec" id="fork"><summary><span class="stitle">fork()</span></summary>
 <p style="margin-top:14px"><strong><a href="files/prof-tema1/programa05_fork_v1.c" download style="color:var(--indigo)">programa05_fork_v1.c</a></strong> — Primer contacto con <code>fork()</code>: después de la llamada hay <strong>dos procesos</strong> ejecutando el mismo código, por eso los <code>printf</code> 2 y 3 salen duplicados. <code>id_hijo</code> vale <code>0</code> en el hijo y el PID del hijo en el padre.</p>
 <pre><code>#include &lt;stdio.h&gt;
 #include &lt;unistd.h&gt;
@@ -538,8 +540,8 @@ int main(void)
 in child
 	child pid = 12346
 	child ppid = 12345</code></pre>
-</div>
-<div class="section-block"><h4>Errores del sistema (errno, strerror, perror)</h4>
+</details>
+<details class="section-block sec" id="errores-del-sistema-errno-strerror-perro"><summary><span class="stitle">Errores del sistema (errno, strerror, perror)</span></summary>
 <p style="margin-top:14px"><strong><a href="files/prof-tema1/programa03_codigos_sistema.c" download style="color:var(--indigo)">programa03_codigos_sistema.c</a></strong> — Recorre <code>strerror(0..150)</code> e imprime el mensaje de cada código de error de Linux. Es la versión &laquo;en C&raquo; de la tabla de los 131 códigos.</p>
 <pre><code>/* Manejo de codigos de sistema */
 
@@ -647,8 +649,8 @@ ESRCH                3
 EINTR                4
 EIO                  5
 ...</code></pre>
-</div>
-<div class="section-block"><h4>Familia de funciones exec()</h4>
+</details>
+<details class="section-block sec" id="familia-de-funciones-exec"><summary><span class="stitle">Familia de funciones exec()</span></summary>
 <p style="margin-top:14px"><strong><a href="files/prof-tema1/programa10_execl.c" download style="color:var(--indigo)">programa10_execl.c</a></strong> — <code>execl(path, arg0, …, NULL)</code>: lista de argumentos y <strong>ruta absoluta</strong>. A propósito llama a <code>/bin/lsa</code> (no existe) para mostrar el caso de error: <code>execl</code> devuelve <code>-1</code>. Si tuviera éxito, el proceso se reemplaza y las líneas siguientes <strong>nunca</strong> se ejecutan.</p>
 <pre><code>#include &lt;unistd.h&gt;
 #include &lt;stdlib.h&gt;
@@ -1023,8 +1025,8 @@ argv[1]: hola
 argv[2]: mundo
 argv[3]: buen
 argv[4]: dia</code></pre>
-</div>
-<div class="section-block"><h4>Patrón fork() + exec()</h4>
+</details>
+<details class="section-block sec" id="patron-fork-exec"><summary><span class="stitle">Patrón fork() + exec()</span></summary>
 <p style="margin-top:14px"><strong><a href="files/prof-tema1/programa22_fork-exec.c" download style="color:var(--indigo)">programa22_fork-exec.c</a></strong> — El patrón completo con trazas: <code>spawn()</code> hace <code>fork()</code>; el <strong>hijo</strong> llama <code>execvp("./programa01_print-pid")</code> (se reemplaza), el <strong>padre</strong> regresa de <code>spawn</code> y sigue. El orden exacto de las líneas varía.</p>
 <pre><code>#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
@@ -1116,8 +1118,8 @@ int main ()
 &lt;listado del directorio raíz&gt;
 
 (o el listado primero y luego "Termina el proceso padre": el orden no está garantizado)</code></pre>
-</div>
-<div class="section-block"><h4>Identificadores del proceso</h4>
+</details>
+<details class="section-block sec" id="identificadores-del-proceso"><summary><span class="stitle">Identificadores del proceso</span></summary>
 <p style="margin-top:14px"><strong><a href="files/prof-tema1/programa01_print-pid.c" download style="color:var(--indigo)">programa01_print-pid.c</a></strong> — Imprime el PID del proceso (<code>getpid</code>) y el PID de su padre (<code>getppid</code>).</p>
 <pre><code>#include&lt;stdio.h&gt;
 #include&lt;unistd.h&gt;
@@ -1148,15 +1150,15 @@ int main()
 Effective user ID: 1000
 Real group ID: 1000
 Effective group ID: 1000</code></pre>
-</div>
-<div class="section-block"><h4>Diagramas (Tema 1)</h4>
+</details>
+<details class="section-block sec" id="diagramas-tema-1"><summary><span class="stitle">Diagramas (Tema 1)</span></summary>
 <figure style="margin:16px 0"><img src="files/prof-tema1/1_funcion_system.png" alt="system() — el shell hijo ejecuta el comando y devuelve su estado al proceso que llamó." style="max-width:100%;border-radius:8px;border:1px solid rgba(255,255,255,0.1)"><figcaption style="font-size:12.5px;color:var(--ink-soft);margin-top:6px">system() — el shell hijo ejecuta el comando y devuelve su estado al proceso que llamó.</figcaption></figure>
 <figure style="margin:16px 0"><img src="files/prof-tema1/2_funcion_fork_1.png" alt="fork() — se crea un proceso hijo, copia del padre; la ejecución continúa en ambos desde el punto de la llamada." style="max-width:100%;border-radius:8px;border:1px solid rgba(255,255,255,0.1)"><figcaption style="font-size:12.5px;color:var(--ink-soft);margin-top:6px">fork() — se crea un proceso hijo, copia del padre; la ejecución continúa en ambos desde el punto de la llamada.</figcaption></figure>
 <figure style="margin:16px 0"><img src="files/prof-tema1/2_funcion_fork_2.png" alt="fork() — qué devuelve la llamada a cada proceso: 0 al hijo, el PID del hijo al padre, -1 si falla." style="max-width:100%;border-radius:8px;border:1px solid rgba(255,255,255,0.1)"><figcaption style="font-size:12.5px;color:var(--ink-soft);margin-top:6px">fork() — qué devuelve la llamada a cada proceso: 0 al hijo, el PID del hijo al padre, -1 si falla.</figcaption></figure>
 <figure style="margin:16px 0"><img src="files/prof-tema1/3_funcion_exec.png" alt="exec() — reemplaza la imagen del proceso actual por otro programa; no crea un proceso nuevo." style="max-width:100%;border-radius:8px;border:1px solid rgba(255,255,255,0.1)"><figcaption style="font-size:12.5px;color:var(--ink-soft);margin-top:6px">exec() — reemplaza la imagen del proceso actual por otro programa; no crea un proceso nuevo.</figcaption></figure>
 <figure style="margin:16px 0"><img src="files/prof-tema1/programa23_fork-exec.png" alt="fork() + exec() — flujo combinado: el padre hace fork, el hijo se reemplaza con exec, el padre continúa." style="max-width:100%;border-radius:8px;border:1px solid rgba(255,255,255,0.1)"><figcaption style="font-size:12.5px;color:var(--ink-soft);margin-top:6px">fork() + exec() — flujo combinado: el padre hace fork, el hijo se reemplaza con exec, el padre continúa.</figcaption></figure>
-</div>
-<div class="section-block"><h4>Referencias del profesor (Tema 1)</h4><div class="links" style="margin-top:0"><div class="link-item"><span class="label">Familia exec — man</span><a href="https://manpages.ubuntu.com/manpages/bionic/es/man3/execl.3.html" target="_blank" rel="noopener">https://manpages.ubuntu.com/manpages/bionic/es/man3/execl.3.html</a></div><div class="link-item"><span class="label">Procesos en Linux</span><a href="https://www.hpca.ual.es/~vruiz/docencia/cursos/linux/html/node43.html" target="_blank" rel="noopener">https://www.hpca.ual.es/~vruiz/docencia/cursos/linux/html/node43.html</a></div></div></div>
+</details>
+<details class="section-block sec" id="referencias-del-profesor-tema-1"><summary><span class="stitle">Referencias del profesor (Tema 1)</span></summary><div class="links" style="margin-top:0"><div class="link-item"><span class="label">Familia exec — man</span><a href="https://manpages.ubuntu.com/manpages/bionic/es/man3/execl.3.html" target="_blank" rel="noopener">https://manpages.ubuntu.com/manpages/bionic/es/man3/execl.3.html</a></div><div class="link-item"><span class="label">Procesos en Linux</span><a href="https://www.hpca.ual.es/~vruiz/docencia/cursos/linux/html/node43.html" target="_blank" rel="noopener">https://www.hpca.ual.es/~vruiz/docencia/cursos/linux/html/node43.html</a></div></div></details>
 </div>
 </body>
 </html>

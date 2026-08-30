@@ -21,42 +21,44 @@
   <p class="prof">Apuntes destilados del audio de clase (lo esencial, sin el detalle ejemplo por ejemplo)</p>
 </div>
 
-<div class="section-block"><h4>Idea central</h4><p>Un sistema embebido es un sistema DIGITAL (tiene microcontrolador o procesador) dedicado a UNA tarea específica, a diferencia de una computadora personal, que es de propósito general.
+<div class="encorto"><h4>En corto</h4><ul><li>Sistema embebido = sistema <strong>digital</strong> (µC / procesador) dedicado a <strong>una</strong> tarea; distinto de una computadora de propósito general y de lo puramente mecánico / analógico.</li><li>Criterio: ¿de verdad necesita cómputo digital, o basta con electrónica / mecánica robusta?</li><li>Lazo de control <strong>abierto</strong> (por tiempo) vs. <strong>cerrado</strong> (sensores deciden cuándo parar).</li><li>Propiedades de materiales: dureza, tenacidad y ductilidad.</li><li>Cierre: definición formal de computadora (entrada, salida, procesador, memoria).</li></ul></div>
+<div class="examen"><h4>🎯 Para el examen</h4><ul><li>Distinguir solución <strong>mecánica / analógica / electromecánica</strong> vs. <strong>sistema embebido digital</strong>.</li><li>Definiciones precisas de <strong>dureza</strong> (resistencia a rayarse, va con fragilidad), <strong>tenacidad</strong> (se dobla sin romperse) y <strong>ductilidad</strong> (se estira sin fracturarse) — no confundirlas.</li><li>Saber cuándo se justifica un microcontrolador y cuándo basta con electrónica analógica.</li></ul></div>
+<details class="section-block sec" id="idea-central" open><summary><span class="stitle">Idea central</span></summary><p>Un sistema embebido es un sistema DIGITAL (tiene microcontrolador o procesador) dedicado a UNA tarea específica, a diferencia de una computadora personal, que es de propósito general.
 
-Lo que se resuelve de forma puramente mecánica, analógica o electromecánica NO es un sistema embebido, aunque haga una función "inteligente".</p></div>
+Lo que se resuelve de forma puramente mecánica, analógica o electromecánica NO es un sistema embebido, aunque haga una función "inteligente".</p></details>
 
-<div class="section-block"><h4>El criterio que hay que saber aplicar</h4><p>Ante cualquier dispositivo, preguntarse: ¿de verdad necesita procesamiento digital, o basta con electrónica analógica / mecánica robusta?
+<details class="section-block sec" id="el-criterio-que-hay-que-saber-aplicar"><summary><span class="stitle">El criterio que hay que saber aplicar</span></summary><p>Ante cualquier dispositivo, preguntarse: ¿de verdad necesita procesamiento digital, o basta con electrónica analógica / mecánica robusta?
 
-El profesor insistió: un ingeniero debe saber CUÁNDO poner un microcontrolador y cuándo no. Llamar "sistema embebido" a algo que es puramente físico es el error de fondo de la clase.</p></div>
+El profesor insistió: un ingeniero debe saber CUÁNDO poner un microcontrolador y cuándo no. Llamar "sistema embebido" a algo que es puramente físico es el error de fondo de la clase.</p></details>
 
-<div class="section-block"><h4>Ejemplos por categoría</h4><table><thead><tr><th>Sí es sistema embebido (digital)</th><th>No lo es (mecánico / analógico / electromecánico)</th></tr></thead><tbody>
+<details class="section-block sec" id="ejemplos-por-categoria"><summary><span class="stitle">Ejemplos por categoría</span></summary><table><thead><tr><th>Sí es sistema embebido (digital)</th><th>No lo es (mecánico / analógico / electromecánico)</th></tr></thead><tbody>
 <tr><td>Control remoto (µC genera el tren de pulsos IR)</td><td>Semáforo electromecánico (plato giratorio con escobillas)</td></tr>
 <tr><td>Cámara de seguridad, oxímetro, termómetro digital</td><td>Alarma de incendios con transistor 2N2222 + buzzer</td></tr>
 <tr><td>Calculadora, piano digital, Apple Pencil</td><td>Termostato bimetálico (mercurio / nitinol)</td></tr>
 <tr><td>Frenos ABS, puerta automática con sensores</td><td>Microondas de perillas, lavadora de tina manual</td></tr>
 <tr><td>Cerradura electrónica, lector RFID / biométrico</td><td>Medidor electromecánico antiguo de CFE</td></tr>
 <tr><td>Roomba, bocinas inteligentes, audífonos Bluetooth</td><td>Radio analógico, walkie-talkie 80s, tornamesa</td></tr>
-</tbody></table><p>Casos "depende": marcapasos (digital sí / analógico no), multímetro (solo el digital), lector de código de barras (con USB sí; transceptor láser simple no), máquina expendedora (hay modelos solo mecánicos), bomba de insulina (en esencia es un motor de empuje).</p></div>
+</tbody></table><p>Casos "depende": marcapasos (digital sí / analógico no), multímetro (solo el digital), lector de código de barras (con USB sí; transceptor láser simple no), máquina expendedora (hay modelos solo mecánicos), bomba de insulina (en esencia es un motor de empuje).</p></details>
 
-<div class="section-block"><h4>Lazo de control abierto vs. cerrado (ejemplo: máquina de diálisis)</h4><ul><li><strong>Lazo abierto:</strong> se fija por tiempo (3 horas y se asume que la sangre quedó limpia), sin retroalimentación.</li><li><strong>Lazo cerrado:</strong> sensores miden en tiempo real. Conforme se filtran sales y ácido úrico, la conductividad de la sangre baja; el sistema usa ese dato para decidir cuándo detenerse.</li></ul></div>
+<details class="section-block sec" id="lazo-de-control-abierto-vs-cerrado-ejemp"><summary><span class="stitle">Lazo de control abierto vs. cerrado (ejemplo: máquina de diálisis)</span></summary><ul><li><strong>Lazo abierto:</strong> se fija por tiempo (3 horas y se asume que la sangre quedó limpia), sin retroalimentación.</li><li><strong>Lazo cerrado:</strong> sensores miden en tiempo real. Conforme se filtran sales y ácido úrico, la conductividad de la sangre baja; el sistema usa ese dato para decidir cuándo detenerse.</li></ul></details>
 
-<div class="section-block"><h4>Propiedades de los materiales</h4><ul><li><strong>Dureza:</strong> resistencia a rayarse / a la fricción. Suele venir acompañada de fragilidad. Ej.: diamante (raya todo pero se hace añicos de un martillazo); aluminio (duro y quebradizo frente al acero).</li><li><strong>Tenacidad / extensibilidad:</strong> se dobla o deforma sin romperse. Ej.: acero (se raya fácil, pero es flexible → parrillas, estructuras).</li><li><strong>Ductilidad:</strong> se estira mucho sin fracturarse. Ej.: oro (muy dúctil pero blando); níquel y titanio (usados en termostatos bimetálicos).</li></ul></div>
+<details class="section-block sec" id="propiedades-de-los-materiales"><summary><span class="stitle">Propiedades de los materiales</span></summary><ul><li><strong>Dureza:</strong> resistencia a rayarse / a la fricción. Suele venir acompañada de fragilidad. Ej.: diamante (raya todo pero se hace añicos de un martillazo); aluminio (duro y quebradizo frente al acero).</li><li><strong>Tenacidad / extensibilidad:</strong> se dobla o deforma sin romperse. Ej.: acero (se raya fácil, pero es flexible → parrillas, estructuras).</li><li><strong>Ductilidad:</strong> se estira mucho sin fracturarse. Ej.: oro (muy dúctil pero blando); níquel y titanio (usados en termostatos bimetálicos).</li></ul></details>
 
-<div class="section-block"><h4>Motor eléctrico de CA (taladro, licuadora)</h4><p>No usa imanes permanentes: bobinas en el estator y en el rotor. Al energizar se forman polos N-S y el rotor empieza a girar.
+<details class="section-block sec" id="motor-electrico-de-ca-taladro-licuadora"><summary><span class="stitle">Motor eléctrico de CA (taladro, licuadora)</span></summary><p>No usa imanes permanentes: bobinas en el estator y en el rotor. Al energizar se forman polos N-S y el rotor empieza a girar.
 
 Escobillas + carbones: invierten la polaridad mecánicamente en cada media vuelta, para que los polos se repelan y el giro no se detenga al alinearse.
 
-El carbón se usa porque conduce bien y además es suave (lubricante sólido); metal rozando cobre se destruiría por fricción. El carbón se desgasta con el uso y se reemplaza barato en una tlapalería en vez de tirar la herramienta.</p></div>
+El carbón se usa porque conduce bien y además es suave (lubricante sólido); metal rozando cobre se destruiría por fricción. El carbón se desgasta con el uso y se reemplaza barato en una tlapalería en vez de tirar la herramienta.</p></details>
 
-<div class="section-block"><h4>Cierre — definición formal de computadora</h4><p>Máquina que consta de: elementos de entrada, elementos de salida, procesador central y memoria. En esencia, algo que realiza cálculos. Con esto el profesor abrió el tema siguiente: procesadores.</p></div>
+<details class="section-block sec" id="cierre-definicion-formal-de-computadora"><summary><span class="stitle">Cierre — definición formal de computadora</span></summary><p>Máquina que consta de: elementos de entrada, elementos de salida, procesador central y memoria. En esencia, algo que realiza cálculos. Con esto el profesor abrió el tema siguiente: procesadores.</p></details>
 
-<div class="section-block"><h4>Contexto de clase — <em>no va para examen</em></h4><p>Cosas que el profesor comentó de pasada; interesantes pero sin peso para el examen y sin relación directa con el temario:</p><ul>
+<details class="section-block sec contexto" id="contexto-de-clase-no-va-para-examen"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto de clase — <em>no va para examen</em></span></summary><p>Cosas que el profesor comentó de pasada; interesantes pero sin peso para el examen y sin relación directa con el temario:</p><ul>
 <li><strong>Etimología árabe:</strong> "algoritmo" viene de <em>Al-Juarismi</em> (al-Ḵwārizmī, el matemático) y "álgebra" de <em>al-yabr</em>.</li>
 <li><strong>Alan Turing / máquina de Turing:</strong> modelo abstracto de autómata; base teórica de "lo que una computadora puede calcular".</li>
 <li>Menciones sueltas sin contexto en los apuntes: "vacunas 1880" y las <strong>Puertas de Ishtar</strong> en Babilonia.</li>
-</ul><p>El resto de los apuntes a mano de esta clase coincide con lo ya destilado arriba (sistema embebido = digital y dedicado; "electrónico ≠ digital"; el criterio para decidir si algo necesita microcontrolador; y el cierre con "1. Procesador" → siguiente tema).</p></div>
+</ul><p>El resto de los apuntes a mano de esta clase coincide con lo ya destilado arriba (sistema embebido = digital y dedicado; "electrónico ≠ digital"; el criterio para decidir si algo necesita microcontrolador; y el cierre con "1. Procesador" → siguiente tema).</p></details>
 
-<div class="section-block"><h4>⚠️ Énfasis para examen</h4><ul><li>Distinguir solución <strong>mecánica / analógica / electromecánica</strong> vs. <strong>sistema embebido digital</strong>. Es error grave llamar sistema embebido a algo puramente físico.</li><li>Definiciones precisas de <strong>dureza, tenacidad y ductilidad</strong> — no confundirlas.</li><li>Saber cuándo se justifica un microcontrolador y cuándo basta con electrónica analógica robusta.</li></ul></div>
+<details class="section-block sec" id="enfasis-para-examen"><summary><span class="chip chip-examen">examen</span><span class="stitle">⚠️ Énfasis para examen</span></summary><ul><li>Distinguir solución <strong>mecánica / analógica / electromecánica</strong> vs. <strong>sistema embebido digital</strong>. Es error grave llamar sistema embebido a algo puramente físico.</li><li>Definiciones precisas de <strong>dureza, tenacidad y ductilidad</strong> — no confundirlas.</li><li>Saber cuándo se justifica un microcontrolador y cuándo basta con electrónica analógica robusta.</li></ul></details>
 
 </div>
 </body>

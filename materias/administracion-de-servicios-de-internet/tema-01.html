@@ -21,7 +21,9 @@
   <p class="prof">Destilado del transcript de la clase. Corresponde al Tema 1 (Introducción). La <a href="evaluacion.html" style="color:var(--indigo)">Práctica 0</a> sale de esta sesión.</p>
 </div>
 
-<div class="section-block"><h4>Repaso de arquitectura (dado en clase)</h4>
+<div class="encorto"><h4>En corto</h4><ul><li>Repaso de arquitectura: Von Neumann vs. Harvard RISC y <em>pipeline</em>.</li><li><strong>FHS</strong>: jerarquía de directorios de Linux y su prioridad (<code>/boot /bin /dev /etc /usr /lib</code> alta; <code>/home /root /var</code> media; <code>/tmp</code> baja).</li><li>Distribuciones de Linux y para quién es cada una.</li><li>Terminal: <code>whereis</code> / <code>which</code>, <code>man</code>, <code>ps</code> / <code>ps aux</code>, <code>top</code>, <code>nano</code>, <code>cat</code>, <code>ls</code>, <code>mkdir</code>.</li><li>De esta clase sale la <a href="evaluacion.html" style="color:var(--indigo)">Práctica 0</a>.</li></ul></div>
+<div class="examen"><h4>🎯 Para el examen</h4><ul><li>El permiso <code>777</code> nunca se usa por defecto.</li><li>En carpetas, el permiso <code>x</code> deja entrar a otros usuarios; a un atacante le basta el permiso de ejecución → nunca dejar carpetas / archivos dudosos con <code>x</code> para terceros.</li><li><code>ps aux</code> (modificador <code>x</code>): procesos <strong>sin terminal asociada</strong> = primer indicio de malware.</li><li><code>whereis</code> (carpeta de instalación completa) vs. <code>which</code> (solo el binario ejecutable).</li></ul></div>
+<details class="section-block sec" id="repaso-de-arquitectura-dado-en-clase" open><summary><span class="stitle">Repaso de arquitectura (dado en clase)</span></summary>
 <p>El <strong>procesador</strong> ejecuta el algoritmo y los datos que están juntos en la <strong>memoria principal</strong>. El profesor lo describe como "un adminículo electrónico que ejecuta máquinas de Turing".</p>
 <p><strong>Modelo de Von Neumann</strong> — compatible con la máquina de Turing. Componentes básicos: <strong>controlador</strong> (genera las señales de activación), <strong>registro de estado</strong>, <strong>registro de propósito general</strong>, <strong>contador de programa (PC)</strong>, <strong>ALU</strong> y <strong>una sola unidad de almacenamiento</strong> que contiene programa + datos + pila.</p>
 <p><strong>Cuello de botella de Von Neumann:</strong> ejecuta "de un pasito a la vez". El procesador va a memoria, jala la instrucción (<em>fetch</em>), la decodifica, vuelve a memoria por los datos, los procesa en la ALU y escribe el resultado. Mientras una fase ocurre, las demás unidades y buses están <strong>inactivos</strong> (al leer la instrucción, el decodificador y la ALU no hacen nada).</p>
@@ -33,16 +35,16 @@ I1     F     D     E     WB
 I2           F     D     E     WB
 I3                 F     D     E     WB
 I4                       F     D     E     WB
-                         └── desde aquí: 1 resultado por ciclo</code></pre></div>
+                         └── desde aquí: 1 resultado por ciclo</code></pre></details>
 
-<div class="section-block"><h4>Contexto de clase — <em>no va para examen</em></h4><ul>
+<details class="section-block sec contexto" id="contexto-de-clase-no-va-para-examen"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto de clase — <em>no va para examen</em></span></summary><ul>
 <li><strong>Etimología:</strong> "álgebra" ← <em>al-jabr</em>; "algoritmo" ← <em>Al-Juarismi</em> (matemático árabe).</li>
 <li><strong>Búsqueda en profundidad</strong> (grafo antiguo): recorrer todos los puntos de una ciudad pasando por cada calle exactamente una vez, sin repetir (es un recorrido euleriano).</li>
 <li><strong>Transmutación de metales:</strong> físicamente posible entre metales pesados salvo pasar por el <strong>hierro</strong> (el más estable); antes del hierro el proceso es <em>fusión</em>, después es <em>fisión</em>. No se hace comercialmente porque la energía cuesta más que comprar el oro.</li>
 <li><strong>Máquina de Turing:</strong> autómata de doble pila (una infinita), lenguaje finito, operaciones mover izquierda / mover derecha / leer. Sirve para demostrar matemáticamente que una solución converge.</li>
-</ul></div>
+</ul></details>
 
-<div class="section-block"><h4>Jerarquía de directorios de Linux (FHS)</h4><table><thead><tr><th>Directorio</th><th>Prioridad</th><th>Para qué sirve</th></tr></thead><tbody>
+<details class="section-block sec" id="jerarquia-de-directorios-de-linux-fhs"><summary><span class="stitle">Jerarquía de directorios de Linux (FHS)</span></summary><table><thead><tr><th>Directorio</th><th>Prioridad</th><th>Para qué sirve</th></tr></thead><tbody>
 <tr><td><code>/</code></td><td>—</td><td>Raíz de toda la estructura de carpetas.</td></tr>
 <tr><td><code>/boot</code></td><td>alta</td><td>Arranque del sistema operativo y almacenamiento del <strong>kernel</strong>.</td></tr>
 <tr><td><code>/bin</code></td><td>alta</td><td>Comandos binarios esenciales que todos los usuarios pueden ejecutar (<code>cd</code>, <code>ls</code>).</td></tr>
@@ -56,9 +58,9 @@ I4                       F     D     E     WB
 <tr><td><code>/tmp</code></td><td>baja</td><td>Temporales. A diferencia de <code>/var</code>, lo borrado en <code>/tmp</code> se puede recuperar con un script de Bash <strong>mientras no se reinicie</strong>: al reiniciar, la RAM se desenergiza y esos espacios se marcan como libres.</td></tr>
 <tr><td><code>/opt</code></td><td>—</td><td>Software adicional instalado por un usuario común (no por el administrador).</td></tr>
 <tr><td><code>/proc</code></td><td>—</td><td>(mencionado) Información de procesos del kernel.</td></tr>
-</tbody></table></div>
+</tbody></table></details>
 
-<div class="section-block"><h4>Distribuciones de Linux</h4><table><thead><tr><th>Distro</th><th>Perfil / uso</th></tr></thead><tbody>
+<details class="section-block sec" id="distribuciones-de-linux"><summary><span class="stitle">Distribuciones de Linux</span></summary><table><thead><tr><th>Distro</th><th>Perfil / uso</th></tr></thead><tbody>
 <tr><td><strong>Linux Mint</strong></td><td>"Principiante del principiante". Es la más parecida a Windows → ideal como puente inicial en migraciones empresariales, antes de pasar a Ubuntu.</td></tr>
 <tr><td><strong>Ubuntu</strong></td><td>Principiantes / usuario final. Fácil, para aprender. <strong>No</strong> se recomienda para servidores críticos por la inestabilidad de sus actualizaciones constantes.</td></tr>
 <tr><td><strong>Debian</strong></td><td>Usuarios con manejo estable de Linux. Muy recomendado para <strong>servidores</strong> por su estabilidad.</td></tr>
@@ -67,18 +69,18 @@ I4                       F     D     E     WB
 <tr><td><strong>RedHat (RHEL)</strong></td><td>Distribución comercial líder para servidores empresariales; su costo de licencia frena la adopción en algunas organizaciones.</td></tr>
 <tr><td><strong>Arch Linux</strong></td><td>Usuarios avanzados. Instalación manual personalizada obligatoria; no tiene sentido con asistente "siguiente-siguiente".</td></tr>
 <tr><td><strong>Kali Linux</strong></td><td>100 % auditoría de seguridad informática y hacking ético.</td></tr>
-</tbody></table></div>
+</tbody></table></details>
 
-<div class="section-block"><h4>Terminal — localización y ayuda</h4>
+<details class="section-block sec" id="terminal-localizacion-y-ayuda"><summary><span class="stitle">Terminal — localización y ayuda</span></summary>
 <pre><code>whereis ls      # ruta completa del paquete + sus directorios de config
                 # (útil para migraciones)   ej. -> /usr/bin/ls
 which ls        # SOLO la ruta del archivo ejecutable
 pwd             # directorio actual (print working directory)
 man ls          # manual local del comando (funciona sin internet)
                 # salir con  q   [en clase se dijo Ctrl+Z, que en realidad SUSPENDE el proceso]</code></pre>
-<p><strong>⚠️ Examen:</strong> distinguir <code>whereis</code> (mapea toda la carpeta de instalación, documentación y binarios — para migraciones) de <code>which</code> (solo localiza el binario ejecutable).</p></div>
+<p><strong>⚠️ Examen:</strong> distinguir <code>whereis</code> (mapea toda la carpeta de instalación, documentación y binarios — para migraciones) de <code>which</code> (solo localiza el binario ejecutable).</p></details>
 
-<div class="section-block"><h4>Terminal — procesos</h4>
+<details class="section-block sec" id="terminal-procesos"><summary><span class="stitle">Terminal — procesos</span></summary>
 <pre><code>ps              # procesos de esta terminal: PID, terminal, TIME, comando
 kill &lt;PID&gt;       # termina un proceso
 ps aux          # TODOS los procesos del sistema (incluidos los del kernel)
@@ -86,16 +88,16 @@ ps aux          # TODOS los procesos del sistema (incluidos los del kernel)
                 #   u = uso de recursos (columnas de %CPU y %MEM)
                 #   x = procesos SIN terminal asociada
 top             # monitoreo dinámico en tiempo real</code></pre>
-<p><strong>⚠️ Examen / seguridad:</strong> ante sospecha de malware, la primera herramienta es <code>ps aux</code> mirando el modificador <code>x</code>: un proceso <strong>sin terminal asociada</strong> (sin <code>tty</code>) es síntoma inmediato de virus o ataque, porque suelen correr en background.</p></div>
+<p><strong>⚠️ Examen / seguridad:</strong> ante sospecha de malware, la primera herramienta es <code>ps aux</code> mirando el modificador <code>x</code>: un proceso <strong>sin terminal asociada</strong> (sin <code>tty</code>) es síntoma inmediato de virus o ataque, porque suelen correr en background.</p></details>
 
-<div class="section-block"><h4>Terminal — ver y editar archivos</h4>
+<details class="section-block sec" id="terminal-ver-y-editar-archivos"><summary><span class="stitle">Terminal — ver y editar archivos</span></summary>
 <pre><code>nano archivo            # editor de texto plano; guardar/salir con  Ctrl + X
 cat archivo             # muestra el contenido
 cat -n archivo          # lo muestra con las líneas numeradas
 cat a b                 # concatena a y b en la salida
-cat a b &gt; salida        # une a y b en un archivo nuevo (el ORDEN de a y b importa)</code></pre></div>
+cat a b &gt; salida        # une a y b en un archivo nuevo (el ORDEN de a y b importa)</code></pre></details>
 
-<div class="section-block"><h4>Terminal — listar y crear directorios</h4>
+<details class="section-block sec" id="terminal-listar-y-crear-directorios"><summary><span class="stitle">Terminal — listar y crear directorios</span></summary>
 <pre><code>ls -l           # vista larga: permisos, propietario, grupo, tamaño, fecha
 ls -a           # incluye archivos ocultos (empiezan con  .  )
 ls -s           # tamaño de los archivos en KB
@@ -103,14 +105,14 @@ ls -las         # combina las tres (= ls -l -a -s)
 
 mkdir nombre            # permisos por defecto: dueño rwx ; grupo y otros r-x
 mkdir -m 700 nombre     # crea con un modo de permisos específico
-mkdir -p a/b/c          # crea todo el árbol de subcarpetas en una sola línea</code></pre></div>
+mkdir -p a/b/c          # crea todo el árbol de subcarpetas en una sola línea</code></pre></details>
 
-<div class="section-block"><h4>⚠️ Énfasis para examen — permisos y seguridad</h4><ul>
+<details class="section-block sec" id="enfasis-para-examen-permisos-y-seguridad"><summary><span class="chip chip-examen">examen</span><span class="stitle">⚠️ Énfasis para examen — permisos y seguridad</span></summary><ul>
 <li><strong>El permiso <code>777</code> nunca se usa por defecto.</strong></li>
 <li>La columna de permisos de <code>ls -l</code> es clave, sobre todo en <strong>directorios</strong>.</li>
 <li>En una carpeta, el permiso de <strong>ejecución <code>x</code></strong> permite que otros usuarios <em>entren</em> a ella. A un atacante que implanta un virus le basta con el permiso de ejecución para infectar/corromper el sistema → dejar carpetas o archivos de origen dudoso con <code>x</code> abierto a terceros es el error más peligroso de la administración.</li>
 <li><code>ps aux</code> (modificador <code>x</code>): procesos sin terminal asociada = primer punto de revisión ante malware.</li>
-</ul></div>
+</ul></details>
 
 </div>
 </body>

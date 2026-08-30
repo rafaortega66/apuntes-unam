@@ -21,13 +21,15 @@
   <p class="prof">Apuntes de clase · 26-ago-2026 · toca Tema 1 (estructura básica) y Tema 4 (pipelining). Las partes marcadas <em>[?]</em> son de letra difícil de leer — verificar.</p>
 </div>
 
-<div class="section-block"><h4>Von Neumann vs. Harvard</h4><table><thead><tr><th></th><th>Von Neumann</th><th>Harvard</th></tr></thead><tbody>
+<div class="encorto"><h4>En corto</h4><ul><li><strong>Von Neumann</strong>: una memoria para datos e instrucciones → una instrucción a la vez (se asocia a CISC).</li><li><strong>Harvard</strong>: memorias separadas → trae instrucción y dato a la vez (se asocia a RISC).</li><li>CISC = instrucciones complejas, pocas líneas; RISC = instrucciones simples tipo carga / almacena.</li><li>Ciclo: <strong>Fetch → Decode → Execute → Write Back</strong>; con <em>pipeline</em> sale un resultado por ciclo de reloj.</li></ul></div>
+<div class="examen"><h4>🎯 Para el examen</h4><ul><li>Diferencia Von Neumann / Harvard y su relación con CISC / RISC.</li><li>Etapas del pipeline y por qué acelera (etapas concurrentes).</li><li>Las partes marcadas <code>[?]</code> son de letra difícil de leer — verificar el pseudo-ensamblador y el diagrama.</li></ul></div>
+<details class="section-block sec" id="von-neumann-vs-harvard" open><summary><span class="stitle">Von Neumann vs. Harvard</span></summary><table><thead><tr><th></th><th>Von Neumann</th><th>Harvard</th></tr></thead><tbody>
 <tr><td>Memoria</td><td>Una sola memoria para datos e instrucciones</td><td>Memorias separadas para instrucciones y datos</td></tr>
 <tr><td>Consecuencia</td><td>La unidad de control ejecuta <strong>una instrucción a la vez</strong> (busca instrucción o dato, no ambos)</td><td>Puede traer instrucción y dato en el mismo ciclo</td></tr>
 <tr><td>Se asocia con</td><td>CISC</td><td>RISC</td></tr>
-</tbody></table><p>Las instrucciones son "físicas": cada una cuesta tiempo (ciclos de reloj).</p></div>
+</tbody></table><p>Las instrucciones son "físicas": cada una cuesta tiempo (ciclos de reloj).</p></details>
 
-<div class="section-block"><h4>CISC vs. RISC</h4><p><strong>CISC</strong> — instrucciones complejas, cercanas a un lenguaje de alto nivel; el mismo trabajo se escribe en pocas líneas. Ejemplo de estilo (pseudocódigo de la clase):</p>
+<details class="section-block sec" id="cisc-vs-risc"><summary><span class="stitle">CISC vs. RISC</span></summary><p><strong>CISC</strong> — instrucciones complejas, cercanas a un lenguaje de alto nivel; el mismo trabajo se escribe en pocas líneas. Ejemplo de estilo (pseudocódigo de la clase):</p>
 <pre><code>for (i = 0; i &lt; n; i++);
 set(i) 0;
 ...   EST1        ; etiqueta   [?]
@@ -45,9 +47,9 @@ LDA i
 INC A            ; [?] "IWC A"
 STA i
 </code></pre>
-<p><em>[?] En los apuntes hay números junto a varias instrucciones (33, 66, 20 / 80, 64): parecen direcciones o valores de ejemplo, pero no se leen con claridad.</em></p></div>
+<p><em>[?] En los apuntes hay números junto a varias instrucciones (33, 66, 20 / 80, 64): parecen direcciones o valores de ejemplo, pero no se leen con claridad.</em></p></details>
 
-<div class="section-block"><h4>Ciclo del procesador y pipeline</h4><p>Cada instrucción pasa por etapas. En los apuntes aparecen cuatro:</p>
+<details class="section-block sec" id="ciclo-del-procesador-y-pipeline"><summary><span class="stitle">Ciclo del procesador y pipeline</span></summary><p>Cada instrucción pasa por etapas. En los apuntes aparecen cuatro:</p>
 <ol>
 <li><strong>Fetch</strong> — traer la instrucción de memoria.</li>
 <li><strong>Decode</strong> — decodificarla.</li>
@@ -98,7 +100,7 @@ STA i
   <text x="8" y="196" class="lbl">F = Fetch · D = Decode · E = Execute · W = Write Back</text>
 </svg>
 </figure>
-<p><em>[?] El diagrama original de los apuntes ("ABC Pipe") no se distingue bien; éste es la reconstrucción estándar del pipeline de 4 etapas. Si mandas una foto más nítida lo ajusto.</em></p></div>
+<p><em>[?] El diagrama original de los apuntes ("ABC Pipe") no se distingue bien; éste es la reconstrucción estándar del pipeline de 4 etapas. Si mandas una foto más nítida lo ajusto.</em></p></details>
 
 </div>
 </body>
