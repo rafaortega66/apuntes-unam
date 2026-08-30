@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Clase 01 — Introducción: Linux para administración</title>
+<title>Clase 1 — Arquitectura (repaso), FHS de Linux, distros y terminal</title>
 <link rel="stylesheet" href="../../assets/style.css">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js" defer></script>
@@ -17,33 +17,100 @@
 <div class="wrap">
 <a class="back" href="index.html">← Administración de Servicios de Internet</a>
 <div class="detail-head" style="border-color:#7C9CD6">
-  <h2>Clase 01 — Introducción: Linux para administración</h2>
-  <p class="prof">Apuntes de clase · 26-ago-2026 · corresponde al Tema 1 (Introducción)</p>
+  <h2>Clase 1 — Arquitectura (repaso), FHS de Linux, distros y terminal</h2>
+  <p class="prof">Destilado del transcript de la clase. Corresponde al Tema 1 (Introducción). La <a href="evaluacion.html" style="color:var(--indigo)">Práctica 0</a> sale de esta sesión.</p>
 </div>
 
-<div class="section-block"><h4>Jerarquía de directorios de Linux (FHS)</h4><table><thead><tr><th>Directorio</th><th>Para qué sirve</th></tr></thead><tbody>
-<tr><td><code>/root</code></td><td>Directorio personal del administrador (usuario <code>root</code>)</td></tr>
-<tr><td><code>/boot</code></td><td>Archivos de arranque del sistema</td></tr>
-<tr><td><code>/bin</code></td><td>Ejecutables (binarios esenciales)</td></tr>
-<tr><td><code>/dev</code></td><td>Dispositivos</td></tr>
-<tr><td><code>/etc</code></td><td>Archivos de configuración</td></tr>
-<tr><td><code>/home</code></td><td>Directorios personales de los usuarios</td></tr>
-<tr><td><code>/opt</code></td><td>Software opcional / de terceros</td></tr>
-<tr><td><code>/var</code></td><td>Datos variables (logs, colas, caché)</td></tr>
-</tbody></table><p><em>[?] En los apuntes hay una entrada extra antes de <code>/var</code> que no se lee bien (¿<code>/srv</code>, servicios?).</em></p></div>
+<div class="section-block"><h4>Repaso de arquitectura (dado en clase)</h4>
+<p>El <strong>procesador</strong> ejecuta el algoritmo y los datos que están juntos en la <strong>memoria principal</strong>. El profesor lo describe como "un adminículo electrónico que ejecuta máquinas de Turing".</p>
+<p><strong>Modelo de Von Neumann</strong> — compatible con la máquina de Turing. Componentes básicos: <strong>controlador</strong> (genera las señales de activación), <strong>registro de estado</strong>, <strong>registro de propósito general</strong>, <strong>contador de programa (PC)</strong>, <strong>ALU</strong> y <strong>una sola unidad de almacenamiento</strong> que contiene programa + datos + pila.</p>
+<p><strong>Cuello de botella de Von Neumann:</strong> ejecuta "de un pasito a la vez". El procesador va a memoria, jala la instrucción (<em>fetch</em>), la decodifica, vuelve a memoria por los datos, los procesa en la ALU y escribe el resultado. Mientras una fase ocurre, las demás unidades y buses están <strong>inactivos</strong> (al leer la instrucción, el decodificador y la ALU no hacen nada).</p>
+<p><strong>Modelo Load-Store (Peterson):</strong> demuestra que cualquier programa se puede reescribir con más instrucciones cortas basadas solo en <strong>carga</strong> y <strong>almacenamiento</strong> usando una ALU simple.</p>
+<p><strong>Arquitectura Harvard RISC:</strong> soluciona el cuello de botella separando físicamente instrucciones y datos: la cinta única de Turing se parte en <strong>dos</strong> — instrucciones (solo lectura) y datos (lectura y escritura) — permitiendo leer y escribir a la vez.</p>
+<p><strong>Segmentación (pipelining):</strong> 4 etapas que corren concurrentes por ciclo de reloj — <strong>Fetch → Decode → Execute → Write Back</strong>. Tras el arranque sale <strong>una instrucción por ciclo</strong>:</p>
+<pre><code>       T1    T2    T3    T4    T5    T6    T7
+I1     F     D     E     WB
+I2           F     D     E     WB
+I3                 F     D     E     WB
+I4                       F     D     E     WB
+                         └── desde aquí: 1 resultado por ciclo</code></pre></div>
 
-<div class="section-block"><h4>Distribuciones de Linux y su público</h4><table><thead><tr><th>Distribución</th><th>Enfocada a</th></tr></thead><tbody>
-<tr><td>Ubuntu</td><td>Principiantes</td></tr>
-<tr><td>Linux Mint</td><td>Principiantes (derivada de Ubuntu)</td></tr>
-<tr><td>Debian</td><td>Usuarios intermedios y servidores</td></tr>
-<tr><td>Fedora</td><td>Desarrolladores y entusiastas de tecnología</td></tr>
-<tr><td>CentOS / AlmaLinux</td><td>Administradores de servidores empresariales</td></tr>
-<tr><td>Red Hat (RHEL)</td><td>Empresarial, con soporte de pago / suscripción</td></tr>
-<tr><td>Arch Linux</td><td>Usuarios avanzados</td></tr>
-<tr><td>Kali Linux</td><td>Pruebas éticas (pentesting) y expertos en seguridad</td></tr>
+<div class="section-block"><h4>Contexto de clase — <em>no va para examen</em></h4><ul>
+<li><strong>Etimología:</strong> "álgebra" ← <em>al-jabr</em>; "algoritmo" ← <em>Al-Juarismi</em> (matemático árabe).</li>
+<li><strong>Búsqueda en profundidad</strong> (grafo antiguo): recorrer todos los puntos de una ciudad pasando por cada calle exactamente una vez, sin repetir (es un recorrido euleriano).</li>
+<li><strong>Transmutación de metales:</strong> físicamente posible entre metales pesados salvo pasar por el <strong>hierro</strong> (el más estable); antes del hierro el proceso es <em>fusión</em>, después es <em>fisión</em>. No se hace comercialmente porque la energía cuesta más que comprar el oro.</li>
+<li><strong>Máquina de Turing:</strong> autómata de doble pila (una infinita), lenguaje finito, operaciones mover izquierda / mover derecha / leer. Sirve para demostrar matemáticamente que una solución converge.</li>
+</ul></div>
+
+<div class="section-block"><h4>Jerarquía de directorios de Linux (FHS)</h4><table><thead><tr><th>Directorio</th><th>Prioridad</th><th>Para qué sirve</th></tr></thead><tbody>
+<tr><td><code>/</code></td><td>—</td><td>Raíz de toda la estructura de carpetas.</td></tr>
+<tr><td><code>/boot</code></td><td>alta</td><td>Arranque del sistema operativo y almacenamiento del <strong>kernel</strong>.</td></tr>
+<tr><td><code>/bin</code></td><td>alta</td><td>Comandos binarios esenciales que todos los usuarios pueden ejecutar (<code>cd</code>, <code>ls</code>).</td></tr>
+<tr><td><code>/dev</code></td><td>alta</td><td>Dispositivos: todas las conexiones de hardware interno y externo; configuración de <strong>drivers</strong> (impresoras, escáneres, discos).</td></tr>
+<tr><td><code>/etc</code></td><td>alta</td><td>Archivos de configuración del SO y de las aplicaciones instaladas.</td></tr>
+<tr><td><code>/usr</code></td><td>alta</td><td>Programas, bibliotecas, documentación y archivos <strong>estáticos</strong> del sistema.</td></tr>
+<tr><td><code>/lib</code></td><td>alta</td><td>Librerías esenciales del sistema.</td></tr>
+<tr><td><code>/home</code></td><td>media</td><td>Carpetas personales de los usuarios.</td></tr>
+<tr><td><code>/root</code></td><td>media</td><td>Directorio personal del superusuario. Prioridad media porque existen métodos inseguros para reponer su contraseña.</td></tr>
+<tr><td><code>/var</code></td><td>media</td><td>Archivos variables: temporales de ejecución rápida, ocultos y <strong>logs</strong>. Borrar su contenido no tira el SO. Elimina de inmediato al ejecutar.</td></tr>
+<tr><td><code>/tmp</code></td><td>baja</td><td>Temporales. A diferencia de <code>/var</code>, lo borrado en <code>/tmp</code> se puede recuperar con un script de Bash <strong>mientras no se reinicie</strong>: al reiniciar, la RAM se desenergiza y esos espacios se marcan como libres.</td></tr>
+<tr><td><code>/opt</code></td><td>—</td><td>Software adicional instalado por un usuario común (no por el administrador).</td></tr>
+<tr><td><code>/proc</code></td><td>—</td><td>(mencionado) Información de procesos del kernel.</td></tr>
 </tbody></table></div>
 
-<div class="section-block"><h4>Pendiente para el profesor</h4><ul><li>Preguntar el <strong>formato de las prácticas</strong>.</li></ul></div>
+<div class="section-block"><h4>Distribuciones de Linux</h4><table><thead><tr><th>Distro</th><th>Perfil / uso</th></tr></thead><tbody>
+<tr><td><strong>Linux Mint</strong></td><td>"Principiante del principiante". Es la más parecida a Windows → ideal como puente inicial en migraciones empresariales, antes de pasar a Ubuntu.</td></tr>
+<tr><td><strong>Ubuntu</strong></td><td>Principiantes / usuario final. Fácil, para aprender. <strong>No</strong> se recomienda para servidores críticos por la inestabilidad de sus actualizaciones constantes.</td></tr>
+<tr><td><strong>Debian</strong></td><td>Usuarios con manejo estable de Linux. Muy recomendado para <strong>servidores</strong> por su estabilidad.</td></tr>
+<tr><td><strong>Fedora</strong></td><td>Desarrollo y programadores. Conexiones ágiles con tecnologías inalámbricas recientes.</td></tr>
+<tr><td><strong>CentOS / AlmaLinux</strong></td><td>CentOS = copia gratuita de RedHat, muy usada para servidores de almacenamiento; perdió soporte ~2017–2019 pero muchas empresas lo siguen usando ("si no falla, no le muevas"). <strong>AlmaLinux</strong> es su sucesor.</td></tr>
+<tr><td><strong>RedHat (RHEL)</strong></td><td>Distribución comercial líder para servidores empresariales; su costo de licencia frena la adopción en algunas organizaciones.</td></tr>
+<tr><td><strong>Arch Linux</strong></td><td>Usuarios avanzados. Instalación manual personalizada obligatoria; no tiene sentido con asistente "siguiente-siguiente".</td></tr>
+<tr><td><strong>Kali Linux</strong></td><td>100 % auditoría de seguridad informática y hacking ético.</td></tr>
+</tbody></table></div>
+
+<div class="section-block"><h4>Terminal — localización y ayuda</h4>
+<pre><code>whereis ls      # ruta completa del paquete + sus directorios de config
+                # (útil para migraciones)   ej. -> /usr/bin/ls
+which ls        # SOLO la ruta del archivo ejecutable
+pwd             # directorio actual (print working directory)
+man ls          # manual local del comando (funciona sin internet)
+                # salir con  q   [en clase se dijo Ctrl+Z, que en realidad SUSPENDE el proceso]</code></pre>
+<p><strong>⚠️ Examen:</strong> distinguir <code>whereis</code> (mapea toda la carpeta de instalación, documentación y binarios — para migraciones) de <code>which</code> (solo localiza el binario ejecutable).</p></div>
+
+<div class="section-block"><h4>Terminal — procesos</h4>
+<pre><code>ps              # procesos de esta terminal: PID, terminal, TIME, comando
+kill &lt;PID&gt;       # termina un proceso
+ps aux          # TODOS los procesos del sistema (incluidos los del kernel)
+                #   a = procesos de todos los usuarios
+                #   u = uso de recursos (columnas de %CPU y %MEM)
+                #   x = procesos SIN terminal asociada
+top             # monitoreo dinámico en tiempo real</code></pre>
+<p><strong>⚠️ Examen / seguridad:</strong> ante sospecha de malware, la primera herramienta es <code>ps aux</code> mirando el modificador <code>x</code>: un proceso <strong>sin terminal asociada</strong> (sin <code>tty</code>) es síntoma inmediato de virus o ataque, porque suelen correr en background.</p></div>
+
+<div class="section-block"><h4>Terminal — ver y editar archivos</h4>
+<pre><code>nano archivo            # editor de texto plano; guardar/salir con  Ctrl + X
+cat archivo             # muestra el contenido
+cat -n archivo          # lo muestra con las líneas numeradas
+cat a b                 # concatena a y b en la salida
+cat a b &gt; salida        # une a y b en un archivo nuevo (el ORDEN de a y b importa)</code></pre></div>
+
+<div class="section-block"><h4>Terminal — listar y crear directorios</h4>
+<pre><code>ls -l           # vista larga: permisos, propietario, grupo, tamaño, fecha
+ls -a           # incluye archivos ocultos (empiezan con  .  )
+ls -s           # tamaño de los archivos en KB
+ls -las         # combina las tres (= ls -l -a -s)
+
+mkdir nombre            # permisos por defecto: dueño rwx ; grupo y otros r-x
+mkdir -m 700 nombre     # crea con un modo de permisos específico
+mkdir -p a/b/c          # crea todo el árbol de subcarpetas en una sola línea</code></pre></div>
+
+<div class="section-block"><h4>⚠️ Énfasis para examen — permisos y seguridad</h4><ul>
+<li><strong>El permiso <code>777</code> nunca se usa por defecto.</strong></li>
+<li>La columna de permisos de <code>ls -l</code> es clave, sobre todo en <strong>directorios</strong>.</li>
+<li>En una carpeta, el permiso de <strong>ejecución <code>x</code></strong> permite que otros usuarios <em>entren</em> a ella. A un atacante que implanta un virus le basta con el permiso de ejecución para infectar/corromper el sistema → dejar carpetas o archivos de origen dudoso con <code>x</code> abierto a terceros es el error más peligroso de la administración.</li>
+<li><code>ps aux</code> (modificador <code>x</code>): procesos sin terminal asociada = primer punto de revisión ante malware.</li>
+</ul></div>
 
 </div>
 </body>
