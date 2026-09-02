@@ -18,39 +18,116 @@
 <a class="back" href="../../index.html">← Todas las materias</a>
 <div class="detail-head" style="border-color:#45B8A8">
   <h2>Organización y Arquitectura de Computadoras</h2>
-  <p class="prof">M.I. José Antonio de Jesús Arredondo Garza · Grupo 1</p>
-</div>
-<div class="section-block">
-  <h4>Horario y salón</h4>
-  <p>Lunes y miércoles · 09:00–10:30 · Salón A107</p>
+  <p class="prof">M.I. José Antonio de Jesús Arredondo Garza · Grupo 1 · Lunes y miércoles · 09:00–10:30 · Salón A107</p>
 </div>
 
-<div class="grid" style="margin-bottom:32px">
+<div class="grid" style="margin-bottom:26px">
   <a class="card" style="--c:#45B8A8" href="entregas.html"><h3>Entregas</h3><p>PDFs que ya entregaste</p></a>
 </div>
+
+<details class="section-block collapsible"><summary>Clases grabadas</summary>
+<ol class="clases">
+<li><a href="#tema-1"><strong>Clase 01</strong></a> · 26-ago — Von Neumann vs. Harvard, CISC vs. RISC, ciclo Fetch–Decode–Execute–Write Back y pipeline. <span class="tags">Temas 1, 2, 4</span></li>
+</ol>
+<p class="empty">Solo las clases grabadas. El material de presentaciones del profesor está integrado en los temas.</p></details>
 <details class="section-block collapsible"><summary>Plan de estudios</summary><p><strong>Clave FI:</strong> 1867 · Antecedente: Microcomputadoras</p><p>Objetivo: el alumno aplicará, desde el punto de vista de los sistemas digitales VLSI, los diferentes componentes que constituyen un microprocesador mediante los conceptos actuales de las arquitecturas modernas.</p>
 <table><thead><tr><th>Núm.</th><th>Tema</th><th>Horas</th></tr></thead><tbody><tr><td>1</td><td>Estructura básica de una computadora</td><td>3.0</td></tr><tr><td>2</td><td>La arquitectura del conjunto de instrucciones</td><td>8.0</td></tr><tr><td>3</td><td>El procesador</td><td>14.0</td></tr><tr><td>4</td><td>Arquitecturas pipelining (RISC)</td><td>7.0</td></tr><tr><td>5</td><td>Familias de procesadores comerciales</td><td>8.0</td></tr><tr><td>6</td><td>Arquitecturas paralelas</td><td>8.0</td></tr></tbody></table></details>
 <details class="section-block collapsible"><summary>Bibliografía básica</summary><ul><li>Hamacher et al. — <em>Computer Organization and Embedded Systems</em></li><li>Patterson &amp; Hennessy — <em>Computer Organization and Design</em></li><li>Patterson &amp; Hennessy — <em>Computer Architecture: A Quantitative Approach</em></li><li>Tanenbaum &amp; Austin — <em>Structured Computer Organization</em></li></ul></details>
-<div class="section-block"><h4>Contenido</h4>
-<div class="v-tema">
-<div class="grid grid-temas">
-  <a class="card" style="--c:#45B8A8" href="tema-01.html"><h3>Tema 1</h3><p>Estructura básica de una computadora · 3.0 h</p></a>
-  <a class="card" style="--c:#45B8A8" href="tema-01.html"><h3>Tema 2</h3><p>La arquitectura del conjunto de instrucciones · 8.0 h</p></a>
-  <span class="card card-off" style="--c:#45B8A8"><h3>Tema 3</h3><p>El procesador <span class="off">· sin apuntes</span></p></span>
-  <a class="card" style="--c:#45B8A8" href="tema-01.html"><h3>Tema 4</h3><p>Arquitecturas pipelining (RISC) · 7.0 h</p></a>
-  <span class="card card-off" style="--c:#45B8A8"><h3>Tema 5</h3><p>Familias de procesadores comerciales <span class="off">· sin apuntes</span></p></span>
-  <span class="card card-off" style="--c:#45B8A8"><h3>Tema 6</h3><p>Arquitecturas paralelas <span class="off">· sin apuntes</span></p></span>
-</div>
-</div>
-<div class="v-clase">
-<ol class="clases">
-<li><a href="tema-01.html"><strong>Clase 01</strong></a> · 26-ago — Von Neumann vs. Harvard, CISC vs. RISC, ciclo Fetch–Decode–Execute–Write Back y pipeline. <span class="tags">Temas 1, 2, 4</span></li>
-</ol>
-<p class="empty">Las clases previas se agregan aquí cuando consigas la grabación o los apuntes (de un compañero o del profesor).</p>
-</div>
-</div>
 
-<div class="empty">Aún no hay apuntes aquí. Se va a ir llenando conforme avance el semestre.</div>
+<details class="section-block tema" id="tema-1" open><summary><span class="stitle">Tema 1 — Estructura básica de una computadora</span></summary><div class="tema-body">
+<p class="empty">Nota: esta clase también adelanta material del Tema 4 (pipelining).</p>
+<div class="encorto"><h4>En corto</h4><ul><li><strong>Von Neumann</strong>: una memoria para datos e instrucciones → una instrucción a la vez (se asocia a CISC).</li><li><strong>Harvard</strong>: memorias separadas → trae instrucción y dato a la vez (se asocia a RISC).</li><li>CISC = instrucciones complejas, pocas líneas; RISC = instrucciones simples tipo carga / almacena.</li><li>Ciclo: <strong>Fetch → Decode → Execute → Write Back</strong>; con <em>pipeline</em> sale un resultado por ciclo de reloj.</li></ul></div>
+<div class="examen"><h4>🎯 Para el examen</h4><ul><li>Diferencia Von Neumann / Harvard y su relación con CISC / RISC.</li><li>Etapas del pipeline y por qué acelera (etapas concurrentes).</li><li>Las partes marcadas <code>[?]</code> son de letra difícil de leer — verificar el pseudo-ensamblador y el diagrama.</li></ul></div>
+<details class="section-block sec" id="von-neumann-vs-harvard" open><summary><span class="stitle">Von Neumann vs. Harvard</span></summary><table><thead><tr><th></th><th>Von Neumann</th><th>Harvard</th></tr></thead><tbody>
+<tr><td>Memoria</td><td>Una sola memoria para datos e instrucciones</td><td>Memorias separadas para instrucciones y datos</td></tr>
+<tr><td>Consecuencia</td><td>La unidad de control ejecuta <strong>una instrucción a la vez</strong> (busca instrucción o dato, no ambos)</td><td>Puede traer instrucción y dato en el mismo ciclo</td></tr>
+<tr><td>Se asocia con</td><td>CISC</td><td>RISC</td></tr>
+</tbody></table><p>Las instrucciones son "físicas": cada una cuesta tiempo (ciclos de reloj).</p></details>
+
+<details class="section-block sec" id="cisc-vs-risc"><summary><span class="stitle">CISC vs. RISC</span></summary><p><strong>CISC</strong> — instrucciones complejas, cercanas a un lenguaje de alto nivel; el mismo trabajo se escribe en pocas líneas. Ejemplo de estilo (pseudocódigo de la clase):</p>
+<pre><code>for (i = 0; i &lt; n; i++);
+set(i) 0;
+...   EST1        ; etiqueta   [?]
+</code></pre>
+<p><strong>RISC</strong> — instrucciones simples y uniformes tipo carga / almacena / opera. Ejemplo de pseudo-ensamblador de la clase (transcripción aproximada):</p>
+<pre><code>LDA A, (i)        ; cargar A desde memoria
+SUB A, (o)        ; [?] "SBtA"
+STA (i)           ; almacenar A en memoria
+LDA (i)
+LDB (w)
+SUB A, B          ; A &lt;- A - B
+LDC EST1, 1
+JL2              ; salto  [?]
+LDA i
+INC A            ; [?] "IWC A"
+STA i
+</code></pre>
+<p><em>[?] En los apuntes hay números junto a varias instrucciones (33, 66, 20 / 80, 64): parecen direcciones o valores de ejemplo, pero no se leen con claridad.</em></p></details>
+
+<details class="section-block sec" id="ciclo-del-procesador-y-pipeline"><summary><span class="stitle">Ciclo del procesador y pipeline</span></summary><p>Cada instrucción pasa por etapas. En los apuntes aparecen cuatro:</p>
+<ol>
+<li><strong>Fetch</strong> — traer la instrucción de memoria.</li>
+<li><strong>Decode</strong> — decodificarla.</li>
+<li><strong>Execute</strong> — ejecutarla (en los apuntes: <em>"stage? preguntar"</em>). En un pipeline RISC clásico aquí se suele intercalar además una etapa de acceso a memoria.</li>
+<li><strong>Write Back (WB)</strong> — escribir el resultado en el registro.</li>
+</ol>
+<p>Con <strong>pipelining</strong>, mientras una instrucción se ejecuta, la siguiente se decodifica y la siguiente se busca: varias instrucciones avanzan a la vez, desfasadas un ciclo. Éste es el diagrama espacio-tiempo que quedó marcado como <em>&laquo;foto&raquo;</em> en los apuntes:</p>
+<figure style="margin:14px 0;overflow-x:auto">
+<svg viewBox="0 0 560 210" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;min-width:480px;font-family:'IBM Plex Mono',monospace">
+  <style>
+    .lbl{fill:#9297A6;font-size:12px}
+    .cell{fill:none;stroke:rgba(255,255,255,0.12)}
+    .stg{font-size:12px;font-weight:600;fill:#14161C}
+  </style>
+  <!-- eje ciclos -->
+  <text x="8" y="20" class="lbl">ciclo</text>
+  <g>
+    <text x="92" y="20" class="lbl">1</text><text x="152" y="20" class="lbl">2</text>
+    <text x="212" y="20" class="lbl">3</text><text x="272" y="20" class="lbl">4</text>
+    <text x="332" y="20" class="lbl">5</text><text x="392" y="20" class="lbl">6</text>
+    <text x="452" y="20" class="lbl">7</text>
+  </g>
+  <!-- filas de instrucciones -->
+  <!-- I1 -->
+  <text x="8" y="52" class="lbl">I1</text>
+  <rect x="80"  y="36" width="56" height="26" rx="4" class="cell" fill="#45B8A8"/><text x="98"  y="53" class="stg">F</text>
+  <rect x="140" y="36" width="56" height="26" rx="4" class="cell" fill="#7C9CD6"/><text x="158" y="53" class="stg">D</text>
+  <rect x="200" y="36" width="56" height="26" rx="4" class="cell" fill="#E8735C"/><text x="218" y="53" class="stg">E</text>
+  <rect x="260" y="36" width="56" height="26" rx="4" class="cell" fill="#A98BD1"/><text x="278" y="53" class="stg">W</text>
+  <!-- I2 -->
+  <text x="8" y="88" class="lbl">I2</text>
+  <rect x="140" y="72" width="56" height="26" rx="4" class="cell" fill="#45B8A8"/><text x="158" y="89" class="stg">F</text>
+  <rect x="200" y="72" width="56" height="26" rx="4" class="cell" fill="#7C9CD6"/><text x="218" y="89" class="stg">D</text>
+  <rect x="260" y="72" width="56" height="26" rx="4" class="cell" fill="#E8735C"/><text x="278" y="89" class="stg">E</text>
+  <rect x="320" y="72" width="56" height="26" rx="4" class="cell" fill="#A98BD1"/><text x="338" y="89" class="stg">W</text>
+  <!-- I3 -->
+  <text x="8" y="124" class="lbl">I3</text>
+  <rect x="200" y="108" width="56" height="26" rx="4" class="cell" fill="#45B8A8"/><text x="218" y="125" class="stg">F</text>
+  <rect x="260" y="108" width="56" height="26" rx="4" class="cell" fill="#7C9CD6"/><text x="278" y="125" class="stg">D</text>
+  <rect x="320" y="108" width="56" height="26" rx="4" class="cell" fill="#E8735C"/><text x="338" y="125" class="stg">E</text>
+  <rect x="380" y="108" width="56" height="26" rx="4" class="cell" fill="#A98BD1"/><text x="398" y="125" class="stg">W</text>
+  <!-- I4 -->
+  <text x="8" y="160" class="lbl">I4</text>
+  <rect x="260" y="144" width="56" height="26" rx="4" class="cell" fill="#45B8A8"/><text x="278" y="161" class="stg">F</text>
+  <rect x="320" y="144" width="56" height="26" rx="4" class="cell" fill="#7C9CD6"/><text x="338" y="161" class="stg">D</text>
+  <rect x="380" y="144" width="56" height="26" rx="4" class="cell" fill="#E8735C"/><text x="398" y="161" class="stg">E</text>
+  <rect x="440" y="144" width="56" height="26" rx="4" class="cell" fill="#A98BD1"/><text x="458" y="161" class="stg">W</text>
+  <text x="8" y="196" class="lbl">F = Fetch · D = Decode · E = Execute · W = Write Back</text>
+</svg>
+</figure>
+<p><em>[?] El diagrama original de los apuntes ("ABC Pipe") no se distingue bien; éste es la reconstrucción estándar del pipeline de 4 etapas. Si mandas una foto más nítida lo ajusto.</em></p></details>
+</div></details>
+
+<details class="section-block tema off" id="tema-2"><summary><span class="stitle">Tema 2 — La arquitectura del conjunto de instrucciones</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+
+<details class="section-block tema off" id="tema-3"><summary><span class="stitle">Tema 3 — El procesador</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+
+<details class="section-block tema off" id="tema-4"><summary><span class="stitle">Tema 4 — Arquitecturas pipelining (RISC)</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+
+<details class="section-block tema off" id="tema-5"><summary><span class="stitle">Tema 5 — Familias de procesadores comerciales</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+
+<details class="section-block tema off" id="tema-6"><summary><span class="stitle">Tema 6 — Arquitecturas paralelas</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+
 </div>
 </body>
 </html>

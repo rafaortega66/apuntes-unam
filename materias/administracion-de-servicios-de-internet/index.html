@@ -18,41 +18,132 @@
 <a class="back" href="../../index.html">← Todas las materias</a>
 <div class="detail-head" style="border-color:#7C9CD6">
   <h2>Administración de Servicios de Internet</h2>
-  <p class="prof">Mtro. Juan Ángel Calvillo Pérez · Grupo 2</p>
+  <p class="prof">Mtro. Juan Ángel Calvillo Pérez · Grupo 2 · Lunes a miércoles · 17:00–19:00 · Salón D004</p>
 </div>
-<div class="section-block">
-  <h4>Horario y salón</h4>
-  <p>Lunes a miércoles · 17:00–19:00 · Salón D004</p>
-</div>
-<div class="grid" style="margin-bottom:32px">
-  <a class="card" style="--c:#7C9CD6" href="evaluacion.html"><h3>Evaluación</h3><p>Práctica 0 — uso básico de Linux</p></a>
+
+<div class="grid" style="margin-bottom:26px">
+  <a class="card" style="--c:#7C9CD6" href="evaluacion.html"><h3>Evaluación</h3><p>Criterios y tareas</p></a>
   <a class="card" style="--c:#7C9CD6" href="entregas.html"><h3>Entregas</h3><p>PDFs que ya entregaste</p></a>
 </div>
+
+<details class="section-block collapsible"><summary>Clases grabadas</summary>
+<ol class="clases">
+<li><a href="#tema-1"><strong>Clase 1</strong></a> — Repaso de arquitectura (Von Neumann vs Harvard RISC, pipeline), jerarquía de directorios de Linux (FHS) con prioridades, distribuciones, y práctica de terminal: <code>whereis</code>/<code>which</code>, <code>man</code>, <code>ps aux</code>, <code>top</code>, <code>nano</code>, <code>cat</code>, <code>ls</code>, <code>mkdir -m</code>/<code>-p</code>. Deja la <a href="evaluacion.html" style="color:var(--indigo)">Práctica 0</a>. <span class="tags">Tema 1</span></li>
+</ol>
+<p class="empty">Solo las clases grabadas. El material de presentaciones del profesor está integrado en los temas.</p></details>
 <details class="section-block collapsible"><summary>Plan de estudios</summary><p><strong>Clave FI:</strong> 2945</p><p>Objetivo: el alumno diseñará las características, operación y configuración de los servicios de internet para aplicarlo en la administración de diferentes organizaciones.</p>
 <table><thead><tr><th>Núm.</th><th>Tema</th><th>Horas</th></tr></thead><tbody><tr><td>1</td><td>Introducción</td><td>4.0</td></tr><tr><td>2</td><td>Servidor de correo electrónico</td><td>8.0</td></tr><tr><td>3</td><td>Servidor de conexión remota</td><td>8.0</td></tr><tr><td>4</td><td>Servidores de aplicaciones y middleware</td><td>8.0</td></tr><tr><td>5</td><td>Servidor de archivos</td><td>8.0</td></tr><tr><td>6</td><td>Servidor de directorios</td><td>10.0</td></tr><tr><td>7</td><td>Servidor web</td><td>12.0</td></tr><tr><td>8</td><td>Otros servicios</td><td>6.0</td></tr></tbody></table></details>
 <details class="section-block collapsible"><summary>Bibliografía básica</summary><ul><li>Hunt — <em>TCP/IP Network Administration</em></li><li>Mann — <em>Linux TCP/IP Network Administration</em></li><li>Hunt — <em>Linux DNS Server Administration</em></li></ul></details>
-<div class="section-block"><h4>Contenido</h4>
-<div class="v-tema">
-<div class="grid grid-temas">
-  <a class="card" style="--c:#7C9CD6" href="tema-01.html"><h3>Tema 1</h3><p>Introducción · 4.0 h</p></a>
-  <span class="card card-off" style="--c:#7C9CD6"><h3>Tema 2</h3><p>Servidor de correo electrónico <span class="off">· sin apuntes</span></p></span>
-  <span class="card card-off" style="--c:#7C9CD6"><h3>Tema 3</h3><p>Servidor de conexión remota <span class="off">· sin apuntes</span></p></span>
-  <span class="card card-off" style="--c:#7C9CD6"><h3>Tema 4</h3><p>Servidores de aplicaciones y middleware <span class="off">· sin apuntes</span></p></span>
-  <span class="card card-off" style="--c:#7C9CD6"><h3>Tema 5</h3><p>Servidor de archivos <span class="off">· sin apuntes</span></p></span>
-  <span class="card card-off" style="--c:#7C9CD6"><h3>Tema 6</h3><p>Servidor de directorios <span class="off">· sin apuntes</span></p></span>
-  <span class="card card-off" style="--c:#7C9CD6"><h3>Tema 7</h3><p>Servidor web <span class="off">· sin apuntes</span></p></span>
-  <span class="card card-off" style="--c:#7C9CD6"><h3>Tema 8</h3><p>Otros servicios <span class="off">· sin apuntes</span></p></span>
-</div>
-</div>
-<div class="v-clase">
-<ol class="clases">
-<li><a href="tema-01.html"><strong>Clase 1</strong></a> — Repaso de arquitectura (Von Neumann vs Harvard RISC, pipeline), jerarquía de directorios de Linux (FHS) con prioridades, distribuciones, y práctica de terminal: <code>whereis</code>/<code>which</code>, <code>man</code>, <code>ps aux</code>, <code>top</code>, <code>nano</code>, <code>cat</code>, <code>ls</code>, <code>mkdir -m</code>/<code>-p</code>. Deja la <a href="evaluacion.html" style="color:var(--indigo)">Práctica 0</a>. <span class="tags">Tema 1</span></li>
-</ol>
-<p class="empty">Las clases previas se agregan aquí cuando consigas la grabación o los apuntes (de un compañero o del profesor).</p>
-</div>
-</div>
 
-<div class="empty">Aún no hay apuntes aquí. Se va a ir llenando conforme avance el semestre.</div>
+<details class="section-block tema" id="tema-1" open><summary><span class="stitle">Tema 1 — Introducción</span></summary><div class="tema-body">
+<div class="encorto"><h4>En corto</h4><ul><li>Repaso de arquitectura: Von Neumann vs. Harvard RISC y <em>pipeline</em>.</li><li><strong>FHS</strong>: jerarquía de directorios de Linux y su prioridad (<code>/boot /bin /dev /etc /usr /lib</code> alta; <code>/home /root /var</code> media; <code>/tmp</code> baja).</li><li>Distribuciones de Linux y para quién es cada una.</li><li>Terminal: <code>whereis</code> / <code>which</code>, <code>man</code>, <code>ps</code> / <code>ps aux</code>, <code>top</code>, <code>nano</code>, <code>cat</code>, <code>ls</code>, <code>mkdir</code>.</li><li>De esta clase sale la <a href="evaluacion.html" style="color:var(--indigo)">Práctica 0</a>.</li></ul></div>
+<div class="examen"><h4>🎯 Para el examen</h4><ul><li>El permiso <code>777</code> nunca se usa por defecto.</li><li>En carpetas, el permiso <code>x</code> deja entrar a otros usuarios; a un atacante le basta el permiso de ejecución → nunca dejar carpetas / archivos dudosos con <code>x</code> para terceros.</li><li><code>ps aux</code> (modificador <code>x</code>): procesos <strong>sin terminal asociada</strong> = primer indicio de malware.</li><li><code>whereis</code> (carpeta de instalación completa) vs. <code>which</code> (solo el binario ejecutable).</li></ul></div>
+<details class="section-block sec" id="repaso-de-arquitectura-dado-en-clase" open><summary><span class="stitle">Repaso de arquitectura (dado en clase)</span></summary>
+<p>El <strong>procesador</strong> ejecuta el algoritmo y los datos que están juntos en la <strong>memoria principal</strong>. El profesor lo describe como "un adminículo electrónico que ejecuta máquinas de Turing".</p>
+<p><strong>Modelo de Von Neumann</strong> — compatible con la máquina de Turing. Componentes básicos: <strong>controlador</strong> (genera las señales de activación), <strong>registro de estado</strong>, <strong>registro de propósito general</strong>, <strong>contador de programa (PC)</strong>, <strong>ALU</strong> y <strong>una sola unidad de almacenamiento</strong> que contiene programa + datos + pila.</p>
+<p><strong>Cuello de botella de Von Neumann:</strong> ejecuta "de un pasito a la vez". El procesador va a memoria, jala la instrucción (<em>fetch</em>), la decodifica, vuelve a memoria por los datos, los procesa en la ALU y escribe el resultado. Mientras una fase ocurre, las demás unidades y buses están <strong>inactivos</strong> (al leer la instrucción, el decodificador y la ALU no hacen nada).</p>
+<p><strong>Modelo Load-Store (Peterson):</strong> demuestra que cualquier programa se puede reescribir con más instrucciones cortas basadas solo en <strong>carga</strong> y <strong>almacenamiento</strong> usando una ALU simple.</p>
+<p><strong>Arquitectura Harvard RISC:</strong> soluciona el cuello de botella separando físicamente instrucciones y datos: la cinta única de Turing se parte en <strong>dos</strong> — instrucciones (solo lectura) y datos (lectura y escritura) — permitiendo leer y escribir a la vez.</p>
+<p><strong>Segmentación (pipelining):</strong> 4 etapas que corren concurrentes por ciclo de reloj — <strong>Fetch → Decode → Execute → Write Back</strong>. Tras el arranque sale <strong>una instrucción por ciclo</strong>:</p>
+<pre><code>       T1    T2    T3    T4    T5    T6    T7
+I1     F     D     E     WB
+I2           F     D     E     WB
+I3                 F     D     E     WB
+I4                       F     D     E     WB
+                         └── desde aquí: 1 resultado por ciclo</code></pre></details>
+
+<details class="section-block sec contexto" id="contexto-de-clase-no-va-para-examen"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto de clase — <em>no va para examen</em></span></summary><ul>
+<li><strong>Etimología:</strong> "álgebra" ← <em>al-jabr</em>; "algoritmo" ← <em>Al-Juarismi</em> (matemático árabe).</li>
+<li><strong>Búsqueda en profundidad</strong> (grafo antiguo): recorrer todos los puntos de una ciudad pasando por cada calle exactamente una vez, sin repetir (es un recorrido euleriano).</li>
+<li><strong>Transmutación de metales:</strong> físicamente posible entre metales pesados salvo pasar por el <strong>hierro</strong> (el más estable); antes del hierro el proceso es <em>fusión</em>, después es <em>fisión</em>. No se hace comercialmente porque la energía cuesta más que comprar el oro.</li>
+<li><strong>Máquina de Turing:</strong> autómata de doble pila (una infinita), lenguaje finito, operaciones mover izquierda / mover derecha / leer. Sirve para demostrar matemáticamente que una solución converge.</li>
+</ul></details>
+
+<details class="section-block sec" id="jerarquia-de-directorios-de-linux-fhs"><summary><span class="stitle">Jerarquía de directorios de Linux (FHS)</span></summary><table><thead><tr><th>Directorio</th><th>Prioridad</th><th>Para qué sirve</th></tr></thead><tbody>
+<tr><td><code>/</code></td><td>—</td><td>Raíz de toda la estructura de carpetas.</td></tr>
+<tr><td><code>/boot</code></td><td>alta</td><td>Arranque del sistema operativo y almacenamiento del <strong>kernel</strong>.</td></tr>
+<tr><td><code>/bin</code></td><td>alta</td><td>Comandos binarios esenciales que todos los usuarios pueden ejecutar (<code>cd</code>, <code>ls</code>).</td></tr>
+<tr><td><code>/dev</code></td><td>alta</td><td>Dispositivos: todas las conexiones de hardware interno y externo; configuración de <strong>drivers</strong> (impresoras, escáneres, discos).</td></tr>
+<tr><td><code>/etc</code></td><td>alta</td><td>Archivos de configuración del SO y de las aplicaciones instaladas.</td></tr>
+<tr><td><code>/usr</code></td><td>alta</td><td>Programas, bibliotecas, documentación y archivos <strong>estáticos</strong> del sistema.</td></tr>
+<tr><td><code>/lib</code></td><td>alta</td><td>Librerías esenciales del sistema.</td></tr>
+<tr><td><code>/home</code></td><td>media</td><td>Carpetas personales de los usuarios.</td></tr>
+<tr><td><code>/root</code></td><td>media</td><td>Directorio personal del superusuario. Prioridad media porque existen métodos inseguros para reponer su contraseña.</td></tr>
+<tr><td><code>/var</code></td><td>media</td><td>Archivos variables: temporales de ejecución rápida, ocultos y <strong>logs</strong>. Borrar su contenido no tira el SO. Elimina de inmediato al ejecutar.</td></tr>
+<tr><td><code>/tmp</code></td><td>baja</td><td>Temporales. A diferencia de <code>/var</code>, lo borrado en <code>/tmp</code> se puede recuperar con un script de Bash <strong>mientras no se reinicie</strong>: al reiniciar, la RAM se desenergiza y esos espacios se marcan como libres.</td></tr>
+<tr><td><code>/opt</code></td><td>—</td><td>Software adicional instalado por un usuario común (no por el administrador).</td></tr>
+<tr><td><code>/proc</code></td><td>—</td><td>(mencionado) Información de procesos del kernel.</td></tr>
+</tbody></table></details>
+
+<details class="section-block sec" id="distribuciones-de-linux"><summary><span class="stitle">Distribuciones de Linux</span></summary><table><thead><tr><th>Distro</th><th>Perfil / uso</th></tr></thead><tbody>
+<tr><td><strong>Linux Mint</strong></td><td>"Principiante del principiante". Es la más parecida a Windows → ideal como puente inicial en migraciones empresariales, antes de pasar a Ubuntu.</td></tr>
+<tr><td><strong>Ubuntu</strong></td><td>Principiantes / usuario final. Fácil, para aprender. <strong>No</strong> se recomienda para servidores críticos por la inestabilidad de sus actualizaciones constantes.</td></tr>
+<tr><td><strong>Debian</strong></td><td>Usuarios con manejo estable de Linux. Muy recomendado para <strong>servidores</strong> por su estabilidad.</td></tr>
+<tr><td><strong>Fedora</strong></td><td>Desarrollo y programadores. Conexiones ágiles con tecnologías inalámbricas recientes.</td></tr>
+<tr><td><strong>CentOS / AlmaLinux</strong></td><td>CentOS = copia gratuita de RedHat, muy usada para servidores de almacenamiento; perdió soporte ~2017–2019 pero muchas empresas lo siguen usando ("si no falla, no le muevas"). <strong>AlmaLinux</strong> es su sucesor.</td></tr>
+<tr><td><strong>RedHat (RHEL)</strong></td><td>Distribución comercial líder para servidores empresariales; su costo de licencia frena la adopción en algunas organizaciones.</td></tr>
+<tr><td><strong>Arch Linux</strong></td><td>Usuarios avanzados. Instalación manual personalizada obligatoria; no tiene sentido con asistente "siguiente-siguiente".</td></tr>
+<tr><td><strong>Kali Linux</strong></td><td>100 % auditoría de seguridad informática y hacking ético.</td></tr>
+</tbody></table></details>
+
+<details class="section-block sec" id="terminal-localizacion-y-ayuda"><summary><span class="stitle">Terminal — localización y ayuda</span></summary>
+<pre><code>whereis ls      # ruta completa del paquete + sus directorios de config
+                # (útil para migraciones)   ej. -> /usr/bin/ls
+which ls        # SOLO la ruta del archivo ejecutable
+pwd             # directorio actual (print working directory)
+man ls          # manual local del comando (funciona sin internet)
+                # salir con  q   [en clase se dijo Ctrl+Z, que en realidad SUSPENDE el proceso]</code></pre>
+<p><strong>⚠️ Examen:</strong> distinguir <code>whereis</code> (mapea toda la carpeta de instalación, documentación y binarios — para migraciones) de <code>which</code> (solo localiza el binario ejecutable).</p></details>
+
+<details class="section-block sec" id="terminal-procesos"><summary><span class="stitle">Terminal — procesos</span></summary>
+<pre><code>ps              # procesos de esta terminal: PID, terminal, TIME, comando
+kill &lt;PID&gt;       # termina un proceso
+ps aux          # TODOS los procesos del sistema (incluidos los del kernel)
+                #   a = procesos de todos los usuarios
+                #   u = uso de recursos (columnas de %CPU y %MEM)
+                #   x = procesos SIN terminal asociada
+top             # monitoreo dinámico en tiempo real</code></pre>
+<p><strong>⚠️ Examen / seguridad:</strong> ante sospecha de malware, la primera herramienta es <code>ps aux</code> mirando el modificador <code>x</code>: un proceso <strong>sin terminal asociada</strong> (sin <code>tty</code>) es síntoma inmediato de virus o ataque, porque suelen correr en background.</p></details>
+
+<details class="section-block sec" id="terminal-ver-y-editar-archivos"><summary><span class="stitle">Terminal — ver y editar archivos</span></summary>
+<pre><code>nano archivo            # editor de texto plano; guardar/salir con  Ctrl + X
+cat archivo             # muestra el contenido
+cat -n archivo          # lo muestra con las líneas numeradas
+cat a b                 # concatena a y b en la salida
+cat a b &gt; salida        # une a y b en un archivo nuevo (el ORDEN de a y b importa)</code></pre></details>
+
+<details class="section-block sec" id="terminal-listar-y-crear-directorios"><summary><span class="stitle">Terminal — listar y crear directorios</span></summary>
+<pre><code>ls -l           # vista larga: permisos, propietario, grupo, tamaño, fecha
+ls -a           # incluye archivos ocultos (empiezan con  .  )
+ls -s           # tamaño de los archivos en KB
+ls -las         # combina las tres (= ls -l -a -s)
+
+mkdir nombre            # permisos por defecto: dueño rwx ; grupo y otros r-x
+mkdir -m 700 nombre     # crea con un modo de permisos específico
+mkdir -p a/b/c          # crea todo el árbol de subcarpetas en una sola línea</code></pre></details>
+
+<details class="section-block sec" id="enfasis-para-examen-permisos-y-seguridad"><summary><span class="chip chip-examen">examen</span><span class="stitle">⚠️ Énfasis para examen — permisos y seguridad</span></summary><ul>
+<li><strong>El permiso <code>777</code> nunca se usa por defecto.</strong></li>
+<li>La columna de permisos de <code>ls -l</code> es clave, sobre todo en <strong>directorios</strong>.</li>
+<li>En una carpeta, el permiso de <strong>ejecución <code>x</code></strong> permite que otros usuarios <em>entren</em> a ella. A un atacante que implanta un virus le basta con el permiso de ejecución para infectar/corromper el sistema → dejar carpetas o archivos de origen dudoso con <code>x</code> abierto a terceros es el error más peligroso de la administración.</li>
+<li><code>ps aux</code> (modificador <code>x</code>): procesos sin terminal asociada = primer punto de revisión ante malware.</li>
+</ul></details>
+</div></details>
+
+<details class="section-block tema off" id="tema-2"><summary><span class="stitle">Tema 2 — Servidor de correo electrónico</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+
+<details class="section-block tema off" id="tema-3"><summary><span class="stitle">Tema 3 — Servidor de conexión remota</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+
+<details class="section-block tema off" id="tema-4"><summary><span class="stitle">Tema 4 — Servidores de aplicaciones y middleware</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+
+<details class="section-block tema off" id="tema-5"><summary><span class="stitle">Tema 5 — Servidor de archivos</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+
+<details class="section-block tema off" id="tema-6"><summary><span class="stitle">Tema 6 — Servidor de directorios</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+
+<details class="section-block tema off" id="tema-7"><summary><span class="stitle">Tema 7 — Servidor web</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+
+<details class="section-block tema off" id="tema-8"><summary><span class="stitle">Tema 8 — Otros servicios</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+
 </div>
 </body>
 </html>

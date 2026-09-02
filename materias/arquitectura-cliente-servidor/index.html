@@ -18,42 +18,1268 @@
 <a class="back" href="../../index.html">← Todas las materias</a>
 <div class="detail-head" style="border-color:#E8735C">
   <h2>Arquitectura Cliente-Servidor</h2>
-  <p class="prof">Mtro. Carlos Alberto Roman Zamitiz · Grupo 2 · carlos.roman@ingenieria.unam.edu</p>
-  <div class="links"><div class="link-item"><span class="label">Sitio web</span><a href="https://cromanzamitiz.github.io/arquitectura-cliente-servidor/" target="_blank" rel="noopener">https://cromanzamitiz.github.io/arquitectura-cliente-servidor/</a></div><div class="link-item"><span class="label">Repositorio</span><a href="https://github.com/CRomanZamitiz/arquitectura-cliente-servidor/" target="_blank" rel="noopener">https://github.com/CRomanZamitiz/arquitectura-cliente-servidor/</a></div><div class="link-item"><span class="label">Página del profesor</span><a href="http://profesores.fi-b.unam.mx/carlos/acs" target="_blank" rel="noopener">http://profesores.fi-b.unam.mx/carlos/acs</a></div></div>
-</div>
-<div class="section-block">
-  <h4>Horario y salón</h4>
-  <p>Martes y jueves · 07:00–08:30 · Salón A305</p>
+  <p class="prof">Mtro. Carlos Alberto Roman Zamitiz · Grupo 2 · carlos.roman@ingenieria.unam.edu · Martes y jueves · 07:00–08:30 · Salón A305</p>
 </div>
 
-<div class="grid" style="margin-bottom:32px">
-  <a class="card" style="--c:#E8735C" href="evaluacion.html"><h3>Evaluación</h3><p>Criterios, requisitos y tarea #1</p></a>
-  <a class="card" style="--c:#E8735C" href="tema-01.html"><h3>Tema 01 — Procesos</h3><p>Apuntes + PDFs originales</p></a>
+<div class="grid" style="margin-bottom:26px">
+  <a class="card" style="--c:#E8735C" href="evaluacion.html"><h3>Evaluación</h3><p>Criterios y tareas</p></a>
   <a class="card" style="--c:#E8735C" href="entregas.html"><h3>Entregas</h3><p>PDFs que ya entregaste</p></a>
 </div>
 
+<details class="section-block collapsible"><summary>Clases grabadas</summary>
+<ol class="clases">
+<li><a href="#tema-1"><strong>Clase 1</strong></a> — Linux y procesos: imagen de un proceso, segmentos de memoria (text/data/BSS/heap/stack), BCP/PCB, comandos <code>size</code> / <code>pmap</code> / <code>ps</code> / <code>top</code> / <code>ls -ltr</code>, árbol de procesos, PID/PPID, time-sharing, race condition y deadlock. <span class="tags">Tema 1</span></li>
+<li><a href="#tema-1"><strong>Clase 2</strong></a> — Permisos UGO / <code>chmod</code> decimal, bit <strong>SetUID</strong> (<code>chmod 4511</code>, <code>s</code> en permisos), <code>/etc/passwd</code>, ID real vs. efectivo (<code>getuid</code> / <code>geteuid</code>), Tarea 2 (con <code>fdisk</code>), <code>fork()</code> (retorno <code>pid_t</code>, PID hijo al padre / 0 al hijo, <code>if(id_hijo!=0)</code>), deadlock. <span class="tags">Tema 1</span></li>
+<li><a href="#tema-1"><strong>Clase 3</strong></a> — Demo del bit <strong>SetUID</strong> paso a paso en Codespaces (<code>chown root:root</code>, <code>chmod 700</code> → "permiso denegado", <code>chmod 4511</code> → efectivo 0); bits especiales (SetGID <code>2</code>, sticky <code>1</code> → <code>T</code>); <code>/etc/shadow</code>; <strong><code>errno</code></strong> y códigos de error (macros <code>E…</code>, <code>ENOENT</code>=2, <code>0</code>=éxito); red de la FI (subredes A/B/C/P, IPs <code>132.247/248</code>); Tarea 2 reactivada (PDF con capturas, jueves). <span class="tags">Tema 1</span></li>
+</ol>
+<p class="empty">Solo las clases grabadas. El material de presentaciones del profesor está integrado en los temas.</p></details>
 <details class="section-block collapsible"><summary>Plan de estudios</summary><p><strong>Clave FI:</strong> 2946</p><p>Objetivo: el alumno aplicará los conocimientos de protocolos, criptografía y seguridad para desarrollar programas bajo la arquitectura cliente/servidor mediante un lenguaje de programación.</p>
 <table><thead><tr><th>Núm.</th><th>Tema</th><th>Horas</th></tr></thead><tbody><tr><td>1</td><td>Conceptos básicos</td><td>6.0</td></tr><tr><td>2</td><td>Creación de socket servidor y cliente</td><td>10.0</td></tr><tr><td>3</td><td>Servidores y clientes sincronizados</td><td>10.0</td></tr><tr><td>4</td><td>Sockets broadcasting y multicasting</td><td>8.0</td></tr><tr><td>5</td><td>Implantación de servidores con criptografía y código seguro</td><td>8.0</td></tr><tr><td>6</td><td>Herramientas para la comunicación entre servidores</td><td>6.0</td></tr></tbody></table></details>
 <details class="section-block collapsible"><summary>Bibliografía básica</summary><ul><li>Kurose &amp; Ross — <em>Computer Networking: A Top-Down Approach</em></li><li>Stevens — <em>UNIX Network Programming</em>, Vol. I y II</li><li>Walton — <em>Programación de sockets en Linux</em></li></ul></details>
-<div class="section-block"><h4>Contenido</h4>
-<div class="v-tema">
-<div class="grid grid-temas">
-  <a class="card" style="--c:#E8735C" href="tema-01.html"><h3>Tema 1</h3><p>Conceptos básicos · 6.0 h</p></a>
-  <span class="card card-off" style="--c:#E8735C"><h3>Tema 2</h3><p>Creación de socket servidor y cliente <span class="off">· sin apuntes</span></p></span>
-  <span class="card card-off" style="--c:#E8735C"><h3>Tema 3</h3><p>Servidores y clientes sincronizados <span class="off">· sin apuntes</span></p></span>
-  <span class="card card-off" style="--c:#E8735C"><h3>Tema 4</h3><p>Sockets broadcasting y multicasting <span class="off">· sin apuntes</span></p></span>
-  <span class="card card-off" style="--c:#E8735C"><h3>Tema 5</h3><p>Implantación de servidores con criptografía y código seguro <span class="off">· sin apuntes</span></p></span>
-  <span class="card card-off" style="--c:#E8735C"><h3>Tema 6</h3><p>Herramientas para la comunicación entre servidores <span class="off">· sin apuntes</span></p></span>
-</div>
-</div>
-<div class="v-clase">
-<ol class="clases">
-<li><a href="tema-01.html"><strong>Clase 1</strong></a> — Linux y procesos: imagen de un proceso, segmentos de memoria (text/data/BSS/heap/stack), BCP/PCB, comandos <code>size</code> / <code>pmap</code> / <code>ps</code> / <code>top</code> / <code>ls -ltr</code>, árbol de procesos, PID/PPID, time-sharing, race condition y deadlock. <span class="tags">Tema 1</span></li>
-<li><a href="tema-01.html"><strong>Clase 2</strong></a> — Permisos UGO / <code>chmod</code> decimal, bit <strong>SetUID</strong> (<code>chmod 4511</code>, <code>s</code> en permisos), <code>/etc/passwd</code>, ID real vs. efectivo (<code>getuid</code> / <code>geteuid</code>), Tarea 2 (con <code>fdisk</code>), <code>fork()</code> (retorno <code>pid_t</code>, PID hijo al padre / 0 al hijo, <code>if(id_hijo!=0)</code>), deadlock. <span class="tags">Tema 1</span></li>
-<li><a href="tema-01.html"><strong>Clase 3</strong></a> — Demo del bit <strong>SetUID</strong> paso a paso en Codespaces (<code>chown root:root</code>, <code>chmod 700</code> → "permiso denegado", <code>chmod 4511</code> → efectivo 0); bits especiales (SetGID <code>2</code>, sticky <code>1</code> → <code>T</code>); <code>/etc/shadow</code>; <strong><code>errno</code></strong> y códigos de error (macros <code>E…</code>, <code>ENOENT</code>=2, <code>0</code>=éxito); red de la FI (subredes A/B/C/P, IPs <code>132.247/248</code>); Tarea 2 reactivada (PDF con capturas, jueves). <span class="tags">Tema 1</span></li>
-</ol>
-</div>
-</div>
+
+<details class="section-block tema" id="tema-1" open><summary><span class="stitle">Tema 1 — Conceptos básicos</span></summary><div class="tema-body">
+<div class="files">
+    <a class="btn" href="files/Tema-01-Procesos-diapositivas.pdf" target="_blank">📄 Presentación (diapositivas)</a>
+    <a class="btn" href="files/Tema-01-Procesos-manual.pdf" target="_blank">📄 Práctica 1</a>
+    <a class="btn" href="https://www.thegeekstuff.com/2010/10/linux-error-codes/" target="_blank" rel="noopener">🔗 Los 131 códigos de error de Linux</a>
+    <a class="btn" href="files/prof-tema1/Tema-01-1.pdf" target="_blank">📄 Intro a SO y GNU Linux (prof.)</a>
+    <a class="btn" href="files/prof-tema1/Tema-01-2.pdf" target="_blank">📄 Teoría de procesos (prof.)</a>
+    <a class="btn" href="files/prof-tema1/proceso_imagen.pdf" target="_blank">📄 Investigación de un proceso e imagen</a>
+  </div>
+<div class="encorto"><h4>En corto</h4><ul><li>Tema 1 = Linux y procesos: qué es un proceso y su “imagen” en memoria (text / data / BSS / heap / stack), y cómo se crean con <code>system()</code>, <code>fork()</code> y <code>exec()</code>.</li><li>Herramientas para inspeccionar procesos: <code>size</code>, <code>pmap</code>, <code>/proc/&lt;PID&gt;/maps</code>, <code>ps</code> / <code>ps aux</code> / <code>ps -eo</code>, <code>top</code>.</li><li><code>fork()</code> crea una copia del padre (salvo PID/PPID): devuelve el PID del hijo al padre y <code>0</code> al hijo.</li><li>Permisos octales (r=4, w=2, x=1); el bit <strong>setuid</strong> (<code>chmod 4xxx</code>) hace que el proceso tome el UID del dueño del archivo.</li><li>Incluye 25 programas en C del profesor con su salida, 5 diagramas y 3 PDFs de teoría.</li></ul></div>
+<div class="examen"><h4>🎯 Para el examen</h4><ul><li><strong>BCP / PCB</strong> (bloque de control de proceso): estructura del kernel con los metadatos del proceso.</li><li><code>size</code> no muestra heap ni stack porque son dinámicos (solo existen en RAM con el proceso vivo).</li><li><code>pmap</code>: la memoria se asigna por <strong>páginas de 4 KB</strong>; las zonas dinámicas (stack/heap) nunca tienen permiso <code>X</code> (anti-inyección de código).</li><li><code>ps -eo pid,ppid,…</code>: las columnas van separadas por comas <strong>sin espacios</strong> o hay error de sintaxis.</li><li>ID real vs. efectivo; con <em>setuid</em> el EUID pasa a ser el del dueño del archivo (Tarea 2).</li><li><code>fork()</code>: retorno <code>pid_t</code> (PID del hijo al padre / <code>0</code> al hijo); patrón <code>if(id_hijo!=0)</code>; riesgo de <strong>deadlock</strong>.</li></ul></div>
+<details class="section-block sec" id="objetivo" open><summary><span class="stitle">Objetivo</span></summary><p>Entender los conceptos relacionados con los procesos, además de cómo identificarlos en un entorno Linux y las funciones system(), fork() y exec() para su creación.</p></details>
+
+<details class="section-block sec" id="clase-1-linux-y-procesos-la-imagen-de-un"><summary><span class="stitle">Clase 1 — Linux y procesos: la imagen de un proceso</span></summary>
+<p>Destilado del transcript de la clase (NotebookLM). Se omite lo administrativo; solo contenido de la materia.</p>
+<p><strong>Encuadre:</strong> la primera parte de la materia es "una continuación de sistemas operativos": primero procesos, después desarrollo de servidores. El curso se enfoca en <strong>un solo procesador</strong> (uniprocesador): no se ve programación multiprocesador ni multinúcleo. "Distribuido" aquí significa servidor en un host y cliente en otro, conectados por red.</p></details>
+
+<details class="section-block sec" id="entorno-de-trabajo-del-curso"><summary><span class="stitle">Entorno de trabajo del curso</span></summary><ul>
+<li>Códigos del semestre → repositorio <strong>GitHub público</strong> (se puede hacer fork o rama en tu cuenta).</li>
+<li>Apuntes oficiales → <strong>GitHub Pages</strong> (HTTPS, alta disponibilidad). El sitio viejo <code>profesores.fi-b.unam.mx/~carlos/acs</code> es HTTP y está <strong>obsoleto</strong>.</li>
+<li><strong>GitHub Codespaces</strong>: contenedor en la nube; el <code>README.md</code> del Tema 1 explica cómo levantarlo. No hace falta traer computadora — compila y ejecuta incluso desde el celular. Dentro tienes <strong>root</strong> (<code>sudo</code> o <code>sudo su</code>). Si rompes el sistema (<code>rm -rf</code>), destruyes el Codespace y creas otro; los programas vuelven intactos. Cerrar la pestaña lo suspende; se reactiva con el botón verde.</li>
+<li>En equipo propio: cualquier distro de Linux sirve. En Windows → <strong>WSL</strong> (Linux dentro de Windows) o <strong>SSH</strong> a un servidor Linux remoto.</li>
+<li>Red UNAM: los rangos públicos <code>132.247.*.*</code> y <code>132.248.*.*</code> son de la UNAM a nivel mundial. Las IP privadas (p. ej. <code>192.168.x.x</code>) son internas y aisladas. El profesor se conectó por SSH a <code>132.248.77.168</code> <em>[inaudible: también se transcribe como 132.247.248.7.168]</em>.</li>
+<li>Documentación formal de funciones C en Linux: <strong>The Open Group</strong>. Buscar <code>"Open Group &lt;función&gt;"</code> (ej. <code>Open Group getpid</code>).</li>
+</ul></details>
+
+<details class="section-block sec" id="imagen-de-un-proceso"><summary><span class="stitle">Imagen de un proceso</span></summary>
+<p>Definición del profesor: <em>"una fotografía o instantánea"</em>. Un ejecutable en ejecución crea un proceso que vive mientras la ejecución esté viva; al terminar o cerrar, el proceso muere.</p>
+<p><strong>Procesos en segundo plano</strong> (background) o <strong>demonios</strong> (daemon): no son visibles ni interactúas con ellos en la terminal. Cerrar la interfaz gráfica de un programa no siempre mata su proceso.</p></details>
+
+<details class="section-block sec" id="segmentos-de-la-imagen-en-memoria"><summary><span class="stitle">Segmentos de la imagen en memoria</span></summary>
+<p>Al ejecutar un binario, el SO carga en una zona de memoria independiente (espacio de direcciones propio) las áreas de código y datos.</p>
+<p><strong>Segmentos estáticos:</strong></p>
+<ul>
+<li><strong>text</strong> (texto / código): solo lectura; código máquina + constantes de tipo string (p. ej. las que se pasan a <code>printf</code>).</li>
+<li><strong>data</strong>: variables globales <strong>inicializadas</strong>.</li>
+<li><strong>BSS</strong> (<em>Block Started by Symbol</em>; el profesor lo dictó como "block started by single"): variables globales <strong>no inicializadas</strong>.</li>
+</ul>
+<p><strong>Segmentos dinámicos:</strong></p>
+<ul>
+<li><strong>heap</strong> (montículo): memoria dinámica en ejecución (<code>malloc</code>).</li>
+<li><strong>stack</strong> (pila): variables locales y parámetros de las llamadas a función.</li>
+<li>heap y stack <strong>crecen en sentidos opuestos</strong> ("uno crece a la izquierda y el otro a la derecha") para aprovechar el espacio.</li>
+</ul>
+<p><strong>Scope (ámbito)</strong> de una variable local = los límites de su función.</p>
+<p>Tarea futura (todavía no): investigar <strong>file descriptors</strong> y la <strong>asignación dinámica de memoria</strong> (<code>malloc</code>).</p>
+<p><strong>⚠️ Examen — BCP / PCB</strong> (<em>Process Control Block</em>, "bloque de control de proceso"): estructura administrativa del kernel donde se guardan los metadatos del proceso. El profesor lo marcó como muy importante.</p></details>
+
+<details class="section-block sec" id="ejercicio-servidor-sencillo-en-c-dos-ter"><summary><span class="stitle">Ejercicio: servidor sencillo en C (dos terminales)</span></summary><ul>
+<li>Objetivo: entender la estructura de la imagen (código, datos inicializados, BSS, montículo y pila) y diferenciarla del contexto del SO.</li>
+<li>Compilar dando al binario <strong>el mismo nombre</strong> que el <code>.c</code> (con <code>-o</code>); así <code>ls -l</code> agrupa fuente y binario. Sin <code>-o</code> se genera <code>a.out</code> (mala práctica: el nombre no dice nada).</li>
+<li><strong>Terminal 1:</strong> corre el servidor; usa <code>getchar()</code> para pausar y que el proceso no muera al instante — libera la memoria y muere hasta que pulsas Enter.</li>
+<li><strong>Terminal 2:</strong> monitorea el proceso en RAM.</li>
+<li>Ubicación de las variables: global inicializada → <code>data</code>; global no inicializada → <code>BSS</code>; local → <code>stack</code>; reservada con <code>malloc</code> → <code>heap</code>; strings literales de <code>printf</code> → <code>text</code>.</li>
+</ul></details>
+
+<details class="section-block sec" id="comandos-de-analisis-de-procesos"><summary><span class="stitle">Comandos de análisis de procesos</span></summary>
+<p><strong><code>size servidor</code></strong> — <strong>análisis estático</strong> (mira el archivo en disco). Columnas: <code>text</code>, <code>data</code>, <code>bss</code>, <code>dec</code> (suma en decimal), <code>hex</code> (suma en hexadecimal), <code>filename</code>. Ejemplo: <code>1767 + 592 + 8 = 2367</code> dec = <code>0x93F</code> <em>[inaudible: la transcripción decía "3F"]</em>.</p>
+<p><strong>⚠️ Examen:</strong> ¿por qué <code>size</code> no muestra <code>heap</code> ni <code>stack</code>? Porque son <strong>dinámicos</strong>: solo existen en RAM cuando el proceso está vivo; <code>size</code> solo analiza el archivo estático en disco.</p>
+<p><strong><code>pmap &lt;PID&gt;</code></strong> (<em>Process Map</em>) — <strong>análisis dinámico</strong>: consulta las estructuras del kernel e imprime el mapa completo del proceso en RAM (stack, heap, librerías <code>.so</code>, direcciones físicas). El PID se obtiene con <code>getpid()</code> (de <code>&lt;unistd.h&gt;</code>).</p>
+<ul>
+<li>Los valores de <code>pmap</code> no cuadran con <code>size</code> porque el SO asigna memoria por <strong>páginas de 4 KB</strong>; toda sección se redondea a página completa → todos los valores son múltiplos de 4.</li>
+<li><strong>⚠️ Seguridad:</strong> las zonas dinámicas (stack, heap) tienen permisos <code>R</code> / <code>RW</code> pero <strong>nunca <code>X</code></strong> — para que no se pueda inyectar ni ejecutar código malicioso en el proceso.</li>
+</ul>
+<p><strong><code>cat /proc/&lt;PID&gt;/maps</code></strong> — mientras el proceso vive, el SO mantiene el directorio <code>/proc/&lt;PID&gt;/</code>; el archivo <code>maps</code> muestra direcciones hexadecimales, permisos de cada segmento y librerías dinámicas cargadas (información del PCB). Al pulsar Enter en la Terminal 1 termina <code>getchar()</code>, se libera el heap y el proceso muere.</p></details>
+
+<details class="section-block sec" id="arbol-de-procesos-pid-y-ppid"><summary><span class="stitle">Árbol de procesos · PID y PPID</span></summary><ul>
+<li>Todos los procesos forman un <strong>árbol jerárquico</strong>. La raíz tiene <strong>PID = 1</strong>: <code>init</code> en Unix clásico / distros viejas, <code>systemd</code> en distros modernas. De la raíz se derivan todos los demás procesos.</li>
+<li><strong>PID</strong> = identificador único del proceso. <strong>PPID</strong> = PID del proceso padre.</li>
+<li>Principio: <strong>todo comando lanzado en una terminal tiene como padre al proceso de esa terminal</strong> (<code>bash</code>). El PID de <code>bash</code> no cambia mientras sea la misma terminal; el de <code>ps</code> cambia cada vez, porque nace y muere en el instante.</li>
+</ul></details>
+
+<details class="section-block sec" id="monitoreo-top-y-ps"><summary><span class="stitle">Monitoreo: top y ps</span></summary>
+<p><strong><code>top</code></strong> — dinámico, se actualiza en pantalla; se sale con <code>q</code>.</p>
+<p><strong>Tiempo compartido (time-sharing):</strong> un proceso no acapara la RAM de principio a fin (sería una cola secuencial ineficiente). El <strong>planificador (scheduler)</strong> reparte pequeños lapsos de CPU entre los procesos según su <strong>prioridad</strong>, alternando tan rápido que da la ilusión de paralelismo.</p>
+<p><strong><code>ps</code></strong> — <strong>estático</strong> (no se actualiza). Sin opciones: solo los procesos de la terminal actual (normalmente <code>bash</code> + el propio <code>ps</code>).</p>
+<p><strong><code>ps aux</code></strong> — todos los procesos del sistema, ordenados por PID ascendente. Columnas: <code>USER PID %CPU %MEM VSZ RSS TTY STAT START TIME COMMAND</code>.</p>
+<ul>
+<li>Demonios: sin terminal asociada → <code>?</code> en la columna <code>TTY</code>; por convención su nombre termina en <code>d</code> (<code>systemd</code>, <code>kthreadd</code>, <code>watchdogd</code>).</li>
+<li><code>VSZ</code> = <em>Virtual Memory Size</em>, <code>RSS</code> = <em>Resident Set Size</em> (el profesor lo aclarará la próxima clase).</li>
+</ul>
+<p><strong><code>ps -e -o pid,ppid,user,stat,cmd</code></strong> — <code>-e</code> lista todos los procesos; <code>-o</code> elige las columnas a mostrar.</p>
+<p><strong>⚠️ Examen — sintaxis:</strong> las columnas tras <code>-o</code> van <strong>separadas por comas y SIN espacios</strong>; un espacio hace que la terminal devuelva error de sintaxis. Los estados de la columna <code>STAT</code> (<code>S</code>, <code>R</code>, <code>R+</code>, <code>Ss</code>…) se ven en clases posteriores.</p></details>
+
+<details class="section-block sec" id="el-comando-ls-para-administracion-y-segu"><summary><span class="stitle">El comando ls para administración y seguridad</span></summary><ul>
+<li><code>ls</code> a secas no da información útil. <code>ls -l</code> = formato largo (permisos, tamaño, dueño, fecha). <code>ls -la</code> = incluye archivos ocultos (los que empiezan con <code>.</code>).</li>
+<li>Recomendado: <strong><code>ls -ltr</code></strong> — <code>l</code> largo, <code>t</code> ordena por fecha de modificación (más reciente arriba), <code>r</code> invierte el orden (más reciente <strong>abajo</strong>, junto al prompt).</li>
+<li>Uso en seguridad: en un incidente de intrusión ves de inmediato el último archivo creado o modificado por un atacante, sin hacer scroll en un directorio con cientos de archivos.</li>
+</ul></details>
+
+<details class="section-block sec contexto" id="contexto-origen-de-tty"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — origen de "TTY"</span></summary><p><code>TTY</code> viene de los <strong>teletipos</strong> (teletype) de los años 1940-50: máquina de escribir mecánica + transmisión de datos a una computadora. Con los sistemas de tiempo compartido de los 60, las terminales lógicas (pantallas, ventanas) heredaron las siglas. Dato histórico que remarcó el profesor: <strong>las primeras programadoras fueron mujeres</strong>.</p></details>
+
+<details class="section-block sec" id="sincronizacion-race-condition-y-deadlock"><summary><span class="stitle">Sincronización: race condition y deadlock</span></summary><ul>
+<li>Los procesos compiten de forma concurrente por la CPU → <strong>condición de carrera</strong> (race condition).</li>
+<li><strong>Deadlock</strong> (bloqueo mutuo / "candado mortal"): "el proceso 1 dice: para continuar necesito que termine el proceso 2; y el proceso 2 dice: para continuar necesito que termine el proceso 1". No se debe estructurar un programa donde dos procesos dependen circularmente uno del otro.</li>
+</ul></details>
+
+<details class="section-block sec" id="para-repasar-tarea-moral-de-la-clase-1"><summary><span class="stitle">Para repasar (tarea moral de la Clase 1)</span></summary><ul>
+<li>No hay tarea para entregar. <strong>Tarea moral:</strong> repasar el sitio web del curso y el <strong>PDF 2 del Tema 1</strong> ("ID de procesos") — es extenso, no verlo todo de golpe.</li>
+<li>La próxima clase: teoría de <code>fork()</code> en C para crear procesos.</li>
+</ul></details>
+
+<details class="section-block sec" id="clase-2-permisos-bit-setuid-etc-passwd-y"><summary><span class="stitle">Clase 2 — permisos, bit setuid, /etc/passwd y fork()</span></summary>
+<p>Destilado del transcript de la clase (NotebookLM). Sin lo administrativo.</p></details>
+
+<details class="section-block sec" id="permisos-ugo-y-chmod-notacion-decimal"><summary><span class="stitle">Permisos UGO y chmod (notación decimal)</span></summary>
+<p>Regla mnemotécnica: <strong>"ugo"</strong> (como "Hugo" sin H) → <strong>U</strong>suario (dueño), <strong>G</strong>rupo, <strong>O</strong>tros. <code>chmod</code> = <em>change mode</em>.</p>
+<pre><code>  r  w  x
+  4  2  1        rwx = 4+2+1 = 7      rw- = 6      r-x = 5</code></pre>
+<ul>
+<li><code>chmod 777 archivo</code> — todos los permisos para u, g y o.</li>
+<li><code>chmod 644 archivo</code> — archivo editable no ejecutable: dueño <code>rw</code> (6), grupo y otros <code>r</code> (4).</li>
+<li><code>chmod 755 archivo</code> — ejecutable típico: dueño <code>rwx</code> (7), grupo y otros <code>r-x</code> (5).</li>
+</ul></details>
+
+<details class="section-block sec" id="bit-setuid-chmod-con-4-digitos"><summary><span class="stitle">Bit SetUID (chmod con 4 dígitos)</span></summary>
+<p>Al ejecutar un binario, el proceso normalmente pertenece a quien lo ejecuta. Con el <strong>bit SetUID</strong> activo, quien lo ejecuta <strong>toma temporalmente los privilegios del dueño del archivo</strong> mientras dura la ejecución.</p>
+<p>Se activa con un <strong>cuarto dígito a la izquierda</strong> en <code>chmod</code>, que indica sobre qué bloque:</p>
+<pre><code>4 = SetUID   (bloque de usuario)   ← el más usado
+2 = SetGID   (bloque de grupo)
+1 = sticky   (bloque de otros)
+ej.  chmod 4511 archivo</code></pre>
+<p><strong>⚠️ Riesgo de seguridad:</strong> si <code>root</code> pone SetUID a un ejecutable, cualquier usuario sin privilegios se vuelve <code>root</code> durante esa ejecución. Manejar con extrema precaución.</p></details>
+
+<details class="section-block sec" id="usuarios-en-linux-etc-passwd-id-real-vs-"><summary><span class="stitle">Usuarios en Linux · /etc/passwd · ID real vs. efectivo</span></summary>
+<ul>
+<li><strong>ID real</strong> → dueño legítimo del proceso / archivo; es el que asigna <code>/etc/passwd</code>. Se obtiene con <code>getuid()</code> (igual que <code>getpid()</code> / <code>getppid()</code>).</li>
+<li><strong>ID efectivo</strong> → el usuario que está corriendo el programa en ese instante. Se obtiene con <code>geteuid()</code> (la "e" = <em>effective</em>).</li>
+</ul>
+<p><code>cat /etc/passwd</code> — campos separados por <code>:</code></p>
+<pre><code>username : x : UID : GID : nombre_real : /home/... : shell
+   |       |    |     |        |            |          |
+ el 1º   contraseña  id    id de     GECOS (si no    dir.   tipo de
+ es root  oculta   usuario  grupo    se puso, =user) home   shell</code></pre>
+<p>Usuarios de sistema con shell <code>nologin</code>: no pueden iniciar sesión interactiva (seguridad). <em>[inaudible: la ruta se oye como "etc/al passworden"]</em></p></details>
+
+<details class="section-block sec" id="tarea-2-probar-el-bit-setuid"><summary><span class="stitle">Tarea 2 — probar el bit SetUID</span></summary>
+<p>Metodología: <strong>dos terminales</strong> (una como <code>root</code>, otra como usuario sin privilegios). Las instrucciones de pantalla dividida en Codespaces están en la carpeta del <strong>Tema 3</strong> del repo, aunque se usan desde el Tema 1. <code>whoami</code> muestra el usuario activo.</p>
+<p><code>fdisk</code> = comando solo-<code>root</code> para manipular la tabla de particiones (<code>man fdisk</code>). Sirve cualquier comando que pida privilegios. Pasos:</p>
+<pre><code># 1) como usuario NO root:
+fdisk -l                     # -> "permiso denegado"
+                             #    (en Fedora puede solo regresar el prompt vacío)
+
+# 2) como root, ver permisos actuales:
+ls -l /sbin/fdisk            # -> 755  (rwxr-xr-x)
+
+# 3) como root, activar SetUID:
+chmod 4511 /sbin/fdisk       # -> r-s--x--x  (la 's' en vez de 'x' = SetUID activo;
+                             #    el nombre se ve en rojo si hay color)
+
+# 4) como usuario NO root otra vez:
+fdisk -l                     # -> AHORA SÍ funciona: lista las particiones
+
+# 5) OBLIGATORIO: revertir de inmediato
+chmod 755 /sbin/fdisk        # (o los permisos que tuviera antes)</code></pre>
+<p><em>[inaudible: la ruta se dicta rápido como "diagonal se bin diagonal fis" → /sbin/fdisk]</em></p>
+<p><strong>Actividad 2:</strong> programa en C (<a href="files/prof-tema1/programa02_ids.c" download style="color:var(--indigo)">programa02_ids.c</a> en el repo) que imprime <code>getuid()</code> y <code>geteuid()</code>. Compilar <code>gcc programa02_ids.c -o programa02_ids</code>. Ejecutado normal → ID real == ID efectivo. Aplicando <code>chmod 4511</code> al binario y ejecutándolo con <strong>otro usuario</strong> → salen distintos.</p>
+<p><strong>⚠️ Para sacar 10:</strong> las capturas deben mostrar <strong>ID real ≠ ID efectivo</strong>.</p>
+<p><strong>⚠️ No entregar la Tarea 2 todavía</strong> — el profesor no pudo hacer la demo en el laboratorio; reactivará la fecha de entrega después. (Recomienda clonar el repo localmente con git en vez de usar Codespaces.)</p></details>
+
+<details class="section-block sec" id="fork-creacion-de-procesos"><summary><span class="stitle">fork() — creación de procesos</span></summary>
+<ul>
+<li>Mecanismo nativo del kernel de Linux para crear procesos.</li>
+<li>Es <strong>costoso</strong>: clona / duplica toda la estructura de memoria del proceso que lo llama.</li>
+<li>El <strong>proceso hijo</strong> es copia idéntica del padre en datos y variables, <strong>salvo su PID y su PPID</strong>.</li>
+<li>Tras <code>fork()</code>, padre e hijo corren <strong>en paralelo y asíncronos</strong> (ráfagas de CPU alternadas).</li>
+</ul>
+<p><strong>Retorno</strong> (tipo <code>pid_t</code>, encapsula un entero; se imprime con <code>%d</code> / <code>%i</code>):</p>
+<pre><code>al PADRE  ->  el PID del hijo   (entero != 0)
+al HIJO   ->  0</code></pre>
+<p>La variable donde guardas el retorno se duplica: en el padre vale el PID del hijo, en el hijo vale 0. Se separa el código con:</p>
+<pre><code>if (id_hijo != 0) {
+    // código exclusivo del padre
+} else {
+    // código exclusivo del hijo
+}</code></pre>
+<p>Sin <code>if</code>, todo lo que va después de <code>fork()</code> se ejecuta en ambos → sale <strong>duplicado</strong>. En <a href="files/prof-tema1/programa05_fork_v1.c" download style="color:var(--indigo)">programa05_fork_v1.c</a>: la línea de antes del <code>fork()</code> se imprime una vez; las dos de después, dos veces cada una.</p>
+<p><em>Nota semántica del profesor: antes del <code>fork()</code> lo llama "proceso main / principal"; "padre" solo cuando ya hay hijo.</em></p></details>
+
+<details class="section-block sec" id="deadlock-candado-abrazo-mortal"><summary><span class="chip chip-examen">examen</span><span class="stitle">⚠️ Deadlock (candado / abrazo mortal)</span></summary><p>Si el padre espera a que termine el hijo para continuar y a la vez el hijo espera a que termine el padre → bloqueo indefinido. Única salida: <code>Ctrl + C</code>.</p></details>
+
+<details class="section-block sec" id="ejemplo-de-ejecucion-programa05-fork-v2-"><summary><span class="stitle">Ejemplo de ejecución — programa05_fork_v2.c</span></summary><p>Valores de esa corrida (<a href="files/prof-tema1/programa05_fork_v2.c" download style="color:var(--indigo)">programa05_fork_v2.c</a>):</p><table><thead><tr><th>Dato</th><th>Valor</th></tr></thead><tbody>
+<tr><td>PID del padre</td><td><code>30405</code></td></tr>
+<tr><td>PID del hijo</td><td><code>30406</code> (el entero inmediato siguiente)</td></tr>
+<tr><td><code>id_hijo</code> en el padre</td><td><code>30406</code></td></tr>
+<tr><td><code>id_hijo</code> en el hijo</td><td><code>0</code></td></tr>
+<tr><td><code>getpid()</code> en el hijo</td><td><code>30406</code></td></tr>
+<tr><td><code>getppid()</code> en el padre</td><td>PID de la shell (<code>bash</code>) que lanzó el programa</td></tr>
+<tr><td><code>getppid()</code> en el hijo</td><td><code>30405</code> (su creador es el padre)</td></tr>
+</tbody></table><p>El <code>if</code> puede ser <code>!= 0</code> (padre primero) o <code>== 0</code> (hijo primero), a gusto del programador.</p></details>
+
+<details class="section-block sec" id="para-repasar-clase-2"><summary><span class="stitle">Para repasar (Clase 2)</span></summary><p>Tarea moral (sin entrega): leer con calma el <strong>PDF 2 del Tema 1</strong> (procesos).</p></details>
+
+<details class="section-block sec" id="clase-3-codespaces-y-tarea-2"><summary><span class="stitle">Clase 3 — Codespaces y ajuste de la Tarea 2</span></summary>
+<p>Destilado del transcript (NotebookLM). Sin lo administrativo.</p>
+<p><strong>Contenedores en Codespaces:</strong> si sales del navegador sin destruir el contenedor, queda <strong>pausado pero vivo</strong> y sigue consumiendo la cuota gratis. Puedes tener varios (uno por materia); se pausan al salir y se retoman.</p>
+<pre><code># iniciar un Codespace:
+1. botón verde "Code" en el repo
+2. pestaña "Codespaces"   (solo aparece si estás logueado en GitHub)
+3. "Create codespace on main"
+4. si pregunta por seguridad -> "Confiar y continuar"
+# abre VS Code en el navegador; terminal abajo; se puede dividir (split terminal)</code></pre>
+<p><strong>Tarea 2 ajustada:</strong> <code>fdisk</code> <strong>no viene</strong> en el contenedor de Codespaces.</p>
+<ul>
+<li><strong>Actividad 1</strong> (probar SetUID con <code>fdisk</code>): solo quien tenga un <strong>Linux local</strong> propio.</li>
+<li><strong>Actividad 2</strong> (obligatoria para todos): compilar y analizar <a href="files/prof-tema1/programa02_ids.c" download style="color:var(--indigo)">programa02_ids.c</a> con <code>getuid</code> / <code>geteuid</code> bajo el bit SetUID.</li>
+</ul>
+<p><em>get</em> = leer / obtener; <em>set</em> = escribir / establecer. C y Python no son estrictos con el nombre del archivo (a diferencia de Java): en C todo se estructura desde <code>main</code>.</p>
+</details>
+
+<details class="section-block sec" id="clase-3-demo-setuid-paso-a-paso"><summary><span class="stitle">Clase 3 — Demo del bit SetUID en Codespaces, paso a paso</span></summary>
+<pre><code># en ambas terminales:
+whoami                       # -> codespace   (usuario NO privilegiado por defecto)
+
+gcc programa02_ids.c -o programa02_ids
+# al autocompletar con TAB, QUITAR el .c del -o para no sobrescribir el fuente
+./programa02_ids            # real == efectivo == 1000  (lo corre su propio dueño)
+
+# --- terminal izquierda: hacerse root ---
+sudo su                     # whoami -> root
+                            # con root: rm -rf /  te vuela todo -> destruir y recrear el Codespace
+cat /etc/passwd             # metadatos de usuarios; codespace tiene ID 1000 (uid gid = 1000 1000)
+cat /etc/shadow             # en algunas distros root (ID SIEMPRE 0) no está en /etc/passwd
+                            # sino "en las sombras" en /etc/shadow, junto a demonios como sys
+pwd                         # ruta absoluta actual  (/workspaces/arquitectura-cliente-servidor)
+
+chown root:root programa02_ids     # change owner  usuario:grupo archivo
+ls -l programa02_ids               # ahora pertenece a  root root  (antes codespace codespace)
+
+chmod 700 programa02_ids           # solo el dueño (root) tiene rwx; grupo y otros = 0
+# --- terminal derecha (usuario codespace, cae en "otros") ---
+./programa02_ids                   # -> "Permiso denegado"
+
+# --- terminal izquierda (root): activar SetUID ---
+chmod 4511 programa02_ids          # 4 = SetUID en la terna del USUARIO
+ls -l programa02_ids               # la 'x' del usuario se vuelve 's'/'S'; nombre en rojo (si hay color)
+
+# --- terminal derecha ---
+./programa02_ids                   # AHORA SÍ corre:
+                                   #   Real     = 1000  (codespace, quien lo lanzó)
+                                   #   Efectivo = 0     (root, dueño del archivo)</code></pre>
+<p><strong>Ciclo de vida:</strong> el cambio de identidad es <strong>temporal</strong> — solo mientras el proceso vive en memoria. Antes de ejecutar y una vez que termina, el usuario sigue siendo el 1000.</p>
+</details>
+
+<details class="section-block sec" id="clase-3-bits-especiales-qa"><summary><span class="stitle">Clase 3 — Bits especiales (Q&amp;A): SetUID / SetGID / sticky</span></summary>
+<p>El 4.º dígito de <code>chmod</code>:</p>
+<pre><code>4 = SetUID  (usuario)
+2 = SetGID  (grupo: cambia grupo real y efectivo)
+6 = 4+2     (ambos)
+1 = sticky bit   ej. chmod 1511 -> sin error; en la terna de "otros" aparece una 'T';
+                 el archivo se ve en verde/dorado</code></pre>
+<p>No hay funciones "get others ID" en C. Solo existen las 4 estándar: <code>getuid()</code> / <code>geteuid()</code> (usuario) y <code>getgid()</code> / <code>getegid()</code> (grupo). Por eso <strong>no</strong> se puede demostrar dinámicamente el efecto del <code>1</code> (otros). Tarea de investigación que dejó el profe para sí mismo: el comportamiento exacto de la <code>T</code> (sticky) en los SO modernos.</p>
+</details>
+
+<details class="section-block sec" id="clase-3-errno"><summary><span class="stitle">Clase 3 — Gestión de errores en Linux: errno</span></summary>
+<ul>
+<li><code>errno</code> (siempre en minúsculas): variable <strong>global</strong> que el sistema establece automáticamente cuando un programa en Linux tiene una condición de error. <strong>No</strong> se declara ni se inicializa; la provee el entorno de Linux.</li>
+<li>~<strong>131 códigos</strong> de error estándar (enteros 1–131). Cada uno tiene una <strong>macro</strong> en C que empieza con <code>E</code>; quitando la <code>E</code> da pista del error:
+<ul>
+<li><code>ENOENT</code> (No ENTry) → código <strong>2</strong>, "No such file or directory" (error de dedo en rutas o borrado accidental).</li>
+<li><code>EPERM</code> (Operation Not Permitted) → falta de privilegios.</li>
+<li><code>EIO</code> (Input/Output) → fallo físico o lógico de E/S.</li>
+</ul></li>
+<li><strong><code>0</code> = éxito</strong> (success), estandarizado. Cualquier entero ≠ 0 se interpreta como error. Por eso <code>int main</code> termina con <code>return 0;</code> — le devuelve 0 al proceso padre.</li>
+</ul>
+<p><strong><a href="files/prof-tema1/programa03_codigos_sistema.c" download style="color:var(--indigo)">programa03_codigos_sistema.c</a>:</strong> bucle <code>for</code> de <code>i = 0</code> (éxito) a <code>150</code>. Aunque el estándar dice 131, se puede iterar más sin riesgo; los índices sobrantes imprimen <code>Unknown error</code>. En la distro del contenedor la tabla real llega hasta el <strong>código 133</strong>. Salida: índice <code>0</code> → <code>Success</code>; índice <code>2</code> → <code>No such file or directory</code>.</p>
+</details>
+
+<details class="section-block sec" id="clase-3-red-fi-unam"><summary><span class="stitle">Clase 3 — Red de la Facultad de Ingeniería e IPs de la UNAM</span></summary>
+<ul>
+<li><code>132.247.x.x</code> y <code>132.248.x.x</code> = direccionamiento <strong>público global</strong> de la UNAM.</li>
+<li>Tercer octeto <code>59</code> → infraestructura de la <strong>Facultad de Ingeniería</strong>.</li>
+<li>Años 90, al instalar el cableado Ethernet, la red de la FI se dividió en <strong>4 subredes por edificio</strong>:
+<ul>
+<li><strong>FI-A</strong> — Edificio Principal</li>
+<li><strong>FI-B</strong> — Anexo</li>
+<li><strong>FI-C</strong> — Ciencias Básicas</li>
+<li><strong>FI-P</strong> — Posgrado</li>
+</ul></li>
+<li>El servidor de profesores está físicamente en la red <strong>FP (Posgrado)</strong> → de ahí <code>profesores.fi.unam.mx</code> (subdominio <code>.fp.</code>).</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="contexto-historico-origen-de-los-sistema"><summary><span class="stitle">Contexto histórico: origen de los sistemas operativos</span></summary><p>1944–1952: John Von Neumann propone el diseño de una computadora que almacena un programa y usa un procesador central (arquitectura de programa almacenado), junto con el sistema de numeración binaria. Esto permitió que la computadora se usara más allá de la ciencia: en economía, administración, producción, etc.
+
+1956: se crea el primer Sistema Operativo de la historia, para un IBM 704. Solo encadenaba la ejecución de un programa cuando el anterior terminaba.
+
+Década de 1960: revolución en los SO — aparecen los conceptos de sistema multitarea, multiusuario, multiprocesador y en tiempo real. En esta década nace UNIX, base de la mayoría de los SO actuales.</p></details>
+<details class="section-block sec" id="origen-de-unix"><summary><span class="stitle">Origen de Unix</span></summary><p>Unix es un sistema operativo portable, multitarea y multiusuario, desarrollado por empleados de los laboratorios Bell de AT&amp;T (Ken Thompson, Dennis Ritchie y Douglas McIlroy).
+
+A finales de los 60, el MIT, los laboratorios Bell y General Electric trabajaban en un SO experimental llamado Multics, pensado para mejorar la seguridad e interactividad. AT&amp;T se desvinculó del proyecto, pero Ken Thompson siguió usando la máquina GE-645 para un juego llamado &quot;Space Travel&quot;; al resultar lento y caro, lo reescribió en ensamblador para un DEC PDP-7 junto con Dennis Ritchie.
+
+Esa experiencia, sumada a lo aprendido en Multics, llevó a Thompson y Ritchie (con Rudd Canaday y otros) a crear un nuevo SO con sistema de archivos y multitarea propios: UNICS (Uniplexed Information and Computing System), renombrado después a Unix.
+
+Hoy existen varias versiones desarrolladas por distintas compañías: SunOS, Ultrix, HP-UX, entre otras.</p></details>
+<details class="section-block sec" id="cuatro-filosofias-de-trabajo-de-unix"><summary><span class="stitle">Cuatro filosofías de trabajo de Unix</span></summary><ul><li>Fue desarrollado por programadores, para programadores</li><li>Asume que el usuario sabe lo que hace</li><li>Todo lo ve y lo maneja como archivo</li><li>Si un comando no manda mensaje de error, se ejecutó satisfactoriamente</li></ul></details>
+<details class="section-block sec" id="que-es-linux"><summary><span class="stitle">¿Qué es Linux?</span></summary><p>Linux es un sistema operativo open source, diseñado y creado en 1991 por Linus Torvalds mientras estaba en la universidad, como una alternativa gratuita y libre a MINIX (que a su vez se basaba en los principios de Unix).
+
+Se lanzó bajo la Licencia Pública General (GPL) de GNU: cualquiera puede ejecutarlo, estudiarlo, compartirlo y modificarlo; el código modificado también puede redistribuirse (incluso venderse), siempre bajo la misma licencia. Esto lo distingue de sistemas propietarios como Unix o Windows, que están bloqueados y no se pueden modificar.
+
+&quot;Linux&quot; suele referirse al kernel de Linux junto con las herramientas, aplicaciones y servicios que lo acompañan (parte de ellos del proyecto GNU) — por eso la Free Software Foundation prefiere el nombre &quot;GNU/Linux&quot;.</p></details>
+<details class="section-block sec" id="que-es-un-proceso"><summary><span class="stitle">¿Qué es un proceso?</span></summary><p>Un proceso es una instancia de un programa en ejecución. Mientras el ejecutable no se ejecute, es solamente un archivo ocupando espacio en disco.
+
+Un mismo archivo ejecutable puede generar varias instancias (varios procesos) al mismo tiempo: cada ejecución es un proceso distinto, aunque provenga del mismo programa.</p></details>
+<details class="section-block sec" id="estructura-de-un-proceso"><summary><span class="stitle">Estructura de un proceso</span></summary><ul><li>Segmento de texto: contiene las instrucciones que entiende la CPU</li><li>Segmento de datos: contiene los datos que deben cargarse al iniciar el proceso</li><li>Segmento de pila: serie de marcos de pila que se apilan al llamar una función y se desapilan al retornar de ella; cada marco contiene los parámetros de la función, las variables locales y la información necesaria para restaurar el marco anterior</li></ul></details>
+<details class="section-block sec" id="procesos-padre-e-hijo-en-linux"><summary><span class="stitle">Procesos padre e hijo en Linux</span></summary><p>Linux es un sistema de tiempo compartido que permite ejecutar varios procesos a la vez (multiproceso). El planificador es la parte del núcleo que gestiona la CPU y decide qué proceso la ocupa en cada instante.
+
+Todo proceso en Linux, excepto el primero (proceso init), se crea mediante una llamada a fork(). El proceso que llama a fork() es el proceso padre, y el que se crea es el proceso hijo. Un padre puede tener varios hijos, pero cada proceso tiene un único padre.</p></details>
+<details class="section-block sec" id="identificacion-de-procesos-pid-y-ppid"><summary><span class="stitle">Identificación de procesos: PID y PPID</span></summary><p>Cada proceso en Linux se identifica con un PID (ID de proceso): un número entero positivo asignado al crearse.
+
+getpid() devuelve el PID del proceso que la invoca.
+getppid() devuelve el PID de su proceso padre (PPID).</p></details>
+<details class="section-block sec" id="ejemplo-1-numero-de-proceso-print-pid-c"><summary><span class="stitle">Ejemplo 1 — Número de proceso (print-pid.c)</span></summary><pre><code>#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;  // Declara funciones parte del estándar POSIX
+
+int main () {
+    printf(&quot;The process ID is %d\n&quot;, getpid());
+    printf(&quot;The parent process ID is %d\n&quot;, (int) getppid());
+    return 0;
+}</code></pre></details>
+<details class="section-block sec" id="otros-identificadores-de-un-proceso"><summary><span class="stitle">Otros identificadores de un proceso</span></summary><table><thead><tr><th>Atributo</th><th>Tipo</th><th>Función</th></tr></thead><tbody><tr><td>ID de proceso</td><td>pid_t</td><td>getpid(void)</td></tr><tr><td>ID de proceso padre</td><td>pid_t</td><td>getppid(void)</td></tr><tr><td>ID real del usuario</td><td>uid_t</td><td>getuid(void)</td></tr><tr><td>ID efectivo del usuario</td><td>uid_t</td><td>geteuid(void)</td></tr><tr><td>ID real de grupo</td><td>gid_t</td><td>getgid(void)</td></tr><tr><td>ID efectivo de grupo</td><td>gid_t</td><td>getegid(void)</td></tr></tbody></table></details>
+<details class="section-block sec" id="id-real-vs-id-efectivo"><summary><span class="stitle">ID real vs. ID efectivo</span></summary><p>Cada proceso tiene dos IDs de usuario y dos de grupo, usados principalmente por seguridad (permisos de acceso a archivos).
+
+ID real de usuario/grupo: identifica al usuario real, tal como aparece en /etc/passwd.
+ID efectivo de usuario/grupo: se usa para acceder a archivos de otros usuarios, enviar señales a procesos o ejecutar programas &quot;setuid&quot;.
+
+Cuando un proceso ejecuta un programa &quot;setuid&quot;, el núcleo asigna al EUID del proceso el propietario de ese programa, y al EGID el grupo del propietario.</p></details>
+<details class="section-block sec" id="ejemplo-2-identificadores-de-proceso-ids"><summary><span class="stitle">Ejemplo 2 — Identificadores de proceso (ids.c)</span></summary><pre><code>#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(void) {
+    printf(&quot;Real user ID: %d\n&quot;, getuid());
+    printf(&quot;Effective user ID: %d\n&quot;, geteuid());
+    printf(&quot;Real group ID: %d\n&quot;, getgid());
+    printf(&quot;Effective group ID: %d\n&quot;, getegid());
+    return 0;
+}</code></pre></details>
+<details class="section-block sec" id="comando-ps-de-linux"><summary><span class="stitle">Comando ps de Linux</span></summary><p>ps despliega los procesos en ejecución en el sistema. Sin opciones, muestra los del shell actual (la primera columna es el PID; normalmente aparecen el propio shell y el proceso ps).
+
+ps -e -o pid,ppid,command muestra todos los procesos del sistema (-e) especificando qué columnas mostrar (-o): PID, PPID y el comando.</p></details>
+<details class="section-block sec" id="tres-formas-de-crear-procesos-en-linux"><summary><span class="stitle">Tres formas de crear procesos en Linux</span></summary><p>La primera es con system(), parte de las librerías estándar de C. Las otras dos son fork() y exec(), que es la manera nativa en que Linux crea procesos.</p></details>
+<details class="section-block sec" id="system"><summary><span class="stitle">system()</span></summary><p>Ejecuta un comando desde un programa, como si se invocara desde un Shell. Invocar un programa con privilegios de root usando system() puede dar resultados distintos entre sistemas Linux, ya que depende de la versión del Shell utilizado.
+
+Sintaxis: int system(const char *string)</p></details>
+<details class="section-block sec" id="ejemplo-3-uso-de-system-system-c"><summary><span class="stitle">Ejemplo 3 — Uso de system() (system.c)</span></summary><pre><code>#include &lt;stdlib.h&gt;
+
+int main () {
+    int return_value;
+    return_value = system(&quot;ls -l /&quot;);
+    return return_value;
+}</code></pre></details>
+<details class="section-block sec" id="fork"><summary><span class="stitle">fork()</span></summary><p>Crea un nuevo proceso (el hijo) como copia del proceso padre, excepto por el PID y el PPID.
+
+Al llamar fork(), el núcleo:
+· Busca una entrada libre en la tabla de procesos y la reserva para el hijo.
+· Le asigna un PID único e invariable durante toda su vida.
+· Copia el contexto de nivel de usuario del padre al hijo.
+· Copia las tablas de control de archivos locales del padre al hijo.
+· Devuelve al padre el PID del hijo, y al hijo le devuelve 0.
+
+Mientras se crea el hijo, el padre sigue ejecutándose desde el punto donde se invocó fork(); el hijo también ejecuta el programa desde ese mismo punto.
+
+Sintaxis: pid_t fork(void)</p></details>
+<details class="section-block sec" id="ejemplo-4-creacion-de-procesos-fork-c"><summary><span class="stitle">Ejemplo 4 — Creación de procesos (fork.c)</span></summary><pre><code>#include &lt;stdio.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;unistd.h&gt;
+
+int main () {
+    pid_t child_pid;
+    printf(&quot;the main program process ID is %d\n&quot;, (int) getpid());
+    child_pid = fork();
+    if (child_pid != 0) {
+        printf(&quot;this is the parent process, with id %d\n&quot;, (int) getpid());
+        printf(&quot;the child's process ID is %d\n&quot;, (int) child_pid);
+    } else {
+        printf(&quot;this is the child process, with id %d\n&quot;, (int) getpid());
+    }
+    return 0;
+}</code></pre></details>
+<details class="section-block sec" id="condicion-de-carrera-race-condition"><summary><span class="chip chip-examen">examen</span><span class="stitle">⚠️ Condición de carrera (race condition)</span></summary><p>No se puede predecir si el proceso padre seguirá ejecutándose antes o después de que se cree el hijo (o viceversa), ya que ambos corren de forma asíncrona tras fork().
+
+Por eso no debe escribirse, en el proceso hijo, código que dependa del padre (o viceversa): hacerlo genera una condición de carrera con comportamiento impredecible en el programa.</p></details>
+<details class="section-block sec" id="exec"><summary><span class="stitle">exec()</span></summary><p>A diferencia de fork(), exec() reemplaza el programa que se está ejecutando en un proceso por otro programa. Cuando se llama exec(), el proceso invocador termina inmediatamente y comienza a ejecutarse el nuevo programa desde el inicio (si exec() no encontró error).
+
+Si exec() tiene éxito, no regresa al proceso que lo llamó (fue reemplazado por completo). Si falla, regresa -1.</p></details>
+<details class="section-block sec" id="ejemplo-6-uso-de-exec-execs-c"><summary><span class="stitle">Ejemplo 6 — Uso de exec (execs.c)</span></summary><pre><code>#include &lt;unistd.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+
+int main(void) {
+    char *args[] = {&quot;/bin/ls&quot;, NULL};
+    if (execve(&quot;/bin/ls&quot;, args, NULL) == -1) {
+        perror(&quot;execve&quot;);
+        exit(EXIT_FAILURE);
+    }
+    puts(&quot;shouldn't get here&quot;);
+    exit(EXIT_SUCCESS);
+}</code></pre></details>
+<details class="section-block sec" id="familia-de-funciones-exec"><summary><span class="stitle">Familia de funciones exec()</span></summary><ul><li>execl(), execv(), execle(), execve() reciben una ruta (path) como primer argumento</li><li>execlp(), execvp() reciben el nombre de un archivo; si no contiene &quot;/&quot;, lo buscan en $PATH</li><li>Las funciones con &quot;l&quot; (execl, execle, execlp) reciben una lista de argumentos terminada en un apuntador NULL</li><li>Las funciones con &quot;v&quot; (execv, execve, execvp) reciben un arreglo de apuntadores terminado en una cadena NULL</li><li>execve() y execle() además permiten definir un ambiente propio (envp); las demás heredan el ambiente a través de la variable environ</li></ul></details>
+<details class="section-block sec" id="sintaxis-de-la-familia-exec"><summary><span class="stitle">Sintaxis de la familia exec</span></summary><pre><code>int execl (char *path, char *arg0, char *arg1,... char *argN, (char *)0);
+int execv (char *path, char *argv[ ]);
+int execle(char *path, char *arg0, char *arg1,... char *argN, (char *)0, char *envp[ ]);
+int execve(char *path, char *argv[ ], char *envp[ ]);
+int execlp(char *file, char *arg0, char *arg1,... char *argN, (char *)0);
+int execvp(char *file, char *argv[ ]);</code></pre></details>
+<details class="section-block sec" id="variables-de-ambiente"><summary><span class="stitle">Variables de ambiente</span></summary><p>putenv(const char *string) agrega o modifica una variable de ambiente.
+getenv(const char *name) consulta el valor de una variable de ambiente.
+
+Se usan típicamente junto con execve()/execle() para construir el ambiente (envp) que recibirá el nuevo programa.</p></details>
+<details class="section-block sec" id="ejemplo-7-variables-de-ambiente-testenv-"><summary><span class="stitle">Ejemplo 7 — Variables de ambiente (testenv.c)</span></summary><pre><code>#include &lt;unistd.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+
+int main(void) {
+    char envval[] = {&quot;MYPATH=/user/local/someapp/bin&quot;};
+    if (putenv(envval))
+        puts(&quot;putenv failed&quot;);
+    else
+        puts(&quot;putenv succeeded&quot;);
+
+    if (getenv(&quot;MYPATH&quot;))
+        printf(&quot;MYPATH=%s\n&quot;, getenv(&quot;MYPATH&quot;));
+    else
+        puts(&quot;MYPATH unassigned&quot;);
+
+    if (getenv(&quot;YOURPATH&quot;))
+        printf(&quot;YOURPATH=%s\n&quot;, getenv(&quot;YOURPATH&quot;));
+    else
+        puts(&quot;YOURPATH unassigned&quot;);
+    exit(EXIT_SUCCESS);
+}</code></pre></details>
+<details class="section-block sec" id="compilacion-de-los-ejemplos"><summary><span class="stitle">Compilación de los ejemplos</span></summary><p>cc myecho.c –o myecho
+cc execve.c –o execve
+./execve ./myecho
+
+(Analizar el resultado: execve reemplaza el proceso actual por myecho, pasando su propio nombre como argumento.)</p></details>
+<details class="section-block sec" id="cuestionario-codigo-a-analizar-fork-exec"><summary><span class="stitle">Cuestionario — código a analizar (fork-exec.c)</span></summary><pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;unistd.h&gt;
+
+int spawn (char* program, char** arg_list) {
+    pid_t child_pid;
+    child_pid = fork ();
+    if (child_pid != 0)
+        return child_pid;
+    else {
+        execvp (program, arg_list);
+        fprintf (stderr, &quot;an error occurred in execvp\n&quot;);
+        abort ();
+    }
+}
+
+int main () {
+    char* arg_list[] = { &quot;ls&quot;, &quot;-l&quot;, &quot;/&quot;, NULL };
+    spawn (&quot;ls&quot;, arg_list);
+    printf (&quot;done with main program\n&quot;);
+    return 0;
+}</code></pre></details>
+<details class="section-block sec" id="cuestionario"><summary><span class="stitle">Cuestionario</span></summary><p>Describe qué hace el código anterior (fork-exec.c) y qué resultados arroja.
+
+Pista: spawn() crea un proceso hijo con fork() y reemplaza ese hijo con el programa &quot;ls&quot; usando execvp(); el proceso padre continúa su ejecución normal e imprime &quot;done with main program&quot; — el orden entre esa impresión y la salida de ls no está garantizado.</p></details>
+<details class="section-block sec" id="para-repasar"><summary><span class="stitle">Para repasar</span></summary><ul><li>¿Qué diferencia hay entre fork() y exec()?</li><li>¿Por qué el uso de fork() puede generar una condición de carrera (race condition)?</li><li>¿Qué representa el PID y qué el PPID de un proceso?</li><li>¿Cuál es la diferencia entre el ID real y el ID efectivo de usuario/grupo, y cuándo se usa cada uno?</li><li>¿Qué hace el comando ps -e -o pid,ppid,command y qué muestra cada columna?</li><li>¿Qué ocurre si execve() tiene éxito? ¿Y si falla?</li></ul></details>
+<details class="section-block sec" id="referencias-multimedia"><summary><span class="stitle">Referencias multimedia</span></summary><div class="links" style="margin-top:0"><div class="link-item"><span class="label">Árbol de las computadoras (The Computer Tree)</span><a href="https://upload.wikimedia.org/wikipedia/commons/8/8d/The_computer_tree-U.S._Army_diagram.png" target="_blank" rel="noopener">https://upload.wikimedia.org/wikipedia/commons/8/8d/The_computer_tree-U.S._Army_diagram.png</a></div><div class="link-item"><span class="label">Línea de tiempo de distribuciones Linux</span><a href="https://upload.wikimedia.org/wikipedia/commons/1/1b/Linux_Distribution_Timeline.svg" target="_blank" rel="noopener">https://upload.wikimedia.org/wikipedia/commons/1/1b/Linux_Distribution_Timeline.svg</a></div><div class="link-item"><span class="label">Infografía del kernel de Linux</span><a href="https://upload.wikimedia.org/wikipedia/commons/e/ec/Infografia_NucleoLinux.png" target="_blank" rel="noopener">https://upload.wikimedia.org/wikipedia/commons/e/ec/Infografia_NucleoLinux.png</a></div><div class="link-item"><span class="label">Entrevista TED a Linus Torvalds</span><a href="https://www.youtube.com/watch?v=MNXIXDbEmVc" target="_blank" rel="noopener">https://www.youtube.com/watch?v=MNXIXDbEmVc</a></div><div class="link-item"><span class="label">Historia de las &quot;guerras de los Unix&quot;</span><a href="https://architecnologia.es/una-historia-de-unix-los-litigios-sco-contra-todos" target="_blank" rel="noopener">https://architecnologia.es/una-historia-de-unix-los-litigios-sco-contra-todos</a></div></div></details>
+<details class="section-block sec" id="bibliografia"><summary><span class="stitle">Bibliografía</span></summary><ul><li>Francisco Manuel Márquez García — &quot;Unix: programación avanzada&quot;. Editorial RA-MA</li><li>Richard Stevens — &quot;Advanced Unix Programming&quot;. Editorial Addison Wesley</li><li>Kurt Wall — &quot;Linux Programming by Example&quot;. Editorial QUE</li></ul></details>
+<details class="section-block sec" id="programas-del-profesor-tema-1"><summary><span class="stitle">Programas del profesor — Tema 1</span></summary><p>Código descargado del sitio del profesor (<a href="https://cromanzamitiz.github.io/arquitectura-cliente-servidor/tema1/" target="_blank" rel="noopener" style="color:var(--indigo)">tema1</a>). Cada programa está guardado como archivo real en <code>files/prof-tema1/</code>. Las salidas son <strong>representativas en Linux</strong> — los PID y los listados de <code>ls</code> varían en cada corrida.</p><p style="font-size:13px;color:var(--ink-soft)">Compilar: <code>cc programaXX_nombre.c -o programaXX</code> &nbsp;·&nbsp; ejecutar: <code>./programaXX</code></p></details>
+<details class="section-block sec" id="system"><summary><span class="stitle">system()</span></summary>
+<p style="margin-top:14px"><strong><a href="files/prof-tema1/programa04_system_v1.c" download style="color:var(--indigo)">programa04_system_v1.c</a></strong> — Ejemplo mínimo de <code>system("ls -l /")</code>: el shell ejecuta el comando y <code>return_value</code> recibe el estado devuelto por el shell (0 si todo salió bien).</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main ()
+{
+  int return_value;
+  printf("Ejemplo de funcion system(\"ls -l /\") con un comando que se ejecuta correctamente\n");
+  return_value = system ("ls -l /");
+  printf("Termina proceso hijo, return_value=%d\n", return_value);
+  return return_value;
+}</code></pre>
+<p style="font-size:12px;color:var(--ink-soft);margin:6px 0 2px">Salida típica</p>
+<pre class="salida"><code>Ejemplo de funcion system("ls -l /") con un comando que se ejecuta correctamente
+&lt;listado del directorio raíz&gt;
+Termina proceso hijo, return_value=0</code></pre>
+<p style="margin-top:14px"><strong><a href="files/prof-tema1/programa04_system_v2.c" download style="color:var(--indigo)">programa04_system_v2.c</a></strong> — Igual que el anterior pero además interpreta el valor devuelto con <code>WIFEXITED</code> / <code>WEXITSTATUS</code> (tema de <code>wait()</code>, se ve más adelante) y repite con un comando que falla (<code>ls -l no_existe</code>).</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main ()
+{
+ int return_value;
+ printf("Ejemplo 2 de funcion system(\"ls -l /\") con un comando que se ejecuta correctamente\n");
+ return_value = system ("ls -l /");
+ printf("Termina proceso hijo, return_value=%d\n", return_value);
+ printf("Lo siguiente tiene que ver con la funcion wait(), lo veremos mas adelante\n");
+ printf("En el proceso inicial, WIFEXITED(return_value)=%d\n",WIFEXITED(return_value) );
+ printf("En el proceso inicial, WEXITSTATUS(return_value) codigo de salida del hijo=%d\n",WEXITSTATUS(return_value) );
+ printf("---------------------------------------\n");
+ printf("Ejemplo 2 de funcion system(\"ls -l no_existe\") con un comando que se ejecuta incorrectamente\n");
+ return_value = system ("ls -l no_existe");
+ printf("Termina proceso hijo, return_value=%d\n", return_value);
+ printf("Lo siguiente tiene que ver con la funcion wait(), lo veremos mas adelante\n");
+ printf("En el proceso inicial, WIFEXITED(return_value)=%d\n",WIFEXITED(return_value) );
+ printf("En el proceso inicial, WEXITSTATUS(return_value) codigo de salida del hijo=%d\n",WEXITSTATUS(return_value) );
+ return return_value;
+}</code></pre>
+<p style="font-size:12px;color:var(--ink-soft);margin:6px 0 2px">Salida típica</p>
+<pre class="salida"><code>Ejemplo 2 ... comando correcto
+&lt;listado del raíz&gt;
+Termina proceso hijo, return_value=0
+WIFEXITED(return_value)=1
+WEXITSTATUS(...) codigo de salida del hijo=0
+---------------------------------------
+Ejemplo 2 ... "ls -l no_existe"
+ls: cannot access 'no_existe': No such file or directory
+Termina proceso hijo, return_value=512
+WIFEXITED(return_value)=1
+WEXITSTATUS(...)=2</code></pre>
+</details>
+<details class="section-block sec" id="fork"><summary><span class="stitle">fork()</span></summary>
+<p style="margin-top:14px"><strong><a href="files/prof-tema1/programa05_fork_v1.c" download style="color:var(--indigo)">programa05_fork_v1.c</a></strong> — Primer contacto con <code>fork()</code>: después de la llamada hay <strong>dos procesos</strong> ejecutando el mismo código, por eso los <code>printf</code> 2 y 3 salen duplicados. <code>id_hijo</code> vale <code>0</code> en el hijo y el PID del hijo en el padre.</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+
+int main ()
+{
+    pid_t id_hijo;
+    printf( "1: el id del proceso main es %d\n", getpid() );
+    id_hijo = fork ();
+    printf( "2: Este printf saldra duplicado\n");
+    printf( "3: La variable \"id_hijo\" de este proceso es %d. La pregunta es: Quien soy, Padre o Hijo?\n", id_hijo );
+    return 0;
+}</code></pre>
+<p style="font-size:12px;color:var(--ink-soft);margin:6px 0 2px">Salida típica</p>
+<pre class="salida"><code>1: el id del proceso main es 12345
+2: Este printf saldra duplicado
+3: La variable "id_hijo" de este proceso es 12346. ...
+2: Este printf saldra duplicado
+3: La variable "id_hijo" de este proceso es 0. ...</code></pre>
+<p style="margin-top:14px"><strong><a href="files/prof-tema1/programa05_fork_v2.c" download style="color:var(--indigo)">programa05_fork_v2.c</a></strong> — El <code>if (id_hijo != 0)</code> separa el código que ejecuta el padre del que ejecuta el hijo. El orden en que aparecen los bloques PADRE/HIJO <strong>no está garantizado</strong> (condición de carrera).</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+
+int main ()
+{
+    pid_t id_hijo;
+    printf( "1: el id del proceso main es %d\n", getpid() );
+    id_hijo = fork ();
+    printf( "2: Este printf saldra duplicado\n");
+    printf( "3: Este printf tambien sale por duplicado. La variable id_hijo es %d\n", id_hijo );
+    if( id_hijo != 0 )
+    {
+        printf( "\nPADRE:proceso main o padre con id %d\n", getpid());
+        printf( "PADRE:variable id_hijo es %d\n", id_hijo );
+        printf( "PADRE:id del padre del padre %d\n",getppid());
+    }
+    else
+    {
+        printf( "\nHIJO:proceso hijo con id %d\n", getpid() );
+        printf( "HIJO:variable id_hijo es %d\n", id_hijo );
+        printf( "HIJO:id del padre es %d\n", getppid() );
+    }
+    return 0;
+}</code></pre>
+<p style="font-size:12px;color:var(--ink-soft);margin:6px 0 2px">Salida típica</p>
+<pre class="salida"><code>1: el id del proceso main es 12345
+2: Este printf saldra duplicado
+3: ... La variable id_hijo es 12346
+
+PADRE:proceso main o padre con id 12345
+PADRE:variable id_hijo es 12346
+PADRE:id del padre del padre 6789
+2: Este printf saldra duplicado
+3: ... La variable id_hijo es 0
+
+HIJO:proceso hijo con id 12346
+HIJO:variable id_hijo es 0
+HIJO:id del padre es 12345</code></pre>
+<p style="margin-top:14px"><strong><a href="files/prof-tema1/programa08_child.c" download style="color:var(--indigo)">programa08_child.c</a></strong> — <code>fork()</code> con manejo de error: si devuelve <code>-1</code> hace <code>perror("fork")</code> y <code>exit</code>. El hijo imprime <code>in child</code> y sus pid/ppid y termina con <code>exit</code>; el padre imprime <code>in parent</code>.</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(void)
+{
+  pid_t child;
+  if((child = fork()) == -1)
+  {
+    perror("fork");
+    exit(EXIT_FAILURE);
+  }
+  else if(child == 0)
+  {
+    puts("in child");
+    printf("\tchild pid = %d\n", getpid());
+    printf("\tchild ppid = %d\n", getppid());
+    exit(EXIT_SUCCESS);
+  }
+  else
+  {
+    puts("in parent");
+    printf("\tparent pid = %d\n", getpid());
+    printf("\tparent ppid = %d\n", getppid());
+  }
+  exit(EXIT_SUCCESS);
+}</code></pre>
+<p style="font-size:12px;color:var(--ink-soft);margin:6px 0 2px">Salida típica</p>
+<pre class="salida"><code>in parent
+	parent pid = 12345
+	parent ppid = 6789
+in child
+	child pid = 12346
+	child ppid = 12345</code></pre>
+</details>
+<details class="section-block sec" id="errores-del-sistema-errno-strerror-perro"><summary><span class="stitle">Errores del sistema (errno, strerror, perror)</span></summary>
+<p style="margin-top:14px"><strong><a href="files/prof-tema1/programa03_codigos_sistema.c" download style="color:var(--indigo)">programa03_codigos_sistema.c</a></strong> — Recorre <code>strerror(0..150)</code> e imprime el mensaje de cada código de error de Linux. Es la versión &laquo;en C&raquo; de la tabla de los 131 códigos.</p>
+<pre><code>/* Manejo de codigos de sistema */
+
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main()
+{
+  int i;
+
+  for(i=0; i &lt;= 150; i++)
+  {
+    printf( "%d: %s\n", i , strerror( i ) );
+  }
+  return 0;
+}</code></pre>
+<p style="font-size:12px;color:var(--ink-soft);margin:6px 0 2px">Salida típica</p>
+<pre class="salida"><code>0: Success
+1: Operation not permitted
+2: No such file or directory
+3: No such process
+4: Interrupted system call
+...
+11: Resource temporarily unavailable
+12: Cannot allocate memory
+13: Permission denied
+...
+(el mensaje de los códigos sin definir aparece como "Unknown error N")</code></pre>
+<p style="margin-top:14px"><strong><a href="files/prof-tema1/programa06_error.c" download style="color:var(--indigo)">programa06_error.c</a></strong> — Provoca un error real: <code>rename("antes.txt","despues.txt")</code> cuando <code>antes.txt</code> no existe. Muestra <code>errno</code>, <code>strerror(errno)</code>, <code>perror()</code> y un <code>switch</code> que traduce el tipo de error.</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;errno.h&gt;
+#include &lt;string.h&gt;
+
+int main()
+{
+  int result;
+
+  result = rename("antes.txt","despues.txt");
+  if( result != 0 )
+  {
+    printf("Error al renombrar el archivo\n");
+    printf("errno:%d\n", errno);
+    printf( "strerror(errno):%s\n", strerror( errno ) );
+    perror( "el mensaje de error es" );
+    switch(errno)
+    {
+     case EPERM:
+                printf("Operation not permitted\n");
+                break;
+     case ENOENT:
+                printf("File not found\n");
+                break;
+     case EACCES:
+                printf("Permission denied\n");
+                break;
+     case ENAMETOOLONG:
+                printf("Filename is too long\n");
+                break;
+     default:
+                printf("Otro error\n");
+    }
+    return 1;
+  }
+  printf("Archivo renombrado\n");
+  return 0;
+}</code></pre>
+<p style="font-size:12px;color:var(--ink-soft);margin:6px 0 2px">Salida típica</p>
+<pre class="salida"><code>Error al renombrar el archivo
+errno:2
+strerror(errno):No such file or directory
+el mensaje de error es: No such file or directory
+File not found</code></pre>
+<p style="margin-top:14px"><strong><a href="files/prof-tema1/programa07_error.c" download style="color:var(--indigo)">programa07_error.c</a></strong> — Versión mínima del anterior: solo <code>errno</code> + <code>perror()</code>. Sirve para ver que <code>perror("texto")</code> imprime <code>texto: &lt;mensaje del errno actual&gt;</code>.</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;errno.h&gt;
+
+// Esta version es parecida a programa06_error
+// la diferencia es que esta version 
+// llama a la funcion perror( string )
+// observen la linea de perror( "El error es" )
+// y que imprime en pantalla
+int main()
+{
+  int result;
+
+  result = rename("antes.txt","despues.txt");
+  if( result != 0 )
+  {
+    printf("errno:%d\n", errno);
+    perror( "El error es" );
+    return 1;
+  }
+  printf("Archivo renombrado");
+  return 0;
+}</code></pre>
+<p style="font-size:12px;color:var(--ink-soft);margin:6px 0 2px">Salida típica</p>
+<pre class="salida"><code>errno:2
+El error es: No such file or directory</code></pre>
+<p style="margin-top:14px"><strong><a href="files/prof-tema1/programa09" download style="color:var(--indigo)">programa09</a></strong> — <strong>No es C, es un script de shell.</strong> Lista las macros de error (<code>EPERM</code>, <code>ENOENT</code>, …) con su número, leyéndolas de <code>/usr/include/asm-generic/errno*.h</code>. Solo funciona en Linux.</p>
+<pre><code>grep -hPo '#define\s+(E[A-Z0-9_]+)\s+(\d+)'   /usr/include/asm-generic/errno-base.h /usr/include/asm-generic/errno.h   | awk '{printf "%-20s %s\n", $2, $3}' | sort -n -k2</code></pre>
+<p style="font-size:12px;color:var(--ink-soft);margin:6px 0 2px">Salida típica</p>
+<pre class="salida"><code>EPERM                1
+ENOENT               2
+ESRCH                3
+EINTR                4
+EIO                  5
+...</code></pre>
+</details>
+<details class="section-block sec" id="familia-de-funciones-exec"><summary><span class="stitle">Familia de funciones exec()</span></summary>
+<p style="margin-top:14px"><strong><a href="files/prof-tema1/programa10_execl.c" download style="color:var(--indigo)">programa10_execl.c</a></strong> — <code>execl(path, arg0, …, NULL)</code>: lista de argumentos y <strong>ruta absoluta</strong>. A propósito llama a <code>/bin/lsa</code> (no existe) para mostrar el caso de error: <code>execl</code> devuelve <code>-1</code>. Si tuviera éxito, el proceso se reemplaza y las líneas siguientes <strong>nunca</strong> se ejecutan.</p>
+<pre><code>#include &lt;unistd.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+
+// Este ejemplo muestra la funcion execl con el comando ls -l /
+int main(void)
+{
+  printf("En el proceso inicial, antes de llamar a execl\n");
+  // como es execl entonces es una lista
+  // la sintaxis es:
+  // int execl (char *path, char *arg0,... char *argn, (char *)0);
+  // path es la ruta incluyendo el nombre del comando/ejecutable
+  // En C el nombre del comando/ejecutable es el argumento 0
+  // por eso se repite
+  // con NULL se indica que se llego al final de la lista de argumentos
+  // Si execl falla devuelve -1 y entra al if por lo que termina
+  // con exit(EXIT_FAILURE)
+  if( execl("/bin/lsa", "/bin/lsa", "-l", "/", NULL) == -1)
+  {
+    printf("execl genero error y devolvio -1\n");
+    perror("execl");
+    exit(EXIT_FAILURE);
+  }
+  // Por lo tanto, sea exito o error, las sig 2 sentencias
+  // JAMAS se ejecutan
+  printf("Si execl es exito o error, esto no se imprime\n");
+  exit(EXIT_SUCCESS);
+}</code></pre>
+<p style="font-size:12px;color:var(--ink-soft);margin:6px 0 2px">Salida típica</p>
+<pre class="salida"><code>En el proceso inicial, antes de llamar a execl
+execl genero error y devolvio -1
+execl: No such file or directory</code></pre>
+<p style="margin-top:14px"><strong><a href="files/prof-tema1/programa11_execv.c" download style="color:var(--indigo)">programa11_execv.c</a></strong> — <code>execv(path, argv[])</code>: igual que <code>execl</code> pero los argumentos van en un <strong>arreglo</strong>. Aquí sí usa <code>/bin/ls</code>, así que reemplaza el proceso y muestra el listado; la última línea no se imprime.</p>
+<pre><code>#include &lt;unistd.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+
+// Este ejemplo muestra la funcion execv con el comando ls -l /
+int main(void)
+{
+  printf("En el proceso inicial, antes de llamar a execv\n");
+  // como es execv entonces es un vector/arreglo
+  // el cual debe declararse previo a la llamada a execv
+  // la sintaxis es:
+  // int execv (char *path, char *argv[ ]);
+  // path es la ruta incluyendo el nombre del comando/ejecutable
+  // En C el nombre del comando/ejecutable es el argumento 0
+  // por eso se repite
+  // con NULL se indica que se llego al final del vector de argumentos
+  // Si execv falla devuelve -1 y entra al if por lo que termina
+  // con exit(EXIT_FAILURE)
+  char *args[]={"/bin/ls","-l","/",NULL};
+  if( execv("/bin/ls", args) == -1)
+  {
+    printf("execv genero error y devolvio -1\n");
+    perror("execv");
+    exit(EXIT_FAILURE);
+  }
+  // Por lo tanto, sea exito o error, las sig 2 sentencias
+  // JAMAS se ejecutan
+  printf("Si execv es exito o error, esto no se imprime\n");
+  exit(EXIT_SUCCESS);
+}</code></pre>
+<p style="font-size:12px;color:var(--ink-soft);margin:6px 0 2px">Salida típica</p>
+<pre class="salida"><code>En el proceso inicial, antes de llamar a execv
+&lt;listado del directorio raíz&gt;</code></pre>
+<p style="margin-top:14px"><strong><a href="files/prof-tema1/programa18_execlp.c" download style="color:var(--indigo)">programa18_execlp.c</a></strong> — <code>execlp(file, …)</code>: como <code>execl</code> pero recibe el <strong>nombre</strong> del comando (<code>ls</code>, no <code>/bin/ls</code>) y lo busca en <code>$PATH</code> — de ahí la &laquo;p&raquo;.</p>
+<pre><code>#include &lt;unistd.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+
+// Este ejemplo muestra la funcion execlp con el comando ls -l /
+int main(void)
+{
+  // como es execlp entonces es una lista
+  // la sintaxis es:
+  // int execlp (char *file, char *arg0,... char *argn, (char *)0);
+  // file es el nombre del comando/ejecutable sin ruta absoluta
+  // porque toma el directorio de la variable PATH, de ahi la "p" de execlp
+  // En C el nombre del comando/ejecutable es el argumento 0
+  // por eso se repite
+  // con NULL se indica que se llego al final de la lista de argumentos
+  // OBSERVEN QUE execlp() NO NECESITA LA RUTA ABSOLUTA DEL COMANDO O EJECUTABLE
+  // SOLO PONEMOS "ls" NO ES NECESARIO PONER "/bin/ls"
+  if( execlp("ls", "ls", "-l", "/", NULL) == -1)
+  {
+    printf("execlp genero error y devolvio -1\n");
+    perror("execlp");
+    exit(EXIT_FAILURE);
+  }
+  printf("Si execlp es exitoso, esto no se imprime\n");
+  exit(EXIT_SUCCESS);
+}</code></pre>
+<p style="font-size:12px;color:var(--ink-soft);margin:6px 0 2px">Salida típica</p>
+<pre class="salida"><code>&lt;listado del directorio raíz&gt;</code></pre>
+<p style="margin-top:14px"><strong><a href="files/prof-tema1/programa19_execvp.c" download style="color:var(--indigo)">programa19_execvp.c</a></strong> — <code>execvp(file, argv[])</code>: versión con arreglo de argumentos de <code>execlp</code>. Mismo resultado.</p>
+<pre><code>#include &lt;unistd.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+
+// Este ejemplo muestra la funcion execvp con el comando ls -l /
+int main(void)
+{
+  // como es execvp entonces es un vector/arreglo
+  // el cual debe declararse previo a la llamada a execvp
+  // la sintaxis es:
+  // int execvp (char *file, char *argv[ ]);
+  // file es el nombre del comando/ejecutable, sin ruta
+  // ya que la ruta la toma de la variable PATH, de ahi la "p" en el nombre
+  // En C el nombre del comando/ejecutable es el argumento 0
+  // por eso se repite
+  // con NULL se indica que se llego al final del vector de argumentos
+  // OBSERVEN QUE execvp() NO NECESITA LA RUTA ABSOLUTA DEL COMANDO O EJECUTABLE
+  // SOLO PONEMOS "ls" NO ES NECESARIO PONER "/bin/ls"
+  char *args[]={"ls","-l","/",NULL};
+  if( execvp("ls", args) == -1)
+  {
+    printf("execvp genero error y devolvio -1\n");
+    perror("execvp");
+    exit(EXIT_FAILURE);
+  }
+  printf("Si execvp es exitoso, esto no se imprime\n");
+  exit(EXIT_SUCCESS);
+}</code></pre>
+<p style="font-size:12px;color:var(--ink-soft);margin:6px 0 2px">Salida típica</p>
+<pre class="salida"><code>&lt;listado del directorio raíz&gt;</code></pre>
+<p style="margin-top:14px"><strong><a href="files/prof-tema1/programa12_getenv_user1.c" download style="color:var(--indigo)">programa12_getenv_user1.c</a></strong> — Programa &laquo;hijo&raquo; que invocan los ejemplos de <code>exec</code>: imprime su PID y el valor de la variable de entorno <code>USER</code> con <code>getenv</code>.</p>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+
+int main(void)
+{
+  printf( "Entrando al programa llamado por la familia exec, mi pid es %d\n", getpid() );
+  printf( "el valor de la variable de entorno USER es: %s\n", getenv("USER") );
+  return 0;
+}</code></pre>
+<p style="font-size:12px;color:var(--ink-soft);margin:6px 0 2px">Salida típica</p>
+<pre class="salida"><code>Entrando al programa llamado por la familia exec, mi pid es 12345
+el valor de la variable de entorno USER es: jose</code></pre>
+<p style="margin-top:14px"><strong><a href="files/prof-tema1/programa13_getenv_user2.c" download style="color:var(--indigo)">programa13_getenv_user2.c</a></strong> — Igual, pero también lee <code>MI_VARIABLE</code>. Si no está definida, <code>getenv</code> devuelve <code>NULL</code> y se imprime <code>(null)</code>.</p>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+
+int main(void)
+{
+  printf( "Entrando al programa llamado por la familia exec, mi pid es %d\n", getpid() );
+  printf( "el valor de la variable de entorno USER es: %s\n", getenv("USER") );
+  printf( "el valor de la variable de entorno MI_VARIABLE es: %s\n", getenv("MI_VARIABLE") );
+  return 0;
+}</code></pre>
+<p style="font-size:12px;color:var(--ink-soft);margin:6px 0 2px">Salida típica</p>
+<pre class="salida"><code>Entrando al programa llamado por la familia exec, mi pid es 12345
+el valor de la variable de entorno USER es: jose
+el valor de la variable de entorno MI_VARIABLE es: acs</code></pre>
+<p style="margin-top:14px"><strong><a href="files/prof-tema1/programa14_execle1.c" download style="color:var(--indigo)">programa14_execle1.c</a></strong> — <code>execle(path, …, NULL, envp[])</code>: lista de argumentos <strong>más un entorno propio</strong> (<code>envp</code>) que solo vale para el programa ejecutado. El <code>getenv("USER")</code> de <em>antes</em> del <code>execle</code> todavía muestra tu USER real.</p>
+<pre><code>#include &lt;unistd.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+
+// Este ejemplo muestra la funcion execle con el comando ls -l /
+int main(void)
+{
+  printf("En el proceso inicial, antes de llamar a execle\n");
+  // como es execle entonces es una lista 
+  // y ademas puede leer variables de entorno que vienen en un arreglo 
+  // y que solo son validas para la ejecucion del archivo dentro de la funcion execle
+  // la sintaxis es:
+  // int execle(char *path, char *arg0,... char*argn, (char *)0, char *envp[ ]);
+  // path es la ruta incluyendo el nombre del comando/ejecutable
+  // En C el nombre del comando/ejecutable es el argumento 0
+  // por eso se repite
+  // con NULL se indica que se llego al final de la lista de argumentos
+  char *variables_entorno[] = { "PATH=/bin:/usr/bin", "USER=jose", NULL };
+  printf( "el valor de la variable de entorno USER es: %s\n", getenv("USER") );
+  if( execle("/bin/ls", "/bin/ls", "-l", "/", NULL, variables_entorno) == -1)
+  {
+    printf("execle genero error y devolvio -1\n");
+    perror("execle");
+    exit(EXIT_FAILURE);
+  }
+  // Por lo tanto, sea exito o error, las sig 2 sentencias
+  // JAMAS se ejecutan
+  printf("Si execle es exito o error, esto no se imprime\n");
+  exit(EXIT_SUCCESS);
+}</code></pre>
+<p style="font-size:12px;color:var(--ink-soft);margin:6px 0 2px">Salida típica</p>
+<pre class="salida"><code>En el proceso inicial, antes de llamar a execle
+el valor de la variable de entorno USER es: &lt;tu-usuario&gt;
+&lt;listado del directorio raíz, con PATH y USER personalizados solo para ese ls&gt;</code></pre>
+<p style="margin-top:14px"><strong><a href="files/prof-tema1/programa15_execle2.c" download style="color:var(--indigo)">programa15_execle2.c</a></strong> — <code>execle</code> invocando a <strong>nuestro</strong> <code>programa12</code>; el <code>envp</code> le pasa <code>USER=jose</code> solo para esa ejecución. El PID <strong>no cambia</strong>: <code>exec</code> reemplaza el programa, no crea proceso nuevo.</p>
+<pre><code>#include &lt;unistd.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+
+// Este ejemplo muestra la funcion execle
+// invocando a un programa nuestro getenv_user
+// para leer la variable de entorno USER
+int main(void)
+{
+  printf("En el proceso inicial pid=%d, antes de llamar a execle\n", getpid() );
+  // como es execle entonces es una lista 
+  // y ademas puede leer variables de entorno que vienen en un arreglo 
+  // y que solo son validas para esta ejecucion
+  // la sintaxis es:
+  // int execle(char *path, char *arg0,... char*argn, (char *)0, char *envp[ ]);
+  // path es la ruta incluyendo el nombre del comando/ejecutable
+  // En C el nombre del comando/ejecutable es el argumento 0
+  // por eso se repite
+  // con NULL se indica que se llego al final de la lista de argumentos
+  char *variables_entorno[] = { "PATH=/bin:/usr/bin", "USER=jose", NULL };
+  printf( "el valor de la variable de entorno USER es: %s\n", getenv("USER") );
+  printf( "ahora ejecutando ./programa12_getenv_user1, el valor de la variable de entorno USER va a cambiar solo para esta ejecucion\n" );
+  if( execle("./programa12_getenv_user1", "./programa12_getenv_user1", NULL, variables_entorno) == -1)
+  {
+    printf("execle genero error y devolvio -1\n");
+    perror("execle");
+    exit(EXIT_FAILURE);
+  }
+  // Por lo tanto, sea exito o error, las sig 2 sentencias
+  // JAMAS se ejecutan
+  printf("Si execle es exito o error, esto no se imprime\n");
+  exit(EXIT_SUCCESS);
+}</code></pre>
+<p style="font-size:12px;color:var(--ink-soft);margin:6px 0 2px">Salida típica</p>
+<pre class="salida"><code>En el proceso inicial pid=12345, antes de llamar a execle
+el valor de la variable de entorno USER es: &lt;tu-usuario&gt;
+ahora ejecutando ./programa12_getenv_user1 ...
+Entrando al programa llamado por la familia exec, mi pid es 12345
+el valor de la variable de entorno USER es: jose</code></pre>
+<p style="margin-top:14px"><strong><a href="files/prof-tema1/programa16_execle3.c" download style="color:var(--indigo)">programa16_execle3.c</a></strong> — Igual que el anterior con dos variables (<code>USER</code>, <code>MI_VARIABLE</code>) e invocando <code>programa13</code>.</p>
+<pre><code>#include &lt;unistd.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+
+// Este ejemplo muestra la funcion execle
+// invocando a un programa nuestro getenv_user
+// para leer la variable de entorno USER
+int main(void)
+{
+  printf("En el proceso inicial pid=%d, antes de llamar a execle\n", getpid() );
+  // como es execle entonces es una lista 
+  // y ademas puede leer variables de entorno que vienen en un arreglo 
+  // y que solo son validas para esta ejecucion
+  // la sintaxis es:
+  // int execle(char *path, char *arg0,... char*argn, (char *)0, char *envp[ ]);
+  // path es la ruta incluyendo el nombre del comando/ejecutable
+  // En C el nombre del comando/ejecutable es el argumento 0
+  // por eso se repite
+  // con NULL se indica que se llego al final de la lista de argumentos
+  char *variables_entorno[] = { "PATH=/bin:/usr/bin", "USER=jose", "MI_VARIABLE=acs", NULL };
+  printf( "el valor de la variable de entorno USER es: %s\n", getenv("USER") );
+  printf( "el valor de la variable de entorno MI_VARIABLE es: %s\n", getenv("MI_VARIABLE") );
+  printf( "ahora ejecutando ./programa13_getenv_user2, los valores de las variables de entorno USER y MI_VARIABLE van a cambiar solo para esta ejecucion\n" );
+  if( execle("./programa13_getenv_user2", "./programa13_getenv_user2", NULL, variables_entorno) == -1)
+  {
+    printf("execle genero error y devolvio -1\n");
+    perror("execle");
+    exit(EXIT_FAILURE);
+  }
+  // Por lo tanto, sea exito o error, las sig 2 sentencias
+  // JAMAS se ejecutan
+  printf("Si execle es exito o error, esto no se imprime\n");
+  exit(EXIT_SUCCESS);
+}</code></pre>
+<p style="font-size:12px;color:var(--ink-soft);margin:6px 0 2px">Salida típica</p>
+<pre class="salida"><code>En el proceso inicial pid=12345, antes de llamar a execle
+el valor de la variable de entorno USER es: &lt;tu-usuario&gt;
+el valor de la variable de entorno MI_VARIABLE es: (null)
+ahora ejecutando ./programa13_getenv_user2 ...
+Entrando al programa llamado por la familia exec, mi pid es 12345
+el valor de la variable de entorno USER es: jose
+el valor de la variable de entorno MI_VARIABLE es: acs</code></pre>
+<p style="margin-top:14px"><strong><a href="files/prof-tema1/programa17_execve1.c" download style="color:var(--indigo)">programa17_execve1.c</a></strong> — <code>execve(path, argv[], envp[])</code>: equivale a <code>execle</code> pero <strong>todo</strong> en arreglos (argumentos y entorno). Es la llamada &laquo;base&raquo; del sistema; las demás <code>exec*</code> son envoltorios de ésta.</p>
+<pre><code>#include &lt;unistd.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+
+// Este ejemplo muestra la funcion execve
+// invocando a un programa nuestro getenv_user
+// para leer la variable de entorno USER
+int main(void)
+{
+  printf("En el proceso inicial pid=%d, antes de llamar a execve\n", getpid() );
+  // como es execve entonces es un vector/arreglo 
+  // y ademas puede leer variables de entorno que vienen en un arreglo 
+  // y que solo son validas para la ejecucion del ejecutable dentro de la funcion execve
+  // la sintaxis es:
+  // int execve(char *path, char *argv[ ], char *envp[ ]);
+  // path es la ruta incluyendo el nombre del comando/ejecutable
+  // En C el nombre del comando/ejecutable es el argumento 0
+  // por eso se repite
+  // con NULL se indica que se llego al final del vector/arreglo
+  char * args[]={"./programa13_getenv_user2", NULL};
+  char *variables_entorno[] = { "PATH=/bin:/usr/bin", "USER=jose", "MI_VARIABLE=acs", NULL };
+  printf( "el valor de la variable de entorno USER es: %s\n", getenv("USER") );
+  printf( "el valor de la variable de entorno MI_VARIABLE es: %s\n", getenv("MI_VARIABLE") );
+  printf( "ahora ejecutando ./programa13_getenv_user2, los valores de las variables de entorno USER y MI_VARIABLE van a cambiar solo para esta ejecucion\n" );
+  if( execve("./programa13_getenv_user2", args, variables_entorno) == -1)
+  {
+    printf("execve genero error y devolvio -1\n");
+    perror("execve");
+    exit(EXIT_FAILURE);
+  }
+  // Por lo tanto, sea exito o error, las sig 2 sentencias
+  // JAMAS se ejecutan
+  printf("Si execve es exito o error, esto no se imprime\n");
+  exit(EXIT_SUCCESS);
+}</code></pre>
+<p style="font-size:12px;color:var(--ink-soft);margin:6px 0 2px">Salida típica</p>
+<pre class="salida"><code>En el proceso inicial pid=12345, antes de llamar a execve
+el valor de la variable de entorno USER es: &lt;tu-usuario&gt;
+el valor de la variable de entorno MI_VARIABLE es: (null)
+ahora ejecutando ./programa13_getenv_user2 ...
+Entrando al programa llamado por la familia exec, mi pid es 12345
+el valor de la variable de entorno USER es: jose
+el valor de la variable de entorno MI_VARIABLE es: acs</code></pre>
+<p style="margin-top:14px"><strong><a href="files/prof-tema1/programa20_myecho.c" download style="color:var(--indigo)">programa20_myecho.c</a></strong> — Programa auxiliar: imprime <code>argv[0..argc-1]</code>, uno por línea. Sirve para ver exactamente qué argumentos recibe un programa lanzado con <code>exec</code>.</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(int argc, char *argv[])
+{
+  int j;
+  for( j=0; j &lt; argc; j++ )
+  {
+    printf("argv[%d]: %s\n", j, argv[j]);
+  }
+  exit( EXIT_SUCCESS );
+}</code></pre>
+<p style="font-size:12px;color:var(--ink-soft);margin:6px 0 2px">Salida típica</p>
+<pre class="salida"><code>$ ./programa20_myecho hola mundo
+argv[0]: ./programa20_myecho
+argv[1]: hola
+argv[2]: mundo</code></pre>
+<p style="margin-top:14px"><strong><a href="files/prof-tema1/programa21_execve.c" download style="color:var(--indigo)">programa21_execve.c</a></strong> — Recibe un ejecutable en <code>argv[1]</code> y lo lanza con <code>execve</code>, pasándole <code>newargv</code> (con <code>newargv[0] = argv[1]</code>) y entorno <code>NULL</code>. <strong>Ejercicio:</strong> explicar qué hace <code>newargv[0] = argv[1]</code> y modificar el bloque final para que, si <code>execve</code> falla, el <code>printf</code> no se ejecute.</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+
+int main(int argc, char *argv[])
+{
+  char *newargv[] = { NULL, "hola", "mundo", "buen", "dia",  NULL };
+
+  if( argc != 2 )
+  {
+    fprintf( stderr, "La sintaxis es: %s &lt;archivo-a-ejecutar&gt;\n", argv[0] );
+    exit( EXIT_FAILURE );
+  }
+
+  // ESTA SENTENCIA ES MUY IMPORTANTE!
+  // QUE HACE ESTA SENTENCIA? 
+  newargv[0] = argv[1];
+
+  execve( argv[1], newargv, NULL );
+  
+  // AUNQUE LA SIG SENTENCIA DICE QUE NO SE EJECUTA,
+  // ASI COMO ESTA EL CODIGO, SI PODRIA EJECUTARSE, SI EL execve FALLA
+  // MODIFICA ESTE BLOQUE PARA QUE AUNQUE FALLE LA LLAMADA A execve
+  // LA SIGUIENTE SENTENCIA NO SE EJECUTE
+  printf("Esta sentencia no se ejecuta\n");
+  perror("execve");
+  exit( EXIT_FAILURE );
+  
+}</code></pre>
+<p style="font-size:12px;color:var(--ink-soft);margin:6px 0 2px">Salida típica</p>
+<pre class="salida"><code>$ ./programa21_execve ./programa20_myecho
+argv[0]: ./programa20_myecho
+argv[1]: hola
+argv[2]: mundo
+argv[3]: buen
+argv[4]: dia</code></pre>
+</details>
+<details class="section-block sec" id="patron-fork-exec"><summary><span class="stitle">Patrón fork() + exec()</span></summary>
+<p style="margin-top:14px"><strong><a href="files/prof-tema1/programa22_fork-exec.c" download style="color:var(--indigo)">programa22_fork-exec.c</a></strong> — El patrón completo con trazas: <code>spawn()</code> hace <code>fork()</code>; el <strong>hijo</strong> llama <code>execvp("./programa01_print-pid")</code> (se reemplaza), el <strong>padre</strong> regresa de <code>spawn</code> y sigue. El orden exacto de las líneas varía.</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;unistd.h&gt;
+
+int spawn (char* program, char** arg_list)
+{
+ pid_t child_pid;
+ printf ("Voy a llamar a fork() para crear un hijo\n");
+ child_pid = fork ();
+ printf ("Este printf sale duplicado, fork() me devolvio: %d\n", child_pid);
+ if (child_pid != 0)
+  return child_pid;
+ else
+ {
+  printf( "Soy el proceso hijo, PID=%d y PPID=%d\n", getpid(), getppid() );
+  // RECUERDEN: Si execvp() se ejecuta exitosamente
+  // el proceso "invocador" termina en ese momento,
+  // pero termina con exito
+  printf ("Hasta aqui llego! Voy a llamar a exec(...) para ejecutar programa01_print-pid\n");
+  execvp (program, arg_list);
+  printf ("ocurrio un error al ejecutar execvp(...)\n");
+  return 1; // termina con error
+ }
+}
+
+int main ()
+{
+  char* arg_list[] = { "./programa01_print-pid", NULL };
+
+  printf( "Soy el proceso padre, PID=%d y PPID=%d\n", getpid(), getppid() );
+  printf( "Voy a la funcion spawn(...)\n" );
+  spawn ("./programa01_print-pid", arg_list);
+  printf ("Termina el proceso padre\n");
+  return 0; // Termina con exito
+}</code></pre>
+<p style="font-size:12px;color:var(--ink-soft);margin:6px 0 2px">Salida típica</p>
+<pre class="salida"><code>Soy el proceso padre, PID=12345 y PPID=6789
+Voy a la funcion spawn(...)
+Voy a llamar a fork() para crear un hijo
+Este printf sale duplicado, fork() me devolvio: 12346
+Termina el proceso padre
+Este printf sale duplicado, fork() me devolvio: 0
+Soy el proceso hijo, PID=12346 y PPID=12345
+Hasta aqui llego! Voy a llamar a exec(...) para ejecutar programa01_print-pid
+El process id es 12346
+El parent process id es 12345</code></pre>
+<p style="margin-top:14px"><strong><a href="files/prof-tema1/programa23_fork-exec.c" download style="color:var(--indigo)">programa23_fork-exec.c</a></strong> — Versión limpia del patrón (sin trazas): el hijo ejecuta <code>ls -l /</code>, el padre imprime <code>Termina el proceso padre</code>. El diagrama <em>programa23_fork-exec.png</em> ilustra este flujo.</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;unistd.h&gt;
+
+int spawn (char* program, char** arg_list)
+{
+ pid_t child_pid;
+ child_pid = fork ();
+ if (child_pid != 0)
+  return child_pid;
+ else
+ {
+  // RECUERDEN: Si execvp() se ejecuta exitosamente
+  // el proceso "parent" termina en ese momento,
+  // pero termina con exito
+  execvp (program, arg_list);
+  printf ("ocurrio un error al ejecutar execvp(...)\n");
+  // alternativa al printf:
+  // fprintf (stderr, "ocurrio un error al ejecutar execvp(...)\n");
+  return 1; // termina con error
+ }
+}
+
+int main ()
+{
+  char* arg_list[] = {
+   "ls",
+   "-l",
+   "/",
+   NULL
+  };
+
+  spawn ("ls", arg_list);
+  printf ("Termina el proceso padre\n");
+  return 0; // Termina con exito
+}</code></pre>
+<p style="font-size:12px;color:var(--ink-soft);margin:6px 0 2px">Salida típica</p>
+<pre class="salida"><code>Termina el proceso padre
+&lt;listado del directorio raíz&gt;
+
+(o el listado primero y luego "Termina el proceso padre": el orden no está garantizado)</code></pre>
+</details>
+<details class="section-block sec" id="identificadores-del-proceso"><summary><span class="stitle">Identificadores del proceso</span></summary>
+<p style="margin-top:14px"><strong><a href="files/prof-tema1/programa01_print-pid.c" download style="color:var(--indigo)">programa01_print-pid.c</a></strong> — Imprime el PID del proceso (<code>getpid</code>) y el PID de su padre (<code>getppid</code>).</p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;unistd.h&gt;
+
+int main()
+{
+  printf("El process id es %d\n", getpid());
+  printf("El parent process id es %d\n", getppid());
+  return 0;
+}</code></pre>
+<p style="font-size:12px;color:var(--ink-soft);margin:6px 0 2px">Salida típica</p>
+<pre class="salida"><code>El process id es 12345
+El parent process id es 6789</code></pre>
+<p style="margin-top:14px"><strong><a href="files/prof-tema1/programa02_ids.c" download style="color:var(--indigo)">programa02_ids.c</a></strong> — Imprime los IDs <strong>reales</strong> y <strong>efectivos</strong> de usuario y grupo. En un ejecutable con el bit <code>setuid</code>, el UID efectivo sería el del dueño del archivo, no el tuyo.</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+
+int main()
+{
+ printf("Real user ID: %d\n", getuid());
+ printf("Effective user ID: %d\n", geteuid());
+ printf("Real group ID: %d\n", getgid());
+ printf("Effective group ID: %d\n", getegid());
+ return 0;
+}</code></pre>
+<p style="font-size:12px;color:var(--ink-soft);margin:6px 0 2px">Salida típica</p>
+<pre class="salida"><code>Real user ID: 1000
+Effective user ID: 1000
+Real group ID: 1000
+Effective group ID: 1000</code></pre>
+</details>
+<details class="section-block sec" id="diagramas-tema-1"><summary><span class="stitle">Diagramas (Tema 1)</span></summary>
+<figure style="margin:16px 0"><img src="files/prof-tema1/1_funcion_system.png" alt="system() — el shell hijo ejecuta el comando y devuelve su estado al proceso que llamó." style="max-width:100%;border-radius:8px;border:1px solid rgba(255,255,255,0.1)"><figcaption style="font-size:12.5px;color:var(--ink-soft);margin-top:6px">system() — el shell hijo ejecuta el comando y devuelve su estado al proceso que llamó.</figcaption></figure>
+<figure style="margin:16px 0"><img src="files/prof-tema1/2_funcion_fork_1.png" alt="fork() — se crea un proceso hijo, copia del padre; la ejecución continúa en ambos desde el punto de la llamada." style="max-width:100%;border-radius:8px;border:1px solid rgba(255,255,255,0.1)"><figcaption style="font-size:12.5px;color:var(--ink-soft);margin-top:6px">fork() — se crea un proceso hijo, copia del padre; la ejecución continúa en ambos desde el punto de la llamada.</figcaption></figure>
+<figure style="margin:16px 0"><img src="files/prof-tema1/2_funcion_fork_2.png" alt="fork() — qué devuelve la llamada a cada proceso: 0 al hijo, el PID del hijo al padre, -1 si falla." style="max-width:100%;border-radius:8px;border:1px solid rgba(255,255,255,0.1)"><figcaption style="font-size:12.5px;color:var(--ink-soft);margin-top:6px">fork() — qué devuelve la llamada a cada proceso: 0 al hijo, el PID del hijo al padre, -1 si falla.</figcaption></figure>
+<figure style="margin:16px 0"><img src="files/prof-tema1/3_funcion_exec.png" alt="exec() — reemplaza la imagen del proceso actual por otro programa; no crea un proceso nuevo." style="max-width:100%;border-radius:8px;border:1px solid rgba(255,255,255,0.1)"><figcaption style="font-size:12.5px;color:var(--ink-soft);margin-top:6px">exec() — reemplaza la imagen del proceso actual por otro programa; no crea un proceso nuevo.</figcaption></figure>
+<figure style="margin:16px 0"><img src="files/prof-tema1/programa23_fork-exec.png" alt="fork() + exec() — flujo combinado: el padre hace fork, el hijo se reemplaza con exec, el padre continúa." style="max-width:100%;border-radius:8px;border:1px solid rgba(255,255,255,0.1)"><figcaption style="font-size:12.5px;color:var(--ink-soft);margin-top:6px">fork() + exec() — flujo combinado: el padre hace fork, el hijo se reemplaza con exec, el padre continúa.</figcaption></figure>
+</details>
+<details class="section-block sec" id="referencias-del-profesor-tema-1"><summary><span class="stitle">Referencias del profesor (Tema 1)</span></summary><div class="links" style="margin-top:0"><div class="link-item"><span class="label">Familia exec — man</span><a href="https://manpages.ubuntu.com/manpages/bionic/es/man3/execl.3.html" target="_blank" rel="noopener">https://manpages.ubuntu.com/manpages/bionic/es/man3/execl.3.html</a></div><div class="link-item"><span class="label">Procesos en Linux</span><a href="https://www.hpca.ual.es/~vruiz/docencia/cursos/linux/html/node43.html" target="_blank" rel="noopener">https://www.hpca.ual.es/~vruiz/docencia/cursos/linux/html/node43.html</a></div></div></details>
+</div></details>
+
+<details class="section-block tema off" id="tema-2"><summary><span class="stitle">Tema 2 — Creación de socket servidor y cliente</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+
+<details class="section-block tema off" id="tema-3"><summary><span class="stitle">Tema 3 — Servidores y clientes sincronizados</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+
+<details class="section-block tema off" id="tema-4"><summary><span class="stitle">Tema 4 — Sockets broadcasting y multicasting</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+
+<details class="section-block tema off" id="tema-5"><summary><span class="stitle">Tema 5 — Implantación de servidores con criptografía y código seguro</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+
+<details class="section-block tema off" id="tema-6"><summary><span class="stitle">Tema 6 — Herramientas para la comunicación entre servidores</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
 
 </div>
 </body>
