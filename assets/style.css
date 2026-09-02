@@ -260,3 +260,27 @@ details.sec.contexto p, details.sec.contexto li { font-size: 13.5px; color: var(
 span.card.card-off { opacity: 0.5; cursor: default; }
 span.card.card-off:hover { transform: none; }
 span.card .off { color: var(--ink-soft); font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
+
+/* ---- toggle Por tema/Por clase oculto (lógica intacta) ---- */
+.viewswitch { display: none !important; }
+:root[data-view="tema"] .v-clase, :root[data-view="clase"] .v-tema { display: revert; }
+
+/* ---- página única de asignatura: temas como bloques grandes plegables ---- */
+details.tema { margin: 0 0 8px; border-top: 2px solid rgba(255,255,255,0.12); }
+details.tema:first-of-type { border-top: none; }
+details.tema > summary {
+  cursor: pointer; list-style: none;
+  font-family: 'Fraunces', serif; font-size: 19px; font-weight: 600;
+  color: var(--ink); padding: 16px 0 12px; display: flex; align-items: baseline; gap: 10px;
+}
+details.tema > summary::-webkit-details-marker { display: none; }
+details.tema > summary::before {
+  content: '▸'; color: var(--coral); font-size: 14px; flex: none;
+  transition: transform .15s ease;
+}
+details.tema[open] > summary::before { transform: rotate(90deg); }
+details.tema > summary .thrs { font-size: 12px; color: var(--ink-soft); font-family: 'IBM Plex Mono', monospace; font-weight: 400; }
+details.tema.off > summary { color: var(--ink-soft); }
+details.tema.off > summary::before { color: var(--ink-soft); }
+details.tema > .tema-body { padding-left: 4px; }
+@media (max-width: 640px) { details.tema > summary { font-size: 17px; } }
