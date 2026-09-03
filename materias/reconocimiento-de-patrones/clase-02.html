@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 02 — Reconocimiento de Patrones</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Reconocimiento de Patrones</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Clase 02</h2>
+  <p class="prof">Ing. Rubén Omar Azuara Domínguez · 31 ago 2026 · Tema 3 — Selección y reducción de dimensionalidad · métodos Wrapper (Forward / Backward / Exhaustive), métodos embebidos (Lasso, árboles), PCA, cómo elegir K y PCA por SVD.</p>
+</div>
+
+
+<div class="files"><a class="btn" href="#tema-3-lda">▶ próxima: LDA</a></div>
+<div class="encorto"><h4>En corto</h4><ul>
+<li><strong>Selección de características</strong> = quedarse con un subconjunto de las variables originales (no las transforma). <strong>Reducción de dimensionalidad</strong> = <em>proyectar</em> a un espacio nuevo donde las variables ya no representan lo mismo.</li>
+<li><strong>Wrapper</strong> (usan el modelo como caja negra): Forward (arranca vacío, añade), Backward (arranca con todas, quita), Exhaustive (todas las combinaciones, <code>O(2^d)</code>).</li>
+<li><strong>Embebidos</strong> (seleccionan durante el entrenamiento): <strong>Lasso / L1</strong> (penaliza <code>Σ|Wⱼ|</code>; peso → 0 = variable descartada) y <strong>árboles</strong> (importancia por reducción de impureza, normalizada a suma 1, umbral).</li>
+<li><strong>PCA</strong>: proyecta hacia las direcciones de <strong>máxima varianza</strong> (vectores/valores propios de la matriz de covarianza). PC1 = máx. varianza; los componentes son <strong>ortogonales</strong>.</li>
+<li><strong>SVD</strong> (<code>X = UΣVᵀ</code>): forma estable de calcular PCA; <em>V</em> = componentes, valores singulares = <code>√λ</code>.</li>
+</ul></div>
+<div class="examen"><h4>🎯 Para el examen</h4><ul>
+<li><strong>Varianza explicada en SVD:</strong> hay que <strong>elevar al cuadrado</strong> los valores singulares → <code>σᵢ² / Σσⱼ²</code>. Error muy común olvidarlo. (En el método de covarianza los <code>λ</code> se usan directos.)</li>
+<li><strong>Ortogonalidad en PCA:</strong> todos los componentes son estrictamente ortogonales entre sí → no correlacionados, no se obtienen por combinación lineal de los demás (base ortogonal).</li>
+<li>Los métodos wrapper y embebidos <strong>no</strong> requieren discriminación previa de variables — el algoritmo de selección <em>es</em> la discriminación.</li>
+<li>Complejidad de Exhaustive = <code>O(2^d)</code>; inviable con más de ~15–20 características.</li>
+<li>Criterios para elegir K: varianza explicada acumulada · regla del codo · umbral (ej. 90 %) · Kaiser (<code>λ &gt; 1</code>).</li>
+</ul></div>
+
+<details class="section-block sec" id="rdp-wrapper" open><summary><span class="stitle">Métodos Wrapper (de envoltura)</span></summary>
+<p>Usan un algoritmo de aprendizaje como <strong>caja negra</strong> para evaluar iterativamente el rendimiento (exactitud del clasificador) de distintos subconjuntos de variables. El <strong>orden</strong> de las características en la matriz de entrada no importa para el modelo (<code>A+B</code> = <code>B+A</code>).</p>
+<p><strong>Forward Selection (hacia adelante):</strong> iniciar con subconjunto vacío (o con 1 característica; ej. <code>B</code> → 70 %). Añadir una variable a la vez, entrenar y evaluar; consolidar si mejora (<code>B+A</code> mejora; <code>B+A+C</code> → 80 %). Parar cuando añadir empeora (<code>B+A+C+D</code> baja 1 %). Óptimo: <code>{B, A, C}</code>.</p>
+<p><strong>Backward Selection (hacia atrás):</strong> iniciar con <strong>todas</strong> (<code>{A,B,C,D}</code> → 82 %). Quitar una variable a la vez; consolidar la remoción si mejora o mantiene (quitar <code>A</code> → 83 %; quitar <code>D</code> → 84 %). Parar cuando quitar <strong>cualquiera</strong> de las restantes desploma el desempeño (quitar <code>B</code> −24 %, quitar <code>C</code> −14 %). Óptimo: <code>{B, C}</code> con 84 %.</p>
+<p><strong>Exhaustive Feature Selection:</strong> evaluar <strong>todas</strong> las combinaciones (individuales, parejas sin repetir, tríos, todas). Complejidad <code>O(2^d)</code>. <strong>Ventaja:</strong> garantiza el <strong>óptimo global</strong> (<code>{B,C}</code> 84 % &gt; 82 % con las 4). <strong>Desventaja:</strong> un modelo entrenado por combinación → inviable con más de ~15–20 características.</p>
+<table><thead><tr><th>Método</th><th>Cuándo conviene</th><th>Desventaja</th></tr></thead><tbody>
+<tr><td>Forward</td><td>Se espera que <strong>pocas</strong> características sean relevantes; ahorra cómputo</td><td>Una vez añadida, no la puede quitar → conserva redundantes / omite interacciones</td></tr>
+<tr><td>Backward</td><td>Se sospecha que <strong>la mayoría</strong> son relevantes; base sólida, capta interacciones</td><td>Costoso (entrenamientos con todas); inviable con miles de características</td></tr>
+<tr><td>Exhaustive</td><td>Se necesita el <strong>óptimo global</strong></td><td>Solo viable con un clasificador simple (bayesiano &gt; red neuronal)</td></tr>
+</tbody></table></details>
+
+<details class="section-block sec" id="rdp-embebidos"><summary><span class="stitle">Métodos Embebidos</span></summary>
+<p>La selección ocurre <strong>durante</strong> el entrenamiento: el propio modelo tiene un algoritmo de selección intrínseco que asigna pesos / importancias y penaliza o elimina las variables que no aportan.</p>
+<p><strong>Regularización Lasso (norma L1)</strong> — <em>Least Absolute Shrinkage and Selection Operator</em>. Modifica la <strong>función de pérdida</strong> (qué tanto te equivocas: predicción vs. realidad) añadiendo el término <code>Σ |Wⱼ|</code>.</p>
+<ul>
+<li>Cada variable tiene un peso <code>Wⱼ</code>. <code>W</code> alto (15–20) → muy importante. Si <code>W</code> baja (0.5) o llega a <strong>exactamente 0</strong> → el modelo descarta la variable. El algoritmo ajusta los <code>W</code> dinámicamente para optimizar la clasificación.</li>
+</ul>
+<p><strong>Árboles de decisión</strong> — reglas de umbral <code>Xⱼ ≤ t</code> (según se cumpla, el flujo va al nodo hijo izquierdo o derecho).</p>
+<ul>
+<li>En cada nodo se evalúan todas las características y se elige la que da la <strong>mayor reducción de impureza</strong> (Gini o entropía).</li>
+<li>Se calcula la importancia de cada variable, se <strong>normaliza</strong> para que la suma sea 1, y se seleccionan las que superen un <strong>umbral</strong> (ej. &gt; 0.5).</li>
+</ul></details>
+
+<details class="section-block sec" id="rdp-criterios-diseno"><summary><span class="stitle">Criterios de diseño (selección de características)</span></summary>
+<p>No hay regla fija: la elección del método depende de los <strong>recursos de cómputo</strong> y de la naturaleza de los datos. Sin poder de cómputo → usar métodos embebidos o filtrado previo al entrenamiento (wrapper/exhaustive resultan inviables). En la práctica es válido y recomendable <strong>comparar 2 o más métodos</strong> sobre el mismo problema para contrastar resultados y justificar las decisiones de diseño.</p></details>
+
+<details class="section-block sec" id="rdp-reduccion-dim"><summary><span class="stitle">Reducción de dimensionalidad — qué es y por qué</span></summary>
+<p>A diferencia de la selección (conserva intactas las variables originales), la reducción de dimensionalidad <strong>proyecta</strong> los datos a un espacio nuevo de menor dimensión mediante combinaciones matemáticas: las nuevas variables <em>ya no representan lo mismo</em> (ya no son peso, edad o género, sino combinaciones de ellas).</p>
+<p>Importa porque operar con vectores de alta dimensión provoca: mucho más <strong>tiempo de cómputo</strong>, mucho más <strong>almacenamiento</strong>, y sobre todo <strong>degradación del rendimiento</strong> de los modelos (maldición de la dimensionalidad).</p></details>
+
+<details class="section-block sec" id="rdp-pca"><summary><span class="chip chip-examen">examen</span><span class="stitle">PCA — Análisis de Componentes Principales</span></summary>
+<p>Transforma variables posiblemente correlacionadas en <strong>componentes principales</strong> no correlacionados, ordenados por la <strong>varianza que explican</strong>. Asume que la dirección de <strong>máxima varianza</strong> es la más informativa (ahí los patrones de las clases quedan más separados).</p>
+<p><strong>Combinación lineal:</strong> <code>Z = A₁X₁ + A₂X₂ + …</code> — <code>Xᵢ</code> variables originales, <code>Aᵢ</code> coeficientes (escalares), <code>Z</code> variable transformada.</p>
+<p><strong>Vectores y valores propios:</strong> un vector propio <code>v</code> mantiene su dirección al multiplicarlo por la matriz <code>A</code>, solo cambia de magnitud; ese factor es el valor propio <code>λ</code>.</p>
+<pre><code>A v = λ v            (A = matriz de covarianza; v = dirección; λ = varianza en esa dirección)
+Z = W · X           (W = matriz de vectores propios; X = datos originales; Z = proyección)</code></pre>
+<p><strong>Algoritmo (método de la matriz de covarianza):</strong></p>
+<ol>
+<li><strong>Centrar y escalar</strong> los datos: restar la media de cada característica (y opcionalmente dividir entre su desviación estándar). Indispensable para que variables con escalas grandes (salarios de 15 000 a 1 000 000) no dominen sobre las pequeñas (edades de 18 a 65).</li>
+<li><strong>Matriz de covarianza</strong> con <code>X</code> centrada de <code>N×D</code>: <code>Σ = (1/(N−1)) Xᵀ X</code>. Es cuadrada; mide la variabilidad conjunta entre parejas de variables.</li>
+<li><strong>Ecuación característica</strong> <code>det(Σ − λI) = 0</code> (evita la solución trivial) → valores propios <code>λ₁, λ₂, …</code> y vectores propios <code>v₁, v₂, …</code></li>
+<li><strong>Ordenar</strong> los <code>λ</code> de forma descendente por varianza explicada; tomar los primeros <strong>K</strong> vectores propios → matriz <code>W_K</code>. Proyección: <code>X_nuevo = X · W_K</code>, dimensiones <strong>N×K</strong> con <code>K &lt; D</code>.</li>
+</ol>
+<p><strong>PC1</strong> = dirección de máxima varianza. <strong>PC2</strong> = segunda mayor varianza, <strong>estrictamente ortogonal</strong> a PC1. Todos los componentes son ortogonales entre sí (base ortogonal; ninguno se obtiene por combinación lineal de los otros).</p></details>
+
+<details class="section-block sec" id="rdp-pca-ejemplos"><summary><span class="stitle">PCA — ejemplos numéricos (pizarrón)</span></summary>
+<p><strong>Ejemplo 1 (matriz 2×2):</strong></p>
+<pre><code>det(Σ − λI) = 0   →   λ² − 9λ + 8 = 0   →   λ₁ = 8 ,  λ₂ = 1
+
+Para λ₁ = 8:  (Σ − 8I) w = 0
+   primera fila:  −4 w₁ + 2 w₂ = 0   →   2 w₁ = w₂
+   con w₁ = 1  →  w₂ = 2      →   v₁ = [1, 2]ᵀ   (sin normalizar)
+Normalizar:  ‖v₁‖ = √(1² + 2²) = √5   →   v₁ = [ 1/√5 , 2/√5 ]ᵀ</code></pre>
+<p><em>[inaudible: el profesor tropieza y dice "1/√3"; el divisor correcto es √5.]</em></p>
+<p><strong>Ejemplo 2 (otra matriz):</strong></p>
+<pre><code>det(Σ − λI) = 0   →   λ₁ = 5 ,  λ₂ = 2
+   v₁ = [1, 1]ᵀ ,  v₂ = [1, 2]ᵀ     (falta el paso de normalización)</code></pre></details>
+
+<details class="section-block sec" id="rdp-elegir-k"><summary><span class="chip chip-examen">examen</span><span class="stitle">Cómo elegir K (número de componentes)</span></summary>
+<pre><code>varianza explicada (individual) = λᵢ / Σ λⱼ        (la acumulada llega a 1.0 = 100 %)</code></pre>
+<ol>
+<li><strong>Regla del codo (Elbow):</strong> graficar la varianza acumulada por componente; el "codo" es donde la pendiente cambia bruscamente y la curva se aplana. Ej.: 13 componentes, codo en el 5.º → <code>K = 5</code>.</li>
+<li><strong>Umbral de varianza:</strong> fijar de antemano el % a retener (típico 90 %); tomar los componentes acumulativos necesarios (ej. 8 componentes explican el 91 %).</li>
+<li><strong>Criterio de Kaiser:</strong> conservar solo los componentes con <code>λ &gt; 1</code> (aportan más que una sola variable original).</li>
+</ol></details>
+
+<details class="section-block sec" id="rdp-svd"><summary><span class="chip chip-examen">examen</span><span class="stitle">PCA por SVD (Descomposición en Valores Singulares)</span></summary>
+<pre><code>X = U Σ Vᵀ
+   U   = vectores singulares izquierdos
+   Vᵀ  = transpuesta de los vectores singulares derechos
+   Σ   = matriz DIAGONAL con los valores singulares en orden descendente</code></pre>
+<ul>
+<li>Los vectores singulares derechos (<code>V</code>) = las direcciones principales (componentes de PCA). Los valores singulares = <strong>raíz cuadrada</strong> de los valores propios de la matriz de covarianza.</li>
+<li><strong>Algoritmo:</strong> (1) centrar / normalizar <code>X</code> (restar la media); (2) aplicar SVD directo sobre <code>X</code> centrada; (3) obtener <code>Σ</code> y <code>V</code>.</li>
+<li><strong>⚠️ Varianza explicada en SVD:</strong> hay que <strong>elevar al cuadrado</strong> los valores singulares → <code>σᵢ² / Σ σⱼ²</code>. Olvidarlo da resultados erróneos (error muy común en exámenes y en código).</li>
+<li><strong>Ventajas:</strong> estabilidad numérica muy superior; funciona sobre matrices <strong>no cuadradas</strong>; evita calcular <code>Xᵀ X</code> (costoso); eficiente para datasets masivos con <code>N ≫ D</code> o <code>D ≫ N</code>. Es lo que usan la mayoría de las bibliotecas.</li>
+</ul></details>
+
+<details class="section-block sec" id="tema-3-lda"><summary><span class="stitle">Cierre — próxima clase</span></summary>
+<p>Siguiente sesión: <strong>LDA (Análisis Discriminante Lineal)</strong>.</p></details>
+
+<p class="empty" style="margin-top:28px">Estructurado seg&uacute;n el <a href="index.html#tema-3" style="color:var(--indigo)">Tema 3</a> del programa del profesor.</p>
+
+</div>
+</body>
+</html>

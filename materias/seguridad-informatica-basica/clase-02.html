@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 02 — Seguridad Informática Básica</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Seguridad Informática Básica</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 02</h2>
+  <p class="prof">Dra. Cintia Quezada Reyes · 1 sep 2026 · Tema 1 (1.2 Normatividad) · TCSEC / ITSEC / CTCPEC, Common Criteria (ISO 15408), familia ISO 27000, COBIT, NIST, HIPAA — ejercicio del Equipo 4.</p>
+</div>
+
+<details class="section-block sec" id="clase-2-normatividad" open><summary><span class="stitle">Clase 2 — Normatividad de la seguridad (ejercicio del Equipo 4)</span></summary>
+<p>Investigación hecha en clase (1-sep-2026) sobre los principales estándares y criterios de evaluación de seguridad. Toda la información va desglosada en las secciones siguientes; el documento original está en <a class="btn" href="files/Clase-02-Normatividad-Equipo4.pdf" target="_blank">📄 Normatividad — Equipo 4 (PDF)</a>.</p>
+<p><strong>Hilo conductor:</strong> los criterios nacionales <strong>TCSEC</strong> (EE. UU.), <strong>ITSEC</strong> (Europa) y <strong>CTCPEC</strong> (Canadá) se fusionaron en los <strong>Common Criteria / ISO-IEC 15408</strong>. En paralelo, <strong>BS 7799</strong> → <strong>ISO/IEC 17799</strong> → <strong>ISO/IEC 27002</strong>, dentro de la <strong>familia ISO/IEC 27000</strong> (27001 es certificable, 27002 no). Además: <strong>COBIT</strong> (gobierno de TI), <strong>NIST</strong> (SP 800, CSF) y <strong>HIPAA</strong> (sector salud, EE. UU.).</p>
+</details>
+
+<details class="section-block sec" id="norma-tcsec"><summary><span class="stitle">TCSEC — "Orange Book"</span></summary>
+<ul>
+<li><strong>Siglas:</strong> Trusted Computer System Evaluation Criteria (Criterios de Evaluación de Sistemas Informáticos de Confianza).</li>
+<li><strong>Año / lugar:</strong> EE. UU., publicado en agosto de 1983.</li>
+<li><strong>Objetivos:</strong> metodología rigurosa para evaluar la seguridad y confiabilidad de SO comerciales; guía técnica a fabricantes basada en la confidencialidad estricta de los datos; base de clasificación jerárquica para que el gobierno de EE. UU. eligiera sistemas para información clasificada o sensible.</li>
+<li><strong>Características:</strong> enfoque <strong>monolítico</strong> (evalúa el sistema como un bloque cerrado e indivisible, software + hardware); <strong>orientación militar</strong> (prioriza casi solo la confidencialidad; poco peso a integridad y disponibilidad); todo el análisis recae en la <strong>TCB</strong> (Trusted Computing Base): hardware, firmware y software que ejecutan las políticas de seguridad.</li>
+<li><strong>Niveles:</strong> 4 divisiones jerárquicas, A (máxima) a D (nula):
+<ul>
+<li><strong>D</strong> — Protección mínima: no cumple ninguna categoría superior (p. ej. MS-DOS antiguo).</li>
+<li><strong>C1</strong> — Protección discrecional: control de acceso por identidad de usuario o grupo; separación básica usuarios/datos.</li>
+<li><strong>C2</strong> — Acceso discrecional controlado: más granularidad en permisos; obliga <strong>auditorías</strong> (audit trails) y reutilización segura de objetos en memoria.</li>
+<li><strong>B1</strong> — Seguridad etiquetada: primer nivel de seguridad <strong>mandatoria (MAC)</strong>; etiquetar jerárquicamente cada objeto ("Secreto", "Confidencial").</li>
+<li><strong>B2</strong> — Protección estructurada: SO dividido en módulos; mitiga formalmente los <strong>canales encubiertos</strong> (covert channels); gestión separada de perfiles de administración.</li>
+<li><strong>B3</strong> — Dominios de seguridad: control de acceso demostrablemente a prueba de manipulaciones; recuperación estructurada tras fallos generalizados.</li>
+<li><strong>A1</strong> — Protección verificada: mismas funciones que B3 + <strong>verificación formal matemática</strong> del diseño arquitectónico.</li>
+</ul></li>
+<li><strong>Secciones:</strong> Parte I Criterios de Evaluación (las 4 divisiones y subclases); Parte II Lineamientos de Diseño (Monitor de Referencia, dominios de aislamiento); Apéndices técnicos.</li>
+<li><strong>Actualizaciones:</strong> 1983 original; revisión menor en 1985 (código <strong>DoD 5200.28-STD</strong>, versión definitiva).</li>
+<li><strong>Vigencia:</strong> <strong>no vigente</strong>. Cancelado por el DoD de EE. UU. el 24 de octubre de 2002. Sustituido por Common Criteria / ISO/IEC 15408 (por su rigidez comercial y falta de enfoque en redes modernas). Sin sitio web propio.</li>
+</ul></details>
+
+<details class="section-block sec" id="norma-itsec"><summary><span class="stitle">ITSEC (Europa)</span></summary>
+<ul>
+<li><strong>Siglas:</strong> Information Technology Security Evaluation Criteria.</li>
+<li><strong>Año / lugar:</strong> mayo de 1990 (Francia, Alemania, Países Bajos, Reino Unido); versión definitiva <strong>1.2</strong> en junio de 1991 (Comisión de las Comunidades Europeas).</li>
+<li><strong>Objetivos:</strong> marco de evaluación armonizado entre países europeos; evaluar <strong>productos y sistemas completos</strong> (no solo SO como TCSEC); emitir un informe imparcial de si el <strong>TOE</strong> (Target of Evaluation) cumple la meta de seguridad declarada por el fabricante.</li>
+<li><strong>Características:</strong> <strong>separación funcionalidad / aseguramiento</strong> (qué hace el sistema vs. qué tan comprobado está — el TCSEC los ataba); enfoque flexible (el fabricante define sus objetivos en un <strong>Security Target</strong>); alcance más amplio (puede evaluar solo autenticación o integridad, sin confidencialidad).</li>
+<li><strong>Niveles:</strong> 7 niveles de evaluación, <strong>E0 a E6</strong>. E0 = confianza inadecuada / nula; E1 = mínimo útil; E6 = máxima confianza y rigor.</li>
+<li><strong>Secciones:</strong> Security Target (objetivos, amenazas, funciones exigidas); evaluación de <strong>corrección</strong> (revisión de la implementación); evaluación de <strong>efectividad</strong> (pruebas funcionales y de penetración; resistencia "básica", "media" o "alta").</li>
+<li><strong>Actualizaciones:</strong> única revisión formal, versión 1.2 (junio 1991); sin versiones posteriores.</li>
+<li><strong>Vigencia:</strong> <strong>no</strong>. Absorbido junto con TCSEC y CTCPEC en el proyecto que originó Common Criteria / ISO-IEC 15408 (1993–1999). Sin dominio web activo.</li>
+</ul></details>
+
+<details class="section-block sec" id="norma-ctcpec"><summary><span class="stitle">CTCPEC (Canadá)</span></summary>
+<ul>
+<li><strong>Siglas:</strong> Canadian Trusted Computer Product Evaluation Criteria.</li>
+<li><strong>Año / lugar:</strong> ideado en 1988 (fundación del Centro Canadiense de Seguridad de Sistemas); primer borrador abril 1992; versión final y oficial en enero de 1993, Ottawa.</li>
+<li><strong>Objetivos:</strong> garantizar la <strong>tríada CIA completa</strong> (el TCSEC casi solo Confidencialidad; el CTCPEC añade Integridad y Disponibilidad); flexibilidad (cada producto define sus objetivos antes de evaluarse; mercado comercial, no solo militar); separar la evaluación de <strong>Funcionalidades</strong> de Seguridad y de <strong>Garantía</strong> de Seguridad.</li>
+<li><strong>Características:</strong> enfoque <strong>híbrido</strong> (rigidez de TCSEC + flexibilidad de ITSEC); <strong>evaluación del ciclo de vida</strong> (auditar el desarrollo, del diseño al código fuente); análisis dual de caja — <strong>caja blanca</strong> (arquitectura de un producto) y <strong>caja negra</strong> (integración de SO / instalaciones completas).</li>
+<li><strong>Niveles:</strong> 7 niveles de garantía (Assurance), <strong>T-0 a T-6</strong>: T-0 inseguro; T-1 pruebas básicas (garantía informal); T-2 pruebas estructuradas (desarrollo bajo controles documentados); T-3 metódicamente probado y verificado; T-4 diseñado y probado metódicamente (arquitectura modular, aislamiento de fallos); T-5 semiformalmente diseñado y probado (modelos matemáticos / lógicos parciales); T-6 formalmente verificado (pruebas matemáticas de extremo a extremo).</li>
+<li><strong>Secciones:</strong> 4 criterios / servicios de seguridad — <strong>Confidencialidad, Integridad, Disponibilidad y Controlabilidad</strong> (Accountability: identificación, autenticación y auditoría; trazabilidad unívoca).</li>
+<li><strong>Actualizaciones:</strong> v1.0 mayo 1989; v2.0 diciembre 1990; <strong>v3.0 enero 1993</strong>.</li>
+<li><strong>Vigencia:</strong> <strong>no</strong>. En 1996 el CSE de Canadá se unió con EE. UU. y la UE para fusionar TCSEC + ITSEC + CTCPEC → Common Criteria / ISO/IEC 15408. Estado actual de certificaciones en Canadá: <em>Cyber.gc.ca</em>.</li>
+</ul></details>
+
+<details class="section-block sec" id="norma-common-criteria"><summary><span class="chip chip-examen">examen</span><span class="stitle">Common Criteria — ISO/IEC 15408</span></summary>
+<p>Estándar técnico para evaluar la seguridad de productos TIC; es la <strong>unificación</strong> de las normativas internacionales previas en un estándar único y común reconocido a nivel mundial. Proporciona requisitos estándar de funcionalidad de seguridad + medidas de aseguramiento → los productos se evalúan de forma <strong>independiente</strong> contra normas reconocidas → se obtiene una <strong>métrica</strong> de las propiedades de seguridad.</p>
+<p><strong>Proceso de certificación:</strong></p>
+<ol>
+<li>Desarrollar el <strong>Security Target (ST)</strong> — requisitos y especificaciones de seguridad del producto.</li>
+<li>Evaluación por un <strong>laboratorio acreditado</strong> según el ST y el <strong>EAL</strong> elegido.</li>
+<li>Ensayos y revisión de los procesos de diseño y desarrollo y de las características de seguridad.</li>
+<li>Emisión de la certificación por un <strong>organismo certificador</strong>.</li>
+</ol>
+<p><strong>Conceptos clave:</strong></p>
+<ul>
+<li><strong>Enfoque en el producto, no en la empresa:</strong> evalúa hardware, software o sistemas específicos (un SO, un dispositivo criptográfico, un firewall…).</li>
+<li><strong>Perfiles de Protección (PP):</strong> documentos con los requisitos de seguridad para una <em>clase</em> de productos (p. ej. lectores de huellas, tarjetas inteligentes).</li>
+<li><strong>Security Targets (ST):</strong> especificación técnica concreta de un producto comercial que quiere evaluarse.</li>
+<li><strong>Niveles de Garantía EAL 1 a 7:</strong> qué tan profunda y rigurosa fue la evaluación de laboratorio; EAL1 = análisis básico, EAL7 = el más estricto (entornos militares / máxima seguridad).</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="norma-bs7799"><summary><span class="stitle">BS 7799</span></summary>
+<ul>
+<li>Aparece en <strong>1995</strong>, publicada por <em>The British Standards Institution</em>, para dar a las empresas buenas prácticas de gestión de la seguridad de la información.</li>
+<li>Primero fue una guía británica (<strong>PD 0003</strong>); tras revisión pública → norma oficial <strong>BS 7799-1:1995</strong>; se le sumó <strong>BS 7799-2:1998</strong> (febrero de 1998). Al inicio solo en empresas británicas; luego se extendió a otros países.</li>
+<li><strong>Objetivos:</strong> buenas prácticas; confianza comercial entre empresas; continuidad del negocio y minimizar daños; autoevaluación (fortalezas y debilidades); mejora continua.</li>
+<li><strong>Aporte histórico:</strong> antes la seguridad se veía solo como un tema técnico (contraseñas, respaldos). BS 7799 introdujo el <strong>SGSI</strong> (Sistema de Gestión de Seguridad de la Información), tratándolo como un proceso de gestión de riesgos a nivel empresarial en el que participa toda la organización. Dividió: parte 1 = código de buenas prácticas; parte 2 = especificación estricta y <strong>certificable</strong> de forma independiente (confianza comercial ante clientes y socios internacionales).</li>
+</ul></details>
+
+<details class="section-block sec" id="norma-17799"><summary><span class="stitle">ISO/IEC 17799</span></summary>
+<ul>
+<li><strong>Nombre:</strong> "Tecnología de la información — Técnicas de seguridad — Código de práctica para la gestión de la seguridad de la información".</li>
+<li><strong>Objetivos:</strong> base común internacional para que las organizaciones desarrollen sus propias normas de gestión; guía práctica para responsables de iniciar, implantar o mantener la seguridad; conjunto de controles y objetivos de control de buenas prácticas aplicables a cualquier organización.</li>
+<li><strong>Características:</strong> es un <strong>código de práctica (recomendaciones), no una especificación de requisitos</strong>; <strong>no es certificable por sí mismo</strong> (la certificación del SGSI se hacía con BS 7799-2, luego ISO/IEC 27001); aborda la seguridad de forma integral (organizacional, física, legal, RR. HH.), basada en la tríada C-I-D.</li>
+<li><strong>Alcance:</strong> no maneja niveles jerárquicos; contiene <strong>39 objetivos de control y 133 controles</strong> agrupados en <strong>11 dominios</strong> (política de seguridad; organización de la seguridad; clasificación y control de activos; seguridad ligada al personal; seguridad física y del entorno; gestión de comunicaciones y operaciones; control de accesos; desarrollo y mantenimiento de sistemas; gestión de incidentes; gestión de continuidad del negocio; cumplimiento normativo).</li>
+<li><strong>Actualizaciones:</strong> ISO/IEC 17799:2000 (dic 2000); :2005 (revisada y ampliada); Cor 1:2007 (corrección técnica), año en que se <strong>renombró ISO/IEC 27002:2005</strong>.</li>
+<li><strong>Vigencia:</strong> <strong>retirada</strong> bajo el nombre 17799; sustituida el 1-jul-2007 por ISO/IEC 27002:2005, a su vez sustituida por ISO/IEC 27002:2022 (activa). Ficha: <em>iso.org/standard/39612.html</em>.</li>
+</ul></details>
+
+<details class="section-block sec" id="norma-27000"><summary><span class="chip chip-examen">examen</span><span class="stitle">Familia ISO/IEC 27000 (27000, 27001, 27002)</span></summary>
+<p>Reúne las normas internacionales de gestión de la seguridad de la información, ciberseguridad y protección de la privacidad. Propósito: un marco para que organizaciones de cualquier tamaño y sector protejan la información que manejan (datos financieros, propiedad intelectual, información de empleados, datos de terceros).</p>
+<p><strong>ISO/IEC 27000</strong> — versión más actual del 3-jul-2026; comité <strong>ISO/IEC JTC 1/SC 27</strong>. Da la visión general de los SGSI y sus conceptos y principios; ayuda a entender el conjunto de normas antes de implementar un SGSI.</p>
+<p><strong>ISO/IEC 27001</strong> — <em>Information security, cybersecurity and privacy protection — ISMS — Requirements</em>. Versión de octubre de 2022 (3.ª edición); enmienda de 2024. <strong>Requisitos</strong> para crear, implementar, mantener y mejorar continuamente un SGSI, en cualquier tamaño/sector. Enfoque <strong>basado en riesgos</strong>: analizar qué información proteger, amenazas, vulnerabilidades explotables, consecuencias, probabilidad y controles a implementar. <strong>Es certificable</strong> (auditoría de un organismo de certificación). Cláusulas:</p>
+<pre><code>1  Alcance
+2  Referencias normativas
+3  Términos y definiciones
+4  Contexto de la organización
+5  Liderazgo        (políticas, responsabilidades, recursos, integración en los procesos)
+6  Planificación    (qué controles usar para reducir los riesgos)
+7  Apoyo            (recursos para mantener el SGSI)
+8  Operación        (evaluación y tratamiento de riesgos)
+9  Evaluación del desempeño  (monitoreo, medición, auditorías internas, revisión por la dirección)
+10 Mejora           (corregir los problemas identificados)</code></pre>
+<p><strong>ISO/IEC 27002</strong> — <em>Information security controls</em>. Versión de marzo de 2022 (3.ª edición). Recomendaciones, controles y buenas prácticas para gestionar los riesgos (enfoque preventivo frente a ciberamenazas y protección de la información crítica). La edición 2022 reorganizó los controles en <strong>4 categorías</strong>:</p>
+<table><thead><tr><th>Categoría</th><th>N.º de controles</th><th>Ejemplos</th></tr></thead><tbody>
+<tr><td>Organizacionales</td><td>37</td><td>políticas, responsabilidades, gestión de activos, relaciones con proveedores, gestión de incidentes, cumplimiento</td></tr>
+<tr><td>Humanos</td><td>8</td><td>selección de personal, capacitación y concientización, acuerdos de confidencialidad, trabajo remoto, reporte de incidentes</td></tr>
+<tr><td>Físicos</td><td>14</td><td>acceso físico, protección de oficinas, vigilancia, protección de equipos, eliminación segura de dispositivos</td></tr>
+<tr><td>Tecnológicos</td><td>34</td><td>autenticación, privilegios de acceso, malware, vulnerabilidades técnicas, configuración, prevención de fugas, respaldos, registro y monitoreo, seguridad de redes, desarrollo seguro</td></tr>
+</tbody></table>
+<p><strong>27002 no es directamente certificable</strong>: es una guía de buenas prácticas y controles que sirve de <strong>apoyo</strong> para certificarse con <strong>27001</strong>.</p>
+</details>
+
+<details class="section-block sec" id="norma-hipaa"><summary><span class="stitle">HIPAA (sector salud, EE. UU.)</span></summary>
+<ul>
+<li><strong>Siglas:</strong> Health Insurance Portability and Accountability Act (Ley de Portabilidad y Responsabilidad del Seguro Médico).</li>
+<li><strong>Año / lugar:</strong> ley federal de EE. UU., promulgada en 1996.</li>
+<li><strong>Objetivos:</strong> proteger la privacidad y seguridad de la información médica; establecer reglas para su uso y divulgación; normalizar ciertas transacciones electrónicas del sector salud.</li>
+<li><strong>Características:</strong> aplica a planes de salud, proveedores de servicios médicos, cámaras de compensación y sus asociados comerciales. Protege la <strong>PHI</strong> (Protected Health Information) y, mediante la <strong>Security Rule</strong>, la <strong>ePHI</strong> (electrónica). Exige controles de acceso, análisis de riesgos, políticas de seguridad, protección física, capacitación y procedimientos ante incidentes.</li>
+<li><strong>Niveles:</strong> la Security Rule divide las salvaguardas en <strong>administrativas, físicas y técnicas</strong>.</li>
+<li><strong>Secciones:</strong> Transactions and Code Set Standards; Identifier Standards; Privacy Rule; Security Rule; Enforcement Rule; Breach Notification Rule.</li>
+<li><strong>Actualizaciones:</strong> 2000 Privacy Rule; 2002 modif. de privacidad; 2003 Security Rule; 2009 HITECH; 2013 Omnibus Final Rule; 2016; 2024–2025 nuevas propuestas de privacidad y ciberseguridad. En 2025 HHS propuso actualizar la Security Rule (aún propuesta). Parte de las modif. de 2024 fueron anuladas judicialmente en junio de 2025.</li>
+<li><strong>Vigencia:</strong> <strong>sí</strong>, legislación federal vigente en EE. UU. <em>hhs.gov/hipaa</em>.</li>
+</ul></details>
+
+<details class="section-block sec" id="norma-nist"><summary><span class="stitle">NIST</span></summary>
+<ul>
+<li><strong>Siglas:</strong> National Institute of Standards and Technology.</li>
+<li><strong>Año / lugar:</strong> 3 de marzo de 1901, Washington D. C.</li>
+<li><strong>Objetivos:</strong> promover la innovación y la competitividad industrial de EE. UU. mediante estándares, mediciones y directrices científicas y tecnológicas.</li>
+<li><strong>Características:</strong> agencia federal <strong>no reguladora</strong>; investigación y desarrollo de estándares, metodologías, guías y recomendaciones para gobierno y empresas (ciberseguridad, IA, criptografía, comunicaciones, manufactura, nanotecnología, metrología). En seguridad destaca por las publicaciones <strong>FIPS</strong> y la serie <strong>Special Publication 800</strong>.</li>
+<li><strong>Niveles:</strong> no define un único conjunto; cada estándar/publicación define controles, niveles, categorías o requisitos según su propósito (p. ej. la serie SP 800 da controles y metodologías para identificar, evaluar y administrar riesgos).</li>
+<li><strong>Estructura:</strong> Oficina del Director, programas de laboratorios, servicios de innovación e industria y administración. Laboratorios principales: Communications Technology Laboratory, Engineering Laboratory, Information Technology Laboratory, Material Measurement Laboratory, Physical Measurement Laboratory, NIST Center for Neutron Research.</li>
+<li><strong>Versiones:</strong> como institución no tiene versiones. Su <strong>Cybersecurity Framework (CSF)</strong>: 1.0 (2014), 1.1 (2018), <strong>2.0</strong> (26 de febrero de 2024, vigente).</li>
+<li><strong>Vigencia:</strong> <strong>sí</strong>, agencia activa del Departamento de Comercio de EE. UU. <em>nist.gov</em>.</li>
+</ul></details>
+
+<details class="section-block sec" id="norma-cobit"><summary><span class="chip chip-examen">examen</span><span class="stitle">COBIT</span></summary>
+<ul>
+<li><strong>Siglas:</strong> Control Objectives for Information and Related Technologies.</li>
+<li><strong>Año / lugar:</strong> 1996, EE. UU. (ISACA).</li>
+<li><strong>Objetivos:</strong> marco para <strong>gobernar y administrar</strong> la información y la tecnología de una organización — generar valor, controlar riesgos, usar bien los recursos y <strong>alinear la TI con los objetivos del negocio</strong>.</li>
+<li><strong>Características:</strong> gobierno y gestión de TI a nivel empresarial; permite diseñar un sistema de gobierno adaptado a cada organización (objetivos, procesos, factores de diseño, métricas, componentes); integrable con otros marcos como NIST.</li>
+<li><strong>Niveles:</strong> niveles de <strong>capacidad de procesos 0 a 5</strong> (0 = capacidad insuficiente; 5 = proceso altamente desarrollado y optimizado).</li>
+<li><strong>Estructura:</strong> el <strong>Core Model</strong> tiene <strong>40 objetivos</strong> de gobierno y gestión en 5 dominios: <strong>EDM</strong> (Evaluate, Direct and Monitor), <strong>APO</strong> (Align, Plan and Organize), <strong>BAI</strong> (Build, Acquire and Implement), <strong>DSS</strong> (Deliver, Service and Support), <strong>MEA</strong> (Monitor, Evaluate and Assess). Considera 7 componentes del sistema de gobierno (procesos, estructuras organizacionales, información, personas, tecnología…).</li>
+<li><strong>Actualizaciones:</strong> 1996 1.ª ed.; 1998 2.ª; 2000 3.ª; 2005 COBIT 4.0; 2007 4.1; 2012 COBIT 5; 2018 <strong>COBIT 2019</strong>.</li>
+<li><strong>Vigencia:</strong> <strong>sí</strong>. ISACA mantiene COBIT 2019 como su marco vigente. <em>isaca.org/resources/cobit</em>.</li>
+</ul></details>
+
+<details class="section-block sec contexto" id="clase-2-referencias"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Referencias del ejercicio (Equipo 4)</span></summary>
+<ul>
+<li>Akamai. (s/f). <em>¿Qué es la HIPAA?</em> — akamai.com/es/glossary/what-is-hippa</li>
+<li>Alonso, C. (2022). <em>¿Qué es COBIT y para qué sirve?</em> GlobalSuite Solutions.</li>
+<li>Canadian Centre for Cyber Security. <em>Common Criteria.</em> Government of Canada — cyber.gc.ca/en/tools-services/common-criteria</li>
+<li>Carrero, E. (2023). <em>¿Qué es el NIST?</em> Mobbeel.</li>
+<li>Commission of the European Communities (1991). <em>ITSEC — Preliminary harmonised criteria</em>, versión 1.2, doc. COM(90) 314.</li>
+<li>G., A. (2020). <em>CISSP concepts – Trusted computing base / TCSEC, ITSEC and Common Criteria.</em> Cyber Management Alliance.</li>
+<li>IBM (2025). <em>¿Qué es el marco de ciberseguridad del NIST?</em></li>
+<li>ISO (2022). <em>ISO/IEC 15408-1:2022</em>; <em>ISO/IEC 27001:2022</em>; <em>ISO/IEC 27002:2022</em>. ISO (2024). <em>ISO/IEC 27001:2022/Amd 1:2024</em>. ISO (2026). <em>ISO/IEC 27000:2026</em>. ISO. <em>ISO/IEC 17799:2005</em> (y Cor 1:2007), <em>ISO/IEC 27002:2005</em>, <em>Familia ISO/IEC 27000</em>.</li>
+<li>Li, H., King, G., Ross, M. y Staples, G. (2000). <em>BS7799: A suitable model for information security management.</em> AMCIS 2000 Proceedings, 142.</li>
+</ul>
+</details>
+
+<p class="empty" style="margin-top:28px">Estructurado según el <a href="index.html#tema-1" style="color:var(--indigo)">Tema 1</a> del plan.</p>
+
+</div>
+</body>
+</html>

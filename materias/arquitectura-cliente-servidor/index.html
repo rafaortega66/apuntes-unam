@@ -32,7 +32,24 @@
 <details class="section-block collapsible"><summary>Bibliografía básica</summary><ul><li>Kurose &amp; Ross — <em>Computer Networking: A Top-Down Approach</em></li><li>Stevens — <em>UNIX Network Programming</em>, Vol. I y II</li><li>Walton — <em>Programación de sockets en Linux</em></li></ul></details>
 
 <div class="v-tema">
-<details class="section-block tema" id="tema-1" open><summary><span class="stitle">Tema 1 — Conceptos básicos</span></summary><div class="tema-body">
+<p class="tema-map-hint">Todos los temas y subtemas del plan. <span class="k">En azul</span>, lo que ya se vio en clase (enlaza a la clase). En gris, lo que falta.</p>
+
+<details class="section-block tema" id="tema-1" open><summary><span class="stitle">Tema 1 — Conceptos básicos</span> <span class="thrs">· Clases 01–04</span></summary><div class="tema-body">
+<p class="empty">Las 4 primeras clases fueron <strong>fundamentos de procesos en Linux</strong> (repaso de sistemas operativos; base para 1.6 y 1.7): imagen del proceso &middot; <code>system()</code>/<code>fork()</code>/<code>exec()</code> &middot; permisos y bit SetUID &middot; <code>errno</code> &middot; procesos hu&eacute;rfanos. Res&uacute;menes: <a href="clase-01.html">Clase 01</a> &middot; <a href="clase-02.html">02</a> &middot; <a href="clase-03.html">03</a> &middot; <a href="clase-04.html">04</a>. C&oacute;digo del profesor en <a href="programas.html">Programas</a>.</p>
+<ul class="subtemas">
+<li><span class="sn">1.1</span> Definici&oacute;n de puerto</li>
+<li><span class="sn">1.2</span> Socket</li>
+<ul><li><span class="sn">1.2.1</span> Definici&oacute;n de socket</li><li><span class="sn">1.2.2</span> Familia de sockets</li></ul>
+<li><span class="sn">1.3</span> Concepto cliente/servidor</li>
+<ul><li><span class="sn">1.3.1</span> Proceso cliente</li><li><span class="sn">1.3.2</span> Proceso servidor</li></ul>
+<li><span class="sn">1.4</span> Definici&oacute;n de stream</li>
+<li><span class="sn">1.5</span> API de Berkeley</li>
+<li><span class="sn">1.6</span> <a href="clase-01.html">Concurrencia, multiprogramaci&oacute;n y multitarea</a> <span class="seen">Clase 01</span></li>
+<li><span class="sn">1.7</span> <a href="clase-01.html">Servidores interactivos y concurrentes</a> <span class="seen">Clase 01</span></li>
+<li><span class="sn">1.8</span> Est&aacute;ndares</li>
+<ul><li><span class="sn">1.8.1</span> POSIX</li><li><span class="sn">1.8.2</span> RFC</li></ul>
+</ul>
+<details class="section-block collapsible"><summary>Teor&iacute;a y ejemplos del Tema 1 (procesos en Linux &mdash; apuntes de clase + PDFs del profesor)</summary>
 <div class="files">
     <a class="btn" href="files/Tema-01-Procesos-diapositivas.pdf" target="_blank">📄 Presentación (diapositivas)</a>
     <a class="btn" href="files/Tema-01-Procesos-manual.pdf" target="_blank">📄 Práctica 1</a>
@@ -552,9 +569,10 @@ Pista: spawn() crea un proceso hijo con fork() y reemplaza ese hijo con el progr
 <figure style="margin:16px 0"><img src="files/prof-tema1/programa23_fork-exec.png" alt="fork() + exec() — flujo combinado: el padre hace fork, el hijo se reemplaza con exec, el padre continúa." style="max-width:100%;border-radius:8px;border:1px solid rgba(255,255,255,0.1)"><figcaption style="font-size:12.5px;color:var(--ink-soft);margin-top:6px">fork() + exec() — flujo combinado: el padre hace fork, el hijo se reemplaza con exec, el padre continúa.</figcaption></figure>
 </details>
 <details class="section-block sec" id="referencias-del-profesor-tema-1"><summary><span class="stitle">Referencias del profesor (Tema 1)</span></summary><div class="links" style="margin-top:0"><div class="link-item"><span class="label">Familia exec — man</span><a href="https://manpages.ubuntu.com/manpages/bionic/es/man3/execl.3.html" target="_blank" rel="noopener">https://manpages.ubuntu.com/manpages/bionic/es/man3/execl.3.html</a></div><div class="link-item"><span class="label">Procesos en Linux</span><a href="https://www.hpca.ual.es/~vruiz/docencia/cursos/linux/html/node43.html" target="_blank" rel="noopener">https://www.hpca.ual.es/~vruiz/docencia/cursos/linux/html/node43.html</a></div></div></details>
+</details>
 </div></details>
 
-<details class="section-block tema off" id="tema-2"><summary><span class="stitle">Tema 2 — Creación de socket servidor y cliente</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Subtemas del programa oficial:</p>
+<details class="section-block tema off" id="tema-2"><summary><span class="stitle">Tema 2 — Creación de socket servidor y cliente</span> <span class="thrs">· sin ver</span></summary><div class="tema-body">
 <ul class="subtemas">
 <li><span class="sn">2.1</span> Socket en TCP.</li>
 <ul>
@@ -574,7 +592,7 @@ Pista: spawn() crea un proceso hijo con fork() y reemplaza ese hijo con el progr
 </ul>
 </div></details>
 
-<details class="section-block tema off" id="tema-3"><summary><span class="stitle">Tema 3 — Servidores y clientes sincronizados</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Subtemas del programa oficial:</p>
+<details class="section-block tema off" id="tema-3"><summary><span class="stitle">Tema 3 — Servidores y clientes sincronizados</span> <span class="thrs">· sin ver</span></summary><div class="tema-body">
 <ul class="subtemas">
 <li><span class="sn">3.1</span> Procesos.</li>
 <li><span class="sn">3.2</span> Semáforos y sincronización.</li>
@@ -596,7 +614,7 @@ Pista: spawn() crea un proceso hijo con fork() y reemplaza ese hijo con el progr
 </ul></ul>
 </div></details>
 
-<details class="section-block tema off" id="tema-4"><summary><span class="stitle">Tema 4 — Sockets broadcasting y multicasting</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Subtemas del programa oficial:</p>
+<details class="section-block tema off" id="tema-4"><summary><span class="stitle">Tema 4 — Sockets broadcasting y multicasting</span> <span class="thrs">· sin ver</span></summary><div class="tema-body">
 <ul class="subtemas">
 <li><span class="sn">4.1</span> Broadcast.</li>
 <ul>
@@ -613,7 +631,7 @@ Pista: spawn() crea un proceso hijo con fork() y reemplaza ese hijo con el progr
 </ul></ul>
 </div></details>
 
-<details class="section-block tema off" id="tema-5"><summary><span class="stitle">Tema 5 — Implantación de servidores con criptografía y código seguro</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Subtemas del programa oficial:</p>
+<details class="section-block tema off" id="tema-5"><summary><span class="stitle">Tema 5 — Implantación de servidores con criptografía y código seguro</span> <span class="thrs">· sin ver</span></summary><div class="tema-body">
 <ul class="subtemas">
 <li><span class="sn">5.1</span> SSL y TLS.</li>
 <li><span class="sn">5.2</span> Servidores con criptografía.</li>
@@ -632,7 +650,7 @@ Pista: spawn() crea un proceso hijo con fork() y reemplaza ese hijo con el progr
 </ul>
 </div></details>
 
-<details class="section-block tema off" id="tema-6"><summary><span class="stitle">Tema 6 — Herramientas para la comunicación entre servidores</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Subtemas del programa oficial:</p>
+<details class="section-block tema off" id="tema-6"><summary><span class="stitle">Tema 6 — Herramientas para la comunicación entre servidores</span> <span class="thrs">· sin ver</span></summary><div class="tema-body">
 <ul class="subtemas">
 <li><span class="sn">6.1</span> Servidores Web.</li>
 <ul>
