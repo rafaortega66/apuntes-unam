@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 01 — Minería de Datos</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Minería de Datos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 01</h2>
+  <p class="prof">M.C. José Concepción Roberto Olvera López · 1 sep 2026 · Temas 1 y 2 — introducción a la minería de datos y al proceso KDD (con 5 casos de estudio de los equipos) y arranque de la arquitectura de minería de datos.</p>
+</div>
+
+<div class="encorto"><h4>En corto</h4><ul>
+<li>Tres tareas base: <strong>regresión</strong> (predecir un número, p. ej. demanda), <strong>agrupamiento / clustering</strong> (grupos con comportamiento parecido) y <strong>clasificación</strong> (asignar categorías, p. ej. demanda alta / media / baja).</li>
+<li>Flujo general: <strong>datos crudos → modelos de minería → patrones → predicciones → mejores decisiones de negocio</strong>.</li>
+<li><strong>Datos internos</strong> (dependen de la empresa: fecha, producto, cantidad, precio, sucursal, inventario, promociones) vs. <strong>externos</strong> (festivos, clima, eventos).</li>
+<li>Preparación de datos: <strong>limpieza</strong> (duplicados por regla de unicidad; faltantes por extrapolación o eliminación), <strong>outliers</strong> (eventos atípicos, no errores) y <strong>transformación</strong> (generalización, suavizado, normalización a [0, 1]).</li>
+<li>Cada modelo se <strong>valida</strong>: regresión con un error de estimación ≤ 10 %; clustering con la consistencia de cada sucursal; el modelo de operación con la cobertura de la demanda alta/media/baja.</li>
+<li>Tema 2: la minería vive sobre un <strong>ecosistema heterogéneo</strong> de tecnologías (nube ≈ 70 % de los datos corporativos) y sobre <strong>repositorios</strong> (más amplios que una base de datos: TB–PB, estructurado y no estructurado, con metadata y control de acceso).</li>
+</ul></div>
+
+<div class="examen"><h4>🎯 Para el examen y proyectos</h4><ul>
+<li><strong>Diagrama arquitectónico</strong>: se exige saber representar cómo las tecnologías de minería y el equipo analítico se conectan y consumen los servidores de datos corporativos. En clase se verán <strong>4–5 diagramas de referencia</strong> para aprender a modelarlos.</li>
+<li><strong>Proyecto 2 del curso</strong>: 1) el profesor asigna a cada equipo un <strong>proveedor de base de datos</strong> (Oracle, Amazon, etc.); 2) el equipo investiga a fondo y hace una presentación para "<strong>vender</strong>" esa plataforma a la clase; 3) los demás equipos actúan como <strong>clientes evaluadores</strong> y califican viabilidad, costo y propuesta; 4) se usan <strong>empresas / entornos nuevos</strong>, no los del Proyecto 1.</li>
+</ul></div>
+
+<div class="section-block"><h4>Las tres tareas y el flujo del proceso</h4>
+<ul>
+<li><strong>Regresión</strong> — modela cómo las variables independientes afectan a una variable numérica (p. ej. relación entre ventas y demanda). Explica el efecto de cada variable sobre el producto.</li>
+<li><strong>Agrupamiento / clustering</strong> — identifica grupos de productos o sucursales con comportamiento semejante; analiza tendencias por sucursal.</li>
+<li><strong>Clasificación</strong> — asigna categorías (p. ej. clasificar la demanda de una sucursal en alta, baja o media). Los <strong>árboles de decisión</strong> ayudan a prever si un día tendrá alta demanda para preparar la producción.</li>
+</ul>
+<p>Cadena de valor: <strong>datos crudos → modelos → patrones → predicciones → mejores decisiones</strong>.</p></div>
+
+<div class="section-block"><h4>Datos internos y externos (ejemplo: los pastes de Pachuca)</h4>
+<ul>
+<li><strong>Internos</strong> (dependen de la empresa): fecha, producto, cantidad vendida, precio, sucursal, inventario, promociones.</li>
+<li><strong>Externos</strong> (factores ajenos): calendario de días festivos, clima (el antojo de pastes calientes sube con el frío de Pachuca), eventos especiales.</li>
+</ul></div>
+
+<div class="section-block"><h4>Fases de preparación de datos</h4>
+<ul>
+<li><strong>Limpieza.</strong> Eliminar duplicados con una <strong>regla de unicidad</strong>: combinar campos que identifican la transacción (fecha + lugar + tipo de compra) para detectar redundancias por fallas eléctricas o respaldos. Los <strong>valores faltantes</strong> (captura manual, fallas de equipo) se tratan con extrapolación estadística o eliminación directa del registro.</li>
+<li><strong>Outliers (valores atípicos).</strong> No son errores: son <strong>eventos con condiciones distintas a las normales</strong> (p. ej. un pico de ventas de pastes cuando juegan "Los Tuzos" en Pachuca). Se identifican y se les da un tratamiento aparte.</li>
+<li><strong>Transformación.</strong> Adecuar los datos para que los modelos sean más eficientes:
+<ul>
+<li><strong>Generalización</strong>: agrupar días en semanas, meses o años.</li>
+<li><strong>Suavizado</strong>: reducir picos agudos para analizar la distribución.</li>
+<li><strong>Normalización</strong>: escalar los valores numéricos a un rango fijo, típicamente [0, 1].</li>
+</ul></li>
+</ul></div>
+
+<div class="section-block"><h4>Validación (según el tipo de modelo)</h4>
+<ul>
+<li><strong>Regresión</strong>: error de estimación ≤ <strong>10 %</strong> para evitar mermas o sobreproducción.</li>
+<li><strong>Clustering</strong>: que las agrupaciones por sucursal sean consistentes con el comportamiento típico de esa sucursal.</li>
+<li><strong>Modelo de operación</strong>: que cubra correctamente la demanda alta, media y baja.</li>
+</ul>
+<p class="empty">En el audio quedó un término sin identificar ("GS", para "ver tendencias por sucursal") y frases fragmentadas de los expositores; el resto del contenido se pudo reconstruir del contexto.</p></div>
+
+<div class="section-block"><h4>Casos de estudio KDD de los equipos</h4>
+<p>Cada equipo aplicó el proceso KDD (entender el negocio → datos → limpieza → transformación → algoritmos → validación) a una empresa real:</p>
+<table><thead><tr><th>Caso</th><th>Problema</th><th>Algoritmos</th><th>Validación</th></tr></thead><tbody>
+<tr><td><strong>Retail — inventario y venta cruzada</strong> (Equipo 7)</td><td>Fuga de capital por sobrestock de baja rotación; ventas perdidas por desabasto de alta demanda</td><td><strong>FP-Growth</strong> para <em>market basket analysis</em> (venta cruzada, reglas <em>cross-selling</em>); <strong>regresión</strong> para pronóstico de demanda por zona y periodo</td><td>Reglas de asociación, análisis de ROI, monitoreo de precisión, evaluación empresarial</td></tr>
+<tr><td><strong>Netflix — retención de usuarios</strong> (Equipo 2)</td><td>Fatiga de contenido y cancelación (<em>churn</em>) en los primeros 30 días; <strong>cold start</strong> (usuario nuevo sin historial → recomendaciones genéricas)</td><td><strong>Regresión logística</strong> (predicción de <em>churn</em>, fácil de interpretar); <strong>K-Means</strong> (segmentar: maratonistas, ocasionales, indecisos); <strong>Apriori</strong> (géneros consumidos juntos)</td><td>Metas: bajar cancelación de 20 % a 12 %, +20 % de tiempo de reproducción; variables derivadas: <em>tiempo de decisión</em> = inicio de reproducción − inicio de sesión; <em>tasa de finalización</em> = minutos vistos / duración total</td></tr>
+<tr><td><strong>Jugos Boing — expansión internacional</strong> (Cooperativa Pascual)</td><td>No saber a qué países expandirse; riesgo de invertir a ciegas (EE. UU. concentra el 41 % de las exportaciones)</td><td><strong>K-Means</strong> (agrupar países por nivel comercial, valor de mercado, costo logístico); <strong>Apriori</strong> (patrones de sabor: zonas con migrantes mexicanos aceptan guayaba); <strong>árboles de decisión / regresión logística</strong> (score de viabilidad); <strong>series de tiempo</strong> (demanda mensual por país); modelo <strong>prescriptivo</strong> (sabor óptimo bajo presupuesto y NOM-051)</td><td><strong>Recall</strong> y matriz de confusión; <strong>Lift</strong> en reglas de asociación; <strong>MAE</strong> en regresión (error &lt; 20 %); <strong>validación cruzada</strong> contra <em>overfitting</em>; explicabilidad <strong>SHAP / LIME</strong>; comparación con <strong>baseline</strong> (promedio móvil) para justificar el modelo complejo</td></tr>
+<tr><td><strong>Mercado Libre — última milla</strong> (Equipo PMA)</td><td>Costos altos y entregas fallidas en zonas rurales, serranas e insulares de difícil acceso</td><td><strong>Muestreo estratificado</strong> (solo zonas inaccesibles); <strong>Expectation-Maximization (EM)</strong> para estimar coordenadas cuando se pierde GPS; <strong>PCA</strong> (sintetizar clima, INEGI y demografía en componentes); <strong>clustering jerárquico</strong> (microzonas logísticas); priorización de reintentos (el fallido pasa a primer punto de la siguiente ruta); <strong>SARIMA</strong> (demanda estacional, p. ej. Navidad); <strong>VRP</strong> (moto / auto / camión según terreno)</td><td><strong>MAE</strong> y <strong>RMSE</strong> (costos); precisión y <em>recall</em> (intentos de entrega); <strong>índice de silueta</strong> (consistencia de microzonas); <strong>backtesting</strong> con histórico; explicabilidad <strong>SHAP</strong></td></tr>
+<tr><td><strong>Zara — inventario global</strong> (Equipo 8, Inditex)</td><td>Punto de equilibrio del stock: sobrestock inmoviliza capital; <em>stockout</em> genera ventas perdidas</td><td><strong>Series de tiempo</strong> (demanda futura, estacionalidad, tendencias de color/print por región y clima); <strong>regresión lineal</strong> (sensibilidad de la demanda a precio y descuento); <strong>árboles de decisión</strong> (tendencia por color/tipo de prenda). Atributo derivado: <em>indicador de rotación</em></td><td>Métricas estándar de precisión de la regresión + validación empresarial de la rentabilidad de las compras</td></tr>
+</tbody></table></div>
+
+<div class="section-block"><h4>Tema 2 — Arquitectura de minería de datos (arranque)</h4>
+<p><strong>Minería de datos (definición formal del profesor):</strong> "proceso de análisis de grandes conjuntos de datos". Los datos son "la carnita, la esencia, el argumento" de cualquier análisis o decisión industrial.</p>
+<p><strong>Ecosistema heterogéneo:</strong> las empresas operan con un "mix de tecnologías": AWS, Google Cloud, Azure, SAP, bases relacionales (Oracle, SQL Server), Excel, y entornos analíticos masivos (Hadoop, Data Warehouses). Hoy ≈ <strong>70 %</strong> de la información corporativa global vive y se procesa en la <strong>nube</strong>; la migración va de servidores locales (<em>on-premises</em>) a Data Warehouses y Data Lakes en la nube.</p>
+<p><strong>Taxonomía de bases de datos especializadas:</strong></p>
+<ul>
+<li><strong>Blockchain</strong> — base de datos de cadena de bloques.</li>
+<li><strong>Espaciales</strong> — coordenadas, distancias y áreas geográficas en tiempo récord (mapas, logística).</li>
+<li><strong>Columnares</strong> — lectura/escritura analítica masiva a gran velocidad (p. ej. Amazon Redshift); surgieron hace ~15–20 años ante los límites de las relacionales; soportan transacciones críticas con <strong>Two-Phase Commit</strong>.</li>
+<li><strong>Gráficas</strong>.</li>
+<li><strong>Documentales</strong> — grandes volúmenes de documentos (historiales médicos, leyes, periódicos, libros) con búsqueda conceptual inmediata.</li>
+<li><strong>Series de tiempo</strong>.</li>
+<li><strong>Vectoriales</strong> — textos, archivos e imágenes representados como vectores; búsquedas de similitud muy veloces (a qué imágenes se parece una imagen de entrada); base de la IA moderna.</li>
+<li><strong>En memoria (in-memory)</strong> — toda la base reside en RAM en vez de disco → velocidad muy superior.</li>
+</ul></div>
+
+<div class="section-block"><h4>Arquitectura de datos, seguridad y repositorios</h4>
+<ul>
+<li><strong>Arquitectura de base de datos</strong>: el diseño de esquemas y diagramas que integran redes, servidores y conexiones para mapear cómo fluyen, se integran y se rescatan los datos que alimentan los modelos.</li>
+<li><strong>Gobernanza de seguridad</strong> (gran avance en los últimos 15 años): acceso restringido <strong>por usuario</strong> y hasta por <strong>columna</strong> (un analista ve nombres de empleados pero no salarios), <strong>por horario</strong> (p. ej. solo de 9:00 a 10:00), firewalls y <strong>auditoría automática</strong> con alarmas ante cualquier intento de alterar transacciones.</li>
+<li><strong>Acceso en tiempo real</strong>: imprescindible en finanzas, retail, análisis bursátil y sensores IoT, donde el retraso impide reaccionar al mercado.</li>
+<li><strong>Repositorio de datos</strong>: contenedor (físico o digital, local o global) que almacena grandes volúmenes con estructura y jerarquía definidas, con <strong>metadata obligatoria</strong> y control de acceso estricto para administrar, auditar y analizar el ciclo de vida de la información.
+<ul>
+<li><strong>Base de datos relacional</strong> (Access, SQL Server local): esquema de tablas y relaciones, normalmente hasta gigabytes, enfoque transaccional inmediato.</li>
+<li><strong>Repositorio</strong>: concepto más macro (servidores de archivos, data lakes, contenedores); estructurado y no estructurado; terabytes o petabytes; acceso concurrente de miles de usuarios; registro histórico masivo.</li>
+</ul></li>
+</ul></div>
+
+<p class="empty" style="margin-top:28px">Resumen por subtema en los <a href="index.html#tema-1" style="color:var(--indigo)">Temas 1</a> y <a href="index.html#tema-2" style="color:var(--indigo)">2</a> de la materia.</p>
+
+</div>
+</body>
+</html>

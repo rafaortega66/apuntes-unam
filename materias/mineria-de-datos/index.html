@@ -30,30 +30,88 @@
 <details class="section-block collapsible"><summary>Bibliografía básica</summary><ul><li>Hernández Orallo &amp; Ramírez — <em>Introducción a la minería de datos</em></li><li>Mitchell — <em>Machine Learning</em></li><li>Witten &amp; Frank — <em>Data Mining</em></li><li>Han, Kamber &amp; Pei — <em>Data Mining: Concepts and Techniques</em></li></ul></details>
 
 <div class="v-tema">
-<details class="section-block tema off" id="tema-1"><summary><span class="stitle">Tema 1 — Introducción al descubrimiento del conocimiento en bases de datos (KDD) y la minería de datos</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Subtemas del programa oficial:</p>
-<ul class="subtemas">
-<li><span class="sn">1.1</span> Arquitectura del proceso de descubrimiento del conocimiento en base de datos (KDD).</li>
+<details class="section-block tema" id="tema-1" open><summary><span class="stitle">Tema 1 — Introducción al descubrimiento del conocimiento en bases de datos (KDD) y la minería de datos</span></summary><div class="tema-body">
+<p class="empty">Apuntes de la <a href="clase-01.html" style="color:var(--indigo)">Clase 01</a>. Los 5 casos de estudio de los equipos están completos en esa página.</p>
+
+<div class="encorto"><h4>En corto</h4><ul>
+<li>Tres tareas base: <strong>regresión</strong> (predecir un número), <strong>agrupamiento / clustering</strong> (grupos con comportamiento parecido) y <strong>clasificación</strong> (asignar categorías: demanda alta / media / baja).</li>
+<li>Flujo: <strong>datos crudos → modelos → patrones → predicciones → mejores decisiones</strong>.</li>
+<li><strong>Datos internos</strong> (dependen de la empresa) vs. <strong>externos</strong> (festivos, clima, eventos).</li>
+<li>Preparación: <strong>limpieza</strong> (duplicados por regla de unicidad; faltantes por extrapolación o eliminación), <strong>outliers</strong> (eventos atípicos, no errores) y <strong>transformación</strong> (generalización, suavizado, normalización a [0, 1]).</li>
+<li>Cada modelo se <strong>valida</strong>: regresión con error ≤ 10 %; clustering con la consistencia por sucursal; modelo de operación con la cobertura de demanda alta/media/baja.</li>
+</ul></div>
+
+<details class="section-block sec" id="t1-tareas" open><summary><span class="stitle">Las tres tareas y el flujo del proceso</span></summary>
 <ul>
-<li><span class="sn">1.1.1</span> Entendimiento del dominio del negocio.</li>
-<li><span class="sn">1.1.2</span> Identificación de los datos relevantes.</li>
-<li><span class="sn">1.1.3</span> Limpieza de datos.</li>
-<li><span class="sn">1.1.4</span> Transformación de datos.</li>
-<li><span class="sn">1.1.5</span> Identificación de tareas de Minería de datos.</li>
-<li><span class="sn">1.1.6</span> Implementación de algoritmos de minería de datos.</li>
-<li><span class="sn">1.1.7</span> Interpretación y evaluación de datos.</li>
+<li><strong>Regresión</strong> — cómo las variables independientes afectan a una variable numérica (ventas vs. demanda).</li>
+<li><strong>Agrupamiento / clustering</strong> — grupos de productos o sucursales con comportamiento semejante.</li>
+<li><strong>Clasificación</strong> — asignar categorías (demanda alta / baja / media). Los <strong>árboles de decisión</strong> ayudan a prever un día de alta demanda para preparar producción.</li>
 </ul>
-<li><span class="sn">1.2</span> El papel de la minería de datos dentro del KDD.</li>
+<p>Cadena de valor: datos crudos → modelos → patrones → predicciones → mejores decisiones.</p></details>
+
+<details class="section-block sec" id="t1-datos"><summary><span class="stitle">Datos internos y externos (ejemplo: pastes de Pachuca)</span></summary>
+<ul>
+<li><strong>Internos</strong>: fecha, producto, cantidad vendida, precio, sucursal, inventario, promociones.</li>
+<li><strong>Externos</strong>: días festivos, clima (el frío de Pachuca sube el antojo de pastes calientes), eventos especiales.</li>
+</ul></details>
+
+<details class="section-block sec" id="t1-preparacion"><summary><span class="stitle">Fases de preparación de datos</span></summary>
+<ul>
+<li><strong>Limpieza.</strong> Duplicados: <strong>regla de unicidad</strong> combinando campos de la transacción (fecha + lugar + tipo de compra). Faltantes (captura manual, fallas de equipo): extrapolación estadística o eliminación del registro.</li>
+<li><strong>Outliers.</strong> No son errores: <strong>eventos con condiciones distintas a las normales</strong> (pico de ventas cuando juegan "Los Tuzos"). Tratamiento aparte.</li>
+<li><strong>Transformación.</strong> <em>Generalización</em> (días → semanas / meses / años), <em>suavizado</em> (reducir picos), <em>normalización</em> (escalar a [0, 1]).</li>
+</ul></details>
+
+<details class="section-block sec" id="t1-validacion"><summary><span class="chip chip-examen">examen</span><span class="stitle">Validación por tipo de modelo</span></summary>
+<ul>
+<li><strong>Regresión</strong>: error de estimación ≤ <strong>10 %</strong> (evitar mermas / sobreproducción).</li>
+<li><strong>Clustering</strong>: agrupaciones por sucursal consistentes con su comportamiento típico.</li>
+<li><strong>Modelo de operación</strong>: cubrir bien la demanda alta, media y baja.</li>
+</ul></details>
+
+<details class="section-block sec" id="t1-casos"><summary><span class="stitle">Casos de estudio KDD de los equipos (resumen)</span></summary>
+<ul>
+<li><strong>Retail / inventario</strong> — FP-Growth para <em>market basket analysis</em> y venta cruzada; regresión para pronóstico de demanda.</li>
+<li><strong>Netflix / churn</strong> — regresión logística (predicción de cancelación), K-Means (segmentar usuarios), Apriori (géneros juntos); problema de <em>cold start</em>.</li>
+<li><strong>Boing / expansión</strong> — K-Means + Apriori + árboles/regresión logística + series de tiempo + modelo prescriptivo; validación con recall, Lift, MAE, cross-validation, SHAP/LIME y baseline.</li>
+<li><strong>Mercado Libre / última milla</strong> — EM para coordenadas faltantes, PCA, clustering jerárquico, SARIMA, VRP; validación con MAE/RMSE, índice de silueta, backtesting.</li>
+<li><strong>Zara / inventario</strong> — series de tiempo, regresión lineal (precio/descuento), árboles de decisión (color/prenda); atributo derivado "indicador de rotación".</li>
 </ul>
+<p><a href="clase-01.html" style="color:var(--indigo)">→ tabla completa con problema, algoritmos y validación de cada caso</a></p></details>
 </div></details>
 
-<details class="section-block tema off" id="tema-2"><summary><span class="stitle">Tema 2 — Arquitectura de minería de datos</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Subtemas del programa oficial:</p>
-<ul class="subtemas">
-<li><span class="sn">2.1</span> Repositorios.</li>
-<li><span class="sn">2.2</span> Servidores de datos.</li>
-<li><span class="sn">2.3</span> Base de datos de conocimientos.</li>
-<li><span class="sn">2.4</span> Proceso de minería de datos.</li>
-<li><span class="sn">2.5</span> Evaluación.</li>
-</ul>
+<details class="section-block tema" id="tema-2" open><summary><span class="stitle">Tema 2 — Arquitectura de minería de datos</span></summary><div class="tema-body">
+<p class="empty">Arranque en la <a href="clase-01.html" style="color:var(--indigo)">Clase 01</a> (segunda mitad).</p>
+
+<div class="encorto"><h4>En corto</h4><ul>
+<li><strong>Minería de datos</strong> = "proceso de análisis de grandes conjuntos de datos". Los datos son la esencia del análisis y de la decisión.</li>
+<li>Se opera sobre un <strong>ecosistema heterogéneo</strong> (AWS, GCP, Azure, SAP, Oracle, SQL Server, Excel, Hadoop, Data Warehouses); ≈ 70 % de los datos corporativos ya están en la <strong>nube</strong>.</li>
+<li>Familias de <strong>BD especializadas</strong>: blockchain, espaciales, columnares, gráficas, documentales, series de tiempo, vectoriales, in-memory.</li>
+<li><strong>Repositorio</strong> ≠ base de datos: más macro (data lakes, contenedores), TB–PB, estructurado y no estructurado, con metadata y control de acceso.</li>
+</ul></div>
+
+<details class="section-block sec" id="t2-ecosistema" open><summary><span class="stitle">Ecosistema de tecnologías y la nube</span></summary>
+<p>Definición formal del profesor: "proceso de análisis de grandes conjuntos de datos"; los datos son "la carnita, la esencia, el argumento". Las empresas usan un "mix de tecnologías" — nube (AWS, Google Cloud, Azure), SAP, relacionales (Oracle, SQL Server), Excel, y entornos analíticos masivos (Hadoop, Data Warehouses). ≈ <strong>70 %</strong> de la información corporativa global vive en la nube; la migración va de <em>on-premises</em> a Data Warehouses y Data Lakes.</p></details>
+
+<details class="section-block sec" id="t2-taxonomia"><summary><span class="stitle">Taxonomía de bases de datos especializadas</span></summary>
+<ul>
+<li><strong>Blockchain</strong> — cadena de bloques.</li>
+<li><strong>Espaciales</strong> — coordenadas, distancias y áreas geográficas muy rápido (mapas, logística).</li>
+<li><strong>Columnares</strong> — lectura/escritura analítica masiva a gran velocidad (Amazon Redshift); ~15–20 años de antigüedad; transacciones críticas con <strong>Two-Phase Commit</strong>.</li>
+<li><strong>Gráficas</strong>.</li>
+<li><strong>Documentales</strong> — grandes volúmenes de documentos (historiales médicos, leyes, periódicos) con búsqueda conceptual inmediata.</li>
+<li><strong>Series de tiempo</strong>.</li>
+<li><strong>Vectoriales</strong> — texto / archivos / imágenes como vectores; búsquedas de similitud muy veloces; base de la IA moderna.</li>
+<li><strong>In-memory</strong> — toda la base en RAM en vez de disco.</li>
+</ul></details>
+
+<details class="section-block sec" id="t2-gobernanza"><summary><span class="stitle">Arquitectura de datos, seguridad y repositorios</span></summary>
+<ul>
+<li><strong>Arquitectura de BD</strong>: esquemas y diagramas que integran redes, servidores y conexiones para mapear cómo fluyen y se rescatan los datos que alimentan los modelos.</li>
+<li><strong>Gobernanza</strong>: acceso restringido por <strong>usuario</strong> y por <strong>columna</strong> (ver nombres pero no salarios), por <strong>horario</strong> (p. ej. 9:00–10:00), firewalls y <strong>auditoría automática</strong> con alarmas ante cambios en transacciones.</li>
+<li><strong>Acceso en tiempo real</strong>: clave en finanzas, retail, bolsa e IoT.</li>
+<li><strong>Repositorio de datos</strong>: contenedor con estructura y jerarquía definidas, metadata obligatoria y control de acceso. Frente a una <strong>base relacional</strong> (tablas y relaciones, ~GB, transaccional), el repositorio es macro (data lakes, contenedores), TB–PB, estructurado y no estructurado, acceso concurrente de miles de usuarios y registro histórico masivo.</li>
+</ul></details>
 </div></details>
 
 <details class="section-block tema off" id="tema-3"><summary><span class="stitle">Tema 3 — El proceso de minería de datos</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Subtemas del programa oficial:</p>
@@ -110,8 +168,8 @@
 </div>
 
 <div class="v-clase">
-<p class="empty" style="padding:8px 0 16px">Clases grabadas, en orden.</p>
-<p class="empty">Aún no hay clases grabadas registradas.</p>
+<p class="empty" style="padding:8px 0 16px">Clases grabadas, en orden. Cada tarjeta abre la página completa de esa clase.</p>
+<a class="clase-link" href="clase-01.html"><span class="cl-n">Clase 01</span><span class="cl-t">1 sep 2026 · Temas 1 y 2</span><span class="cl-d">Introducción a la minería de datos y al proceso KDD (regresión, clustering, clasificación; limpieza, outliers, transformación, validación) con 5 casos de estudio de los equipos; arranque de la arquitectura de minería de datos (ecosistema, taxonomía de BD, repositorios).</span></a>
 </div>
 
 </div>
