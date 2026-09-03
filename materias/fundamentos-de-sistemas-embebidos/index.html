@@ -71,24 +71,84 @@ El carbón se usa porque conduce bien y además es suave (lubricante sólido); m
 <details class="section-block sec" id="enfasis-para-examen"><summary><span class="chip chip-examen">examen</span><span class="stitle">⚠️ Énfasis para examen</span></summary><ul><li>Distinguir solución <strong>mecánica / analógica / electromecánica</strong> vs. <strong>sistema embebido digital</strong>. Es error grave llamar sistema embebido a algo puramente físico.</li><li>Definiciones precisas de <strong>dureza, tenacidad y ductilidad</strong> — no confundirlas.</li><li>Saber cuándo se justifica un microcontrolador y cuándo basta con electrónica analógica robusta.</li></ul></details>
 </div></details>
 
-<details class="section-block tema off" id="tema-2"><summary><span class="stitle">Tema 2 — Organización, arquitectura y plataformas de sistemas embebidos</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Todavía sin apuntes de clase. Subtemas del programa:</p>
-<ul class="subtemas">
+<details class="section-block tema" id="tema-2" open><summary><span class="stitle">Tema 2 — Organización, arquitectura y plataformas de sistemas embebidos</span></summary><div class="tema-body">
+<p class="empty">Apuntes de la <a href="clase-02.html" style="color:var(--indigo)">Clase 02</a>. Cubre 2.1 (procesador), 2.5 (memoria y direccionamientos) y 2.9 (plataformas comerciales); adelanta también 2.2.</p>
+
+<div class="encorto"><h4>En corto</h4><ul>
+<li><strong>RISC</strong>: programa y datos en memorias separadas (Harvard), ~1000 instrucciones simples de ancho fijo, casi todo <em>load/store</em> vía registro. Verboso, pero el <em>pipeline</em> lo compensa.</li>
+<li><strong>CISC</strong> (Intel x86, heredero del 8086 / IA-32): instrucciones complejas de ancho variable que operan directo sobre memoria. Internamente, los Intel modernos parten cada instrucción CISC en micro-operaciones RISC.</li>
+<li>Direccionamiento por potencias de 2: 8 bits → 2⁸ = 256 B; 14 bits → 2¹⁴ = 16 K.</li>
+<li><strong>Caché</strong> = "almacenamiento en proxy". En multinúcleo, mínimo 2 niveles (L1+L2 por núcleo, L3 global; L1 dividida en datos e instrucciones) para evitar colisiones sobre la RAM.</li>
+<li>Familia <strong>Cortex-M</strong>: M0 barato sin FPU · M3 multiplica · M4/M7 FPU nativa · M7 además DSP/vectores.</li>
+</ul></div>
+
+<div class="examen"><h4>🎯 Para el examen</h4><ul>
+<li>Potencias de 2 <strong>de memoria</strong> para direccionamiento (2⁸=256 B de datos, 2¹⁴=16 K de programa).</li>
+<li>No usar <strong>recursión</strong> en µC con pila pequeña (PIC = 8 niveles, fuera de la RAM) → <em>stack overflow</em>.</li>
+<li>Elegir la familia <strong>Cortex-M</strong> por costo e infraestructura interna (FPU, DSP).</li>
+<li><strong>Caché</strong> como almacenamiento en proxy y la regla de ≥ 2 niveles en multinúcleo.</li>
+</ul></div>
+
+<details class="section-block sec" id="t2-risc-cisc" open><summary><span class="stitle">2.1 · Procesador: RISC vs. CISC</span></summary>
+<table><thead><tr><th></th><th>RISC</th><th>CISC (Intel x86)</th></tr></thead><tbody>
+<tr><td>Memoria</td><td>Programa y datos separados (Harvard)</td><td>Unificada; instrucciones operan directo sobre memoria</td></tr>
+<tr><td>Catálogo</td><td>~1000 instrucciones, ancho fijo</td><td>Millones de combinaciones, ancho variable</td></tr>
+<tr><td>Estilo</td><td>Casi todo <em>load/store</em> por un registro</td><td>Instrucciones complejas que hacen varias cosas</td></tr>
+</tbody></table>
+<p>"La pata donde cojean" las RISC: todo trabajo aritmético pasa por un registro → accesos constantes a memoria; el <em>pipeline</em> lo vuelve competitivo. Todos los Intel de escritorio derivan del <strong>8086</strong> (IA-32).</p></details>
+
+<details class="section-block sec" id="t2-pic"><summary><span class="stitle">Plataforma: PIC (RISC 8 bits)</span></summary>
 <ul>
-<li><span class="sn">2.1</span> Procesador.</li>
-<li><span class="sn">2.2</span> Mapa de memoria del sistema.</li>
-<li><span class="sn">2.3</span> Controlador de interrupciones.</li>
-<li><span class="sn">2.4</span> Temporizadores.</li>
-<li><span class="sn">2.5</span> Memoria volátil y no volátil. Direccionamientos.</li>
-<li><span class="sn">2.6</span> Bus serie universal.</li>
-<li><span class="sn">2.7</span> Interconexión de dispositivos.</li>
-<li><span class="sn">2.8</span> Secuencia de arranque en plataformas embebidas.</li>
-<li><span class="sn">2.9</span> Estudio de plataformas comerciales para sistemas embebidos (INTEL, ARM, etc.).</li>
-</ul>
+<li>Flash separada de RAM; bus de datos único conecta RAM, registro W, control, puertos y periféricos → acceso a cualquiera en un ciclo.</li>
+<li>Bus de datos 8 bits → 2⁸ = <strong>256 B de RAM</strong>; bus de programa 14 bits → 2¹⁴ = <strong>16 K</strong>.</li>
+<li><strong>Pila</strong>: fuera de la RAM, registro aparte de <strong>solo 8 niveles</strong> → prohibido recursión (<code>factorial(9)</code> desborda).</li>
+<li><strong>ALU</strong>: entrada izquierda desde un multiplexor, derecha cableada al acumulador <strong>W</strong>. <code>A + B</code> = 3 accesos: cargar A en W → W = W + B → escribir W en destino.</li>
+<li>Expansión: 2 puertos de direcciones + 1 de datos → 2¹⁶ = 64 KB externos; con el puerto A (5 bits) → 21 bits → &gt; 1 MB. La RAM interna pasa a ser <em>caché / scratchpad</em>.</li>
+</ul></details>
+
+<details class="section-block sec" id="t2-avr-esp32"><summary><span class="stitle">Plataformas: AVR (Arduino) y ESP32</span></summary>
+<p><strong>AVR</strong>: RISC con memoria de programa separada de la SRAM; <strong>32 registros de propósito general</strong> (no un solo W). Opera sobre registros, no sobre memoria directa; direcciona hasta 8 K de RAM.</p>
+<p><strong>ESP32</strong>: núcleo RISC + RF (WiFi), RTC, sensores, cripto <strong>SHA por hardware</strong> (encripta el flujo de RAM sin cargar la CPU → llaves de 256 bits en memoria externa segura). La ROM trae JTAG + caché, no es memoria de programa. Datos e instrucciones van <strong>revueltos</strong> en una RAM común (SRAM/PSRAM); una interfaz los separa en cola de instrucciones y cola de datos. ISA Xtensa / RISC-V.</p></details>
+
+<details class="section-block sec" id="t2-rp2040"><summary><span class="stitle">Plataforma: RP2040 (Raspberry Pi Pico) / ARM Cortex-M0+</span></summary>
+<ul>
+<li>Periféricos: GPIO, oscilador, <em>debugger</em>, flash externa, PIO, regulador interno. <strong>Dos procesadores</strong> + SRAM; la ROM es un periférico más.</li>
+<li>Con dos núcleos hay <strong>colisión de acceso</strong> → bloques de memoria independientes por los que se turnan.</li>
+<li>Núcleo <strong>Cortex-M0+</strong> (RISC): caché de instrucciones, pero mezcla datos en la misma memoria. Bloques: NVIC, wake-up de <em>sleep</em>, MPU, conmutador de bus, GPIO rápido, verificador de datos, <em>breakpoints</em>, tabla de traducción, JTAG, DMA.</li>
+<li>La "M" de Cortex = sistemas embebidos; la familia <strong>Cortex-A</strong> son procesadores de aplicación con compilador distinto.</li>
+</ul></details>
+
+<details class="section-block sec" id="t2-cortex-m"><summary><span class="stitle">Cómo elegir la familia Cortex-M</span></summary>
+<table><thead><tr><th>Núcleo</th><th>Punto flotante</th><th>Cuándo</th></tr></thead><tbody>
+<tr><td>Cortex-M0</td><td>Sin FPU; ~30 instrucciones enteras por operación decimal</td><td>El más barato (~1 USD); casi sin flotantes</td></tr>
+<tr><td>Cortex-M3</td><td>Flotantes no optimizados; multiplica por hardware → divide por inverso multiplicativo</td><td>Intermedio</td></tr>
+<tr><td>Cortex-M4</td><td>FPU nativa: multiplica y divide flotante por hardware</td><td>Mucho punto flotante</td></tr>
+<tr><td>Cortex-M7</td><td>FPU + unidad vectorial (DSP)</td><td><em>Overkill</em> salvo procesamiento de señales avanzado</td></tr>
+</tbody></table>
+<p>Si se necesita red → ESP32 (cripto SHA por hardware). El compilador traduce a ensamblador ARMv6-M y el decodificador de hardware lo parte en micro-operaciones internas.</p></details>
+
+<details class="section-block sec" id="t2-cache"><summary><span class="stitle">2.5 · Memoria caché y cuello de botella CPU–RAM</span></summary>
+<ul>
+<li>Caché = "almacenamiento en proxy": copiar lo más usado a un medio más rápido y cercano. HDD ~100 MB/s vs. DDR ~500 MB/s; copiar tabla de contenidos y archivos frecuentes a la DDR evita el giro físico del plato.</li>
+<li>Caché "inteligente": reconoce el SO y precarga a RAM sus archivos/librerías más usados (en Linux, kernel + binarios de <code>bash</code>).</li>
+<li><strong>Cuello de botella</strong>: CPU 4.2 GHz vs. DDR4 2.6 GHz. Solución: caché interna a la velocidad del núcleo; se toca la RAM una sola vez para traer un bloque grande (8 MB). Un programa típico (~500 KB) cabe entero en caché.</li>
+<li><strong>Multinúcleo</strong>: mínimo L1 + L2 por núcleo y L3 global; L1 dividida en L1-D (datos) y L1-I (instrucciones).</li>
+</ul></details>
+
+<details class="section-block sec" id="t2-intel"><summary><span class="stitle">2.9 · Intel x86: CISC por fuera, RISC por dentro</span></summary>
+<ul>
+<li><strong>Retrocompatibilidad</strong>: un Core i9 ejecuta código del 8086 sin recompilar. <strong>Itanium (IA-64)</strong> rompía la compatibilidad → fracaso. El estándar de 64 bits que triunfó es <strong>x86-64</strong> (de AMD, retrocompatible con IA-32).</li>
+<li>Cambiar el set de instrucciones (Mac Intel → Apple Silicon) obliga a recompilar los SO o usar traducción (Rosetta).</li>
+<li><strong>Microarquitectura</strong>: decodificador con predictor de saltos → L1-I (32 KB, 8 vías) → predecodificador jala 16 B/ciclo → parte las instrucciones CISC en micro-operaciones RISC (<em>micro-fusion</em>) → cola → planificador fuera de orden.</li>
+<li><strong>Renombrado de registros</strong>: muchos más registros físicos que los 8 nominales de x86 → dos programas de 32 bits en paralelo por hardware, sin hilos ni semáforos.</li>
+<li>Puertos de ejecución: Coffee Lake (2017) 8 puertos → 32 µops/ciclo en un quad-core; Golden Cove (2021) 12 puertos, cola de 512 entradas (2 store + 2 load + 5 cómputo pesado, 3 vectoriales).</li>
+</ul></details>
+
+<details class="section-block sec contexto" id="t2-practica"><summary><span class="chip chip-contexto">práctica</span><span class="stitle">Restricción de la práctica</span></summary><p>La práctica de sistemas operativos enfocada a <strong>Windows</strong> exige <strong>Raspberry Pi 3</strong>; <strong>no funciona en la Raspberry Pi 4</strong>. Se puede elegir la arquitectura de µC vista en clase que se prefiera.</p></details>
 </div></details>
 
 <details class="section-block tema off" id="tema-3"><summary><span class="stitle">Tema 3 — Sistemas operativos para plataformas embebidas</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Todavía sin apuntes de clase. Subtemas del programa:</p>
 <ul class="subtemas">
-<ul>
 <li><span class="sn">3.1</span> Interfaz de aplicación.</li>
 <li><span class="sn">3.2</span> Procesos, tareas e hilos.</li>
 <li><span class="sn">3.3</span> Tipos de scheduling.</li>
@@ -105,7 +165,6 @@ El carbón se usa porque conduce bien y además es suave (lubricante sólido); m
 
 <details class="section-block tema off" id="tema-4"><summary><span class="stitle">Tema 4 — Software y programación de sistemas embebidos</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Todavía sin apuntes de clase. Subtemas del programa:</p>
 <ul class="subtemas">
-<ul>
 <li><span class="sn">4.1</span> Programación en ensamblador.</li>
 <li><span class="sn">4.2</span> Programación en alto nivel.</li>
 <li><span class="sn">4.3</span> Ejemplos de manejadores de dispositivos (Device Drivers).</li>
@@ -116,15 +175,15 @@ El carbón se usa porque conduce bien y además es suave (lubricante sólido); m
 
 <details class="section-block tema off" id="tema-5"><summary><span class="stitle">Tema 5 — Desarrollo de un sistema embebido</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Todavía sin apuntes de clase. Subtemas del programa:</p>
 <ul class="subtemas">
-<ul>
 <li><span class="sn">5.1</span> Desarrollo de un sistema embebido con alguna plataforma comercial (INTEL Atom, ARM etc.).</li>
 </ul>
 </div></details>
 </div>
 
 <div class="v-clase">
-<p class="empty" style="padding:8px 0 16px">Solo las <strong>clases grabadas</strong>, en orden. Si falté a las primeras, se irán completando con grabaciones o apuntes de compañeros.</p>
-<details class="section-block clase-block" open><summary><span class="stitle">Clase 01</span></summary><div class="cbody"><p>— ¿Qué es un sistema embebido? Digital vs. mecánico/analógico, lazo abierto vs. cerrado, propiedades de materiales, motor de CA, definición formal de computadora. <span class="tags">Tema 1</span></p><p><a href="#tema-1">→ ver el detalle completo en el tema correspondiente</a></p></div></details>
+<p class="empty" style="padding:8px 0 16px">Solo las <strong>clases grabadas</strong>, en orden. Cada tarjeta abre la página completa de esa clase.</p>
+<a class="clase-link" href="clase-01.html"><span class="cl-n">Clase 01</span><span class="cl-t">Tema 1</span><span class="cl-d">¿Qué es (y qué no es) un sistema embebido? Digital vs. mecánico/analógico, lazo de control abierto vs. cerrado, propiedades de materiales, definición formal de computadora.</span></a>
+<a class="clase-link" href="clase-02.html"><span class="cl-n">Clase 02</span><span class="cl-t">Tema 2</span><span class="cl-d">RISC vs. CISC recorriendo PIC, AVR, ESP32, RP2040/Cortex-M e Intel x86. Memoria caché, cuello de botella CPU–RAM y cómo elegir la familia Cortex-M.</span></a>
 </div>
 
 </div>

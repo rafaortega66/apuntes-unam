@@ -305,3 +305,16 @@ details.clase-block > summary::before { content: '▸'; color: var(--coral); fon
 details.clase-block[open] > summary::before { transform: rotate(90deg); }
 details.clase-block .cbody { font-size: 14px; line-height: 1.65; padding-left: 4px; }
 details.clase-block .cbody a { color: var(--indigo); }
+
+/* vista Por clase: tarjeta que abre la página completa de esa clase */
+a.clase-link {
+  display: block; text-decoration: none; color: inherit;
+  border: 1px solid rgba(255,255,255,0.12); border-left: 3px solid var(--coral);
+  border-radius: 10px; padding: 13px 16px; margin: 0 0 10px;
+  transition: border-color .15s, background .15s, transform .15s;
+}
+a.clase-link:hover { background: rgba(232,115,92,0.07); border-left-color: var(--coral); transform: translateX(2px); }
+a.clase-link .cl-n { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 600; color: var(--ink); }
+a.clase-link .cl-t { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--ink-soft); margin-left: 8px; }
+a.clase-link .cl-d { display: block; font-size: 13.5px; line-height: 1.6; color: var(--ink-soft); margin-top: 4px; }
+@media (max-width: 640px) { a.clase-link .cl-n { font-size: 15px; } a.clase-link .cl-d { font-size: 13px; } }

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 01 — Fundamentos de Sistemas Embebidos</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Fundamentos de Sistemas Embebidos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 01</h2>
+  <p class="prof">M.C. José Mauricio Matamoros de María y Campos · Tema 1 — Introducción a los sistemas embebidos · qué es (y qué no es) un sistema embebido, lazo de control, propiedades de materiales y definición formal de computadora.</p>
+</div>
+
+<div class="encorto"><h4>En corto</h4><ul>
+<li>Sistema embebido = sistema <strong>digital</strong> (µC / procesador) dedicado a <strong>una</strong> tarea; distinto de una computadora de propósito general y de lo puramente mecánico / analógico.</li>
+<li>Criterio de ingeniería: ¿de verdad necesita cómputo digital, o basta con electrónica / mecánica robusta?</li>
+<li>Lazo de control <strong>abierto</strong> (por tiempo) vs. <strong>cerrado</strong> (los sensores deciden cuándo parar).</li>
+<li>Propiedades de materiales: <strong>dureza</strong>, <strong>tenacidad</strong> y <strong>ductilidad</strong> — no confundirlas.</li>
+<li>Cierre: definición formal de computadora (entrada, salida, procesador, memoria) → abre el tema de procesadores.</li>
+</ul></div>
+
+<div class="examen"><h4>🎯 Para el examen</h4><ul>
+<li>Distinguir solución <strong>mecánica / analógica / electromecánica</strong> vs. <strong>sistema embebido digital</strong>. Es error grave llamar sistema embebido a algo puramente físico, aunque haga una función "inteligente".</li>
+<li>Definiciones precisas: <strong>dureza</strong> (resistencia a rayarse, suele venir con fragilidad), <strong>tenacidad</strong> (se dobla sin romperse), <strong>ductilidad</strong> (se estira sin fracturarse).</li>
+<li>Saber cuándo se justifica un microcontrolador y cuándo basta con electrónica analógica robusta.</li>
+</ul></div>
+
+<div class="section-block"><h4>Idea central</h4>
+<p>Un sistema embebido es un sistema <strong>digital</strong> (tiene microcontrolador o procesador) dedicado a <strong>una tarea específica</strong>, a diferencia de una computadora personal, que es de propósito general. Lo que se resuelve de forma puramente mecánica, analógica o electromecánica <strong>no</strong> es un sistema embebido, aunque haga una función aparentemente inteligente.</p></div>
+
+<div class="section-block"><h4>El criterio que hay que saber aplicar</h4>
+<p>Ante cualquier dispositivo, preguntarse: ¿de verdad necesita procesamiento digital, o basta con electrónica analógica / mecánica robusta? Un ingeniero debe saber <strong>cuándo</strong> poner un microcontrolador y cuándo no. Llamar "sistema embebido" a algo que es puramente físico es el error de fondo.</p></div>
+
+<div class="section-block"><h4>Ejemplos por categoría</h4>
+<table><thead><tr><th>Sí es sistema embebido (digital)</th><th>No lo es (mecánico / analógico / electromecánico)</th></tr></thead><tbody>
+<tr><td>Control remoto (µC genera el tren de pulsos IR)</td><td>Semáforo electromecánico (plato giratorio con escobillas)</td></tr>
+<tr><td>Cámara de seguridad, oxímetro, termómetro digital</td><td>Alarma de incendios con transistor 2N2222 + buzzer</td></tr>
+<tr><td>Calculadora, piano digital, Apple Pencil</td><td>Termostato bimetálico (mercurio / nitinol)</td></tr>
+<tr><td>Frenos ABS, puerta automática con sensores</td><td>Microondas de perillas, lavadora de tina manual</td></tr>
+<tr><td>Cerradura electrónica, lector RFID / biométrico</td><td>Medidor electromecánico antiguo de CFE</td></tr>
+<tr><td>Roomba, bocinas inteligentes, audífonos Bluetooth</td><td>Radio analógico, walkie-talkie 80s, tornamesa</td></tr>
+</tbody></table>
+<p>Casos "depende": marcapasos (digital sí / analógico no), multímetro (solo el digital), lector de código de barras (con USB sí; transceptor láser simple no), máquina expendedora (hay modelos solo mecánicos), bomba de insulina (en esencia es un motor de empuje).</p></div>
+
+<div class="section-block"><h4>Lazo de control abierto vs. cerrado (ejemplo: máquina de diálisis)</h4>
+<ul>
+<li><strong>Lazo abierto:</strong> se fija por tiempo (3 horas y se asume que la sangre quedó limpia), sin retroalimentación.</li>
+<li><strong>Lazo cerrado:</strong> sensores miden en tiempo real. Conforme se filtran sales y ácido úrico, la conductividad de la sangre baja; el sistema usa ese dato para decidir cuándo detenerse.</li>
+</ul></div>
+
+<div class="section-block"><h4>Propiedades de los materiales</h4>
+<ul>
+<li><strong>Dureza:</strong> resistencia a rayarse / a la fricción. Suele venir acompañada de fragilidad. Ej.: diamante (raya todo pero se hace añicos de un martillazo); aluminio (duro y quebradizo frente al acero).</li>
+<li><strong>Tenacidad / extensibilidad:</strong> se dobla o deforma sin romperse. Ej.: acero (se raya fácil, pero es flexible → parrillas, estructuras).</li>
+<li><strong>Ductilidad:</strong> se estira mucho sin fracturarse. Ej.: oro (muy dúctil pero blando); níquel y titanio (usados en termostatos bimetálicos).</li>
+</ul></div>
+
+<div class="section-block"><h4>Motor eléctrico de CA (taladro, licuadora)</h4>
+<p>No usa imanes permanentes: bobinas en el estator y en el rotor. Al energizar se forman polos N-S y el rotor empieza a girar. Las <strong>escobillas + carbones</strong> invierten la polaridad mecánicamente en cada media vuelta, para que los polos se repelan y el giro no se detenga al alinearse. Se usa carbón porque conduce bien y además es suave (lubricante sólido); metal rozando cobre se destruiría por fricción. El carbón se desgasta con el uso y se reemplaza barato en vez de tirar la herramienta.</p></div>
+
+<div class="section-block"><h4>Cierre — definición formal de computadora</h4>
+<p>Máquina que consta de: elementos de entrada, elementos de salida, procesador central y memoria. En esencia, algo que realiza cálculos. Con esto el profesor abrió el tema siguiente: procesadores.</p></div>
+
+<div class="section-block"><h4>Contexto de clase — <em>no va para examen</em></h4>
+<p>Comentarios de pasada, sin peso para el examen: etimología árabe de "algoritmo" (<em>al-Ḵwārizmī</em>) y "álgebra" (<em>al-yabr</em>); la máquina de Turing como modelo abstracto de "lo que una computadora puede calcular"; menciones sueltas a "vacunas 1880" y las Puertas de Ishtar de Babilonia.</p></div>
+
+<p class="empty" style="margin-top:28px">Este material también está en el <a href="index.html#tema-1" style="color:var(--indigo)">Tema 1</a> de la materia.</p>
+
+</div>
+</body>
+</html>
