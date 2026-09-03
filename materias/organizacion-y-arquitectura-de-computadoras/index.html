@@ -172,7 +172,19 @@ STA i
 </ul>
 </div></details>
 
-<details class="section-block tema off" id="tema-5"><summary><span class="stitle">Tema 5 — Familias de procesadores comerciales</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Subtemas del programa oficial:</p>
+<details class="section-block tema off" id="tema-5"><summary><span class="stitle">Tema 5 — Familias de procesadores comerciales</span> <span class="thrs">· notas sueltas</span></summary><div class="tema-body">
+<details class="section-block sec" id="t5-pico-clase2" open><summary><span class="stitle">Notas de ARM / Raspberry Pi Pico (Clase 2 · 2 sep)</span></summary>
+<p>El tema aún no se desarrolla en clase; esto son apuntes sueltos de la <a href="clase-02.html" style="color:var(--indigo)">Clase 02</a> (el curso usa ensamblador sobre Raspberry Pi Pico, que monta un núcleo ARM Cortex-M).</p>
+<ul>
+<li><strong>Pico 2 tiene FPU</strong>; la <strong>Pico 1 no</strong>. Un programa en ensamblador con punto flotante para la Pico 2 <strong>no corre</strong> en la Pico 1 (ausencia física de la FPU). En alto nivel casi no se nota.</li>
+<li>La Pico 2 expone <strong>32 registros de punto flotante</strong> y, en teoría, una <strong>unidad MAC</strong> (multiplicación-acumulación) tipo DSP — todavía no accesible desde los ensambladores disponibles.</li>
+<li>El <em>bootloader</em> oficial aún <strong>no distingue</strong> Pico 1 de Pico 2.</li>
+<li><strong>DMA</strong>: lo importante es <strong>direccionar directamente los registros internos</strong> de la tarjeta; la librería oficial no convenció al profesor, que hizo la suya para manejar imágenes.</li>
+<li>Mencionados: microcontrolador <strong>FPU 64</strong> (canadiense, 64 bits, 40 MHz, ISA muy potente); display <strong>ILI9488</strong> (320×480); libro <em>Numerical Recipes in C</em>.</li>
+</ul>
+<p class="chip chip-examen" style="display:inline-block">examen</p> <span style="font-size:13px;color:var(--ink-soft)">En las Pico se pueden usar 32 registros; la limitación real aparece al direccionar directamente los registros internos, no al usar alto nivel + librerías.</span>
+</details>
+<p class="empty" style="margin-top:12px">Subtemas del programa oficial:</p>
 <ul class="subtemas">
 <li><span class="sn">5.1</span> Arquitectura ARM.</li>
 <ul>
@@ -225,8 +237,9 @@ STA i
 </div>
 
 <div class="v-clase">
-<p class="empty" style="padding:8px 0 16px">Clases grabadas, en orden.</p>
-<details class="section-block clase-block" open><summary><span class="stitle">Clase 01</span> <span class="thrs">· 31 ago 2026</span></summary><div class="cbody"><p>— Von Neumann vs. Harvard, CISC vs. RISC, ciclo Fetch–Decode–Execute–Write Back y pipeline. <span class="tags">Temas 1, 2, 4</span></p><p><a href="#tema-1">→ ver el detalle completo en el tema correspondiente</a></p></div></details>
+<p class="empty" style="padding:8px 0 16px">Clases grabadas, en orden. Cada tarjeta abre la página completa de esa clase.</p>
+<a class="clase-link" href="clase-01.html"><span class="cl-n">Clase 01</span><span class="cl-t">31 ago 2026 · Temas 1, 2, 4</span><span class="cl-d">Estructura básica: Von Neumann vs. Harvard, CISC vs. RISC, ciclo Fetch–Decode–Execute–Write Back y pipeline (con diagrama espacio-tiempo).</span></a>
+<a class="clase-link" href="clase-02.html"><span class="cl-n">Clase 02</span><span class="cl-t">2 sep 2026 · herramientas + Pico</span><span class="cl-d">Herramientas del curso (osciloscopio virtual v3, ensamblador Pico, terminal web) y diferencias de hardware Pico 1 vs. Pico 2: FPU, 32 registros de punto flotante, unidad MAC, bootloader y DMA. Sesión corta.</span></a>
 </div>
 
 </div>

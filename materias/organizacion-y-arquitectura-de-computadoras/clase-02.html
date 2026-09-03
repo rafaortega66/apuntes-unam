@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 02 — Organización y Arquitectura de Computadoras</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Organización y Arquitectura de Computadoras</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Clase 02</h2>
+  <p class="prof">M.I. José Antonio de Jesús Arredondo Garza · 2 sep 2026 · herramientas del curso, ensamblador en Raspberry Pi Pico y diferencias de hardware Pico 1 vs. Pico 2. Sesión corta (el profesor la terminó antes para entregar un informe de posgrado).</p>
+</div>
+
+<div class="encorto"><h4>En corto</h4><ul>
+<li>Clase de <strong>arranque práctico</strong>: presentación de materiales y herramientas, no de teoría formal (no hubo diagramas de bloques, formatos de instrucción, tablas de registros ni fórmulas de rendimiento).</li>
+<li><strong>Pico 2 tiene FPU</strong> (unidad de punto flotante) y la <strong>Pico 1 no</strong>: un programa en ensamblador con punto flotante para la Pico 2 <strong>no corre</strong> en la Pico 1. En alto nivel casi no se nota; en ensamblador es crítico.</li>
+<li>La Pico 2 expone <strong>32 registros de punto flotante</strong> y, en teoría, una <strong>unidad MAC</strong> (multiplicación-acumulación) como la de los DSP — aún no accesible desde los ensambladores disponibles.</li>
+<li>El <em>bootloader</em> oficial todavía <strong>no distingue</strong> Pico 1 de Pico 2 (es el mismo).</li>
+<li><strong>DMA</strong> (Direct Memory Access): la clave es poder <strong>direccionar directamente los registros internos</strong> de la tarjeta. La librería oficial no convenció al profesor, que hizo la suya para manejar imágenes.</li>
+</ul></div>
+
+<div class="examen"><h4>🎯 Para el examen</h4><ul>
+<li>En las Pico se pueden usar <strong>32 registros</strong> (los de punto flotante de la Pico 2).</li>
+<li>Es cómodo quedarse en alto nivel y librerías, pero la <strong>limitación real</strong> aparece cuando hay que <strong>direccionar directamente los registros internos</strong> de la tarjeta.</li>
+<li>No se dictaron fechas de examen, tareas ni porcentajes (la sesión se cortó).</li>
+</ul></div>
+
+<div class="section-block"><h4>Contexto histórico (mencionado de pasada)</h4>
+<p>Procesador IBM 180; origen del temporizador <strong>555</strong>; nacimiento de BASIC; <strong>Texas Instruments</strong>, que empezó siendo una petrolera y pasó a ser un gigante de la electrónica — hoy destaca por sus <strong>sensores y chips biomédicos</strong>.</p></div>
+
+<div class="section-block"><h4>Raspberry Pi Pico 1 vs. Pico 2</h4>
+<ul>
+<li>Ambas permiten programar en <strong>lenguaje ensamblador</strong>.</li>
+<li><strong>FPU</strong>: la Pico 2 la tiene; la Pico 1 no. Consecuencia: código en ensamblador con operaciones de <strong>punto flotante</strong> compilado para la Pico 2 <strong>no corre</strong> en la Pico 1 por la ausencia física de la FPU. En lenguajes de alto nivel la diferencia casi no se ve.</li>
+<li>La Pico 2 tiene <strong>32 registros de punto flotante</strong> para operaciones complejas o para implementar funciones que no existen por defecto.</li>
+<li><strong>Unidad de multiplicación acumulativa (MAC)</strong>: la Pico 2 teóricamente añade una unidad parecida a la de los <strong>DSP</strong>. El profesor intentó acceder a ella desde los ensambladores disponibles y no lo logró → todavía no está integrada al software de desarrollo.</li>
+<li><strong>Bootloader</strong> oficial: aún no está diferenciado; es el mismo para Pico 1 y Pico 2.</li>
+</ul></div>
+
+<div class="section-block"><h4>DMA (Direct Memory Access) y librería propia</h4>
+<p>El profesor subraya la importancia de <strong>direccionar directamente los registros internos</strong> de las Pico. Existe una <strong>librería oficial de DMA</strong>, pero tras revisarla no le convenció; desarrolló su <strong>propia librería de DMA</strong> para acceder directamente al recurso y manejar <strong>imágenes</strong> de forma directa.</p></div>
+
+<div class="section-block"><h4>Librería AP (matemática reducida)</h4>
+<p>Librería matemática reducida, del estilo de la librería grande de Python: permite <strong>operaciones matriciales</strong> y <strong>solución de ecuaciones</strong>. No corre con el bootloader oficial, sino con un <strong>bootloader alternativo</strong> (nombre transcrito de forma imprecisa como "de Pori Bimor").</p></div>
+
+<div class="section-block"><h4>Otros procesadores y hardware mencionados</h4>
+<ul>
+<li><strong>Display gráfico ILI9488</strong> — archivo para controlarlo con la Pico 2. Resolución citada en clase como "320 por 408" px (el ILI9488 es habitualmente <strong>320×480</strong>).</li>
+<li><strong>Microcontrolador FPU 64</strong> — procesador canadiense de 64 bits, "no muy veloz" (40 MHz), pero con un <strong>conjunto de instrucciones en ensamblador muy potente</strong>, al punto de no necesitar componentes adicionales.</li>
+<li>Driver para <strong>servos</strong> y ejemplo de <strong>red neuronal en Matlab</strong> que resuelve una compuerta <strong>XOR</strong>.</li>
+</ul></div>
+
+<div class="section-block"><h4>Herramientas y materiales del curso</h4>
+<ul>
+<li><strong>Osciloscopio Virtual v3</strong> — en la carpeta de materiales, ya con correcciones de errores.</li>
+<li><strong>Assembler Pico</strong> — el ensamblador con el que se trabajará el curso.</li>
+<li><strong>Terminal web</strong> — corre desde el navegador, sin instalación, para ejecutar programas.</li>
+<li><strong>Matlab</strong> — ejemplo incluido: compuerta XOR con redes neuronales.</li>
+<li>Lecturas: diferencias entre microcontroladores y microprocesadores; artículos y documentales cortos; libro de dominio público <strong>"Numerical Recipes" (in C)</strong> — algoritmos de ingeniería como "recetas de cocina" (integración, derivación).</li>
+<li>Los proyectos del trimestre pasado ("Tomy") sirven de guía de lo que se hace en la materia.</li>
+</ul></div>
+
+<p class="empty" style="margin-top:28px">Las notas de hardware ARM / Pico se recogen también en el <a href="index.html#tema-5" style="color:var(--indigo)">Tema 5</a> (familias de procesadores comerciales).</p>
+
+</div>
+</body>
+</html>
