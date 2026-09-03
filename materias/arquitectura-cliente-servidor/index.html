@@ -26,17 +26,11 @@
   <a class="card" style="--c:#E8735C" href="entregas.html"><h3>Entregas</h3><p>PDFs que ya entregaste</p></a>
 </div>
 
-<details class="section-block collapsible"><summary>Clases grabadas</summary>
-<ol class="clases">
-<li><a href="#tema-1"><strong>Clase 1</strong></a> — Linux y procesos: imagen de un proceso, segmentos de memoria (text/data/BSS/heap/stack), BCP/PCB, comandos <code>size</code> / <code>pmap</code> / <code>ps</code> / <code>top</code> / <code>ls -ltr</code>, árbol de procesos, PID/PPID, time-sharing, race condition y deadlock. <span class="tags">Tema 1</span></li>
-<li><a href="#tema-1"><strong>Clase 2</strong></a> — Permisos UGO / <code>chmod</code> decimal, bit <strong>SetUID</strong> (<code>chmod 4511</code>, <code>s</code> en permisos), <code>/etc/passwd</code>, ID real vs. efectivo (<code>getuid</code> / <code>geteuid</code>), Tarea 2 (con <code>fdisk</code>), <code>fork()</code> (retorno <code>pid_t</code>, PID hijo al padre / 0 al hijo, <code>if(id_hijo!=0)</code>), deadlock. <span class="tags">Tema 1</span></li>
-<li><a href="#tema-1"><strong>Clase 3</strong></a> — Demo del bit <strong>SetUID</strong> paso a paso en Codespaces (<code>chown root:root</code>, <code>chmod 700</code> → "permiso denegado", <code>chmod 4511</code> → efectivo 0); bits especiales (SetGID <code>2</code>, sticky <code>1</code> → <code>T</code>); <code>/etc/shadow</code>; <strong><code>errno</code></strong> y códigos de error (macros <code>E…</code>, <code>ENOENT</code>=2, <code>0</code>=éxito); red de la FI (subredes A/B/C/P, IPs <code>132.247/248</code>); Tarea 2 reactivada (PDF con capturas, jueves). <span class="tags">Tema 1</span></li>
-</ol>
-<p class="empty">Solo las clases grabadas. El material de presentaciones del profesor está integrado en los temas.</p></details>
 <details class="section-block collapsible"><summary>Plan de estudios</summary><p><strong>Clave FI:</strong> 2946</p><p>Objetivo: el alumno aplicará los conocimientos de protocolos, criptografía y seguridad para desarrollar programas bajo la arquitectura cliente/servidor mediante un lenguaje de programación.</p>
 <table><thead><tr><th>Núm.</th><th>Tema</th><th>Horas</th></tr></thead><tbody><tr><td>1</td><td>Conceptos básicos</td><td>6.0</td></tr><tr><td>2</td><td>Creación de socket servidor y cliente</td><td>10.0</td></tr><tr><td>3</td><td>Servidores y clientes sincronizados</td><td>10.0</td></tr><tr><td>4</td><td>Sockets broadcasting y multicasting</td><td>8.0</td></tr><tr><td>5</td><td>Implantación de servidores con criptografía y código seguro</td><td>8.0</td></tr><tr><td>6</td><td>Herramientas para la comunicación entre servidores</td><td>6.0</td></tr></tbody></table></details>
 <details class="section-block collapsible"><summary>Bibliografía básica</summary><ul><li>Kurose &amp; Ross — <em>Computer Networking: A Top-Down Approach</em></li><li>Stevens — <em>UNIX Network Programming</em>, Vol. I y II</li><li>Walton — <em>Programación de sockets en Linux</em></li></ul></details>
 
+<div class="v-tema">
 <details class="section-block tema" id="tema-1" open><summary><span class="stitle">Tema 1 — Conceptos básicos</span></summary><div class="tema-body">
 <div class="files">
     <a class="btn" href="files/Tema-01-Procesos-diapositivas.pdf" target="_blank">📄 Presentación (diapositivas)</a>
@@ -1271,15 +1265,121 @@ Effective group ID: 1000</code></pre>
 <details class="section-block sec" id="referencias-del-profesor-tema-1"><summary><span class="stitle">Referencias del profesor (Tema 1)</span></summary><div class="links" style="margin-top:0"><div class="link-item"><span class="label">Familia exec — man</span><a href="https://manpages.ubuntu.com/manpages/bionic/es/man3/execl.3.html" target="_blank" rel="noopener">https://manpages.ubuntu.com/manpages/bionic/es/man3/execl.3.html</a></div><div class="link-item"><span class="label">Procesos en Linux</span><a href="https://www.hpca.ual.es/~vruiz/docencia/cursos/linux/html/node43.html" target="_blank" rel="noopener">https://www.hpca.ual.es/~vruiz/docencia/cursos/linux/html/node43.html</a></div></div></details>
 </div></details>
 
-<details class="section-block tema off" id="tema-2"><summary><span class="stitle">Tema 2 — Creación de socket servidor y cliente</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+<details class="section-block tema off" id="tema-2"><summary><span class="stitle">Tema 2 — Creación de socket servidor y cliente</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Todavía sin apuntes de clase. Subtemas del programa:</p>
+<ul class="subtemas">
+<ul>
+<li><span class="sn">2.1</span> Socket en TCP.</li>
+<ul>
+<li><span class="sn">2.1.1</span> Servidor eco.</li>
+<li><span class="sn">2.1.2</span> Cliente eco.</li>
+</ul>
+<li><span class="sn">2.2</span> Socket en UDP.</li>
+<ul>
+<li><span class="sn">2.2.1</span> Servidor eco.</li>
+<li><span class="sn">2.2.2</span> Cliente eco.</li>
+</ul>
+<li><span class="sn">2.3</span> Concepto de hilos.</li>
+<ul>
+<li><span class="sn">2.3.1</span> Creación de servidor concurrente.</li>
+</ul>
+<li><span class="sn">2.4</span> Definición de DAEMON.</li>
+</ul>
+</div></details>
 
-<details class="section-block tema off" id="tema-3"><summary><span class="stitle">Tema 3 — Servidores y clientes sincronizados</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+<details class="section-block tema off" id="tema-3"><summary><span class="stitle">Tema 3 — Servidores y clientes sincronizados</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Todavía sin apuntes de clase. Subtemas del programa:</p>
+<ul class="subtemas">
+<ul>
+<li><span class="sn">3.1</span> Procesos.</li>
+<li><span class="sn">3.2</span> Semáforos y sincronización.</li>
+<li><span class="sn">3.3</span> Lectura y escritura de archivos.</li>
+<li><span class="sn">3.4</span> Servidores orientados a conexión.</li>
+<ul>
+<li><span class="sn">3.4.1</span> HTTP.</li>
+<li><span class="sn">3.4.2</span> FTP.</li>
+<li><span class="sn">3.4.3</span> Otros servidores.</li>
+</ul>
+<li><span class="sn">3.5</span> Servidores no orientados a conexión.</li>
+<ul>
+<li><span class="sn">3.5.1</span> Servidores P2P.</li>
+<li><span class="sn">3.5.2</span> Otros servidores.</li>
+</ul>
+<li><span class="sn">3.6</span> Desarrollo de aplicaciones.</li>
+<ul>
+<li><span class="sn">3.6.1</span> Generación de protocolos de la capa de aplicación.</li>
+</ul></ul>
+</div></details>
 
-<details class="section-block tema off" id="tema-4"><summary><span class="stitle">Tema 4 — Sockets broadcasting y multicasting</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+<details class="section-block tema off" id="tema-4"><summary><span class="stitle">Tema 4 — Sockets broadcasting y multicasting</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Todavía sin apuntes de clase. Subtemas del programa:</p>
+<ul class="subtemas">
+<ul>
+<li><span class="sn">4.1</span> Broadcast.</li>
+<ul>
+<li><span class="sn">4.1.1</span> Definición de broadcast.</li>
+<li><span class="sn">4.1.2</span> Funcionamiento de broadcast.</li>
+<li><span class="sn">4.1.3</span> Creación del socket broadcast.</li>
+</ul>
+<li><span class="sn">4.2</span> Multicast.</li>
+<ul>
+<li><span class="sn">4.2.1</span> Definición de multicast.</li>
+<li><span class="sn">4.2.2</span> Funcionamiento multicast.</li>
+<li><span class="sn">4.2.3</span> Creación del socket multicast.</li>
+<li><span class="sn">4.2.4</span> Ruteo multicast.</li>
+</ul></ul>
+</div></details>
 
-<details class="section-block tema off" id="tema-5"><summary><span class="stitle">Tema 5 — Implantación de servidores con criptografía y código seguro</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+<details class="section-block tema off" id="tema-5"><summary><span class="stitle">Tema 5 — Implantación de servidores con criptografía y código seguro</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Todavía sin apuntes de clase. Subtemas del programa:</p>
+<ul class="subtemas">
+<ul>
+<li><span class="sn">5.1</span> SSL y TLS.</li>
+<li><span class="sn">5.2</span> Servidores con criptografía.</li>
+<ul>
+<li><span class="sn">5.2.1</span> Servidor HTTP.</li>
+<li><span class="sn">5.2.2</span> Servidor FTP.</li>
+<li><span class="sn">5.2.3</span> Servidor Secure Shell.</li>
+</ul>
+<li><span class="sn">5.3</span> Clientes con criptografía.</li>
+<ul>
+<li><span class="sn">5.3.1</span> Cliente HTTP.</li>
+<li><span class="sn">5.3.2</span> Cliente FTP.</li>
+<li><span class="sn">5.3.3</span> Cliente Secure Shell.</li>
+</ul>
+<li><span class="sn">5.4</span> Servidores y clientes implantando código seguro.</li>
+</ul>
+</div></details>
 
-<details class="section-block tema off" id="tema-6"><summary><span class="stitle">Tema 6 — Herramientas para la comunicación entre servidores</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+<details class="section-block tema off" id="tema-6"><summary><span class="stitle">Tema 6 — Herramientas para la comunicación entre servidores</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Todavía sin apuntes de clase. Subtemas del programa:</p>
+<ul class="subtemas">
+<ul>
+<li><span class="sn">6.1</span> Servidores Web.</li>
+<ul>
+<li><span class="sn">6.1.1</span> HTML.</li>
+<li><span class="sn">6.1.2</span> Programación desde cliente.</li>
+<li><span class="sn">6.1.3</span> Instalación.</li>
+<li><span class="sn">6.1.4</span> Configuración.</li>
+</ul>
+<li><span class="sn">6.2</span> Servidores de bases de datos.</li>
+<ul>
+<li><span class="sn">6.2.1</span> SQL.</li>
+</ul>
+<li><span class="sn">6.3</span> Servidores de correos.</li>
+<li><span class="sn">6.4</span> Conceptos.</li>
+<ul>
+<li><span class="sn">6.4.1</span> Frameworks.</li>
+<li><span class="sn">6.4.2</span> Middleware.</li>
+<li><span class="sn">6.4.3</span> Servidores de aplicaciones.</li>
+<li><span class="sn">6.4.4</span> Servicios web.</li>
+</ul>
+<li><span class="sn">6.5</span> Utilización de un framework en un servidor de aplicaciones.</li>
+</ul>
+</div></details>
+</div>
+
+<div class="v-clase">
+<p class="empty" style="padding:8px 0 16px">Solo las <strong>clases grabadas</strong>, en orden. Si falté a las primeras, se irán completando con grabaciones o apuntes de compañeros.</p>
+<details class="section-block clase-block"><summary><span class="stitle">Clase 1</span></summary><div class="cbody"><p>— Linux y procesos: imagen de un proceso, segmentos de memoria (text/data/BSS/heap/stack), BCP/PCB, comandos <code>size</code> / <code>pmap</code> / <code>ps</code> / <code>top</code> / <code>ls -ltr</code>, árbol de procesos, PID/PPID, time-sharing, race condition y deadlock. <span class="tags">Tema 1</span></p><p><a href="#tema-1">→ ver el detalle completo en el tema correspondiente</a></p></div></details>
+<details class="section-block clase-block"><summary><span class="stitle">Clase 2</span></summary><div class="cbody"><p>— Permisos UGO / <code>chmod</code> decimal, bit <strong>SetUID</strong> (<code>chmod 4511</code>, <code>s</code> en permisos), <code>/etc/passwd</code>, ID real vs. efectivo (<code>getuid</code> / <code>geteuid</code>), Tarea 2 (con <code>fdisk</code>), <code>fork()</code> (retorno <code>pid_t</code>, PID hijo al padre / 0 al hijo, <code>if(id_hijo!=0)</code>), deadlock. <span class="tags">Tema 1</span></p><p><a href="#tema-1">→ ver el detalle completo en el tema correspondiente</a></p></div></details>
+<details class="section-block clase-block" open><summary><span class="stitle">Clase 3</span></summary><div class="cbody"><p>— Demo del bit <strong>SetUID</strong> paso a paso en Codespaces (<code>chown root:root</code>, <code>chmod 700</code> → "permiso denegado", <code>chmod 4511</code> → efectivo 0); bits especiales (SetGID <code>2</code>, sticky <code>1</code> → <code>T</code>); <code>/etc/shadow</code>; <strong><code>errno</code></strong> y códigos de error (macros <code>E…</code>, <code>ENOENT</code>=2, <code>0</code>=éxito); red de la FI (subredes A/B/C/P, IPs <code>132.247/248</code>); Tarea 2 reactivada (PDF con capturas, jueves). <span class="tags">Tema 1</span></p><p><a href="#tema-1">→ ver el detalle completo en el tema correspondiente</a></p></div></details>
+</div>
 
 </div>
 </body>

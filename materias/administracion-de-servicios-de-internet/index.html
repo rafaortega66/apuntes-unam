@@ -26,15 +26,11 @@
   <a class="card" style="--c:#7C9CD6" href="entregas.html"><h3>Entregas</h3><p>PDFs que ya entregaste</p></a>
 </div>
 
-<details class="section-block collapsible"><summary>Clases grabadas</summary>
-<ol class="clases">
-<li><a href="#tema-1"><strong>Clase 1</strong></a> — Repaso de arquitectura (Von Neumann vs Harvard RISC, pipeline), jerarquía de directorios de Linux (FHS) con prioridades, distribuciones, y práctica de terminal: <code>whereis</code>/<code>which</code>, <code>man</code>, <code>ps aux</code>, <code>top</code>, <code>nano</code>, <code>cat</code>, <code>ls</code>, <code>mkdir -m</code>/<code>-p</code>. Deja la <a href="evaluacion.html" style="color:var(--indigo)">Práctica 0</a>. <span class="tags">Tema 1</span></li>
-</ol>
-<p class="empty">Solo las clases grabadas. El material de presentaciones del profesor está integrado en los temas.</p></details>
 <details class="section-block collapsible"><summary>Plan de estudios</summary><p><strong>Clave FI:</strong> 2945</p><p>Objetivo: el alumno diseñará las características, operación y configuración de los servicios de internet para aplicarlo en la administración de diferentes organizaciones.</p>
 <table><thead><tr><th>Núm.</th><th>Tema</th><th>Horas</th></tr></thead><tbody><tr><td>1</td><td>Introducción</td><td>4.0</td></tr><tr><td>2</td><td>Servidor de correo electrónico</td><td>8.0</td></tr><tr><td>3</td><td>Servidor de conexión remota</td><td>8.0</td></tr><tr><td>4</td><td>Servidores de aplicaciones y middleware</td><td>8.0</td></tr><tr><td>5</td><td>Servidor de archivos</td><td>8.0</td></tr><tr><td>6</td><td>Servidor de directorios</td><td>10.0</td></tr><tr><td>7</td><td>Servidor web</td><td>12.0</td></tr><tr><td>8</td><td>Otros servicios</td><td>6.0</td></tr></tbody></table></details>
 <details class="section-block collapsible"><summary>Bibliografía básica</summary><ul><li>Hunt — <em>TCP/IP Network Administration</em></li><li>Mann — <em>Linux TCP/IP Network Administration</em></li><li>Hunt — <em>Linux DNS Server Administration</em></li></ul></details>
 
+<div class="v-tema">
 <details class="section-block tema" id="tema-1" open><summary><span class="stitle">Tema 1 — Introducción</span></summary><div class="tema-body">
 <div class="encorto"><h4>En corto</h4><ul><li>Repaso de arquitectura: Von Neumann vs. Harvard RISC y <em>pipeline</em>.</li><li><strong>FHS</strong>: jerarquía de directorios de Linux y su prioridad (<code>/boot /bin /dev /etc /usr /lib</code> alta; <code>/home /root /var</code> media; <code>/tmp</code> baja).</li><li>Distribuciones de Linux y para quién es cada una.</li><li>Terminal: <code>whereis</code> / <code>which</code>, <code>man</code>, <code>ps</code> / <code>ps aux</code>, <code>top</code>, <code>nano</code>, <code>cat</code>, <code>ls</code>, <code>mkdir</code>.</li><li>De esta clase sale la <a href="evaluacion.html" style="color:var(--indigo)">Práctica 0</a>.</li></ul></div>
 <div class="examen"><h4>🎯 Para el examen</h4><ul><li>El permiso <code>777</code> nunca se usa por defecto.</li><li>En carpetas, el permiso <code>x</code> deja entrar a otros usuarios; a un atacante le basta el permiso de ejecución → nunca dejar carpetas / archivos dudosos con <code>x</code> para terceros.</li><li><code>ps aux</code> (modificador <code>x</code>): procesos <strong>sin terminal asociada</strong> = primer indicio de malware.</li><li><code>whereis</code> (carpeta de instalación completa) vs. <code>which</code> (solo el binario ejecutable).</li></ul></div>
@@ -130,19 +126,155 @@ mkdir -p a/b/c          # crea todo el árbol de subcarpetas en una sola línea<
 </ul></details>
 </div></details>
 
-<details class="section-block tema off" id="tema-2"><summary><span class="stitle">Tema 2 — Servidor de correo electrónico</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+<details class="section-block tema off" id="tema-2"><summary><span class="stitle">Tema 2 — Servidor de correo electrónico</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Todavía sin apuntes de clase. Subtemas del programa:</p>
+<ul class="subtemas">
+<ul>
+<li><span class="sn">2.1</span> Protocolo smtp.</li>
+<ul>
+<li><span class="sn">2.1.1</span> RFC 2821.</li>
+<li><span class="sn">2.1.2</span> Tipos.</li>
+</ul>
+<li><span class="sn">2.2</span> Características de smtp.</li>
+<ul>
+<li><span class="sn">2.2.1</span> Configuración y ejecución de módulos.</li>
+<li><span class="sn">2.2.2</span> Creación y configuración de dominios y usuarios virtuales.</li>
+<li><span class="sn">2.2.3</span> Cifrado del protocolo.</li>
+<li><span class="sn">2.2.4</span> Autenticación.</li>
+<li><span class="sn">2.2.5</span> Configuración del tipo masquerade y antispam.</li>
+</ul>
+<li><span class="sn">2.3</span> Protocolo pop3.</li>
+<ul>
+<li><span class="sn">2.3.1</span> RFC 1939.</li>
+<li><span class="sn">2.3.2</span> Tipos.</li>
+</ul>
+<li><span class="sn">2.4</span> Características del pop3.</li>
+<ul>
+<li><span class="sn">2.4.1</span> Configuración y ejecución de módulos.</li>
+<li><span class="sn">2.4.2</span> Configuración de dominios y usuarios virtuales.</li>
+<li><span class="sn">2.4.3</span> Cifrado del protocolo.</li>
+<li><span class="sn">2.4.4</span> Autenticación.</li>
+</ul>
+<li><span class="sn">2.5</span> Protocolo imap.</li>
+<ul>
+<li><span class="sn">2.5.1</span> RFC 3501.</li>
+<li><span class="sn">2.5.2</span> Tipos.</li>
+</ul>
+<li><span class="sn">2.6</span> Características de imap.</li>
+<ul>
+<li><span class="sn">2.6.1</span> Configuración y ejecución de módulos.</li>
+<li><span class="sn">2.6.2</span> Configuración de dominios y usuarios virtuales.</li>
+<li><span class="sn">2.6.3</span> Cifrado del protocolo.</li>
+<li><span class="sn">2.6.4</span> Autenticación.</li>
+</ul></ul>
+</div></details>
 
-<details class="section-block tema off" id="tema-3"><summary><span class="stitle">Tema 3 — Servidor de conexión remota</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+<details class="section-block tema off" id="tema-3"><summary><span class="stitle">Tema 3 — Servidor de conexión remota</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Todavía sin apuntes de clase. Subtemas del programa:</p>
+<ul class="subtemas">
+<ul>
+<li><span class="sn">3.1</span> Protocolo telnet.</li>
+<ul>
+<li><span class="sn">3.1.1</span> Características.</li>
+<li><span class="sn">3.1.2</span> RFC 854.</li>
+<li><span class="sn">3.1.3</span> Tipos.</li>
+</ul>
+<li><span class="sn">3.2</span> Protocolo ssh.</li>
+<ul>
+<li><span class="sn">3.2.1</span> Características.</li>
+<li><span class="sn">3.2.2</span> RFC 854.</li>
+<li><span class="sn">3.2.3</span> Tipos.</li>
+<li><span class="sn">3.2.4</span> Transferencia de archivos y configuración de jaulas.</li>
+<li><span class="sn">3.2.5</span> Creación y configuración de túneles.</li>
+</ul></ul>
+</div></details>
 
-<details class="section-block tema off" id="tema-4"><summary><span class="stitle">Tema 4 — Servidores de aplicaciones y middleware</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+<details class="section-block tema off" id="tema-4"><summary><span class="stitle">Tema 4 — Servidores de aplicaciones y middleware</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Todavía sin apuntes de clase. Subtemas del programa:</p>
+<ul class="subtemas">
+<ul>
+<li><span class="sn">4.1</span> Características.</li>
+<li><span class="sn">4.2</span> Tipos.</li>
+<li><span class="sn">4.3</span> Configuración y administración.</li>
+<li><span class="sn">4.4</span> Balanceo de carga.</li>
+<li><span class="sn">4.5</span> Generación de un caso práctico.</li>
+</ul>
+</div></details>
 
-<details class="section-block tema off" id="tema-5"><summary><span class="stitle">Tema 5 — Servidor de archivos</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+<details class="section-block tema off" id="tema-5"><summary><span class="stitle">Tema 5 — Servidor de archivos</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Todavía sin apuntes de clase. Subtemas del programa:</p>
+<ul class="subtemas">
+<ul>
+<li><span class="sn">5.1</span> Protocolos.</li>
+<ul>
+<li><span class="sn">5.1.1</span> NFS.</li>
+<li><span class="sn">5.1.2</span> Samba.</li>
+<li><span class="sn">5.1.3</span> Distribuidos (cassandra, dropbox).</li>
+</ul>
+<li><span class="sn">5.2</span> Configuración y administración.</li>
+<li><span class="sn">5.3</span> Balanceo de carga.</li>
+<li><span class="sn">5.4</span> Generación de un caso práctico.</li>
+</ul>
+</div></details>
 
-<details class="section-block tema off" id="tema-6"><summary><span class="stitle">Tema 6 — Servidor de directorios</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+<details class="section-block tema off" id="tema-6"><summary><span class="stitle">Tema 6 — Servidor de directorios</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Todavía sin apuntes de clase. Subtemas del programa:</p>
+<ul class="subtemas">
+<ul>
+<li><span class="sn">6.1</span> Protocolos.</li>
+<ul>
+<li><span class="sn">6.1.1</span> Domain Name Services (DNS, RFC 1034).</li>
+<li><span class="sn">6.1.2</span> Network Information Services (NIS, RFC 3898).</li>
+<li><span class="sn">6.1.3</span> Lightweight Directory Access Protocol (LDAP, RFC 4510).</li>
+</ul>
+<li><span class="sn">6.2</span> Configuración y administración.</li>
+<li><span class="sn">6.3</span> Seguridad y Cifrado.</li>
+<li><span class="sn">6.4</span> Generación de un caso práctico.</li>
+</ul>
+</div></details>
 
-<details class="section-block tema off" id="tema-7"><summary><span class="stitle">Tema 7 — Servidor web</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+<details class="section-block tema off" id="tema-7"><summary><span class="stitle">Tema 7 — Servidor web</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Todavía sin apuntes de clase. Subtemas del programa:</p>
+<ul class="subtemas">
+<ul>
+<li><span class="sn">7.1</span> Protocolo http.</li>
+<ul>
+<li><span class="sn">7.1.1</span> Características.</li>
+<li><span class="sn">7.1.2</span> RFC 2616.</li>
+<li><span class="sn">7.1.3</span> Tipos.</li>
+</ul>
+<li><span class="sn">7.2</span> Configuración y ejecución de módulos.</li>
+<li><span class="sn">7.3</span> Creación y configuración de host virtuales.</li>
+<li><span class="sn">7.4</span> Cifrado del protocolo.</li>
+<ul>
+<li><span class="sn">7.4.1</span> Características.</li>
+<li><span class="sn">7.4.2</span> SSL/TLS.</li>
+<li><span class="sn">7.4.3</span> Configurar para migrar de un servidor http a https.</li>
+</ul>
+<li><span class="sn">7.5</span> Autenticación.</li>
+<ul>
+<li><span class="sn">7.5.1</span> http_access.</li>
+<li><span class="sn">7.5.2</span> Conexión con base de datos.</li>
+<li><span class="sn">7.5.3</span> Conexión con servidor samba.</li>
+</ul>
+<li><span class="sn">7.6</span> Proxy http.</li>
+<ul>
+<li><span class="sn">7.6.1</span> Características.</li>
+<li><span class="sn">7.6.2</span> Configuración.</li>
+<li><span class="sn">7.6.3</span> Generación de proxy http.</li>
+</ul></ul>
+</div></details>
 
-<details class="section-block tema off" id="tema-8"><summary><span class="stitle">Tema 8 — Otros servicios</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+<details class="section-block tema off" id="tema-8"><summary><span class="stitle">Tema 8 — Otros servicios</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Todavía sin apuntes de clase. Subtemas del programa:</p>
+<ul class="subtemas">
+<ul>
+<li><span class="sn">8.1</span> RFC 1700.</li>
+<li><span class="sn">8.2</span> Servidor Proxy.</li>
+<li><span class="sn">8.3</span> Servidor DHCP.</li>
+<li><span class="sn">8.4</span> Servidor de transferencia de archivos.</li>
+<li><span class="sn">8.5</span> Nuevas tendencias y servicios.</li>
+</ul>
+</div></details>
+</div>
+
+<div class="v-clase">
+<p class="empty" style="padding:8px 0 16px">Solo las <strong>clases grabadas</strong>, en orden. Si falté a las primeras, se irán completando con grabaciones o apuntes de compañeros.</p>
+<details class="section-block clase-block" open><summary><span class="stitle">Clase 1</span></summary><div class="cbody"><p>— Repaso de arquitectura (Von Neumann vs Harvard RISC, pipeline), jerarquía de directorios de Linux (FHS) con prioridades, distribuciones, y práctica de terminal: <code>whereis</code>/<code>which</code>, <code>man</code>, <code>ps aux</code>, <code>top</code>, <code>nano</code>, <code>cat</code>, <code>ls</code>, <code>mkdir -m</code>/<code>-p</code>. Deja la <a href="evaluacion.html" style="color:var(--indigo)">Práctica 0</a>. <span class="tags">Tema 1</span></p><p><a href="#tema-1">→ ver el detalle completo en el tema correspondiente</a></p></div></details>
+</div>
 
 </div>
 </body>

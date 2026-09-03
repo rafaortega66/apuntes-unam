@@ -262,8 +262,6 @@ span.card.card-off:hover { transform: none; }
 span.card .off { color: var(--ink-soft); font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
 
 /* ---- toggle Por tema/Por clase oculto (lógica intacta) ---- */
-.viewswitch { display: none !important; }
-:root[data-view="tema"] .v-clase, :root[data-view="clase"] .v-tema { display: revert; }
 
 /* ---- página única de asignatura: temas como bloques grandes plegables ---- */
 details.tema { margin: 0 0 8px; border-top: 2px solid rgba(255,255,255,0.12); }
@@ -284,3 +282,26 @@ details.tema.off > summary { color: var(--ink-soft); }
 details.tema.off > summary::before { color: var(--ink-soft); }
 details.tema > .tema-body { padding-left: 4px; }
 @media (max-width: 640px) { details.tema > summary { font-size: 17px; } }
+
+/* subtemas de un tema sin apuntes (vista Por tema) */
+ul.subtemas, ul.subtemas ul { list-style: none; margin: 0; padding: 0; }
+ul.subtemas { font-size: 13.5px; line-height: 1.7; color: var(--ink-soft); }
+ul.subtemas ul { margin: 2px 0 4px 10px; padding-left: 10px; border-left: 1px solid rgba(255,255,255,0.09); }
+ul.subtemas li { margin: 2px 0; }
+ul.subtemas .sn { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--ink-soft); margin-right: 5px; }
+details.tema.off .tema-body > p.empty { padding: 6px 0 10px; }
+
+/* vista Por clase: un bloque por clase */
+details.clase-block { margin-bottom: 6px; }
+details.clase-block > summary {
+  cursor: pointer; list-style: none;
+  font-family: 'Fraunces', serif; font-size: 16px; font-weight: 600; color: var(--ink);
+  padding: 12px 0; display: flex; align-items: baseline; gap: 8px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+details.clase-block:first-of-type > summary { border-top: none; }
+details.clase-block > summary::-webkit-details-marker { display: none; }
+details.clase-block > summary::before { content: '▸'; color: var(--coral); font-size: 12px; flex: none; transition: transform .15s; }
+details.clase-block[open] > summary::before { transform: rotate(90deg); }
+details.clase-block .cbody { font-size: 14px; line-height: 1.65; padding-left: 4px; }
+details.clase-block .cbody a { color: var(--indigo); }

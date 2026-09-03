@@ -25,15 +25,11 @@
   <a class="card" style="--c:#A98BD1" href="entregas.html"><h3>Entregas</h3><p>PDFs que ya entregaste</p></a>
 </div>
 
-<details class="section-block collapsible"><summary>Clases grabadas</summary>
-<ol class="clases">
-<li><a href="#tema-1"><strong>Clase 01</strong></a> — ¿Qué es un sistema embebido? Digital vs. mecánico/analógico, lazo abierto vs. cerrado, propiedades de materiales, motor de CA, definición formal de computadora. <span class="tags">Tema 1</span></li>
-</ol>
-<p class="empty">Solo las clases grabadas. El material de presentaciones del profesor está integrado en los temas.</p></details>
 <details class="section-block collapsible"><summary>Plan de estudios</summary><p><strong>Clave FI:</strong> 1858 · Antecedente: Microcomputadoras</p><p>Objetivo: el alumno integrará la utilidad de los sistemas embebidos en las aplicaciones actuales mediante la estructura completa de un sistema embebido, tanto en hardware (arquitecturas, plataformas y procesadores) como en software (sistema operativo, programación y aplicaciones).</p>
 <table><thead><tr><th>Núm.</th><th>Tema</th><th>Horas</th></tr></thead><tbody><tr><td>1</td><td>Introducción a los sistemas embebidos</td><td>3.0</td></tr><tr><td>2</td><td>Organización, arquitectura y plataformas de sistemas embebidos</td><td>12.0</td></tr><tr><td>3</td><td>Sistemas operativos para plataformas embebidas</td><td>11.0</td></tr><tr><td>4</td><td>Software y programación de sistemas embebidos</td><td>12.0</td></tr><tr><td>5</td><td>Desarrollo de un sistema embebido</td><td>10.0</td></tr></tbody></table></details>
 <details class="section-block collapsible"><summary>Bibliografía básica</summary><ul><li>Barr &amp; Massa — <em>Programming Embedded Systems with C and GNU Development Tools</em></li><li>Barry &amp; Crowley — <em>Modern Embedded Computing</em></li><li>Noergaard — <em>Embedded Systems Architecture</em></li><li>Valvano — <em>Embedded Systems: Introduction to ARM Cortex-M</em></li></ul></details>
 
+<div class="v-tema">
 <details class="section-block tema" id="tema-1" open><summary><span class="stitle">Tema 1 — Introducción a los sistemas embebidos</span></summary><div class="tema-body">
 <div class="encorto"><h4>En corto</h4><ul><li>Sistema embebido = sistema <strong>digital</strong> (µC / procesador) dedicado a <strong>una</strong> tarea; distinto de una computadora de propósito general y de lo puramente mecánico / analógico.</li><li>Criterio: ¿de verdad necesita cómputo digital, o basta con electrónica / mecánica robusta?</li><li>Lazo de control <strong>abierto</strong> (por tiempo) vs. <strong>cerrado</strong> (sensores deciden cuándo parar).</li><li>Propiedades de materiales: dureza, tenacidad y ductilidad.</li><li>Cierre: definición formal de computadora (entrada, salida, procesador, memoria).</li></ul></div>
 <div class="examen"><h4>🎯 Para el examen</h4><ul><li>Distinguir solución <strong>mecánica / analógica / electromecánica</strong> vs. <strong>sistema embebido digital</strong>.</li><li>Definiciones precisas de <strong>dureza</strong> (resistencia a rayarse, va con fragilidad), <strong>tenacidad</strong> (se dobla sin romperse) y <strong>ductilidad</strong> (se estira sin fracturarse) — no confundirlas.</li><li>Saber cuándo se justifica un microcontrolador y cuándo basta con electrónica analógica.</li></ul></div>
@@ -75,13 +71,61 @@ El carbón se usa porque conduce bien y además es suave (lubricante sólido); m
 <details class="section-block sec" id="enfasis-para-examen"><summary><span class="chip chip-examen">examen</span><span class="stitle">⚠️ Énfasis para examen</span></summary><ul><li>Distinguir solución <strong>mecánica / analógica / electromecánica</strong> vs. <strong>sistema embebido digital</strong>. Es error grave llamar sistema embebido a algo puramente físico.</li><li>Definiciones precisas de <strong>dureza, tenacidad y ductilidad</strong> — no confundirlas.</li><li>Saber cuándo se justifica un microcontrolador y cuándo basta con electrónica analógica robusta.</li></ul></details>
 </div></details>
 
-<details class="section-block tema off" id="tema-2"><summary><span class="stitle">Tema 2 — Organización, arquitectura y plataformas de sistemas embebidos</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+<details class="section-block tema off" id="tema-2"><summary><span class="stitle">Tema 2 — Organización, arquitectura y plataformas de sistemas embebidos</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Todavía sin apuntes de clase. Subtemas del programa:</p>
+<ul class="subtemas">
+<ul>
+<li><span class="sn">2.1</span> Procesador.</li>
+<li><span class="sn">2.2</span> Mapa de memoria del sistema.</li>
+<li><span class="sn">2.3</span> Controlador de interrupciones.</li>
+<li><span class="sn">2.4</span> Temporizadores.</li>
+<li><span class="sn">2.5</span> Memoria volátil y no volátil. Direccionamientos.</li>
+<li><span class="sn">2.6</span> Bus serie universal.</li>
+<li><span class="sn">2.7</span> Interconexión de dispositivos.</li>
+<li><span class="sn">2.8</span> Secuencia de arranque en plataformas embebidas.</li>
+<li><span class="sn">2.9</span> Estudio de plataformas comerciales para sistemas embebidos (INTEL, ARM, etc.).</li>
+</ul>
+</div></details>
 
-<details class="section-block tema off" id="tema-3"><summary><span class="stitle">Tema 3 — Sistemas operativos para plataformas embebidas</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+<details class="section-block tema off" id="tema-3"><summary><span class="stitle">Tema 3 — Sistemas operativos para plataformas embebidas</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Todavía sin apuntes de clase. Subtemas del programa:</p>
+<ul class="subtemas">
+<ul>
+<li><span class="sn">3.1</span> Interfaz de aplicación.</li>
+<li><span class="sn">3.2</span> Procesos, tareas e hilos.</li>
+<li><span class="sn">3.3</span> Tipos de scheduling.</li>
+<li><span class="sn">3.4</span> Administración de memoria.</li>
+<li><span class="sn">3.5</span> Relojes y temporizadores.</li>
+<li><span class="sn">3.6</span> Modelos de manejadores de dispositivos.</li>
+<li><span class="sn">3.7</span> Sistema de almacenamiento de archivos.</li>
+<li><span class="sn">3.8</span> Administración de energía.</li>
+<li><span class="sn">3.9</span> Linux embebido (herramientas, anatomía, kernel, depuración, drivers, administración de memoria).</li>
+<li><span class="sn">3.10</span> Windows embebido.</li>
+<li><span class="sn">3.11</span> Android.</li>
+</ul>
+</div></details>
 
-<details class="section-block tema off" id="tema-4"><summary><span class="stitle">Tema 4 — Software y programación de sistemas embebidos</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+<details class="section-block tema off" id="tema-4"><summary><span class="stitle">Tema 4 — Software y programación de sistemas embebidos</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Todavía sin apuntes de clase. Subtemas del programa:</p>
+<ul class="subtemas">
+<ul>
+<li><span class="sn">4.1</span> Programación en ensamblador.</li>
+<li><span class="sn">4.2</span> Programación en alto nivel.</li>
+<li><span class="sn">4.3</span> Ejemplos de manejadores de dispositivos (Device Drivers).</li>
+<li><span class="sn">4.4</span> Software de aplicación y Middleware.</li>
+<li><span class="sn">4.5</span> Programación de código en editores integrados IDE.</li>
+</ul>
+</div></details>
 
-<details class="section-block tema off" id="tema-5"><summary><span class="stitle">Tema 5 — Desarrollo de un sistema embebido</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Aún no hay apuntes de este tema.</p></div></details>
+<details class="section-block tema off" id="tema-5"><summary><span class="stitle">Tema 5 — Desarrollo de un sistema embebido</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Todavía sin apuntes de clase. Subtemas del programa:</p>
+<ul class="subtemas">
+<ul>
+<li><span class="sn">5.1</span> Desarrollo de un sistema embebido con alguna plataforma comercial (INTEL Atom, ARM etc.).</li>
+</ul>
+</div></details>
+</div>
+
+<div class="v-clase">
+<p class="empty" style="padding:8px 0 16px">Solo las <strong>clases grabadas</strong>, en orden. Si falté a las primeras, se irán completando con grabaciones o apuntes de compañeros.</p>
+<details class="section-block clase-block" open><summary><span class="stitle">Clase 01</span></summary><div class="cbody"><p>— ¿Qué es un sistema embebido? Digital vs. mecánico/analógico, lazo abierto vs. cerrado, propiedades de materiales, motor de CA, definición formal de computadora. <span class="tags">Tema 1</span></p><p><a href="#tema-1">→ ver el detalle completo en el tema correspondiente</a></p></div></details>
+</div>
 
 </div>
 </body>
