@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 03 — Fundamentos de Sistemas Embebidos</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Fundamentos de Sistemas Embebidos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 03</h2>
+  <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 2 sep 2026 · Tema 2 — evolución histórica de la arquitectura x86 (Intel 4004 → Pentium), el coprocesador matemático y la guerra Intel vs. AMD.</p>
+</div>
+
+<div class="encorto"><h4>En corto</h4><ul>
+<li>En un procesador multinúcleo el <strong>silicio lo domina la memoria</strong> (cachés y registros), no la ALU. Diagrama en espejo: 4 núcleos + L2 + L1D + L1I + bus interno + lógica de control + registros (incl. vectoriales) + FPU + ALU.</li>
+<li><strong>Promesa de Intel</strong> (desde el 8085/8086): <strong>retrocompatibilidad binaria</strong> — un ejecutable de 1978 corre igual en un Core i9. Los "vicios de diseño" viven en los kernels de los SO.</li>
+<li>Paradoja velocidad vs. MIPS: el 8080 (2 MHz) va más rápido que el 4004 (740 kHz) pero da <strong>menos MIPS reales</strong> porque cada instrucción compleja (seno, coseno…) se resuelve con muchas micro-operaciones sobre una ALU de enteros.</li>
+<li>Hitos: <strong>286</strong> → MMU + modo protegido; <strong>386</strong> → 32 bits + pipeline + VM86 + pines para coprocesador; <strong>486</strong> → caché L1 (I y D) y FPU dentro del integrado.</li>
+<li>La ALU antigua era <strong>solo de enteros</strong>: el <strong>coprocesador matemático</strong> (80387, luego integrado) resuelve trig/exp/log en 4–5 ciclos con tablas de interpolación, frente a miles de ciclos aproximando por Series de Taylor.</li>
+</ul></div>
+
+<div class="examen"><h4>🎯 Para el examen (marcado explícito por el profesor)</h4><ul>
+<li><strong>Pipeline fuertemente acoplado</strong>: codependencia extrema entre los bloques internos → modificar uno obliga a rediseñar todo el procesador. (RISC = débilmente acoplado, bloques separados y reemplazables.) Analogía: fuertemente acoplado = todo el código en <code>main</code> sin modularidad; débilmente acoplado = patrón MVC con interfaces.</li>
+<li><strong>"Explique qué es un bus coherente"</strong>. La caché tiene una copia de la RAM y va a la velocidad del procesador; la RAM es 10–1000× más lenta. Al escribir:
+<ul>
+<li><em>Bus no coherente</em>: la escritura va solo a la caché → la RAM queda con datos viejos.</li>
+<li><em>Bus coherente</em>: la escritura actualiza <strong>caché y RAM a la vez</strong> — más lento, pero garantiza consistencia e integridad de los datos.</li>
+</ul></li>
+<li><strong>Necesidad del coprocesador matemático</strong>: las ALU antiguas eran de enteros; el punto flotante (trigonométricas, exponenciales, logaritmos) se aproximaba por software con <strong>Series de Taylor</strong> → miles/millones de ciclos. El coprocesador (FPU) lo baja a <strong>4–5 ciclos</strong> con tablas de interpolación por hardware.</li>
+</ul></div>
+
+<div class="section-block"><h4>Diagrama de un procesador de 4 núcleos</h4>
+<p>Acomodo simétrico "en espejo": <strong>4 núcleos físicos</strong> (1–4), caché <strong>L2</strong>, caché L1 de datos (<strong>L1D</strong>) y de instrucciones (<strong>L1I</strong>), bus de interconexión interna, lógica de control, registros internos y <strong>registros vectoriales</strong>, <strong>FPU</strong> y <strong>ALU</strong>. La ALU no pesa tanto en el diseño: el integrado está dominado casi por completo por la <strong>memoria</strong> (registros y cachés).</p></div>
+
+<div class="section-block"><h4>Línea histórica de Intel x86</h4>
+<table><thead><tr><th>Chip</th><th>Año</th><th>Bits</th><th>Reloj</th><th>Notas</th></tr></thead><tbody>
+<tr><td><strong>4004</strong></td><td>1971</td><td>4</td><td>740 kHz</td><td>&lt; 1 MIPS. Instrucciones mínimas (contar, cargar, escribir, sumar enteros de 4 bits). Con esto se calcularon los cohetes a la Luna.</td></tr>
+<tr><td>4040</td><td>1974</td><td>4</td><td>—</td><td>Evolución del 4004.</td></tr>
+<tr><td>8008</td><td>1972</td><td>8</td><td>500 kHz</td><td>≈ 0.0005 MIPS.</td></tr>
+<tr><td>8080</td><td>1974</td><td>8</td><td>2 MHz</td><td>Sigue sin llegar a 1 MIPS pese a ser más rápido: ejecuta instrucciones complejas sobre una ALU de enteros.</td></tr>
+<tr><td><strong>8085</strong></td><td>1976</td><td>8</td><td>3 MHz</td><td>Casi el mismo 8080 con más frecuencia. Hasta ~25 000 bytes de RAM. Aquí arranca la promesa de retrocompatibilidad.</td></tr>
+<tr><td><strong>8086</strong></td><td>1978</td><td>16</td><td>5–10 MHz</td><td>Primer 16 bits. Define la ISA <strong>x86</strong> (~20 000 instrucciones con variantes). Direcciona 2²⁰. Instrucción promedio &gt; 10 ciclos → &lt; 1 MIPS.</td></tr>
+<tr><td>186</td><td>—</td><td>16</td><td>—</td><td>"8086 en esteroides", robustecido para el mercado industrial; misma arquitectura.</td></tr>
+<tr><td><strong>286</strong></td><td>1982</td><td>16</td><td>hasta 25 MHz</td><td>2.66 MIPS. MMU, modo protegido, 2 ALU, +30 mnemónicos.</td></tr>
+<tr><td><strong>386</strong></td><td>1985</td><td>32</td><td>hasta 40 MHz</td><td>≈ 10 MIPS. Primer 32 bits x86, pipeline de 3 etapas, 4 GB de RAM, VM86, 2 registros de debug, pines para coprocesador, +16 mnemónicos.</td></tr>
+<tr><td><strong>486</strong></td><td>1989</td><td>32</td><td>hasta 100 MHz</td><td>Caché L1 en el integrado (I y D separadas), FPU integrada, pipeline de 5 etapas, +6 mnemónicos. (Una RP2040 a 125 MHz / ~77 MIPS ya lo supera.)</td></tr>
+<tr><td><strong>Pentium</strong></td><td>1993</td><td>32</td><td>hasta 200 MHz</td><td>Arquitectura P5.</td></tr>
+</tbody></table>
+<p><strong>Promesa de Intel</strong>: desde el 8085/8086, la microarquitectura garantiza que "todos los programas que hagas van a funcionar en el procesador siguiente". Cambiar la ISA es hoy casi imposible porque los vicios de diseño están metidos en los kernels de los SO (no se instala Windows-ARM en Intel ni macOS en una Raspberry Pi directamente).</p></div>
+
+<div class="section-block"><h4>Intel 8085 — diagrama de bloques</h4>
+<p>ALU entera · señales de control · controlador de interrupciones · puerto serie · <strong>acumulador de 8 bits</strong> · registro temporal · banderas (flags) · registro de instrucción actual · decodificador de instrucciones · registros de propósito general <strong>B, C, D, E, H, L</strong> (H y L se combinan como par para operar en 16 bits) · <strong>Stack Pointer</strong> · <strong>Program Counter</strong> · incrementador/decrementador.</p>
+<p>Indexar un arreglo (<code>i = 1</code>): cargar la dirección en un registro (par HL) → mandarla a la ALU → sumarle 1 → usarla como nueva dirección → traer el dato.</p></div>
+
+<div class="section-block"><h4>Intel 8086 — registros y prefetch</h4>
+<ul>
+<li><strong>AX</strong> — acumulador; se parte en <strong>AH</strong> (alta) y <strong>AL</strong> (baja), usables como dos registros de 8 bits o como uno de 16.</li>
+<li><strong>SI</strong> (Source Index) y <strong>DI</strong> (Destination Index) — registros de índice (origen / destino).</li>
+<li><strong>BP</strong> (Base Pointer) y <strong>SP</strong> (Stack Pointer) — apuntadores.</li>
+<li><strong>PC</strong>, registros de <strong>segmento</strong>, <strong>banderas</strong>.</li>
+<li>16 registros de propósito <em>cuasi</em> general; hay instrucciones que operan hasta dos direcciones de memoria.</li>
+<li><strong>Cola de prefetch</strong>: precarga instrucciones en los ciclos en que no se accede a memoria, para acelerar la ejecución.</li>
+</ul></div>
+
+<div class="section-block"><h4>Intel 286 — MMU, doble ALU y modo protegido</h4>
+<ul>
+<li>Duplica el rendimiento del 186 al quitar la <strong>multiplexación de los buses</strong> de dirección y datos.</li>
+<li><strong>Dos ALU</strong>: la principal de cómputo y una segunda de enteros dedicada solo a sumar (calcula <em>base + offset</em> en cada acceso a memoria).</li>
+<li><strong>MMU</strong> (Memory Management Unit).</li>
+<li><strong>Modo real vs. modo protegido</strong>: al encender, el procesador "cree que es un 8086" (modo real); cuando el software cambia el bit de modo, pasa a 286 (modo protegido). Por eso un CPU de 64 bits todavía puede correr MS-DOS. En modo real, cada dirección lógica corresponde a un pin físico → con memorias modernas habría huecos en los bancos de RAM.</li>
+<li>Modo protegido añade <strong>paginación</strong>, <strong>multitarea</strong> y <strong>segmentación</strong>. Robustez: si una app falla, el procesador la mata y sigue con el resto (multitarea tipo OS/2); antes, un fallo tumbaba todo el procesador.</li>
+</ul></div>
+
+<div class="section-block"><h4>Intel 386 y el coprocesador 80387</h4>
+<ul>
+<li>Primer x86 de <strong>32 bits</strong>; pipeline de 3 etapas; direcciona <strong>4 GB</strong>.</li>
+<li><strong>VM86</strong> (Virtual 8086): simula varios 8086 a la vez dentro de la memoria segmentada en modo protegido (como Matrioskas); cada máquina virtual trabaja de la dirección 0 a la 255 sin saber que está aislada por privilegios.</li>
+<li>2 <strong>registros de debug</strong> para depurar por hardware sobre el propio procesador.</li>
+<li>La ALU del 386 es <strong>solo de enteros</strong> (multiplicador, divisor, sumador, desplazador). No tiene FPU.</li>
+<li>MP3 (Fraunhofer) y criptografía exigen punto flotante. Sin FPU, hay que aproximar por software, p. ej. el seno con <strong>Serie de Taylor / Maclaurin</strong> alrededor de x₀ = 0:
+<pre><code>sin(x) ≈ x − x³/3! + x⁵/5! − x⁷/7! + …</code></pre>
+Factoriales y divisiones en una ALU de enteros → miles o millones de ciclos.</li>
+<li><strong>80387</strong>: coprocesador externo por bus, con tablas de interpolación gigantes en su silicio; resuelve trigonométricas, exponenciales y logaritmos en <strong>4–5 ciclos</strong>.</li>
+</ul></div>
+
+<div class="section-block"><h4>Intel 486 — L1 y FPU en el chip</h4>
+<ul>
+<li>Primera <strong>caché L1</strong> en el mismo integrado, dividida en <strong>L1I</strong> (instrucciones) y <strong>L1D</strong> (datos): una cola hace <em>prefetch</em> incremental desde L1I y separa las instrucciones antes de decodificarlas.</li>
+<li>El coprocesador matemático (<strong>FPU</strong>) queda <strong>integrado</strong> — se acaba el chip externo.</li>
+<li>Pipeline de <strong>5 etapas</strong>: la decodificación de instrucciones CISC es lenta; con más etapas la ALU ejecuta mientras se decodifican las siguientes.</li>
+</ul></div>
+
+<div class="section-block"><h4>Intel vs. AMD — el litigio</h4>
+<ul>
+<li>Años 70: Intel subcontrata a <strong>AMD</strong> y <strong>Cyrix</strong> para chips de apoyo (controlador de teclado, cachés, tarjetas madre); Intel solo hacía microprocesadores.</li>
+<li>1982: convenio de transferencia tecnológica — Intel se queda con el 386/486; <strong>AMD recibe la patente para fabricar el 186 y 286</strong> para el mercado masivo. AMD vendía su 286 a <strong>1/4</strong> del precio de Intel.</li>
+<li>Intel intenta bloquear a AMD en 32 bits; AMD alega que el 386 es una <strong>extensión del 286</strong> por su retrocompatibilidad y reclama los esquemáticos. Mientras dura el pleito, AMD hace ingeniería inversa y saca el <strong>Am386DX-40</strong>: 40 MHz (vs. 33 de Intel), menos consumo, 1/3 del precio.</li>
+<li>Precedente ganado por AMD en <strong>1991</strong> (386) → en <strong>1995</strong> gana en automático el caso del 486 en la Suprema Corte de EE. UU.</li>
+<li>Analogía del profesor: derecho romano/germánico = <strong>CISC</strong> (constituciones con ~15 000 artículos calculados de antemano); derecho anglosajón = <strong>RISC</strong> (precedentes, leyes cortas e independientes).</li>
+</ul></div>
+
+<p class="empty" style="margin-top:28px">Este material amplía el <a href="index.html#tema-2" style="color:var(--indigo)">Tema 2</a> (2.9 — plataformas comerciales, Intel).</p>
+
+</div>
+</body>
+</html>

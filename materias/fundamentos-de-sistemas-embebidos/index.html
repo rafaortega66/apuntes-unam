@@ -145,6 +145,15 @@ El carbón se usa porque conduce bien y además es suave (lubricante sólido); m
 <li>Puertos de ejecución: Coffee Lake (2017) 8 puertos → 32 µops/ciclo en un quad-core; Golden Cove (2021) 12 puertos, cola de 512 entradas (2 store + 2 load + 5 cómputo pesado, 3 vectoriales).</li>
 </ul></details>
 
+<details class="section-block sec" id="t2-historia-x86"><summary><span class="chip chip-examen">examen</span><span class="stitle">2.9 · Historia de x86 y el coprocesador (Clase 3)</span></summary>
+<p>Detalle completo en la <a href="clase-03.html" style="color:var(--indigo)">Clase 03</a>. Línea histórica: 4004 (1971, 4 bits, 740 kHz) → 8080/8085 (1974–76, 8 bits) → <strong>8086</strong> (1978, 16 bits, define la ISA x86) → <strong>286</strong> (1982: MMU, modo protegido, 2 ALU) → <strong>386</strong> (1985: 32 bits, pipeline, VM86, pines para coprocesador) → <strong>486</strong> (1989: caché L1 I/D y FPU en el integrado, pipeline de 5 etapas) → <strong>Pentium</strong> (P5, 1993). Promesa de Intel: retrocompatibilidad binaria desde el 8085.</p>
+<p><strong>Tres preguntas que el profesor marcó para examen:</strong></p>
+<ul>
+<li><strong>Pipeline fuertemente acoplado</strong>: codependencia extrema entre bloques → cambiar uno obliga a rediseñar todo el procesador (RISC = débilmente acoplado). Analogía: todo en <code>main</code> sin modularidad vs. patrón MVC.</li>
+<li><strong>Bus coherente vs. no coherente</strong>: no coherente = la escritura va solo a la caché y la RAM queda desactualizada; coherente = actualiza caché y RAM a la vez (más lento, pero íntegro).</li>
+<li><strong>Necesidad del coprocesador matemático</strong>: la ALU antigua era de enteros; el punto flotante (trig/exp/log) se aproximaba por Series de Taylor → miles de ciclos; la FPU lo hace en 4–5 ciclos con tablas de interpolación.</li>
+</ul></details>
+
 <details class="section-block sec contexto" id="t2-practica"><summary><span class="chip chip-contexto">práctica</span><span class="stitle">Restricción de la práctica</span></summary><p>La práctica de sistemas operativos enfocada a <strong>Windows</strong> exige <strong>Raspberry Pi 3</strong>; <strong>no funciona en la Raspberry Pi 4</strong>. Se puede elegir la arquitectura de µC vista en clase que se prefiera.</p></details>
 </div></details>
 
@@ -185,6 +194,7 @@ El carbón se usa porque conduce bien y además es suave (lubricante sólido); m
 <p class="empty" style="padding:8px 0 16px">Solo las <strong>clases grabadas</strong>, en orden. Cada tarjeta abre la página completa de esa clase.</p>
 <a class="clase-link" href="clase-01.html"><span class="cl-n">Clase 01</span><span class="cl-t">26 ago 2026 · Tema 1</span><span class="cl-d">¿Qué es (y qué no es) un sistema embebido? Digital vs. mecánico/analógico, lazo de control abierto vs. cerrado, propiedades de materiales, definición formal de computadora.</span></a>
 <a class="clase-link" href="clase-02.html"><span class="cl-n">Clase 02</span><span class="cl-t">31 ago 2026 · Tema 2</span><span class="cl-d">RISC vs. CISC recorriendo PIC, AVR, ESP32, RP2040/Cortex-M e Intel x86. Memoria caché, cuello de botella CPU–RAM y cómo elegir la familia Cortex-M.</span></a>
+<a class="clase-link" href="clase-03.html"><span class="cl-n">Clase 03</span><span class="cl-t">2 sep 2026 · Tema 2</span><span class="cl-d">Evolución histórica de x86 (Intel 4004 → Pentium), el coprocesador matemático (80387) y la guerra Intel vs. AMD. Examen: pipeline fuertemente acoplado, bus coherente vs. no coherente, coprocesador matemático.</span></a>
 </div>
 
 </div>
