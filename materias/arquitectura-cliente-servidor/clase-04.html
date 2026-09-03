@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 04 — Arquitectura Cliente-Servidor</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Arquitectura Cliente-Servidor</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 04</h2>
+  <p class="prof">Mtro. Carlos Alberto Román Zamitiz · 3 sep 2026 · Tema 1 — <code>strerror()</code> y <code>perror()</code>, control de flujo de <code>fork()</code>, procesos huérfanos y <em>reapers</em>, y la familia de funciones <code>exec</code>.</p>
+</div>
+
+<div class="encorto"><h4>En corto</h4><ul>
+<li><code>strerror(n)</code> devuelve la <strong>cadena</strong> del mensaje de sistema para el código <code>n</code>; <code>perror("txt")</code> imprime <code>txt: &lt;mensaje del sistema&gt;</code> si la instrucción anterior falló (la <strong>P</strong> es de "personalizar").</li>
+<li><code>fork()</code> abre <strong>tres caminos</strong>: error (<code>-1</code>), hijo (<code>0</code>) y padre (PID del hijo). Vive en <code>&lt;unistd.h&gt;</code> y devuelve <code>pid_t</code> (se imprime con <code>%d</code>).</li>
+<li><strong>Proceso huérfano</strong> = su padre ya murió pero él sigue vivo → lo adopta <strong>PID 1</strong> (<code>init</code>/<code>systemd</code>); en Linux moderno hay subprocesos <strong>reapers</strong> que adoptan huérfanos, por eso a veces el PPID de adopción no es <code>1</code>.</li>
+<li><strong>Familia <code>exec</code></strong> (6 funciones): <strong>L</strong> = lista de args terminada en <code>NULL</code> · <strong>V</strong> = vector de punteros · <strong>E</strong> = entorno propio · <strong>P</strong> = busca en <code>$PATH</code> (no requiere ruta absoluta).</li>
+<li><code>exec</code> exitoso <strong>reemplaza la imagen</strong> del proceso: el original muere ahí y el código de abajo es <em>inalcanzable</em>. Si falla, devuelve <code>-1</code> y el proceso sigue → hay que envolverlo en <code>if</code> + <code>exit(EXIT_FAILURE)</code>.</li>
+</ul></div>
+
+<div class="examen"><h4>🎯 Reglas y conceptos clave</h4><ul>
+<li>Códigos de error del sistema: del <code>1</code> en adelante son errores; <code>0</code> es éxito (<em>success</em>).</li>
+<li>El <strong>argumento 0</strong> (<code>argv[0]</code>) de una llamada <code>exec</code> debe ser el <strong>nombre del ejecutable</strong> → por eso la cadena aparece repetida: <code>execl("/bin/ls", "ls", "-l", "/", (char *)0)</code>.</li>
+<li>Regla obligatoria: nunca dejar un <code>exec</code> "suelto". Envolverlo en <code>if (... == -1) { perror(...); exit(EXIT_FAILURE); }</code>.</li>
+<li>Causa más común de que <code>fork()</code> devuelva <code>-1</code>: <strong>falta de memoria</strong> para duplicar la imagen del proceso.</li>
+<li>Entre esta clase y la siguiente empieza el <strong>Tema 2: Estados de proceso</strong>.</li>
+</ul></div>
+
+<div class="section-block"><h4><code>strerror()</code> y los códigos de error de Linux</h4>
+<p><code>strerror(n)</code> — "devuelve el mensaje de sistema correspondiente al código que le pasas como parámetro". El prefijo <code>str</code> es por <em>string</em>: devuelve la cadena de texto asociada al código numérico. Análisis de <code>programa03_codigos_sistema.c</code>:</p>
+<pre><code>int i;
+for (i = 0; i &lt;= 150; i++)          /* el límite se puede subir a 200 para probar */
+    printf("%d: %s\n", i, strerror(i));
+</code></pre>
+<p><code>%d</code> (o <code>%i</code>) se reemplaza con el entero <code>i</code>; <code>%s</code> con el string que devuelve <code>strerror(i)</code>.</p>
+<ul>
+<li>Las distros comunes traen entre <strong>130 y 133</strong> códigos de error. En el entorno de clase (Fedora / Red Hat) el último con mensaje válido es el <strong>133</strong>; a partir del <code>134</code> se imprime <code>Unknown error</code>.</li>
+<li>En Fedora, el código <strong>41 no tiene error asociado</strong> — está reservado / saltado para implementaciones futuras.</li>
+</ul></div>
+
+<div class="section-block"><h4><code>perror()</code> — mensaje de error personalizado</h4>
+<p>Recibe una cadena personalizada; si la instrucción anterior generó error, <code>perror</code> toma esa cadena, le añade automáticamente <code>": "</code> y concatena a la derecha el mensaje de error estándar del sistema. La <strong>P</strong> es de "personalizar".</p>
+<p>Ejemplo: si un <code>fork()</code> falla, <code>perror("fork")</code> imprime <code>fork: &lt;mensaje del sistema&gt;</code>.</p></div>
+
+<div class="section-block"><h4>Control de flujo de <code>fork()</code></h4>
+<p>Con condicionales, <code>fork()</code> abre <strong>tres caminos</strong>: el de error, el del hijo y el del padre.</p>
+<p><strong>Estilo compacto</strong> (paréntesis anidados):</p>
+<pre><code>if ((child = fork()) == -1) { ... }
+</code></pre>
+<p>El compilador lo resuelve así: 1) se invoca <code>fork()</code>; 2) su valor de retorno se asigna a <code>child</code>; 3) se compara <code>child</code> con <code>-1</code>.</p>
+<p><strong>Estilo descompuesto</strong> ("camino largo", prioriza claridad sobre rendimiento):</p>
+<pre><code>pid_t ch;
+ch = fork();
+if (ch == -1) { ... }
+</code></pre></div>
+
+<div class="section-block"><h4>Documentación oficial y retorno de <code>fork()</code></h4>
+<ul>
+<li>Para llegar al sitio oficial, buscar en Google: <code>"Open Group" fork</code> → <code>www.opengroup.org</code>.</li>
+<li><code>fork()</code>, <code>getpid()</code>, <code>getppid()</code>, <code>getuid()</code>, <code>geteuid()</code>, <code>getgid()</code>, <code>getegid()</code> están definidas en <code>&lt;unistd.h&gt;</code>.</li>
+<li><code>fork()</code> devuelve <code>pid_t</code>, que internamente es un entero → se imprime con <code>%d</code>.</li>
+<li><strong>Éxito</strong>: devuelve <code>0</code> al hijo y el <strong>PID del hijo</strong> al padre; ambos siguen ejecutando en paralelo las líneas posteriores.</li>
+<li><strong>Error</strong>: devuelve <code>-1</code> al padre, no se crea hijo y se establece <code>errno</code>. Causa más común: falta de memoria para duplicar la imagen del proceso.</li>
+</ul></div>
+
+<div class="section-block"><h4><code>exit()</code> y macros de salida</h4>
+<p>Cuando una llamada crítica (<code>fork()</code>, <code>exec()</code>) devuelve <code>-1</code>, se usa <code>exit()</code> para terminar el programa de inmediato y no seguir ejecutando código.</p>
+<ul>
+<li><code>EXIT_FAILURE</code> (en mayúsculas) ≡ <code>exit(1)</code> — salida no exitosa.</li>
+<li><code>EXIT_SUCCESS</code> ≡ <code>exit(0)</code> — salida exitosa.</li>
+</ul></div>
+
+<div class="section-block"><h4>Procesos huérfanos, adopción y <em>reapers</em></h4>
+<p>Al correr <code>programa08</code>, la salida muestra <code>in parent</code> <strong>antes</strong> que <code>in child</code>, y el hijo, al llamar <code>getppid()</code>, obtiene <code>1</code> aunque su padre real era otro.</p>
+<ul>
+<li><strong>Proceso huérfano</strong>: "un proceso cuyo padre ya murió, pero él sigue vivo". Aquí el padre terminó antes de que el hijo llegara a <code>getppid()</code>.</li>
+<li>Linux no permite huérfanos sin control: el proceso <strong>PID 1</strong> (<code>init</code> en sistemas antiguos, <code>systemd</code> en modernos) los <strong>adopta</strong> automáticamente.</li>
+<li>En distros modernas hay subprocesos monitores llamados <strong>reapers</strong> ("recogedores") que adoptan y vigilan huérfanos para descargar al PID 1 → por eso a veces el PPID de adopción que ves <strong>no es <code>1</code></strong>.</li>
+<li>Ver la distro exacta: <code>cat /etc/os-release</code> (la máquina del profesor: Fedora Linux Workstation 40).</li>
+<li>Jerarquía familiar: el proceso creado es el <strong>hijo</strong>; el que llamó <code>fork()</code> es el <strong>padre</strong>; la terminal interactiva es el <strong>abuelo</strong>.</li>
+</ul></div>
+
+<div class="section-block"><h4>La familia de funciones <code>exec</code></h4>
+<p>No existe <code>exec</code> "a secas": es una familia de <strong>seis</strong> funciones que empiezan con esa palabra y añaden 1 o 2 letras que definen su comportamiento.</p>
+<table><thead><tr><th>Letra</th><th>Significado</th></tr></thead><tbody>
+<tr><td><strong>L</strong> (list)</td><td>Los argumentos se escriben como <strong>lista</strong> explícita separada por comas, terminada en <code>NULL</code> o <code>(char *)0</code>.</td></tr>
+<tr><td><strong>V</strong> (vector)</td><td>Los argumentos van en un <strong>arreglo de punteros</strong>, también terminado en puntero nulo.</td></tr>
+<tr><td><strong>E</strong> (environment)</td><td>Permite pasar un vector de <strong>variables de entorno propias</strong>, válidas solo durante la ejecución del nuevo proceso.</td></tr>
+<tr><td><strong>P</strong> (PATH)</td><td>No requiere ruta absoluta: lee la variable <code>PATH</code> y busca el ejecutable en los directorios del sistema (<code>/bin</code>, <code>/usr/bin</code>…).</td></tr>
+</tbody></table>
+<ul>
+<li><code>execl</code>, <code>execv</code>, <code>execle</code>, <code>execve</code> → parámetro <code>path</code> (ruta absoluta, ej. <code>/bin/ls</code>).</li>
+<li><code>execlp</code>, <code>execvp</code> → parámetro <code>file</code> (nombre a secas, ej. <code>ls</code>).</li>
+</ul></div>
+
+<div class="section-block"><h4>Reemplazo de imagen y "argumento cero"</h4>
+<p>A diferencia de <code>fork()</code> (que duplica), cuando <code>exec</code> tiene éxito la imagen del proceso original en memoria se <strong>destruye y se reemplaza</strong> por completo por la del nuevo programa. El proceso original <strong>muere</strong> en ese punto y no recupera el control.</p>
+<p>En C, <code>argv[0]</code> debe ser el <strong>nombre del ejecutable</strong>, por eso la cadena del comando aparece repetida:</p>
+<pre><code>execl("/bin/ls", "ls", "-l", "/", (char *)0);
+/*     ^ruta      ^arg0 ^arg1 ^arg2  ^fin de lista */
+</code></pre></div>
+
+<div class="section-block"><h4>Manejo de errores y código inalcanzable</h4>
+<p>Si el comando no existe o está mal escrito, <code>exec</code> falla, devuelve <code>-1</code> y el proceso original <strong>sigue</strong> ejecutando las líneas de abajo. En una llamada exitosa, en cambio, esas líneas son <strong>inalcanzables</strong> (el proceso ya fue reemplazado).</p>
+<p>Regla obligatoria — envolver en <code>if</code> y terminar si devuelve <code>-1</code>:</p>
+<pre><code>if (execl("/bin/ls", "ls", "-l", "/", (char *)0) == -1) {
+    perror("execl");
+    exit(EXIT_FAILURE);
+}
+</code></pre></div>
+
+<div class="section-block"><h4>Demo en terminal — <code>programa10.c</code></h4>
+<pre><code>gcc programa10.c -o programa10
+</code></pre>
+<ul>
+<li><strong>Prueba 1 (éxito)</strong>: llama a <code>/bin/ls</code> → muestra el listado de <code>/</code> y regresa el prompt. La línea de abajo del <code>if</code> ("esto no se imprime") <strong>no</strong> aparece.</li>
+<li><strong>Prueba 2 (error intencional)</strong>: se cambia el comando a <code>/bin/lsa</code> (no existe) y se <strong>comenta</strong> el <code>exit(EXIT_FAILURE)</code>. Resultado: <code>execl</code> devuelve <code>-1</code>, <code>perror("execl")</code> imprime <code>execl: No such file or directory</code> y, como no hay <code>exit</code>, el proceso sigue vivo e imprime "esto no se imprime" — mostrando físicamente la falla por no manejar el error.</li>
+</ul></div>
+
+<div class="section-block"><h4>Cierre</h4>
+<p>Sin pase de lista y sin tarea formal de entrega. <strong>Tarea moral</strong>: repasar la familia <code>exec</code>, con énfasis en <code>execl</code>. El profesor termina de calificar la Tarea 2 durante el fin de semana. La próxima sesión (martes) arranca el <strong>Tema 2: Estados de proceso</strong>.</p></div>
+
+<p class="empty" style="margin-top:28px">Teoría general de procesos, ejemplos en C y los <a href="programas.html" style="color:var(--indigo)">programas del profesor</a> están en el <a href="index.html#tema-1" style="color:var(--indigo)">Tema 1</a>.</p>
+
+</div>
+</body>
+</html>

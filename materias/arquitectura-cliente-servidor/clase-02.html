@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 02 — Arquitectura Cliente-Servidor</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Arquitectura Cliente-Servidor</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 02</h2>
+  <p class="prof">Mtro. Carlos Alberto Román Zamitiz · 27 ago 2026 · Tema 1 — Permisos UGO y chmod decimal, bit SetUID (chmod 4xxx), /etc/passwd, ID real vs. efectivo, Tarea 2, y fork() (retorno pid_t, PID del hijo al padre / 0 al hijo, deadlock).</p>
+</div>
+
+<details class="section-block sec" id="clase-2-permisos-bit-setuid-etc-passwd-y"><summary><span class="stitle">Clase 2 — permisos, bit setuid, /etc/passwd y fork()</span></summary>
+</details>
+
+<details class="section-block sec" id="permisos-ugo-y-chmod-notacion-decimal"><summary><span class="stitle">Permisos UGO y chmod (notación decimal)</span></summary>
+<p>Regla mnemotécnica: <strong>"ugo"</strong> (como "Hugo" sin H) → <strong>U</strong>suario (dueño), <strong>G</strong>rupo, <strong>O</strong>tros. <code>chmod</code> = <em>change mode</em>.</p>
+<pre><code>  r  w  x
+  4  2  1        rwx = 4+2+1 = 7      rw- = 6      r-x = 5</code></pre>
+<ul>
+<li><code>chmod 777 archivo</code> — todos los permisos para u, g y o.</li>
+<li><code>chmod 644 archivo</code> — archivo editable no ejecutable: dueño <code>rw</code> (6), grupo y otros <code>r</code> (4).</li>
+<li><code>chmod 755 archivo</code> — ejecutable típico: dueño <code>rwx</code> (7), grupo y otros <code>r-x</code> (5).</li>
+</ul></details>
+
+<details class="section-block sec" id="bit-setuid-chmod-con-4-digitos"><summary><span class="stitle">Bit SetUID (chmod con 4 dígitos)</span></summary>
+<p>Al ejecutar un binario, el proceso normalmente pertenece a quien lo ejecuta. Con el <strong>bit SetUID</strong> activo, quien lo ejecuta <strong>toma temporalmente los privilegios del dueño del archivo</strong> mientras dura la ejecución.</p>
+<p>Se activa con un <strong>cuarto dígito a la izquierda</strong> en <code>chmod</code>, que indica sobre qué bloque:</p>
+<pre><code>4 = SetUID   (bloque de usuario)   ← el más usado
+2 = SetGID   (bloque de grupo)
+1 = sticky   (bloque de otros)
+ej.  chmod 4511 archivo</code></pre>
+<p><strong>⚠️ Riesgo de seguridad:</strong> si <code>root</code> pone SetUID a un ejecutable, cualquier usuario sin privilegios se vuelve <code>root</code> durante esa ejecución. Manejar con extrema precaución.</p></details>
+
+<details class="section-block sec" id="usuarios-en-linux-etc-passwd-id-real-vs-"><summary><span class="stitle">Usuarios en Linux · /etc/passwd · ID real vs. efectivo</span></summary>
+<ul>
+<li><strong>ID real</strong> → dueño legítimo del proceso / archivo; es el que asigna <code>/etc/passwd</code>. Se obtiene con <code>getuid()</code> (igual que <code>getpid()</code> / <code>getppid()</code>).</li>
+<li><strong>ID efectivo</strong> → el usuario que está corriendo el programa en ese instante. Se obtiene con <code>geteuid()</code> (la "e" = <em>effective</em>).</li>
+</ul>
+<p><code>cat /etc/passwd</code> — campos separados por <code>:</code></p>
+<pre><code>username : x : UID : GID : nombre_real : /home/... : shell
+   |       |    |     |        |            |          |
+ el 1º   contraseña  id    id de     GECOS (si no    dir.   tipo de
+ es root  oculta   usuario  grupo    se puso, =user) home   shell</code></pre>
+<p>Usuarios de sistema con shell <code>nologin</code>: no pueden iniciar sesión interactiva (seguridad). <em>[inaudible: la ruta se oye como "etc/al passworden"]</em></p></details>
+
+<details class="section-block sec" id="tarea-2-probar-el-bit-setuid"><summary><span class="stitle">Tarea 2 — probar el bit SetUID</span></summary>
+<p>Metodología: <strong>dos terminales</strong> (una como <code>root</code>, otra como usuario sin privilegios). Las instrucciones de pantalla dividida en Codespaces están en la carpeta del <strong>Tema 3</strong> del repo, aunque se usan desde el Tema 1. <code>whoami</code> muestra el usuario activo.</p>
+<p><code>fdisk</code> = comando solo-<code>root</code> para manipular la tabla de particiones (<code>man fdisk</code>). Sirve cualquier comando que pida privilegios. Pasos:</p>
+<pre><code># 1) como usuario NO root:
+fdisk -l                     # -> "permiso denegado"
+                             #    (en Fedora puede solo regresar el prompt vacío)
+
+# 2) como root, ver permisos actuales:
+ls -l /sbin/fdisk            # -> 755  (rwxr-xr-x)
+
+# 3) como root, activar SetUID:
+chmod 4511 /sbin/fdisk       # -> r-s--x--x  (la 's' en vez de 'x' = SetUID activo;
+                             #    el nombre se ve en rojo si hay color)
+
+# 4) como usuario NO root otra vez:
+fdisk -l                     # -> AHORA SÍ funciona: lista las particiones
+
+# 5) OBLIGATORIO: revertir de inmediato
+chmod 755 /sbin/fdisk        # (o los permisos que tuviera antes)</code></pre>
+<p><em>[inaudible: la ruta se dicta rápido como "diagonal se bin diagonal fis" → /sbin/fdisk]</em></p>
+<p><strong>Actividad 2:</strong> programa en C (<a href="files/prof-tema1/programa02_ids.c" download style="color:var(--indigo)">programa02_ids.c</a> en el repo) que imprime <code>getuid()</code> y <code>geteuid()</code>. Compilar <code>gcc programa02_ids.c -o programa02_ids</code>. Ejecutado normal → ID real == ID efectivo. Aplicando <code>chmod 4511</code> al binario y ejecutándolo con <strong>otro usuario</strong> → salen distintos.</p>
+<p><strong>⚠️ Para sacar 10:</strong> las capturas deben mostrar <strong>ID real ≠ ID efectivo</strong>.</p>
+<p><strong>⚠️ No entregar la Tarea 2 todavía</strong> — el profesor no pudo hacer la demo en el laboratorio; reactivará la fecha de entrega después. (Recomienda clonar el repo localmente con git en vez de usar Codespaces.)</p></details>
+
+<details class="section-block sec" id="fork-creacion-de-procesos"><summary><span class="stitle">fork() — creación de procesos</span></summary>
+<ul>
+<li>Mecanismo nativo del kernel de Linux para crear procesos.</li>
+<li>Es <strong>costoso</strong>: clona / duplica toda la estructura de memoria del proceso que lo llama.</li>
+<li>El <strong>proceso hijo</strong> es copia idéntica del padre en datos y variables, <strong>salvo su PID y su PPID</strong>.</li>
+<li>Tras <code>fork()</code>, padre e hijo corren <strong>en paralelo y asíncronos</strong> (ráfagas de CPU alternadas).</li>
+</ul>
+<p><strong>Retorno</strong> (tipo <code>pid_t</code>, encapsula un entero; se imprime con <code>%d</code> / <code>%i</code>):</p>
+<pre><code>al PADRE  ->  el PID del hijo   (entero != 0)
+al HIJO   ->  0</code></pre>
+<p>La variable donde guardas el retorno se duplica: en el padre vale el PID del hijo, en el hijo vale 0. Se separa el código con:</p>
+<pre><code>if (id_hijo != 0) {
+    // código exclusivo del padre
+} else {
+    // código exclusivo del hijo
+}</code></pre>
+<p>Sin <code>if</code>, todo lo que va después de <code>fork()</code> se ejecuta en ambos → sale <strong>duplicado</strong>. En <a href="files/prof-tema1/programa05_fork_v1.c" download style="color:var(--indigo)">programa05_fork_v1.c</a>: la línea de antes del <code>fork()</code> se imprime una vez; las dos de después, dos veces cada una.</p>
+<p><em>Nota semántica del profesor: antes del <code>fork()</code> lo llama "proceso main / principal"; "padre" solo cuando ya hay hijo.</em></p></details>
+
+<details class="section-block sec" id="deadlock-candado-abrazo-mortal"><summary><span class="chip chip-examen">examen</span><span class="stitle">⚠️ Deadlock (candado / abrazo mortal)</span></summary><p>Si el padre espera a que termine el hijo para continuar y a la vez el hijo espera a que termine el padre → bloqueo indefinido. Única salida: <code>Ctrl + C</code>.</p></details>
+
+<details class="section-block sec" id="ejemplo-de-ejecucion-programa05-fork-v2-"><summary><span class="stitle">Ejemplo de ejecución — programa05_fork_v2.c</span></summary><p>Valores de esa corrida (<a href="files/prof-tema1/programa05_fork_v2.c" download style="color:var(--indigo)">programa05_fork_v2.c</a>):</p><table><thead><tr><th>Dato</th><th>Valor</th></tr></thead><tbody>
+<tr><td>PID del padre</td><td><code>30405</code></td></tr>
+<tr><td>PID del hijo</td><td><code>30406</code> (el entero inmediato siguiente)</td></tr>
+<tr><td><code>id_hijo</code> en el padre</td><td><code>30406</code></td></tr>
+<tr><td><code>id_hijo</code> en el hijo</td><td><code>0</code></td></tr>
+<tr><td><code>getpid()</code> en el hijo</td><td><code>30406</code></td></tr>
+<tr><td><code>getppid()</code> en el padre</td><td>PID de la shell (<code>bash</code>) que lanzó el programa</td></tr>
+<tr><td><code>getppid()</code> en el hijo</td><td><code>30405</code> (su creador es el padre)</td></tr>
+</tbody></table><p>El <code>if</code> puede ser <code>!= 0</code> (padre primero) o <code>== 0</code> (hijo primero), a gusto del programador.</p></details>
+
+<details class="section-block sec" id="para-repasar-clase-2"><summary><span class="stitle">Para repasar (Clase 2)</span></summary><p>Tarea moral (sin entrega): leer con calma el <strong>PDF 2 del Tema 1</strong> (procesos).</p></details>
+
+<p class="empty" style="margin-top:28px">Teoría general de procesos, ejemplos en C y los <a href="programas.html" style="color:var(--indigo)">programas del profesor</a> están en el <a href="index.html#tema-1" style="color:var(--indigo)">Tema 1</a>.</p>
+
+</div>
+</body>
+</html>

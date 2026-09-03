@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 03 — Arquitectura Cliente-Servidor</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Arquitectura Cliente-Servidor</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 03</h2>
+  <p class="prof">Mtro. Carlos Alberto Román Zamitiz · 1 sep 2026 · Tema 1 — Demo del bit SetUID paso a paso en Codespaces, bits especiales (SetGID / sticky), /etc/shadow, errno y códigos de error, y la red de la Facultad de Ingeniería (subredes e IPs de la UNAM).</p>
+</div>
+
+<details class="section-block sec" id="clase-3-codespaces-y-tarea-2"><summary><span class="stitle">Clase 3 — Codespaces y ajuste de la Tarea 2</span></summary>
+<p><strong>Contenedores en Codespaces:</strong> si sales del navegador sin destruir el contenedor, queda <strong>pausado pero vivo</strong> y sigue consumiendo la cuota gratis. Puedes tener varios (uno por materia); se pausan al salir y se retoman.</p>
+<pre><code># iniciar un Codespace:
+1. botón verde "Code" en el repo
+2. pestaña "Codespaces"   (solo aparece si estás logueado en GitHub)
+3. "Create codespace on main"
+4. si pregunta por seguridad -> "Confiar y continuar"
+# abre VS Code en el navegador; terminal abajo; se puede dividir (split terminal)</code></pre>
+<p><strong>Tarea 2 ajustada:</strong> <code>fdisk</code> <strong>no viene</strong> en el contenedor de Codespaces.</p>
+<ul>
+<li><strong>Actividad 1</strong> (probar SetUID con <code>fdisk</code>): solo quien tenga un <strong>Linux local</strong> propio.</li>
+<li><strong>Actividad 2</strong> (obligatoria para todos): compilar y analizar <a href="files/prof-tema1/programa02_ids.c" download style="color:var(--indigo)">programa02_ids.c</a> con <code>getuid</code> / <code>geteuid</code> bajo el bit SetUID.</li>
+</ul>
+<p><em>get</em> = leer / obtener; <em>set</em> = escribir / establecer. C y Python no son estrictos con el nombre del archivo (a diferencia de Java): en C todo se estructura desde <code>main</code>.</p>
+</details>
+
+<details class="section-block sec" id="clase-3-demo-setuid-paso-a-paso"><summary><span class="stitle">Clase 3 — Demo del bit SetUID en Codespaces, paso a paso</span></summary>
+<pre><code># en ambas terminales:
+whoami                       # -> codespace   (usuario NO privilegiado por defecto)
+
+gcc programa02_ids.c -o programa02_ids
+# al autocompletar con TAB, QUITAR el .c del -o para no sobrescribir el fuente
+./programa02_ids            # real == efectivo == 1000  (lo corre su propio dueño)
+
+# --- terminal izquierda: hacerse root ---
+sudo su                     # whoami -> root
+                            # con root: rm -rf /  te vuela todo -> destruir y recrear el Codespace
+cat /etc/passwd             # metadatos de usuarios; codespace tiene ID 1000 (uid gid = 1000 1000)
+cat /etc/shadow             # en algunas distros root (ID SIEMPRE 0) no está en /etc/passwd
+                            # sino "en las sombras" en /etc/shadow, junto a demonios como sys
+pwd                         # ruta absoluta actual  (/workspaces/arquitectura-cliente-servidor)
+
+chown root:root programa02_ids     # change owner  usuario:grupo archivo
+ls -l programa02_ids               # ahora pertenece a  root root  (antes codespace codespace)
+
+chmod 700 programa02_ids           # solo el dueño (root) tiene rwx; grupo y otros = 0
+# --- terminal derecha (usuario codespace, cae en "otros") ---
+./programa02_ids                   # -> "Permiso denegado"
+
+# --- terminal izquierda (root): activar SetUID ---
+chmod 4511 programa02_ids          # 4 = SetUID en la terna del USUARIO
+ls -l programa02_ids               # la 'x' del usuario se vuelve 's'/'S'; nombre en rojo (si hay color)
+
+# --- terminal derecha ---
+./programa02_ids                   # AHORA SÍ corre:
+                                   #   Real     = 1000  (codespace, quien lo lanzó)
+                                   #   Efectivo = 0     (root, dueño del archivo)</code></pre>
+<p><strong>Ciclo de vida:</strong> el cambio de identidad es <strong>temporal</strong> — solo mientras el proceso vive en memoria. Antes de ejecutar y una vez que termina, el usuario sigue siendo el 1000.</p>
+</details>
+
+<details class="section-block sec" id="clase-3-bits-especiales-qa"><summary><span class="stitle">Clase 3 — Bits especiales (Q&amp;A): SetUID / SetGID / sticky</span></summary>
+<p>El 4.º dígito de <code>chmod</code>:</p>
+<pre><code>4 = SetUID  (usuario)
+2 = SetGID  (grupo: cambia grupo real y efectivo)
+6 = 4+2     (ambos)
+1 = sticky bit   ej. chmod 1511 -> sin error; en la terna de "otros" aparece una 'T';
+                 el archivo se ve en verde/dorado</code></pre>
+<p>No hay funciones "get others ID" en C. Solo existen las 4 estándar: <code>getuid()</code> / <code>geteuid()</code> (usuario) y <code>getgid()</code> / <code>getegid()</code> (grupo). Por eso <strong>no</strong> se puede demostrar dinámicamente el efecto del <code>1</code> (otros). Tarea de investigación que dejó el profe para sí mismo: el comportamiento exacto de la <code>T</code> (sticky) en los SO modernos.</p>
+</details>
+
+<details class="section-block sec" id="clase-3-errno"><summary><span class="stitle">Clase 3 — Gestión de errores en Linux: errno</span></summary>
+<ul>
+<li><code>errno</code> (siempre en minúsculas): variable <strong>global</strong> que el sistema establece automáticamente cuando un programa en Linux tiene una condición de error. <strong>No</strong> se declara ni se inicializa; la provee el entorno de Linux.</li>
+<li>~<strong>131 códigos</strong> de error estándar (enteros 1–131). Cada uno tiene una <strong>macro</strong> en C que empieza con <code>E</code>; quitando la <code>E</code> da pista del error:
+<ul>
+<li><code>ENOENT</code> (No ENTry) → código <strong>2</strong>, "No such file or directory" (error de dedo en rutas o borrado accidental).</li>
+<li><code>EPERM</code> (Operation Not Permitted) → falta de privilegios.</li>
+<li><code>EIO</code> (Input/Output) → fallo físico o lógico de E/S.</li>
+</ul></li>
+<li><strong><code>0</code> = éxito</strong> (success), estandarizado. Cualquier entero ≠ 0 se interpreta como error. Por eso <code>int main</code> termina con <code>return 0;</code> — le devuelve 0 al proceso padre.</li>
+</ul>
+<p><strong><a href="files/prof-tema1/programa03_codigos_sistema.c" download style="color:var(--indigo)">programa03_codigos_sistema.c</a>:</strong> bucle <code>for</code> de <code>i = 0</code> (éxito) a <code>150</code>. Aunque el estándar dice 131, se puede iterar más sin riesgo; los índices sobrantes imprimen <code>Unknown error</code>. En la distro del contenedor la tabla real llega hasta el <strong>código 133</strong>. Salida: índice <code>0</code> → <code>Success</code>; índice <code>2</code> → <code>No such file or directory</code>.</p>
+</details>
+
+<details class="section-block sec" id="clase-3-red-fi-unam"><summary><span class="stitle">Clase 3 — Red de la Facultad de Ingeniería e IPs de la UNAM</span></summary>
+<ul>
+<li><code>132.247.x.x</code> y <code>132.248.x.x</code> = direccionamiento <strong>público global</strong> de la UNAM.</li>
+<li>Tercer octeto <code>59</code> → infraestructura de la <strong>Facultad de Ingeniería</strong>.</li>
+<li>Años 90, al instalar el cableado Ethernet, la red de la FI se dividió en <strong>4 subredes por edificio</strong>:
+<ul>
+<li><strong>FI-A</strong> — Edificio Principal</li>
+<li><strong>FI-B</strong> — Anexo</li>
+<li><strong>FI-C</strong> — Ciencias Básicas</li>
+<li><strong>FI-P</strong> — Posgrado</li>
+</ul></li>
+<li>El servidor de profesores está físicamente en la red <strong>FP (Posgrado)</strong> → de ahí <code>profesores.fi.unam.mx</code> (subdominio <code>.fp.</code>).</li>
+</ul>
+</details>
+
+<p class="empty" style="margin-top:28px">Teoría general de procesos, ejemplos en C y los <a href="programas.html" style="color:var(--indigo)">programas del profesor</a> están en el <a href="index.html#tema-1" style="color:var(--indigo)">Tema 1</a>.</p>
+
+</div>
+</body>
+</html>
