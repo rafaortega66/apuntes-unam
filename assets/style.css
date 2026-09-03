@@ -287,8 +287,13 @@ details.tema > .tema-body { padding-left: 4px; }
 ul.subtemas, ul.subtemas ul { list-style: none; margin: 0; padding: 0; }
 ul.subtemas { font-size: 13.5px; line-height: 1.7; color: var(--ink-soft); }
 ul.subtemas ul { margin: 2px 0 4px 10px; padding-left: 10px; border-left: 1px solid rgba(255,255,255,0.09); }
-ul.subtemas li { margin: 2px 0; }
+ul.subtemas li { margin: 3px 0; }
 ul.subtemas .sn { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--ink-soft); margin-right: 5px; }
+ul.subtemas li a { color: var(--indigo); text-decoration: none; }
+ul.subtemas li a:hover { text-decoration: underline; }
+ul.subtemas .seen { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--ink-soft); margin-left: 6px; white-space: nowrap; }
+.tema-map-hint { font-size: 12.5px; color: var(--ink-soft); padding: 4px 0 14px; }
+.tema-map-hint a, .tema-map-hint .k { color: var(--indigo); }
 details.tema.off .tema-body > p.empty { padding: 6px 0 10px; }
 
 /* vista Por clase: un bloque por clase */

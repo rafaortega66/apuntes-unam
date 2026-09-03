@@ -57,42 +57,6 @@
 <li><strong>ALU</strong>: dos entradas. La izquierda viene de un multiplexor (dato de la instrucción, de la memoria o de un periférico); la derecha está cableada al <strong>registro acumulador W</strong> (<em>working register</em>). Sumar <code>A + B</code> cuesta <strong>tres accesos</strong>: (1) cargar A en W, (2) W = W + B, (3) escribir W en el destino.</li>
 <li><strong>Expansión externa</strong>: usando 2 puertos como bus de direcciones + 1 puerto como bus de datos se direcciona RAM externa de 2¹⁶ = <strong>64 KB</strong>. Sumando el puerto A (5 bits) → 21 bits → más de 2²¹ = <strong>1 MB</strong>. La RAM interna pasa a funcionar como <em>caché / scratchpad</em> de esa memoria externa.</li>
 </ul>
-<figure class="blockdiag"><svg viewBox="0 0 600 370" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama de bloques del PIC">
-<rect class="bd-box" x="25" y="15" width="255" height="52" rx="8" style="stroke:var(--plum)"/>
-<text class="bd-lbl" x="152" y="38" text-anchor="middle">Memoria de PROGRAMA (Flash)</text>
-<text class="bd-sub" x="152" y="55" text-anchor="middle">bus 14 bits → 2¹⁴ = 16 K</text>
-<rect class="bd-box" x="320" y="15" width="255" height="52" rx="8" style="stroke:var(--teal)"/>
-<text class="bd-lbl" x="447" y="38" text-anchor="middle">Memoria de DATOS (RAM)</text>
-<text class="bd-sub" x="447" y="55" text-anchor="middle">bus 8 bits → 2⁸ = 256 B</text>
-<rect class="bd-box" x="25" y="102" width="255" height="38" rx="8" style="stroke:var(--plum)"/>
-<text class="bd-lbl" x="152" y="125" text-anchor="middle">Reg. de instrucción → Decodificador</text>
-<path class="bd-wire" d="M152 67 V102"/>
-<path class="bd-bus" d="M40 193 H560"/>
-<text class="bd-sub" x="300" y="184" text-anchor="middle" style="fill:var(--coral)">BUS DE DATOS único — 1 ciclo a cualquier bloque</text>
-<path class="bd-wire" d="M152 140 V193" stroke-dasharray="4 3"/>
-<path class="bd-wire" d="M447 67 V193"/>
-<rect class="bd-box" x="25" y="223" width="130" height="44" rx="8"/>
-<text class="bd-lbl" x="90" y="250" text-anchor="middle">Reg. de control</text>
-<path class="bd-wire" d="M90 193 V223"/>
-<rect class="bd-box" x="170" y="223" width="135" height="44" rx="8"/>
-<text class="bd-lbl" x="237" y="250" text-anchor="middle">Puertos / periféricos</text>
-<path class="bd-wire" d="M237 193 V223"/>
-<rect class="bd-box" x="320" y="223" width="130" height="44" rx="8" style="stroke:var(--coral)"/>
-<text class="bd-lbl" x="385" y="243" text-anchor="middle">Pila</text>
-<text class="bd-sub" x="385" y="259" text-anchor="middle">8 niveles · fuera de RAM</text>
-<path class="bd-wire" d="M385 193 V223"/>
-<rect class="bd-box" x="465" y="223" width="110" height="44" rx="8" style="stroke:var(--indigo)"/>
-<text class="bd-lbl" x="520" y="250" text-anchor="middle">Registro W</text>
-<path class="bd-wire" d="M520 193 V223"/>
-<rect class="bd-box" x="25" y="305" width="130" height="48" rx="8"/>
-<text class="bd-lbl" x="90" y="326" text-anchor="middle">MUX</text>
-<text class="bd-sub" x="90" y="342" text-anchor="middle">instr / mem / perif</text>
-<rect class="bd-box" x="320" y="305" width="255" height="48" rx="8" style="stroke:var(--indigo)"/>
-<text class="bd-lbl" x="447" y="326" text-anchor="middle">ALU</text>
-<text class="bd-sub" x="447" y="342" text-anchor="middle">izq ← MUX · der ← W — A+B = 3 accesos</text>
-<path class="bd-wire" d="M155 329 H320"/>
-<path class="bd-wire" d="M520 267 V329 H320"/>
-</svg><figcaption>Diagrama de bloques propio, a partir de lo descrito en clase. Arquitectura Harvard (dos memorias separadas), un solo bus de datos y el cuello de botella W↔ALU. Referencia oficial: <a href="https://www.microchip.com/en-us/product/pic16f877a" target="_blank" rel="noopener">datasheet PIC16F877A (Microchip)</a>.</figcaption></figure>
 </div>
 
 <div class="section-block"><h4>AVR — el microcontrolador de Arduino</h4>
@@ -101,26 +65,6 @@
 <li>Diferencia clave con el PIC: <strong>32 registros de propósito general</strong> en vez de un único acumulador W.</li>
 <li>Flujo para operar en la ALU: mover el dato de la SRAM a uno de los 32 registros → alimentar la ALU → el resultado vuelve a un registro o a la SRAM. Trabaja <strong>sobre registros, no sobre memoria directa</strong>. Direcciona hasta <strong>8 K de RAM</strong>.</li>
 </ul>
-<figure class="blockdiag"><svg viewBox="0 0 600 290" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama de bloques del AVR">
-<rect class="bd-box" x="25" y="15" width="255" height="50" rx="8" style="stroke:var(--plum)"/>
-<text class="bd-lbl" x="152" y="37" text-anchor="middle">Memoria de PROGRAMA (Flash)</text>
-<text class="bd-sub" x="152" y="54" text-anchor="middle">instrucciones</text>
-<rect class="bd-box" x="320" y="15" width="255" height="50" rx="8" style="stroke:var(--teal)"/>
-<text class="bd-lbl" x="447" y="37" text-anchor="middle">SRAM de DATOS</text>
-<text class="bd-sub" x="447" y="54" text-anchor="middle">hasta 8 K</text>
-<rect class="bd-box" x="25" y="110" width="120" height="44" rx="8" style="stroke:var(--plum)"/>
-<text class="bd-lbl" x="85" y="137" text-anchor="middle">Decodificador</text>
-<path class="bd-wire" d="M100 65 V110"/>
-<rect class="bd-box" x="175" y="105" width="290" height="52" rx="8" style="stroke:var(--indigo)"/>
-<text class="bd-lbl" x="320" y="128" text-anchor="middle">Banco de 32 registros de propósito general</text>
-<text class="bd-sub" x="320" y="145" text-anchor="middle">no hay un único acumulador W</text>
-<path class="bd-wire" d="M447 65 V105"/>
-<path class="bd-wire" d="M145 132 H175"/>
-<rect class="bd-box" x="200" y="210" width="240" height="48" rx="8" style="stroke:var(--indigo)"/>
-<text class="bd-lbl" x="320" y="231" text-anchor="middle">ALU</text>
-<text class="bd-sub" x="320" y="247" text-anchor="middle">opera sobre registros → resultado vuelve a registro / SRAM</text>
-<path class="bd-wire" d="M320 157 V210"/>
-</svg><figcaption>Diagrama de bloques propio. La diferencia con el PIC: 32 registros de trabajo en vez de uno. Referencia oficial: <a href="https://www.microchip.com/en-us/product/atmega328p" target="_blank" rel="noopener">datasheet ATmega328P (Microchip)</a>.</figcaption></figure>
 </div>
 
 <div class="section-block"><h4>ESP32 — sistema integrado con red</h4>
@@ -131,43 +75,6 @@
 <li>El decodificador <strong>SHA por hardware</strong> encripta el flujo de la RAM sin cargar la CPU → permite guardar llaves complejas (p. ej. claves de AWS de 256 bits) en memoria externa de forma segura.</li>
 <li>ISA: Xtensa / RISC-V.</li>
 </ul>
-<figure class="blockdiag"><svg viewBox="0 0 600 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama de bloques del ESP32">
-<rect class="bd-box" x="25" y="15" width="270" height="48" rx="8" style="stroke:var(--teal)"/>
-<text class="bd-lbl" x="160" y="37" text-anchor="middle">RAM común (SRAM / PSRAM)</text>
-<text class="bd-sub" x="160" y="53" text-anchor="middle">datos + instrucciones revueltos</text>
-<rect class="bd-box" x="25" y="100" width="270" height="44" rx="8" style="stroke:var(--coral)"/>
-<text class="bd-lbl" x="160" y="120" text-anchor="middle">Interfaz de división</text>
-<text class="bd-sub" x="160" y="136" text-anchor="middle">separa el flujo</text>
-<path class="bd-wire" d="M160 63 V100"/>
-<rect class="bd-box" x="25" y="180" width="125" height="40" rx="8"/>
-<text class="bd-lbl" x="87" y="204" text-anchor="middle">Cola de instr.</text>
-<rect class="bd-box" x="170" y="180" width="125" height="40" rx="8"/>
-<text class="bd-lbl" x="232" y="204" text-anchor="middle">Cola de datos</text>
-<path class="bd-wire" d="M100 144 V180"/>
-<path class="bd-wire" d="M220 144 V180"/>
-<rect class="bd-box" x="25" y="256" width="270" height="50" rx="8" style="stroke:var(--indigo)"/>
-<text class="bd-lbl" x="160" y="278" text-anchor="middle">Núcleo RISC (Xtensa / RISC-V)</text>
-<text class="bd-sub" x="160" y="294" text-anchor="middle">con caché de instrucciones</text>
-<path class="bd-wire" d="M100 220 V256"/>
-<path class="bd-wire" d="M220 220 V256"/>
-<path class="bd-wire" d="M330 40 V285 H305"/>
-<text class="bd-sub" x="342" y="36">periféricos</text>
-<rect class="bd-box" x="350" y="15" width="225" height="34" rx="7" style="stroke:var(--teal)"/>
-<text class="bd-lbl" x="462" y="36" text-anchor="middle">RF — WiFi + Bluetooth</text>
-<path class="bd-wire" d="M330 32 H350"/>
-<rect class="bd-box" x="350" y="59" width="225" height="30" rx="7"/>
-<text class="bd-lbl" x="462" y="79" text-anchor="middle">Reloj de tiempo real (RTC)</text>
-<path class="bd-wire" d="M330 74 H350"/>
-<rect class="bd-box" x="350" y="99" width="225" height="30" rx="7"/>
-<text class="bd-lbl" x="462" y="119" text-anchor="middle">Sensores</text>
-<path class="bd-wire" d="M330 114 H350"/>
-<rect class="bd-box" x="350" y="139" width="225" height="34" rx="7" style="stroke:var(--plum)"/>
-<text class="bd-lbl" x="462" y="160" text-anchor="middle">Cripto SHA por hardware</text>
-<path class="bd-wire" d="M330 156 H350"/>
-<rect class="bd-box" x="350" y="183" width="225" height="34" rx="7"/>
-<text class="bd-lbl" x="462" y="204" text-anchor="middle">ROM: JTAG + caché</text>
-<path class="bd-wire" d="M330 200 H350"/>
-</svg><figcaption>Diagrama de bloques propio. Lo distintivo: una RAM unificada de la que una interfaz separa instrucciones y datos, más un anillo de periféricos de comunicación y cripto. Referencias oficiales: <a href="https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf" target="_blank" rel="noopener">datasheet ESP32</a> · <a href="https://www.espressif.com/sites/default/files/documentation/esp32_technical_reference_manual_en.pdf" target="_blank" rel="noopener">technical reference manual</a> (Espressif).</figcaption></figure>
 </div>
 
 <div class="section-block"><h4>Memoria caché y latencia de acceso</h4>
@@ -188,42 +95,6 @@
 <li>Bloques internos del Cortex-M0+: controlador de interrupciones (NVIC), controlador para despertar del modo <em>sleep</em>, <strong>MPU</strong> (unidad de protección de memoria), conmutador de bus (<em>crossbar</em>), GPIO rápido, verificador de datos, unidad de <em>breakpoints</em>, tabla de traducción, puerto JTAG y controlador de <strong>DMA</strong>.</li>
 <li>La <strong>"M"</strong> de Cortex = pensada para <strong>sistemas embebidos</strong> (microcontrolador). La familia <strong>Cortex-A</strong> son procesadores de aplicación de alto rendimiento, con conjuntos de instrucciones multimedia y un compilador distinto.</li>
 </ul>
-<figure class="blockdiag"><svg viewBox="0 0 600 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama de bloques del RP2040 y del núcleo Cortex-M0+">
-<rect class="bd-box" x="25" y="15" width="165" height="44" rx="8" style="stroke:var(--indigo)"/>
-<text class="bd-lbl" x="107" y="42" text-anchor="middle">Core 0 — Cortex-M0+</text>
-<rect class="bd-box" x="205" y="15" width="165" height="44" rx="8" style="stroke:var(--indigo)"/>
-<text class="bd-lbl" x="287" y="42" text-anchor="middle">Core 1 — Cortex-M0+</text>
-<rect class="bd-box" x="25" y="90" width="345" height="34" rx="8" style="stroke:var(--coral)"/>
-<text class="bd-lbl" x="197" y="111" text-anchor="middle">Conmutador de bus (crossbar)</text>
-<path class="bd-wire" d="M107 59 V90"/>
-<path class="bd-wire" d="M287 59 V90"/>
-<rect class="bd-box" x="25" y="150" width="76" height="38" rx="7" style="stroke:var(--teal)"/>
-<text class="bd-lbl" x="63" y="173" text-anchor="middle">Banco 0</text>
-<rect class="bd-box" x="112" y="150" width="76" height="38" rx="7" style="stroke:var(--teal)"/>
-<text class="bd-lbl" x="150" y="173" text-anchor="middle">Banco 1</text>
-<rect class="bd-box" x="199" y="150" width="76" height="38" rx="7" style="stroke:var(--teal)"/>
-<text class="bd-lbl" x="237" y="173" text-anchor="middle">Banco 2</text>
-<rect class="bd-box" x="286" y="150" width="76" height="38" rx="7" style="stroke:var(--teal)"/>
-<text class="bd-lbl" x="324" y="173" text-anchor="middle">Banco 3</text>
-<path class="bd-wire" d="M63 124 V150"/>
-<path class="bd-wire" d="M150 124 V150"/>
-<path class="bd-wire" d="M237 124 V150"/>
-<path class="bd-wire" d="M324 124 V150"/>
-<text class="bd-sub" x="197" y="205" text-anchor="middle">SRAM en bancos independientes — los núcleos se turnan (evita colisión)</text>
-<path class="bd-wire" d="M400 32 V172 H362"/>
-<text class="bd-sub" x="410" y="28">periféricos</text>
-<rect class="bd-box" x="418" y="15" width="157" height="26" rx="6"/><text class="bd-lbl" x="496" y="32" text-anchor="middle">GPIO</text>
-<rect class="bd-box" x="418" y="47" width="157" height="26" rx="6"/><text class="bd-lbl" x="496" y="64" text-anchor="middle">Oscilador</text>
-<rect class="bd-box" x="418" y="79" width="157" height="26" rx="6"/><text class="bd-lbl" x="496" y="96" text-anchor="middle">PIO (perif. programables)</text>
-<rect class="bd-box" x="418" y="111" width="157" height="26" rx="6"/><text class="bd-lbl" x="496" y="128" text-anchor="middle">DMA</text>
-<rect class="bd-box" x="418" y="143" width="157" height="26" rx="6"/><text class="bd-lbl" x="496" y="160" text-anchor="middle">Debug / JTAG</text>
-<rect class="bd-box" x="418" y="175" width="157" height="26" rx="6"/><text class="bd-lbl" x="496" y="192" text-anchor="middle">ROM (periférico)</text>
-<rect class="bd-box" x="25" y="235" width="550" height="95" rx="8" style="stroke-dasharray:5 4"/>
-<text class="bd-lbl" x="40" y="256">Dentro del Cortex-M0+</text>
-<text class="bd-sub" x="40" y="278">NVIC (interrupciones) · controlador de wake-up desde sleep · MPU (protección de memoria)</text>
-<text class="bd-sub" x="40" y="296">GPIO rápido · verificador de datos · unidad de breakpoints · tabla de traducción</text>
-<text class="bd-sub" x="40" y="314">caché de instrucciones · pero datos e instrucciones comparten la misma memoria interna</text>
-</svg><figcaption>Diagrama de bloques propio. Dos núcleos Cortex-M0+ sobre un crossbar, SRAM en bancos para que no colisionen, y el detalle interno del núcleo. Referencias oficiales: <a href="https://datasheets.raspberrypi.com/rp2040/rp2040-datasheet.pdf" target="_blank" rel="noopener">datasheet RP2040</a> · <a href="https://developer.arm.com/documentation/ddi0484/latest/" target="_blank" rel="noopener">Cortex-M0+ Technical Reference Manual (Arm)</a>.</figcaption></figure>
 </div>
 
 <div class="section-block"><h4>Familia Cortex-M — cómo elegir (criterio de ingeniería)</h4>
@@ -255,49 +126,13 @@
 <li><strong>Renombrado de registros</strong>: hay muchos más registros físicos que los 8 nominales de x86. El procesador renombra los nominales a físicos libres y puede correr <strong>dos programas independientes de 32 bits en paralelo por hardware</strong>, sin hilos del SO ni semáforos.</li>
 </ol>
 <p><strong>Puertos de ejecución</strong>: <em>Coffee Lake</em> (2017) tenía 8 puertos (0–7) → un Intel de 4 núcleos paraleliza hasta 32 µops por ciclo. <em>Golden Cove</em> (2021) sube a 12 puertos (P0–P11), con cola de reordenamiento de 512 entradas: 2 puertos de <em>store</em>, 2 de <em>load</em> y 5 de cómputo pesado (3 de ellos vectoriales).</p>
-<p><strong>Caché multinivel en multinúcleo</strong>: regla obligatoria de ≥ 2 niveles — L1 y L2 a nivel núcleo, L3 global —, con la L1 dividida en datos (D) e instrucciones (I).</p>
-<figure class="blockdiag"><svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Microarquitectura interna de un Intel moderno">
-<rect class="bd-box" x="25" y="15" width="250" height="38" rx="8" style="stroke:var(--teal)"/>
-<text class="bd-lbl" x="150" y="38" text-anchor="middle">Caché L1-I (32 KB, 8 vías)</text>
-<rect class="bd-box" x="315" y="15" width="260" height="38" rx="8"/>
-<text class="bd-lbl" x="445" y="38" text-anchor="middle">Predictor de saltos</text>
-<path class="bd-wire" d="M315 34 H275"/>
-<rect class="bd-box" x="25" y="72" width="250" height="38" rx="8"/>
-<text class="bd-lbl" x="150" y="95" text-anchor="middle">Predecodificador — 16 B/ciclo</text>
-<path class="bd-wire" d="M150 53 V72"/>
-<rect class="bd-box" x="25" y="129" width="250" height="48" rx="8" style="stroke:var(--coral)"/>
-<text class="bd-lbl" x="150" y="150" text-anchor="middle">Decodificadores (simples + 1 completo)</text>
-<text class="bd-sub" x="150" y="166" text-anchor="middle">parten CISC → micro-ops RISC (micro-fusion)</text>
-<path class="bd-wire" d="M150 110 V129"/>
-<rect class="bd-box" x="25" y="196" width="250" height="46" rx="8" style="stroke:var(--plum)"/>
-<text class="bd-lbl" x="150" y="216" text-anchor="middle">Renombrado de registros</text>
-<text class="bd-sub" x="150" y="232" text-anchor="middle">8 nominales x86 → muchos físicos</text>
-<path class="bd-wire" d="M150 177 V196"/>
-<rect class="bd-box" x="25" y="261" width="250" height="46" rx="8" style="stroke:var(--indigo)"/>
-<text class="bd-lbl" x="150" y="281" text-anchor="middle">Planificador (fuera de orden)</text>
-<text class="bd-sub" x="150" y="297" text-anchor="middle">cola de µops · Golden Cove: 512 entradas</text>
-<path class="bd-wire" d="M150 242 V261"/>
-<rect class="bd-box" x="25" y="326" width="550" height="52" rx="8" style="stroke:var(--indigo)"/>
-<text class="bd-lbl" x="300" y="347" text-anchor="middle">Puertos de ejecución</text>
-<text class="bd-sub" x="300" y="363" text-anchor="middle">Coffee Lake: 8 (P0–P7) · Golden Cove: 12 (P0–P11) — 2 store + 2 load + 5 cómputo (3 vectoriales)</text>
-<path class="bd-wire" d="M150 307 V326"/>
-<rect class="bd-box" x="315" y="72" width="260" height="170" rx="8" style="stroke-dasharray:5 4"/>
-<text class="bd-lbl" x="330" y="94">CISC por fuera / RISC por dentro</text>
-<text class="bd-sub" x="330" y="118">Un Core i9 corre código del 8086</text>
-<text class="bd-sub" x="330" y="136">sin recompilar (compatibilidad 16/32 bits).</text>
-<text class="bd-sub" x="330" y="160">x86-64 (de AMD) mantiene esa compatibilidad.</text>
-<text class="bd-sub" x="330" y="178">Itanium / IA-64 la rompía → fracasó.</text>
-<text class="bd-sub" x="330" y="210">2 programas de 32 bits en paralelo</text>
-<text class="bd-sub" x="330" y="228">por hardware, sin hilos ni semáforos.</text>
-</svg><figcaption>Diagrama de bloques propio del flujo interno (front-end CISC → micro-ops → ejecución RISC fuera de orden). Referencia oficial: <a href="https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html" target="_blank" rel="noopener">Intel 64 and IA-32 Architectures Software Developer Manuals</a>.</figcaption></figure></div>
+<p><strong>Caché multinivel en multinúcleo</strong>: regla obligatoria de ≥ 2 niveles — L1 y L2 a nivel núcleo, L3 global —, con la L1 dividida en datos (D) e instrucciones (I).</p></div>
 
 <div class="section-block"><h4>Práctica de laboratorio (sesión siguiente)</h4>
 <ul>
 <li>Cada quien elige la arquitectura de microcontrolador que prefiera de las vistas en clase.</li>
 <li><strong>Restricción</strong>: la práctica de sistemas operativos enfocada a <strong>Windows</strong> exige una <strong>Raspberry Pi 3</strong>. <strong>No funciona en la Raspberry Pi 4.</strong></li>
 </ul></div>
-
-<p class="empty" style="margin-top:28px">Este material también está integrado, ordenado por subtema, en el <a href="index.html#tema-2" style="color:var(--indigo)">Tema 2</a> de la materia.</p>
 
 </div>
 </body>
