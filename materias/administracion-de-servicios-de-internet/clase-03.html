@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 03 — Administración de Servicios de Internet</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Administración de Servicios de Internet</a>
+<div class="detail-head" style="border-color:#7C9CD6"><h2>Clase 03</h2>
+  <p class="prof">Mtro. Juan Ángel Calvillo Pérez · 2 sep 2026 · Tema 1 — qué es un servidor (vs. repositorio), pirámide DIC, tríada CIA, tramas de red, tipos de servidor, levantamiento de requerimientos y aprovisionamiento en la nube (Azure).</p>
+</div>
+
+<div class="encorto"><h4>En corto</h4><ul>
+<li><strong>Servidor</strong> = una computadora con hardware suficiente para atender peticiones de otros dispositivos y <strong>compartir procesamiento</strong> (software, hardware, dispositivos de red). No se define usando "modelo cliente-servidor" (redundancia circular).</li>
+<li><strong>Servidor vs. repositorio</strong>: el repositorio solo <strong>almacena</strong> datos (Git guarda scripts pero no los ejecuta); el servidor además <strong>ejecuta</strong> lógica (Python, SQL, redes neuronales, ML).</li>
+<li><strong>Pirámide DIC</strong>: Datos → (contexto) → Información → (matemáticas / algoritmos) → Conocimiento → decisiones.</li>
+<li><strong>Tríada CIA</strong>: Disponibilidad, Integridad, Confidencialidad.</li>
+<li>Antes de instalar un servidor: <strong>levantamiento de requerimientos</strong> — de sistema (hardware/infra), funcionales (el qué), no funcionales (el cómo: velocidad, seguridad, usabilidad).</li>
+<li>En la nube (Azure/AWS/GCP) todo el <strong>presupuesto y las alertas van en USD</strong>; nunca recomendar una nube sin análisis de requerimientos previo.</li>
+</ul></div>
+
+<div class="examen"><h4>🎯 Para el examen y la evaluación</h4><ul>
+<li><strong>Cambiar de metodología a mitad del semestre = reprobado automático.</strong> El equipo se apega a lo que eligió (PMBOK o Scrum).</li>
+<li>Entregas por metodología: <strong>Scrum</strong> → reportes semanales del Sprint + evidencia de avance + bitácora de las <em>dailies</em> (15 min) y de las revisiones. <strong>PMBOK</strong> → sin bitácoras semanales; cronograma de Gantt detallado y luego validación física de los entregables comprometidos.</li>
+<li><strong>Servidor vs. repositorio</strong>: repositorio = datos estáticos sin procesamiento; servidor = ejecuta lógica, corre BD, comparte software y hardware.</li>
+<li>Clasificar <strong>requerimientos</strong> funcionales / no funcionales / de sistema — estudiar el cuestionario de ejemplos de la clase.</li>
+<li>Los presupuestos de nube operan en <strong>dólares (USD)</strong>, no en pesos.</li>
+<li><strong>Caso de la papelería (CDMX): $45 000 USD</strong> de deuda en Azure por migrar la BD a la nube sin análisis de requerimientos ni alertas de presupuesto. Nunca recomendar una nube "a ciegas".</li>
+</ul></div>
+
+<div class="section-block"><h4>Qué es un servidor (y qué no)</h4>
+<p><strong>Servidor</strong>: "un dispositivo que tiene la arquitectura suficiente para poder comunicar datos y peticiones por parte de otros dispositivos"; "una computadora que ofrece servicios para que otras accedan a información o herramientas, configurada de cierta manera, pero al final una computadora más". Tiene hardware potente para compartir servicios <strong>lógicos</strong> (software), <strong>físicos</strong> (hardware) y dispositivos de red. <strong>No</strong> se debe definir con el modelo cliente-servidor dentro de la propia definición (redundancia circular).</p>
+<p><strong>Servidor vs. repositorio</strong>: el repositorio solo almacena datos. En la práctica se usa una laptop de oficina (1 TB, 16 GB RAM) creyendo que es servidor cuando se comporta como <strong>repositorio pasivo</strong>. En un repositorio de Git subes scripts (Bash, Python, SQL), fotos o video, pero <strong>no se ejecutan</strong>. El servidor sí comparte procesamiento: correr Python, entrenar una red neuronal, simulaciones, IA y Machine Learning.</p></div>
+
+<div class="section-block"><h4>Pirámide DIC (Datos → Información → Conocimiento)</h4>
+<ul>
+<li><strong>Datos</strong> — materia prima del repositorio. Estructurados (tablas) o no estructurados (archivos planos, fotos, video). Las BD guardan datos aislados.</li>
+<li><strong>Información</strong> — el analista le da <strong>contexto</strong> al dato (relevancia para el cliente).</li>
+<li><strong>Conocimiento</strong> — procesar la información con matemáticas, estadística, algoritmos y modelos predictivos para <strong>tomar decisiones</strong>.</li>
+</ul>
+<p><em>Ejemplo (redes sociales)</em>: el usuario sube datos (fotos, publicaciones, interacciones) → la red extrae información (consume cierto contenido de 12:00 a 6:00 a. m.) → el conocimiento permite enviarle publicidad segmentada a esa hora.</p></div>
+
+<div class="section-block"><h4>Conectividad: cliente-servidor, intranet y CIA</h4>
+<ul>
+<li><strong>BD cliente-servidor</strong>: el servidor almacena la BD y ejecuta el procesamiento pesado de las consultas; el cliente (p. ej. <code>SQL*Plus</code>) es solo un <strong>puente</strong>. Conexión mínima: una <strong>dirección IP</strong> + los <strong>protocolos de seguridad</strong>.</li>
+<li><strong>No hace falta internet</strong>: se puede montar una <strong>Intranet</strong> local (LAN / MAN / CAN / PAN) con cable cruzado, comprobar con <code>ping</code> y entrar por <code>SSH</code> (puerto 22).</li>
+<li><strong>Tríada CIA</strong>:
+<ul>
+<li><strong>Disponibilidad</strong> — el servicio accesible de forma continua para el usuario autorizado, incluso en días de baja demanda (caso de la caída de BBVA Bancomer).</li>
+<li><strong>Integridad</strong> — los datos exactos y sin alteraciones no autorizadas (si el estado de cuenta dice $75, debe seguir diciendo $75).</li>
+<li><strong>Confidencialidad</strong> — solo quien tiene privilegios consulta; barrera contra externos; también protege los datos en tránsito.</li>
+</ul></li>
+<li><strong>Tramas</strong>: el paquete se fracciona en tramas, cada una con <strong>encabezado</strong> (header) y <strong>cola</strong> (footer), y viaja encriptada. Como los SMS antiguos (llegaba el bloque 2 de 3 antes que el 1 de 3) frente a WhatsApp, que retiene las tramas hasta tener el paquete completo.</li>
+</ul></div>
+
+<div class="section-block"><h4>Tipos de servidor de red</h4>
+<ul>
+<li><strong>Web</strong> — entrega páginas por HTTP/HTTPS (puertos 80 y 8080).</li>
+<li><strong>De archivos</strong> — comparte documentos por FTP / SFTP.</li>
+<li><strong>De correo</strong> — envío y recepción de correo electrónico.</li>
+<li><strong>De base de datos / autenticación</strong> — datos estructurados y validación de accesos.</li>
+</ul></div>
+
+<div class="section-block"><h4>Levantamiento de requerimientos</h4>
+<p>El error más común es levantar un servidor sin definir un objetivo. Antes de instalar, se hace el levantamiento según el alcance:</p>
+<ul>
+<li><strong>De sistema</strong> — hardware, servidores, infraestructura, ancho de banda.</li>
+<li><strong>Funcionales</strong> — <strong>qué</strong> debe hacer el sistema (entradas, salidas, interacciones lógicas con el usuario).</li>
+<li><strong>No funcionales</strong> — estándares de calidad: eficiente, seguro, rápido (tiempo de respuesta corto), robusto, confiable, fácil de usar.</li>
+</ul>
+<table><thead><tr><th>Requerimiento</th><th>Tipo</th></tr></thead><tbody>
+<tr><td>"El usuario debe loguearse antes de entrar al sistema"</td><td>Funcional</td></tr>
+<tr><td>"El tiempo de respuesta debe ser muy corto"</td><td>No funcional</td></tr>
+<tr><td>"Se necesitan múltiples servidores para garantizar la disponibilidad"</td><td>De sistema</td></tr>
+<tr><td>"Se requiere amplio ancho de banda para un video de streaming"</td><td>De sistema</td></tr>
+<tr><td>"Se debe enviar un mail con un informe al final de la semana"</td><td>Funcional</td></tr>
+<tr><td>"La interfaz debe ser sencilla y fácil de usar"</td><td>No funcional</td></tr>
+</tbody></table></div>
+
+<div class="section-block"><h4>Aprovisionar servicios en la nube — Microsoft Azure</h4>
+<ul>
+<li><strong>App Services</strong> + <strong>máquinas virtuales (VM)</strong>. La asignación de usuarios y jerarquías se centraliza en el <strong>Active Directory</strong>; las VM se agrupan en <strong>grupos de recursos</strong>.</li>
+<li><strong>Nombre de la VM</strong>: identificador único sin espacios (ej. <code>maquinita</code>).</li>
+<li><strong>Nivel de seguridad</strong>: estándar → 2.ª generación → avanzada / alta confiabilidad. A más seguridad, más recursos → mayor costo.</li>
+<li><strong>Imagen de SO</strong> (Marketplace): Ubuntu Server, Oracle Linux, Windows Server 2025.</li>
+<li><strong>Directiva de desalojo (eviction policy)</strong>: qué hacer con la VM y los datos si se suspende el pago — detener el servicio o <strong>eliminar todos los datos</strong>. Útil como mecanismo de ciberseguridad para no dejar rastro en crisis (fugas de personal, etc.).</li>
+<li><strong>Autenticación</strong>: clave pública <strong>SSH</strong> (SHA) o contraseña de texto plano (ejemplo inseguro: <code>Juanito123</code>).</li>
+<li><strong>Puertos de entrada (firewall)</strong>: <strong>22</strong> SSH, <strong>80</strong> HTTP, <strong>443</strong> HTTPS.</li>
+</ul></div>
+
+<div class="section-block"><h4>Costos de almacenamiento y presupuestos en la nube</h4>
+<ul>
+<li><strong>Variables de facturación</strong>: consumo (tiempo de CPU y memoria), almacenamiento (datos en reposo) y flujo de red (<strong>ingress / egress</strong>, con tres tipos de cargo). Analogía: rentar una <em>bodega</em> para guardar (barato) vs. una <em>casa</em> para vivir y consumir servicios (caro).</li>
+<li><strong>Niveles de acceso</strong>: <strong>Hot</strong> (acceso frecuente — almacenamiento caro, transacciones baratas) vs. <strong>Cool</strong> (respaldos infrecuentes — almacenamiento barato, acceso caro).</li>
+<li><strong>Enrutamiento</strong>: red privada de <em>Microsoft</em> (rápida y segura, más cara) vs. <em>internet</em> público (barato, seguridad a cargo del cliente).</li>
+<li><strong>Claves</strong>: usar <em>customer-managed keys</em> para que Microsoft no tenga acceso a los datos confidenciales.</li>
+<li><strong>Presupuestos y alertas</strong>: solo en <strong>USD</strong>, mensuales / trimestrales / anuales. Alertas por <strong>costo real</strong> (ej. 50 % = <code>0.50</code> de $5 000 = $2 500) y por <strong>costo previsto</strong> (predictivo, ej. <code>0.40</code>).</li>
+<li><strong>Escalabilidad dinámica</strong>: contratar almacenamiento/cómputo masivo solo en picos (Buen Fin, diciembre) y cancelarlo después.</li>
+</ul>
+<p><strong>Caso real</strong>: una papelería de la CDMX acumuló <strong>$45 000 USD</strong> de deuda en Azure porque un estudiante (hijo del dueño) migró la BD a la nube sin análisis de requerimientos ni alertas de presupuesto.</p></div>
+
+<p class="empty" style="margin-top:28px">Actividad "Avante Textil" (entrega el lunes 7 sep, 17:00) y reglas de entrega por metodología: en <a href="evaluacion.html" style="color:var(--indigo)">Evaluación</a>. Resumen por subtema en el <a href="index.html#tema-1" style="color:var(--indigo)">Tema 1</a>.</p>
+
+</div>
+</body>
+</html>

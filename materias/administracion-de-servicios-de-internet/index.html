@@ -142,6 +142,19 @@ mkdir -p a/b/c          # crea todo el árbol de subcarpetas en una sola línea<
 <p><strong>Scrum</strong>: roles Product Owner / Scrum Master / Equipo de Desarrollo · eventos del Sprint (Planning · Daily 15 min · Review · Retrospective) · artefactos Product Backlog y Sprint Backlog · pilares transparencia, inspección, adaptación.</p>
 <p><strong>PMBOK (PMI)</strong>: 5 fases (Inicio, Planificación, Ejecución, Monitoreo y Control, Cierre) · 10 áreas de conocimiento (integración, alcance, cronograma, costos, calidad, recursos, comunicaciones, riesgos, adquisiciones, interesados) · todo centralizado en el <strong>Project Manager</strong>.</p>
 <p><strong>Microsoft Project</strong> (resumen): usar programación <strong>automática</strong>; vincular con <code>Ctrl + F2</code>; relación Comienzo-a-Comienzo con <code>nCC</code> en Predecesoras; recursos de tipo <strong>Trabajo / Material / Costo</strong>. Error típico: asignar personal en el nivel 1 (Tarea Resumen) → 3 272 h / $34 000; asignar por rol a nivel de subtarea → 304 h / $812.50.</p></details>
+
+<details class="section-block sec" id="servidores-requerimientos-nube-clase-3"><summary><span class="chip chip-examen">examen</span><span class="stitle">Servidores, requerimientos y nube <span class="thrs">· Clase 3 · 2 sep</span></span></summary>
+<p>Desarrollo completo en la <a href="clase-03.html" style="color:var(--indigo)">Clase 03</a>.</p>
+<ul>
+<li><strong>Servidor</strong> = computadora con hardware suficiente para atender peticiones y <strong>compartir procesamiento</strong> (no se define con "modelo cliente-servidor"). <strong>Repositorio</strong> = solo <strong>almacena</strong> datos; Git guarda scripts pero no los ejecuta. El servidor sí corre Python, SQL, redes neuronales, ML.</li>
+<li><strong>Pirámide DIC</strong>: Datos → (contexto) → Información → (matemáticas / algoritmos) → Conocimiento → decisiones. Datos estructurados (tablas) o no estructurados (archivos planos, fotos, video).</li>
+<li>Conexión cliente-servidor mínima: <strong>IP + protocolos de seguridad</strong>. No hace falta internet: Intranet (LAN/MAN/CAN/PAN), <code>ping</code>, <code>SSH</code> (puerto 22).</li>
+<li><strong>Tríada CIA</strong>: Disponibilidad (servicio continuo — caso caída de Bancomer), Integridad (datos sin alteración — $75 siguen siendo $75), Confidencialidad (solo con privilegios; también en tránsito).</li>
+<li><strong>Tramas</strong>: el paquete se fracciona; cada trama lleva encabezado y cola, viaja encriptada y se reensambla en el destino.</li>
+<li><strong>Tipos de servidor</strong>: web (HTTP/HTTPS, puertos 80/8080), archivos (FTP/SFTP), correo, base de datos / autenticación.</li>
+<li><strong>Requerimientos</strong>: de <strong>sistema</strong> (hardware, infra, ancho de banda), <strong>funcionales</strong> (el qué: login, enviar mail), <strong>no funcionales</strong> (el cómo: tiempo de respuesta, usabilidad, seguridad). Estudiar el cuestionario de ejemplos de la clase.</li>
+</ul>
+<p><strong>Nube (Azure/AWS/GCP)</strong>: VM en grupos de recursos + Active Directory; nivel de seguridad = más recursos = más costo; imagen de SO (Ubuntu/Oracle Linux/Windows Server); <em>eviction policy</em> (detener o borrar datos si se corta el pago); puertos de entrada 22/80/443; niveles <strong>Hot</strong> (almacenamiento caro, acceso barato) vs. <strong>Cool</strong> (al revés); enrutamiento Microsoft vs. internet; <em>customer-managed keys</em>; presupuestos y alertas <strong>en USD</strong> por costo real y costo previsto. <strong>Caso papelería CDMX: $45 000 USD</strong> por migrar a la nube sin análisis de requerimientos → nunca recomendar una nube a ciegas.</p></details>
 </div></details>
 
 <details class="section-block tema off" id="tema-2"><summary><span class="stitle">Tema 2 — Servidor de correo electrónico</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Subtemas del programa oficial:</p>
@@ -286,6 +299,7 @@ mkdir -p a/b/c          # crea todo el árbol de subcarpetas en una sola línea<
 <p class="empty" style="padding:8px 0 16px">Clases grabadas, en orden. Cada tarjeta abre la página completa de esa clase.</p>
 <a class="clase-link" href="clase-01.html"><span class="cl-n">Clase 01</span><span class="cl-t">26 ago 2026 · Tema 1</span><span class="cl-d">Repaso de arquitectura (Von Neumann vs. Harvard RISC, pipeline), jerarquía de directorios de Linux (FHS), distribuciones y práctica de terminal. De aquí sale la Práctica 0.</span></a>
 <a class="clase-link" href="clase-02.html"><span class="cl-n">Clase 02</span><span class="cl-t">31 ago 2026 · metodología</span><span class="cl-d">Gestión de proyectos tradicional (cascada) vs. ágil (Scrum), PMBOK y planificación del Gantt en Microsoft Project: recursos (Trabajo/Material/Costo), predecesoras <code>nCC</code>, costos.</span></a>
+<a class="clase-link" href="clase-03.html"><span class="cl-n">Clase 03</span><span class="cl-t">2 sep 2026 · Tema 1</span><span class="cl-d">Qué es un servidor (vs. repositorio), pirámide DIC, tríada CIA, tramas de red, tipos de servidor, levantamiento de requerimientos y aprovisionamiento en la nube (Azure): VM, puertos, storage tiers, presupuestos en USD.</span></a>
 </div>
 
 </div>
