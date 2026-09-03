@@ -30,91 +30,20 @@
 <details class="section-block collapsible"><summary>Bibliografía básica</summary><ul><li>Hamacher et al. — <em>Computer Organization and Embedded Systems</em></li><li>Patterson &amp; Hennessy — <em>Computer Organization and Design</em></li><li>Patterson &amp; Hennessy — <em>Computer Architecture: A Quantitative Approach</em></li><li>Tanenbaum &amp; Austin — <em>Structured Computer Organization</em></li></ul></details>
 
 <div class="v-tema">
-<details class="section-block tema" id="tema-1" open><summary><span class="stitle">Tema 1 — Estructura básica de una computadora</span></summary><div class="tema-body">
-<p class="empty">Nota: esta clase también adelanta material del Tema 4 (pipelining).</p>
-<div class="encorto"><h4>En corto</h4><ul><li><strong>Von Neumann</strong>: una memoria para datos e instrucciones → una instrucción a la vez (se asocia a CISC).</li><li><strong>Harvard</strong>: memorias separadas → trae instrucción y dato a la vez (se asocia a RISC).</li><li>CISC = instrucciones complejas, pocas líneas; RISC = instrucciones simples tipo carga / almacena.</li><li>Ciclo: <strong>Fetch → Decode → Execute → Write Back</strong>; con <em>pipeline</em> sale un resultado por ciclo de reloj.</li></ul></div>
-<div class="examen"><h4>🎯 Para el examen</h4><ul><li>Diferencia Von Neumann / Harvard y su relación con CISC / RISC.</li><li>Etapas del pipeline y por qué acelera (etapas concurrentes).</li><li>Las partes marcadas <code>[?]</code> son de letra difícil de leer — verificar el pseudo-ensamblador y el diagrama.</li></ul></div>
-<details class="section-block sec" id="von-neumann-vs-harvard" open><summary><span class="stitle">Von Neumann vs. Harvard</span></summary><table><thead><tr><th></th><th>Von Neumann</th><th>Harvard</th></tr></thead><tbody>
-<tr><td>Memoria</td><td>Una sola memoria para datos e instrucciones</td><td>Memorias separadas para instrucciones y datos</td></tr>
-<tr><td>Consecuencia</td><td>La unidad de control ejecuta <strong>una instrucción a la vez</strong> (busca instrucción o dato, no ambos)</td><td>Puede traer instrucción y dato en el mismo ciclo</td></tr>
-<tr><td>Se asocia con</td><td>CISC</td><td>RISC</td></tr>
-</tbody></table><p>Las instrucciones son "físicas": cada una cuesta tiempo (ciclos de reloj).</p></details>
+<p class="tema-map-hint">Todos los temas y subtemas del plan. <span class="k">En azul</span>, lo que ya se vio en clase (enlaza a la clase). En gris, lo que falta.</p>
 
-<details class="section-block sec" id="cisc-vs-risc"><summary><span class="stitle">CISC vs. RISC</span></summary><p><strong>CISC</strong> — instrucciones complejas, cercanas a un lenguaje de alto nivel; el mismo trabajo se escribe en pocas líneas. Ejemplo de estilo (pseudocódigo de la clase):</p>
-<pre><code>for (i = 0; i &lt; n; i++);
-set(i) 0;
-...   EST1        ; etiqueta   [?]
-</code></pre>
-<p><strong>RISC</strong> — instrucciones simples y uniformes tipo carga / almacena / opera. Ejemplo de pseudo-ensamblador de la clase (transcripción aproximada):</p>
-<pre><code>LDA A, (i)        ; cargar A desde memoria
-SUB A, (o)        ; [?] "SBtA"
-STA (i)           ; almacenar A en memoria
-LDA (i)
-LDB (w)
-SUB A, B          ; A &lt;- A - B
-LDC EST1, 1
-JL2              ; salto  [?]
-LDA i
-INC A            ; [?] "IWC A"
-STA i
-</code></pre>
-<p><em>[?] En los apuntes hay números junto a varias instrucciones (33, 66, 20 / 80, 64): parecen direcciones o valores de ejemplo, pero no se leen con claridad.</em></p></details>
-
-<details class="section-block sec" id="ciclo-del-procesador-y-pipeline"><summary><span class="stitle">Ciclo del procesador y pipeline</span></summary><p>Cada instrucción pasa por etapas. En los apuntes aparecen cuatro:</p>
-<ol>
-<li><strong>Fetch</strong> — traer la instrucción de memoria.</li>
-<li><strong>Decode</strong> — decodificarla.</li>
-<li><strong>Execute</strong> — ejecutarla (en los apuntes: <em>"stage? preguntar"</em>). En un pipeline RISC clásico aquí se suele intercalar además una etapa de acceso a memoria.</li>
-<li><strong>Write Back (WB)</strong> — escribir el resultado en el registro.</li>
-</ol>
-<p>Con <strong>pipelining</strong>, mientras una instrucción se ejecuta, la siguiente se decodifica y la siguiente se busca: varias instrucciones avanzan a la vez, desfasadas un ciclo. Éste es el diagrama espacio-tiempo que quedó marcado como <em>&laquo;foto&raquo;</em> en los apuntes:</p>
-<figure style="margin:14px 0;overflow-x:auto">
-<svg viewBox="0 0 560 210" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;min-width:480px;font-family:'IBM Plex Mono',monospace">
-  <style>
-    .lbl{fill:#9297A6;font-size:12px}
-    .cell{fill:none;stroke:rgba(255,255,255,0.12)}
-    .stg{font-size:12px;font-weight:600;fill:#14161C}
-  </style>
-  <!-- eje ciclos -->
-  <text x="8" y="20" class="lbl">ciclo</text>
-  <g>
-    <text x="92" y="20" class="lbl">1</text><text x="152" y="20" class="lbl">2</text>
-    <text x="212" y="20" class="lbl">3</text><text x="272" y="20" class="lbl">4</text>
-    <text x="332" y="20" class="lbl">5</text><text x="392" y="20" class="lbl">6</text>
-    <text x="452" y="20" class="lbl">7</text>
-  </g>
-  <!-- filas de instrucciones -->
-  <!-- I1 -->
-  <text x="8" y="52" class="lbl">I1</text>
-  <rect x="80"  y="36" width="56" height="26" rx="4" class="cell" fill="#45B8A8"/><text x="98"  y="53" class="stg">F</text>
-  <rect x="140" y="36" width="56" height="26" rx="4" class="cell" fill="#7C9CD6"/><text x="158" y="53" class="stg">D</text>
-  <rect x="200" y="36" width="56" height="26" rx="4" class="cell" fill="#E8735C"/><text x="218" y="53" class="stg">E</text>
-  <rect x="260" y="36" width="56" height="26" rx="4" class="cell" fill="#A98BD1"/><text x="278" y="53" class="stg">W</text>
-  <!-- I2 -->
-  <text x="8" y="88" class="lbl">I2</text>
-  <rect x="140" y="72" width="56" height="26" rx="4" class="cell" fill="#45B8A8"/><text x="158" y="89" class="stg">F</text>
-  <rect x="200" y="72" width="56" height="26" rx="4" class="cell" fill="#7C9CD6"/><text x="218" y="89" class="stg">D</text>
-  <rect x="260" y="72" width="56" height="26" rx="4" class="cell" fill="#E8735C"/><text x="278" y="89" class="stg">E</text>
-  <rect x="320" y="72" width="56" height="26" rx="4" class="cell" fill="#A98BD1"/><text x="338" y="89" class="stg">W</text>
-  <!-- I3 -->
-  <text x="8" y="124" class="lbl">I3</text>
-  <rect x="200" y="108" width="56" height="26" rx="4" class="cell" fill="#45B8A8"/><text x="218" y="125" class="stg">F</text>
-  <rect x="260" y="108" width="56" height="26" rx="4" class="cell" fill="#7C9CD6"/><text x="278" y="125" class="stg">D</text>
-  <rect x="320" y="108" width="56" height="26" rx="4" class="cell" fill="#E8735C"/><text x="338" y="125" class="stg">E</text>
-  <rect x="380" y="108" width="56" height="26" rx="4" class="cell" fill="#A98BD1"/><text x="398" y="125" class="stg">W</text>
-  <!-- I4 -->
-  <text x="8" y="160" class="lbl">I4</text>
-  <rect x="260" y="144" width="56" height="26" rx="4" class="cell" fill="#45B8A8"/><text x="278" y="161" class="stg">F</text>
-  <rect x="320" y="144" width="56" height="26" rx="4" class="cell" fill="#7C9CD6"/><text x="338" y="161" class="stg">D</text>
-  <rect x="380" y="144" width="56" height="26" rx="4" class="cell" fill="#E8735C"/><text x="398" y="161" class="stg">E</text>
-  <rect x="440" y="144" width="56" height="26" rx="4" class="cell" fill="#A98BD1"/><text x="458" y="161" class="stg">W</text>
-  <text x="8" y="196" class="lbl">F = Fetch · D = Decode · E = Execute · W = Write Back</text>
-</svg>
-</figure>
-<p><em>[?] El diagrama original de los apuntes ("ABC Pipe") no se distingue bien; éste es la reconstrucción estándar del pipeline de 4 etapas. Si mandas una foto más nítida lo ajusto.</em></p></details>
+<details class="section-block tema" id="tema-1" open><summary><span class="stitle">Tema 1 &mdash; Estructura b&aacute;sica de una computadora</span> <span class="thrs">&middot; Clase 01</span></summary><div class="tema-body">
+<ul class="subtemas">
+<li><span class="sn">1.1</span> Tipos de computadoras</li>
+<li><span class="sn">1.2</span> <a href="clase-01.html">El modelo Von Neumann</a> <span class="seen">Clase 01</span></li>
+<li><span class="sn">1.3</span> Unidades funcionales: entrada, memoria, ALU, salida y control</li>
+<li><span class="sn">1.4</span> <a href="clase-01.html">Conceptos b&aacute;sicos de operaci&oacute;n</a> <span class="seen">Clase 01</span></li>
+<li><span class="sn">1.5</span> Estructura de buses</li>
+<li><span class="sn">1.6</span> <a href="clase-01.html">Rendimiento: reloj, ecuaci&oacute;n b&aacute;sica, pipeline y superescalar, RISC y CISC, m&eacute;tricas</a> <span class="seen">Clase 01</span></li>
+</ul>
 </div></details>
 
-<details class="section-block tema off" id="tema-2"><summary><span class="stitle">Tema 2 — La arquitectura del conjunto de instrucciones</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Subtemas del programa oficial:</p>
+<details class="section-block tema off" id="tema-2"><summary><span class="stitle">Tema 2 &mdash; La arquitectura del conjunto de instrucciones</span> <span class="thrs">&middot; sin ver</span></summary><div class="tema-body">
 <ul class="subtemas">
 <li><span class="sn">2.1</span> Componentes de hardware de la arquitectura del conjunto de instrucciones.</li>
 <ul>
@@ -135,7 +64,7 @@ STA i
 </ul>
 </div></details>
 
-<details class="section-block tema off" id="tema-3"><summary><span class="stitle">Tema 3 — El procesador</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Subtemas del programa oficial:</p>
+<details class="section-block tema off" id="tema-3"><summary><span class="stitle">Tema 3 &mdash; El procesador</span> <span class="thrs">&middot; sin ver</span></summary><div class="tema-body">
 <ul class="subtemas">
 <li><span class="sn">3.1</span> Conceptos fundamentales.</li>
 <ul>
@@ -161,9 +90,9 @@ STA i
 </ul></ul>
 </div></details>
 
-<details class="section-block tema off" id="tema-4"><summary><span class="stitle">Tema 4 — Arquitecturas pipelining (RISC)</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Subtemas del programa oficial:</p>
+<details class="section-block tema off" id="tema-4"><summary><span class="stitle">Tema 4 &mdash; Arquitecturas pipelining (RISC)</span> <span class="thrs">&middot; Clase 01 (adelanto)</span></summary><div class="tema-body">
 <ul class="subtemas">
-<li><span class="sn">4.1</span> Forma del funcionamiento del pipelining.</li>
+<li><span class="sn">4.1</span> <a href="clase-01.html">Forma del funcionamiento del pipelining</a> <span class="seen">Clase 01</span></li>
 <li><span class="sn">4.2</span> Rendimiento del pipelining.</li>
 <li><span class="sn">4.3</span> Riesgos de datos. Manejo por software y efectos colaterales.</li>
 <li><span class="sn">4.4</span> Riesgos de control. Manejo de saltos incondicionales y predicción en saltos condicionales.</li>
@@ -172,21 +101,9 @@ STA i
 </ul>
 </div></details>
 
-<details class="section-block tema off" id="tema-5"><summary><span class="stitle">Tema 5 — Familias de procesadores comerciales</span> <span class="thrs">· notas sueltas</span></summary><div class="tema-body">
-<details class="section-block sec" id="t5-pico-clase2" open><summary><span class="stitle">Notas de ARM / Raspberry Pi Pico (Clase 2 · 2 sep)</span></summary>
-<p>El tema aún no se desarrolla en clase; esto son apuntes sueltos de la <a href="clase-02.html" style="color:var(--indigo)">Clase 02</a> (el curso usa ensamblador sobre Raspberry Pi Pico, que monta un núcleo ARM Cortex-M).</p>
-<ul>
-<li><strong>Pico 2 tiene FPU</strong>; la <strong>Pico 1 no</strong>. Un programa en ensamblador con punto flotante para la Pico 2 <strong>no corre</strong> en la Pico 1 (ausencia física de la FPU). En alto nivel casi no se nota.</li>
-<li>La Pico 2 expone <strong>32 registros de punto flotante</strong> y, en teoría, una <strong>unidad MAC</strong> (multiplicación-acumulación) tipo DSP — todavía no accesible desde los ensambladores disponibles.</li>
-<li>El <em>bootloader</em> oficial aún <strong>no distingue</strong> Pico 1 de Pico 2.</li>
-<li><strong>DMA</strong>: lo importante es <strong>direccionar directamente los registros internos</strong> de la tarjeta; la librería oficial no convenció al profesor, que hizo la suya para manejar imágenes.</li>
-<li>Mencionados: microcontrolador <strong>FPU 64</strong> (canadiense, 64 bits, 40 MHz, ISA muy potente); display <strong>ILI9488</strong> (320×480); libro <em>Numerical Recipes in C</em>.</li>
-</ul>
-<p class="chip chip-examen" style="display:inline-block">examen</p> <span style="font-size:13px;color:var(--ink-soft)">En las Pico se pueden usar 32 registros; la limitación real aparece al direccionar directamente los registros internos, no al usar alto nivel + librerías.</span>
-</details>
-<p class="empty" style="margin-top:12px">Subtemas del programa oficial:</p>
+<details class="section-block tema off" id="tema-5"><summary><span class="stitle">Tema 5 &mdash; Familias de procesadores comerciales</span> <span class="thrs">&middot; Clase 02 (notas)</span></summary><div class="tema-body">
 <ul class="subtemas">
-<li><span class="sn">5.1</span> Arquitectura ARM.</li>
+<li><span class="sn">5.1</span> <a href="clase-02.html">Arquitectura ARM</a> <span class="seen">Clase 02 (notas)</span></li>
 <ul>
 <li><span class="sn">5.1.1</span> Estructura de registros.</li>
 <li><span class="sn">5.1.2</span> Modos de direccionamiento e instrucciones de acceso a memoria.</li>
@@ -216,7 +133,7 @@ STA i
 </ul></ul>
 </div></details>
 
-<details class="section-block tema off" id="tema-6"><summary><span class="stitle">Tema 6 — Arquitecturas paralelas</span> <span class="thrs">· sin apuntes</span></summary><div class="tema-body"><p class="empty">Subtemas del programa oficial:</p>
+<details class="section-block tema off" id="tema-6"><summary><span class="stitle">Tema 6 &mdash; Arquitecturas paralelas</span> <span class="thrs">&middot; sin ver</span></summary><div class="tema-body">
 <ul class="subtemas">
 <li><span class="sn">6.1</span> Introducción: La problemática de crear programas para el procesamiento paralelo.</li>
 <li><span class="sn">6.2</span> Organización para compartir la memoria en sistemas multiprocesador.</li>

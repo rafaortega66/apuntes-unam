@@ -60,48 +60,17 @@ STA i</code></pre>
 <ol>
 <li><strong>Fetch</strong> — traer la instrucción de memoria.</li>
 <li><strong>Decode</strong> — decodificarla.</li>
-<li><strong>Execute</strong> — ejecutarla (en un pipeline RISC clásico aquí se suele intercalar además una etapa de acceso a memoria).</li>
+<li><strong>Execute</strong> — ejecutarla.</li>
 <li><strong>Write Back (WB)</strong> — escribir el resultado en el registro.</li>
 </ol>
 <p>Con <strong>pipelining</strong>, mientras una instrucción se ejecuta, la siguiente se decodifica y la siguiente se busca: varias instrucciones avanzan a la vez, desfasadas un ciclo.</p>
-<figure style="margin:14px 0;overflow-x:auto">
-<svg viewBox="0 0 560 210" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;min-width:480px;font-family:'IBM Plex Mono',monospace">
-  <style>
-    .lbl{fill:#9297A6;font-size:12px}
-    .cell{fill:none;stroke:rgba(255,255,255,0.12)}
-    .stg{font-size:12px;font-weight:600;fill:#14161C}
-  </style>
-  <text x="8" y="20" class="lbl">ciclo</text>
-  <g>
-    <text x="92" y="20" class="lbl">1</text><text x="152" y="20" class="lbl">2</text>
-    <text x="212" y="20" class="lbl">3</text><text x="272" y="20" class="lbl">4</text>
-    <text x="332" y="20" class="lbl">5</text><text x="392" y="20" class="lbl">6</text>
-    <text x="452" y="20" class="lbl">7</text>
-  </g>
-  <text x="8" y="52" class="lbl">I1</text>
-  <rect x="80"  y="36" width="56" height="26" rx="4" class="cell" fill="#45B8A8"/><text x="98"  y="53" class="stg">F</text>
-  <rect x="140" y="36" width="56" height="26" rx="4" class="cell" fill="#7C9CD6"/><text x="158" y="53" class="stg">D</text>
-  <rect x="200" y="36" width="56" height="26" rx="4" class="cell" fill="#E8735C"/><text x="218" y="53" class="stg">E</text>
-  <rect x="260" y="36" width="56" height="26" rx="4" class="cell" fill="#A98BD1"/><text x="278" y="53" class="stg">W</text>
-  <text x="8" y="88" class="lbl">I2</text>
-  <rect x="140" y="72" width="56" height="26" rx="4" class="cell" fill="#45B8A8"/><text x="158" y="89" class="stg">F</text>
-  <rect x="200" y="72" width="56" height="26" rx="4" class="cell" fill="#7C9CD6"/><text x="218" y="89" class="stg">D</text>
-  <rect x="260" y="72" width="56" height="26" rx="4" class="cell" fill="#E8735C"/><text x="278" y="89" class="stg">E</text>
-  <rect x="320" y="72" width="56" height="26" rx="4" class="cell" fill="#A98BD1"/><text x="338" y="89" class="stg">W</text>
-  <text x="8" y="124" class="lbl">I3</text>
-  <rect x="200" y="108" width="56" height="26" rx="4" class="cell" fill="#45B8A8"/><text x="218" y="125" class="stg">F</text>
-  <rect x="260" y="108" width="56" height="26" rx="4" class="cell" fill="#7C9CD6"/><text x="278" y="125" class="stg">D</text>
-  <rect x="320" y="108" width="56" height="26" rx="4" class="cell" fill="#E8735C"/><text x="338" y="125" class="stg">E</text>
-  <rect x="380" y="108" width="56" height="26" rx="4" class="cell" fill="#A98BD1"/><text x="398" y="125" class="stg">W</text>
-  <text x="8" y="160" class="lbl">I4</text>
-  <rect x="260" y="144" width="56" height="26" rx="4" class="cell" fill="#45B8A8"/><text x="278" y="161" class="stg">F</text>
-  <rect x="320" y="144" width="56" height="26" rx="4" class="cell" fill="#7C9CD6"/><text x="338" y="161" class="stg">D</text>
-  <rect x="380" y="144" width="56" height="26" rx="4" class="cell" fill="#E8735C"/><text x="398" y="161" class="stg">E</text>
-  <rect x="440" y="144" width="56" height="26" rx="4" class="cell" fill="#A98BD1"/><text x="458" y="161" class="stg">W</text>
-  <text x="8" y="196" class="lbl">F = Fetch · D = Decode · E = Execute · W = Write Back</text>
-</svg>
-</figure>
-<p><em>[?] El diagrama original de los apuntes no se distingue bien; ésta es la reconstrucción estándar del pipeline de 4 etapas.</em></p></div>
+<pre><code>       T1   T2   T3   T4   T5   T6   T7
+I1     F    D    E    WB
+I2          F    D    E    WB
+I3               F    D    E    WB
+I4                    F    D    E    WB
+                      (desde aqui: 1 resultado por ciclo)</code></pre>
+<p class="empty">El profesor dibujo este diagrama espacio-tiempo en el pizarron; la foto de los apuntes no se distingue bien.</p></div>
 
 <p class="empty" style="margin-top:28px">Este material también está en el <a href="index.html#tema-1" style="color:var(--indigo)">Tema 1</a> de la materia.</p>
 
