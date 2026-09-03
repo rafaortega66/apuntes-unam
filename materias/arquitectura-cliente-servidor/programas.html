@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programas — Arquitectura Cliente-Servidor</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Arquitectura Cliente-Servidor</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Programas — Tema 1</h2>
+  <p class="prof">Programas en C del profesor (procesos: <code>system()</code>, <code>fork()</code>, familia <code>exec()</code>). Archivos reales en <code>files/prof-tema1/</code>. Compilar: <code>cc programaXX_nombre.c -o programaXX</code> · ejecutar: <code>./programaXX</code>. Los PID y listados de <code>ls</code> varían en cada corrida.</p>
+</div>
+
+<ul class="proglist">
+<li class="pg-h">system()</li>
+<li><a href="#programa04_system_v1.c"><code>programa04_system_v1.c</code></a> — Ejemplo mínimo de <code>system("ls -l /")</code>: el shell ejecuta el comando y <code>return_value</code> recibe el estado devuelto por el shell (0 si todo salió bien).</li>
+<li><a href="#programa04_system_v2.c"><code>programa04_system_v2.c</code></a> — Igual que el anterior pero además interpreta el valor devuelto con <code>WIFEXITED</code> / <code>WEXITSTATUS</code> (tema de <code>wait()</code>, se ve más adelante) y repite con un comando que falla (<code>ls -l no_existe</code>).</li>
+<li class="pg-h">fork()</li>
+<li><a href="#programa05_fork_v1.c"><code>programa05_fork_v1.c</code></a> — Primer contacto con <code>fork()</code>: después de la llamada hay <strong>dos procesos</strong> ejecutando el mismo código, por eso los <code>printf</code> 2 y 3 salen duplicados. <code>id_hijo</code> vale <code>0</code> en el hijo y el PID del hijo en el padre.</li>
+<li><a href="#programa05_fork_v2.c"><code>programa05_fork_v2.c</code></a> — El <code>if (id_hijo != 0)</code> separa el código que ejecuta el padre del que ejecuta el hijo. El orden en que aparecen los bloques PADRE/HIJO <strong>no está garantizado</strong> (condición de carrera).</li>
+<li><a href="#programa08_child.c"><code>programa08_child.c</code></a> — <code>fork()</code> con manejo de error: si devuelve <code>-1</code> hace <code>perror("fork")</code> y <code>exit</code>. El hijo imprime <code>in child</code> y sus pid/ppid y termina con <code>exit</code>; el padre imprime <code>in parent</code>.</li>
+<li class="pg-h">Errores del sistema (errno / perror)</li>
+<li><a href="#programa03_codigos_sistema.c"><code>programa03_codigos_sistema.c</code></a> — Recorre <code>strerror(0..150)</code> e imprime el mensaje de cada código de error de Linux. Es la versión &laquo;en C&raquo; de la tabla de los 131 códigos.</li>
+<li><a href="#programa06_error.c"><code>programa06_error.c</code></a> — Provoca un error real: <code>rename("antes.txt","despues.txt")</code> cuando <code>antes.txt</code> no existe. Muestra <code>errno</code>, <code>strerror(errno)</code>, <code>perror()</code> y un <code>switch</code> que traduce el tipo de error.</li>
+<li><a href="#programa07_error.c"><code>programa07_error.c</code></a> — Versión mínima del anterior: solo <code>errno</code> + <code>perror()</code>. Sirve para ver que <code>perror("texto")</code> imprime <code>texto: &lt;mensaje del errno actual&gt;</code>.</li>
+<li><a href="#programa09"><code>programa09</code></a> — <strong>No es C, es un script de shell.</strong> Lista las macros de error (<code>EPERM</code>, <code>ENOENT</code>, …) con su número, leyéndolas de <code>/usr/include/asm-generic/errno*.h</code>. Solo funciona en Linux.</li>
+<li class="pg-h">Familia exec()</li>
+<li><a href="#programa10_execl.c"><code>programa10_execl.c</code></a> — <code>execl(path, arg0, …, NULL)</code>: lista de argumentos y <strong>ruta absoluta</strong>. A propósito llama a <code>/bin/lsa</code> (no existe) para mostrar el caso de error: <code>execl</code> devuelve <code>-1</code>. Si tuviera éxito, el proceso se reemplaza y las líneas siguientes <strong>nunca</strong> se ejecutan.</li>
+<li><a href="#programa11_execv.c"><code>programa11_execv.c</code></a> — <code>execv(path, argv[])</code>: igual que <code>execl</code> pero los argumentos van en un <strong>arreglo</strong>. Aquí sí usa <code>/bin/ls</code>, así que reemplaza el proceso y muestra el listado; la última línea no se imprime.</li>
+<li><a href="#programa18_execlp.c"><code>programa18_execlp.c</code></a> — <code>execlp(file, …)</code>: como <code>execl</code> pero recibe el <strong>nombre</strong> del comando (<code>ls</code>, no <code>/bin/ls</code>) y lo busca en <code>$PATH</code> — de ahí la &laquo;p&raquo;.</li>
+<li><a href="#programa19_execvp.c"><code>programa19_execvp.c</code></a> — <code>execvp(file, argv[])</code>: versión con arreglo de argumentos de <code>execlp</code>. Mismo resultado.</li>
+<li><a href="#programa12_getenv_user1.c"><code>programa12_getenv_user1.c</code></a> — Programa &laquo;hijo&raquo; que invocan los ejemplos de <code>exec</code>: imprime su PID y el valor de la variable de entorno <code>USER</code> con <code>getenv</code>.</li>
+<li><a href="#programa13_getenv_user2.c"><code>programa13_getenv_user2.c</code></a> — Igual, pero también lee <code>MI_VARIABLE</code>. Si no está definida, <code>getenv</code> devuelve <code>NULL</code> y se imprime <code>(null)</code>.</li>
+<li><a href="#programa14_execle1.c"><code>programa14_execle1.c</code></a> — <code>execle(path, …, NULL, envp[])</code>: lista de argumentos <strong>más un entorno propio</strong> (<code>envp</code>) que solo vale para el programa ejecutado. El <code>getenv("USER")</code> de <em>antes</em> del <code>execle</code> todavía muestra tu USER real.</li>
+<li><a href="#programa15_execle2.c"><code>programa15_execle2.c</code></a> — <code>execle</code> invocando a <strong>nuestro</strong> <code>programa12</code>; el <code>envp</code> le pasa <code>USER=jose</code> solo para esa ejecución. El PID <strong>no cambia</strong>: <code>exec</code> reemplaza el programa, no crea proceso nuevo.</li>
+<li><a href="#programa16_execle3.c"><code>programa16_execle3.c</code></a> — Igual que el anterior con dos variables (<code>USER</code>, <code>MI_VARIABLE</code>) e invocando <code>programa13</code>.</li>
+<li><a href="#programa17_execve1.c"><code>programa17_execve1.c</code></a> — <code>execve(path, argv[], envp[])</code>: equivale a <code>execle</code> pero <strong>todo</strong> en arreglos (argumentos y entorno). Es la llamada &laquo;base&raquo; del sistema; las demás <code>exec*</code> son envoltorios de ésta.</li>
+<li><a href="#programa20_myecho.c"><code>programa20_myecho.c</code></a> — Programa auxiliar: imprime <code>argv[0..argc-1]</code>, uno por línea. Sirve para ver exactamente qué argumentos recibe un programa lanzado con <code>exec</code>.</li>
+<li><a href="#programa21_execve.c"><code>programa21_execve.c</code></a> — Recibe un ejecutable en <code>argv[1]</code> y lo lanza con <code>execve</code>, pasándole <code>newargv</code> (con <code>newargv[0] = argv[1]</code>) y entorno <code>NULL</code>. <strong>Ejercicio:</strong> explicar qué hace <code>newargv[0] = argv[1]</code> y modificar el bloque final para que, si <code>execve</code> falla, el <code>printf</code> no se ejecute.</li>
+<li class="pg-h">Patrón fork() + exec()</li>
+<li><a href="#programa22_fork-exec.c"><code>programa22_fork-exec.c</code></a> — El patrón completo con trazas: <code>spawn()</code> hace <code>fork()</code>; el <strong>hijo</strong> llama <code>execvp("./programa01_print-pid")</code> (se reemplaza), el <strong>padre</strong> regresa de <code>spawn</code> y sigue. El orden exacto de las líneas varía.</li>
+<li><a href="#programa23_fork-exec.c"><code>programa23_fork-exec.c</code></a> — Versión limpia del patrón (sin trazas): el hijo ejecuta <code>ls -l /</code>, el padre imprime <code>Termina el proceso padre</code>. El diagrama <em>programa23_fork-exec.png</em> ilustra este flujo.</li>
+<li class="pg-h">Identificadores del proceso</li>
+<li><a href="#programa01_print-pid.c"><code>programa01_print-pid.c</code></a> — Imprime el PID del proceso (<code>getpid</code>) y el PID de su padre (<code>getppid</code>).</li>
+<li><a href="#programa02_ids.c"><code>programa02_ids.c</code></a> — Imprime los IDs <strong>reales</strong> y <strong>efectivos</strong> de usuario y grupo. En un ejecutable con el bit <code>setuid</code>, el UID efectivo sería el del dueño del archivo, no el tuyo.</li>
+</ul>
+
+<section class="section-block" id="programa04_system_v1.c">
+<h4><code>programa04_system_v1.c</code></h4>
+<p>Ejemplo mínimo de <code>system("ls -l /")</code>: el shell ejecuta el comando y <code>return_value</code> recibe el estado devuelto por el shell (0 si todo salió bien).</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main ()
+{
+  int return_value;
+  printf("Ejemplo de funcion system(\"ls -l /\") con un comando que se ejecuta correctamente\n");
+  return_value = system ("ls -l /");
+  printf("Termina proceso hijo, return_value=%d\n", return_value);
+  return return_value;
+}</code></pre>
+<p class="salida-lbl">Salida típica</p>
+<pre class="salida"><code>Ejemplo de funcion system("ls -l /") con un comando que se ejecuta correctamente
+&lt;listado del directorio raíz&gt;
+Termina proceso hijo, return_value=0</code></pre>
+</section>
+<section class="section-block" id="programa04_system_v2.c">
+<h4><code>programa04_system_v2.c</code></h4>
+<p>Igual que el anterior pero además interpreta el valor devuelto con <code>WIFEXITED</code> / <code>WEXITSTATUS</code> (tema de <code>wait()</code>, se ve más adelante) y repite con un comando que falla (<code>ls -l no_existe</code>).</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main ()
+{
+ int return_value;
+ printf("Ejemplo 2 de funcion system(\"ls -l /\") con un comando que se ejecuta correctamente\n");
+ return_value = system ("ls -l /");
+ printf("Termina proceso hijo, return_value=%d\n", return_value);
+ printf("Lo siguiente tiene que ver con la funcion wait(), lo veremos mas adelante\n");
+ printf("En el proceso inicial, WIFEXITED(return_value)=%d\n",WIFEXITED(return_value) );
+ printf("En el proceso inicial, WEXITSTATUS(return_value) codigo de salida del hijo=%d\n",WEXITSTATUS(return_value) );
+ printf("---------------------------------------\n");
+ printf("Ejemplo 2 de funcion system(\"ls -l no_existe\") con un comando que se ejecuta incorrectamente\n");
+ return_value = system ("ls -l no_existe");
+ printf("Termina proceso hijo, return_value=%d\n", return_value);
+ printf("Lo siguiente tiene que ver con la funcion wait(), lo veremos mas adelante\n");
+ printf("En el proceso inicial, WIFEXITED(return_value)=%d\n",WIFEXITED(return_value) );
+ printf("En el proceso inicial, WEXITSTATUS(return_value) codigo de salida del hijo=%d\n",WEXITSTATUS(return_value) );
+ return return_value;
+}</code></pre>
+<p class="salida-lbl">Salida típica</p>
+<pre class="salida"><code>Ejemplo 2 ... comando correcto
+&lt;listado del raíz&gt;
+Termina proceso hijo, return_value=0
+WIFEXITED(return_value)=1
+WEXITSTATUS(...) codigo de salida del hijo=0
+---------------------------------------
+Ejemplo 2 ... "ls -l no_existe"
+ls: cannot access 'no_existe': No such file or directory
+Termina proceso hijo, return_value=512
+WIFEXITED(return_value)=1
+WEXITSTATUS(...)=2</code></pre>
+</section>
+<section class="section-block" id="programa05_fork_v1.c">
+<h4><code>programa05_fork_v1.c</code></h4>
+<p>Primer contacto con <code>fork()</code>: después de la llamada hay <strong>dos procesos</strong> ejecutando el mismo código, por eso los <code>printf</code> 2 y 3 salen duplicados. <code>id_hijo</code> vale <code>0</code> en el hijo y el PID del hijo en el padre.</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+
+int main ()
+{
+    pid_t id_hijo;
+    printf( "1: el id del proceso main es %d\n", getpid() );
+    id_hijo = fork ();
+    printf( "2: Este printf saldra duplicado\n");
+    printf( "3: La variable \"id_hijo\" de este proceso es %d. La pregunta es: Quien soy, Padre o Hijo?\n", id_hijo );
+    return 0;
+}</code></pre>
+<p class="salida-lbl">Salida típica</p>
+<pre class="salida"><code>1: el id del proceso main es 12345
+2: Este printf saldra duplicado
+3: La variable "id_hijo" de este proceso es 12346. ...
+2: Este printf saldra duplicado
+3: La variable "id_hijo" de este proceso es 0. ...</code></pre>
+</section>
+<section class="section-block" id="programa05_fork_v2.c">
+<h4><code>programa05_fork_v2.c</code></h4>
+<p>El <code>if (id_hijo != 0)</code> separa el código que ejecuta el padre del que ejecuta el hijo. El orden en que aparecen los bloques PADRE/HIJO <strong>no está garantizado</strong> (condición de carrera).</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+
+int main ()
+{
+    pid_t id_hijo;
+    printf( "1: el id del proceso main es %d\n", getpid() );
+    id_hijo = fork ();
+    printf( "2: Este printf saldra duplicado\n");
+    printf( "3: Este printf tambien sale por duplicado. La variable id_hijo es %d\n", id_hijo );
+    if( id_hijo != 0 )
+    {
+        printf( "\nPADRE:proceso main o padre con id %d\n", getpid());
+        printf( "PADRE:variable id_hijo es %d\n", id_hijo );
+        printf( "PADRE:id del padre del padre %d\n",getppid());
+    }
+    else
+    {
+        printf( "\nHIJO:proceso hijo con id %d\n", getpid() );
+        printf( "HIJO:variable id_hijo es %d\n", id_hijo );
+        printf( "HIJO:id del padre es %d\n", getppid() );
+    }
+    return 0;
+}</code></pre>
+<p class="salida-lbl">Salida típica</p>
+<pre class="salida"><code>1: el id del proceso main es 12345
+2: Este printf saldra duplicado
+3: ... La variable id_hijo es 12346
+
+PADRE:proceso main o padre con id 12345
+PADRE:variable id_hijo es 12346
+PADRE:id del padre del padre 6789
+2: Este printf saldra duplicado
+3: ... La variable id_hijo es 0
+
+HIJO:proceso hijo con id 12346
+HIJO:variable id_hijo es 0
+HIJO:id del padre es 12345</code></pre>
+</section>
+<section class="section-block" id="programa08_child.c">
+<h4><code>programa08_child.c</code></h4>
+<p><code>fork()</code> con manejo de error: si devuelve <code>-1</code> hace <code>perror("fork")</code> y <code>exit</code>. El hijo imprime <code>in child</code> y sus pid/ppid y termina con <code>exit</code>; el padre imprime <code>in parent</code>.</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(void)
+{
+  pid_t child;
+  if((child = fork()) == -1)
+  {
+    perror("fork");
+    exit(EXIT_FAILURE);
+  }
+  else if(child == 0)
+  {
+    puts("in child");
+    printf("\tchild pid = %d\n", getpid());
+    printf("\tchild ppid = %d\n", getppid());
+    exit(EXIT_SUCCESS);
+  }
+  else
+  {
+    puts("in parent");
+    printf("\tparent pid = %d\n", getpid());
+    printf("\tparent ppid = %d\n", getppid());
+  }
+  exit(EXIT_SUCCESS);
+}</code></pre>
+<p class="salida-lbl">Salida típica</p>
+<pre class="salida"><code>in parent
+	parent pid = 12345
+	parent ppid = 6789
+in child
+	child pid = 12346
+	child ppid = 12345</code></pre>
+</section>
+<section class="section-block" id="programa03_codigos_sistema.c">
+<h4><code>programa03_codigos_sistema.c</code></h4>
+<p>Recorre <code>strerror(0..150)</code> e imprime el mensaje de cada código de error de Linux. Es la versión &laquo;en C&raquo; de la tabla de los 131 códigos.</p>
+<pre><code>/* Manejo de codigos de sistema */
+
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main()
+{
+  int i;
+
+  for(i=0; i &lt;= 150; i++)
+  {
+    printf( "%d: %s\n", i , strerror( i ) );
+  }
+  return 0;
+}</code></pre>
+<p class="salida-lbl">Salida típica</p>
+<pre class="salida"><code>0: Success
+1: Operation not permitted
+2: No such file or directory
+3: No such process
+4: Interrupted system call
+...
+11: Resource temporarily unavailable
+12: Cannot allocate memory
+13: Permission denied
+...
+(el mensaje de los códigos sin definir aparece como "Unknown error N")</code></pre>
+</section>
+<section class="section-block" id="programa06_error.c">
+<h4><code>programa06_error.c</code></h4>
+<p>Provoca un error real: <code>rename("antes.txt","despues.txt")</code> cuando <code>antes.txt</code> no existe. Muestra <code>errno</code>, <code>strerror(errno)</code>, <code>perror()</code> y un <code>switch</code> que traduce el tipo de error.</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;errno.h&gt;
+#include &lt;string.h&gt;
+
+int main()
+{
+  int result;
+
+  result = rename("antes.txt","despues.txt");
+  if( result != 0 )
+  {
+    printf("Error al renombrar el archivo\n");
+    printf("errno:%d\n", errno);
+    printf( "strerror(errno):%s\n", strerror( errno ) );
+    perror( "el mensaje de error es" );
+    switch(errno)
+    {
+     case EPERM:
+                printf("Operation not permitted\n");
+                break;
+     case ENOENT:
+                printf("File not found\n");
+                break;
+     case EACCES:
+                printf("Permission denied\n");
+                break;
+     case ENAMETOOLONG:
+                printf("Filename is too long\n");
+                break;
+     default:
+                printf("Otro error\n");
+    }
+    return 1;
+  }
+  printf("Archivo renombrado\n");
+  return 0;
+}</code></pre>
+<p class="salida-lbl">Salida típica</p>
+<pre class="salida"><code>Error al renombrar el archivo
+errno:2
+strerror(errno):No such file or directory
+el mensaje de error es: No such file or directory
+File not found</code></pre>
+</section>
+<section class="section-block" id="programa07_error.c">
+<h4><code>programa07_error.c</code></h4>
+<p>Versión mínima del anterior: solo <code>errno</code> + <code>perror()</code>. Sirve para ver que <code>perror("texto")</code> imprime <code>texto: &lt;mensaje del errno actual&gt;</code>.</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;errno.h&gt;
+
+// Esta version es parecida a programa06_error
+// la diferencia es que esta version 
+// llama a la funcion perror( string )
+// observen la linea de perror( "El error es" )
+// y que imprime en pantalla
+int main()
+{
+  int result;
+
+  result = rename("antes.txt","despues.txt");
+  if( result != 0 )
+  {
+    printf("errno:%d\n", errno);
+    perror( "El error es" );
+    return 1;
+  }
+  printf("Archivo renombrado");
+  return 0;
+}</code></pre>
+<p class="salida-lbl">Salida típica</p>
+<pre class="salida"><code>errno:2
+El error es: No such file or directory</code></pre>
+</section>
+<section class="section-block" id="programa09">
+<h4><code>programa09</code></h4>
+<p><strong>No es C, es un script de shell.</strong> Lista las macros de error (<code>EPERM</code>, <code>ENOENT</code>, …) con su número, leyéndolas de <code>/usr/include/asm-generic/errno*.h</code>. Solo funciona en Linux.</p>
+<pre><code>grep -hPo '#define\s+(E[A-Z0-9_]+)\s+(\d+)'   /usr/include/asm-generic/errno-base.h /usr/include/asm-generic/errno.h   | awk '{printf "%-20s %s\n", $2, $3}' | sort -n -k2</code></pre>
+<p class="salida-lbl">Salida típica</p>
+<pre class="salida"><code>EPERM                1
+ENOENT               2
+ESRCH                3
+EINTR                4
+EIO                  5
+...</code></pre>
+</section>
+<section class="section-block" id="programa10_execl.c">
+<h4><code>programa10_execl.c</code></h4>
+<p><code>execl(path, arg0, …, NULL)</code>: lista de argumentos y <strong>ruta absoluta</strong>. A propósito llama a <code>/bin/lsa</code> (no existe) para mostrar el caso de error: <code>execl</code> devuelve <code>-1</code>. Si tuviera éxito, el proceso se reemplaza y las líneas siguientes <strong>nunca</strong> se ejecutan.</p>
+<pre><code>#include &lt;unistd.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+
+// Este ejemplo muestra la funcion execl con el comando ls -l /
+int main(void)
+{
+  printf("En el proceso inicial, antes de llamar a execl\n");
+  // como es execl entonces es una lista
+  // la sintaxis es:
+  // int execl (char *path, char *arg0,... char *argn, (char *)0);
+  // path es la ruta incluyendo el nombre del comando/ejecutable
+  // En C el nombre del comando/ejecutable es el argumento 0
+  // por eso se repite
+  // con NULL se indica que se llego al final de la lista de argumentos
+  // Si execl falla devuelve -1 y entra al if por lo que termina
+  // con exit(EXIT_FAILURE)
+  if( execl("/bin/lsa", "/bin/lsa", "-l", "/", NULL) == -1)
+  {
+    printf("execl genero error y devolvio -1\n");
+    perror("execl");
+    exit(EXIT_FAILURE);
+  }
+  // Por lo tanto, sea exito o error, las sig 2 sentencias
+  // JAMAS se ejecutan
+  printf("Si execl es exito o error, esto no se imprime\n");
+  exit(EXIT_SUCCESS);
+}</code></pre>
+<p class="salida-lbl">Salida típica</p>
+<pre class="salida"><code>En el proceso inicial, antes de llamar a execl
+execl genero error y devolvio -1
+execl: No such file or directory</code></pre>
+</section>
+<section class="section-block" id="programa11_execv.c">
+<h4><code>programa11_execv.c</code></h4>
+<p><code>execv(path, argv[])</code>: igual que <code>execl</code> pero los argumentos van en un <strong>arreglo</strong>. Aquí sí usa <code>/bin/ls</code>, así que reemplaza el proceso y muestra el listado; la última línea no se imprime.</p>
+<pre><code>#include &lt;unistd.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+
+// Este ejemplo muestra la funcion execv con el comando ls -l /
+int main(void)
+{
+  printf("En el proceso inicial, antes de llamar a execv\n");
+  // como es execv entonces es un vector/arreglo
+  // el cual debe declararse previo a la llamada a execv
+  // la sintaxis es:
+  // int execv (char *path, char *argv[ ]);
+  // path es la ruta incluyendo el nombre del comando/ejecutable
+  // En C el nombre del comando/ejecutable es el argumento 0
+  // por eso se repite
+  // con NULL se indica que se llego al final del vector de argumentos
+  // Si execv falla devuelve -1 y entra al if por lo que termina
+  // con exit(EXIT_FAILURE)
+  char *args[]={"/bin/ls","-l","/",NULL};
+  if( execv("/bin/ls", args) == -1)
+  {
+    printf("execv genero error y devolvio -1\n");
+    perror("execv");
+    exit(EXIT_FAILURE);
+  }
+  // Por lo tanto, sea exito o error, las sig 2 sentencias
+  // JAMAS se ejecutan
+  printf("Si execv es exito o error, esto no se imprime\n");
+  exit(EXIT_SUCCESS);
+}</code></pre>
+<p class="salida-lbl">Salida típica</p>
+<pre class="salida"><code>En el proceso inicial, antes de llamar a execv
+&lt;listado del directorio raíz&gt;</code></pre>
+</section>
+<section class="section-block" id="programa18_execlp.c">
+<h4><code>programa18_execlp.c</code></h4>
+<p><code>execlp(file, …)</code>: como <code>execl</code> pero recibe el <strong>nombre</strong> del comando (<code>ls</code>, no <code>/bin/ls</code>) y lo busca en <code>$PATH</code> — de ahí la &laquo;p&raquo;.</p>
+<pre><code>#include &lt;unistd.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+
+// Este ejemplo muestra la funcion execlp con el comando ls -l /
+int main(void)
+{
+  // como es execlp entonces es una lista
+  // la sintaxis es:
+  // int execlp (char *file, char *arg0,... char *argn, (char *)0);
+  // file es el nombre del comando/ejecutable sin ruta absoluta
+  // porque toma el directorio de la variable PATH, de ahi la "p" de execlp
+  // En C el nombre del comando/ejecutable es el argumento 0
+  // por eso se repite
+  // con NULL se indica que se llego al final de la lista de argumentos
+  // OBSERVEN QUE execlp() NO NECESITA LA RUTA ABSOLUTA DEL COMANDO O EJECUTABLE
+  // SOLO PONEMOS "ls" NO ES NECESARIO PONER "/bin/ls"
+  if( execlp("ls", "ls", "-l", "/", NULL) == -1)
+  {
+    printf("execlp genero error y devolvio -1\n");
+    perror("execlp");
+    exit(EXIT_FAILURE);
+  }
+  printf("Si execlp es exitoso, esto no se imprime\n");
+  exit(EXIT_SUCCESS);
+}</code></pre>
+<p class="salida-lbl">Salida típica</p>
+<pre class="salida"><code>&lt;listado del directorio raíz&gt;</code></pre>
+</section>
+<section class="section-block" id="programa19_execvp.c">
+<h4><code>programa19_execvp.c</code></h4>
+<p><code>execvp(file, argv[])</code>: versión con arreglo de argumentos de <code>execlp</code>. Mismo resultado.</p>
+<pre><code>#include &lt;unistd.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+
+// Este ejemplo muestra la funcion execvp con el comando ls -l /
+int main(void)
+{
+  // como es execvp entonces es un vector/arreglo
+  // el cual debe declararse previo a la llamada a execvp
+  // la sintaxis es:
+  // int execvp (char *file, char *argv[ ]);
+  // file es el nombre del comando/ejecutable, sin ruta
+  // ya que la ruta la toma de la variable PATH, de ahi la "p" en el nombre
+  // En C el nombre del comando/ejecutable es el argumento 0
+  // por eso se repite
+  // con NULL se indica que se llego al final del vector de argumentos
+  // OBSERVEN QUE execvp() NO NECESITA LA RUTA ABSOLUTA DEL COMANDO O EJECUTABLE
+  // SOLO PONEMOS "ls" NO ES NECESARIO PONER "/bin/ls"
+  char *args[]={"ls","-l","/",NULL};
+  if( execvp("ls", args) == -1)
+  {
+    printf("execvp genero error y devolvio -1\n");
+    perror("execvp");
+    exit(EXIT_FAILURE);
+  }
+  printf("Si execvp es exitoso, esto no se imprime\n");
+  exit(EXIT_SUCCESS);
+}</code></pre>
+<p class="salida-lbl">Salida típica</p>
+<pre class="salida"><code>&lt;listado del directorio raíz&gt;</code></pre>
+</section>
+<section class="section-block" id="programa12_getenv_user1.c">
+<h4><code>programa12_getenv_user1.c</code></h4>
+<p>Programa &laquo;hijo&raquo; que invocan los ejemplos de <code>exec</code>: imprime su PID y el valor de la variable de entorno <code>USER</code> con <code>getenv</code>.</p>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+
+int main(void)
+{
+  printf( "Entrando al programa llamado por la familia exec, mi pid es %d\n", getpid() );
+  printf( "el valor de la variable de entorno USER es: %s\n", getenv("USER") );
+  return 0;
+}</code></pre>
+<p class="salida-lbl">Salida típica</p>
+<pre class="salida"><code>Entrando al programa llamado por la familia exec, mi pid es 12345
+el valor de la variable de entorno USER es: jose</code></pre>
+</section>
+<section class="section-block" id="programa13_getenv_user2.c">
+<h4><code>programa13_getenv_user2.c</code></h4>
+<p>Igual, pero también lee <code>MI_VARIABLE</code>. Si no está definida, <code>getenv</code> devuelve <code>NULL</code> y se imprime <code>(null)</code>.</p>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+
+int main(void)
+{
+  printf( "Entrando al programa llamado por la familia exec, mi pid es %d\n", getpid() );
+  printf( "el valor de la variable de entorno USER es: %s\n", getenv("USER") );
+  printf( "el valor de la variable de entorno MI_VARIABLE es: %s\n", getenv("MI_VARIABLE") );
+  return 0;
+}</code></pre>
+<p class="salida-lbl">Salida típica</p>
+<pre class="salida"><code>Entrando al programa llamado por la familia exec, mi pid es 12345
+el valor de la variable de entorno USER es: jose
+el valor de la variable de entorno MI_VARIABLE es: acs</code></pre>
+</section>
+<section class="section-block" id="programa14_execle1.c">
+<h4><code>programa14_execle1.c</code></h4>
+<p><code>execle(path, …, NULL, envp[])</code>: lista de argumentos <strong>más un entorno propio</strong> (<code>envp</code>) que solo vale para el programa ejecutado. El <code>getenv("USER")</code> de <em>antes</em> del <code>execle</code> todavía muestra tu USER real.</p>
+<pre><code>#include &lt;unistd.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+
+// Este ejemplo muestra la funcion execle con el comando ls -l /
+int main(void)
+{
+  printf("En el proceso inicial, antes de llamar a execle\n");
+  // como es execle entonces es una lista 
+  // y ademas puede leer variables de entorno que vienen en un arreglo 
+  // y que solo son validas para la ejecucion del archivo dentro de la funcion execle
+  // la sintaxis es:
+  // int execle(char *path, char *arg0,... char*argn, (char *)0, char *envp[ ]);
+  // path es la ruta incluyendo el nombre del comando/ejecutable
+  // En C el nombre del comando/ejecutable es el argumento 0
+  // por eso se repite
+  // con NULL se indica que se llego al final de la lista de argumentos
+  char *variables_entorno[] = { "PATH=/bin:/usr/bin", "USER=jose", NULL };
+  printf( "el valor de la variable de entorno USER es: %s\n", getenv("USER") );
+  if( execle("/bin/ls", "/bin/ls", "-l", "/", NULL, variables_entorno) == -1)
+  {
+    printf("execle genero error y devolvio -1\n");
+    perror("execle");
+    exit(EXIT_FAILURE);
+  }
+  // Por lo tanto, sea exito o error, las sig 2 sentencias
+  // JAMAS se ejecutan
+  printf("Si execle es exito o error, esto no se imprime\n");
+  exit(EXIT_SUCCESS);
+}</code></pre>
+<p class="salida-lbl">Salida típica</p>
+<pre class="salida"><code>En el proceso inicial, antes de llamar a execle
+el valor de la variable de entorno USER es: &lt;tu-usuario&gt;
+&lt;listado del directorio raíz, con PATH y USER personalizados solo para ese ls&gt;</code></pre>
+</section>
+<section class="section-block" id="programa15_execle2.c">
+<h4><code>programa15_execle2.c</code></h4>
+<p><code>execle</code> invocando a <strong>nuestro</strong> <code>programa12</code>; el <code>envp</code> le pasa <code>USER=jose</code> solo para esa ejecución. El PID <strong>no cambia</strong>: <code>exec</code> reemplaza el programa, no crea proceso nuevo.</p>
+<pre><code>#include &lt;unistd.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+
+// Este ejemplo muestra la funcion execle
+// invocando a un programa nuestro getenv_user
+// para leer la variable de entorno USER
+int main(void)
+{
+  printf("En el proceso inicial pid=%d, antes de llamar a execle\n", getpid() );
+  // como es execle entonces es una lista 
+  // y ademas puede leer variables de entorno que vienen en un arreglo 
+  // y que solo son validas para esta ejecucion
+  // la sintaxis es:
+  // int execle(char *path, char *arg0,... char*argn, (char *)0, char *envp[ ]);
+  // path es la ruta incluyendo el nombre del comando/ejecutable
+  // En C el nombre del comando/ejecutable es el argumento 0
+  // por eso se repite
+  // con NULL se indica que se llego al final de la lista de argumentos
+  char *variables_entorno[] = { "PATH=/bin:/usr/bin", "USER=jose", NULL };
+  printf( "el valor de la variable de entorno USER es: %s\n", getenv("USER") );
+  printf( "ahora ejecutando ./programa12_getenv_user1, el valor de la variable de entorno USER va a cambiar solo para esta ejecucion\n" );
+  if( execle("./programa12_getenv_user1", "./programa12_getenv_user1", NULL, variables_entorno) == -1)
+  {
+    printf("execle genero error y devolvio -1\n");
+    perror("execle");
+    exit(EXIT_FAILURE);
+  }
+  // Por lo tanto, sea exito o error, las sig 2 sentencias
+  // JAMAS se ejecutan
+  printf("Si execle es exito o error, esto no se imprime\n");
+  exit(EXIT_SUCCESS);
+}</code></pre>
+<p class="salida-lbl">Salida típica</p>
+<pre class="salida"><code>En el proceso inicial pid=12345, antes de llamar a execle
+el valor de la variable de entorno USER es: &lt;tu-usuario&gt;
+ahora ejecutando ./programa12_getenv_user1 ...
+Entrando al programa llamado por la familia exec, mi pid es 12345
+el valor de la variable de entorno USER es: jose</code></pre>
+</section>
+<section class="section-block" id="programa16_execle3.c">
+<h4><code>programa16_execle3.c</code></h4>
+<p>Igual que el anterior con dos variables (<code>USER</code>, <code>MI_VARIABLE</code>) e invocando <code>programa13</code>.</p>
+<pre><code>#include &lt;unistd.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+
+// Este ejemplo muestra la funcion execle
+// invocando a un programa nuestro getenv_user
+// para leer la variable de entorno USER
+int main(void)
+{
+  printf("En el proceso inicial pid=%d, antes de llamar a execle\n", getpid() );
+  // como es execle entonces es una lista 
+  // y ademas puede leer variables de entorno que vienen en un arreglo 
+  // y que solo son validas para esta ejecucion
+  // la sintaxis es:
+  // int execle(char *path, char *arg0,... char*argn, (char *)0, char *envp[ ]);
+  // path es la ruta incluyendo el nombre del comando/ejecutable
+  // En C el nombre del comando/ejecutable es el argumento 0
+  // por eso se repite
+  // con NULL se indica que se llego al final de la lista de argumentos
+  char *variables_entorno[] = { "PATH=/bin:/usr/bin", "USER=jose", "MI_VARIABLE=acs", NULL };
+  printf( "el valor de la variable de entorno USER es: %s\n", getenv("USER") );
+  printf( "el valor de la variable de entorno MI_VARIABLE es: %s\n", getenv("MI_VARIABLE") );
+  printf( "ahora ejecutando ./programa13_getenv_user2, los valores de las variables de entorno USER y MI_VARIABLE van a cambiar solo para esta ejecucion\n" );
+  if( execle("./programa13_getenv_user2", "./programa13_getenv_user2", NULL, variables_entorno) == -1)
+  {
+    printf("execle genero error y devolvio -1\n");
+    perror("execle");
+    exit(EXIT_FAILURE);
+  }
+  // Por lo tanto, sea exito o error, las sig 2 sentencias
+  // JAMAS se ejecutan
+  printf("Si execle es exito o error, esto no se imprime\n");
+  exit(EXIT_SUCCESS);
+}</code></pre>
+<p class="salida-lbl">Salida típica</p>
+<pre class="salida"><code>En el proceso inicial pid=12345, antes de llamar a execle
+el valor de la variable de entorno USER es: &lt;tu-usuario&gt;
+el valor de la variable de entorno MI_VARIABLE es: (null)
+ahora ejecutando ./programa13_getenv_user2 ...
+Entrando al programa llamado por la familia exec, mi pid es 12345
+el valor de la variable de entorno USER es: jose
+el valor de la variable de entorno MI_VARIABLE es: acs</code></pre>
+</section>
+<section class="section-block" id="programa17_execve1.c">
+<h4><code>programa17_execve1.c</code></h4>
+<p><code>execve(path, argv[], envp[])</code>: equivale a <code>execle</code> pero <strong>todo</strong> en arreglos (argumentos y entorno). Es la llamada &laquo;base&raquo; del sistema; las demás <code>exec*</code> son envoltorios de ésta.</p>
+<pre><code>#include &lt;unistd.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+
+// Este ejemplo muestra la funcion execve
+// invocando a un programa nuestro getenv_user
+// para leer la variable de entorno USER
+int main(void)
+{
+  printf("En el proceso inicial pid=%d, antes de llamar a execve\n", getpid() );
+  // como es execve entonces es un vector/arreglo 
+  // y ademas puede leer variables de entorno que vienen en un arreglo 
+  // y que solo son validas para la ejecucion del ejecutable dentro de la funcion execve
+  // la sintaxis es:
+  // int execve(char *path, char *argv[ ], char *envp[ ]);
+  // path es la ruta incluyendo el nombre del comando/ejecutable
+  // En C el nombre del comando/ejecutable es el argumento 0
+  // por eso se repite
+  // con NULL se indica que se llego al final del vector/arreglo
+  char * args[]={"./programa13_getenv_user2", NULL};
+  char *variables_entorno[] = { "PATH=/bin:/usr/bin", "USER=jose", "MI_VARIABLE=acs", NULL };
+  printf( "el valor de la variable de entorno USER es: %s\n", getenv("USER") );
+  printf( "el valor de la variable de entorno MI_VARIABLE es: %s\n", getenv("MI_VARIABLE") );
+  printf( "ahora ejecutando ./programa13_getenv_user2, los valores de las variables de entorno USER y MI_VARIABLE van a cambiar solo para esta ejecucion\n" );
+  if( execve("./programa13_getenv_user2", args, variables_entorno) == -1)
+  {
+    printf("execve genero error y devolvio -1\n");
+    perror("execve");
+    exit(EXIT_FAILURE);
+  }
+  // Por lo tanto, sea exito o error, las sig 2 sentencias
+  // JAMAS se ejecutan
+  printf("Si execve es exito o error, esto no se imprime\n");
+  exit(EXIT_SUCCESS);
+}</code></pre>
+<p class="salida-lbl">Salida típica</p>
+<pre class="salida"><code>En el proceso inicial pid=12345, antes de llamar a execve
+el valor de la variable de entorno USER es: &lt;tu-usuario&gt;
+el valor de la variable de entorno MI_VARIABLE es: (null)
+ahora ejecutando ./programa13_getenv_user2 ...
+Entrando al programa llamado por la familia exec, mi pid es 12345
+el valor de la variable de entorno USER es: jose
+el valor de la variable de entorno MI_VARIABLE es: acs</code></pre>
+</section>
+<section class="section-block" id="programa20_myecho.c">
+<h4><code>programa20_myecho.c</code></h4>
+<p>Programa auxiliar: imprime <code>argv[0..argc-1]</code>, uno por línea. Sirve para ver exactamente qué argumentos recibe un programa lanzado con <code>exec</code>.</p>
+<pre><code>
+
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(int argc, char *argv[])
+{
+  int j;
+  for( j=0; j &lt; argc; j++ )
+  {
+    printf("argv[%d]: %s\n", j, argv[j]);
+  }
+  exit( EXIT_SUCCESS );
+}</code></pre>
+<p class="salida-lbl">Salida típica</p>
+<pre class="salida"><code>$ ./programa20_myecho hola mundo
+argv[0]: ./programa20_myecho
+argv[1]: hola
+argv[2]: mundo</code></pre>
+</section>
+<section class="section-block" id="programa21_execve.c">
+<h4><code>programa21_execve.c</code></h4>
+<p>Recibe un ejecutable en <code>argv[1]</code> y lo lanza con <code>execve</code>, pasándole <code>newargv</code> (con <code>newargv[0] = argv[1]</code>) y entorno <code>NULL</code>. <strong>Ejercicio:</strong> explicar qué hace <code>newargv[0] = argv[1]</code> y modificar el bloque final para que, si <code>execve</code> falla, el <code>printf</code> no se ejecute.</p>
+<pre><code>
+
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+
+int main(int argc, char *argv[])
+{
+  char *newargv[] = { NULL, "hola", "mundo", "buen", "dia",  NULL };
+
+  if( argc != 2 )
+  {
+    fprintf( stderr, "La sintaxis es: %s &lt;archivo-a-ejecutar&gt;\n", argv[0] );
+    exit( EXIT_FAILURE );
+  }
+
+  // ESTA SENTENCIA ES MUY IMPORTANTE!
+  // QUE HACE ESTA SENTENCIA? 
+  newargv[0] = argv[1];
+
+  execve( argv[1], newargv, NULL );
+  
+  // AUNQUE LA SIG SENTENCIA DICE QUE NO SE EJECUTA,
+  // ASI COMO ESTA EL CODIGO, SI PODRIA EJECUTARSE, SI EL execve FALLA
+  // MODIFICA ESTE BLOQUE PARA QUE AUNQUE FALLE LA LLAMADA A execve
+  // LA SIGUIENTE SENTENCIA NO SE EJECUTE
+  printf("Esta sentencia no se ejecuta\n");
+  perror("execve");
+  exit( EXIT_FAILURE );
+  
+}</code></pre>
+<p class="salida-lbl">Salida típica</p>
+<pre class="salida"><code>$ ./programa21_execve ./programa20_myecho
+argv[0]: ./programa20_myecho
+argv[1]: hola
+argv[2]: mundo
+argv[3]: buen
+argv[4]: dia</code></pre>
+</section>
+<section class="section-block" id="programa22_fork-exec.c">
+<h4><code>programa22_fork-exec.c</code></h4>
+<p>El patrón completo con trazas: <code>spawn()</code> hace <code>fork()</code>; el <strong>hijo</strong> llama <code>execvp("./programa01_print-pid")</code> (se reemplaza), el <strong>padre</strong> regresa de <code>spawn</code> y sigue. El orden exacto de las líneas varía.</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;unistd.h&gt;
+
+int spawn (char* program, char** arg_list)
+{
+ pid_t child_pid;
+ printf ("Voy a llamar a fork() para crear un hijo\n");
+ child_pid = fork ();
+ printf ("Este printf sale duplicado, fork() me devolvio: %d\n", child_pid);
+ if (child_pid != 0)
+  return child_pid;
+ else
+ {
+  printf( "Soy el proceso hijo, PID=%d y PPID=%d\n", getpid(), getppid() );
+  // RECUERDEN: Si execvp() se ejecuta exitosamente
+  // el proceso "invocador" termina en ese momento,
+  // pero termina con exito
+  printf ("Hasta aqui llego! Voy a llamar a exec(...) para ejecutar programa01_print-pid\n");
+  execvp (program, arg_list);
+  printf ("ocurrio un error al ejecutar execvp(...)\n");
+  return 1; // termina con error
+ }
+}
+
+int main ()
+{
+  char* arg_list[] = { "./programa01_print-pid", NULL };
+
+  printf( "Soy el proceso padre, PID=%d y PPID=%d\n", getpid(), getppid() );
+  printf( "Voy a la funcion spawn(...)\n" );
+  spawn ("./programa01_print-pid", arg_list);
+  printf ("Termina el proceso padre\n");
+  return 0; // Termina con exito
+}</code></pre>
+<p class="salida-lbl">Salida típica</p>
+<pre class="salida"><code>Soy el proceso padre, PID=12345 y PPID=6789
+Voy a la funcion spawn(...)
+Voy a llamar a fork() para crear un hijo
+Este printf sale duplicado, fork() me devolvio: 12346
+Termina el proceso padre
+Este printf sale duplicado, fork() me devolvio: 0
+Soy el proceso hijo, PID=12346 y PPID=12345
+Hasta aqui llego! Voy a llamar a exec(...) para ejecutar programa01_print-pid
+El process id es 12346
+El parent process id es 12345</code></pre>
+</section>
+<section class="section-block" id="programa23_fork-exec.c">
+<h4><code>programa23_fork-exec.c</code></h4>
+<p>Versión limpia del patrón (sin trazas): el hijo ejecuta <code>ls -l /</code>, el padre imprime <code>Termina el proceso padre</code>. El diagrama <em>programa23_fork-exec.png</em> ilustra este flujo.</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;unistd.h&gt;
+
+int spawn (char* program, char** arg_list)
+{
+ pid_t child_pid;
+ child_pid = fork ();
+ if (child_pid != 0)
+  return child_pid;
+ else
+ {
+  // RECUERDEN: Si execvp() se ejecuta exitosamente
+  // el proceso "parent" termina en ese momento,
+  // pero termina con exito
+  execvp (program, arg_list);
+  printf ("ocurrio un error al ejecutar execvp(...)\n");
+  // alternativa al printf:
+  // fprintf (stderr, "ocurrio un error al ejecutar execvp(...)\n");
+  return 1; // termina con error
+ }
+}
+
+int main ()
+{
+  char* arg_list[] = {
+   "ls",
+   "-l",
+   "/",
+   NULL
+  };
+
+  spawn ("ls", arg_list);
+  printf ("Termina el proceso padre\n");
+  return 0; // Termina con exito
+}</code></pre>
+<p class="salida-lbl">Salida típica</p>
+<pre class="salida"><code>Termina el proceso padre
+&lt;listado del directorio raíz&gt;
+
+(o el listado primero y luego "Termina el proceso padre": el orden no está garantizado)</code></pre>
+</section>
+<section class="section-block" id="programa01_print-pid.c">
+<h4><code>programa01_print-pid.c</code></h4>
+<p>Imprime el PID del proceso (<code>getpid</code>) y el PID de su padre (<code>getppid</code>).</p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;unistd.h&gt;
+
+int main()
+{
+  printf("El process id es %d\n", getpid());
+  printf("El parent process id es %d\n", getppid());
+  return 0;
+}</code></pre>
+<p class="salida-lbl">Salida típica</p>
+<pre class="salida"><code>El process id es 12345
+El parent process id es 6789</code></pre>
+</section>
+<section class="section-block" id="programa02_ids.c">
+<h4><code>programa02_ids.c</code></h4>
+<p>Imprime los IDs <strong>reales</strong> y <strong>efectivos</strong> de usuario y grupo. En un ejecutable con el bit <code>setuid</code>, el UID efectivo sería el del dueño del archivo, no el tuyo.</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+
+int main()
+{
+ printf("Real user ID: %d\n", getuid());
+ printf("Effective user ID: %d\n", geteuid());
+ printf("Real group ID: %d\n", getgid());
+ printf("Effective group ID: %d\n", getegid());
+ return 0;
+}</code></pre>
+<p class="salida-lbl">Salida típica</p>
+<pre class="salida"><code>Real user ID: 1000
+Effective user ID: 1000
+Real group ID: 1000
+Effective group ID: 1000</code></pre>
+</section>
+
+<p class="salida-lbl" style="margin-top:28px">Diagramas de las tres llamadas (system / fork / exec) en el <a href="index.html#diagramas-tema-1" style="color:var(--indigo)">Tema 1</a>.</p>
+
+</div>
+</body>
+</html>
