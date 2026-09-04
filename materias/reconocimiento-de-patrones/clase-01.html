@@ -19,6 +19,7 @@
 <div class="files">
     <a class="btn" href="files/Clase-02-Extraccion-de-caracteristicas-I.pdf" target="_blank">📄 Extracción de características I (prof.)</a>
     <a class="btn" href="files/Clase-03-Extraccion-de-caracteristicas-II.pdf" target="_blank">📄 Extracción de características II (prof.)</a>
+    <a class="btn" href="files/Clase-04-Extraccion-de-caracteristicas-III.pdf" target="_blank">📄 Extracción de características III (prof.)</a>
   </div>
 <div class="encorto"><h4>En corto</h4><ul><li>Extracción de características = pasar datos crudos (imagen / audio) a un vector numérico corto que separe clases (<code>y ∈ ℝᴺ → x ∈ ℝᵈ</code>, d ≪ N).</li><li>Imagen: estadísticas, histogramas, momentos geométricos (Hu = invariante a traslación / escala / rotación), textura <strong>GLCM</strong>, forma con <strong>HOG</strong>, puntos clave SIFT / SURF.</li><li>Audio: temporales (energía, RMS, ZCR), espectrales (centroide, ancho de banda, roll-off, flux, flatness), tiempo-frecuencia (<strong>MFCC</strong> + Δ / ΔΔ).</li><li>HOG de una imagen 64×128 → vector de <strong>3 780</strong>; audio → vector de <strong>80</strong> dimensiones.</li></ul></div>
 <div class="examen"><h4>🎯 Para el examen</h4><ul><li>Momentos: espaciales (dependen de la posición) → centrales (invariantes a traslación) → normalizados (+ escala) → <strong>Hu</strong> (+ rotación).</li><li>GLCM: parámetros N, d, θ; hacerla <strong>simétrica</strong> y <strong>normalizar</strong> antes de sacar descriptores (contraste, ASM / energía, entropía…).</li><li>MFCC: se descarta <strong>obligatoriamente el coeficiente 0</strong> (solo energía promedio); el proceso es <strong>irreversible</strong>.</li><li>Δ = velocidad del cambio del timbre; ΔΔ = aceleración.</li></ul></div>
@@ -215,6 +216,24 @@ Spectral flatness     media geométrica / media aritmética del espectro  (≈1 
 (5 espectrales × 4 estadísticos)  = 20      (Centroide, BW, Roll-off, Flux, Flatness)
                                    ----
 Dimensión total del vector        = 80</code></pre></details>
+
+<details class="section-block sec" id="clase4-formulas-ejemplos"><summary><span class="stitle">Fórmulas y ejemplos numéricos (diapositivas Clase 4)</span></summary>
+<p><strong>Temporales:</strong></p>
+<pre><code>Energía  E = Σ x[n]²          RMS = √( (1/N) Σ x[n]² )
+ZCR = (1/2N) Σ |sign(x[n]) − sign(x[n−1])|      (alto = ruidoso · bajo = armónico)
+Autocorrelación  R(k) = Σ x[n]·x[n−k]
+
+Ej. ventana [0.5, −0.3, 0.8, −0.2]:  E = (1/4)(0.25+0.09+0.64+0.04) = 0.255
+Ej. ventana [0.5, 0.3, −0.2, −0.4, 0.1]:  2 cruces  →  ZCR = 4 / (2·5) = 0.4</code></pre>
+<p><strong>Espectrales</strong> (sobre la FFT <code>X(k) = Σ x[n] e^(−j2πkn/N)</code>):</p>
+<pre><code>Centroide     C  = Σ fₖ|X[k]| / Σ|X[k]|                 Ej. → 760 Hz
+Ancho de banda BW = √( Σ (fₖ − C)² |X[k]| / Σ|X[k]| )    Ej. → ≈ 498.4 Hz
+Roll-off: menor R tal que Σ₀..ᴿ|X[k]| = α Σ₀..ᴷ|X[k]|   (α = 0.85 o 0.95)   Ej. → 1500 Hz
+Flux     = Σ ( |Xₜ[k]| − |Xₜ₋₁[k]| )²                    Ej. → 0.27
+Flatness = media geométrica / media aritmética           Ej. → ≈ 0.96 (espectro casi plano)</code></pre>
+<p><strong>Escala Mel</strong> (bajas frecuencias ≈ lineal, altas ≈ logarítmica):</p>
+<pre><code>Mel(f) = 2595 · log₁₀(1 + f/700)          f = 700 · (10^(m/2595) − 1)</code></pre>
+<p><strong>Etapas MFCC:</strong> 1) pre-énfasis <code>y[n] = x[n] − α x[n−1]</code>, α ≈ 0.95 · 2) framing 20–40 ms, 50 % de solape · 3) ventana de Hamming <code>w[n] = 0.54 − 0.46 cos(2πn/(N−1))</code> · 4) FFT y espectro de potencia · 5) banco de 20–40 filtros triangulares Mel, <code>energíaᵢ = Σ P(k) Hᵢ[k]</code> · 6) logaritmo · 7) DCT-II, quedarse con los primeros 12–13 → MFCC. Con Δ y ΔΔ: matriz <code>#ventanas × 39</code>.</p></details>
 
 <details class="section-block sec" id="para-investigar-siguiente"><summary><span class="stitle">Para investigar / siguiente</span></summary><ul>
 <li><strong>LBP</strong> (<em>Local Binary Patterns</em>) — método alternativo de análisis de textura en imágenes (es parte de la Tarea 1).</li>

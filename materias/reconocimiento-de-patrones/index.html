@@ -96,14 +96,15 @@
 </div></details>
 
 <details class="section-block tema" id="tema-2" open><summary><span class="stitle">Tema 2 &mdash; Extracci&oacute;n de caracter&iacute;sticas</span> <span class="thrs">&middot; Clase 01</span></summary><div class="tema-body">
-<p class="empty">Resumen completo en la <a href="clase-01.html">Clase 01</a>.</p>
+<p class="empty">Resumen completo en la <a href="clase-01.html">Clase 01</a>. Diapositivas del profesor: <a href="files/Clase-02-Extraccion-de-caracteristicas-I.pdf" target="_blank">I</a> · <a href="files/Clase-03-Extraccion-de-caracteristicas-II.pdf" target="_blank">II</a> · <a href="files/Clase-04-Extraccion-de-caracteristicas-III.pdf" target="_blank">III</a>.</p>
 <div class="encorto"><h4>En corto</h4><ul><li>Extracción de características = pasar datos crudos (imagen / audio) a un vector numérico corto que separe clases (<code>y ∈ ℝᴺ → x ∈ ℝᵈ</code>, d ≪ N).</li><li>Imagen: estadísticas, histogramas, momentos geométricos (Hu = invariante a traslación / escala / rotación), textura <strong>GLCM</strong>, forma con <strong>HOG</strong>, puntos clave SIFT / SURF.</li><li>Audio: temporales (energía, RMS, ZCR), espectrales (centroide, ancho de banda, roll-off, flux, flatness), tiempo-frecuencia (<strong>MFCC</strong> + Δ / ΔΔ).</li><li>HOG de una imagen 64×128 → vector de <strong>3 780</strong>; audio → vector de <strong>80</strong> dimensiones.</li></ul></div>
 </div></details>
 
 <details class="section-block tema" id="tema-3" open><summary><span class="stitle">Tema 3 &mdash; Selecci&oacute;n y reducci&oacute;n de dimensionalidad</span> <span class="thrs">&middot; Clase 02</span></summary><div class="tema-body">
-<p class="empty">Resumen completo en la <a href="clase-02.html">Clase 02</a>.</p>
+<p class="empty">Resumen completo en la <a href="clase-02.html">Clase 02</a>. Diapositivas del profesor: <a href="files/Clase-05-Seleccion-y-Reduccion-de-Dimensionalidad.pdf" target="_blank">Clase 5</a>.</p>
 <div class="encorto"><h4>En corto</h4><ul>
 <li><strong>Selección de características</strong> = quedarse con un subconjunto de las variables originales (no las transforma). <strong>Reducción de dimensionalidad</strong> = <em>proyectar</em> a un espacio nuevo donde las variables ya no representan lo mismo.</li>
+<li><strong>Filtrado</strong> (evalúa cada variable por separado, antes de entrenar): Pearson (continua–continua), χ² (categórica–categórica), ANOVA F (continua–categórica), información mutua (cualquiera).</li>
 <li><strong>Wrapper</strong> (usan el modelo como caja negra): Forward (arranca vacío, añade), Backward (arranca con todas, quita), Exhaustive (todas las combinaciones, <code>O(2^d)</code>).</li>
 <li><strong>Embebidos</strong> (seleccionan durante el entrenamiento): <strong>Lasso / L1</strong> (penaliza <code>Σ|Wⱼ|</code>; peso → 0 = variable descartada) y <strong>árboles</strong> (importancia por reducción de impureza, normalizada a suma 1, umbral).</li>
 <li><strong>PCA</strong>: proyecta hacia las direcciones de <strong>máxima varianza</strong> (vectores/valores propios de la matriz de covarianza). PC1 = máx. varianza; los componentes son <strong>ortogonales</strong>.</li>
