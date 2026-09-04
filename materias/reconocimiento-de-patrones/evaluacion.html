@@ -49,18 +49,26 @@
 
 <div class="section-block"><h4>¡Importante!</h4><p>El que una calificación mayor a .5 suba a la inmediata superior queda a criterio del profesor con base en el desempeño del alumno durante el semestre.</p></div>
 
-<div class="section-block"><h4>Tarea 1</h4>
+<div class="section-block"><h4>Tarea 1 — fecha de entrega: 4 de septiembre de 2026</h4>
 <ul>
-<li><strong>Entrega:</strong> el viernes siguiente a la clase, subida a Classroom.</li>
-<li><strong>Formato:</strong> hecha <strong>a mano</strong> (en papel o en tableta). Si es en tableta, letra de tamaño legible ("no super chiquita").</li>
-<li>El profesor subirá a Classroom ejemplos resueltos de la clase pasada como guía.</li>
+<li>Ejercicios <strong>1 y 2 a mano</strong>, con procedimiento claro y ordenado y los resultados obtenidos. El ejercicio 3 puede ser un documento de Word.</li>
+<li>Guía: <strong>ejercicios resueltos en clase</strong> — <a href="files/Ejercicios-Hu-y-GLCM-clase.pdf" target="_blank" style="color:var(--indigo)">Ejercicios de Hu y GLCM (PDF)</a>.</li>
 </ul>
-<p><strong>Problemas:</strong></p>
-<ol>
-<li><strong>Momentos de Hu</strong> — con una imagen de una figura en forma de "C", calcular analíticamente <code>HU₁</code> y <code>HU₂</code>. Orden obligatorio: momento geométrico <code>m₀₀</code> → momento espacial → momento rotacional → momentos de Hu.</li>
-<li><strong>GLCM</strong> — dada una matriz cuantizada a ciertos niveles de gris, calcular la GLCM en dos direcciones (<strong>Oeste→Este</strong> y <strong>Norte→Sur</strong>), distancia <code>d = 1</code>. Normalizar cada una a probabilidades y calcular <strong>Contraste, Energía y Entropía</strong> → 3 descriptores × 2 direcciones = <strong>6 características</strong>.</li>
-<li><strong>Investigación corta</strong> (un párrafo): qué es y en qué consiste <strong>LBP (Local Binary Patterns)</strong>.</li>
-</ol></div>
+<p><strong>1.1 — Momentos de Hu.</strong> Para la imagen siguiente, calcular <code>Hu[1]</code> y <code>Hu[2]</code>. Aplicar al final la <strong>escala logarítmica</strong> vista en clase a los momentos calculados.</p>
+<pre><code>I =  0 0 0 0 0 0
+     0 1 1 1 0 0
+     0 1 0 0 0 0
+     0 1 0 0 0 0
+     0 1 1 1 1 0
+     0 0 0 0 0 0</code></pre>
+<p><strong>1.2 — GLCM.</strong> Para la imagen siguiente, calcular la <strong>GLCM normalizada</strong> en las direcciones <strong>oeste→este</strong> y <strong>norte→sur</strong>, con distancia de píxel <code>d = 1</code>; luego el <strong>contraste, la energía y la entropía</strong> de cada dirección → 3 características × 2 direcciones = <strong>6 características</strong>.</p>
+<pre><code>I =  0 0 1 2 2 3
+     0 1 1 2 3 3
+     1 1 4 2 3 4
+     2 4 2 3 3 4
+     3 3 4 4 4 5
+     3 4 4 5 5 2</code></pre>
+<p><strong>1.3 — LBP.</strong> Investigar y explicar en qué consisten los <strong>Local Binary Patterns (LBP)</strong>.</p></div>
 
 <div class="section-block"><h4>Datos del curso</h4><ul>
 <li>Lenguaje: <strong>Python</strong>.</li>

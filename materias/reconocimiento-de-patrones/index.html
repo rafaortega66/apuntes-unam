@@ -190,6 +190,36 @@ Centroide (x̄, ȳ) = ( M(1,0)/M(0,0) ,  M(0,1)/M(0,0) )</code></pre>
 <li><strong>Estadística descriptiva:</strong> Media, Varianza, Correlación.</li>
 </ul></details>
 
+<details class="section-block sec" id="ejercicios-hu-glcm-clase" open><summary><span class="stitle">Ejercicios resueltos en clase (Hu y GLCM)</span></summary>
+<p>Guardados en <a href="files/Ejercicios-Hu-y-GLCM-clase.pdf" target="_blank">Ejercicios de Hu y GLCM (PDF)</a>. Resumen de los que se pueden transcribir:</p>
+<p><strong>Ejemplo 1 — Momentos geom&eacute;tricos</strong> &nbsp; <code>M<sub>pq</sub> = &Sigma;&Sigma; x<sup>p</sup> y<sup>q</sup> f(x,y)</code>. Imagen 5&times;5 con cuatro p&iacute;xeles en 1 (x &isin; {2,3}, y &isin; {1,2}):</p>
+<pre><code>M00 = &Sigma; f            = 1+1+1+1                 = 4
+M10 = &Sigma; x&middot;f          = 2+3+2+3                 = 10
+M01 = &Sigma; y&middot;f          = 1+1+2+2                 = 6
+M11 = &Sigma; x&middot;y&middot;f        = 2&middot;1 + 3&middot;1 + 2&middot;2 + 3&middot;2     = 15
+
+M = [ M00  M10 ] = [ 4  10 ]
+    [ M01  M11 ]   [ 6  15 ]</code></pre>
+<p><strong>Ejemplo 2 — Momentos centrales</strong> &nbsp; <code>&mu;<sub>pq</sub> = &Sigma;&Sigma; (x&minus;x&#772;)<sup>p</sup> (y&minus;y&#772;)<sup>q</sup> f(x,y)</code>.</p>
+<pre><code>Centroide {x&#772;, y&#772;} = { M10/M00 , M01/M00 } = { 10/4 , 6/4 } = { 2.5 , 1.5 }
+
+&mu;00 = M00 = 4
+&mu;10 = 0 ,  &mu;01 = 0            (siempre, por definici&oacute;n del centroide)
+&mu;11 = &Sigma;&Sigma; (x&minus;2.5)(y&minus;1.5) f
+     = (&minus;0.5)(&minus;0.5) + (0.5)(&minus;0.5) + (&minus;0.5)(0.5) + (0.5)(0.5)
+     = 0.25 &minus; 0.25 &minus; 0.25 + 0.25 = 0
+Relaci&oacute;n:  &mu;11 = M11 &minus; x&#772;&middot;M01 = M11 &minus; y&#772;&middot;M10
+
+&mu; = [ &mu;00  &mu;10 ] = [ 4  0 ]
+    [ &mu;01  &mu;11 ]   [ 0  0 ]</code></pre>
+<p><strong>Ejemplo 4 — GLCM</strong> (imagen 4&times;4, niveles de gris 0&ndash;3), <code>d = 1</code>. GLCM <strong>&theta; = 0</strong> (izquierda&rarr;derecha), sin normalizar &mdash; 12 pares en total:</p>
+<pre><code>       j=0  j=1  j=2  j=3
+ i=0    2    2    1    0
+ i=1    0    2    0    0
+ i=2    0    0    3    1
+ i=3    0    0    0    1</code></pre>
+<p>La versi&oacute;n sim&eacute;trica y la direcci&oacute;n <strong>&theta; = 90&deg;</strong> (arriba&rarr;abajo) est&aacute;n resueltas celda por celda en el PDF.</p></details>
+
 <details class="section-block sec" id="hog-histogram-of-oriented-gradients"><summary><span class="stitle">HOG — Histogram of Oriented Gradients</span></summary>
 <p>Descriptor de <strong>forma</strong>: codifica los gradientes de intensidad y sus orientaciones dentro de regiones localizadas de la imagen. Captura estructuras locales de bordes. Aplicación estrella: <strong>detección de personas y objetos</strong>; fue lo más sólido del estado del arte antes de las redes convolucionales.</p></details>
 
