@@ -24,6 +24,7 @@
 <div class="grid" style="margin-bottom:26px">
   <a class="card" style="--c:#45B8A8" href="evaluacion.html"><h3>Evaluación</h3><p>Ponderación, prácticas, proyecto, Classroom</p></a>
   <a class="card" style="--c:#45B8A8" href="entregas.html"><h3>Entregas</h3><p>PDFs que ya entregaste</p></a>
+  <a class="card" style="--c:#45B8A8" href="practicas.html"><h3>Prácticas y material</h3><p>Enunciados, audio de apoyo, plantilla IEEE, diapositivas</p></a>
 </div>
 
 
@@ -353,8 +354,8 @@ Flatness = media geométrica / media aritmética           Ej. → ≈ 0.96 (esp
 </div></details>
 
 <details class="section-block tema" id="tema-3" open><summary><span class="stitle">Tema 3 &mdash; Selecci&oacute;n y reducci&oacute;n de dimensionalidad</span> <span class="thrs">&middot; Clase 02</span></summary><div class="tema-body">
-<p class="empty">Contenido de la <a href="clase-02.html">Clase 02</a> (audio) + diapositivas del profesor <a href="files/Clase-05-Seleccion-y-Reduccion-de-Dimensionalidad.pdf" target="_blank">Clase 5</a>.</p>
-<div class="files"><a class="btn" href="files/Clase-05-Seleccion-y-Reduccion-de-Dimensionalidad.pdf" target="_blank">📄 Diapositivas Clase 5 (prof.)</a></div>
+<p class="empty">Contenido de la <a href="clase-02.html">Clase 02</a> (audio) + diapositivas del profesor <a href="files/Clase-05-Seleccion-y-Reduccion-de-Dimensionalidad.pdf" target="_blank">Clase 5</a> y <a href="files/Clase-06-Reduccion-de-Dimensionalidad-II.pdf" target="_blank">Clase 6</a> (esta última sin audio grabado todavía).</p>
+<div class="files"><a class="btn" href="files/Clase-05-Seleccion-y-Reduccion-de-Dimensionalidad.pdf" target="_blank">📄 Diapositivas Clase 5 (prof.)</a> <a class="btn" href="files/Clase-06-Reduccion-de-Dimensionalidad-II.pdf" target="_blank">📄 Diapositivas Clase 6 (prof.)</a></div>
 <div class="encorto"><h4>En corto</h4><ul>
 <li><strong>Selección de características</strong> = quedarse con un subconjunto de las variables originales (no las transforma). <strong>Reducción de dimensionalidad</strong> = <em>proyectar</em> a un espacio nuevo donde las variables ya no representan lo mismo.</li>
 <li>Tres familias de <strong>selección</strong>: <strong>Filtrado</strong> (mide relevancia de cada variable por separado, antes de entrenar: Pearson, χ², ANOVA F, información mutua), <strong>Wrapper</strong> (usan el modelo como caja negra) y <strong>Embebidos</strong> (seleccionan durante el entrenamiento).</li>
@@ -466,8 +467,15 @@ Z = W · X           (W = matriz de vectores propios; X = datos originales; Z = 
 <li><strong>Ventajas:</strong> estabilidad numérica muy superior; funciona sobre matrices <strong>no cuadradas</strong>; evita calcular <code>Xᵀ X</code> (costoso); eficiente para datasets masivos con <code>N ≫ D</code> o <code>D ≫ N</code>. Es lo que usan la mayoría de las bibliotecas.</li>
 </ul></details>
 
-<details class="section-block sec" id="tema-3-lda"><summary><span class="stitle">Cierre — próxima clase</span></summary>
-<p>Siguiente sesión: <strong>LDA (Análisis Discriminante Lineal)</strong>.</p></details>
+<details class="section-block sec" id="tema-3-lda"><summary><span class="stitle">Diapositivas Clase 6 — Reducción de dimensionalidad II</span></summary>
+<p>Deck del profesor, aún <strong>sin audio grabado</strong>. Puntos que cubre, para no perder de vista la laguna:</p>
+<ul>
+<li><strong>Reconstrucción con PCA:</strong> <code>X̂ = Z·Wₖᵀ + μ</code>; el error <code>‖X − X̂‖²</code> es mínimo con los k componentes de mayor varianza (mejor aproximación de rango k). EigenFaces como caso de uso.</li>
+<li><strong>Ventajas/desventajas de PCA:</strong> reducción óptima en MSE, elimina redundancia; pero sensible a escala y outliers, solo estructura lineal, no supervisado — <strong>no garantiza mejor clasificación</strong>.</li>
+<li><strong>LDA (Análisis Discriminante Lineal)</strong> — reducción <em>supervisada</em>: maximiza separación entre clases y minimiza dispersión intra-clase. Dispersión entre clases <code>S_B</code>, dentro de clases <code>S_W</code>; coeficiente de Rayleigh <code>J(w) = (wᵀS_B w)/(wᵀS_W w)</code>; se resuelve <code>S_W⁻¹S_B w = λw</code>. Da como máximo <code>min(K−1, d)</code> discriminantes. Si <code>S_W</code> es singular: PCA previo, regularización <code>(1−α)S_W + αI</code> o pseudoinversa por SVD.</li>
+<li><strong>Otros métodos:</strong> t-SNE (no lineal, visualización, divergencia KL), Kernel PCA (truco del kernel), QDA (fronteras cuadráticas, covarianza distinta por clase).</li>
+</ul>
+<p>Siguiente clase del deck: <strong>Evaluación de modelos</strong> (Tema 4).</p></details>
 </div></details>
 
 <details class="section-block tema off" id="tema-4"><summary><span class="stitle">Tema 4 &mdash; Evaluación de modelos</span> <span class="thrs">&middot; sin ver</span></summary><div class="tema-body"><p class="empty">Sin ver todav&iacute;a. (El programa del profesor no desglosa subtemas.)</p></div></details>
