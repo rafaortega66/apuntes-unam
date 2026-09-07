@@ -20,7 +20,25 @@
   <p class="prof">Documentos (PDF) que ya entregaste en esta asignatura. Cada uno se abre en pestaña nueva; desde el visor de Chrome se puede descargar.</p>
 </div>
 <div class="section-block"><h4>Registro de entregas</h4>
-<p class="empty">Aún no hay entregas registradas. Cuando entregues algo, me pasas el PDF y aparece aquí como fila con enlace.</p>
+<table><thead><tr><th>Archivo</th><th>Qué es</th></tr></thead><tbody>
+<tr><td><a href="files/Practica-01-Uso-basico-de-Linux.pdf" target="_blank" style="color:var(--indigo)">Práctica 1 — Uso básico de Linux</a></td><td>Entregada en Classroom («P1 Entorno») el 29 ago 2026 · tarde</td></tr>
+</tbody></table>
+</div>
+
+<div class="section-block"><h4>Cotejo de la Práctica 1 contra lo que pide el profesor</h4>
+<p>Revisado contra el enunciado de la <a href="evaluacion.html" style="color:var(--indigo)">Práctica</a> (apartados Desarrollo y Resultados).</p>
+<table><thead><tr><th>Requisito</th><th>¿Cumple?</th></tr></thead><tbody>
+<tr><td>Formato PDF · individual</td><td>Sí</td></tr>
+<tr><td>Nombre del archivo <code>P0_uso_basico_INICIALES.pdf</code></td><td>No — se entregó como <code>P01ASI420054085.pdf</code> (número de cuenta en vez de iniciales). Ya aceptado; cuídalo en las siguientes.</td></tr>
+<tr><td>Desarrollo: <code>whereis</code> <code>which</code> <code>man</code> <code>ps</code>/<code>ps aux</code> <code>top</code> <code>nano</code> <code>cat -n</code> <code>ls -l -a -s</code> <code>mkdir -m</code> <code>mkdir -p</code></td><td>Sí — Figuras 1–5</td></tr>
+<tr><td>Resultados: <code>mv</code> <code>rm</code> <code>tree</code> <code>ls -h</code> <code>head</code> <code>tail</code> <code>grep</code> <code>wc</code> <code>cd ..</code> <code>touch</code> <code>rmdir</code> <code>tac</code></td><td>Sí — Figuras 6–8, 12–13</td></tr>
+<tr><td>Ejercicio obligatorio: permisos en un archivo vs. en una carpeta completa</td><td>Parcial — hay <code>chmod 777</code> y <code>chown</code> sobre <code>dg.txt</code> y <code>mkdir -m 700</code>; verifica en las capturas que quede explícito el contraste archivo vs. carpeta (<code>chmod -R</code>)</td></tr>
+<tr><td><code>ls -d</code>, <code>ls -R</code> (la <code>-R</code> en mayúscula)</td><td>Revisar — el texto solo menciona <code>ls -l -a -s -h</code>; confirma que <code>-d</code> y <code>-R</code> aparezcan en alguna figura</td></tr>
+<tr><td><code>tee</code></td><td>Revisar — no aparece en el texto del reporte</td></tr>
+<tr><td>Dos distribuciones de Linux</td><td>Sí — Ubuntu 26.04 (bare metal) + Fedora Workstation 44 (VM con VBoxManage); diferencia apt vs dnf documentada</td></tr>
+<tr><td>Introducción · Conclusiones</td><td>Sí</td></tr>
+</tbody></table>
+<p>El grueso de comandos de Desarrollo y Resultados está cubierto y además se cumplió el requisito de dos distribuciones. Antes de darla por cerrada conviene confirmar en las capturas que aparezcan <code>ls -d</code>, <code>ls -R</code>, <code>tee</code> y el contraste explícito de permisos archivo/carpeta.</p>
 </div>
 </div>
 </body>
