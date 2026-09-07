@@ -20,7 +20,19 @@
   <p class="prof">Documentos (PDF) que ya entregaste en esta asignatura. Cada uno se abre en pestaña nueva; desde el visor de Chrome se puede descargar.</p>
 </div>
 <div class="section-block"><h4>Registro de entregas</h4>
-<p class="empty">Aún no hay entregas registradas. Cuando entregues algo, me pasas el PDF y aparece aquí como fila con enlace.</p>
+<table><thead><tr><th>Archivo</th><th>Qué es</th></tr></thead><tbody>
+<tr><td><a href="files/entregas/Tarea-01-Investigar-procesos.pdf" target="_blank" style="color:var(--indigo)">Tarea 1 — Investigar (Sistemas Operativos)</a></td><td>Investigación «¿Qué es un proceso?» e imagen de memoria del proceso (Tanenbaum 2009, Gay 2000). APA 7.</td></tr>
+<tr><td><a href="files/entregas/Tarea-02-Permisos-fdisk-setuid.pdf" target="_blank" style="color:var(--indigo)">Tarea 2 — Permisos, fdisk y bit setuid</a></td><td>Entregada el 3 sep 2026. Actividad 1 (dos terminales root / no-root, <code>whoami</code>, <code>fdisk -l</code>, <code>chmod 4511</code>, restaurar) + Actividad 2 (<code>ids.c</code>: UID real vs. efectivo con setuid). APA 7 (Negus 2020, Shotts 2019).</td></tr>
+</tbody></table>
+<p>El enunciado del profesor está en <a href="files/prof-tema1/Tarea-02.pdf" target="_blank" style="color:var(--indigo)">Tarea-02.pdf</a>.</p>
+</div>
+
+<div class="section-block"><h4>Cotejo rápido</h4>
+<ul>
+<li><strong>Tarea 2 — Actividad 1:</strong> cubre los 10 pasos del ejercicio (whoami en ambas terminales, <code>fdisk -l</code> denegado, <code>which fdisk</code> + permisos originales <code>-rwxr-xr-x</code>, <code>chmod 4511</code> → <code>r-s</code>, ejecución exitosa como no-root, restauración con <code>chmod 755</code>). Incluye la investigación previa de <code>fdisk</code> y de la opción <code>-l</code>. ✔</li>
+<li><strong>Tarea 2 — Actividad 2:</strong> <code>ids.c</code> con <code>getuid/geteuid/getgid/getegid</code>, compilado con <code>gcc</code>, primera ejecución (real == efectivo = 1000), luego <code>chown root:root</code> + <code>chmod 4755</code> → <code>-rwsr-xr-x</code>, ejecución como no-root con Real UID 1000 y Effective UID 0. Coincide con lo que pide el enunciado. ✔</li>
+<li><strong>Tarea 1:</strong> definición de proceso, distinción proceso/programa, tabla de procesos e imagen de memoria, con citas a Tanenbaum y Gay en APA 7. ✔</li>
+</ul>
 </div>
 </div>
 </body>
