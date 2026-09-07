@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 02 — Minería de Datos</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Minería de Datos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 02</h2>
+  <p class="prof">M.C. José Concepción Roberto Olvera López · 3 sep 2026 · Tema 2 — Arquitectura de minería de datos · repositorio vs. base de datos, Data Warehouse, Data Mart, virtualización de datos, ERP y Data Lake. Presentaciones de los equipos 9, 13, 12 y 11.</p>
+</div>
+
+<div class="encorto"><h4>En corto</h4><ul>
+<li><strong>Base de datos</strong> (transaccional) → <strong>Repositorio</strong> (histórico, metadatos, gobernanza, TB–PB) → <strong>Data Warehouse</strong> (empresarial, integrado, estructurado, "única fuente confiable") → <strong>Data Lake</strong> (datos crudos y no estructurados en formato nativo).</li>
+<li><strong>Data Mart</strong> = un Data Warehouse acotado a un área de negocio (RR. HH., Finanzas) con usuarios limitados a esa área.</li>
+<li><strong>Virtualización de datos</strong>: consultar los datos en su origen en tiempo real sin moverlos; el usuario ve una vista reducida (p. ej. 14 campos de 180). ~70 % de los datos se manejan así hoy.</li>
+<li><strong>ERP</strong> (p. ej. SAP) = núcleo de la empresa: finanzas, nómina, facturación, inventarios. Alimenta los procesos de minería.</li>
+<li><strong>ETL vs. ELT</strong>: la Extracción-Transformación-Carga es solo una forma de alimentar un Warehouse.</li>
+</ul></div>
+
+<div class="examen"><h4>🎯 Para el examen</h4><ul>
+<li><strong>Diseñar esquemas de arquitectura de datos</strong> (obligatorio): diagramas con redes, servidores, capas de seguridad (firewalls) y acceso restringido por roles y horarios.</li>
+<li><strong>Distinguir técnicamente</strong>: Base de Datos (transaccional) · Repositorio (histórico / gobernanza) · Data Warehouse (empresarial / estructurado) · Data Lake (no estructurado / crudo).</li>
+<li><strong>Gobernanza</strong>: la seguridad moderna limita el acceso no solo por tabla, sino por <strong>columna</strong> y por <strong>tiempo de respuesta</strong>.</li>
+<li><strong>Transacciones distribuidas</strong>: <strong>Two-Phase Commit (2PC)</strong> para garantizar que los registros queden grabados correctamente en sistemas distribuidos.</li>
+<li><strong>ETL vs. ELT</strong> como formas de alimentar el Warehouse.</li>
+</ul></div>
+
+<details class="section-block sec" id="c2-arquitectura" open><summary><span class="stitle">Arquitectura de minería de datos — repositorios y gobernanza</span></summary>
+<ul>
+<li><strong>Repositorio de datos:</strong> contenedor de grandes volúmenes de información con esquemas de seguridad y gobernanza mucho más amplios que una base de datos básica. Se caracteriza por: uso de <strong>metadatos</strong>, almacenamiento de información <strong>histórica</strong> y capacidad para manejar volúmenes muy altos (terabytes o petabytes).</li>
+<li><strong>Gobernanza:</strong> el acceso se restringe por rol, por tabla, por columna y por horario; se controla también el tiempo de respuesta de las consultas.</li>
+</ul></details>
+
+<details class="section-block sec" id="c2-dw-dm" open><summary><span class="stitle">Data Warehouse, Data Mart y virtualización</span></summary>
+<ul>
+<li><strong>Data Warehouse (almacén de datos):</strong> repositorio centralizado que recopila, integra y organiza grandes cantidades de datos <strong>actuales e históricos</strong> de múltiples fuentes para facilitar el análisis y la toma de decisiones. Debe ser la <strong>"única fuente confiable"</strong> de la verdad en la empresa.</li>
+<li><strong>Data Mart:</strong> versión de un repositorio enfocada exclusivamente en un <strong>área de negocio específica</strong> (RR. HH., Finanzas), con usuarios limitados a esa área.</li>
+<li><strong>Virtualización de datos:</strong> técnica que permite consultar los datos en su origen en <strong>tiempo real sin moverlos</strong> físicamente al repositorio. El usuario ve una estructura (p. ej. 14 campos) aunque el origen tenga otra (p. ej. 180 campos). Se estima que ~<strong>70 % de los datos</strong> se manejan así actualmente.</li>
+<li><strong>ETL / ELT:</strong> Extracción, Transformación y Carga es <strong>solo una</strong> de las formas de alimentar un Warehouse.</li>
+</ul></details>
+
+<details class="section-block sec" id="c2-erp"><summary><span class="stitle">Sistemas ERP</span></summary>
+<ul>
+<li><strong>ERP (Enterprise Resource Planning):</strong> el corazón o núcleo de la empresa (p. ej. <strong>SAP</strong>). Integra la parte financiera, nómina, facturación e inventarios.</li>
+<li>Es fundamental para <strong>alimentar los procesos de minería</strong>.</li>
+</ul></details>
+
+<details class="section-block sec" id="c2-datalake"><summary><span class="stitle">Data Lake</span></summary>
+<ul>
+<li><strong>Data Lake (lago de datos):</strong> repositorio para datos <strong>no estructurados</strong> (imágenes, audio, documentos, redes sociales) que se almacenan en su <strong>formato nativo sin procesar</strong>.</li>
+<li>No tiene reglas estrictas de organización como el Warehouse, lo que facilita el almacenamiento rápido de <strong>petabytes</strong> de información.</li>
+<li>Contrapartida: al no estar estructurado, encontrar y explotar la información es más difícil.</li>
+</ul></details>
+
+<details class="section-block sec" id="c2-casos"><summary><span class="stitle">Presentaciones de los equipos (casos de estudio)</span></summary>
+<p>Continuación de los casos de la Clase 1. Cada equipo expone problemática, datos, limpieza, transformación y algoritmos.</p>
+
+<p><strong>Equipo 9 — Scitum / Telmex (ciberseguridad).</strong></p>
+<ul>
+<li><strong>Problema:</strong> alto número de <strong>falsos positivos</strong> en las alertas de un SOC.</li>
+<li><strong>Datos:</strong> tráfico de red, logs de firewalls y servidores (JSON, CSV, texto), IPs, fechas y horas.</li>
+<li><strong>Limpieza:</strong> <em>no</em> eliminar valores faltantes (un campo <code>malware</code> vacío puede ser relevante) ni outliers (pueden ser ataques reales); solo eliminar duplicados de intentos de conexión fallidos.</li>
+<li><strong>Transformación:</strong> variables como "intentos fallidos por minuto"; segmentación por geolocalización.</li>
+<li><strong>Algoritmos:</strong> clasificación (falso positivo vs. amenaza) y <strong>series de tiempo</strong> para predecir el patrón normal de tráfico.</li>
+</ul>
+
+<p><strong>Equipo 13 — LEGO (manufactura).</strong></p>
+<ul>
+<li><strong>Problema:</strong> reducir la huella ecológica por sobredimensionamiento de empaques y exceso de piezas de repuesto.</li>
+<li><strong>Datos:</strong> materia prima (plástico), volumen de empaque, manuales, telemetría de sensores IoT en fábricas.</li>
+<li><strong>Limpieza:</strong> evitar sets atípicos (p. ej. de 65 000 piezas); ID único por pieza sin repetición.</li>
+<li><strong>Algoritmos:</strong> <strong>K-Means</strong> (3 clases: óptimos, sobredimensionados, exceso de piezas); <strong>Silhouette Score</strong> para priorizar; <strong>Random Forest</strong> para predecir qué clientes aceptarían manuales digitales (más probable en sets pequeños/medianos).</li>
+</ul>
+
+<p><strong>Equipo 12 — SmartFit (retail / salud).</strong></p>
+<ul>
+<li><strong>Problema:</strong> abandono de clientes (<strong>churn rate</strong>) por saturación en horas pico.</li>
+<li><strong>Datos:</strong> tendencia de asistencia, biométricos (huella), índice de saturación de equipos, CRM de pagos.</li>
+<li><strong>Limpieza:</strong> eliminar registros biométricos dobles; imputar salidas faltantes con la <strong>media</strong> del usuario; eliminar estancias atípicas (muy cortas o muy largas).</li>
+<li><strong>Transformación:</strong> <strong>normalización</strong> a escala 0–1; <strong>discretización</strong> de horas pico.</li>
+<li><strong>Algoritmos:</strong> <strong>Naïve Bayes</strong> (probabilidad de deserción); <strong>K-Means</strong> para perfiles (asistentes de inicio de mes, de hora pico, desertores).</li>
+</ul>
+
+<p><strong>Equipo 11 — CEMEX (construcción).</strong></p>
+<ul>
+<li><strong>Problema:</strong> disminuir el uso de agua potable en la producción de concreto.</li>
+<li><strong>Metas:</strong> scripts en Python y dashboards en Power BI para auditar el consumo por metro cúbico.</li>
+<li><strong>Limpieza:</strong> valores faltantes → <strong>valor medio</strong> entre la hora anterior y la posterior; outliers → distinguir error de lectura de fuga masiva.</li>
+<li><strong>Algoritmos:</strong> <strong>K-Means</strong> (plantas eficientes vs. no eficientes); <strong>Z-Score</strong> para detectar fugas en tiempo real; <strong>regresión lineal múltiple</strong> para los factores que aumentan el consumo.</li>
+<li><strong>Validación:</strong> Silhouette Score y comparación de predicciones contra el histórico real para evitar sobreajuste.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c2-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li>En una presentación ejecutiva, un error de ortografía puede hundir un proyecto millonario: los directivos pierden confianza en el detalle técnico si ven descuido en lo básico.</li>
+<li>Las láminas no deben saturarse de texto: el cliente tiene poco tiempo (máx. ~20 min) y debe captar la esencia; el detalle técnico se queda en el documento de soporte. <strong>Elevator pitch</strong>: poder transmitir la idea central en lo que dura un viaje en elevador (1–2 min).</li>
+</ul></details>
+
+<details class="section-block sec" id="c2-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li>Continúan las presentaciones de los equipos restantes el próximo martes.</li>
+<li><strong>Proyecto 2:</strong> el martes se asignan <strong>proveedores tecnológicos</strong> (Oracle, Amazon, Google…). Cada equipo se "pone la camiseta" de su marca y vende técnicamente su solución al resto del grupo.</li>
+<li>Investigar y complementar por cuenta propia <strong>Data Warehouse</strong> y <strong>Data Lake</strong> para dominar los términos técnicos.</li>
+</ul></details>
+
+</div>
+</body>
+</html>
