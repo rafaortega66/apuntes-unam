@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 03 — Seguridad Informática Básica</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Seguridad Informática Básica</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 03</h2>
+  <p class="prof">Dra. Cintia Quezada Reyes · 3 sep 2026 · Tema 1 (1.2 Normatividad y 1.3 Perfiles de protección) · normas vs. estándares, TCSEC / ITSEC / CTCPEC, Common Criteria (TOE/PP/ST), BS 7799 → ISO 17799 → serie ISO 27000, ISO 27002:2022, HIPAA, NIST, COBIT.</p>
+</div>
+
+<div class="encorto"><h4>En corto</h4><ul>
+<li><strong>Norma</strong> = obligatoria; <strong>estándar</strong> = recomendación. En México: <strong>NOM</strong> obligatoria, <strong>NMX</strong> recomendación.</li>
+<li>Criterios nacionales <strong>TCSEC</strong> (EE. UU., militar, "Libro Naranja", divisiones A–D) · <strong>ITSEC</strong> (Comisión Europea, funcionalidad f1–f10 + garantía E0–E6) · <strong>CTCPEC</strong> (Canadá, solo productos, T0–T7) → se unifican en los <strong>Common Criteria / ISO-IEC 15408</strong> (garantía EAL1–EAL7).</li>
+<li>Common Criteria define <strong>TOE</strong> (lo que se evalúa), <strong>PP</strong> (perfil de protección: requisitos que debe cumplir el TOE) y <strong>ST</strong> (meta de seguridad: a qué se quiere llegar). Norma en 3 partes: modelo general · requerimientos funcionales ("F") · requerimientos de garantía.</li>
+<li>Rama de gestión: <strong>BS 7799</strong> (Reino Unido, 1995) → <strong>ISO/IEC 17799</strong> (2000: 10 dominios · 2005: 11) → <strong>serie ISO/IEC 27000</strong>. <strong>27001</strong> = requisitos del SGSI ("qué hacer", = Parte 2 de BS 7799); <strong>27002</strong> = guía de buenas prácticas ("cómo hacerlo", = Parte 1).</li>
+<li><strong>ISO/IEC 27002:2022</strong>: pasa de 14 dominios (edición 2013) a <strong>4 secciones + 2 anexos</strong>. Buenas prácticas desde la <strong>Cláusula 5</strong>.</li>
+<li><strong>HIPAA</strong> (EE. UU., 1996): datos médicos. <strong>NIST</strong>: instituto de estándares y metrología de EE. UU. <strong>COBIT</strong>: marco de gobierno de TI, base para las <strong>matrices de riesgo</strong> con código de colores rojo / naranja / amarillo / verde.</li>
+</ul></div>
+
+<div class="examen"><h4>🎯 Para el examen</h4><ul>
+<li><strong>Lógica y evolución de los dominios</strong>: 10 (2000) → 11 (2005) → 14 (2013) de la ISO 17799 / 27002. Hay que entender <em>por qué</em> cambian y su aplicación real en una empresa, no memorizar la lista.</li>
+<li><strong>ISO/IEC 27002:2022</strong>: cambió nomenclaturas y formatos (dolor de cabeza para laboratorios certificados, p. ej. formatos amarrados a la antigua cláusula 4.1.3). Estructura: <strong>4 secciones + 2 anexos</strong>; buenas prácticas desde la <strong>Cláusula 5</strong> (cláusulas 1–4 = glosario y clasificaciones). Los <strong>2 anexos</strong> regulan el uso de atributos y la equivalencia con los controles de 2013. Justificación del cambio: comercio electrónico, clases en línea, trámites digitales, teletrabajo por pandemia, ciberterrorismo y ciberguerras.</li>
+<li><strong>COBIT y matrices de riesgo</strong>: COBIT es la base prioritaria para estructurar matrices de riesgo; código de colores obligatorio <strong>rojo · naranja · amarillo · verde</strong>.</li>
+</ul></div>
+
+<details class="section-block sec" id="c3-normas-estandares" open><summary><span class="stitle">Normas, estándares y normatividad</span></summary>
+<ul>
+<li><strong>Normas</strong> (textual): «algo que es obligatorio».</li>
+<li><strong>Estándares</strong> (textual): «algo que te estoy recomendando, son recomendaciones».</li>
+<li><strong>Normatividad</strong> (textual): «leyes o reglamentaciones o algunos procedimientos o recomendaciones o ciertos criterios, que lo que nos va a ayudar es que yo lo siga para poder implementar algo». Es una guía de conducta técnica.</li>
+<li>La obligatoriedad depende del <strong>país de origen</strong>. Reino Unido: obliga por ley a toda empresa nueva a basarse en la normatividad de seguridad (BS 7799). México: <strong>NOM</strong> (obligatoria por ley) vs. <strong>NMX</strong> (recomendación técnica no obligatoria), aunque ambas se llamen «normas».</li>
+<li>Ejemplo de aplicación: el modelo <strong>OSI (ISO 7498)</strong> — para fabricar y comercializar un <em>switch</em> de Capa 2, el diseño de hardware debe cumplir los criterios de la Capa de Enlace de Datos del estándar para garantizar compatibilidad global.</li>
+</ul></details>
+
+<details class="section-block sec" id="c3-tcsec"><summary><span class="stitle">TCSEC — Trusted Computer System Evaluation Criteria</span></summary>
+<ul>
+<li>Desarrollado por el <strong>Departamento de Defensa de EE. UU.</strong>, a nivel militarizado. Apodo: <strong>"Libro Naranja"</strong>.</li>
+<li>Divisiones jerárquicas de seguridad:
+<ul>
+<li><strong>D</strong> — protección mínima.</li>
+<li><strong>C</strong> (p. ej. C1) — protección discrecional.</li>
+<li><strong>B</strong> (p. ej. B1) — protección obligatoria.</li>
+<li><strong>A</strong> — protección verificada.</li>
+</ul></li>
+<li><em>(contexto — no examen)</em> Anécdotas sobre la rigidez militar en la Secretaría de Marina (ver «Ejemplos y casos»).</li>
+</ul></details>
+
+<details class="section-block sec" id="c3-itsec"><summary><span class="stitle">ITSEC — Information Technology Security Evaluation Criteria</span></summary>
+<ul>
+<li>Estándar de la <strong>Comisión Europea</strong> (1990/1991), con varios países colaboradores. Evalúa la confianza en TI con <strong>dos parámetros</strong>:
+<ol>
+<li><strong>Funcionalidad</strong>: escala <strong>f1 a f10</strong>.</li>
+<li><strong>Evaluación / Garantía</strong>: escala <strong>E0 a E6</strong> (siete niveles de confianza).</li>
+</ol></li>
+<li><em>(contexto — no examen)</em> Su creación fue difícil por la falta de herramientas de comunicación de la época (vuelos, llamadas, módems de 56 kbps, ICQ recién apareciendo) y por diferencias de infraestructura (enchufes, voltajes) y de percepción de «seguridad» entre regiones.</li>
+</ul></details>
+
+<details class="section-block sec" id="c3-ctcpec"><summary><span class="stitle">CTCPEC — Canadian Trusted Computer Product Evaluation Criteria</span></summary>
+<ul>
+<li>Criterios <strong>canadienses</strong>, enfocados <strong>exclusivamente en productos</strong> informáticos de confianza.</li>
+<li><strong>Ocho niveles</strong> de confianza: <strong>T0 a T7</strong>.</li>
+</ul></details>
+
+<details class="section-block sec" id="c3-common-criteria" open><summary><span class="stitle">Common Criteria / ISO-IEC 15408</span></summary>
+<p>Unificación internacional de agencias gubernamentales para homogeneizar la seguridad de productos, servicios y sistemas a nivel global. Escala de <strong>siete niveles de garantía de evaluación: EAL1 a EAL7</strong>.</p>
+<p><strong>Tres públicos destinatarios:</strong></p>
+<ul>
+<li><strong>Desarrolladores</strong> — directrices técnicas para construir productos seguros.</li>
+<li><strong>Evaluadores</strong> — criterios de auditoría objetiva para certificar los niveles EAL.</li>
+<li><strong>Usuarios</strong> — pautas para comprobar que el producto o servicio que usan es seguro.</li>
+</ul>
+<p><strong>Terminología clave (subtema 1.3 — perfiles de protección):</strong></p>
+<ul>
+<li><strong>TOE</strong> (<em>Target of Evaluation</em> / Objeto de Evaluación): el sistema, hardware, software o producto que se evalúa (p. ej. un firewall o una chapa biométrica).</li>
+<li><strong>PP</strong> (<em>Protection Profile</em> / Perfil de Protección): conjunto de características y requisitos de seguridad que debe cumplir un TOE para alcanzar un nivel de garantía (p. ej. EAL7).</li>
+<li><strong>ST</strong> (<em>Security Target</em> / Meta de Seguridad), textual: «es a lo que quiero llegar, qué es lo que quiero obtener, puntualmente». Define el objetivo del producto dentro de la organización.</li>
+</ul>
+<p><strong>Estructura de la norma:</strong></p>
+<ul>
+<li><strong>Parte 1 — Introducción y modelo general:</strong> glosarios, colores, metodología y modelos de perfiles de protección.</li>
+<li><strong>Parte 2 — Requerimientos de seguridad funcional:</strong> reglas técnicas para que la seguridad funcione. Las familias de control se identifican con la letra <strong>«F»</strong> (auditoría, comunicación, soporte criptográfico, privacidad).</li>
+<li><strong>Parte 3 — Requerimientos de garantía / seguridad confiable:</strong> directrices para garantizar que el servicio implementado funcione de forma segura en la organización; audita la <strong>entrega, la operación y la documentación</strong>.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c3-bs7799" open><summary><span class="stitle">BS 7799 → ISO/IEC 17799 → serie ISO/IEC 27000</span></summary>
+<ul>
+<li><strong>BS 7799</strong> — Reino Unido, <strong>1995</strong>. Cambio de enfoque: protección <strong>integral</strong> de la información en toda la empresa (personas, contratos, accesos…). Dos partes:
+<ol>
+<li><strong>Código de Prácticas</strong> — recomendaciones de buenas prácticas.</li>
+<li><strong>Especificación</strong> — requisitos obligatorios y auditables; origen del <strong>SGSI / ISMS</strong> (Sistema de Gestión de Seguridad de la Información).</li>
+</ol></li>
+<li><strong>ISO/IEC 17799</strong> — adopción internacional del estándar británico, independiente del sector de la empresa. Edición <strong>2000</strong>: 10 dominios. Edición <strong>2005</strong>: 11 dominios.</li>
+<li><strong>Serie ISO/IEC 27000</strong> — agrupación sistemática de estándares de seguridad por ISO.
+<ul>
+<li><strong>ISO/IEC 27001</strong> — <strong>requisitos</strong> del SGSI («qué hacer»). Equivale a la <strong>Parte 2</strong> (Especificación) de BS 7799. Última actualización: octubre de 2022.</li>
+<li><strong>ISO/IEC 27002</strong> — guía detallada de buenas prácticas con ejemplos («cómo hacerlo»). Equivale a la <strong>Parte 1</strong> (Código de Prácticas) de BS 7799. Nombrada formalmente ISO 27002 en 2007 (Suiza).</li>
+</ul></li>
+<li>Evolución de dominios: <strong>10 (2000) → 11 (2005) → 14 (2013)</strong>; en 2013 se integró la <strong>criptografía</strong> como dominio propio y se actualizaron las telecomunicaciones (de audio-conferencias analógicas a Skype y herramientas de pandemia).</li>
+</ul></details>
+
+<details class="section-block sec" id="c3-27002-2022"><summary><span class="stitle">ISO/IEC 27002:2022 (febrero de 2022)</span></summary>
+<ul>
+<li>Título oficial: «Seguridad de la información, ciberseguridad y protección de la privacidad — Controles de seguridad de la información».</li>
+<li>Estructura condensada: de <strong>14 dominios</strong> a <strong>4 secciones de control + 2 anexos</strong>.</li>
+<li>Cláusulas <strong>1 a 4</strong> = clasificaciones e introducción; las recomendaciones de buenas prácticas empiezan en la <strong>Cláusula 5</strong>.</li>
+<li>Los <strong>2 anexos</strong> detallan el uso de <strong>atributos</strong> y la <strong>correspondencia / equivalencia</strong> con los controles de la edición 2013.</li>
+<li>Justificación del cambio: nuevas amenazas (ciberterrorismo, ciberguerras) y teletrabajo por pandemia. Impacto administrativo real en los manuales de laboratorios certificados (nomenclaturas y formatos reescritos).</li>
+</ul></details>
+
+<details class="section-block sec" id="c3-hipaa-nist-cobit"><summary><span class="stitle">HIPAA · NIST · COBIT</span></summary>
+<ul>
+<li><strong>HIPAA</strong> — Ley de Portabilidad y Responsabilidad del Seguro Médico (EE. UU., <strong>1996</strong>); protege la confidencialidad de los datos médicos de las personas.</li>
+<li><strong>NIST</strong> — Instituto Nacional de Estándares y Tecnología de EE. UU.; promueve innovación y competitividad industrial mediante estándares, tecnología y <strong>ciencia de la medición</strong>.</li>
+<li><strong>COBIT</strong> — marco de referencia transversal (financiero, médico, cómputo, economía, ambiental) usado <strong>prioritariamente</strong> para diseñar y estructurar <strong>matrices de riesgo</strong>. Nomenclatura estandarizada de colores:
+<ul>
+<li>🔴 <strong>Rojo</strong> — impacto crítico / peligroso.</li>
+<li>🟠 <strong>Naranja</strong> — impacto alto.</li>
+<li>🟡 <strong>Amarillo</strong> — impacto medio.</li>
+<li>🟢 <strong>Verde</strong> — impacto bajo / seguro.</li>
+</ul></li>
+</ul></details>
+
+<details class="section-block sec" id="c3-ejemplos"><summary><span class="stitle">Ejemplos y casos de la clase</span></summary>
+<ul>
+<li><strong>NOM vs. NMX (México):</strong> solo la NOM es obligatoria por ley; la NMX es recomendación.</li>
+<li><strong>OSI / ISO 7498:</strong> un <em>switch</em> de Capa 2 comercial debe cumplir los criterios de la Capa de Enlace para tener compatibilidad global.</li>
+<li><strong>Burlar la seguridad funcional de WhatsApp:</strong> el canal está cifrado extremo a extremo, pero se vulnera a nivel físico si alguien fotografía tu pantalla o le prestas el teléfono al de al lado.</li>
+<li><strong>Firmas — verificación:</strong> peritos forenses analizan si el trazo autógrafo fue continuo o intermitente (delata que se copiaba) y la presión química sobre el papel. La firma digital moderna (Adobe Acrobat / sistemas corporativos) inyecta metadatos y un <strong>código QR</strong> que enlaza al documento original en el servidor para verificar que no fue alterado.</li>
+<li><strong>Polígrafo:</strong> en EE. UU. no se acepta como prueba confiable en juicios: mentirosos entrenados controlan pulso y sudoración; inocentes con traumas médicos generan falsos positivos.</li>
+<li><strong>Continuidad del negocio:</strong> UPS o plantas de combustible para evitar caídas de energía en servidores.</li>
+<li><strong>Cumplimiento normativo (Dubái):</strong> multinacionales restringen enviar personal femenino a Dubái a dictar conferencias o firmar contratos, para protegerlo ante la legislación local.</li>
+<li><strong>UNAM — Dejesca (hoy DGTIC), 2001–2005:</strong> tras la transición presidencial del año 2000 hubo intrusiones desde China; auditados contra las 11 áreas de la ISO 17799, los niveles de cumplimiento iban de 0–1–5–10 % hasta un máximo de 25 %. Motivó la planificación del <strong>CERT de la UNAM</strong>.</li>
+<li><em>(contexto — no examen)</em> <strong>Marina:</strong> un tesista militar llegó 5 min tarde y preguntó dónde reportarse para ser arrestado; otro tesista fue arrestado porque una empresa de EE. UU. lo invitó a un curso sin gestionar la invitación por el conducto institucional.</li>
+<li><em>(contexto — no examen)</em> <strong>Propiedad intelectual:</strong> un alumno de la FI-UNAM armó un dispositivo con su dinero y tiempo; la empresa lo patentó a su nombre corporativo y solo le dio 30 días de vacaciones en Europa. Recomendación: patentar de forma individual antes de ofrecerlo al patrón.</li>
+</ul></details>
+
+<details class="section-block sec" id="c3-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>No se pedirá memorizar literalmente</strong> cada sección, número o nombre de cláusulas o dominios. Las normas están hechas para consultarse; el examen evalúa el análisis lógico y estructural del estándar, no un listado numérico.</li>
+<li><strong>Los 14 dominios de ISO/IEC 27002:2013</strong> (solo para contextualizar la evolución a 2022): políticas de seguridad, organización, seguridad de RR. HH., gestión de activos, control de acceso, criptografía, seguridad física, seguridad en operaciones, comunicaciones, adquisición y mantenimiento de sistemas, relaciones con proveedores, gestión de incidentes, continuidad del negocio y conformidad.</li>
+<li><strong>Venta de normas:</strong> se comercializan en los portales de los organismos o vía plataformas como Amazon; comprarlas da acceso a soporte técnico, webinars, capacitaciones y cursos para certificar auditores.</li>
+</ul></details>
+
+<details class="section-block sec" id="c3-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<p>Repasar y estudiar a fondo <strong>toda</strong> la información investigada de forma individual más lo complementado en esta clase; habrá <strong>evaluación continua</strong> la próxima sesión.</p>
+</details>
+
+</div>
+</body>
+</html>
