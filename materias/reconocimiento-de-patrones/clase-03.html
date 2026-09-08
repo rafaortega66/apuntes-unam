@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 03 — Reconocimiento de Patrones</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Reconocimiento de Patrones</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Clase 03</h2>
+  <p class="prof">Ing. Rubén Omar Azuara Domínguez · 4 sep 2026 · Tema 3 — Reducción de dimensionalidad II. Reconstrucción con PCA, EigenFaces, LDA y otros métodos (t-SNE, Kernel PCA, QDA). <em>El audio de esta sesión es parcial (solo el tramo final, sobre la práctica); la teoría se completa con el deck del profesor «Clase 6 — Reducción de dimensionalidad II».</em></p>
+</div>
+
+<div class="encorto"><h4>En corto</h4><ul>
+<li><strong>Reconstrucción con PCA:</strong> como es una transformación lineal, se puede volver del espacio reducido al original: <code>X̂ = Z·Wₖᵀ + μ</code>. No es perfecta salvo que se usen todos los componentes; el error <code>‖X − X̂‖²</code> es mínimo con los k componentes de mayor varianza (mejor aproximación de rango k).</li>
+<li><strong>EigenFaces:</strong> PCA sobre una matriz de rostros <code>N×P</code> (N imágenes, P píxeles). Las primeras componentes capturan rasgos anatómicos; las últimas son ruido.</li>
+<li><strong>LDA</strong> = reducción <strong>supervisada</strong>: maximiza separación entre clases y minimiza dispersión intra-clase. Da como máximo <code>min(K−1, d)</code> discriminantes.</li>
+<li><strong>Elegir K:</strong> regla del codo · umbral de varianza (90–95 %) · criterio de Kaiser (<code>λ &gt; 1</code>).</li>
+<li><strong>Audio:</strong> sin <strong>estandarizar</strong>, el primer componente absorbe casi toda la varianza; estandarizando, la curva acumulada sube de forma uniforme. Las diferencias de <strong>signo</strong> entre métodos (covarianza / SVD / <code>sklearn</code>) no afectan: los vectores siguen siendo ortogonales.</li>
+</ul></div>
+
+<div class="examen"><h4>🎯 Para el examen</h4><ul>
+<li><strong>Centrado y escalado:</strong> entender cómo la ausencia de estandarización sesga los componentes principales hacia las variables de mayor magnitud numérica.</li>
+<li><strong>Criterios para elegir K:</strong> regla del codo, criterio de Kaiser (<code>λ &gt; 1</code>) y umbral de varianza explicada acumulada (90–95 %).</li>
+<li><strong>EigenFaces:</strong> por qué las primeras componentes capturan rasgos faciales reconocibles (ojos, boca, contorno) y las últimas solo ruido de alta frecuencia.</li>
+<li><strong>Reconstrucción:</strong> el error de reconstrucción decrece al aumentar k y es mínimo con los k componentes de mayor varianza; se relaciona con la varianza descartada.</li>
+</ul></div>
+
+<details class="section-block sec" id="c3-reconstruccion" open><summary><span class="stitle">Reconstrucción con PCA</span></summary>
+<p>PCA es una transformación lineal; si se puede proyectar a un espacio reducido, también se puede aplicar el camino inverso. La reconstrucción <strong>no es perfecta</strong> a menos que se usen todos los componentes, y permite ver cuánta información se conservó tras reducir la dimensionalidad.</p>
+<pre><code>X ∈ ℝ^(m×n)      datos originales
+Xc = X − μ        datos centrados
+Wₖ ∈ ℝ^(n×k)      k eigenvectores
+Z = Xc·Wₖ ∈ ℝ^(m×k)     datos proyectados
+X̂c = Z·Wₖᵀ       (W ortonormal)        →     X̂ = Z·Wₖᵀ + μ</code></pre>
+<p><strong>Error de reconstrucción:</strong> <code>‖X − X̂‖²</code>. Es mínimo cuando se usan los k componentes que aportan mayor varianza; esa reconstrucción minimiza el MSE entre todos los subespacios de dimensión k → es la mejor aproximación posible de rango k.</p>
+<p><strong>Del audio (práctica, dataset Wine):</strong> 13 características originales. Reconstruyendo con 1, 2, 3, … 13 componentes y graficando el MSE, el error baja paulatinamente desde un valor alto (1 componente) hasta <strong>cero</strong> al usar las 13. Cada reconstrucción tiene un margen de error que depende directamente del número de componentes retenidos.</p>
+</details>
+
+<details class="section-block sec" id="c3-eigenfaces" open><summary><span class="stitle">EigenFaces</span></summary>
+<p>Conjunto de vectores propios que pueden usarse para el reconocimiento facial.</p>
+<ul>
+<li>Las imágenes deben estar en una matriz <code>X</code> de <code>N×P</code>: <code>N</code> = número de imágenes de rostros, <code>P</code> = número total de píxeles por imagen. Se <strong>centra</strong> la matriz y se aplica PCA (por SVD).</li>
+<li><strong>Rostro promedio</strong> (media de <code>X</code>): primera visualización obligatoria. Se ve completamente liso, sin facciones particulares de ninguno de los rostros de la muestra.</li>
+<li><strong>Primeras ~10 eigenfaces:</strong> capturan la mayor cantidad de información y rasgos estructurales; se distinguen boca, ojos, contorno.</li>
+<li><strong>Últimas ~10 eigenfaces:</strong> sin información estructural útil; visualmente son como la estática / ruido blanco de una TV sin señal.</li>
+<li><strong>Validación:</strong> reconstruir una imagen del dataset con subconjuntos progresivos de 10, 20, 50, 100 … hasta 300 eigenfaces, mostrar los resultados en una sola figura y analizar cómo decrece el MSE conforme aumenta el número de eigenfaces. El error disminuye porque se recupera más varianza; se relaciona inversamente con la varianza descartada.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c3-elegir-k"><summary><span class="stitle">Cómo elegir K (criterios definidos en el audio)</span></summary>
+<ul>
+<li><strong>Regla del codo (Elbow):</strong> localizar el punto de inflexión / cambio abrupto de pendiente en la gráfica de varianza explicada acumulada y ahí fijar el número de componentes.</li>
+<li><strong>Criterio de Kaiser:</strong> conservar solo los vectores propios cuyo valor propio sea estrictamente <code>λ &gt; 1</code>.</li>
+<li><strong>Umbral de varianza:</strong> conservar los componentes indispensables para explicar en conjunto un objetivo del <strong>90–95 %</strong> de la varianza total.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c3-lda"><summary><span class="stitle">LDA — Análisis Discriminante Lineal <em>(del deck «Clase 6», no confirmado en el audio)</em></span></summary>
+<p>Técnica de reducción de dimensionalidad <strong>supervisada</strong>: maximiza la separabilidad entre clases preservando la separación de clases. Busca una proyección lineal donde las clases queden lo más separadas posible y los datos dentro de cada clase, lo más compactos posible.</p>
+<ul>
+<li><strong>Supuestos:</strong> distribución gaussiana por clase, misma matriz de covarianza en todas las clases, datos linealmente separables.</li>
+<li><strong>Dispersión entre clases</strong> <code>S_B = Σᵢ nᵢ (μᵢ − μ)(μᵢ − μ)ᵀ</code> — qué tan separadas están las medias de cada clase respecto a la media global.</li>
+<li><strong>Dispersión dentro de clases</strong> <code>S_W = Σᵢ Σ_{x∈Cᵢ} (x − μᵢ)(x − μᵢ)ᵀ</code> — varianza interna de cada clase.</li>
+<li><strong>Coeficiente de Rayleigh</strong> (LDA lo maximiza): <code>J(w) = (wᵀ S_B w) / (wᵀ S_W w)</code>. Numerador = separación entre clases; denominador = dispersión interna.</li>
+<li><strong>Cálculo:</strong> resolver <code>S_B w = λ S_W w</code>, equivalente a <code>S_W⁻¹ S_B w = λ w</code> (requiere que <code>S_W⁻¹</code> exista). Los autovectores de mayor autovalor son los ejes discriminantes. A diferencia de PCA, LDA da <strong>K−1</strong> vectores propios; máximo <code>min(K−1, d)</code>. Proyección <code>Z = X·W</code>.</li>
+<li><strong>Si <code>S_W</code> es singular</strong> (determinante 0, sin inversa): aplicar PCA antes de LDA · regularizar <code>S_W(α) = (1−α)S_W + αI</code> · pseudoinversa por SVD.</li>
+<li><strong>Ventajas:</strong> reducción supervisada, interpretable, eficiente, también sirve como clasificador. <strong>Desventajas:</strong> supone gaussianidad y covarianza compartida, no capta relaciones no lineales, límite de <code>min(K−1, d)</code> discriminantes.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c3-otros-metodos"><summary><span class="stitle">Otros métodos <em>(del deck «Clase 6», no confirmado en el audio)</em></span></summary>
+<ul>
+<li><strong>t-SNE</strong> (t-Distributed Stochastic Neighbor Embedding): método no lineal para visualización (2D/3D). Mide similitudes en el espacio original y en el reducido con una distribución gaussiana y una t de Student respectivamente, y minimiza la divergencia KL entre ambas.</li>
+<li><strong>Kernel PCA:</strong> extensión no lineal de PCA con el truco del kernel — se mapean los datos a un espacio de mayor dimensión con una función kernel y ahí se aplica PCA; todo se calcula con la matriz de kernel <code>K(xᵢ, xⱼ)</code> sin computar el mapeo explícito.</li>
+<li><strong>QDA (Quadratic LDA):</strong> extensión de LDA con fronteras cuadráticas; no asume covarianza igual entre clases — cada clase tiene su propia matriz.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c3-audio-enfasis" open><summary><span class="stitle">Lo que el profesor recalcó en el audio</span></summary>
+<ul>
+<li><strong>Efecto de la estandarización en la varianza:</strong> con datos crudos (sin estandarizar), el primer componente principal absorbe prácticamente toda la varianza del sistema por la disparidad de escalas; al estandarizar, la curva de varianza explicada acumulada asciende de forma paulatina y uniforme.</li>
+<li><strong>Diferencias de signo entre métodos:</strong> al comparar autovalores/autovectores por el cálculo clásico de covarianza, por SVD y con la clase <code>PCA</code> de scikit-learn, es normal que aparezcan diferencias de signo en los vectores. No afecta el análisis: los vectores conservan estrictamente su ortogonalidad.</li>
+<li><strong>Estandarización (definición):</strong> restar la media de cada característica y dividir entre su desviación estándar, para eliminar las diferencias de escala antes de aplicar PCA.</li>
+<li><strong>SVD en Python:</strong> no hay que programar la descomposición a mano; el módulo <code>numpy.linalg</code> tiene SVD nativa y también una función directa para la matriz de covarianza.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c3-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<p>Al terminar las instrucciones de la práctica (reporte IEEE a dos columnas), el profesor cierra la sesión. La próxima clase: <strong>revisión presencial del código</strong> en las computadoras de los alumnos y continuación de la planeación hacia <strong>LDA</strong> y la selección avanzada de características.</p>
+</details>
+
+</div>
+</body>
+</html>
