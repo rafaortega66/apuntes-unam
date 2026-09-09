@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 04 — Reconocimiento de Patrones</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Reconocimiento de Patrones</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Clase 04</h2>
+  <p class="prof">Ing. Rubén Omar Azuara Domínguez · 7 sep 2026 · Tema 4 — Evaluación de modelos. Matriz de confusión y métricas, curva ROC / AUC, sesgo–varianza, datos desbalanceados, esquemas de validación, fuga de datos y data drift. Repaso de cierre de LDA al inicio.</p>
+</div>
+
+<div class="encorto"><h4>En corto</h4><ul>
+<li>Construir el modelo es el 50 % del trabajo; el otro 50 % es evaluarlo para saber si <strong>generaliza</strong> a datos no vistos.</li>
+<li>La <strong>exactitud sola engaña</strong> en problemas desbalanceados (predecir "todos sanos" da 95 % y detecta 0 casos).</li>
+<li><strong>Matriz de confusión:</strong> filas = clase real, columnas = predicción. Diagonal = aciertos. <strong>Error Tipo I</strong> = FP; <strong>Error Tipo II</strong> = FN (suele ser el más grave).</li>
+<li><strong>Métricas:</strong> Precisión = VP/(VP+FP) · Recall = VP/(VP+FN) · Especificidad = VN/(VN+FP) · F₁ = media armónica de precisión y recall · Exactitud balanceada = (Sensibilidad + Especificidad)/2.</li>
+<li><strong>ROC:</strong> TPR (=Recall) vs. FPR (=1−Especificidad) variando el umbral. <strong>AUC</strong>: 0.5 = azar; →1 = perfecto; &lt;0.5 = predicción invertida.</li>
+<li><strong>Sesgo</strong> alto → underfitting (error alto en train y val). <strong>Varianza</strong> alta → overfitting (error bajo en train, alto en val).</li>
+<li><strong>Validación:</strong> Hold-out → K-Fold → Stratified K-Fold (conserva proporción de clases; obligatorio con datos desbalanceados).</li>
+<li><strong>Data leakage</strong> (temporal / de procesamiento / del target) y <strong>data drift</strong> (sudden, gradual, incremental, recurrente).</li>
+</ul></div>
+
+<div class="examen"><h4>🎯 Para el examen</h4><ul>
+<li><strong>Matriz de confusión:</strong> construir e interpretar (filas = real, columnas = predicción), ubicar VP/VN/FP/FN y calcular todas las métricas derivadas.</li>
+<li><strong>Tipos de error:</strong> distinguir Error Tipo I (FP) y Error Tipo II (FN) y argumentar cuál es más crítico según el dominio (diagnóstico médico vs. sistema de alarma).</li>
+<li><strong>ROC / AUC:</strong> ejes (TPR vs. FPR), significado de la diagonal aleatoria (AUC = 0.5), escala de interpretación del AUC y qué hacer si AUC &lt; 0.5 (invertir la predicción).</li>
+<li><strong>Sesgo vs. varianza:</strong> diagnosticar underfitting / overfitting con los errores de train y val, y las técnicas de solución de cada caso (regularización, dropout, early stopping, más datos, más/menos complejidad).</li>
+<li><strong>Validación:</strong> explicar Hold-out, K-Fold y cuándo es necesario Stratified K-Fold.</li>
+<li><strong>Leakage y drift:</strong> identificar las fuentes de fuga (temporal, procesamiento, target) y las estrategias de monitoreo / reentrenamiento ante el drift.</li>
+</ul></div>
+
+<details class="section-block sec" id="c4-repaso-lda" open><summary><span class="stitle">Repaso de cierre — reducción de dimensionalidad</span></summary>
+<ul>
+<li><strong>PCA</strong> (no supervisado, maximiza la varianza proyectada) vs. <strong>LDA</strong> (supervisado, usa etiquetas, maximiza la separabilidad entre clases).</li>
+<li>Tres supuestos de <strong>LDA</strong>: 1) distribución gaussiana; 2) matriz de covarianza idéntica entre clases; 3) separabilidad lineal.</li>
+<li><strong>QDA</strong> = LDA sin el supuesto de covarianza única: cada clase tiene su propia matriz de covarianza.</li>
+<li><strong>t-SNE</strong> (visualización) y <strong>Kernel PCA</strong> (kernel trick → proyectar a mayor dimensión donde sea linealmente separable, luego PCA).</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c4-matriz-confusion" open><summary><span class="stitle">Matriz de confusión y tipos de error</span></summary>
+<p><strong>Matriz de confusión:</strong> tabla de contingencia que resume las predicciones de un clasificador. Filas = clases reales (<em>ground truth</em>); columnas = clases predichas. Diagonal principal = aciertos; triángulos = errores.</p>
+<ul>
+<li><strong>VP</strong> (verdadero positivo): era positivo y se predijo positivo.</li>
+<li><strong>FN</strong> (falso negativo): era positivo y se predijo negativo — <strong>Error Tipo II</strong> (p. ej. no activar la alarma habiendo incendio; suele ser el más peligroso).</li>
+<li><strong>FP</strong> (falso positivo): era negativo y se predijo positivo — <strong>Error Tipo I</strong> (p. ej. activar la alarma sin fuego).</li>
+<li><strong>VN</strong> (verdadero negativo): era negativo y se predijo negativo.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c4-metricas" open><summary><span class="stitle">Métricas de evaluación</span></summary>
+<pre><code>Exactitud (Accuracy)     = (VP + VN) / (VP + FN + FP + VN)
+Precisión                = VP / (VP + FP)          (de lo predicho positivo, cuánto lo era)
+Recall / Sensibilidad    = VP / (VP + FN)          (de lo positivo real, cuánto se capturó)
+Especificidad            = VN / (VN + FP)          (de lo negativo real, cuánto se identificó)
+F1-Score                 = 2 · (Precisión · Recall) / (Precisión + Recall)     (media armónica)
+Exactitud balanceada     = (Sensibilidad + Especificidad) / 2
+</code></pre>
+<p>El <strong>F₁</strong> penaliza fuerte los desequilibrios extremos entre precisión y recall. La <strong>exactitud balanceada</strong> es útil en conjuntos desbalanceados.</p>
+<p><strong>Ejemplo — Spam vs. No Spam</strong> (modelo equilibrado): Accuracy 90 % · Precisión 85.7 % · Recall 85.7 % · F₁ 85.7 %.</p>
+</details>
+
+<details class="section-block sec" id="c4-roc-auc" open><summary><span class="stitle">Curva ROC y AUC</span></summary>
+<p>La <strong>curva ROC</strong> (Receiver Operating Characteristic) evalúa un clasificador <strong>probabilístico</strong> a lo largo de distintos <strong>umbrales de decisión</strong>.</p>
+<pre><code>Eje X  = FPR (tasa de falsos positivos) = FP / (FP + VN) = 1 − Especificidad
+Eje Y  = TPR (tasa de verdaderos positivos) = VP / (VP + FN) = Recall = Sensibilidad</code></pre>
+<p><strong>AUC</strong> (área bajo la curva ROC), escala de interpretación:</p>
+<ul>
+<li><code>AUC = 1.0</code> — clasificador perfecto.</li>
+<li><code>0.9 ≤ AUC &lt; 1.0</code> — excelente · <code>0.7 ≤ AUC &lt; 0.9</code> — bueno · <code>0.5 ≤ AUC &lt; 0.7</code> — regular.</li>
+<li><code>AUC = 0.5</code> — equivale al azar (la diagonal).</li>
+<li><code>AUC &lt; 0.5</code> — peor que el azar: la predicción está <strong>invertida</strong> (el modelo distingue muy bien la clase contraria → invertir la predicción).</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c4-sesgo-varianza" open><summary><span class="stitle">Sesgo, varianza, underfitting y overfitting</span></summary>
+<ul>
+<li><strong>Sesgo (bias):</strong> error sistemático por suposiciones incorrectas o simplificación excesiva. Analogía: arquero que siempre dispara desfasado a la izquierda (consistentemente inexacto).</li>
+<li><strong>Varianza (variance):</strong> sensibilidad excesiva al ruido del conjunto de entrenamiento. Analogía: arquero que dispara en todas direcciones.</li>
+<li><strong>Underfitting</strong> (alto sesgo): el modelo es demasiado simple → <strong>error alto en train y en val</strong>.</li>
+<li><strong>Overfitting</strong> (alta varianza): el modelo memoriza el ruido → <strong>error muy bajo en train, alto en val</strong>.</li>
+</ul>
+<p><strong>Partición de datos:</strong> Entrenamiento (60–80 %, ajusta los parámetros) · Validación (10–20 %, ajusta hiperparámetros y mide generalización) · Prueba (10–20 %, intocado hasta la evaluación final).</p>
+<p><strong>Degradación normal (no patológica):</strong> Accuracy Train 95 % → Val 91 % → Test 87 %.</p>
+<p><strong>Analogía de estudio:</strong> underfitting = memorizar una sola fórmula (el determinante) para todo el examen; overfitting = memorizar al pie de la letra los exámenes de los últimos 5 años y fallar cuando cambian los números.</p>
+</details>
+
+<details class="section-block sec" id="c4-desbalanceados"><summary><span class="stitle">Datos desbalanceados</span></summary>
+<p>Ejemplos reales: detección de fraude, cáncer, intrusiones en red.</p>
+<p><strong>Ejemplo — detección de cáncer:</strong> 1 000 pacientes (950 sanos = 95 %, 50 enfermos = 5 %). Un modelo que predice "todos sanos" → Accuracy = 950/1000 = <strong>95 %</strong>, pero detecta <strong>0 de 50</strong> casos de cáncer (50 falsos negativos). La exactitud alta esconde un modelo inútil.</p>
+<p><strong>Estrategias:</strong> usar métricas adecuadas (F₁, balanced accuracy, ROC) · pesos de clase (<em>class weights</em>) · re-muestreo (<em>resampling</em>) · ajuste de umbrales.</p>
+</details>
+
+<details class="section-block sec" id="c4-validacion"><summary><span class="stitle">Esquemas de validación</span></summary>
+<ul>
+<li><strong>Hold-out:</strong> división fija en Train / Val / Test. Limitación: el resultado depende de cómo cayó la partición.</li>
+<li><strong>K-Fold Cross Validation:</strong> se parte el entrenamiento en <code>K</code> folds; en <code>K</code> iteraciones, un fold distinto es validación y los <code>K−1</code> restantes son entrenamiento. <code>K</code> suele ser impar (5, 7, 9).</li>
+<li><strong>Stratified K-Fold:</strong> conserva la proporción original de las clases en cada fold. Necesario con datos desbalanceados.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c4-leakage-drift"><summary><span class="stitle">Fuga de datos y data drift</span></summary>
+<p><strong>Fuga de datos (data leakage):</strong> contaminar el entrenamiento con información de validación o prueba.</p>
+<ul>
+<li><strong>Temporal:</strong> usar información del futuro para predecir el pasado.</li>
+<li><strong>De procesamiento:</strong> calcular normalización / PCA con estadísticas del conjunto global en vez de solo las de entrenamiento.</li>
+<li><strong>Del target:</strong> incluir como característica de entrada variables derivadas directamente de la variable objetivo.</li>
+</ul>
+<p><strong>Data drift:</strong> cambio en las propiedades estadísticas de los datos en producción respecto a la distribución de entrenamiento. Se detecta con monitoreo estadístico y se maneja con reentrenamiento periódico. Tipos: <strong>sudden</strong> (repentino), <strong>gradual</strong>, <strong>incremental</strong>, <strong>recurrent</strong>.</p>
+</details>
+
+<details class="section-block sec" id="c4-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li>Viernes: exposición y revisión de la práctica.</li>
+<li>Lunes: inicio formal del bloque de <strong>clasificadores</strong>.</li>
+</ul>
+</details>
+
+</div>
+</body>
+</html>
