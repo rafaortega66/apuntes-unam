@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 03 — Organización y Arquitectura de Computadoras</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Organización y Arquitectura de Computadoras</a>
+<div class="detail-head" style="border-color:#7C9CD6"><h2>Clase 03</h2>
+  <p class="prof">M.I. José Antonio de Jesús Arredondo Garza · 7 sep 2026 · Tema 2 — Continuación: Pico 1 vs. Pico 2, RISC-V (filosofía, modularidad, libre de regalías), CISC vs. RISC, periféricos, FPU con 32 registros de punto flotante, modos de ejecución (bootloader), independencia funcional de periféricos (ADC + DMA).</p>
+</div>
+
+<div class="encorto"><h4>En corto</h4><ul>
+<li><strong>Pico 1 vs. Pico 2:</strong> impacto del overclocking, ciclo máquina, tamaño del chip, pines, periféricos (4 → 8 máquinas de estado de interfaz), memoria.</li>
+<li><strong>RISC-V:</strong> arquitectura abierta, libre de regalías, modular (instrucciones base + extensiones), alternativa a Intel (CISC) y ARM (RISC).</li>
+<li><strong>CISC vs. RISC:</strong> Intel CISC · ARM y RISC-V RISC. Anchos de palabra 32/64/128 bits.</li>
+<li><strong>RISC-V estructura:</strong> 32 registros generales (x0–x31), modularidad de instrucciones, ABI (asignación de uso por software), latencia en saltos (>1 ciclo).</li>
+<li><strong>FPU (Pico 2):</strong> 32 registros de punto flotante (s0–s31), operaciones suma/resta/mult/div/sqrt, no hay funciones trascendentales directas.</li>
+<li><strong>Bootloader Pico 2:</strong> selecciona en arranque entre ARM normal o RISC-V (un bit, ruta distinta).</li>
+<li><strong>Independencia de periféricos:</strong> ADC + DMA trabajan autónomamente sin intervención de la CPU una vez programados.</li>
+</ul></div>
+
+<div class="examen"><h4>🎯 Para el examen</h4><ul>
+<li><strong>CISC vs. RISC:</strong> Intel = CISC; ARM y RISC-V = RISC.</li>
+<li><strong>Ensamblador:</strong> overflow, carry, modos de direccionamiento (inmediato, indirecto).</li>
+<li><strong>Saltos en RISC:</strong> duran >1 ciclo máquina.</li>
+<li><strong>Independencia funcional:</strong> periféricos (ADC/DMA) funcionan autónomos una vez configurados.</li>
+<li><strong>FPU Pico 2:</strong> 32 registros s0–s31 de punto flotante; programa compilado para Pico 2 no corre en Pico 1.</li>
+</ul></div>
+
+<details class="section-block sec" id="c3-pico1-pico2" open><summary><span class="stitle">Diferencias Pico 1 vs. Pico 2</span></summary>
+<ul>
+<li><strong>Impacto del overclocking:</strong> cambios en el ciclo máquina y la capacidad de procesamiento.</li>
+<li><strong>Tamaño del chip y pines:</strong> diferencias en la organización física.</li>
+<li><strong>Periféricos:</strong> expansión de máquinas de estado de interfaz de 4 a 8.</li>
+<li><strong>Mapas de memoria:</strong> distinción entre versiones en la organización de RAM, Flash y periféricos.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c3-risc-v" open><summary><span class="stitle">RISC-V — Arquitectura abierta y modular</span></summary>
+<p><strong>Filosofía:</strong> "Proponer una arquitectura libre con un conjunto de instrucciones básico y la posibilidad de agregar instrucciones a través de modularidad". Surgió como alternativa abierta para no pagar regalías de licenciamiento.</p>
+<ul>
+<li><strong>Modularidad:</strong> conjunto de instrucciones base + extensiones.</li>
+<li><strong>Libre de regalías:</strong> contrasta con arquitecturas propietarias (Intel CISC, ARM RISC).</li>
+<li><strong>Origen:</strong> UC Berkeley (2014/2015) como proyecto de investigación.</li>
+<li><strong>Consorcio RISC-V International:</strong> miembros como Google, Intel, Huawei, Ali Cloud.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c3-cisc-risc"><summary><span class="stitle">CISC vs. RISC — Comparación de arquitecturas</span></summary>
+<ul>
+<li><strong>CISC (Complex Instruction Set Computer):</strong> Intel x86/x64 — instrucciones complejas de ancho variable, operan directamente en memoria.</li>
+<li><strong>RISC (Reduced Instruction Set Computer):</strong> ARM Cortex, RISC-V — instrucciones simples y de ancho fijo, principalmente load/store, pipeline fuerte.</li>
+<li><strong>Anchos de palabra:</strong> 32 bits, 64 bits, 128 bits (extensiones RISC-V).</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c3-risc-v-estructura" open><summary><span class="stitle">Estructura de instrucciones y registros en RISC-V</span></summary>
+<ul>
+<li><strong>Registros generales:</strong> 32 registros (x0–x31) para propósito general.</li>
+<li><strong>ABI (Application Binary Interface):</strong> normas que asignan un uso determinado a cada registro (p. ej. x0 = zero, envío de parámetros en funciones).</li>
+<li><strong>Codificación de instrucciones:</strong> modular en memoria.</li>
+<li><strong>Latencia de saltos:</strong> defecto de arquitectura RISC: las instrucciones de salto duran más de un ciclo máquina (>1 ciclo).</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c3-fpu"><summary><span class="stitle">Unidad de Punto Flotante (FPU) en Pico 2</span></summary>
+<ul>
+<li><strong>Registros:</strong> 32 registros de punto flotante (s0–s31).</li>
+<li><strong>Operaciones soportadas:</strong> suma, resta, multiplicación, división, raíz cuadrada.</li>
+<li><strong>Sin funciones trascendentales:</strong> no incluye sen, cos, exp, log de forma nativa en la FPU.</li>
+<li><strong>Portabilidad:</strong> un programa compilado para la FPU de Pico 2 no puede ejecutarse en Pico 1 (que no tiene FPU).</li>
+<li><strong>Soporte en compiladores:</strong> estado actual del soporte para instrucciones DSP aún en desarrollo.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c3-bootloader"><summary><span class="stitle">Mecanismo de selección de arquitectura en Pico 2</span></summary>
+<p><strong>Bootloader:</strong> proceso donde "el procesador detecta un determinado bit que se habilita por software al inicio a través del bootloader y toma dos caminos: uno puede ser ARM normal y el otro RISC-V". Si se arranca en modo normal de ARM, no se puede acceder a RISC-V.</p>
+<ul>
+<li>Selección en tiempo de arranque mediante un bit de control.</li>
+<li>Dos rutas de ejecución: ARM estándar o RISC-V.</li>
+<li>Decisión tomada al inicio, no intercambiable en tiempo de ejecución.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c3-independencia-perifericos" open><summary><span class="stitle">Independencia funcional de periféricos</span></summary>
+<p><strong>Definición:</strong> criterio de diseño en el que "una vez programado el periférico, no se tenga que estar refrescando cada vez", permitiendo que funcione autónomamente sin depender continuamente de la CPU.</p>
+<p><strong>Ejemplo — ADC con DMA:</strong> al configurar el Convertidor Analógico-Digital (ADC) usando acceso directo a memoria (DMA) y separar una región de RAM, el ADC realiza conversiones continuas y llena la memoria <strong>sin requerir intervención ni ciclos de CPU</strong>. Ambos núcleos pueden atender otras tareas mientras el periférico trabaja.</p>
+</details>
+
+<details class="section-block sec" id="c3-ejemplos"><summary><span class="stitle">Ejemplos y ejercicios de la clase</span></summary>
+<ul>
+<li><strong>Generación de onda cuadrada y paralelismo:</strong> diferencias entre Pico 1 y Pico 2 requieren ajustar el procedimiento de generación de ondas por cambios en la arquitectura.</li>
+<li><strong>Filtro digital en ensamblador de punto flotante:</strong> rutina que implementa un filtro usando instrucciones FPU y registros s0–s31.</li>
+<li><strong>Simulación en Visual Studio Code:</strong> uso de VS Code integrado con Make, emulador integrado (evita máquinas virtuales pesadas como QEMU).</li>
+<li><strong>Ensamblador cruzado (inline) en MicroPython:</strong> método de desarrollo rápido incrustrando código ensamblador directamente en MicroPython.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c3-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto — no examen)</em> <strong>UC Berkeley:</strong> lugar donde surgió RISC-V (2014/2015). Anécdota descriptiva del campus: óvalo gigante con pinos, inclinación, comparación con Ciudad Universitaria (CU).</li>
+<li><em>(Contexto — no examen)</em> <strong>Recursos y documentación:</strong> libros sobre RISC-V disponibles traducidos descargables, páginas de referencia rápida de instrucciones en línea, consorcio RISC-V International.</li>
+<li><em>(Contexto — no examen)</em> <strong>Expansión de memoria:</strong> disponibilidad comercial de módulo externo para expandir memoria de Pico vía interfaz serial.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c3-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li>Revisión paso a paso del <strong>conjunto de instrucciones</strong> en ensamblador, tecleando y analizando cada instrucción.</li>
+<li>Comenzar con instrucciones básicas antes de ejercicios aplicados.</li>
+<li>Práctica de <strong>direccionamiento a registros</strong>: ejercicios iniciales sin librerías intermedias.</li>
+</ul>
+</details>
+
+</div>
+</body>
+</html>
