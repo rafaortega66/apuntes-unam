@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 04 — Organización y Arquitectura de Computadoras</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Organización y Arquitectura de Computadoras</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Clase 04</h2>
+  <p class="prof">M.I. José Antonio de Jesús Arredondo Garza · 10 sep 2026 · Tema 2 (continuación) — ISA vs. Microarquitectura, CISC vs. RISC, RISC-V vs. ARM vs. x86. Raspberry Pi Pico 1 vs. Pico 2 (RP2350): FPU, benchmarks, PIO, mecanismo de selección de arquitectura en arranque. Videos técnicos: RISC-V vs ARM vs x86, Pico 2 architecture review.</p>
+</div>
+
+<div class="encorto"><h4>En corto</h4><ul>
+<li><strong>ISA vs Microarquitectura:</strong> ISA = especificación de instrucciones y registros (interfaz de programador) · Microarquitectura = implementación física en silicio (cambia cada generación).</li>
+<li><strong>CISC vs RISC:</strong> CISC = instrucciones complejas de longitud variable (1–15 bytes), más código pero heterogéneo · RISC = instrucciones simples de longitud fija, homogéneo, menor consumo.</li>
+<li><strong>Arquitecturas comerciales:</strong> x86 (CISC, servidores/PC) · ARM (RISC, móviles/Apple Silicon, licencias pagadas) · RISC-V (abierto, sin regalías, adoptado por Google/Nvidia/Alibaba).</li>
+<li><strong>Pico 1 (RP2040) vs Pico 2 (RP2350):</strong> Pico 2 = 4 núcleos (2x ARM Cortex-M33 + 2x RISC-V Hazard3), 520 KB SRAM, 4 MB Flash QSPI externa, FPU integrada, hasta 150 MHz (overclocking ~350 MHz).</li>
+<li><strong>FPU:</strong> acelerador de punto flotante integrado, 32 registros (s0–s31), reduce tiempo de ejecución de operaciones flotantes de 125 µs–220 ms a 102 µs.</li>
+<li><strong>PIO:</strong> mini-FPGA programable para crear periféricos personalizados (3 interfaces, 12 máquinas de estado en Pico 2) independientes de la CPU.</li>
+</ul></div>
+
+<div class="examen"><h4>🎯 Para el examen</h4><ul>
+<li><strong>ISA vs Microarquitectura:</strong> diferencia fundamental, ejemplos concretos (Intel x86 mantiene ISA pero cambia microarquitectura generación tras generación).</li>
+<li><strong>CISC vs RISC:</strong> características, trade-offs, ejemplos (x86 vs. RISC-V), consumo energético y densidad de código.</li>
+<li><strong>Arquitectura abierta vs propietaria:</strong> RISC-V libre de licencias · ARM con regalías · x86 cerrado.</li>
+<li><strong>Especificaciones Pico 2 (RP2350):</strong> cantidad de núcleos, SRAM, Flash externa, FPU, frecuencia base y overclocking máximo.</li>
+<li><strong>Ciclo Fetch:</strong> impacto del overclocking en la velocidad del ciclo de reloj.</li>
+<li><strong>FPU:</strong> beneficio de aceleradores de hardware en punto flotante; interpretación de benchmarks.</li>
+<li><strong>PIO:</strong> propósito como máquinas de estado programables independientes; no consume ciclos de CPU principal.</li>
+</ul></div>
+
+<details class="section-block sec" id="c4-isa-microarq" open><summary><span class="stitle">ISA vs. Microarquitectura</span></summary>
+<p><strong>Instruction Set Architecture (ISA):</strong> organización funcional del procesador desde la perspectiva del software.</p>
+<ul>
+<li>Define qué instrucciones puede ejecutar el procesador.</li>
+<li>Especifica la estructura de memoria (direccionamiento lineal, segmentado, etc.).</li>
+<li>Define el conjunto de registros visibles al programador (AX, BX, PC, SP en x86; x0–x31 en RISC-V).</li>
+<li>Codifica el "idioma" de la máquina: binario de instrucciones, formatos, modos de direccionamiento.</li>
+<li>Permanece estable durante años (ej. x86 desde 1978 mantiene compatibilidad hacia atrás).</li>
+</ul>
+<p><strong>Microarquitectura:</strong> diseño e implementación física detallada del procesador que ejecuta una ISA.</p>
+<ul>
+<li>Incluye datapath (ALU, registros, multiplexores), unidad de control, caché, predicción de saltos, ejecución fuera de orden.</li>
+<li>Cambia en cada generación de silicio para mejorar rendimiento, consumo energético y densidad transistórica.</li>
+<li>Ejemplo: Intel Pentium, Pentium Pro, Core i3/i5/i7 comparten ISA x86 pero difieren radicalmente en microarquitectura.</li>
+</ul>
+<p><strong>Implicación para el programador:</strong> código ensamblador escrito para ISA x86 ejecuta en procesadores Pentium de 1993 y en i9 moderno (compatibilidad), pero la microarquitectura determina velocidad y eficiencia.</p>
+</details>
+
+<details class="section-block sec" id="c4-cisc-risc" open><summary><span class="stitle">CISC vs. RISC — Filosofías de Diseño</span></summary>
+<p><strong>CISC (Complex Instruction Set Computer):</strong></p>
+<ul>
+<li><strong>Conjunto de instrucciones:</strong> amplio y heterogéneo (x86 tiene ~1500 instrucciones).</li>
+<li><strong>Longitud de instrucción:</strong> variable (1 a 15 bytes en x86), ocupa diferentes espacios en memoria.</li>
+<li><strong>Complejidad de operaciones:</strong> instrucción única puede realizar operaciones complejas (ej. multiplicar dos números en memoria: `IMUL [mem1], [mem2]`).</li>
+<li><strong>Código resultante:</strong> compacto, menos líneas de ensamblador para la misma tarea.</li>
+<li><strong>Ciclos de reloj:</strong> heterogéneos por instrucción (algunas tardan 1 ciclo, otras 20+).</li>
+<li><strong>Consumo energético:</strong> más alto por ciclo debido a decodificadores complejos y accesos múltiples a memoria.</li>
+<li><strong>Ejemplos:</strong> Intel x86 (1978–presente), IBM System/360 (1964).</li>
+</ul>
+<p><strong>RISC (Reduced Instruction Set Computer):</strong></p>
+<ul>
+<li><strong>Conjunto de instrucciones:</strong> reducido y ortogonal (RISC-V tiene ~50 instrucciones base).</li>
+<li><strong>Longitud de instrucción:</strong> fija (4 bytes en RISC-V, 32 bits en ARM Thumb es variable pero en bloques de 2 o 4).</li>
+<li><strong>Complejidad de operaciones:</strong> instrucciones atómicas simples (carga, almacenamiento, operación ALU, salto).</li>
+<li><strong>Código resultante:</strong> más líneas de ensamblador para resolver la misma tarea.</li>
+<li><strong>Ciclos de reloj:</strong> homogéneos, casi todas las instrucciones tardan 1 ciclo (excepto carga/almacenamiento: 2–3 ciclos).</li>
+<li><strong>Consumo energético:</strong> más bajo por ciclo, decodificadores simples.</li>
+<li><strong>Pipeline:</strong> altamente optimizado, pocas dependencias de datos entre instrucciones consecutivas.</li>
+<li><strong>Ejemplos:</strong> RISC-V (abierto, 2010–presente), ARM, MIPS.</li>
+</ul>
+<p><strong>Comparativa visual:</strong></p>
+<ul>
+<li>CISC = navaja multiusos (compleja pero versátil).</li>
+<li>RISC = herramientas especializadas (simples pero coordinadas).</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c4-arquitecturas-comerciales" open><summary><span class="stitle">Arquitecturas Comerciales: x86, ARM, RISC-V</span></summary>
+<p><strong>x86 (Intel, AMD):</strong></p>
+<ul>
+<li><strong>Filosofía:</strong> CISC, instrucciones complejas de longitud variable.</li>
+<li><strong>Mercado:</strong> PCs, servidores, estaciones de trabajo (monopolio ~95% de mercado en 2000–2015).</li>
+<li><strong>Consumo energético:</strong> alto (100–500 W en servidores).</li>
+<li><strong>Historial:</strong> Intel 4004 (1971, 2,300 transistores) → 8086 (1978) → Pentium (1993) → Core i7 (2008) → Xeon (servidores actuales).</li>
+<li><strong>Licencia:</strong> cerrada, propietaria.</li>
+<li><strong>Intento fallido en móviles:</strong> Intel Atom fue diseñado para teléfonos pero falló por disipación térmica (el teléfono se calentaba demasiado).</li>
+</ul>
+<p><strong>ARM (ARM Holdings):</strong></p>
+<ul>
+<li><strong>Filosofía:</strong> RISC, instrucciones simples de longitud fija (32 bits) o variable comprimida (Thumb: 16 bits).</li>
+<li><strong>Mercado:</strong> smartphones, tablets, Apple Silicon (M1, M2, M3, M4 en MacBook Pro), IoT.</li>
+<li><strong>Consumo energético:</strong> bajo–medio (5–15 W en smartphones, 10–30 W en M4).</li>
+<li><strong>Versiones:</strong> ARMv7 (32 bits, Cortex-A8/A9), ARMv8 (64 bits, Cortex-A72/A76), ARMv9 (Cortex-X1/A710).</li>
+<li><strong>Licencia:</strong> pagada, ARM Holdings cobra por cada chip fabricado y diseño de núcleos (ej. Cortex-M4 = licencia anual + regalías por volumen).</li>
+<li><strong>Dominancia actual:</strong> ~90% de procesadores en IoT/móviles (2023–2024).</li>
+</ul>
+<p><strong>RISC-V:</strong></p>
+<ul>
+<li><strong>Filosofía:</strong> RISC, arquitectura abierta, modular, libre de licencias y regalías.</li>
+<li><strong>Mercado:</strong> emergente, adoptado por Google (SoCs Tensor), Nvidia (chips de IA), Alibaba (Xuantie), startups de semiconductores.</li>
+<li><strong>Consumo energético:</strong> bajo (similar a ARM, por ser RISC).</li>
+<li><strong>Ventaja competitiva:</strong> no hay pago de regalías, diseño flexible, escalabilidad desde microcontroladores (32 bits) a servidores (64 bits).</li>
+<li><strong>Licencia:</strong> open-source, estándar Berkeley (BSD-like), cualquiera puede fabricar chips RISC-V sin pedir permiso.</li>
+<li><strong>Proyección:</strong> esperado como alternativa a ARM en IoT/Edge dentro de 5–10 años.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c4-pico-especificaciones" open><summary><span class="stitle">Raspberry Pi Pico: Pico 1 (RP2040) vs. Pico 2 (RP2350)</span></summary>
+<p><strong>Pico 1 (RP2040, 2021):</strong></p>
+<ul>
+<li>Procesador: 2x ARM Cortex-M0+ @ 133 MHz (inicializado a 125 MHz).</li>
+<li>Memoria SRAM: 264 KB (integrada en el die).</li>
+<li>Memoria Flash: 2 MB QSPI externa (en la placa).</li>
+<li>FPU: No (emulación por software de punto flotante en MicroPython).</li>
+<li>PIO: 2 interfaces, 8 máquinas de estado programables en total.</li>
+<li>Costo: ~$4–5 USD.</li>
+</ul>
+<p><strong>Pico 2 (RP2350, 2024):</strong></p>
+<ul>
+<li>Procesador: 2x ARM Cortex-M33 @ 150 MHz + 2x RISC-V Hazard3 @ 150 MHz (4 núcleos heterogéneos).</li>
+<li>Memoria SRAM: 520 KB (integrada en el die, 2x capacidad vs. Pico 1).</li>
+<li>Memoria Flash: 4 MB QSPI externa (2x capacidad).</li>
+<li>FPU: Sí, integrada (32 registros s0–s31 para punto flotante, acelerador de hardware).</li>
+<li>PIO: 3 interfaces, 12 máquinas de estado programables en total (50% más).</li>
+<li>Overclocking: soporta hasta ~350 MHz (vs. 250 MHz en Pico 1).</li>
+<li>Seguridad: TrustZone integrado (procesador ARM Cortex-M33 incluye seguridad).</li>
+<li>Costo: ~$8–10 USD.</li>
+</ul>
+<p><strong>Mecanismo de Selección de Arquitectura en Arranque (Pico 2):</strong> proceso controlado por software en el bootloader que determina si la placa arrancará en modo ARM Cortex-M33 o en modo RISC-V Hazard3. Implementado mediante un registro de la CPU leído en el inicio (warm boot detection).</p>
+</details>
+
+<details class="section-block sec" id="c4-fpu-benchmarks" open><summary><span class="stitle">FPU (Unidad de Punto Flotante) — Benchmarks Pico 1 vs Pico 2</span></summary>
+<p><strong>Problema:</strong> operaciones de punto flotante (multiplicación, división, trigonométricas, logaritmos) son costosas computacionalmente. En Pico 1 sin FPU integrada, la emulación por software (mediante rutinas compiladas en MicroPython) es lenta.</p>
+<p><strong>Benchmark (mismo algoritmo de procesamiento flotante):</strong></p>
+<ul>
+<li><strong>Pico 1 (RP2040) sin FPU:</strong> tiempo de ejecución entre 125 µs y 220 ms (dependiendo de la complejidad).</li>
+<li><strong>Pico 2 (RP2350) con FPU:</strong> tiempo de ejecución 102 µs (aceleración hardware ~2.15x más rápido en casos simples, hasta 2000x en operaciones complejas).</li>
+</ul>
+<p><strong>Registros de FPU:</strong> banco de 32 registros de punto flotante denominados s0 a s31 (single precision, 32 bits cada uno). Permiten operaciones FADD (suma), FMUL (multiplicación), FDIV (división), FSQRT (raíz cuadrada) en un solo ciclo de reloj.</p>
+<p><strong>Implicación:</strong> para cálculos de IA, DSP (procesamiento de señal), simulaciones físicas, la FPU integrada es crítica para rendimiento aceptable en microcontroladores.</p>
+</details>
+
+<details class="section-block sec" id="c4-pio-perifericos" open><summary><span class="stitle">PIO (Programmable I/O) — Mini-FPGA del Microcontrolador</span></summary>
+<p><strong>¿Qué es PIO?</strong> periférico dedicado que funciona como máquinas de estado programables independientes, capaces de implementar protocolos de comunicación o control de periféricos sin consumir ciclos del procesador principal.</p>
+<p><strong>Especificaciones Pico 2:</strong></p>
+<ul>
+<li>3 interfaces PIO independientes.</li>
+<li>12 máquinas de estado en total (4 por interfaz).</li>
+<li>Frecuencia de reloj: síncrona con el reloj del sistema (150 MHz en Pico 2).</li>
+<li>Capacidad: crear periféricos personalizados como SPI de 20–30 MHz, I2S (audio digital), protocolos IR, PWM, etc.</li>
+</ul>
+<p><strong>Ventaja arquitectónica:</strong> en lugar de usar interrupciones de software (costosas) o polling (consume CPU), PIO ejecuta de forma asincrónica periodos de comunicación complejos. Ejemplo: protocolo WS2812 (LED RGB addressable) se implementa en 10–15 líneas de código PIO, sin cargar a la CPU.</p>
+<p><strong>Comparativa:</strong> PIO ≈ FPGA ultraminimalista integrada en el microcontrolador.</p>
+</details>
+
+<details class="section-block sec" id="c4-nomenclatura-rp2350"><summary><span class="stitle">Desglose de la nomenclatura RP2350</span></summary>
+<ul>
+<li><strong>RP2:</strong> serie de microcontroladores de Raspberry Pi (2 = segunda generación de Pico).</li>
+<li><strong>3:</strong> número que indica la familia de procesador: 3 = ARM Cortex-M33 (presencia de Cortex-M33, no solo M0+).</li>
+<li><strong>5:</strong> encode de la capacidad de SRAM: 5 = 2^5 × 16 KB = 32 × 16 KB = 512 KB (realmente 520 KB contando overhead del sistema).</li>
+<li><strong>0:</strong> memoria Flash interna del die: 0 = 0 KB de Flash interna (utiliza 4 MB QSPI externa en la placa, conectada vía bus SPI a 30 MHz).</li>
+</ul>
+<p><strong>Implicación:</strong> la nomenclatura codifica las especificaciones de hardware de forma compacta, facilitando identificación rápida de capacidades.</p>
+</details>
+
+<details class="section-block sec" id="c4-overclocking-ciclo-fetch" open><summary><span class="stitle">Overclocking e Impacto en el Ciclo Fetch</span></summary>
+<p><strong>Ciclo Fetch (Fase 1 del ciclo de máquina):</strong> etapa donde la CPU lee la próxima instrucción desde memoria (o caché de instrucciones) y la coloca en el registro de instrucción (IR).</p>
+<p><strong>Relación con frecuencia de reloj:</strong> el ciclo fetch toma 1 ciclo de reloj (en arquitecturas RISC modernas con pipeline). Si aumentamos la frecuencia del reloj, el ciclo de reloj se acorta:</p>
+<ul>
+<li><strong>Pico 1 a 133 MHz:</strong> ciclo de reloj = 1/133 MHz ≈ 7.5 ns.</li>
+<li><strong>Pico 2 a 150 MHz (base):</strong> ciclo de reloj = 1/150 MHz ≈ 6.7 ns.</li>
+<li><strong>Pico 2 con overclocking a 350 MHz:</strong> ciclo de reloj = 1/350 MHz ≈ 2.9 ns.</li>
+</ul>
+<p><strong>Consecuencia:</strong> el fetch ocurre más frecuentemente, lo que acelera la ejecución global de programas. Sin embargo, overclocking aumenta consumo de energía y temperatura (requiere disipación térmica).</p>
+<p><strong>Limitación en Pico 2:</strong> la memoria Flash QSPI externa tiene latencia intrínseca (~30 ns), por lo que fetch desde Flash remoto es más lento que desde caché o SRAM. El overclocking mejora fetch desde SRAM pero no tanto desde Flash.</p>
+</details>
+
+<details class="section-block sec" id="c4-ensamblador-inline" open><summary><span class="stitle">Ensamblador Inline en MicroPython — Acceso Directo a Registros</span></summary>
+<p><strong>Limitación de MicroPython puro:</strong> intérprete Python compilado a bytecode, no accede directamente a registros de hardware ni a FPU.</p>
+<p><strong>Solución: Decorador @micropython.asm_thumb en MicroPython:</strong> permite declarar subrutinas nativas en ensamblador ARM Thumb, operando directamente sobre registros y aceleradores (FPU).</p>
+<p><strong>Ejemplo (pseudocódigo):</strong></p>
+<pre><code>@micropython.asm_thumb
+def add_floats(r0, r1):
+    # r0, r1 son parámetros de entrada (registros flotantes s0, s1)
+    VADD(s0, s1, s2)  # s0 += s1, resultado en s2
+    # retorna s2 en r0
+</code></pre>
+<p><strong>Beneficio:</strong> combina flexibilidad de Python para lógica de control + velocidad de ensamblador nativo para operaciones críticas (DSP, cálculos flotantes).</p>
+</details>
+
+<details class="section-block sec" id="c4-videos-proyectados"><summary><span class="stitle">Videos Técnicos Proyectados en Clase</span></summary>
+<p><strong>Video 1: RISC-V vs. ARM vs. x86 (13 minutos)</strong></p>
+<ul>
+<li>Explora las diferencias fundamentales entre ISA y microarquitectura.</li>
+<li>Analiza filosofías CISC (x86) vs. RISC (ARM, RISC-V).</li>
+<li>Contexto histórico: irrupción de RISC-V como disruptor en el mercado de licencias de ARM.</li>
+<li>Impacto en el costo de fabricación y adopción por fabricantes chinos (Alibaba Xuantie, Nvidia).</li>
+</ul>
+<p><strong>Video 2: Reseña Técnica de Raspberry Pi Pico 2 (RP2350)</strong></p>
+<ul>
+<li>Desglose de la arquitectura heterogénea: 2x ARM Cortex-M33 + 2x RISC-V Hazard3.</li>
+<li>Capacidades de la FPU integrada.</li>
+<li>Demostraciones de PIO programado para periféricos personalizados.</li>
+<li>Comparativa de rendimiento vs. Pico 1 en benchmarks de punto flotante.</li>
+<li>Seguridad TrustZone y aislamiento de código de confianza.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c4-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> <strong>Crítica del M.I. Arredondo a MicroPython:</strong> expresó su descontento con que Raspberry Pi enfatice MicroPython, señalando que oculta la arquitectura subyacente e incentiva el uso de librerías genéricas en lugar de programación de registros directa.</li>
+<li><em>(Contexto)</em> <strong>Anécdota sobre Orange Pi 6:</strong> destacó la potencia de la tarjeta china Orange Pi 6 (12 núcleos ARM/RISC-V heterogéneos, opción de declarar núcleos adicionales como RISC-V, memoria LPDDR5 hasta 24 GB, 2 slots M.2 NVMe) a precio muy accesible (~$120 USD). Comentó que Orange Pi "le está comiendo el mandado" a Raspberry Pi en el mercado de maker/IoT profesional.</li>
+<li><em>(Contexto)</em> <strong>Reflexión sobre regalías en arquitecturas propietarias:</strong> explicó cómo ARM Holdings no solo cobra licencia de diseño inicial (~$10–50 millones USD), sino que exige regalías porcentuales por cada chip fabricado si se alcanza cierto volumen de producción anual (~10 millones de unidades). Esta estructura de costos hace que RISC-V sea tan disruptivo: sin pago de regalías, las márgenes de ganancia en chips de volumen alto son significativamente mayores.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c4-pendiente"><summary><span class="stitle">Pendiente / próximas clases</span></summary>
+<ul>
+<li><strong>Tema 3 (El Procesador):</strong> profundización completa en Transferencia entre Registros (RTL), diseño detallado de la ALU, Datapath (banco de registros, multiplexores, control de buses), Unidad de Control (microprogramada vs. hardwired), ciclos de máquina (Fetch, Decode, Execute, Write Back).</li>
+<li><strong>Práctica directa en ensamblador ARM Thumb:</strong> próxima clase se iniciará la escritura paso a paso de:
+   * Toggle de un pin de puerto (LED).
+   * Rutina de lectura del registro de ID de procesador (CPUID).
+   * Implementación de una macro de delay en ciclos de reloj.</li>
+</ul>
+</details>
+
+</div>
+</body>
+</html>
