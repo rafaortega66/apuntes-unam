@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 03 — Minería de Datos</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Minería de Datos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 03</h2>
+  <p class="prof">M.C. José Concepción Roberto Olvera López · Fecha: 8 sep 2026 · Tema 2 (continuación) — Servidores de bases de datos, On-Premise vs. Nube, Data Lake vs. Data Warehouse, ecosistema Big Data (Kafka, Spark, Hadoop/HDFS/MapReduce). Exposiciones de KDD: News Corp, Bwood, Nu Bank.</p>
+</div>
+
+<div class="encorto"><h4>En corto</h4><ul>
+<li><strong>Servidores de BD:</strong> SAP HANA/Sybase IQ (columnares con 80–90% de compresión), Oracle, IBM, Microsoft SQL Server.</li>
+<li><strong>On-Premise vs. Cloud:</strong> On-Premise (~30% del mercado) = baja latencia, sistemas de producción físicos · Cloud = escalabilidad, costo inicial $10–20 K MXN, rápida implementación.</li>
+<li><strong>Data Lake vs. DW:</strong> Data Lake = datos crudos/no estructurados (imágenes, JSON), flexibilidad · Data Warehouse = estructurado, esquemas definidos, consultas de negocio.</li>
+<li><strong>Big Data:</strong> Spark (procesamiento en memoria ultra rápido) · Kafka (eventos en tiempo real) · Hadoop/HDFS/MapReduce (distribución por nodos).</li>
+<li><strong>KDD aplicado:</strong> News Corp (clustering + series de tiempo) · Bwood/Delivery (clasificación + regresión) · Nu Bank (LightGBM/XGBoost + Isolation Forest + PCA + RFM + SHAP).</li>
+<li><strong>Examen:</strong> Solo Tema 1 y Tema 2 (NO Tema 3). Énfasis en Cloud/On-Prem, Data Lake/DW, ecosistema Big Data, validación cruzada, ROC/AUC, KS.</li>
+</ul></div>
+
+<div class="examen"><h4>🎯 Para el examen</h4><ul>
+<li><strong>Arquitecturas On-Premise vs. Cloud:</strong> casos de uso, costos, latencia, escalabilidad.</li>
+<li><strong>Data Lake vs. Data Warehouse:</strong> diferencia fundamental, cuándo usar cada uno, flexibilidad vs. estructura.</li>
+<li><strong>Ecosistema Big Data:</strong> Kafka (eventos en tiempo real), Spark (procesamiento en memoria), Hadoop/HDFS/MapReduce (distribución).</li>
+<li><strong>Validación de modelos:</strong> validación cruzada (Cross-Validation), balanceo de clases (SMOTE), métricas ROC/AUC/KS.</li>
+<li><strong>Nota crítica:</strong> El Tema 3 (Métodos y algoritmos) NO entra en el examen. Se impartirá después del examen.</li>
+</ul></div>
+
+<details class="section-block sec" id="c3-servidores-bd" open><summary><span class="stitle">Servidores de bases de datos — Architeturas columnares</span></summary>
+<ul>
+<li><strong>SAP HANA y Sybase IQ:</strong> sistemas columnares que comprimen datos de forma drástica (80–90% de compresión). Ejemplo: 100 GB sin comprimir → 10–20 GB comprimidos. Basados en almacenamiento por columna en lugar de por fila.</li>
+<li><strong>Oracle Database:</strong> servidor relacional tradicional, soporta datos de empresa, compatible con aplicaciones legacy.</li>
+<li><strong>IBM Db2 / Informix:</strong> alternativa de datos en memoria para transacciones de alta velocidad.</li>
+<li><strong>Microsoft SQL Server:</strong> integración con ecosistema Azure, soporta OLTP y OLAP.</li>
+<li><strong>PostgreSQL / MySQL:</strong> opciones open-source de bajo costo para startups y proyectos sin presupuesto elevado.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c3-onprem-vs-cloud" open><summary><span class="stitle">Arquitecturas On-Premise vs. Nube (Cloud)</span></summary>
+<p><strong>On-Premise (~30% del mercado):</strong></p>
+<ul>
+<li>Requisito de baja latencia: sistemas de cotización en bolsa de valores requieren respuesta en milisegundos.</li>
+<li>Sistemas de producción físicos: bases de datos que deben permanecer en instalaciones del cliente por regulación o seguridad.</li>
+<li>Control total de hardware, infraestructura y datos.</li>
+<li>Costo inicial alto, mantenimiento de personal TI/DBA en sitio.</li>
+</ul>
+<p><strong>Cloud (~70% del mercado):</strong></p>
+<ul>
+<li>Rápida implementación: provisionar servidores en minutos, no en meses.</li>
+<li>Escalabilidad automática: Google atiende 100 millones de usuarios simultáneos; Ticketmaster cae con 10,000 conexiones.</li>
+<li>Costo inicial accesible: $10,000–20,000 MXN para infraestructura inicial (AWS, Azure, Oracle Cloud, IBM Cloud).</li>
+<li>Pago por consumo (pay-as-you-go), sin inversión en hardware físico.</li>
+<li>Responsabilidad compartida de seguridad y actualizaciones con el proveedor.</li>
+</ul>
+<p><strong>Decisión de Gerentes TI/DBAs:</strong> evaluación de infraestructura preexistente, compatibilidad con stack tecnológico actual y comparativa de costos de almacenamiento para Data Lakes.</p>
+</details>
+
+<details class="section-block sec" id="c3-datalake-vs-dw" open><summary><span class="stitle">Data Lake vs. Data Warehouse</span></summary>
+<p><strong>Data Lake (Lago de Datos):</strong></p>
+<ul>
+<li>Almacena datos crudos y no estructurados: imágenes, documentos PDF, archivos JSON, logs de aplicación, datos de sensores IoT.</li>
+<li>Alta flexibilidad: "ingesta primero, preguntas después" (schema-on-read).</li>
+<li>Volumen masivo: petabytes de datos históricos sin depuración previa.</li>
+<li>Menor costo de almacenamiento (archivos comprimidos en HDFS o S3).</li>
+<li>Riesgo: convertirse en "swamp" (pantano) sin gobernanza y catalogación.</li>
+</ul>
+<p><strong>Data Warehouse (Almacén de Datos):</strong></p>
+<ul>
+<li>Almacena datos estructurados, limpios y esquematizados para consultas de negocio ejecutivas.</li>
+<li>Requiere esquemas definidos a priori (schema-on-write): tablas de dimensiones y hechos (Kimball, Star Schema).</li>
+<li>Optimizado para reportes y análisis OLAP (Online Analytical Processing).</li>
+<li>Mayor costo de almacenamiento, pero consultas más rápidas y confiables.</li>
+<li>Excelente para toma de decisiones gerencial con datos validados.</li>
+</ul>
+<p><strong>Analogía:</strong> Data Lake es la cantera de minerales; Data Warehouse es la joyería terminada y pulida.</p>
+</details>
+
+<details class="section-block sec" id="c3-bigdata-ecosystem" open><summary><span class="stitle">Ecosistema Big Data — Kafka, Spark, Hadoop</span></summary>
+<p><strong>Apache Kafka:</strong> plataforma de streaming de eventos en tiempo real.</p>
+<ul>
+<li>Ingesta masiva de eventos desde múltiples fuentes simultáneas (IoT, transacciones, logs de aplicación).</li>
+<li>Modelo productor-consumidor desacoplado: productores no esperan confirmación de consumidores.</li>
+<li>Tolerancia a fallos mediante replicación de particiones entre brokers de Kafka.</li>
+<li>Casos de uso: monitoreo de alertas, recomendaciones en tiempo real, detección de fraude en transacciones.</li>
+</ul>
+<p><strong>Apache Spark:</strong> procesamiento distribuido en memoria ultra rápido.</p>
+<ul>
+<li>100x más rápido que Hadoop MapReduce clásico porque mantiene datos en RAM entre iteraciones.</li>
+<li>Soporta SQL, Python (PySpark), Scala, Java.</li>
+<li>APIs de alto nivel: DataFrames, Datasets, SQL queries.</li>
+<li>Casos de uso: transformación de datos (ETL), machine learning a escala, análisis exploratorio de datasets grandes.</li>
+</ul>
+<p><strong>Hadoop / HDFS / MapReduce:</strong> distribución por nodos para procesamiento batch.</p>
+<ul>
+<li><strong>HDFS (Hadoop Distributed File System):</strong> almacena datos replicados en múltiples nodos (3 réplicas por defecto). Tolera fallos de hardware automáticamente.</li>
+<li><strong>MapReduce:</strong> paradigma de programación que divide un problema grande en tareas pequeñas (Map) y agrega resultados (Reduce). Funciona en paralelo en múltiples nodos.</li>
+<li>Más lento que Spark pero altamente confiable para procesamiento batch nocturno de petabytes.</li>
+<li>Fundamento de gran parte de la infraestructura de Big Data histórica (2008–2015).</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c3-caso-newscorp" open><summary><span class="stitle">Caso 1: News Corporation (Equipo 3)</span></summary>
+<p><strong>Problema de Negocio:</strong></p>
+<ul>
+<li>Caída de confianza en noticieros del 75% (2018) al 46% (2022).</li>
+<li>Causa: incremento de programación de opinión (entretenimiento) vs. reportaje informativo.</li>
+<li>Riesgo paradójico: los programas de opinión generan 30% de los ingresos totales, pero erosionan credibilidad de marca.</li>
+</ul>
+<p><strong>Métodos Analíticos Aplicados:</strong></p>
+<ul>
+<li><strong>K-Means:</strong> agrupar audiencias por preferencias (noticias duras vs. opinión).</li>
+<li><strong>Reglas de Asociación:</strong> identificar patrones: si ven noticia X, ¿qué programa suele seguir?</li>
+<li><strong>Análisis de Redes:</strong> conectividad entre temas y programas en redes sociales.</li>
+<li><strong>Series de Tiempo:</strong> tendencia mensual de confianza vs. % de programación de opinión.</li>
+<li><strong>Regresión:</strong> cuantificar relación entre incremento de opinión y caída de confianza.</li>
+<li><strong>Redes Neuronales:</strong> predicción no lineal de confianza futura bajo distintos escenarios de programación.</li>
+<li><strong>Modelos de Optimización:</strong> balancear ingreso (30% de opinión) vs. credibilidad (máx. confianza).</li>
+</ul>
+<p><strong>Solución Recomendada:</strong> reducir programas de opinión en 15% e incrementar programación informativa/noticias para recuperar índice de confianza sin sacrificar ingresos críticos.</p>
+</details>
+
+<details class="section-block sec" id="c3-caso-bwood" open><summary><span class="stitle">Caso 2: Bwood / App de Delivery (Equipo 1)</span></summary>
+<p><strong>Problema de Negocio:</strong></p>
+<ul>
+<li>Inexactitud en tiempos de entrega estimados: cliente pide comida en 30 min, pero llega en 45 min → frustración y cancelaciones.</li>
+<li>Desbalance entre oferta y demanda: picos de pedidos sin suficientes repartidores disponibles.</li>
+<li>Fricciones operacionales: retrasos acumulativos en cocina, tráfico, asignación de rutas.</li>
+</ul>
+<p><strong>Métodos Analíticos Aplicados:</strong></p>
+<ul>
+<li><strong>Clasificación Binaria:</strong> ¿Entregado a tiempo (SÍ/NO)? ¿Cancelado (SÍ/NO)? Entrenamiento con histórico de 50,000 pedidos.</li>
+<li><strong>Regresión:</strong> predicción de duración del pedido en minutos (integración de horario, zona geográfica, demanda actual).</li>
+<li><strong>Clusterización (K-Means):</strong> agrupar comportamientos similares (usuarios que siempre piden entre 6–8 PM, pedidos desde zona norte, etc.).</li>
+<li><strong>Árboles de Decisión:</strong> identificar factores críticos de retraso (repartidor sin GPS, cocina saturada, tráfico vehicular).</li>
+</ul>
+<p><strong>Validación del Modelo:</strong></p>
+<ul>
+<li>Validación cruzada (5-fold Cross-Validation) con datos históricos de 3 meses.</li>
+<li>Criterios de despliegue: velocidad de desarrollo (1 semana), facilidad de implementación en API, bajo costo de mantenimiento.</li>
+</ul>
+<p><strong>Impacto Esperado:</strong> mejora en predicción de tiempos (±5 minutos de error), reducción de cancelaciones, mejor asignación de repartidores en tiempo real.</p>
+</details>
+
+<details class="section-block sec" id="c3-caso-nubank" open><summary><span class="stitle">Caso 3: Nu Bank (Equipo 10) — Evaluación de Riesgo Crediticio</span></summary>
+<p><strong>Problema de Negocio:</strong></p>
+<ul>
+<li>Mercado latinoamericano (México, Brasil, Colombia) con millones de personas <strong>sin historial crediticio</strong> documentado.</li>
+<li>Riesgo: otorgar crédito a solicitantes sin Buró de Crédito confiable. Alternativa: usar datos alternativos (comportamiento de gasto, transacciones móviles, datos demográficos).</li>
+<li>Regulación: CNBV (México) y Banxico requieren explicabilidad del modelo de decisión crediticia (no "caja negra").</li>
+</ul>
+<p><strong>Métodos Analíticos Aplicados:</strong></p>
+<ul>
+<li><strong>LightGBM y XGBoost:</strong> modelos de gradient boosting para predicción de probabilidad de incumplimiento (Default Rate).</li>
+<li><strong>Regresión Logística Regularizada (Ridge/Lasso):</strong> interpretable, fácil de implementar en producción.</li>
+<li><strong>Isolation Forest:</strong> detección de valores atípicos (anomalías crediticias, intentos de fraude organizado).</li>
+<li><strong>PCA (Análisis de Componentes Principales):</strong> reducción de dimensionalidad en features demográficas/transaccionales (de 150 variables → 20 componentes).</li>
+<li><strong>Segmentación RFM:</strong> Recency (última transacción), Frequency (frecuencia de uso), Monetary (monto gastado) para agrupar usuarios por valor y riesgo.</li>
+</ul>
+<p><strong>Validación y Métricas:</strong></p>
+<ul>
+<li><strong>ROC/AUC:</strong> sensibilidad vs. especificidad (capturar morosos sin rechazar buenos clientes).</li>
+<li><strong>Estadístico KS (Kolmogorov-Smirnov):</strong> discriminación entre buenos y malos pagadores (target ≥ 0.30 típicamente).</li>
+<li><strong>SMOTE:</strong> balanceo de clases (los morosos son ~2–5% de la población, imbalance).</li>
+<li><strong>SHAP (SHapley Additive exPlanations):</strong> explicabilidad por contrato regulatorio (mostrar por qué se aprobó/rechazó cada solicitud a cliente y regulador).</li>
+</ul>
+<p><strong>Impacto Esperado:</strong> ampliar acceso crediticio a millones de usuarios bancarizados sin historial formal, mantener tasa de incumplimiento baja (< 3%), cumplir regulación de explicabilidad.</p>
+</details>
+
+<details class="section-block sec" id="c3-rubrica-proyecto" open><summary><span class="stitle">Rúbrica y Logística del Proyecto Arquitectura de Datos</span></summary>
+<p><strong>Reorganización de Equipos:</strong> el profesor coordinó la reconfiguración de integrantes en los equipos para el Proyecto 1 (Presentación de KDD).</p>
+<p><strong>Estructura del Proyecto:</strong></p>
+<ol>
+<li><strong>Presentación en PowerPoint:</strong> 10 diapositivas máximo, duración de exposición 7 minutos máximo (regla ejecutiva).</li>
+<li><strong>Documento Técnico (Anexo):</strong> rigor matemático, detalles de algoritmos, matrices de confusión, código, formatos de datos (JSON, CSV, bases relacionales).</li>
+<li><strong>Presentación ejecutiva:</strong> enfocada en Director General / Tomadores de decisiones. Texto minimalista, imágenes corporativas, conclusiones de negocio.</li>
+</ol>
+<p><strong>Criterios de Calificación:</strong></p>
+<ol>
+<li>Contenido técnico del documento anexo.</li>
+<li>Claridad y impacto visual (PowerPoint).</li>
+<li>Dominio del conocimiento temático.</li>
+<li>Desenvolvimiento, seguridad y confianza al hablar.</li>
+</ol>
+<p><strong>Fecha de Examen:</strong> confirmada al cierre de la clase (consúltalo con tus compañeros).</p>
+</details>
+
+<details class="section-block sec" id="c3-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> <strong>Experiencia con SAP HANA:</strong> el profesor relató su experiencia laboral implementando sistemas SAP HANA y Sybase IQ, destacando la capacidad de compresión de 80–90% en bases columnares.</li>
+<li><em>(Contexto)</em> <strong>Latencia en Casas de Bolsa:</strong> explicación de cómo los algoritmos de trading requieren respuesta en milisegundos, imposibilitando arquitecturas con latencia o dependencia de Cloud remoto.</li>
+<li><em>(Contexto)</em> <strong>Escalabilidad: Google vs. Ticketmaster:</strong> comparación dramática entre Google (100 millones de usuarios simultáneos) y Ticketmaster (colapso con 10,000 conexiones simultáneas para compra de boletos).</li>
+<li><em>(Contexto)</em> <strong>Decisiones de Infraestructura:</strong> gerentes de TI y DBAs negocian con proveedores (AWS, Azure, Oracle) basándose en costo de almacenamiento para Data Lakes y compatibilidad con stack tecnológico existente.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c3-pendiente"><summary><span class="stitle">Pendiente / próximas clases</span></summary>
+<ul>
+<li><strong>Tema 3 (El proceso de minería de datos):</strong> completamente pendiente de impartir. Se abordará tras el examen de Temas 1 y 2.</li>
+<li><strong>Secuencia 3.5:</strong> metodología detallada de Identificar modelo → Identificar método → Identificar algoritmo → Generar → Validar → Mejorar.</li>
+<li><strong>Los 7 métodos (3.4):</strong> profundización en Clasificación, Regresión, Agrupación, Sumarización, Dependencia/Correlación, Reglas de Asociación y Detección de Cambios.</li>
+<li><strong>Validación Cruzada (Tema 4):</strong> estrategias avanzadas de validación, comparación de esquemas, evaluación de predicción numérica, LDM.</li>
+</ul>
+</details>
+
+</div>
+</body>
+</html>
