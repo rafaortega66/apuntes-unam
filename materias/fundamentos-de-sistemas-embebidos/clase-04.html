@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 04 — Fundamentos de Sistemas Embebidos</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Fundamentos de Sistemas Embebidos</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 04</h2>
+  <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 7 sep 2026 · Tema 2 (continuación) — Evolución x86 (Pentium P5 a AMD64), pipelines U/V, ejecución fuera de orden, compilación GCC, alineación de datos, MMX/SSE, batalla IA-64 vs. AMD64, HyperTransport e IMC.</p>
+</div>
+
+<div class="encorto"><h4>En corto</h4><ul>
+<li><strong>Distribución estadística:</strong> 60–75 % cargas/almacenamientos (simples) · 25–40 % cómputo pesado (FPU).</li>
+<li><strong>Pentium P5 (1993):</strong> doble pipeline U (cualquier instrucción) y V (solo simple load/store), separación interna de caché I/D.</li>
+<li><strong>Compilación GCC:</strong> `-c` (objeto .o) · `-S` (ensamblador .s) · `ld` (enlazador) para inspeccionar instrucciones exactas.</li>
+<li><strong>Alineación (struct packing):</strong> memoria en palabras de 8 bytes; relleno (padding) vs. empaquetado (`__attribute__((packed))`) para transmisión en ráfaga.</li>
+<li><strong>Evolución:</strong> MMX (1997, 64 bits SIMD compartidos con FPU) → SSE (128 bits XMM independientes) → NetBurst (20+ etapas, alto consumo).</li>
+<li><strong>Pentium Pro (P6):</strong> PAE (36 bits/64 GB), ejecución fuera de orden, especulativa, renombrado de registros.</li>
+<li><strong>Guerra 64 bits:</strong> Intel Itanium (IA-64) no retrocompatible = fracaso · AMD64/Opteron (x86-64) retrocompatible = éxito.</li>
+<li><strong>AMD Opteron:</strong> IMC integrado, HyperTransport, controlador de memoria en el die.</li>
+</ul></div>
+
+<div class="examen"><h4>🎯 Para el examen</h4><ul>
+<li><strong>Distribución de instrucciones:</strong> explicar por qué ~75 % son load/store y cómo fundamenta pipelines U/V y filosofía RISC.</li>
+<li><strong>Reducción algorítmica:</strong> optimización de complejidad a O(N log N) mediante ordenamiento (cierre convexo); relación con manipulación de memoria.</li>
+<li><strong>Mecanismos de aceleración:</strong> diferenciar Out-of-Order Execution, Ejecución Especulativa y Renombrado de Registros en multitarea y servidores.</li>
+<li><strong>Alineación de memoria:</strong> efecto de padding en structs de 64 bits; empaquetado para transmisión en ráfaga.</li>
+<li><strong>Evolución x86:</strong> de Pentium P5 a AMD64; retrocompatibilidad vs. rendimiento.</li>
+</ul></div>
+
+<details class="section-block sec" id="c4-distribucion-instrucciones" open><summary><span class="stitle">Distribución estadística de instrucciones</span></summary>
+<p><strong>Regla del 75/25 (o 60/40):</strong> en cualquier programa compilado:</p>
+<ul>
+<li><strong>60–75 %</strong> = operaciones simples de <strong>carga y almacenamiento</strong> (load/store), comparaciones, incrementos de índices. Se resuelven en el pipeline secundario V en pocos ciclos.</li>
+<li><strong>25–40 %</strong> = cómputo pesado: cálculo numérico, trigonométricas (sen, cos), logaritmos, exponenciales, derivadas, integrales, sigmoides para IA, multiplicación de matrices. Requieren FPU y pueden consumir cientos/miles de ciclos.</li>
+</ul>
+<p><strong>Implicación arquitectónica:</strong> esta distribución fundamenta la separación de pipelines en el Pentium P5 y la filosofía RISC de mantener instrucciones simples rápidas para aprovechar los ciclos muertos.</p>
+</details>
+
+<details class="section-block sec" id="c4-pentium-p5" open><summary><span class="stitle">Pentium P5 (1993) — Arquitectura superescalar de doble pipeline</span></summary>
+<ul>
+<li><strong>Pipeline U (principal):</strong> capaz de ejecutar cualquier instrucción, incluyendo cómputo pesado en FPU.</li>
+<li><strong>Pipeline V (secundario):</strong> optimizado únicamente para instrucciones simples (load/store) en paralelo.</li>
+<li><strong>Caché separada:</strong> aunque la RAM sea unificada (Von Neumann/CISC), internamente se separan caché de código (I-cache) y datos (D-cache) para evitar cuellos de botella en el bus.</li>
+<li><strong>Transición arquitectónica:</strong> de la serie 286/386/486 (pipeline simple de 5 etapas) a superescalar con dos pipelines independientes.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c4-compilacion-gcc" open><summary><span class="stitle">Herramientas de compilación — GCC y banderas clave</span></summary>
+<p><strong>Proceso de compilación modular en sistemas embebidos:</strong></p>
+<ul>
+<li><strong>Compilación directa:</strong> <code>gcc programa.c -o ejecutable</code> → binario final (o <code>a.out</code> sin `-o`).</li>
+<li><strong>Compilación por paso de objeto (`-c`):</strong> <code>gcc -c modulo1.c</code> → genera `modulo1.o`. Permite compilación incremental mediante `make` o `CMake` (comparación de fechas de modificación: si `.c` no cambió, evita recompilar).</li>
+<li><strong>Generación de ensamblador (`-S`):</strong> <code>gcc -S programa.c</code> → genera `programa.s` en código ASM humanamente legible. <strong>Propósito en sistemas embebidos:</strong> inspeccionar a nivel de registros, detectar cuellos de botella de CPU, realizar optimizaciones finas.</li>
+<li><strong>El enlazador (`ld`):</strong> toma todos los archivos objeto (`.o`) y librerías para construir el ejecutable final.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c4-alineacion-memory" open><summary><span class="stitle">Alineación de memoria y struct packing</span></summary>
+<p>En arquitecturas de 64 bits, la memoria se organiza en <strong>palabras de 8 bytes</strong> (no por bytes).</p>
+<p><strong>Ejemplo de struct con padding (desperdicio):</strong></p>
+<pre><code>struct Datos {
+    int a;    // 4 bytes nominales → 8 bytes (alineado a palabra)
+    int b;    // 4 bytes nominales → 8 bytes
+    double c; // 8 bytes nominales → 8 bytes
+};
+// Cálculo teórico: 4 + 4 + 8 = 16 bytes
+// Realidad: 8 + 8 + 8 = 24 bytes (relleno/padding)</code></pre>
+<p><strong>Solución — Empaquetado (`packed`):</strong> directiva del compilador para forzar almacenamiento contiguo sin bytes de relleno, optimizando transmisión en ráfaga por bus serie/red:</p>
+<pre><code>struct Datos {
+    int a;
+    int b;
+    double c;
+} __attribute__((packed));  // Ahora pesa exactamente 16 bytes</code></pre>
+</details>
+
+<details class="section-block sec" id="c4-mmx-sse" open><summary><span class="stitle">Extensiones SIMD — MMX y SSE</span></summary>
+<ul>
+<li><strong>MMX (1997):</strong> extensión SIMD de 64 bits (compartida físicamente con la FPU). Manipulable como 8 `char`, 4 `short`, 2 `int` o 1 `long`. Paralelismo a nivel de palabra.</li>
+<li><strong>Memoria DDR (Double Data Rate):</strong> tecnología que duplica ancho de banda efectivo transfiriendo datos en flanco de subida Y de bajada de reloj, sin ensanchar el bus físico.</li>
+<li><strong>SSE (Streaming SIMD Extensions):</strong> reemplaza MMX introduciendo 8 registros independientes de 128 bits (XMM), desvinculados de la FPU. 70 nuevas instrucciones vectoriales para paralelismo de datos más potente.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c4-pentium-pro" open><summary><span class="stitle">Pentium Pro (P6) — Salto a arquitectura moderna</span></summary>
+<ul>
+<li><strong>PAE (Physical Address Extension):</strong> extiende bus de direcciones a 36 bits para direccionar hasta 64 GB de RAM, manteniendo registros internos y espacio lógico en 32 bits.</li>
+<li><strong>Ejecución fuera de orden (Out-of-Order Execution):</strong> reordena dinámicamente instrucciones entrantes para ejecutar las que ya tienen datos listos en caché, aprovechando ciclos de reloj.</li>
+<li><strong>Ejecución especulativa:</strong> ejecuta por adelantado ramas de código o instrucciones antes de saber si serán necesarias.</li>
+<li><strong>Renombrado de registros (Register Renaming):</strong> mapeo dinámico de registros nominales (AX, BX) hacia banco de registros físicos libres más grande, permitiendo ejecutar múltiples hilos en paralelo sin conflictos de dependencia.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c4-evolucion-x86"><summary><span class="stitle">Evolución de x86 — Pentium II, III, 4</span></summary>
+<ul>
+<li><strong>Pentium II (1997):</strong> integra P6 con cache L2 externo, mantiene SSE inicial.</li>
+<li><strong>Pentium III (1999):</strong> añade SSE (8 registros XMM de 128 bits), desvincula del FPU, 70 nuevas instrucciones vectoriales.</li>
+<li><strong>Pentium 4 / NetBurst (2000):</strong> pipeline profundo de <strong>más de 20 etapas</strong> diseñado para alcanzar altas frecuencias (hasta 3.8 GHz), pero altamente ineficiente energéticamente por disipación de calor (400–500 W de consumo).</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c4-guerra-64bits" open><summary><span class="stitle">Guerra de los 64 bits — IA-64 vs. AMD64</span></summary>
+<ul>
+<li><strong>Intel Itanium (IA-64):</strong> arquitectura mononúcleo de 64 bits <strong>no retrocompatible</strong> con x86 (IA-32). Requería recompilar completamente sistemas operativos y aplicaciones → <strong>fracaso comercial</strong>.</li>
+<li><strong>AMD64 / Opteron (x86-64):</strong> arquitectura de 64 bits con <strong>retrocompatibilidad nativa total</strong>:
+<ul>
+<li>Modo Real (8086)</li>
+<li>Modo Protegido (286/386)</li>
+<li>Modo Largo (64 bits)</li>
+</ul>
+Esto permitió migración suave de software heredado → <strong>éxito global de x86-64</strong>.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c4-amd-opteron" open><summary><span class="stitle">AMD Opteron — Innovaciones arquitectónicas</span></summary>
+<ul>
+<li><strong>IMC (Integrated Memory Controller):</strong> integración del controlador de memoria directamente en el die del procesador, eliminando dependencia del Northbridge externo.</li>
+<li><strong>HyperTransport:</strong> conmutador crossbar de alta velocidad para interconectar múltiples núcleos e interprocesadores en sistemas servidores.</li>
+<li><strong>Coherencia de caché:</strong> protocolo de sincronización entre cachés de múltiples procesadores en el mismo die o en sistemas de múltiples procesadores.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c4-algoritmo-cierre-convexo"><summary><span class="stitle">Ejemplo — Reducción de complejidad: cierre convexo</span></summary>
+<p><strong>Problema:</strong> dado un conjunto de puntos en un plano, encontrar el contorno convexo que los delimita.</p>
+<ul>
+<li><strong>Fuerza bruta:</strong> evaluar todas las combinaciones de puntos → O(N²) o peor.</li>
+<li><strong>Optimización matemática:</strong> ordenar previamente los puntos → O(N log N) (Heapsort, Mergesort).</li>
+<li><strong>Relación arquitectónica:</strong> el algoritmo de ordenamiento realiza casi en su totalidad (95 %) operaciones de comparación, carga y almacenamiento (intercambiar índices, mover variables en memoria). <strong>No satura la FPU</strong> → se resuelve en pipelines de instrucciones simples (U/V).</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c4-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> <strong>Anécdota del Dr. Urrutia:</strong> demostración en tres pizarrones de la reducción de cierre convexo a N log N para artículo científico.</li>
+<li><em>(Contexto)</em> <strong>Primera computadora del profesor (1995):</strong> Pentium 75 MHz, 8 MB RAM, disco 800 MB. Comparación con potencia de ESP32 actual.</li>
+<li><em>(Contexto)</em> <strong>Fuentes de poder de los 90s:</strong> eficiencia del 60%, transformadores basados, requería 1.4 kW para alimentar Pentium 4 de 400 W.</li>
+<li><em>(Contexto)</em> <strong>Cartas ASM:</strong> diseño de máquinas de estados a nivel de transistores (referencia al libro del Dr. Jesús Carmona).</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c4-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li>Profundización en arquitectura AMD Opteron: estructura interna de enlaces interprocesador (HyperTransport), matriz de conmutación crossbar, protocolo de coherencia de caché en Opteron.</li>
+</ul>
+</details>
+
+</div>
+</body>
+</html>
