@@ -37,7 +37,68 @@
 </ul></div>
 
 <details class="section-block sec" id="c4-esquema-seguridad" open><summary><span class="stitle">El esquema de seguridad — componentes centrales</span></summary>
-<p>La Dra. Quezada dedicó la mayor parte de la clase a este desglose conceptual (diagrama en pantalla). Los componentes, en orden de construcción:</p>
+<p>La Dra. Quezada dedicó la mayor parte de la clase a este desglose conceptual. El diagrama de abajo reproduce el esquema que trazó en el pizarrón: del <strong>entorno</strong> a la <strong>implementación</strong>. Los componentes, en orden de construcción:</p>
+
+<figure style="margin:16px 0 6px">
+<svg viewBox="0 0 760 676" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Esquema de seguridad: tipos de usuarios, sistemas lógicos, sistemas físicos, hardware y software definen el entorno de seguridad; de él se derivan las hipótesis de cómo debería operar el entorno, las amenazas / riesgos / vulnerabilidades y las políticas de seguridad; los tres convergen en los objetivos de seguridad; de los objetivos se pasa a los requerimientos de seguridad, apoyados en el catálogo de requerimientos de Common Criteria (CCITSE / ISO 15408); los requerimientos se dividen en funcionales, de garantía y del objeto y del entorno; los tres convergen en la implementación del esquema de seguridad. Nota: los objetivos se redactan como acciones, con verbo en infinitivo." style="width:100%;height:auto;font-family:'Inter',sans-serif">
+<style>
+.sib-b{fill:var(--white,#1E212B);stroke:var(--ink-soft,#9297A6);stroke-width:1.2}
+.sib-p{fill:rgba(232,115,92,0.12);stroke:var(--coral,#E8735C);stroke-width:1.6}
+.sib-t{fill:var(--ink,#EDEEF2);font-size:12px}
+.sib-e{fill:none;stroke:var(--ink-soft,#9297A6);stroke-width:1.4}
+.sib-d{fill:none;stroke:var(--ink-soft,#9297A6);stroke-width:1;stroke-dasharray:3 3}
+.sib-s{fill:var(--ink-soft,#9297A6);font-size:11px;font-style:italic}
+</style>
+<defs>
+<marker id="sib-ar" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+<path d="M0,0 L10,5 L0,10 z" fill="var(--ink-soft,#9297A6)"/>
+</marker>
+</defs>
+<g class="sib-e">
+<path marker-end="url(#sib-ar)" d="M71,46 L300,88"/>
+<path marker-end="url(#sib-ar)" d="M221,46 L336,88"/>
+<path marker-end="url(#sib-ar)" d="M370,46 L370,88"/>
+<path marker-end="url(#sib-ar)" d="M519,46 L404,88"/>
+<path marker-end="url(#sib-ar)" d="M669,46 L440,88"/>
+<path marker-end="url(#sib-ar)" d="M330,140 L128,176"/>
+<path marker-end="url(#sib-ar)" d="M370,140 L373,176"/>
+<path marker-end="url(#sib-ar)" d="M410,140 L641,176"/>
+<path marker-end="url(#sib-ar)" d="M122,258 L302,309"/>
+<path marker-end="url(#sib-ar)" d="M373,258 L370,298"/>
+<path marker-end="url(#sib-ar)" d="M647,258 L498,309"/>
+<path marker-end="url(#sib-ar)" d="M370,346 L370,408"/>
+<path marker-end="url(#sib-ar)" d="M188,432 L203,432"/>
+<path marker-end="url(#sib-ar)" d="M320,456 L120,497"/>
+<path marker-end="url(#sib-ar)" d="M370,456 L373,497"/>
+<path marker-end="url(#sib-ar)" d="M420,456 L628,497"/>
+<path marker-end="url(#sib-ar)" d="M111,558 L250,608"/>
+<path marker-end="url(#sib-ar)" d="M373,558 L370,608"/>
+<path marker-end="url(#sib-ar)" d="M636,558 L490,608"/>
+</g>
+<path class="sib-d" d="M544,312 L531,318"/>
+<g class="sib-t" text-anchor="middle">
+<rect class="sib-b" x="6" y="16" width="130" height="30" rx="4"/><text x="71" y="35">Tipos de Usuarios</text>
+<rect class="sib-b" x="156" y="16" width="130" height="30" rx="4"/><text x="221" y="35">Sistemas lógicos</text>
+<rect class="sib-b" x="305" y="16" width="130" height="30" rx="4"/><text x="370" y="35">Sistemas físicos</text>
+<rect class="sib-b" x="454" y="16" width="130" height="30" rx="4"/><text x="519" y="35">Hardware</text>
+<rect class="sib-b" x="604" y="16" width="130" height="30" rx="4"/><text x="669" y="35">Software</text>
+<rect class="sib-b" x="280" y="92" width="180" height="48" rx="6"/><text x="370" y="108">Entorno de<tspan x="370" dy="16">Seguridad</tspan></text>
+<rect class="sib-b" x="6" y="180" width="232" height="78" rx="6"/><text x="122" y="205">Hipótesis de cómo<tspan x="122" dy="16">debería operar el</tspan><tspan x="122" dy="16">entorno de seguridad</tspan></text>
+<rect class="sib-b" x="288" y="180" width="170" height="78" rx="6"/><text x="373" y="205">Amenazas<tspan x="373" dy="16">Riesgos</tspan><tspan x="373" dy="16">Vulnerabilidades</tspan></text>
+<rect class="sib-b" x="560" y="180" width="174" height="78" rx="6"/><text x="647" y="212">Políticas de<tspan x="647" dy="16">Seguridad</tspan></text>
+<rect class="sib-p" x="210" y="300" width="320" height="46" rx="23"/><text x="370" y="327">Objetivos de Seguridad</text>
+<rect class="sib-p" x="205" y="410" width="330" height="46" rx="23"/><text x="370" y="437">Requerimientos de Seguridad</text>
+<rect class="sib-b" x="6" y="398" width="182" height="70" rx="6"/><text x="97" y="419">Catálogo de<tspan x="97" dy="16">requerimientos de CC</tspan><tspan x="97" dy="16">CCITSE / ISO 15408</tspan></text>
+<rect class="sib-b" x="6" y="500" width="210" height="58" rx="6"/><text x="111" y="521">Requerimientos<tspan x="111" dy="16">funcionales</tspan></text>
+<rect class="sib-b" x="278" y="500" width="190" height="58" rx="6"/><text x="373" y="521">Requerimientos<tspan x="373" dy="16">de garantía</tspan></text>
+<rect class="sib-b" x="524" y="500" width="224" height="58" rx="6"/><text x="636" y="521">Requerimientos del<tspan x="636" dy="16">objeto y del entorno</tspan></text>
+<rect class="sib-p" x="185" y="610" width="370" height="58" rx="29"/><text x="370" y="631">Implementación del<tspan x="370" dy="16">Esquema de Seguridad</tspan></text>
+</g>
+<text class="sib-s" x="546" y="303">los objetivos se<tspan x="546" dy="14">redactan como</tspan><tspan x="546" dy="14">acciones (verbo)</tspan></text>
+</svg>
+<figcaption class="empty" style="padding:6px 0 0;font-size:12.5px">Esquema tal como lo trazó la Dra. Quezada en el pizarrón. Las cajas con borde coral (Objetivos, Requerimientos, Implementación) son los puntos donde convergen las ramas anteriores.</figcaption>
+</figure>
+
 <ul>
 <li><strong>Entorno de seguridad:</strong> todo lo que rodea al activo, físico y lógico — hardware, software, usuarios, instalaciones, y factores ambientales (clima, filtraciones de agua, sismos, polvo).</li>
 <li><strong>Hipótesis:</strong> supuestos sobre cómo <em>debería</em> operar idealmente el activo (ej. «el cañón funcionará siempre») y las acciones de mantenimiento que respaldan esa hipótesis (limpiar filtros, cambiar focos).</li>
