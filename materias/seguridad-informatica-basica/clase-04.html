@@ -12,16 +12,46 @@
 <div class="wrap">
 <a class="back" href="index.html">← Seguridad Informática Básica</a>
 <div class="detail-head" style="border-color:#E8735C"><h2>Clase 04</h2>
-  <p class="prof">Dra. Cintia Quezada Reyes · 8 sep 2026 · Tema 1 (1.3 Perfiles de protección) · metodología para construir un esquema de seguridad mediante Perfiles de Protección (PP) — las 11 partes. <em>Apuntes tomados en vivo durante la clase; se completan al subir el audio.</em></p>
+  <p class="prof">Dra. Cintia Quezada Reyes · 8 sep 2026 · Tema 1 (1.3 Perfiles de protección) · esquema de seguridad y metodología para construirlo mediante Perfiles de Protección (PP) — las 11 partes; introducción a los 6 servicios de seguridad.</p>
 </div>
 
 <div class="encorto"><h4>En corto</h4><ul>
-<li>Un <strong>Perfil de Protección (PP)</strong> se construye con una metodología de <strong>11 partes</strong>, de la introducción ejecutiva hasta la implementación de las herramientas.</li>
-<li>El hilo lógico: describir el <strong>objeto de evaluación</strong> y su <strong>entorno</strong> → fijar <strong>hipótesis, amenazas y políticas</strong> → derivar <strong>objetivos</strong> → derivar <strong>requerimientos</strong> → <strong>justificar</strong> → definir la <strong>arquitectura</strong> (mecanismos y herramientas) → <strong>implementar</strong>.</li>
+<li>Un <strong>esquema de seguridad</strong> se arma con este hilo lógico: <strong>Entorno</strong> → <strong>Hipótesis</strong> → <strong>Amenazas / Riesgos / Vulnerabilidades</strong> → <strong>Políticas</strong> → <strong>Objetivos</strong> → <strong>Requerimientos</strong> → <strong>Implementación</strong>.</li>
+<li>Un <strong>Perfil de Protección (PP)</strong> formaliza ese esquema en una metodología de <strong>11 partes</strong>, de la introducción ejecutiva hasta la implementación de las herramientas.</li>
+<li>Las <strong>amenazas nunca se eliminan al 100%</strong>: la metodología sirve para <strong>mitigarlas o disminuirlas</strong>.</li>
 <li>Cada <strong>amenaza</strong> se describe como: <strong>agente</strong> + <strong>ataque</strong> + <strong>bien</strong> que es sujeto del ataque.</li>
+<li>Los <strong>objetivos de seguridad</strong> se redactan con <strong>verbo en infinitivo</strong>, específicos y en <strong>máximo 2 renglones</strong>.</li>
+<li>Los <strong>requerimientos</strong> se apoyan en <strong>ISO/IEC 15408 (Common Criteria)</strong> y se dividen en <strong>funcionales</strong> y <strong>de garantía</strong>.</li>
+<li>Los <strong>6 servicios de seguridad</strong>: Confidencialidad, Integridad, Disponibilidad (tríada CIA), Control de acceso, Autenticación, No repudio.</li>
 </ul></div>
 
+<div class="examen"><h4>🎯 Para el examen</h4><ul>
+<li><strong>Nomenclatura de normas (obligatoria):</strong> en normas ISO/IEC hay que anteponer siempre <strong>"ISO"</strong> o <strong>"ISO/IEC"</strong>; escribir solo la cifra (ej. «27000») <strong>resta medio punto</strong> por imprecisión.</li>
+<li><strong>Common Criteria — formas aceptadas:</strong> «Criterios Comunes», «CC», «CCITS», «ISO/IEC 15408».</li>
+<li><strong>Ortografía de estándares/leyes:</strong> HIPAA (H-I-P-A-A), ITSEC, TCSEC, CTCPEC, ISO 27000, ISO 17799, ISO 27001, ISO 27002.</li>
+<li><strong>Redacción de objetivos de seguridad:</strong> iniciar con <strong>verbo (acción)</strong>, ser muy específicos, <strong>máximo 2 renglones</strong> para evitar ambigüedad.</li>
+<li><strong>Requerimientos:</strong> se sustentan en <strong>ISO/IEC 15408</strong>; se clasifican en <strong>funcionales</strong> y <strong>de garantía</strong> según la perspectiva (usuario, desarrollador, evaluador).</li>
+<li><strong>Amenazas:</strong> no se eliminan al 100%, solo se mitigan; se describen como <strong>agente + ataque + bien</strong>.</li>
+<li><strong>Implementación:</strong> se hace <strong>por partes</strong> (no toda la institución de golpe) y requiere <strong>apoyo de la alta dirección</strong>.</li>
+<li><strong>Formato de calificación:</strong> número cerrado, con pluma, dentro de un círculo, en la esquina superior derecha.</li>
+</ul></div>
+
+<details class="section-block sec" id="c4-esquema-seguridad" open><summary><span class="stitle">El esquema de seguridad — componentes centrales</span></summary>
+<p>La Dra. Quezada dedicó la mayor parte de la clase a este desglose conceptual (diagrama en pantalla). Los componentes, en orden de construcción:</p>
+<ul>
+<li><strong>Entorno de seguridad:</strong> todo lo que rodea al activo, físico y lógico — hardware, software, usuarios, instalaciones, y factores ambientales (clima, filtraciones de agua, sismos, polvo).</li>
+<li><strong>Hipótesis:</strong> supuestos sobre cómo <em>debería</em> operar idealmente el activo (ej. «el cañón funcionará siempre») y las acciones de mantenimiento que respaldan esa hipótesis (limpiar filtros, cambiar focos).</li>
+<li><strong>Amenazas / Riesgos / Vulnerabilidades:</strong> lo que puede atentar contra el bien desde el entorno. <strong>No se eliminan al 100%</strong>, solo se mitigan o disminuyen.</li>
+<li><strong>Políticas de seguridad:</strong> las reglas de la organización. El error común en México es tener <strong>reglamentos obsoletos</strong> o <strong>no contar con mecanismos para hacerlas cumplir</strong>.</li>
+<li><strong>Objetivos:</strong> qué se quiere lograr, derivado de hipótesis + amenazas + políticas.</li>
+<li><strong>Requerimientos:</strong> qué debe cubrir el objeto de evaluación o su entorno para alcanzar los objetivos.</li>
+<li><strong>Implementación:</strong> instalación y configuración de las herramientas; se hace por partes y con apoyo de la dirección.</li>
+</ul>
+</details>
+
 <details class="section-block sec" id="c4-metodologia-pp" open><summary><span class="stitle">Metodología mediante perfiles de protección — las 11 partes</span></summary>
+
+<p class="empty">En el audio la profesora mostró un resumen en pantalla y profundizó en las primeras fases; <strong>no</strong> desglosó formalmente una por una las 11 partes en orden estricto (Justificación y Arquitectura no se definieron individualmente antes del cierre). Abajo, la definición del temario más lo que amplió en clase.</p>
 
 <p><strong>1. Introducción.</strong> Contiene:</p>
 <ul>
@@ -29,39 +59,84 @@
 <li>b) Explicación clara y concisa del <strong>problema de seguridad</strong> que hay que resolver y de cómo el esquema de seguridad le dará solución.</li>
 <li>c) <strong>Síntesis de información</strong> consistente con el contenido técnico del PP.</li>
 </ul>
+<p><em>En clase:</em> enfatizó que debe redactarse en <strong>lenguaje claro y accesible</strong>, para que directivos o dueños no técnicos entiendan el documento <strong>sin modismos de ciberseguridad</strong>.</p>
 
-<p><strong>2. Descripción del objeto de la evaluación.</strong> Se describe el objeto de evaluación a fin de entender sus requerimientos de seguridad.</p>
+<p><strong>2. Descripción del objeto de la evaluación (TOE — Target of Evaluation).</strong> Se describe el objeto de evaluación a fin de entender sus requerimientos de seguridad.</p>
+<p><em>En clase:</em> advirtió <strong>no comprometer herramientas tecnológicas específicas</strong> en esta fase, para evitar asumir responsabilidades directas si esa herramienta llegara a fallar.</p>
 
 <p><strong>3. Entorno de seguridad.</strong> Se describen los aspectos de seguridad del entorno en el cual se pretende utilizar el objeto de evaluación y la forma como se espera que sea empleado.</p>
+<p><em>En clase:</em> señaló que en la metodología formal de 11 pasos, Entorno / Hipótesis / Amenazas / Políticas suelen ir en <strong>secciones dedicadas</strong>, aunque algunos autores los <strong>agrupan en un solo bloque</strong>. El entorno contempla hardware, software, usuarios, instalaciones, clima, filtraciones de agua o sismos.</p>
 
 <p><strong>4. Hipótesis.</strong> A través de las hipótesis se muestran los aspectos de seguridad del entorno.</p>
+<p><em>En clase:</em> son <strong>supuestos sobre la operación ideal</strong> del activo (ej. «el cañón funcionará siempre») más las <strong>acciones de mantenimiento</strong> requeridas para respaldar esa hipótesis (limpieza de filtros, cambio de focos).</p>
 
 <p><strong>5. Amenazas.</strong> Primeramente se consideran todas aquellas que atentan contra los bienes de la organización y contra las cuales se requiere protección específica en el objeto de evaluación y su entorno. Cada amenaza se describe en términos de: un <strong>agente</strong> identificado como una amenaza, un <strong>ataque</strong>, y el <strong>bien</strong> que es el sujeto del ataque.</p>
+<p><em>En clase:</em> subrayó que las amenazas <strong>no se pueden eliminar al 100%</strong>, solo mitigar o disminuir. (En este audio no desglosó la fórmula «agente + ataque + bien» ni dio clasificaciones formales de tipos de ataque o de agente — queda para reforzar.)</p>
 
 <p><strong>6. Políticas de seguridad de la organización.</strong> Se identifica —y si es necesario se explica— cualquier enunciado de política de seguridad organizacional y las normas con las cuales el objeto de evaluación debe cumplir.</p>
+<p><em>En clase:</em> el error común en México es tener <strong>reglamentos obsoletos</strong> o <strong>no tener autoridad/mecanismo</strong> que supervise su cumplimiento (lo comparó con los reglamentos de tránsito o de protección animal).</p>
 
-<p><strong>7. Objetivos.</strong> Con base en las hipótesis, amenazas y políticas de seguridad determinadas durante la fase de análisis del entorno de seguridad, se establecen los objetivos de seguridad, considerando que es imprescindible la comprensión general de lo que es necesario para satisfacer los objetivos del PP.</p>
+<p><strong>7. Objetivos.</strong> Con base en las hipótesis, amenazas y políticas de seguridad determinadas durante la fase de análisis del entorno de seguridad, se establecen los objetivos de seguridad.</p>
+<p><em>En clase:</em> deben redactarse <strong>como acciones, con verbo en infinitivo</strong>, ser específicos y claros, y <strong>no exceder de 2 renglones</strong> para evitar ambigüedades.</p>
 
 <p><strong>8. Requerimientos.</strong> Se definen detalladamente los requerimientos de seguridad IT que deberán ser cubiertos por el objeto de evaluación o por su entorno.</p>
+<p><em>En clase:</em> se apoyan en el estándar <strong>ISO/IEC 15408 (Common Criteria)</strong> y se dividen en <strong>funcionales</strong> y <strong>de garantía</strong>, según la perspectiva del <strong>usuario</strong>, el <strong>desarrollador</strong> o el <strong>evaluador</strong>.</p>
 
-<p><strong>9. Justificación.</strong> Se presenta la evidencia que justifica el trabajo desarrollado: el soporte de que el PP es un conjunto completo de defensa de seguridad IT para el objeto de evaluación dentro de su entorno de seguridad.</p>
+<p><strong>9. Justificación.</strong> Se presenta la evidencia que justifica el trabajo desarrollado: el soporte de que el PP es un conjunto completo de defensa de seguridad IT para el objeto de evaluación dentro de su entorno de seguridad. <em>(No definida individualmente en el audio.)</em></p>
 
-<p><strong>10. Definición de la arquitectura.</strong> Con la confianza de que los requerimientos seleccionados son los necesarios para alcanzar los objetivos de seguridad, hacer cumplir las políticas y contrarrestar las amenazas, se define la arquitectura de seguridad: se seleccionan los mecanismos y herramientas necesarios y se lleva a cabo su implantación.</p>
+<p><strong>10. Definición de la arquitectura.</strong> Con la confianza de que los requerimientos seleccionados son los necesarios para alcanzar los objetivos de seguridad, hacer cumplir las políticas y contrarrestar las amenazas, se define la arquitectura de seguridad: se seleccionan los mecanismos y herramientas necesarios y se lleva a cabo su implantación. <em>(No definida individualmente en el audio.)</em></p>
 
 <p><strong>11. Implementación.</strong> Se lleva a cabo la instalación de las herramientas de seguridad siguiendo las indicaciones del fabricante (manuales) y configurándolas de acuerdo con las políticas de seguridad.</p>
+<p><em>En clase:</em> un esquema de seguridad <strong>no se hace en un día</strong> ni debe abarcar a toda la institución de golpe; debe hacerse <strong>por partes</strong> y contar <strong>indispensablemente con el apoyo de la alta dirección</strong>.</p>
+</details>
+
+<details class="section-block sec" id="c4-amenaza-estructura" open><summary><span class="stitle">Amenazas — agente + ataque + bien</span></summary>
+<ul>
+<li><strong>Bien (activo):</strong> el elemento físico o lógico que se desea resguardar (ejemplo recurrente en clase: el cañón/proyector del salón).</li>
+<li><strong>Estructura de una amenaza (según el temario):</strong> <strong>agente</strong> que representa la amenaza + <strong>ataque</strong> que ejecuta + <strong>bien</strong> que es el sujeto del ataque.</li>
+<li><strong>Mitigación vs. eliminación:</strong> las amenazas y riesgos sobre un bien <strong>jamás se eliminan por completo (100%)</strong>; el objetivo de la metodología es <strong>reducir su presencia</strong>.</li>
+</ul>
+<p class="empty">Pendiente de reforzar con la siguiente clase / lectura: clasificación formal de <strong>tipos de agente</strong> y <strong>tipos de ataque</strong>, y ejemplos de la fórmula completa.</p>
 </details>
 
 <details class="section-block sec" id="c4-servicios-seguridad" open><summary><span class="stitle">Servicios de seguridad — ¿cómo vamos a proteger al bien?</span></summary>
-<p>Son aquellos que <strong>mejoran la seguridad de un bien</strong> y el flujo de él en una organización; representan las <strong>necesidades de seguridad</strong> que se tienen.</p>
+<p>Son los mecanismos que <strong>responden a las necesidades de seguridad</strong> que la organización requiere satisfacer para mantener su nivel de protección.</p>
 <p><strong>6 servicios:</strong></p>
 <ol>
-<li>Integridad</li>
-<li>Disponibilidad</li>
-<li>Confidencialidad</li>
-<li>Control de acceso</li>
-<li>Autenticación</li>
-<li>No repudio</li>
+<li><strong>Confidencialidad</strong> (tríada CIA)</li>
+<li><strong>Integridad</strong> (tríada CIA)</li>
+<li><strong>Disponibilidad</strong> (tríada CIA)</li>
+<li><strong>Control de acceso</strong></li>
+<li><strong>Autenticación</strong> (o autentificación)</li>
+<li><strong>No repudio</strong></li>
 </ol>
+<p class="empty">La profesora <strong>solo los enumeró</strong> al final de la sesión. La explicación detallada de herramientas, mecanismos y su relación con la tríada CIA queda para la <strong>siguiente clase</strong>, junto con un ejercicio práctico de concientización.</p>
+</details>
+
+<details class="section-block sec" id="c4-ejemplos"><summary><span class="stitle">Ejemplos y casos mencionados en clase</span></summary>
+<ul>
+<li><strong>El cañón/proyector del salón:</strong> caso recurrente para ejemplificar el entorno físico (techo, goteras, filtraciones, polvo en filtros, calentamiento del equipo) y la necesidad de controlar el acceso.</li>
+<li><strong>Examen de admisión de la UNAM:</strong> ejemplo sobre la falta de consideración del entorno de seguridad completo al migrar o implementar esquemas — no prever dispositivos externos, software de terceros o la complicidad de usuarios.</li>
+<li><strong>Reglamentos no ejercidos:</strong> comparó las políticas de seguridad obsoletas con los reglamentos de tránsito o de protección animal en México — existen en papel pero carecen de autoridades que supervisen su cumplimiento.</li>
+<li><strong>Mantenimiento vs. reemplazo:</strong> evaluación de costo al decidir entre dar mantenimiento preventivo o comprar equipos/focos nuevos cuando no se cuidaron los activos.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c4-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li>Revisión profunda de los <strong>6 servicios de seguridad</strong> (herramientas, mecanismos, relación con la tríada CIA) y un <strong>ejercicio práctico de concientización</strong>.</li>
+<li>Reforzar la estructura formal de una <strong>amenaza</strong> (agente + ataque + bien) y las clasificaciones de agentes y ataques.</li>
+<li><strong>Calendario:</strong> la clase del martes subsiguiente se suspende por asueto (15/16 de septiembre); se reanuda el jueves.</li>
+<li>En el audio no se mencionan las claves numéricas de los subtemas <strong>1.4</strong> y <strong>1.5</strong> del temario.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c4-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> <strong>Cuotas de organismos vs. streaming:</strong> comparó pagar membresías para obtener estándares internacionales sin usarlos con pagar suscripciones de entretenimiento (Netflix, Disney+, Paramount+) que nunca se ven.</li>
+<li><em>(Contexto)</em> <strong>Orgullo UNAM:</strong> los 3 Premios Nobel de México han salido de la UNAM; la universidad cuenta con <strong>11 modalidades de titulación</strong>.</li>
+<li><em>(Contexto)</em> <strong>Comentarios al margen:</strong> bromeó con que «matar a todos» haría un entorno 100% seguro pero la política no lo permite; comentarios ligeros sobre el clima de la CDMX y las festividades patrias.</li>
+</ul>
 </details>
 
 </div>
