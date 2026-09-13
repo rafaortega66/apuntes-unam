@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 05 — Seguridad Informática Básica</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Seguridad Informática Básica</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 05</h2>
+  <p class="prof">Dra. Cintia Quezada Reyes · 10 sep 2026 · Tema 1 (1.4, a fondo) — Servicios y mecanismos de seguridad informática, autenticación de entidades, el fenómeno del bolero y aplicación práctica en escenarios reales.</p>
+</div>
+
+<div class="encorto"><h4>En corto</h4><ul>
+<li><strong>6 servicios vs. Estándar 74 (OSI):</strong> el modelo OSI solo contempla 5 servicios porque asume que la disponibilidad se logra automáticamente; los estándares de seguridad informática exigen los 6 de forma explícita.</li>
+<li><strong>Control de acceso y autenticación:</strong> el control de acceso requiere obligatoriamente autenticación previa para verificar identidades.</li>
+<li><strong>Alcance de la autenticación:</strong> no solo aplica a personas, también a servicios, procesos informáticos y activos físicos.</li>
+<li><strong>3 categorías de autenticación:</strong> algo que se sabe (contraseñas), algo que se tiene (credenciales, tokens, certificados), algo que se es (biometría).</li>
+<li><strong>Reclasificación de la biometría:</strong> huella digital e iris se clasificaban como "algo que se tiene"; en los estándares modernos son "algo que se es", por ser atributos biológicos irremplazables.</li>
+<li><strong>Síndrome del bolero:</strong> minimizar el riesgo de confidencialidad asumiendo que las personas del entorno inmediato no representan un peligro para lo que escuchan.</li>
+<li><strong>Integridad del factor humano:</strong> no solo protege datos y equipos, también evalúa la estabilidad conductual y neurológica del personal que manipula la información.</li>
+<li><strong>No repudio:</strong> garantiza que un ente no pueda negar una acción o transacción, mediante acuses, firmas digitales o registros de auditoría.</li>
+</ul></div>
+
+<div class="examen"><h4>🎯 Para el examen</h4><ul>
+<li><strong>Estándar 74 (OSI) vs. estándares de seguridad:</strong> OSI = 5 servicios (asume disponibilidad automática); seguridad informática real = 6 servicios obligatorios, porque la disponibilidad requiere mecanismos propios.</li>
+<li><strong>Control de acceso ⇒ autenticación obligatoria y vinculante.</strong></li>
+<li><strong>Clasificación de mecanismos de autenticación:</strong> algo que se sabe (info en la memoria del usuario) · algo que se tiene (bienes lógicos/físicos sustituibles o clonables: credenciales, inode de un archivo en Linux, firma digital, extensión de archivo) · algo que se es (atributos intrínsecos no duplicables: huella, iris, PID mutuamente excluyente). <strong>Punto clave:</strong> entender la transición histórica de huella/iris de "se tiene" a "se es".</li>
+<li><strong>Criterios de sensores biométricos:</strong> la muestra no debe degradarse ni cambiar rápido; la sangre NO sirve como sensor continuo (se seca, cambia propiedades, el ADN se degrada sin aditivos); sensores de nivel de confianza 7 verifican vitalidad (pulsaciones) para impedir suplantación con dedos cercenados o huellas latentes.</li>
+<li><strong>Gestión de contraseñas:</strong> cambiar contraseñas de fábrica (ej. <code>admin123</code>) al primer uso, rotación periódica, prohibir reutilizar contraseñas previas.</li>
+<li><strong>Síndrome del bolero (definición técnica):</strong> vulnerabilidad por minimizar la peligrosidad del entorno al divulgar información confidencial frente a personal no autorizado o terceros.</li>
+<li><strong>No repudio:</strong> impide que un sujeto niegue haber autorizado o realizado una actividad.</li>
+<li><strong>Graduación de controles:</strong> no conviene aplicar el nivel máximo de restricción en todas las áreas; se gradúa según el modelo de negocio (ej. catálogo público sin autenticar vs. proceso de compra autenticado).</li>
+</ul></div>
+
+<details class="section-block sec" id="c5-6-servicios" open><summary><span class="stitle">Los 6 servicios de seguridad vs. Estándar 74 (modelo OSI)</span></summary>
+<p>El estándar 74 (modelo OSI) contempla solo 5 servicios porque asume que la disponibilidad se obtiene automáticamente al implementar autenticación, integridad, confidencialidad y control de acceso. La Dra. Quezada enfatizó que en entornos reales la disponibilidad <strong>no</strong> se implementa sola: un equipo puede reiniciarse inesperadamente en pleno uso, y tener control de acceso o no repudio no evita que el sistema quede inoperable si no se diseñaron mecanismos específicos de disponibilidad.</p>
+</details>
+
+<details class="section-block sec" id="c5-control-acceso" open><summary><span class="stitle">Control de acceso y autenticación de entidades</span></summary>
+<p><strong>Control de acceso:</strong> servicio que permite o deniega el paso de un bien (persona, proceso o dispositivo) hacia un área, servicio u otro bien. Requiere obligatoriamente autenticación previa.</p>
+<p><strong>Autenticación:</strong> verifica identidades para comprobar que una entidad es realmente quien dice ser. No se restringe a personas — aplica también a procesos de software, servicios de red y activos físicos.</p>
+<p><strong>Analogías usadas en clase:</strong></p>
+<ul>
+<li>Un chihuahua puede parecerse a otros perros, pero se requieren señas específicas para autenticarlo con certeza.</li>
+<li>Hermanos gemelos o quintillizos pueden lucir idénticos a primera vista, pero se identifican de forma unívoca con detalles específicos (peinado diferenciado, cicatrices de la infancia).</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c5-mecanismos" open><summary><span class="stitle">Clasificación de mecanismos de autenticación y evaluación biométrica</span></summary>
+<ol>
+<li><strong>Algo que se sabe:</strong> información en la memoria (contraseñas, conocimiento exclusivo de eventos pasados). <em>Riesgo:</em> contraseñas débiles o anotadas en papel destruyen la responsabilidad individual; compartir contraseñas vuelve la responsabilidad legal/operativa compartida entre todos los involucrados.</li>
+<li><strong>Algo que se tiene:</strong> elementos lógicos o físicos transferibles/duplicables. Lógico: el inode de un archivo en Linux, una firma digital (~256 caracteres), la extensión de archivo (ej. detectar doble extensión sospechosa). Físico: credenciales con fotografía, tarjetas plásticas, fotochecks.</li>
+<li><strong>Algo que se es:</strong> atributos biológicos o identificadores lógicos mutuamente excluyentes. Históricamente la huella se consideraba "algo que se tiene"; la estandarización moderna la reclasifica como "algo que se es", junto con el iris, por ser características irremplazables. En procesos lógicos, un ID mutuamente excluyente que prohíbe duplicados se convierte en "algo que es" ese proceso.</li>
+</ol>
+<p><strong>Requisitos y límites técnicos de sensores biométricos:</strong></p>
+<ul>
+<li>Los rasgos deben mantenerse estables en el tiempo — la huella puede desgastarse por cortes o actividad física, pero conserva su estructura general.</li>
+<li>La sangre está descartada como biométrico continuo: se seca al contacto con el ambiente, altera sus propiedades químicas, y su ADN se degrada rápido sin preservación de laboratorio.</li>
+<li>Los sensores básicos son vulnerables a huellas latentes recolectadas con silicona o gel. Los sensores de <strong>nivel de confianza 7</strong> incorporan lectura de constante vital (pulsaciones) para confirmar que la muestra proviene de tejido vivo.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c5-bolero" open><summary><span class="stitle">Confidencialidad y el síndrome/fenómeno del bolero</span></summary>
+<p><strong>Confidencialidad:</strong> garantiza que la información o los bienes permanezcan ocultos y accesibles solo para personal autorizado.</p>
+<p><strong>Síndrome/fenómeno del bolero:</strong> vulnerabilidad social donde las personas minimizan el riesgo de su entorno asumiendo que quienes los rodean (un bolero, personal de limpieza, pasajeros de un elevador, comensales) son inofensivos o no entienden la relevancia de sus pláticas.</p>
+<p><strong>Manifestaciones descritas en clase:</strong></p>
+<ul>
+<li><strong>Fuga en espacios públicos:</strong> divulgar datos de la empresa al hablar por teléfono en pasillos, elevadores o áreas de comida.</li>
+<li><strong>Personal de servicio/mantenimiento:</strong> atacantes infiltrados con uniformes de trabajo (chalecos reflejantes, escaleras, ropa de empresas de energía o apoyos sociales) a quienes se deja pasar sin autenticar porque "solo están haciendo su trabajo".</li>
+<li><strong>Espionaje pasivo:</strong> individuos que observan discretamente los relevos y horarios de empleados en plazas o locales para estructurar diagramas de actividades y planear robos.</li>
+<li><strong>Rastreo en apps/redes sociales:</strong> personal militar que usa apps de ejercicio (Strava) publicando rutas y horarios exactos, permitiendo a adversarios planear emboscadas.</li>
+<li><strong>Egosurfing:</strong> buscar el propio nombre en buscadores para detectar información o fotos publicadas por terceros sin autorización — persisten en servidores (verificaciones gubernamentales, visas de EE.UU., reclutamiento laboral) aunque se borren del perfil.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c5-integridad" open><summary><span class="stitle">Integridad de los bienes y del factor humano</span></summary>
+<p><strong>Integridad:</strong> evita la modificación no autorizada de información e infraestructura — pero también abarca la integridad de las personas que los operan.</p>
+<p><strong>Factores de riesgo humano:</strong></p>
+<ul>
+<li><strong>Empleados descontentos:</strong> personal frustrado o que percibe favoritismo hacia compañeros ineficientes — principal amenaza interna para borrar o modificar datos por venganza.</li>
+<li><strong>Alteraciones neurológicas/psicológicas:</strong> cambios conductuales drásticos por golpes severos en la cabeza en la infancia (caídas, pelotazos) o traumas acumulados en deportes de contacto (fútbol americano NFL, lucha libre WWE), que pueden desencadenar conductas agresivas o sociopáticas años después de retirarse.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c5-norepudio-disp" open><summary><span class="stitle">No repudio y disponibilidad</span></summary>
+<p><strong>No repudio:</strong> garantiza que un usuario o entidad no pueda negar la autoría de una acción ejecutada. Mecanismos: acuse de recibido en oficios físicos, peritaje caligráfico sobre firmas autógrafas, llaves de firma digital, registro (logging) de comandos de alto riesgo ejecutados por administradores.</p>
+<p><strong>Disponibilidad:</strong> garantiza que los activos estén accesibles en los días/horarios oficialmente estipulados. No definir con precisión las necesidades de disponibilidad deja al sistema descubierto y vulnerable.</p>
+<p><strong>Equilibrio operacional:</strong> los servicios se gradúan según las necesidades del negocio. Ej. Liverpool: el catálogo público está disponible 24/7 sin autenticar, mientras el módulo de pago y entrega (Click and Collect) exige autenticación y controles de no repudio.</p>
+</details>
+
+<details class="section-block sec" id="c5-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> Caso mediático en España: el culpable de la desaparición de un niño se delató en una entrevista de TV al hablar de él en tiempo pasado ("era un niño muy bueno") antes de que se hallara el cuerpo — mostró que poseía "algo que se sabe".</li>
+<li><em>(Contexto)</em> Empresas aplican preguntas aparentemente triviales en entrevistas de trabajo para analizar comportamiento y lenguaje del candidato sin que note que está siendo evaluado.</li>
+<li><em>(Contexto)</em> Cliché de películas: personajes que protegen un maletín/caja fuerte con tal nivel de confidencialidad que la audiencia nunca sabe qué había adentro.</li>
+<li><em>(Contexto)</em> Día Mundial para la Prevención del Suicidio: la profesora recordó la fecha y compartió el caso de un alumno de la Facultad con problemas psicológicos graves que buscó a su tutor durante una clase; al pedírsele esperar al final de la sesión, se retiró y se suicidó.</li>
+<li><em>(Contexto)</em> Caso de Lindsay Clancy en EE.UU.: debate legal/médico sobre depresión postparto grave y las limitaciones para compartir historiales psiquiátricos entre médicos bajo regulaciones tipo HIPAA.</li>
+<li><em>(Contexto)</em> El proyector del Aula Magna de la Facultad desapareció dos veces — requirió meter una escalera larga a plena luz del día simulando ser personal de mantenimiento uniformado para no levantar sospechas.</li>
+<li><em>(Contexto)</em> Referencia a Los Simpson: el episodio donde Homero sube de peso para calificar por incapacidad médica y trabajar desde casa.</li>
+<li><em>(Contexto)</em> Los perros reconocen a sus dueños por conducta y olor (saltan, se orinan de alegría) vs. reacción agresiva o ladridos ante desconocidos.</li>
+<li><em>(Contexto)</em> Hace años las aulas de la Facultad no tenían chapas ni cerraduras complejas y permanecían abiertas, porque no había proyectores ni computadoras instaladas.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c5-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Ejercicio en parejas (segunda mitad de la clase):</strong> redactar en papel una propuesta de necesidades y mecanismos de seguridad para 1) la Facultad de Ingeniería (edificios Anexo y Principal) y 2) una casa particular, cubriendo los 6 servicios de seguridad. Encabezado obligatorio: nombre de los integrantes, número de cuenta, fecha, materia (Seguridad Informática Básica), grupo (Grupo 2).</li>
+<li><strong>Próxima sesión:</strong> continuar con el diseño e implementación de mecanismos de seguridad en infraestructuras organizacionales.</li>
+</ul>
+</details>
+
+</div>
+</body>
+</html>
