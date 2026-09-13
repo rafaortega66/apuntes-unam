@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 05 — Arquitectura Cliente-Servidor</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Arquitectura Cliente-Servidor</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 05</h2>
+  <p class="prof">Mtro. Carlos Alberto Román Zamitiz · 8 sep 2026 · Tema 2 — Estados de un proceso, señales de UNIX System V, función <code>wait()</code>, procesos zombie y terminación de procesos con <code>kill()</code>/<code>abort()</code>.</p>
+</div>
+
+<div class="section-block" style="background:#fff7ed;border-left:3px solid #E8735C"><p style="margin:0"><strong>⚠️ Nota:</strong> a esta clase no asistí por una entrevista. El contenido de esta página no viene de audio propio, sino que fue reconstruido a partir de la <strong>Práctica #3 "Procesos (continuación)"</strong> publicada en el <a href="https://cromanzamitiz.github.io/arquitectura-cliente-servidor/tema2/" target="_blank" rel="noopener" style="color:var(--indigo)">sitio del profesor</a> (Tema 2), que es el material teórico que corresponde a esta sesión según la secuencia del temario (justo después de la familia <code>exec</code> vista en la Clase 04). No hay secciones de "para el examen" ni "contexto" porque no hay audio del que sacar el énfasis real del profesor ni sus anécdotas — solo el material escrito.</p></div>
+
+<div class="encorto"><h4>En corto</h4><ul>
+<li><strong>Estados de un proceso:</strong> 9 estados posibles (ejecución modo usuario, ejecución modo núcleo, listo/en memoria, dormido/en memoria, listo/descargado, dormido/descargado, expulsado, creado, zombie).</li>
+<li><strong>Contexto de un proceso:</strong> su código, variables globales, estructuras de datos, registros de CPU, entrada en la tabla de procesos, área de usuario, pilas de usuario y núcleo.</li>
+<li><strong>Señales:</strong> mensajes asíncronos a un proceso; se procesan de inmediato sin esperar a que termine la instrucción en curso. Requieren <code>&lt;signal.h&gt;</code>.</li>
+<li><strong>19 señales de UNIX System V</strong>, cada una con un número y una acción por defecto (casi siempre generar <em>core</em> y terminar el proceso).</li>
+<li><strong><code>wait()</code>:</strong> bloquea al proceso padre hasta que el hijo termina; regresa un código de estado interpretable con macros (<code>WIFEXITED</code>, <code>WEXITSTATUS</code>, <code>WIFSIGNALED</code>, <code>WTERMSIG</code>, <code>WCOREDUMP</code>, <code>WIFSTOPPED</code>, <code>WSTOPSIG</code>).</li>
+<li><strong>Proceso zombie:</strong> ya terminó pero el padre no ha llamado <code>wait()</code> para "recogerlo"; aparece en <code>ps</code> como <code>Z+ &lt;defunct&gt;</code>.</li>
+<li><strong>Terminación de procesos:</strong> normal (regresa control al padre) o por señal (<code>SIGINT</code>, <code>SIGTERM</code> vía <code>kill</code>, <code>SIGABRT</code> vía <code>abort()</code>, <code>SIGKILL</code> — no se puede bloquear ni manejar).</li>
+</ul></div>
+
+<details class="section-block sec" id="c5-estados" open><summary><span class="stitle">Estados de un proceso</span></summary>
+<p>Un proceso puede ejecutarse en modo usuario o en modo núcleo (supervisor). Su tiempo de vida se divide en un conjunto de estados con reglas de transición bien definidas, impuestas por la competencia entre procesos por un recurso escaso: la CPU.</p>
+<p><strong>Los 9 estados posibles:</strong></p>
+<ol>
+<li>Ejecución en modo de usuario.</li>
+<li>Ejecución en modo del núcleo.</li>
+<li>Listo para ejecutar y en memoria — listo para ejecutarse tan pronto como el núcleo lo planifique.</li>
+<li>Dormido y en memoria — no dispuesto para ejecutar hasta que se produzca un suceso; el proceso está en memoria principal.</li>
+<li>Listo para ejecutar y descargado — listo, pero debe cargarse en memoria principal antes de que el núcleo pueda planificarlo.</li>
+<li>Dormido y descargado — esperando un suceso y expulsado al almacenamiento secundario.</li>
+<li>Expulsado — retorna del modo núcleo al modo usuario, pero el núcleo lo expulsa y hace un cambio de contexto para planificar otro proceso.</li>
+<li>Creado — recién creado (vía <code>fork</code>), aún no listo para ejecutarse.</li>
+<li>Zombie — el proceso ya no existe, pero deja un registro para que lo recoja el proceso padre.</li>
+</ol>
+<p><strong>Diagrama de transición</strong> (descrito): del estado 1 (modo usuario) se pasa al 2 (modo núcleo) por llamada al sistema o interrupción; del 2 se puede ir a 7 (cambio de contexto) y de ahí de vuelta a 1 (retorno al modo usuario), o a 9 (zombie) vía <code>exit</code>. Desde 2 también se puede pasar a "dormir" (4) o recibir "orden de ejecución" desde 3. El ciclo 8→3/5 corresponde a la creación con <code>fork</code> (según haya o no memoria suficiente), y 3↔4↔6↔5 son los movimientos entre memoria principal (MP) y secundaria (MS) mientras el proceso está dormido o listo.</p>
+<p><strong>Contexto de un proceso:</strong> su código, los valores de sus variables de usuario globales y sus estructuras de datos, el valor de los registros de la CPU, los valores almacenados en su entrada de la tabla de procesos y en su área de usuario, y el valor de sus pilas de usuario y núcleo.</p>
+</details>
+
+<details class="section-block sec" id="c5-senales" open><summary><span class="stitle">Señales (signals)</span></summary>
+<p>Las señales son un mecanismo de comunicación y manipulación de procesos en Linux: un mensaje especial enviado a un proceso. Son <strong>asíncronas</strong> — cuando un proceso recibe una señal, la procesa de inmediato, sin terminar la función o línea de código en curso. Cada señal tiene un número, pero en los programas se referencian por nombre. Requieren la cabecera <code>&lt;signal.h&gt;</code>.</p>
+<p>El sistema manda señales en respuesta a condiciones específicas: <code>SIGBUS</code> (error en el bus), <code>SIGSEGV</code> (violación de segmento) y <code>SIGFPE</code> (excepción de punto flotante) terminan el proceso y producen un archivo <em>core</em>. Un proceso también puede mandar una señal a otro: <code>SIGTERM</code> y <code>SIGKILL</code> terminan un proceso desde otro proceso; <code>SIGHUP</code> se usa para despertar un proceso. Un manejador de señales debe hacer el mínimo trabajo necesario y regresar el control (o terminar el programa); puede ser interrumpido por otra señal.</p>
+<p><strong>Clasificación de señales:</strong> terminación de procesos · excepciones inducidas (acceso fuera del espacio de direcciones virtuales, errores de punto flotante) · errores irrecuperables en una llamada al sistema · originadas desde un proceso en modo usuario (ej. <code>kill</code>, temporizador de alarma) · interacción con terminal (ej. Ctrl+C) · ejecución paso a paso (usadas por depuradores).</p>
+<p><strong>Las 19 señales de UNIX System V:</strong></p>
+<table>
+<thead><tr><th>Señal</th><th>Núm.</th><th>Descripción / acción por defecto</th></tr></thead>
+<tbody>
+<tr><td><code>SIGHUP</code></td><td>1</td><td>Hangup — se envía cuando el terminal se desconecta, o a todo el grupo cuando el líder termina. Termina el proceso.</td></tr>
+<tr><td><code>SIGINT</code></td><td>2</td><td>Interrupción — al pulsar la tecla de interrupción (Ctrl+C) en un proceso con terminal de control. Termina el proceso.</td></tr>
+<tr><td><code>SIGQUIT</code></td><td>3</td><td>Salir — similar a SIGINT pero con la tecla de salida (Ctrl+\). Genera <em>core</em> y termina.</td></tr>
+<tr><td><code>SIGILL</code></td><td>4</td><td>Instrucción ilegal — hardware detecta instrucción inválida (común con punteros a función mal inicializados en C). Genera <em>core</em> y termina.</td></tr>
+<tr><td><code>SIGTRAP</code></td><td>5</td><td>Trace trap — enviada tras cada instrucción en ejecución paso a paso. Genera <em>core</em> y termina.</td></tr>
+<tr><td><code>SIGIOT</code></td><td>6</td><td>I/O trap — fallo de hardware; se envía al llamar <code>abort()</code> ("suicidio" del proceso, genera <em>core</em>).</td></tr>
+<tr><td><code>SIGEMT</code></td><td>7</td><td>Emulator trap — fallo de hardware, poco usada. Genera <em>core</em> y termina.</td></tr>
+<tr><td><code>SIGFPE</code></td><td>8</td><td>Error en coma flotante — formato desconocido, overflow/underflow. Genera <em>core</em> y termina.</td></tr>
+<tr><td><code>SIGKILL</code></td><td>9</td><td>Kill — termina el proceso irremediablemente; <strong>no puede ser ignorada</strong>. Genera <em>core</em> y termina.</td></tr>
+<tr><td><code>SIGBUS</code></td><td>10</td><td>Bus error — acceso a dirección inexistente o desalineada. Genera <em>core</em> y termina.</td></tr>
+<tr><td><code>SIGSEGV</code></td><td>11</td><td>Violación de segmento — acceso fuera del segmento de datos. Genera <em>core</em> y termina.</td></tr>
+<tr><td><code>SIGSYS</code></td><td>12</td><td>Argumento erróneo en llamada al sistema. No se usa.</td></tr>
+<tr><td><code>SIGPIPE</code></td><td>13</td><td>Escritura en tubería sin lector — el proceso lector terminó de forma anormal. Termina el proceso.</td></tr>
+<tr><td><code>SIGALRM</code></td><td>14</td><td>Alarm clock — un temporizador del proceso llega a cero. Termina el proceso.</td></tr>
+<tr><td><code>SIGTERM</code></td><td>15</td><td>Finalización software — pide terminar la ejecución; a diferencia de SIGKILL, puede ignorarse o manejarse (ej. borrar temporales antes de llamar <code>exit</code>). Se envía a todos los procesos en el shutdown.</td></tr>
+<tr><td><code>SIGUSR1</code></td><td>16</td><td>Señal de usuario 1 — reservada para el programador, sin uso estándar. Termina el proceso por defecto.</td></tr>
+<tr><td><code>SIGUSR2</code></td><td>17</td><td>Señal de usuario 2 — idéntica en propósito a SIGUSR1.</td></tr>
+<tr><td><code>SIGCLD</code></td><td>18</td><td>Muerte del proceso hijo — se envía al padre cuando un hijo termina. Ignorada por defecto.</td></tr>
+<tr><td><code>SIGPWR</code></td><td>19</td><td>Fallo de alimentación — avisa de una caída inminente, o notifica tras recuperarse de una; el proceso debe poder restaurar pérdidas.</td></tr>
+</tbody>
+</table>
+</details>
+
+<details class="section-block sec" id="c5-wait" open><summary><span class="stitle">La función <code>wait()</code></span></summary>
+<p>Permite a un proceso padre esperar a que sus procesos hijos terminen. Bloquea al padre hasta que el hijo finaliza, y regresa un código de estado (entero) del que se extrae información con macros:</p>
+<ul>
+<li><strong><code>WIFEXITED</code></strong> — verdadero (≠0) si el proceso terminó con <code>exit()</code> o <code>wait()</code>.</li>
+<li><strong><code>WEXITSTATUS</code></strong> — si <code>WIFEXITED</code> es verdadero, regresa los 8 bits menos significativos que <code>exit()</code> pasó al padre.</li>
+<li><strong><code>WIFSIGNALED</code></strong> — verdadero si el proceso terminó por una señal.</li>
+<li><strong><code>WTERMSIG</code></strong> — si <code>WIFSIGNALED</code> es verdadero, regresa el número de la señal que causó la terminación.</li>
+<li><strong><code>WCOREDUMP</code></strong> — verdadero si se generó un volcado de memoria (<em>core</em>).</li>
+<li><strong><code>WIFSTOPPED</code></strong> — verdadero si el proceso está parado.</li>
+<li><strong><code>WSTOPSIG</code></strong> — si <code>WIFSTOPPED</code> es verdadero, regresa el número de la señal que causó la parada.</li>
+</ul>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;sys/wait.h&gt;
+
+int spawn(char* program, char** arg_list) {
+  pid_t child_pid;
+  child_pid = fork();
+  if (child_pid != 0) /* proceso padre */
+    return child_pid;
+  else {
+    execvp(program, arg_list); /* solo regresa si hay error */
+    fprintf(stderr, "an error occurred in execvp\n");
+    abort();
+  }
+}
+
+int main() {
+  int child_status;
+  char* arg_list[] = {"ls", "-l", "/", NULL};
+  spawn("ls", arg_list);
+  wait(&child_status);              /* espera al hijo */
+  if (WIFEXITED(child_status))
+    printf("the child process exited normally, with exit code %d\n",
+           WEXITSTATUS(child_status));
+  else
+    printf("the child process exited abnormally\n");
+  return 0;
+}
+</code></pre>
+<p><em>Código 1 — uso de <code>wait()</code> (fork-exec.c).</em></p>
+</details>
+
+<details class="section-block sec" id="c5-zombies"><summary><span class="stitle">Procesos zombie</span></summary>
+<p>Un proceso zombie ya terminó su ejecución pero no ha sido eliminado del sistema. Es responsabilidad del proceso padre eliminarlo: <code>wait()</code> revisa el estado de terminación del hijo y, si ya terminó, lo elimina y regresa el control al padre. Si el padre nunca llama <code>wait()</code>, el proceso queda como zombie.</p>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;unistd.h&gt;
+
+int main() {
+  pid_t child_pid;
+  child_pid = fork();
+  if (child_pid > 0) {
+    sleep(60);      /* padre duerme 1 minuto */
+  } else {
+    exit(0);        /* hijo termina de inmediato */
+  }
+  return 0;
+}
+</code></pre>
+<p><em>Código 2 — proceso zombie (zombie.c).</em> Al correrlo y revisar con <code>ps -e -o pid,ppid,stat,cmd</code> desde otra terminal, el hijo aparece como <code>Z+ &lt;defunct&gt;</code> mientras el padre sigue dormido.</p>
+</details>
+
+<details class="section-block sec" id="c5-terminacion"><summary><span class="stitle">Terminación de procesos: <code>kill()</code> y <code>abort()</code></span></summary>
+<p>Un proceso termina de dos formas: completando su tarea y regresando el control al padre, o de forma anormal en respuesta a una señal (<code>SIGINT</code> con Ctrl+C, <code>SIGTERM</code> vía el comando <code>kill</code>, <code>SIGABRT</code> al llamar <code>abort()</code> — genera <em>core</em> —, o <code>SIGKILL</code>, la más poderosa: termina de inmediato y no puede bloquearse ni manejarse).</p>
+<p>Desde la terminal: <code>kill -SEÑAL PID</code>. Desde código, con <code>&lt;sys/types.h&gt;</code> y <code>&lt;signal.h&gt;</code>: <code>kill(child_pid, SIGTERM)</code>.</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;signal.h&gt;
+
+int main() {
+  pid_t pid;
+  if ((pid = fork()) == 0) {
+    while (1) {
+      printf("HIJO PID = %d\n", pid);
+      sleep(1);
+    }
+  }
+  sleep(10);
+  printf("PADRE Terminacion proceso %d\n", pid);
+  kill(pid, SIGTERM);
+  exit(0);
+}
+</code></pre>
+<p><em>Código 3 — uso de <code>kill()</code> (kill.c):</em> el hijo imprime su PID cada segundo hasta que, tras 10 segundos, el padre lo termina con <code>SIGTERM</code>.</p>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+
+int main(void) {
+  abort();
+  exit(EXIT_SUCCESS);
+}
+</code></pre>
+<p><em>Código 4 — invocando <code>abort()</code> (abort.c):</em> el proceso se manda a sí mismo <code>SIGABRT</code> e imprime "Aborted".</p>
+<p><strong>Códigos de salida:</strong> por convención, 0 = sin problemas; otro valor = error. En Linux se consulta con <code>$?</code>. Un código entre 0 y 127 es un valor normal de salida; 128 o mayor indica que el proceso fue interrumpido por una señal.</p>
+</details>
+
+<details class="section-block sec" id="c5-pendiente" open><summary><span class="stitle">Pendiente — cuestionario de la Práctica 3</span></summary>
+<ul>
+<li>Usando el código de <code>kill.c</code>, crear otro proceso hijo e indicar qué pasa con el programa.</li>
+<li>Modificar el proceso creado para que termine su ejecución después de 20 segundos.</li>
+</ul>
+</details>
+
+</div>
+</body>
+</html>
