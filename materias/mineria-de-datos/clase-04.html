@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 04 — Minería de Datos</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Minería de Datos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 04</h2>
+  <p class="prof">M.C. José Concepción Roberto Olvera López · Fecha: 10 sep 2026 · Tema 2 (continuación) — Bases de datos vectoriales y embeddings, vectorización de imagen/audio/video, bases de datos de conocimiento, arquitectura de datos para IA/minería. Exposición KDD: Nu Bank (evaluación crediticia en tiempo real).</p>
+</div>
+
+<div class="encorto"><h4>En corto</h4><ul>
+<li><strong>Bases de datos vectoriales:</strong> almacenan y gestionan embeddings (vectores numéricos de alta dimensión) para búsqueda por similitud semántica, no coincidencia exacta.</li>
+<li><strong>Embedding y chunking:</strong> transformación de datos no estructurados dividiéndolos en fragmentos (chunks) y convirtiéndolos a vectores matemáticos.</li>
+<li><strong>Visión por computadora (CNN):</strong> procesa imágenes a vectores usando convolución, ReLU y Softmax para clasificación probabilística.</li>
+<li><strong>Vectores de audio y video:</strong> extracción de frecuencia/timbre/ritmo para voz; procesamiento por frames para vigilancia y análisis deportivo.</li>
+<li><strong>Base de datos de conocimiento:</strong> almacén especializado para centralizar información organizacional mediante plantillas (templates) y cuestionarios.</li>
+<li><strong>Arquitectura de datos para IA/minería:</strong> conecta fuentes de origen, ETL, motores de almacenamiento, componentes de red (APIs, Gateways) y analítica.</li>
+<li><strong>Caso Nu:</strong> evaluación crediticia en tiempo real con ingesta continua (Kafka), procesamiento en flujo (Spark), modelos de ensamble (Random Forest, XGBoost) y explicabilidad (SHAP, WoE).</li>
+</ul></div>
+
+<div class="examen"><h4>🎯 Para el examen</h4><ul>
+<li><strong>Búsqueda tradicional (SQL) vs. vectorial:</strong> tradicional = coincidencia exacta/estructurada (ej. <code>edad &gt; 48</code>) con índices B-Tree/Hash; vectorial = similitud semántica aproximada, con clustering para crear índices por zonas y evitar recorrer toda la base.</li>
+<li><strong>Pasos obligatorios para diseñar una arquitectura de minería de datos</strong> (pregunta explícita de examen): 1) requerimientos funcionales/no funcionales (rendimiento, seguridad, escalabilidad, tolerancia a fallos) → 2) selección del tipo de BD (relacional, no relacional, vectorial, especializada) → 3) diseño del esquema y relaciones → 4) infraestructura (nube vs. local) y escalabilidad → 5) seguridad y control de accesos por roles → 6) plan de pruebas de volumen/rendimiento/optimización.</li>
+<li><strong>Componentes de red en arquitecturas:</strong> API (protocolo/reglas para acceder a funciones o datos de forma segura, vía conectores propietarios: Oracle, IBM, Python) · Gateway (elemento de red/IP que enruta tráfico entrante/saliente hacia servicios autorizados) · ETL Batch (extracción, transformación —estandarización de formatos, fórmulas—, carga masiva).</li>
+</ul></div>
+
+<details class="section-block sec" id="c4-vectoriales" open><summary><span class="stitle">Bases de datos vectoriales y embeddings</span></summary>
+<ul>
+<li><strong>Embedding:</strong> tomar datos no estructurados (PDFs, texto libre, imágenes, voz, video) y transformarlos en vectores numéricos de miles de dimensiones. Cada vector captura el contexto semántico o las características esenciales del objeto.</li>
+<li><strong>Chunking (fragmentación):</strong> división previa del contenido en fragmentos lógicos (chunks). Al consultar, el sistema convierte la pregunta del usuario en un vector de búsqueda y busca por similitud los chunks más cercanos para armar la respuesta — es el mecanismo base de los sistemas LLM/ChatGPT.</li>
+<li><strong>Índices y eficiencia de búsqueda:</strong> a diferencia de los métodos relacionales exactos, el índice vectorial genera clusters mediante algoritmos de agrupamiento. La consulta no revisa millones de registros uno a uno, sino que entra directamente al cluster correspondiente, permitiendo búsquedas por similitud ultrarrápidas.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c4-vectorizacion" open><summary><span class="stitle">Vectorización de imagen, audio y video</span></summary>
+<p><strong>Imágenes (Redes Neuronales Convolucionales — CNN):</strong></p>
+<ul>
+<li>Se procesa la matriz de píxeles mediante capas de convolución que reducen y extraen patrones visuales.</li>
+<li>Se aplica la función de activación <strong>ReLU</strong> para filtrar qué características pasan a la siguiente etapa.</li>
+<li>La capa final clasifica aplicando <strong>Softmax</strong>, entregando un vector de probabilidades (ej. 70% perro, 20% caballo, 10% otro).</li>
+<li>Aplicaciones: reconocimiento facial (distancias biométricas entre ojos y nariz), detección de fraudes, control de calidad en manufactura (ej. validación al 99% de precisión en salpicaderas de vehículos).</li>
+</ul>
+<p><strong>Audio y voz:</strong></p>
+<ul>
+<li>Extrae parámetros físicos: frecuencia, timbre, ritmo, forma de la onda sonora.</li>
+<li>Permite identificar a un hablante específico diferenciando su huella vocal única de otros tonos.</li>
+</ul>
+<p><strong>Video:</strong></p>
+<ul>
+<li>Divide la secuencia en marcos individuales (frames).</li>
+<li>Aplicaciones: vigilancia de seguridad (alertas automáticas si un vector indica que se cruzó una línea delimitada) y analítica deportiva (ej. el Bayern Múnich registrando posiciones y recorridos para ajustar tácticas).</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c4-knowledge-base" open><summary><span class="stitle">Bases de datos de conocimiento (Knowledge Bases)</span></summary>
+<ul>
+<li><strong>Definición:</strong> bases especializadas para almacenar y consultar información temático-organizacional.</li>
+<li><strong>Analogía con Excel:</strong> una base de datos de conocimiento, al comprarse, viene "vacía" — igual que una hoja de Excel: no sabe hacer cálculos por sí sola hasta que se configuran reglas, fórmulas y datos.</li>
+<li><strong>Estructuración mediante cuestionarios y plantillas:</strong> la carga se hace con plantillas (templates) preconfiguradas por área (RRHH, Finanzas, Ventas) que guían la captura de documentos, imágenes, enciclopedias/glosarios internos (ej. definición de ROI) y reglamentos.</li>
+<li><strong>Casos de uso empresariales:</strong> <em>Onboarding</em> — evaluación de nuevos empleados sobre reglamentos internos y confidencialidad mediante exámenes interactivos basados en los documentos cargados. <em>Normatividad y cumplimiento</em> — capacitaciones obligatorias periódicas (cada 6 meses) en empresas grandes (ej. 3,000 empleados) sobre políticas de seguridad y divulgación de información.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c4-arquitectura-datos" open><summary><span class="stitle">Arquitectura de datos para minería e IA</span></summary>
+<ul>
+<li><strong>Estructura multicapa:</strong> desde sistemas de origen (Excel, servicios nube AWS/Google, sensores IoT), pasando por tuberías ETL, almacenamiento en Data Lakes/Data Warehouses, hasta las capas de servicio y visualización.</li>
+<li><strong>Caso práctico — monitoreo IoT en tiempo real:</strong> 500 sensores de electricidad, temperatura, gas y agua transmitiendo datos cada 20 segundos. Los datos llegan vía Internet a un Data Warehouse donde modelos analíticos predictivos detectan variaciones de temperatura y disparan alertas operacionales (color amarillo) al supervisor antes de una falla crítica.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c4-caso-nu" open><summary><span class="stitle">Caso de estudio: modelo crediticio en Nu (exposición propia)</span></summary>
+<p><strong>Contexto operativo:</strong> cartera de 135 millones de clientes y 37.2 billones de dólares en créditos, entidad financiera 100% digital.</p>
+<p><strong>Problemática:</strong> incremento de morosidad temprana (incumplimiento de 15 a 90 días) de 4.1% a 5%, aumentando las provisiones un 33%. Los modelos tradicionales rechazaban al 70% de los solicitantes por carecer de historial convencional.</p>
+<p><strong>Propuesta técnica (metodología CRISP-DM):</strong></p>
+<ul>
+<li><strong>Variables:</strong> historial de pagos, uso de la línea de crédito, antigüedad, patrones de comportamiento digital en la App.</li>
+<li><strong>Modelos evaluados:</strong> Regresión Logística, Random Forest (múltiples árboles de decisión en paralelo), XGBoost (árboles por segmento).</li>
+<li><strong>Explicabilidad y métricas:</strong> coeficiente Gini, estadístico KS, valores SHAP y Weight of Evidence (WoE) para justificar la puntuación ante el usuario y el regulador.</li>
+<li><strong>Arquitectura de solución:</strong> ingesta continua con Kafka → procesamiento en flujo con Spark → Data Lake/Data Warehouse → API de scoring en la nube con disponibilidad del 99.5%.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c4-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> <strong>Anécdota del profesor en selección de personal:</strong> relató haber contratado a más de 200 personas como director; no perdía tiempo con preguntas técnicas (ya filtradas por sus colaboradores), sino que hacía solo 3 preguntas clave para evaluar confianza, claridad de ideas y metas de vida del postulante. Comentó cómo hoy los sistemas de IA evalúan por video la postura y gestos del candidato antes de pasar a la entrevista humana.</li>
+<li><em>(Contexto)</em> <strong>Búsqueda vectorial en archivos y bibliotecas:</strong> un alumno comentó que hace su servicio social digitalizando libros analógicos para búsqueda semántica en biblioteca. El profesor mencionó el almacenamiento vectorial de 20 años de noticias de periódicos en Alemania para estudiar tendencias históricas de enfermedades.</li>
+<li><em>(Contexto)</em> <strong>Retroalimentación a mi exposición:</strong> el profesor y la clase felicitaron por meterse en el rol de vendedor/director proponiendo el proyecto a la directiva y por la limpieza visual de la presentación; como mejora, sugirieron mantener mayor contacto visual con la audiencia en lugar de mirar la pantalla.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c4-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Entrega de Proyecto del Tema 2:</strong> fecha límite viernes 18 de septiembre de 2026. La revisión/cierre del tema será a partir del 22 de septiembre.</li>
+<li><strong>Próxima sesión — exposiciones de proveedores Nube/BD:</strong> presentaciones de 8 minutos por equipo en rol de venta técnica. Sofía y su equipo expondrán AWS (incluyendo TimeStream y el Data Warehouse de Amazon). Equipos 6 y 11 presentarán sus temas sobre repositorios y bases de datos especializadas.</li>
+</ul>
+</details>
+
+</div>
+</body>
+</html>
