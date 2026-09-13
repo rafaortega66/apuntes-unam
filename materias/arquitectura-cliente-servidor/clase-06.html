@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 06 — Arquitectura Cliente-Servidor</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Arquitectura Cliente-Servidor</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 06</h2>
+  <p class="prof">Mtro. Carlos Alberto Román Zamitiz · 10 sep 2026 · Manejo de señales con <code>signal()</code>, escenarios de tratamiento de interrupciones y control de procesos en primer/segundo plano (<code>fg</code>/<code>bg</code>).</p>
+</div>
+
+<details class="section-block sec" id="c6-repaso" open><summary><span class="stitle">Repaso que hizo el profesor de la Clase 05 (la que no asistí)</span></summary>
+<ul>
+<li><strong>Inicio del Tema 2</strong> (estados de un proceso y señales) — confirmado que arrancó formalmente en la Clase 05.</li>
+<li><strong>Tarea moral:</strong> revisar <code>man 7 signal</code> en la terminal para familiarizarse con la arquitectura y numeración de señales — la columna que aplica para la materia es <strong>X86 ARM</strong>.</li>
+<li><strong>Procesos huérfanos:</strong> se demostró en vivo qué pasa cuando el padre muere antes que el hijo — al consultar el PPID del hijo, éste cambia a <code>1</code>, mostrando que el sistema (<code>init</code>/systemd) lo adopta casi al instante.</li>
+<li><strong>SIGCHLD (17 en X86/ARM, 18 en otras arquitecturas):</strong> el hijo, al morir, envía implícitamente esta señal a su padre para avisarle que terminó y pedirle que limpie la entrada en la tabla de procesos.</li>
+</ul>
+<p style="margin-top:8px"><em>Esto confirma y precisa lo reconstruido en la <a href="clase-05.html" style="color:var(--indigo)">Clase 05</a> — en particular, el número real de SIGCHLD en la arquitectura de la materia es <strong>17</strong>, no 18 como aparece en la tabla genérica de UNIX System V.</em></p>
+</details>
+
+<div class="encorto"><h4>En corto</h4><ul>
+<li><strong><code>man 7 signal</code>:</strong> documentación oficial y numeración estándar de señales en Linux; columna a consultar: <strong>X86 ARM</strong>.</li>
+<li><strong>Tres escenarios ante una señal:</strong> 1) ignorarla (<code>SIG_IGN</code>), 2) tratarla con una función programada, o 3) el proceso es terminado de inmediato si la señal no puede ignorarse ni tratarse.</li>
+<li><strong><code>SIGINT</code> (2):</strong> interrupción por teclado (Ctrl+C); por defecto (<code>SIG_DFL</code>) mata el proceso, pero puede ignorarse o capturarse.</li>
+<li><strong><code>SIGKILL</code> (9):</strong> la más fulminante (<code>kill -9</code>); no puede ignorarse, bloquearse ni tratarse bajo ninguna circunstancia.</li>
+<li><strong><code>SIGCHLD</code> (17):</strong> el hijo se la manda al padre al morir (sinónimo <code>SIGCLD</code>), para que limpie la tabla de procesos.</li>
+<li><strong>Manejador de señales:</strong> la función debe ser estrictamente <code>void</code> y recibir un único parámetro <code>int</code>.</li>
+<li><strong>Background (<code>bg</code>):</strong> Ctrl+Z detiene el proceso en primer plano; <code>bg</code> lo reanuda en segundo plano, liberando el prompt.</li>
+<li><strong>Control de trabajos:</strong> <code>jobs</code> lista los procesos en background; <code>fg %N</code> regresa el trabajo N a primer plano.</li>
+</ul></div>
+
+<div class="examen"><h4>🎯 Para el examen</h4><ul>
+<li><strong>Firma del manejador:</strong> <code>signal(signum, handler)</code> — <code>handler</code> puede ser <code>SIG_IGN</code>, <code>SIG_DFL</code>, o la dirección de una función definida por el usuario que debe retornar <code>void</code> y aceptar un <code>int</code> (ej. <code>void manejador_senales(int sig)</code>).</li>
+<li><strong>SIGKILL es inalterable:</strong> intentar asociarla a un manejador o a <code>SIG_IGN</code> genera error en tiempo de ejecución.</li>
+<li><strong>Variables <code>static</code> en handlers:</strong> para contar cuántas veces se recibió una señal (ej. Ctrl+C) a lo largo de la vida del programa, el contador debe declararse <code>static</code> para preservar su valor entre invocaciones.</li>
+<li><strong>Huérfano vs. Zombie:</strong> huérfano = el padre muere primero y el sistema adopta al hijo (PID 1); zombie = el hijo muere pero el padre no procesa <code>SIGCHLD</code> ni limpia su entrada en la tabla de procesos.</li>
+<li><strong>Comandos de administración de trabajos:</strong> <code>Ctrl+Z</code> detiene sin destruir · <code>bg</code> reanuda en segundo plano · <code>jobs</code> lista trabajos con su <code>[N]</code> · <code>fg %N</code> trae el trabajo N a primer plano · <code>kill -9 PID</code> fuerza terminación inmediata.</li>
+<li><strong>Relevancia para el proyecto final:</strong> el profesor remarcó que la captura de señales y el control de procesos concurrentes será un requisito práctico indispensable del proyecto.</li>
+</ul></div>
+
+<details class="section-block sec" id="c6-man-signal" open><summary><span class="stitle">Consulta y estructura del manual de señales (<code>man 7 signal</code>)</span></summary>
+<p>Para inspeccionar las señales disponibles en la arquitectura del sistema se ejecuta <code>man 7 signal</code> (capítulo 7 del manual). Dentro de la sección <em>Signal numbering for standard signals</em>, hay que identificar la columna <strong>X86 ARM</strong> para la correspondencia exacta entre macro en C y número entero:</p>
+<ul>
+<li><strong><code>SIGINT</code> (2):</strong> generada por Ctrl+C; interrumpe la ejecución, se puede ignorar o manejar.</li>
+<li><strong><code>SIGABRT</code> (6):</strong> el proceso se la manda a sí mismo para abortar su ejecución.</li>
+<li><strong><code>SIGKILL</code> (9):</strong> matanza ineludible e inmediata del proceso.</li>
+<li><strong><code>SIGTERM</code> (15):</strong> solicitud de terminación enviada por utilidades del sistema (ej. <code>shutdown</code>); puede ignorarse o tratarse.</li>
+<li><strong><code>SIGCHLD</code>/<code>SIGCLD</code> (17 en X86/ARM, 18 en otras):</strong> enviada por el hijo a su padre al terminar su tarea.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c6-signal-func" open><summary><span class="stitle">La función <code>signal()</code> y sus 3 escenarios</span></summary>
+<p>Prototipo, en <code>&lt;signal.h&gt;</code>:</p>
+<pre><code>void (*signal(int sig, void (*func)(int)))(int);
+</code></pre>
+
+<p><strong>Escenario 1 — Ignorar la señal (<code>SIG_IGN</code>):</strong></p>
+<pre><code>signal(SIGINT, SIG_IGN);
+</code></pre>
+<p>Con un ciclo <code>while(1)</code>, cualquier Ctrl+C es ignorado y el proceso sigue corriendo. Para volver al comportamiento nativo se sustituye por <code>SIG_DFL</code>, que destruye el proceso al presionar Ctrl+C.</p>
+
+<p><strong>Escenario 2 — Manejar/tratar la señal con una función personalizada:</strong> debe cumplir estrictamente el prototipo <code>void nombre_funcion(int param)</code>.</p>
+<pre><code>void manejador_senales(int sig) {
+    if (sig == SIGINT) {
+        printf("Señal número %d recibida\n", sig);
+    }
+}
+
+int main() {
+    signal(SIGINT, manejador_senales);
+    while(1) {
+        printf("En espera de Ctrl+C. PID: %d\n", getpid());
+        sleep(5);
+    }
+    return 0;
+}
+</code></pre>
+<ul>
+<li><strong>Versión 1 (el proceso sigue vivo):</strong> tras ejecutar el manejador, el flujo regresa al <code>while(1)</code> y el proceso continúa normalmente.</li>
+<li><strong>Versión 2 (el proceso termina tras el tratamiento):</strong> se invoca <code>exit(0)</code> dentro del manejador (o se condiciona a un número de interrupciones con una variable <code>static int cnt</code>), haciendo que el programa haga su limpieza y termine de forma limpia.</li>
+</ul>
+
+<p><strong>Escenario 3 — Señales inalterables / no capturables:</strong> el sistema no permite redirigir ni bloquear ciertas señales. Ejemplo principal: <code>SIGKILL</code> (9).</p>
+<p><em>Analogía del profesor:</em> <code>SIGKILL</code> equivale al hechizo <em>Avada Kedavra</em> de Harry Potter: fulminante, ineludible, ningún código puede proteger al proceso de ella. Si se intenta <code>signal(SIGKILL, manejador_senales)</code>, la llamada regresa un valor de error indicando que no se puede capturar esa señal.</p>
+</details>
+
+<details class="section-block sec" id="c6-fgbg" open><summary><span class="stitle">Procesos en primer plano (foreground) y segundo plano (background)</span></summary>
+<ul>
+<li><strong>Foreground:</strong> el proceso está atado a la terminal activa, recibe la entrada estándar del teclado y bloquea la consola mientras se ejecuta.</li>
+<li><strong>Background:</strong> el proceso corre en tiempo compartido en segundo plano, dejando la línea de comandos libre para lanzar otros programas en paralelo.</li>
+</ul>
+<p><strong>Secuencia para enviar un proceso a background:</strong></p>
+<ol>
+<li>Ejecutar el proceso en primer plano.</li>
+<li>Presionar <code>Ctrl+Z</code> para enviar <code>SIGTSTP</code>, dejando el proceso pausado (<em>Stopped</em>).</li>
+<li>Escribir <code>bg</code> en el prompt — el sistema lo reanuda en segundo plano e imprime su identificador de trabajo entre corchetes (ej. <code>[33]</code>).</li>
+</ol>
+<p><strong>Inconveniente:</strong> si el proceso en background tiene <code>printf()</code>, el texto se sigue imprimiendo en la terminal, desplazando el prompt mientras el usuario escribe otros comandos. Para evitarlo, redirigir la salida a un archivo o a <code>/dev/null</code>.</p>
+<p><strong>Administración de trabajos:</strong> <code>jobs</code> lista los trabajos activos en background (<code>[33]</code>, <code>[36]</code>, etc.); <code>fg %N</code> trae de vuelta el trabajo N a primer plano — necesario si se le quiere mandar una interrupción Ctrl+C, ya que esa combinación solo afecta al proceso activo en foreground.</p>
+</details>
+
+<details class="section-block sec" id="c6-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> El profesor compartió una foto impresa de los 90 tomada en la Facultad de Ingeniería para boletines de la UNAM; contó con humor cómo los fotógrafos les pedían posar frente a computadoras antiguas diciendo "tómame una foto como si no me diera cuenta" mientras fingían teclear aceleradamente.</li>
+<li><em>(Contexto)</em> Fiestas tradicionales de fin de semestre en la UNAM: Química hacía la "quema de batas" (saltar en parejas sobre una hoguera con las batas de laboratorio); Derecho hacía "quema de libros" (códigos penales y textos jurídicos viejos); Ingeniería organizaba fiestas masivas en el estacionamiento del CELE o junto a los edificios P y Q.</li>
+<li><em>(Contexto)</em> Antes no existían las rejas ni cercados actuales entre facultades — había libre tránsito por toda Ciudad Universitaria; el aumento de inseguridad y robos obligó a cerrar y enrejar los accesos con los años.</li>
+<li><em>(Contexto)</em> Usa Telegram para avisos del curso porque permite registrarse manteniendo en privado el teléfono y el nombre real; recordó que un semestre pasado un alumno usaba el apodo "enjolada" y tuvo que buscarlo en privado para saber quién era en la lista oficial. Prometió no usar el canal para spam ni imágenes de "Snoopy dando los buenos días".</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c6-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Sin clase el martes 15 de septiembre</strong> (Día de la Independencia). Se reanuda el jueves 17 de septiembre.</li>
+<li><strong>Tarea 3</strong> ya disponible en la plataforma del curso. Para calificación máxima (10): entregar antes de la sesión del jueves 17 sep. Entregas extemporáneas de la Tarea 3 (y las Tareas 1 y 2 pendientes) se aceptan después, pero con calificación menor.</li>
+<li><strong>Próxima sesión:</strong> se profundizará en procesos zombie — cómo se originan y cómo tratarlos correctamente capturando <code>SIGCHLD</code> en el proceso padre.</li>
+</ul>
+</details>
+
+</div>
+</body>
+</html>
