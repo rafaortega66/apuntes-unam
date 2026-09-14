@@ -49,3 +49,19 @@ pídele a Claude Code que:
 
 Luego solo es `git add . && git commit -m "..." && git push` y GitHub Pages
 se actualiza solo.
+
+## Buscador global
+
+El sitio tiene un buscador (botón 🔍 flotante abajo a la derecha, o tecla `/`)
+que indexa el contenido de las 9 materias — clases, temarios, entregas — y
+lleva directo a la sección exacta.
+
+El índice vive en `assets/search-index.json` y se genera con:
+
+```bash
+python3 scripts/build_search_index.py
+```
+
+**Hay que correr este script y commitear el JSON generado cada vez que se
+agrega o edita contenido** (clase nueva, corrección, etc.) — si no, el
+buscador sigue funcionando pero con contenido desactualizado.
