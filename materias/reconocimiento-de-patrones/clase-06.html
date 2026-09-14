@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 06 — Reconocimiento de Patrones</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Reconocimiento de Patrones</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Clase 06</h2>
+  <p class="prof">Ing. Rubén Omar Azuara Domínguez · 14 sep 2026 · Tema 5 — Funciones de decisión lineales y multiclase, interpretación geométrica en espacios de características y pesos, algoritmo de aprendizaje y sistemas de funciones ortogonales.</p>
+</div>
+
+<div class="encorto"><h4>En corto</h4><ul>
+<li><strong>Función de decisión g(x):</strong> modelo matemático que recibe un vector de características y devuelve un escalar cuyo signo determina la clase.</li>
+<li><strong>1 vs. Resto:</strong> c funciones de decisión para c clases; se asigna la clase i solo si su función es positiva y todas las demás negativas.</li>
+<li><strong>Regiones de ambigüedad:</strong> zonas donde no se puede clasificar porque varias funciones son positivas o todas son negativas.</li>
+<li><strong>Máquina Lineal:</strong> elimina las ambigüedades asignando la clase con el valor escalar máximo (gᵢ(x) &gt; gⱼ(x)).</li>
+<li><strong>Espacio de características vs. espacio de pesos:</strong> en el primero los puntos son patrones; en el segundo, los puntos son clasificadores completos.</li>
+<li><strong>Ortogonalidad de w:</strong> el vector de pesos es perpendicular al hiperplano g(x)=0; el escalar de g(x) mide la distancia a ese hiperplano.</li>
+<li><strong>Funciones ortogonales:</strong> descomponen funciones de decisión complejas en combinaciones lineales de polinomios base (Legendre, Laguerre, Hermite).</li>
+</ul></div>
+
+<div class="examen"><h4>🎯 Para el examen</h4><ul>
+<li><strong>Regla del signo:</strong> g(x) = wᵀx + w₀ — g(x)&gt;0 → clase 1, g(x)&lt;0 → clase 2. Si g(x)=0, cae en la frontera; se decide según el costo del error (ej. en diagnóstico médico, prefiere falso positivo sobre falso negativo).</li>
+<li><strong>Criterio estricto 1 vs. Resto:</strong> clase i solo si Dᵢ(x)&gt;0 y Dⱼ(x)&lt;0 para todo j≠i. Dos o más positivos, o todos negativos → región de ambigüedad.</li>
+<li><strong>Criterio de Máquina Lineal:</strong> asigna a ωᵢ si gᵢ(x) &gt; gⱼ(x) para todo j≠i — divide el espacio en c regiones sin zonas ambiguas.</li>
+<li><strong>Espacio de características (ejes = variables medibles, puntos = patrones) vs. espacio de pesos (ejes = w₀..wₙ, puntos = clasificadores completos).</strong></li>
+<li><strong>Distancia al hiperplano:</strong> depende del vector unitario ortogonal w y de la magnitud escalar de g(x).</li>
+<li><strong>Dominios de los polinomios ortogonales (pregunta frecuente):</strong> Legendre → [-1,1] · Laguerre → [0,∞) · Hermite → (-∞,∞).</li>
+<li><strong>Clasificación (supervisado, requiere x e y) vs. Agrupamiento/Clustering (no supervisado, solo x) vs. Reconocimiento de Patrones (término integral: detección, extracción, clasificación y clustering).</strong></li>
+</ul></div>
+
+<details class="section-block sec" id="c6-repaso" open><summary><span class="stitle">Repaso de la clase anterior — métricas, evaluación y validación cruzada</span></summary>
+<ul>
+<li><strong>Sesgo/varianza</strong> describen cómo aprende el clasificador; <strong>exactitud (accuracy)</strong> mide el rendimiento global. Repaso de precisión, recall, especificidad, F1 y exactitud balanceada.</li>
+<li><strong>Precisión vs. recall:</strong> precisión = TP/(TP+FP) (de lo predicho positivo, cuánto es real); recall = de todo lo real positivo, cuánto capturó el modelo.</li>
+<li><strong>Matriz de confusión:</strong> diagonal = aciertos, triángulos = errores. Ejemplo de la alarma de incendio: falso positivo = suena sin fuego; falso negativo = hay incendio y no suena.</li>
+<li><strong>ROC/AUC:</strong> escala de interpretación — 1.0 perfecto, 0.9–1.0 excelente, 0.7–0.9 bueno/regular, 0.5 aleatorio, &lt;0.5 predicción invertida.</li>
+<li><strong>K-Fold Cross Validation:</strong> divide el entrenamiento en K subconjuntos e itera permutando los folds, para que el modelo no dependa de una partición particular.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c6-pipeline" open><summary><span class="stitle">Pipeline de reconocimiento y funciones de decisión (lineales, cuadráticas, no lineales)</span></summary>
+<ul>
+<li><strong>Pipeline:</strong> patrones/objetos → extracción de características (vector x ∈ ℝⁿ) → selección/reducción de dimensionalidad → clasificador.</li>
+<li><strong>Función de decisión:</strong> g(x) recibe x ∈ ℝⁿ y produce un escalar cuyo signo asigna la clase.</li>
+<li><strong>Función lineal:</strong> g(x) = w₁x₁ + w₂x₂ + ... + wₙxₙ + w₀ = wᵀx + w₀. w₀ es la ordenada al origen (nivel promedio). Geométricamente es un hiperplano. Ventaja: simple, rápida, interpretable. Desventaja: solo sirve si las clases son linealmente separables.</li>
+<li><strong>Función cuadrática:</strong> xᵀAx + bᵀx + c — más flexible para fronteras complejas, pero más parámetros y riesgo de sobreajuste.</li>
+<li><strong>Funciones no lineales:</strong> forma arbitraria, máxima adaptabilidad pero difíciles de entrenar e interpretar. Enfoque clásico: transformar/reducir a un nuevo espacio donde sí sean linealmente separables.</li>
+<li><strong>Interpretación de pesos:</strong> wᵢ = importancia de xᵢ para discriminar la clase. g(x)&gt;0 → clase 1; g(x)&lt;0 → clase 2; g(x)=0 → frontera (decisión aleatoria o según costo del error, ej. diagnóstico médico prefiere falso positivo).</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c6-multiclase" open><summary><span class="stitle">Clasificación multiclase: 1 vs. Resto, 1 vs. 1 y Máquinas Lineales</span></summary>
+<ul>
+<li><strong>1 vs. Resto:</strong> c funciones D₁(x)...D_c(x). Pertenece a la clase i solo si Dᵢ(x)&gt;0 y Dⱼ(x)&lt;0 para todo j≠i.</li>
+<li><strong>1 vs. 1:</strong> compara pares de clases con Dᵢⱼ(x). Se asigna a la clase i si Dᵢⱼ(x)&gt;0 para todo j≠i.</li>
+<li><strong>Regiones de ambigüedad:</strong> cuando no se cumple la condición estricta (más de una positiva, o todas negativas).</li>
+<li><strong>Máquina Lineal:</strong> evalúa g₁(x)...g_c(x) y asigna a ωᵢ cuyo valor sea el máximo absoluto — no depende del signo sino de la magnitud, sin dejar zonas ambiguas.</li>
+<li><strong>Funciones generalizadas / ensambles:</strong> g(x) = Σwᵢfᵢ(x) = wᵀx*, donde x* son los resultados de modelos base y wᵢ representa la confianza/voto de cada clasificador.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c6-ejercicios" open><summary><span class="stitle">Ejercicios resueltos en clase</span></summary>
+<p><strong>Binario (ℝ²):</strong> w = [-3, 0.75, 1]ᵀ → g(x) = -3 + 0.75x₁ + x₂.</p>
+<ul>
+<li>Punto (4,3): g = -3+0.75(4)+1(3) = 3 &gt; 0 → Clase 1.</li>
+<li>Origen (0,0): g = -3 &lt; 0 → Clase 2.</li>
+</ul>
+<p><strong>Multiclase 1 vs. Resto (ℝ²):</strong> D₁(x)=-x₁+x₂, D₂(x)=x₁+x₂-5, D₃(x)=-x₂+1.</p>
+<ul>
+<li>(6,5): D₁=-1(-), D₂=6(+), D₃=-4(-) → solo D₂ positivo → Clase 2.</li>
+<li>(0,2): D₁=2(+), D₂=-3(-), D₃=-1(-) → solo D₁ positivo → Clase 1.</li>
+<li>(6,4): D₁=-2(-), D₂=5(+), D₃=-3(-) → solo D₂ positivo → Clase 2.</li>
+<li>(2,-2) — evaluado por mí: D₁=-4(-), D₂=-5(-), D₃=3(+) → solo D₃ positivo → Clase 3.</li>
+<li>(2,6) — evaluado por Jorge: D₁=4(+), D₂=3(+), D₃=-5(-) → D₁ y D₂ positivos → región de ambigüedad.</li>
+<li>Los puntos evaluados por Santiago y Sebastián también cayeron en regiones indeterminadas — demuestra en la práctica las limitaciones de 1 vs. Resto.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c6-geometria" open><summary><span class="stitle">Interpretación geométrica y comparación de espacios</span></summary>
+<ul>
+<li><strong>Hiperplano de decisión:</strong> g(x)=wᵀx+w₀ define g(x)=0; el vector w es perpendicular a esa superficie.</li>
+<li><strong>Distancia al hiperplano:</strong> r = g(x)/|w| — evaluar la función de decisión equivale a medir la distancia dirigida del patrón al hiperplano.</li>
+<li><strong>Espacio de características (ℝⁿ):</strong> ejes = variables medibles, puntos = patrones, grupos de puntos = clases. Pregunta: ¿dónde está cada patrón?</li>
+<li><strong>Espacio de pesos:</strong> ejes = coeficientes w₀..wₙ, puntos = clasificadores completos, regiones = clasificadores válidos. Pregunta: ¿qué clasificador separa las clases?</li>
+<li><strong>Clase (Cᵢ):</strong> donde Dᵢ(x) supera a Dⱼ(x) para todo j≠i. <strong>Región de decisión:</strong> subespacio de una sola clase. <strong>Frontera:</strong> donde g(x)=0 o gᵢ(x)=gⱼ(x).</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c6-perceptron" open><summary><span class="stitle">Algoritmo de aprendizaje de pesos (regla de actualización del perceptrón)</span></summary>
+<ol>
+<li>Inicialización: w en ceros o valores aleatorios pequeños.</li>
+<li>Evaluación: para cada par (xᵢ, yᵢ), se evalúa el signo de g(xᵢ).</li>
+<li>Actualización si el signo predicho difiere del real: <code>w_nuevo = w_anterior + α · error · xᵢ</code>, donde α es la tasa de aprendizaje (learning rate).</li>
+<li>Iteración hasta converger (error mínimo aceptable o máximo de iteraciones).</li>
+<li>Inferencia: para un patrón nuevo, se calcula g(x) y se aplica la regla del signo.</li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c6-ortogonales" open><summary><span class="stitle">Sistemas de funciones ortogonales</span></summary>
+<p><strong>Propósito:</strong> aproximar funciones de decisión complejas como combinación lineal de funciones base ortogonales: g(x) = Σwₖφₖ(x).</p>
+<p><strong>Ventajas:</strong> sin redundancia (cada base es independiente) · compresión eficiente (pocos coeficientes) · cálculo desacoplado (wₖ se calculan independientemente) · estabilidad numérica.</p>
+<p><strong>Familias y dominios:</strong></p>
+<ul>
+<li><strong>Legendre:</strong> x ∈ [-1, 1]. Aplicaciones: clasificación de formas geométricas, contornos, análisis de imágenes.</li>
+<li><strong>Laguerre:</strong> x ∈ [0, ∞).</li>
+<li><strong>Hermite:</strong> x ∈ (-∞, ∞). Aplicaciones: reconocimiento de voz, audio, visión computacional, datos con distribución normal/gaussiana.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c6-clasif-vs-cluster" open><summary><span class="stitle">Clasificación vs. Agrupamiento vs. Reconocimiento de Patrones</span></summary>
+<ul>
+<li><strong>Clasificación (supervisado):</strong> recibe x con etiquetas y explícitas; genera un modelo que predice la clase.</li>
+<li><strong>Agrupamiento/Clustering (no supervisado):</strong> recibe x sin etiquetas; busca agrupaciones naturales (grupo 1, 2, 3...).</li>
+<li><strong>Reconocimiento de Patrones:</strong> proceso integral — adquisición de señales/imágenes, extracción de características, clasificación supervisada y clustering no supervisado.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c6-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> El profesor usó el ejemplo del diagnóstico de cáncer para explicar el manejo de g(x)=0: es preferible un falso positivo (alerta en paciente sano) que un falso negativo (no detectar a un paciente enfermo).</li>
+<li><em>(Contexto)</em> Durante los ejercicios en el pizarrón, el profesor asignó casos específicos a varios compañeros (a mí me tocó el punto (2,-2), a Jorge el (2,6)) para calcular las funciones de decisión en tiempo real, mostrando en vivo cómo surgen las regiones de ambigüedad.</li>
+<li><em>(Contexto)</em> La idea de combinaciones lineales ponderadas de clasificadores (g(x)=Σwᵢfᵢ(x)) se presentó como antesala al concepto de ensambles de modelos, donde varios clasificadores "votan" según la confianza que se les otorga.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c6-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Próxima sesión:</strong> viernes.</li>
+<li><strong>Tema a iniciar:</strong> métodos de clasificación no supervisada (Clustering) — primero clasificadores basados en funciones de distancia, luego funciones de similitud.</li>
+<li>No se asignaron tareas ni fechas límite de prácticas adicionales en esta sesión.</li>
+</ul>
+</details>
+
+</div>
+</body>
+</html>
