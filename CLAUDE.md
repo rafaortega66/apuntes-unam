@@ -52,11 +52,19 @@ como ejemplo de este patrón.
 materias/<slug>/
   index.html        ← temario oficial (vista "Por tema") + lista de clases (vista "Por clase")
   evaluacion.html    ← criterios de evaluación, tareas, rúbricas (si existe)
-  entregas.html      ← registro de lo que el usuario YA entregó, con enlace al PDF o a la clase
+  material.html      ← TODOS los archivos que dio el profesor/a (guiones, diapositivas, plantillas)
+  entregas.html      ← TODO lo que el usuario ya entregó (con enlace al PDF/código o a la clase)
   clase-NN.html      ← apuntes completos de cada clase (ver plantilla abajo)
-  files/             ← PDFs/código real: guiones del profesor, prácticas, diapositivas
-  files/entregas/    ← copias de lo que el usuario ya entregó (cuando aplica)
+  files/             ← archivos del profesor (los que se listan en material.html)
+  files/entregas/    ← archivos que el usuario ya entregó (los que se listan en entregas.html)
 ```
+
+**Regla de oro de archivos (site-wide desde el 14 sep 2026):** todo archivo del
+profesor va en `files/` (raíz de la materia) y se lista en `material.html`;
+todo archivo que el usuario haya entregado va en `files/entregas/` y se lista
+en `entregas.html`. Nunca mezclar los dos. El `index.html` de cada materia
+tiene siempre estas tarjetas, en este orden: Evaluación (si existe) →
+Material → Entregas → (otras específicas de la materia, ej. Programas de ACS).
 
 `index.html` tiene un botón fijo "Por tema / Por clase" (JS en `assets/app.js`,
 persiste en `localStorage`). **Por tema** = mapa del temario oficial que se va
