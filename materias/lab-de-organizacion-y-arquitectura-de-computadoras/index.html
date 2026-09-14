@@ -21,17 +21,49 @@
   <p class="prof">Ricardo Daniel Vega Gutierrez · Grupo 3 · Miércoles · 07:00–09:00 · Salón Q209</p>
 </div>
 
-<div class="section-block" style="background:#fff7ed;border-left:3px solid #7C9CD6"><p style="margin:0"><strong>⚠️ Cambio de profesor (detectado 14 sep 2026):</strong> el laboratorio ya no lo da la Mtra. Rosa Elena Lobera Sánchez — ahora es <strong>Ricardo Daniel Vega Gutierrez</strong>. Pide un formato de reporte distinto al de la Práctica 1 (la Práctica 1/Reporte 1 fueron con la profesora anterior); falta confirmar el detalle exacto del nuevo formato.</p></div>
+<div class="section-block" style="background:#fff7ed;border-left:3px solid #7C9CD6"><p style="margin:0"><strong>⚠️ Cambio de profesor (14 sep 2026):</strong> el laboratorio ya no lo da la Mtra. Rosa Elena Lobera Sánchez — ahora es <strong>Ricardo Daniel Vega Gutierrez</strong>, con criterios de evaluación y formato de reporte nuevos (abajo). Los archivos viejos <code>Estructura-Reporte.docx</code> y <code>Estructura-Cuestionario-Previo.docx</code> (en <a href="entregas.html" style="color:var(--indigo)">Entregas</a>) corresponden al formato de la profesora anterior — <strong>ya no aplican</strong>, quedan solo de referencia histórica de la Práctica 1.</p></div>
 
 <div class="grid" style="margin-bottom:26px">
   <a class="card" style="--c:#7C9CD6" href="entregas.html"><h3>Entregas</h3><p>Pre-reporte 1, guion y requisitos · cotejo contra lo que pide la maestra</p></a>
 </div>
 <div class="empty">Este laboratorio acompaña a su materia teórica y todavía no tiene apuntes ni temario propio. Los archivos de cada práctica están en <a href="entregas.html" style="color:var(--indigo)">Entregas</a>.</div>
 
-<div class="section-block" style="margin-top:22px"><h4>Práctica 2 — Diseño de máquinas de estado (nuevo profesor)</h4>
-<p><strong>Práctica No. 2: Diseño de máquinas de estado — Direccionamiento por Trayectoria</strong> (publicada 1 sep 2026). Sin apuntes de clase todavía — solo el guion técnico.</p>
+<div class="section-block" style="margin-top:22px"><h4>Evaluación (con Ricardo, desde la Práctica 2)</h4>
+<table><thead><tr><th>Componente</th><th>Peso</th></tr></thead><tbody>
+<tr><td>Prácticas de laboratorio (Reporte)</td><td>70%</td></tr>
+<tr><td>Avance de práctica (en laboratorio, salón Q209)</td><td>20%</td></tr>
+<tr><td>Previos</td><td>10%</td></tr>
+</tbody></table>
+<p style="margin-top:8px">Cada clase de laboratorio se pueden otorgar décimas extra para el reporte, dependiendo de la participación del estudiante. <strong>Las participaciones se cuentan de forma individual.</strong></p>
+</div>
+
+<div class="section-block"><h4>Contenido del Reporte (formato nuevo — reemplaza el de la Práctica 1)</h4>
+<ul>
+<li>Carátula</li>
+<li>Objetivo(s)</li>
+<li>Introducción</li>
+<li>Desarrollo (ejercicios resueltos, mapas de Karnaugh, cartas ASM)</li>
+<li>Conclusiones</li>
+<li>Bibliografía</li>
+</ul>
+</div>
+
+<div class="section-block"><h4>Previo (pre-reporte) — formato nuevo</h4>
+<ul>
+<li>Se entrega de forma <strong>individual</strong>.</li>
+<li><strong>No</strong> se necesita carátula/portada — solo un encabezado con los datos generales del alumno.</li>
+<li>Entrega en la fecha indicada; <strong>no se evalúan una vez pasada la fecha</strong> (sin prórroga).</li>
+<li><strong>Nombre del archivo (PDF):</strong> <code>previo#_grupo#_apellidoPat_apellidoMat_Nombre(s).pdf</code><br>Ejemplo del profesor: <code>previo1_grupo5_Bautista_Escutia_Juan.pdf</code></li>
+</ul>
+</div>
+
+<div class="section-block"><h4>Práctica 2 — Diseño de máquinas de estado (nuevo profesor)</h4>
+<p><strong>Práctica No. 2: Diseño de máquinas de estado — Direccionamiento por Trayectoria</strong> (publicada 1 sep 2026).</p>
 <p><strong>Parte I — Diseño:</strong> identificar estados/entradas/salidas, codificación de estados, tabla de transiciones, mapas de Karnaugh para flip-flops tipo D y señales de salida, simplificación de funciones booleanas, diagrama del circuito.</p>
 <p><strong>Parte II — Implementación en Quartus y FPGA DE10-Lite:</strong> proyecto en Quartus, diagrama de bloques, implementación en VHDL, asignación de entradas/salidas a la DE10-Lite, compilación, programación de la FPGA, comprobación experimental contra la carta ASM, comparación contra el llenado de memoria de la Parte I.</p>
+<p><strong>Ejemplo resuelto en clase (pizarrón):</strong> con 2 bits de estado (E1E0), entradas X, Y y salidas S1, S0, se construyó la tabla de transiciones (estado presente → estado siguiente Q1Q0 según entradas) y de ahí el mapa de Karnaugh de Q1 (ejes E1E0 × YX), obteniendo:</p>
+<pre><code>Q1 = Ē1·Ē0·Y·X + E1·Ē0</code></pre>
+<p style="font-size:13px;color:var(--ink-soft)">(Q0 y las salidas S1/S0 se resuelven con el mismo método — mapa K por variable, a partir de la misma tabla de transiciones.)</p>
 </div>
 
 </div>
