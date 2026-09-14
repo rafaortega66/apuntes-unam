@@ -26,8 +26,38 @@
 </tbody></table>
 </div>
 
-<div class="section-block"><h4>Pendiente de descargar</h4>
-<p class="empty"><code>Formatos_Scrum_y_Cascada.docx</code> — plantilla del proyecto final (Scrum/Cascada), publicada en Classroom el 9 sep. Todavía no se ha bajado a este repo; su contenido ya está resumido en <a href="evaluacion.html" style="color:var(--indigo)">Evaluación</a>.</p>
+<div class="section-block"><h4>Formatos para el Proyecto Final — Scrum y Cascada</h4>
+<p><a href="files/Formatos_Scrum_y_Cascada.pdf" target="_blank" style="color:var(--indigo)">📄 Formatos_Scrum_y_Cascada.pdf</a> — documento oficial completo. Mi equipo (10) usa <strong>Scrum</strong>, así que llenamos la Parte I:</p>
+<ol>
+<li><strong>Ficha de inicio y visión del producto:</strong> Nombre del proyecto, Equipo, Product Owner, Scrum Master, Fecha de inicio, Problema a resolver, Usuarios/beneficiarios, Visión del producto, Objetivo general, Alcance inicial, Fuera de alcance.</li>
+<li><strong>Product Backlog:</strong> tabla ID (HU01, HU02...) · Historia de usuario ("Como [usuario] quiero [acción] para [beneficio]") · Prioridad (Alta/Media/Baja) · Valor · Estimación · Criterios de aceptación · Estado.</li>
+<li><strong>Historia de usuario detallada:</strong> por cada HU — ID/Título, Como/Quiero/Para, Prioridad, Estimación (Story Points), Dependencias, 3 Criterios de aceptación, Notas.</li>
+<li><strong>Sprint Planning / Sprint Backlog:</strong> Sprint, Objetivo del Sprint, Fecha inicio/fin, Integrantes, tabla de tareas (ID, Tarea, Responsable, Estimación en horas, Estado).</li>
+<li><strong>Daily Scrum:</strong> tabla por fecha — ¿Qué hice ayer? · ¿Qué haré hoy? · Impedimentos.</li>
+<li><strong>Registro de impedimentos:</strong> ID, Fecha, Impedimento, Impacto (Alto/Medio/Bajo), Responsable, Acción, Estado.</li>
+<li><strong>Sprint Review:</strong> Sprint, Incremento presentado, Participantes/interesados, Comentarios recibidos, Historias aceptadas/no aceptadas (y motivo), Nuevos elementos para el Backlog.</li>
+<li><strong>Sprint Retrospective:</strong> Sprint, Fecha, ¿Qué funcionó bien? / ¿Qué no funcionó? / ¿Qué debemos mejorar?, Acciones de mejora.</li>
+<li><strong>Definition of Done (DoD):</strong> checklist — código implementado, pruebas realizadas, criterios de aceptación cumplidos, revisión del equipo, documentación actualizada (cada uno con Sí/No + evidencia).</li>
+</ol>
+<p class="empty" style="padding-top:6px">La Parte II (Cascada) y la Parte III (checklist comparativo Scrum vs. Cascada) están en el mismo PDF, para equipos que eligieron esa metodología.</p>
+</div>
+
+<div class="section-block"><h4>Las 10 propuestas de proyecto — descripción oficial completa</h4>
+<p><a href="files/Practicas-10-Propuestas-Descripcion.pdf" target="_blank" style="color:var(--indigo)">📄 Practicas-10-Propuestas-Descripcion.pdf</a> — reemplaza/complementa el resumen que salió del audio de la Clase 05, con el detalle exacto de cada práctica.</p>
+<p><strong>Lineamientos generales (todas las prácticas):</strong> mínimo 2 VMs (3+ si la arquitectura lo requiere) · Ubuntu Server recomendado + Windows/Linux como cliente · red interna con IPs documentadas · mínimo 3 servicios/componentes · seguridad básica (usuarios, permisos, firewall) · evidencias: capturas, pruebas técnicas, documento y <strong>video de 8–12 min</strong>. Regla clave del profesor: "no basta con instalar — hay que explicar, demostrar, probar y documentar".</p>
+<table><thead><tr><th>#</th><th>Proyecto</th><th>VMs</th><th>Debe incluir (resumen)</th></tr></thead><tbody>
+<tr><td>1</td><td>Intranet empresarial</td><td>2</td><td>DNS + dominio interno, Apache, Virtual Hosts (3 áreas), HTTPS + autenticación</td></tr>
+<tr><td>2</td><td>Correo electrónico empresarial</td><td>2</td><td>DNS del dominio de correo, SMTP, POP3/IMAP, usuarios + autenticación, cifrado</td></tr>
+<tr><td>3</td><td>Acceso remoto seguro</td><td>2</td><td>SSH, usuarios/grupos/permisos, autenticación por claves, SFTP</td></tr>
+<tr><td>4</td><td>Archivos empresarial</td><td>3</td><td>Samba + NFS, usuarios/grupos por departamento, permisos, carpetas (Admin/Ventas/Sistemas/Público)</td></tr>
+<tr><td>5</td><td>Web con base de datos</td><td>2–3</td><td>Apache + PHP + MySQL/MariaDB, DNS + HTTPS, CRUD de empleados</td></tr>
+<tr><td>6</td><td><strong>🥇 Balanceo de carga</strong></td><td>3</td><td>Balanceador/proxy + 2 servidores web (WEB1/WEB2), prueba de disponibilidad ante falla</td></tr>
+<tr><td>7</td><td><strong>🥇 Infraestructura escolar</strong></td><td>3–4</td><td>DHCP + DNS (escuela.local) + sitio web + Samba + SSH</td></tr>
+<tr><td>8</td><td>Web seguro HTTPS</td><td>2</td><td>Apache, Virtual Host, SSL/TLS + certificado, redirección HTTP→HTTPS, zona privada autenticada</td></tr>
+<tr><td>9</td><td>Archivos + acceso remoto</td><td>3</td><td>Samba + NFS + SSH + SFTP, usuarios/grupos, permisos por departamento, multiplataforma</td></tr>
+<tr><td>10</td><td><strong>🥇 Proxy y control de acceso</strong></td><td>2–3</td><td>Proxy HTTP, reglas de acceso, autenticación, logs (sitios permitidos/bloqueados)</td></tr>
+</tbody></table>
+<p class="empty" style="padding-top:6px">🥇 = las 3 que el profesor recomienda explícitamente para el proyecto final (Balanceo de carga, Infraestructura escolar, Proxy y control de acceso) por integrar mejor varios módulos de la materia.</p>
 </div>
 
 </div>
