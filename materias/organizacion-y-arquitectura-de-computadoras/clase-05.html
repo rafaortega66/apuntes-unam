@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 05 — Organización y Arquitectura de Computadoras</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Organización y Arquitectura de Computadoras</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Clase 05</h2>
+  <p class="prof">M.I. José Antonio de Jesús Arredondo Garza · 14 sep 2026 · Tema 3 — Modelo de programación en ensamblador ARM para la Raspberry Pi Pico 1 (Cortex-M0) y Pico 2 (Cortex-M33 + FPU), sintaxis de Inline Assembly en MicroPython, y repertorio completo de instrucciones de movimiento, aritmética, lógica, corrimientos, saltos y punto flotante.</p>
+</div>
+
+<details class="section-block sec" id="c5-registros-pico1" open><summary><span class="stitle">El banco de registros de la Pico 1 (Cortex-M0)</span></summary>
+<p>La clase retomó la comparación Pico 1 / Pico 2 de la sesión anterior, pero ahora bajando del nivel de especificaciones de hardware al nivel de <strong>modelo de programación</strong>: qué registros existen realmente y cómo se manipulan al escribir ensamblador. En el Cortex-M0 de la Pico 1, el banco de registros de propósito general es de 32 bits cada uno, y el profesor los dividió en dos grupos: los <strong>registros bajos</strong> (R0 a R7) y los <strong>registros altos</strong> (R8 a R12), aclarando que este segundo grupo tiene un acceso más restringido desde el juego de instrucciones Thumb que usa el Cortex-M0.</p>
+<p>Además de los de propósito general, hay cuatro registros con <strong>funciones reservadas</strong> que no deben usarse como almacenamiento genérico de datos:</p>
+<ul>
+<li><strong>R13 / SP (Stack Pointer):</strong> puntero de pila. El profesor insistió en que no se debe usar para guardar datos generales, precisamente porque el hardware y el compilador dependen de que apunte siempre al tope de la pila.</li>
+<li><strong>R14 / LR (Link Register):</strong> guarda la dirección de retorno cuando se llama a una subrutina, para poder volver al punto de origen al terminar.</li>
+<li><strong>R15 / PC (Program Counter):</strong> refleja en todo momento la dirección de la instrucción que se está ejecutando.</li>
+<li><strong>PSR (Program Status Register):</strong> registro de estado que contiene el registro de banderas (<em>flags</em>) del procesador — el resultado de comparaciones y operaciones aritméticas que después usan los saltos condicionales.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c5-registros-pico2" open><summary><span class="stitle">El banco de registros de punto flotante de la Pico 2 (FPU)</span></summary>
+<p>Al pasar a la Pico 2, el profesor mapeó el banco de <strong>32 registros de punto flotante</strong>, nombrados S0 a S31, exclusivos de la unidad de punto flotante (FPU) que la Pico 1 no tiene. Cada uno sigue el estándar <strong>IEEE 754 de precisión simple</strong> (32 bits), con capacidad de notación extendida. A diferencia de los registros generales R0–R12, estos S0–S31 solo pueden recibir instrucciones de la propia FPU — no se puede operar sobre ellos con las instrucciones aritméticas enteras normales (ADD, SUB, etc.).</p>
+</details>
+
+<details class="section-block sec" id="c5-inline-assembly" open><summary><span class="stitle">Sintaxis de Inline Assembly en MicroPython</span></summary>
+<p>Antes de entrar al repertorio de instrucciones, se explicó la diferencia de sintaxis entre escribir <strong>ensamblador puro</strong> (el que correría directamente en el procesador, tal cual se ve en manuales de referencia) y el <strong>Inline Assembly</strong> que ofrece MicroPython mediante la directiva <code>thumb</code> — el mecanismo para incrustar instrucciones de ensamblador directamente dentro de un script de MicroPython.</p>
+<p>La diferencia práctica más importante, y la que el profesor remarcó como regla obligatoria del entorno MicroPython, es que <strong>cada instrucción debe escribirse con paréntesis</strong>, como si fuera una llamada a función, en vez de la sintaxis de espacios que usa el ensamblador puro:</p>
+<ul>
+<li>En ensamblador puro: <code>ADD RD, RN, RM</code> calcula <code>RD = RN + RM</code>.</li>
+<li>En Inline Assembly de MicroPython: la misma operación se escribe <code>add(RD, RN, RM)</code>, o en su forma simplificada de dos operandos <code>add(RD, RM)</code>, que calcula <code>RD = RD + RM</code>.</li>
+</ul>
+<p>Esta misma regla de "instrucción con paréntesis" aplica a todas las instrucciones que se revisaron después en la clase.</p>
+</details>
+
+<details class="section-block sec" id="c5-mov-memoria" open><summary><span class="stitle">Instrucciones de movimiento y acceso a memoria</span></summary>
+<p>El primer bloque de instrucciones cubrió cómo mover datos entre registros y cómo leerlos o escribirlos en memoria:</p>
+<ul>
+<li><code>mov(RD, RM)</code> — copia el contenido de un registro a otro. En su modo inmediato (cargar una constante), el valor queda limitado a un <strong>offset de 8 bits</strong> dentro del Inline Assembly.</li>
+<li><code>ldr(RD, [RN])</code> o <code>ldr(RD, [RN, offset])</code> — carga en <code>RD</code> el valor ubicado en la dirección de memoria apuntada por <code>RN</code> (opcionalmente desplazada por <code>offset</code>).</li>
+<li><code>str(RD, [RN])</code> o <code>str(RD, [RN, offset])</code> — la operación inversa: almacena el contenido de <code>RD</code> en la dirección de memoria indicada por <code>RN</code>.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c5-aritmetica-logica" open><summary><span class="stitle">Instrucciones aritméticas y lógicas — y la ausencia de división</span></summary>
+<p>Para las operaciones aritméticas básicas, la sintaxis sigue el mismo patrón de tres operandos: <code>add(RD, RN, RM)</code> y <code>sub(RD, RN, RM)</code> para suma y resta. La multiplicación entera, en cambio, solo existe en su forma de dos operandos: <code>mul(RD, RN)</code> ejecuta <code>RD = RD * RN</code>.</p>
+<p>El punto que el profesor marcó explícitamente aquí es que <strong>el Cortex-M0 no tiene división entera</strong> como instrucción de hardware. La razón que dio es arquitectónica: al ser un procesador RISC orientado a bajo consumo energético, el circuito divisor (que es considerablemente más caro en silicio y en ciclos de reloj que un sumador o un multiplicador) se sacrifica a propósito. Cualquier división que se necesite en un programa para Cortex-M0 tiene que resolverse por software (con rutinas de corrimientos y restas sucesivas) en vez de con una sola instrucción.</p>
+<p>En el terreno lógico se revisaron los operadores bit a bit: <code>AND</code>, <code>ORR</code> (OR) y <code>EOR</code> (XOR), con la misma sintaxis de tres operandos que las aritméticas.</p>
+</details>
+
+<details class="section-block sec" id="c5-corrimientos-saltos" open><summary><span class="stitle">Corrimientos lógicos y saltos — la ganancia de velocidad de la Pico 2</span></summary>
+<p>Los corrimientos lógicos se manejan con <code>lsl(RD, RN, shift)</code> (desplazamiento a la izquierda) y <code>lsr(RD, RN, shift)</code> (desplazamiento a la derecha). El profesor señaló un límite concreto: como los registros son de 32 bits, el desplazamiento máximo permitido es de <strong>31 bits</strong> — especificar un valor mayor genera un error en tiempo de ensamblado, no en tiempo de ejecución.</p>
+<p>Para el control de flujo se vio el salto incondicional y la familia de saltos condicionales que leen el registro de banderas del PSR: <code>BEQ</code> (igual), <code>BNE</code> (distinto), <code>BCC</code> (sin acarreo), <code>BMI</code> (negativo) y <code>BVS</code> (con desbordamiento/overflow).</p>
+<p>Aquí es donde se conectó con la comparación de rendimiento entre las dos tarjetas que se había visto en la clase anterior: en la Pico 2, gracias a su pipeline más moderno, <strong>la latencia de un salto se redujo a 2 ciclos de máquina</strong> (entre 8 y 16 ns a 150 MHz), mientras que la Pico 1 necesitaba 3 ciclos para lo mismo. Es una mejora concreta y medible, no solo una diferencia de frecuencia de reloj.</p>
+</details>
+
+<details class="section-block sec" id="c5-fpu-instrucciones" open><summary><span class="stitle">El repertorio de instrucciones de la FPU (exclusivo de la Pico 2)</span></summary>
+<p>Cerrando el repertorio técnico, se cubrieron las instrucciones que sí requieren la FPU y por lo tanto solo corren en la Pico 2. Todas llevan el prefijo <code>V</code> (de la unidad vectorial de punto flotante) y operan exclusivamente entre los registros S0–S31:</p>
+<ul>
+<li><code>vadd(SD, SN, SM)</code>, <code>vsub(SD, SN, SM)</code>, <code>vmul(SD, SN, SM)</code> y <code>vdiv(SD, SN, SM)</code> — las cuatro operaciones aritméticas básicas. El profesor apuntó que, a diferencia de la división entera (que ni siquiera existe en el Cortex-M0), aquí la división sí existe en hardware, pero es la operación que más esfuerzo de procesamiento exige de las cuatro.</li>
+<li><code>vsqrt(SD, SN)</code> — calcula la raíz cuadrada directamente en hardware: <code>SD = sqrt(SN)</code>.</li>
+<li><code>vmov</code> — convierte y mueve datos entre registros enteros y registros flotantes.</li>
+<li><code>vldr</code> y <code>vstr</code> — la versión de carga/almacenamiento para intercambiar valores entre los registros de la FPU y variables o etiquetas de MicroPython.</li>
+</ul>
+<p>Un punto que el profesor enfatizó para que no se sobreestimara la FPU: solo hace aritmética elemental y raíz cuadrada por hardware. Textualmente advirtió <strong>"no esperen encontrar ni seno ni coseno ni nada de eso"</strong> — cualquier función trascendental (trigonométricas, logaritmos, exponenciales) sigue teniendo que resolverse por software, igual que en la Pico 1.</p>
+</details>
+
+<details class="section-block sec" id="c5-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> El profesor comentó, a propósito de las instrucciones de corrimiento con offset directo, que el formato moderno de este tipo de instrucciones tiene su origen en el diseño histórico de los DSP (procesadores digitales de señales).</li>
+<li><em>(Contexto)</em> Mencionó que, aunque la Pico 2 cuenta en teoría con hardware para multiplicación-acumulada (MAC), el soporte de Inline Assembly en MicroPython todavía no permite usarla con facilidad, por tratarse de una operación muy especializada.</li>
+<li><em>(Contexto)</em> Al cerrar la sesión, el profesor preguntó directamente a los alumnos si les había dado miedo el ensamblador en materias anteriores, o si ya se les había quitado — con el comentario "es una parte importante" de la formación.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c5-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Suspensión de clases:</strong> el miércoles 16 de septiembre no hubo clase por el asueto del aniversario de la Independencia de México.</li>
+<li><strong>Próxima sesión (lunes):</strong> se empezará a teclear y probar programas completos en ensamblador directamente en las tarjetas, ya no solo instrucciones sueltas de ejemplo.</li>
+<li><strong>Material distribuido:</strong> el profesor compartió las carpetas de trabajo (<em>micros</em>, <em>computación cuántica</em>, <em>assembler pico</em>), con enlaces a videos y el manual de referencia <em>RP2040 Assembly Language Programming</em> — pendiente subirlo a <a href="material.html" style="color:var(--indigo)">Material</a> en cuanto se comparta el archivo.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Pico 1 (Cortex-M0): registros R0–R7 (bajos) y R8–R12 (altos), más SP/LR/PC/PSR reservados.</li>
+<li>Pico 2 añade 32 registros de punto flotante S0–S31 (IEEE 754 simple), exclusivos de la FPU.</li>
+<li>En Inline Assembly de MicroPython toda instrucción se escribe con paréntesis: <code>add(RD, RN, RM)</code>, no <code>ADD RD, RN, RM</code>.</li>
+<li>El Cortex-M0 no tiene división entera en hardware (decisión RISC de bajo consumo); la FPU de la Pico 2 sí divide, pero no tiene funciones trigonométricas.</li>
+<li>La Pico 2 salta en 2 ciclos de máquina contra 3 de la Pico 1.</li>
+</ul></div>
+
+</div>
+</body>
+</html>
