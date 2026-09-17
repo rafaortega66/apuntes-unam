@@ -23,9 +23,8 @@
 <table><thead><tr><th>Archivo</th><th>Qué es</th></tr></thead><tbody>
 <tr><td><a href="files/entregas/Tarea-01-Investigar-procesos.pdf" target="_blank" style="color:var(--indigo)">Tarea 1 — Investigar (Sistemas Operativos)</a></td><td>Investigación «¿Qué es un proceso?» e imagen de memoria del proceso (Tanenbaum 2009, Gay 2000). APA 7.</td></tr>
 <tr><td><a href="files/entregas/Tarea-02-Permisos-fdisk-setuid.pdf" target="_blank" style="color:var(--indigo)">Tarea 2 — Permisos, fdisk y bit setuid</a></td><td>Entregada el 3 sep 2026. Actividad 1 (dos terminales root / no-root, <code>whoami</code>, <code>fdisk -l</code>, <code>chmod 4511</code>, restaurar) + Actividad 2 (<code>ids.c</code>: UID real vs. efectivo con setuid). APA 7 (Negus 2020, Shotts 2019).</td></tr>
-<tr><td><a href="files/entregas/Tarea-03-fork-exec-execve.pdf" target="_blank" style="color:var(--indigo)">Tarea 3 — fork(), exec() y manejo de errores</a></td><td>Entregada el 17 sep 2026. Actividad 1 (<code>programa20_myecho.c</code> y <code>programa21_execve.c</code> comentados línea por línea, ejecución con argumentos genéricos y con el nombre propio, llamada encadenada <code>programa21_execve ./programa20_myecho</code>, corrección del bloque <code>if</code>/<code>exit(EXIT_FAILURE)</code> en <code>execve()</code>) + Actividad 2 (<code>programa23_fork-exec.c</code> comentado, misma corrección en <code>execvp()</code> dentro de <code>spawn()</code>). Código fuente tomado de <code>profesores.fi-b.unam.mx/carlos/acs</code>, compilado y ejecutado realmente para obtener la evidencia. APA 7 (The Open Group, Stevens &amp; Rago 2013).</td></tr>
 </tbody></table>
-<p>El enunciado del profesor está en <a href="files/prof-tema1/Tarea-02.pdf" target="_blank" style="color:var(--indigo)">Tarea-02.pdf</a> y <a href="files/prof-tema1/Tarea-03.pdf" target="_blank" style="color:var(--indigo)">Tarea-03.pdf</a>.</p>
+<p>El enunciado del profesor está en <a href="files/prof-tema1/Tarea-02.pdf" target="_blank" style="color:var(--indigo)">Tarea-02.pdf</a>.</p>
 </div>
 
 <div class="section-block"><h4>Cotejo rápido</h4>
@@ -33,8 +32,6 @@
 <li><strong>Tarea 2 — Actividad 1:</strong> cubre los 10 pasos del ejercicio (whoami en ambas terminales, <code>fdisk -l</code> denegado, <code>which fdisk</code> + permisos originales <code>-rwxr-xr-x</code>, <code>chmod 4511</code> → <code>r-s</code>, ejecución exitosa como no-root, restauración con <code>chmod 755</code>). Incluye la investigación previa de <code>fdisk</code> y de la opción <code>-l</code>. ✔</li>
 <li><strong>Tarea 2 — Actividad 2:</strong> <code>ids.c</code> con <code>getuid/geteuid/getgid/getegid</code>, compilado con <code>gcc</code>, primera ejecución (real == efectivo = 1000), luego <code>chown root:root</code> + <code>chmod 4755</code> → <code>-rwsr-xr-x</code>, ejecución como no-root con Real UID 1000 y Effective UID 0. Coincide con lo que pide el enunciado. ✔</li>
 <li><strong>Tarea 1:</strong> definición de proceso, distinción proceso/programa, tabla de procesos e imagen de memoria, con citas a Tanenbaum y Gay en APA 7. ✔</li>
-<li><strong>Tarea 3 — Actividad 1:</strong> cubre los 5 incisos (a-e): comentario detallado de ambos programas, ejecución de <code>myecho</code> con argumentos genéricos y con el nombre en formato apellidoPaterno apellidoMaterno nombre(s), corrección del bloque <code>if</code>/<code>exit(EXIT_FAILURE)</code> en <code>execve()</code>, y ejecución encadenada <code>programa21_execve ./programa20_myecho</code>. Incluye verificación adicional del manejo de errores (ruta inexistente). ✔</li>
-<li><strong>Tarea 3 — Actividad 2:</strong> <code>programa23_fork-exec.c</code> comentado, con la misma corrección aplicada a <code>execvp()</code> dentro de <code>spawn()</code>; compilado y ejecutado, mostrando el listado real de <code>ls -l /</code> y explicando por qué aparece después del mensaje del padre (no hay <code>wait()</code>). ✔</li>
 </ul>
 </div>
 </div>
