@@ -15,28 +15,6 @@
   <p class="prof">Dra. Cintia Quezada Reyes · 10 sep 2026 · Tema 1 (1.4, a fondo) — Servicios y mecanismos de seguridad informática, autenticación de entidades, el fenómeno del bolero y aplicación práctica en escenarios reales.</p>
 </div>
 
-<div class="encorto"><h4>En corto</h4><ul>
-<li><strong>6 servicios vs. Estándar 74 (OSI):</strong> el modelo OSI solo contempla 5 servicios porque asume que la disponibilidad se logra automáticamente; los estándares de seguridad informática exigen los 6 de forma explícita.</li>
-<li><strong>Control de acceso y autenticación:</strong> el control de acceso requiere obligatoriamente autenticación previa para verificar identidades.</li>
-<li><strong>Alcance de la autenticación:</strong> no solo aplica a personas, también a servicios, procesos informáticos y activos físicos.</li>
-<li><strong>3 categorías de autenticación:</strong> algo que se sabe (contraseñas), algo que se tiene (credenciales, tokens, certificados), algo que se es (biometría).</li>
-<li><strong>Reclasificación de la biometría:</strong> huella digital e iris se clasificaban como "algo que se tiene"; en los estándares modernos son "algo que se es", por ser atributos biológicos irremplazables.</li>
-<li><strong>Síndrome del bolero:</strong> minimizar el riesgo de confidencialidad asumiendo que las personas del entorno inmediato no representan un peligro para lo que escuchan.</li>
-<li><strong>Integridad del factor humano:</strong> no solo protege datos y equipos, también evalúa la estabilidad conductual y neurológica del personal que manipula la información.</li>
-<li><strong>No repudio:</strong> garantiza que un ente no pueda negar una acción o transacción, mediante acuses, firmas digitales o registros de auditoría.</li>
-</ul></div>
-
-<div class="examen"><h4>🎯 Para el examen</h4><ul>
-<li><strong>Estándar 74 (OSI) vs. estándares de seguridad:</strong> OSI = 5 servicios (asume disponibilidad automática); seguridad informática real = 6 servicios obligatorios, porque la disponibilidad requiere mecanismos propios.</li>
-<li><strong>Control de acceso ⇒ autenticación obligatoria y vinculante.</strong></li>
-<li><strong>Clasificación de mecanismos de autenticación:</strong> algo que se sabe (info en la memoria del usuario) · algo que se tiene (bienes lógicos/físicos sustituibles o clonables: credenciales, inode de un archivo en Linux, firma digital, extensión de archivo) · algo que se es (atributos intrínsecos no duplicables: huella, iris, PID mutuamente excluyente). <strong>Punto clave:</strong> entender la transición histórica de huella/iris de "se tiene" a "se es".</li>
-<li><strong>Criterios de sensores biométricos:</strong> la muestra no debe degradarse ni cambiar rápido; la sangre NO sirve como sensor continuo (se seca, cambia propiedades, el ADN se degrada sin aditivos); sensores de nivel de confianza 7 verifican vitalidad (pulsaciones) para impedir suplantación con dedos cercenados o huellas latentes.</li>
-<li><strong>Gestión de contraseñas:</strong> cambiar contraseñas de fábrica (ej. <code>admin123</code>) al primer uso, rotación periódica, prohibir reutilizar contraseñas previas.</li>
-<li><strong>Síndrome del bolero (definición técnica):</strong> vulnerabilidad por minimizar la peligrosidad del entorno al divulgar información confidencial frente a personal no autorizado o terceros.</li>
-<li><strong>No repudio:</strong> impide que un sujeto niegue haber autorizado o realizado una actividad.</li>
-<li><strong>Graduación de controles:</strong> no conviene aplicar el nivel máximo de restricción en todas las áreas; se gradúa según el modelo de negocio (ej. catálogo público sin autenticar vs. proceso de compra autenticado).</li>
-</ul></div>
-
 <details class="section-block sec" id="c5-6-servicios" open><summary><span class="stitle">Los 6 servicios de seguridad vs. Estándar 74 (modelo OSI)</span></summary>
 <p>El estándar 74 (modelo OSI) contempla solo 5 servicios porque asume que la disponibilidad se obtiene automáticamente al implementar autenticación, integridad, confidencialidad y control de acceso. La Dra. Quezada enfatizó que en entornos reales la disponibilidad <strong>no</strong> se implementa sola: un equipo puede reiniciarse inesperadamente en pleno uso, y tener control de acceso o no repudio no evita que el sistema quede inoperable si no se diseñaron mecanismos específicos de disponibilidad.</p>
 </details>
@@ -53,7 +31,7 @@
 
 <details class="section-block sec" id="c5-mecanismos" open><summary><span class="stitle">Clasificación de mecanismos de autenticación y evaluación biométrica</span></summary>
 <ol>
-<li><strong>Algo que se sabe:</strong> información en la memoria (contraseñas, conocimiento exclusivo de eventos pasados). <em>Riesgo:</em> contraseñas débiles o anotadas en papel destruyen la responsabilidad individual; compartir contraseñas vuelve la responsabilidad legal/operativa compartida entre todos los involucrados.</li>
+<li><strong>Algo que se sabe:</strong> información en la memoria (contraseñas, conocimiento exclusivo de eventos pasados). <em>Riesgo:</em> contraseñas débiles o anotadas en papel destruyen la responsabilidad individual; compartir contraseñas vuelve la responsabilidad legal/operativa compartida entre todos los involucrados. <em>Buenas prácticas de gestión:</em> cambiar las contraseñas de fábrica (ej. <code>admin123</code>) desde el primer uso, rotarlas periódicamente y prohibir reutilizar contraseñas previas.</li>
 <li><strong>Algo que se tiene:</strong> elementos lógicos o físicos transferibles/duplicables. Lógico: el inode de un archivo en Linux, una firma digital (~256 caracteres), la extensión de archivo (ej. detectar doble extensión sospechosa). Físico: credenciales con fotografía, tarjetas plásticas, fotochecks.</li>
 <li><strong>Algo que se es:</strong> atributos biológicos o identificadores lógicos mutuamente excluyentes. Históricamente la huella se consideraba "algo que se tiene"; la estandarización moderna la reclasifica como "algo que se es", junto con el iris, por ser características irremplazables. En procesos lógicos, un ID mutuamente excluyente que prohíbe duplicados se convierte en "algo que es" ese proceso.</li>
 </ol>
@@ -113,6 +91,14 @@
 <li><strong>Próxima sesión:</strong> continuar con el diseño e implementación de mecanismos de seguridad en infraestructuras organizacionales.</li>
 </ul>
 </details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>El modelo OSI (Estándar 74) solo contempla 5 servicios porque asume disponibilidad automática; la seguridad informática real exige 6, con la disponibilidad como servicio explícito.</li>
+<li>El control de acceso requiere autenticación previa obligatoria; la autenticación aplica a personas, procesos y activos físicos, no solo a personas.</li>
+<li>Los mecanismos de autenticación se clasifican en algo que se sabe, algo que se tiene y algo que se es — huella e iris migraron históricamente de "se tiene" a "se es".</li>
+<li>El síndrome del bolero es la vulnerabilidad de minimizar el riesgo de confidencialidad asumiendo que el entorno inmediato es inofensivo.</li>
+<li>La integridad no solo protege datos e infraestructura, también evalúa la estabilidad del factor humano que los opera; el no repudio impide que una entidad niegue haber realizado una acción.</li>
+</ul></div>
 
 </div>
 </body>
