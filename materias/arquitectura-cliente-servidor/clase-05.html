@@ -17,16 +17,6 @@
 
 <div class="section-block" style="background:#fff7ed;border-left:3px solid #E8735C"><p style="margin:0"><strong>⚠️ Nota:</strong> a esta clase no asistí por una entrevista. El grueso del contenido no viene de audio propio, sino que fue reconstruido a partir de la <strong>Práctica #3 "Procesos (continuación)"</strong> publicada en el <a href="https://cromanzamitiz.github.io/arquitectura-cliente-servidor/tema2/" target="_blank" rel="noopener" style="color:var(--indigo)">sitio del profesor</a> (Tema 2). No hay secciones de "para el examen" ni "contexto" propias porque no hay audio del que sacar el énfasis real del profesor ni sus anécdotas de ese día — solo el material escrito. <strong>Sí confirmado por audio</strong> (repaso que el profesor hizo al inicio de la <a href="clase-06.html" style="color:var(--indigo)">Clase 06</a>): que aquí arrancó formalmente el Tema 2, que dejó de tarea moral revisar <code>man 7 signal</code> (columna X86 ARM), que se demostró en vivo la adopción de huérfanos (PPID → 1), y que <strong>SIGCHLD es la señal 17 en X86/ARM</strong> (no 18 como en la tabla genérica de abajo, que es la numeración histórica de UNIX System V).</p></div>
 
-<div class="encorto"><h4>En corto</h4><ul>
-<li><strong>Estados de un proceso:</strong> 9 estados posibles (ejecución modo usuario, ejecución modo núcleo, listo/en memoria, dormido/en memoria, listo/descargado, dormido/descargado, expulsado, creado, zombie).</li>
-<li><strong>Contexto de un proceso:</strong> su código, variables globales, estructuras de datos, registros de CPU, entrada en la tabla de procesos, área de usuario, pilas de usuario y núcleo.</li>
-<li><strong>Señales:</strong> mensajes asíncronos a un proceso; se procesan de inmediato sin esperar a que termine la instrucción en curso. Requieren <code>&lt;signal.h&gt;</code>.</li>
-<li><strong>19 señales de UNIX System V</strong>, cada una con un número y una acción por defecto (casi siempre generar <em>core</em> y terminar el proceso).</li>
-<li><strong><code>wait()</code>:</strong> bloquea al proceso padre hasta que el hijo termina; regresa un código de estado interpretable con macros (<code>WIFEXITED</code>, <code>WEXITSTATUS</code>, <code>WIFSIGNALED</code>, <code>WTERMSIG</code>, <code>WCOREDUMP</code>, <code>WIFSTOPPED</code>, <code>WSTOPSIG</code>).</li>
-<li><strong>Proceso zombie:</strong> ya terminó pero el padre no ha llamado <code>wait()</code> para "recogerlo"; aparece en <code>ps</code> como <code>Z+ &lt;defunct&gt;</code>.</li>
-<li><strong>Terminación de procesos:</strong> normal (regresa control al padre) o por señal (<code>SIGINT</code>, <code>SIGTERM</code> vía <code>kill</code>, <code>SIGABRT</code> vía <code>abort()</code>, <code>SIGKILL</code> — no se puede bloquear ni manejar).</li>
-</ul></div>
-
 <details class="section-block sec" id="c5-estados" open><summary><span class="stitle">Estados de un proceso</span></summary>
 <p>Un proceso puede ejecutarse en modo usuario o en modo núcleo (supervisor). Su tiempo de vida se divide en un conjunto de estados con reglas de transición bien definidas, impuestas por la competencia entre procesos por un recurso escaso: la CPU.</p>
 <p><strong>Los 9 estados posibles:</strong></p>
@@ -181,6 +171,14 @@ int main(void) {
 <li>Modificar el proceso creado para que termine su ejecución después de 20 segundos.</li>
 </ul>
 </details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Un proceso transita entre 9 estados posibles (modo usuario, modo núcleo, listo/dormido en memoria o descargado, expulsado, creado, zombie), regidos por la competencia por la CPU.</li>
+<li>Las señales son mensajes asíncronos que se procesan de inmediato; UNIX System V define 19, cada una con número y acción por defecto (casi siempre generar <em>core</em> y terminar).</li>
+<li><code>wait()</code> bloquea al padre hasta que el hijo termina y expone el resultado mediante macros (<code>WIFEXITED</code>, <code>WEXITSTATUS</code>, <code>WIFSIGNALED</code>…).</li>
+<li>Un proceso zombie ya terminó pero sigue en la tabla de procesos porque el padre no ha llamado <code>wait()</code> para "recogerlo".</li>
+<li><code>SIGKILL</code> es la única señal que no puede bloquearse ni manejarse; <code>SIGTERM</code> y <code>SIGABRT</code> sí permiten limpieza antes de terminar.</li>
+</ul></div>
 
 </div>
 </body>

@@ -25,26 +25,6 @@
 <p style="margin-top:8px"><em>Esto confirma y precisa lo reconstruido en la <a href="clase-05.html" style="color:var(--indigo)">Clase 05</a> — en particular, el número real de SIGCHLD en la arquitectura de la materia es <strong>17</strong>, no 18 como aparece en la tabla genérica de UNIX System V.</em></p>
 </details>
 
-<div class="encorto"><h4>En corto</h4><ul>
-<li><strong><code>man 7 signal</code>:</strong> documentación oficial y numeración estándar de señales en Linux; columna a consultar: <strong>X86 ARM</strong>.</li>
-<li><strong>Tres escenarios ante una señal:</strong> 1) ignorarla (<code>SIG_IGN</code>), 2) tratarla con una función programada, o 3) el proceso es terminado de inmediato si la señal no puede ignorarse ni tratarse.</li>
-<li><strong><code>SIGINT</code> (2):</strong> interrupción por teclado (Ctrl+C); por defecto (<code>SIG_DFL</code>) mata el proceso, pero puede ignorarse o capturarse.</li>
-<li><strong><code>SIGKILL</code> (9):</strong> la más fulminante (<code>kill -9</code>); no puede ignorarse, bloquearse ni tratarse bajo ninguna circunstancia.</li>
-<li><strong><code>SIGCHLD</code> (17):</strong> el hijo se la manda al padre al morir (sinónimo <code>SIGCLD</code>), para que limpie la tabla de procesos.</li>
-<li><strong>Manejador de señales:</strong> la función debe ser estrictamente <code>void</code> y recibir un único parámetro <code>int</code>.</li>
-<li><strong>Background (<code>bg</code>):</strong> Ctrl+Z detiene el proceso en primer plano; <code>bg</code> lo reanuda en segundo plano, liberando el prompt.</li>
-<li><strong>Control de trabajos:</strong> <code>jobs</code> lista los procesos en background; <code>fg %N</code> regresa el trabajo N a primer plano.</li>
-</ul></div>
-
-<div class="examen"><h4>🎯 Para el examen</h4><ul>
-<li><strong>Firma del manejador:</strong> <code>signal(signum, handler)</code> — <code>handler</code> puede ser <code>SIG_IGN</code>, <code>SIG_DFL</code>, o la dirección de una función definida por el usuario que debe retornar <code>void</code> y aceptar un <code>int</code> (ej. <code>void manejador_senales(int sig)</code>).</li>
-<li><strong>SIGKILL es inalterable:</strong> intentar asociarla a un manejador o a <code>SIG_IGN</code> genera error en tiempo de ejecución.</li>
-<li><strong>Variables <code>static</code> en handlers:</strong> para contar cuántas veces se recibió una señal (ej. Ctrl+C) a lo largo de la vida del programa, el contador debe declararse <code>static</code> para preservar su valor entre invocaciones.</li>
-<li><strong>Huérfano vs. Zombie:</strong> huérfano = el padre muere primero y el sistema adopta al hijo (PID 1); zombie = el hijo muere pero el padre no procesa <code>SIGCHLD</code> ni limpia su entrada en la tabla de procesos.</li>
-<li><strong>Comandos de administración de trabajos:</strong> <code>Ctrl+Z</code> detiene sin destruir · <code>bg</code> reanuda en segundo plano · <code>jobs</code> lista trabajos con su <code>[N]</code> · <code>fg %N</code> trae el trabajo N a primer plano · <code>kill -9 PID</code> fuerza terminación inmediata.</li>
-<li><strong>Relevancia para el proyecto final:</strong> el profesor remarcó que la captura de señales y el control de procesos concurrentes será un requisito práctico indispensable del proyecto.</li>
-</ul></div>
-
 <details class="section-block sec" id="c6-man-signal" open><summary><span class="stitle">Consulta y estructura del manual de señales (<code>man 7 signal</code>)</span></summary>
 <p>Para inspeccionar las señales disponibles en la arquitectura del sistema se ejecuta <code>man 7 signal</code> (capítulo 7 del manual). Dentro de la sección <em>Signal numbering for standard signals</em>, hay que identificar la columna <strong>X86 ARM</strong> para la correspondencia exacta entre macro en C y número entero:</p>
 <ul>
@@ -104,6 +84,7 @@ int main() {
 </ol>
 <p><strong>Inconveniente:</strong> si el proceso en background tiene <code>printf()</code>, el texto se sigue imprimiendo en la terminal, desplazando el prompt mientras el usuario escribe otros comandos. Para evitarlo, redirigir la salida a un archivo o a <code>/dev/null</code>.</p>
 <p><strong>Administración de trabajos:</strong> <code>jobs</code> lista los trabajos activos en background (<code>[33]</code>, <code>[36]</code>, etc.); <code>fg %N</code> trae de vuelta el trabajo N a primer plano — necesario si se le quiere mandar una interrupción Ctrl+C, ya que esa combinación solo afecta al proceso activo en foreground.</p>
+<p><strong>Huérfano vs. zombie</strong> (distinción marcada para examen): un huérfano es un proceso cuyo padre muere primero y que el sistema adopta (PID 1 o un <em>reaper</em>); un zombie es lo contrario — el hijo ya murió, pero el padre no ha procesado la señal <code>SIGCHLD</code> ni limpiado su entrada en la tabla de procesos, así que sigue apareciendo en el sistema. El profesor remarcó que la captura correcta de señales y el control de procesos concurrentes será un requisito práctico indispensable del proyecto final de la materia.</p>
 </details>
 
 <details class="section-block sec" id="c6-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
@@ -122,6 +103,14 @@ int main() {
 <li><strong>Próxima sesión:</strong> se profundizará en procesos zombie — cómo se originan y cómo tratarlos correctamente capturando <code>SIGCHLD</code> en el proceso padre.</li>
 </ul>
 </details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Ante una señal hay tres escenarios: ignorarla (<code>SIG_IGN</code>), tratarla con un manejador <code>void función(int)</code>, o dejar que termine el proceso si no puede ignorarse ni tratarse.</li>
+<li><code>SIGKILL</code> (9) es inalterable — ni se ignora, ni se bloquea, ni se maneja, bajo ninguna circunstancia.</li>
+<li><code>SIGCHLD</code> es la señal 17 en X86/ARM (18 en la numeración genérica de UNIX System V) que el hijo manda al padre al morir.</li>
+<li>Huérfano (padre muere primero, lo adopta PID 1/reaper) es lo opuesto a zombie (hijo ya murió, padre no ha limpiado su entrada con <code>wait()</code>/<code>SIGCHLD</code>).</li>
+<li><code>Ctrl+Z</code> detiene sin destruir, <code>bg</code> reanuda en segundo plano, <code>jobs</code> lista trabajos y <code>fg %N</code> trae uno de vuelta a primer plano.</li>
+</ul></div>
 
 </div>
 </body>
