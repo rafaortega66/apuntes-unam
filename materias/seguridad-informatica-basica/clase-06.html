@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 06 — Seguridad Informática Básica</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Seguridad Informática Básica</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 06</h2>
+  <p class="prof">Dra. Cintia Quezada Reyes · 17 sep 2026 · Tema 2 — Amenazas y vulnerabilidades: definiciones formales, la fórmula del riesgo, las cinco fuentes de origen, y las clasificaciones por flujo de información, objetivo y ubicación.</p>
+</div>
+
+<details class="section-block sec" id="c6-transicion" open><summary><span class="stitle">Transición: equilibrio operacional y el Tema 2 — Amenazas y vulnerabilidades</span></summary>
+<p>La clase inicia con un repaso breve del concepto de <strong>equilibrio operacional</strong> y la graduación de los servicios de seguridad según las necesidades del negocio, retomando el ejemplo de Liverpool. A partir de ahí se da paso formal al Tema 2, dedicado a las amenazas y las vulnerabilidades. La profesora enfatiza que <strong>estos dos términos no son sinónimos</strong>, y que un error común en las organizaciones es detectar solo vulnerabilidades ignorando las amenazas, o viceversa. Tampoco existe una relación uno a uno entre una amenaza y una vulnerabilidad: dentro de una organización hay una amplia diversidad de amenazas que requieren análisis profundo para minimizar el riesgo. Para priorizar ese análisis es vital evaluar la <strong>frecuencia de aparición</strong> de las amenazas, que puede ir desde eventos que ocurren una vez al año hasta amenazas críticas que se presentan cada 24 horas, cada 2 horas o varias veces por semana. Identificar bien los activos, amenazas y vulnerabilidades permite responder la primera pregunta clave de la seguridad: <em>"¿qué quiero proteger?"</em>.</p>
+</details>
+
+<details class="section-block sec" id="c6-precision-amenazas" open><summary><span class="stitle">Precisión al describir amenazas y jerarquización de las pérdidas</span></summary>
+<p>Al identificar un bien o activo (por ejemplo, la propia vivienda), se puede analizar qué daños podría sufrir y por qué sería grave que ocurrieran: quedarse sin lugar para vivir, incurrir en gastos extraordinarios no contemplados, o perder bienes de alto valor irrecuperables. Para ilustrar la evaluación del impacto y la jerarquización de las inversiones de seguridad, se usó el ejemplo visual de una figura de globo con forma de perro que teme a un cerillo encendido, frente a una figura de origami de papel que teme a una chincheta: aunque una chincheta es una amenaza directa para el papel, una llama de cerillo provocaría una <strong>pérdida total e irreversible</strong> en ambos objetos. Como existen pérdidas totales que no se pueden recuperar "ni con todo el oro del mundo", organizaciones y personas deben establecer prioridades de inversión para prevenir los escenarios más catastróficos.</p>
+<p>También se recalcó la importancia de una <strong>descripción de amenazas precisa</strong>: no basta con enunciar de forma vaga "robo" o "que tiemble" — hay que detallar qué modalidad de robo, o qué magnitud sismológica se contempla (por ejemplo, sismos de magnitud 1.3 frente a eventos de 7.1, 7.5 u 8.1/8.5, recordando el sismo de 2017 con epicentro en la Ciudad de México, y la ausencia histórica de protocolos sismológicos en lugares como Haití). Aunque ciertos sucesos tengan frecuencia de aparición muy baja (como la caída de un meteorito o el desplome de un avión o helicóptero sobre una vivienda), no deben descartarse arbitrariamente del análisis de riesgo.</p>
+</details>
+
+<details class="section-block sec" id="c6-definiciones" open><summary><span class="stitle">Definiciones formales: amenaza y riesgo</span></summary>
+<p><strong>Amenaza:</strong> cualquier actividad, evento o circunstancia que intenta o puede causar un daño a la información o a cualquier bien de la organización (incluyendo hardware, software, instalaciones, y el propio recurso humano, protegido mediante seguros de gastos médicos o de vida). La amenaza es un <strong>factor latente y multifactorial</strong> que siempre está presente — como la probabilidad de lluvia del 80%, sufrir un ataque cardíaco, ser víctima de un delito tras ganar la lotería, o lesionarse jugando fútbol o bajando escaleras.</p>
+<p><strong>Riesgo:</strong> se define formalmente como el producto de la ocurrencia de la amenaza y su consecuencia: <strong>Riesgo = Ocurrencia × Consecuencia</strong>. El riesgo determina la probabilidad concreta y la severidad del impacto en caso de que la amenaza llegue a materializarse.</p>
+<p>Sobre disponibilidad, se plantearon escenarios de <strong>denegación de servicio</strong> tanto en suministros cotidianos (agua, gas, internet, educación, compras y pagos en línea) como en instituciones: qué pasaría si la UNAM dejara de existir, o las consecuencias operativas de las fallas del portal del SAT durante las declaraciones anuales de abril, que generan pérdidas severas de tiempo e ineficiencias. Sobre puntos de acceso (físicos o lógicos), se revisaron las eventualidades al intentar ingresar a una instalación o las desconfiguraciones por ejecución inadvertida de software — desmintiendo la típica justificación de <em>"así estaba cuando llegué"</em>. También se trataron los errores de programación: gran parte del software actual se desarrolla sin principios básicos de seguridad por la urgencia de entrega ("para ayer"), desmontando la falsa creencia de que los especialistas en seguridad no necesitan saber programar, o que los desarrolladores no necesitan saber de seguridad.</p>
+</details>
+
+<details class="section-block sec" id="c6-cinco-fuentes" open><summary><span class="stitle">Las cinco fuentes de origen de las amenazas</span></summary>
+<ul>
+<li><strong>Factor humano:</strong> la principal y más frecuente fuente de amenazas, debido a la alta densidad poblacional, los comportamientos, los descuidos y el exceso de confianza.</li>
+<li><strong>Fallas de hardware:</strong> averías o fallos en componentes físicos.</li>
+<li><strong>Fallas de software:</strong> errores en código, aplicaciones o sistemas operativos.</li>
+<li><strong>Red:</strong> el conjunto integrado de hardware, software y servicios de comunicaciones.</li>
+<li><strong>Desastres naturales / Actos de Dios:</strong> eventos ambientales e imponderables de la naturaleza donde no existe responsabilidad humana directa (<em>Acts of God</em>).</li>
+</ul>
+<p>Todas estas fuentes se interrelacionan con el factor humano, ya que son las personas quienes diseñan, configuran y mantienen el hardware, el software y las redes.</p>
+</details>
+
+<details class="section-block sec" id="c6-clasificaciones" open><summary><span class="stitle">Clasificación de las amenazas: por flujo, por objetivo y por ubicación</span></summary>
+<p><strong>Por el flujo de información o del bien:</strong></p>
+<ul>
+<li><strong>Intercepción:</strong> un agente no autorizado observa, lee, escucha o visualiza el bien o la información durante su traslado del emisor al receptor — atenta contra la <strong>confidencialidad</strong> sin interrumpir el flujo.</li>
+<li><strong>Interrupción o destrucción:</strong> el bien o servicio deja de estar disponible o no llega a su destino — atenta contra la <strong>disponibilidad</strong>.</li>
+<li><strong>Modificación:</strong> una tercera entidad maliciosa altera el contenido o formato del bien durante el tránsito y lo entrega modificado al receptor — atenta contra la <strong>integridad</strong>.</li>
+<li><strong>Suplantación o falsificación:</strong> una entidad maliciosa se hace pasar por el emisor legítimo para engañar al receptor.</li>
+</ul>
+<p><strong>Por el objetivo de la acción:</strong></p>
+<ul>
+<li><strong>Intencionadas (conscientes):</strong> hay una planificación deliberada para causar daño o un abuso de autoridad — representan entre el <strong>85% y el 95%</strong> de los incidentes en las organizaciones.</li>
+<li><strong>No intencionadas (inconscientes/accidentales):</strong> ocurren sin objetivo deliberado, por negligencia, ignorancia o accidentes (como mancharse la ropa con comida, o accidentes caseros en vacaciones).</li>
+</ul>
+<p><strong>Por el lugar y la cercanía (ubicación):</strong></p>
+<ul>
+<li><strong>Internas:</strong> generadas dentro de la organización por empleados o activos internos — constituyen del <strong>85% al 95%</strong> de los problemas reales, por el conocimiento directo que tienen los usuarios internos de la infraestructura.</li>
+<li><strong>Externas:</strong> se originan fuera de la organización, aunque para consumarse suelen requerir algún grado de complicidad o descuido interno.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c6-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>El perrito de globo y el ave de origami:</strong> la analogía visual usada para ilustrar la diferencia en gravedad del daño — el globo teme al cerillo, el origami teme a la chincheta, pero el cerillo destruye a ambos por igual.</li>
+<li><strong>La carta de Hogwarts:</strong> broma sobre por qué a nadie le llegó su carta de aceptación a la escuela de magia — una interrupción en el trayecto de la lechuza.</li>
+<li><strong>Atentados de las Torres Gemelas (25 aniversario):</strong> referencia a cómo se recabó información mediante intercepción, observando durante horas las rutinas del personal de seguridad en los aeropuertos.</li>
+<li><strong>El llavero de Deadpool y la rutina diaria:</strong> ejemplo de cómo un observador puede identificar el patrón de un estudiante notando que siempre lleva la misma mochila, el mismo peinado, la misma sudadera y el llavero de Deadpool colgado.</li>
+<li><strong>Mancharse con comida:</strong> ejemplo de accidentes cotidianos no intencionados — gotas de mole, aguacate o birria cayendo sobre la ropa.</li>
+<li><strong>Explosión de la pipa de gas en La Concordia:</strong> mención de un accidente real ocurrido un año atrás, donde personas que caminaban lejos resultaron afectadas por una amenaza externa que alcanzó su entorno.</li>
+<li><strong>Brincarse la barda y los "50,000 perros":</strong> las complicaciones físicas de entrar a casa saltando la barda si se olvidan las llaves — riesgo de cortarse con vidrios o ser atacado por perros guardianes.</li>
+<li><strong>Falsos reclutadores de empleo:</strong> el riesgo de caer en ofertas laborales fraudulentas que suplantan identidad para trasladar a las víctimas a otro lugar.</li>
+<li><strong>Cuentas de profesores abiertas y la contraseña "Hola123":</strong> comentario sobre docentes o alumnos que dejan sesiones abiertas en las computadoras del laboratorio, o usan contraseñas débiles.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c6-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Traer desayuno individual:</strong> cada estudiante debe llevar su propio desayuno (torta, molletes, café, leche, pan, etc.) en contenedores cerrados que no se derramen, con una bebida no alcohólica — es material para una actividad práctica y solo se podrá consumir cuando la profesora lo autorice.</li>
+<li><strong>Hoja tamaño carta individual:</strong> una hoja limpia de cualquier color o estilo. En el <strong>frente</strong>: pegar o imprimir en el centro una foto individual del estudiante (sin familiares ni acompañantes), dejando margen libre alrededor para escribir. En el <strong>reverso</strong>: pegar o imprimir una foto de la fachada de su casa, omitiendo o borrando el número exterior y la dirección por privacidad.</li>
+<li><strong>Ejercicio en equipo entregado en esta clase:</strong> durante los últimos 35-40 minutos, los equipos desarrollaron la descripción detallada de un escenario (como una tienda OXXO) — mercancía, flujo de personas, roles de empleados, cámaras, refrigeradores, microondas, mostrador de hot dogs, máquinas de café y eventualidades fuera de lo común, entregado en una sola hoja firmada en orden alfabético por los integrantes.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Amenaza y riesgo no son lo mismo: la amenaza es un factor latente siempre presente; el riesgo es Ocurrencia × Consecuencia.</li>
+<li>Las amenazas vienen de 5 fuentes (humano, hardware, software, red, desastres naturales), pero el factor humano es la causa predominante, directa o indirectamente, en casi todas.</li>
+<li>Por flujo de información: intercepción (confidencialidad), interrupción (disponibilidad), modificación (integridad) y suplantación.</li>
+<li>Por objetivo: intencionadas (85-95% de los incidentes) vs. no intencionadas/accidentales.</li>
+<li>Por ubicación: internas (85-95% de los problemas reales, por el conocimiento directo de la infraestructura) vs. externas.</li>
+</ul></div>
+
+</div>
+</body>
+</html>
