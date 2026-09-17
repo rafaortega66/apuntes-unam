@@ -12,137 +12,107 @@
 <div class="wrap">
 <a class="back" href="index.html">← Administración de Servicios de Internet</a>
 <div class="detail-head" style="border-color:#7C9CD6"><h2>Clase 02</h2>
-  <p class="prof">Mtro. Juan Ángel Calvillo Pérez · 31 ago 2026 · Metodología del proyecto del curso — gestión de proyectos tradicional (cascada) vs. ágil (Scrum), PMBOK y planificación en Microsoft Project.</p>
+  <p class="prof">Mtro. Juan Ángel Calvillo Pérez · 31 ago 2026 · Metodología del proyecto del curso: tradicional/cascada (PMBOK) vs. ágil (Scrum), y práctica guiada de planificación con Diagrama de Gantt, recursos y costos en Microsoft Project.</p>
 </div>
 
-<div class="encorto"><h4>En corto</h4><ul>
-<li><strong>Tradicional / cascada</strong>: planificación exhaustiva por fases cerradas (análisis → diseño → implementación → pruebas → mantenimiento); requisitos fijos desde el contrato. Marca el <strong>Triángulo de Hierro</strong>: alcance, costo y tiempo.</li>
-<li><strong>Ágil</strong> (Manifiesto Ágil, 2001): entrega temprana y continua de valor, adaptándose al cambio. <strong>Scrum no es la metodología</strong>: la metodología es "ágil", Scrum es un marco que la usa.</li>
-<li><strong>4 pilares ágiles</strong>: iterativo, incremental, colaborativo, respuesta al cambio.</li>
-<li><strong>Scrum</strong>: 3 roles (Product Owner / Scrum Master / Equipo) · eventos del Sprint (Planning, Daily 15 min, Review, Retrospective) · artefactos (Product Backlog, Sprint Backlog).</li>
-<li><strong>PMBOK</strong> (PMI): modelo predictivo de 5 fases y 10 áreas de conocimiento, todo centralizado en el <strong>Project Manager</strong>.</li>
-<li><strong>Microsoft Project</strong>: usar programación <strong>automática</strong>; vincular con <code>Ctrl + F2</code>; relación Comienzo-a-Comienzo con <code>nCC</code> en Predecesoras; recursos de tipo Trabajo / Material / Costo.</li>
+<div class="section-block" style="background:#fff7ed;border-left:3px solid #7C9CD6"><p style="margin:0"><strong>📅 Actualización:</strong> la fecha "16 de noviembre, inamovible" que se menciona en esta clase quedó reemplazada por el calendario de 3 entregas negociado en la <a href="clase-06.html" style="color:var(--indigo)">Clase 06</a> (20 sep, 18 oct, 22 nov).</p></div>
+
+<details class="section-block sec" id="c2-fechas" open><summary><span class="stitle">Fechas clave del curso y esquema de entregables</span></summary>
+<p>El profesor abrió la sesión fijando las fechas límite del semestre. Se estableció oficialmente que el semestre concluye el <strong>28 de noviembre</strong>, por lo que la entrega final del Proyecto Final debía realizarse de forma inamovible el <strong>16 de noviembre</strong>, independientemente de si había clases ese día o no — esa ventana de dos semanas entre la entrega y el fin de curso le da al profesor el tiempo para revisar, dar retroalimentación, preguntar individualmente y calificar. (Como se ve en la nota de arriba, esa fecha única terminó reemplazándose por un calendario de 3 entregas en la Clase 06.) Al estar los alumnos en décimo semestre, el proyecto debía planificarse eligiendo formalmente entre una <strong>metodología tradicional (Cascada/PMBOK)</strong> o una <strong>metodología ágil (Scrum)</strong> para estructurar cronograma, roles y control de actividades.</p>
+</details>
+
+<details class="section-block sec" id="c2-tradicional" open><summary><span class="stitle">Metodología tradicional: Cascada y el marco PMBOK</span></summary>
+<p>La metodología tradicional o en Cascada se basa en enfoques de gestión fundamentados en una planificación exhaustiva y anticipada. En este esquema, una fase debe completarse al 100% antes de poder iniciar la siguiente, y los requisitos se fijan desde el arranque. La secuencia natural sigue el ciclo de vida del software: <strong>Análisis, Diseño, Implementación, Pruebas y Mantenimiento</strong>.</p>
+<p>La principal ventaja técnica de este enfoque es la <strong>trazabilidad</strong> y la seguridad estructural: al no cambiar los requisitos a mitad de camino, se puede auditar con precisión de dónde salió cada decisión. Además trabaja sobre resultados y entregas puntuales, evitando ambigüedad sobre qué se debe entregar y cuándo. El control del proyecto se rige estrictamente por el <strong>Triángulo de Hierro</strong> (Alcance, Costo y Tiempo), definidos desde el arranque — para lo cual es indispensable un levantamiento riguroso de <strong>requerimientos funcionales, no funcionales y del sistema</strong>.</p>
+<p>Entre sus desventajas destaca su severa inflexibilidad ante cambios de requerimientos a mitad del desarrollo. El cliente no ve resultados funcionales sino hasta el final del proyecto, lo que puede generar desconfianza o ansiedad. Y existe el riesgo de detectar errores de forma tardía si la etapa de pruebas no se planeó con suficiente profundidad.</p>
+</details>
+
+<details class="section-block sec" id="c2-agil" open><summary><span class="stitle">Metodología ágil y el Manifiesto Ágil (2001)</span></summary>
+<p>El profesor aclaró una confusión muy común en el mercado laboral: <strong>Scrum no es una metodología en sí misma</strong> — la metodología es "ágil"; Scrum es un marco de trabajo (framework) que la implementa. El enfoque ágil nació formalmente con el <strong>Manifiesto Ágil en 2001</strong>, priorizando la entrega temprana y continua de valor al cliente y la capacidad de adaptarse dinámicamente a cambios de requerimientos.</p>
+<p>Las metodologías ágiles se sostienen sobre <strong>cuatro pilares</strong>:</p>
+<ul>
+<li><strong>Iterativo:</strong> el producto se construye a través de ciclos de desarrollo cortos y repetibles.</li>
+<li><strong>Incremental:</strong> cada ciclo finalizado agrega funcionalidad utilizable y representativa al software.</li>
+<li><strong>Colaborativo:</strong> el cliente y el equipo de desarrollo trabajan juntos de forma constante.</li>
+<li><strong>Respuesta al cambio:</strong> capacidad de modificar el rumbo del proyecto según las necesidades cambiantes del negocio.</li>
+</ul>
+<p>Y sobre los <strong>cuatro valores del Manifiesto Ágil</strong>, que priorizan: individuos e interacciones sobre procesos y herramientas; software funcionando sobre documentación extensiva; colaboración con el cliente sobre negociación contractual; y respuesta ante el cambio sobre el seguimiento de un plan rígido.</p>
+<p>Entre las ventajas de lo ágil destacan las entregas tempranas que calman la ansiedad del cliente y la detección temprana de errores lógicos. No obstante, sus desventajas técnicas son considerables: exige alta disciplina y comunicación constante del equipo; el alcance y costo final son menos predecibles (los libros de gestión recomiendan presupuestar un <strong>15% adicional</strong> como margen de variación); presenta serias dificultades para escalarse en proyectos muy grandes que requieren estructuras rígidas de control; y genera menor documentación formal, respaldándose en canales informales como WhatsApp o correo.</p>
+</details>
+
+<details class="section-block sec" id="c2-comparativa" open><summary><span class="stitle">Cuadro comparativo: Tradicional vs. Ágil</span></summary>
+<table><thead><tr><th>Criterio</th><th>Tradicional (Cascada/PMBOK)</th><th>Ágil (Scrum)</th></tr></thead><tbody>
+<tr><td>Planificación</td><td>Detallada, exhaustiva y anticipada desde el inicio</td><td>Iterativa, incremental y continua</td></tr>
+<tr><td>Requerimientos</td><td>Fijos y estables desde el comienzo</td><td>Evolutivos y cambiantes durante el proyecto</td></tr>
+<tr><td>Entrega de producto</td><td>Entrega única y total al final del proyecto</td><td>Entregas frecuentes de incrementos funcionales</td></tr>
+<tr><td>Participación del cliente</td><td>Puntual (levantamiento inicial, revisión media y entrega final)</td><td>Constante y continua a lo largo del desarrollo</td></tr>
+<tr><td>Documentación</td><td>Extensa, formal y detallada (trazabilidad completa)</td><td>Mínima, ligera e indispensable</td></tr>
+<tr><td>Gestión del cambio</td><td>Difícil y costoso de incorporar (requiere control formal)</td><td>Bienvenido, esperado y adaptativo</td></tr>
+</tbody></table>
+</details>
+
+<details class="section-block sec" id="c2-scrum-pmbok" open><summary><span class="stitle">Profundización en Scrum vs. PMBOK</span></summary>
+<p><strong>El marco Scrum:</strong> el proyecto se divide en ciclos de trabajo llamados <strong>Sprints</strong>, con duración fija de <strong>2 a 4 semanas</strong>. Cada sprint debe generar un incremento de producto potencialmente utilizable. Scrum se basa en transparencia, inspección y adaptación, definiendo tres roles principales, eventos y artefactos:</p>
+<ul>
+<li><strong>Product Owner (PO):</strong> representa al cliente y las reglas de negocio; solicita las funcionalidades y prioriza el trabajo.</li>
+<li><strong>Scrum Master (SM):</strong> facilitador y líder del proceso, puente entre las exigencias del PO y el equipo.</li>
+<li><strong>Equipo de Desarrollo:</strong> los desarrolladores y especialistas técnicos que construyen el software.</li>
+</ul>
+<p><strong>Eventos del sprint:</strong> <em>Sprint Planning</em> (reunión inicial donde se planifica el trabajo de las 2–4 semanas), <em>Daily Scrum</em> (reunión diaria de máximo 15 minutos para sincronizar al equipo, ver qué se hizo/hará y detectar bloqueos), <em>Sprint Review</em> (inspección directa del incremento funcional al cierre) y <em>Sprint Retrospective</em> (reflexión del equipo sobre la dinámica de trabajo y mejoras operativas).</p>
+<p><strong>Artefactos:</strong> <em>Product Backlog</em> (lista general priorizada de historias de usuario y tareas pendientes), <em>Sprint Backlog</em> (elementos del Product Backlog seleccionados para el sprint actual) e <em>Incremento</em> (el módulo de software funcional y probado resultante del sprint).</p>
+<p><strong>El estándar PMBOK (PMI):</strong> guía de buenas prácticas del Project Management Institute, aplicable a cualquier industria. Se estructura en 5 grupos de procesos (Inicio, Planificación, Ejecución, Monitoreo/Control y Cierre) y 10 Áreas de Conocimiento (Integración, Alcance, Cronograma, Costos, Calidad, Recursos, Comunicaciones, Riesgos, Adquisiciones e Interesados). Su rol central es el <strong>Project Manager</strong>, quien asume la responsabilidad y centraliza el control del proyecto — en PMBOK, cualquier modificación al alcance requiere pasar por una junta formal de control de cambios.</p>
+</details>
+
+<details class="section-block sec" id="c2-gantt" open><summary><span class="stitle">Práctica guiada en Microsoft Project: el Diagrama de Gantt</span></summary>
+<p>El profesor hizo una demostración práctica en vivo de cómo construir el Diagrama de Gantt del proyecto en <strong>Microsoft Project</strong> (aclarando que también se puede usar GanttProject o Jira como alternativas gratuitas):</p>
+<ul>
+<li><strong>Configuración inicial:</strong> lo primero es cambiar la configuración predeterminada de las tareas a "Programación Automática", para que el software recalcule las fechas de inicio y fin al modificar duraciones.</li>
+<li><strong>Fases del ciclo de vida:</strong> se ingresaron las tareas principales — Análisis del problema, Diseño, Implementación, Pruebas/Mantenimiento, Lanzamiento/Cierre.</li>
+<li><strong>Tarea resumen (niveles de esquema):</strong> para envolver todo el proyecto se insertó una tarea superior ("Proyectito ADS"), y se seleccionaron todas las fases y se les aplicó "Aplicar Sangría" para convertirlas en subtareas. En ese momento la tarea resumen calcula automáticamente la duración total del proyecto (en el ejemplo, 56.13 días iniciando el 31 de agosto).</li>
+<li><strong>Desglose de subtareas:</strong> dentro de Análisis del problema se agregaron, por sangría, las subtareas Requerimientos Funcionales, Requerimientos No Funcionales y Requerimientos de Sistema.</li>
+<li><strong>Conexión de tareas y dependencias:</strong> para vincular tareas secuencialmente (Fin a Comienzo) se seleccionan y se usa el botón "Vincular tareas" o la tecla rápida <code>Ctrl+F2</code>. Para tareas que deben iniciar simultáneamente (Comienzo a Comienzo) se edita la columna Predecesoras: por ejemplo, para que Requerimientos de Sistema (tarea 6) inicie al mismo tiempo que Requerimientos Funcionales (tarea 4), se escribe <code>4CC</code> en su columna de predecesoras.</li>
+<li><strong>Ajuste a la fecha límite:</strong> al encadenar las tareas con duraciones estimadas en meses, la fecha final calculada resultó el 1 de diciembre — excediendo el límite. El profesor demostró cómo ajustar las duraciones de las etapas para que el proyecto termine dentro de la fecha límite real.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c2-recursos" open><summary><span class="stitle">Gestión de recursos: Trabajo, Material y Costo</span></summary>
+<p>Dentro de la vista "Hoja de Recursos" de Microsoft Project se dan de alta los elementos humanos, de infraestructura y de consumo del proyecto, con columnas: Nombre, Tipo, Etiqueta de material, Iniciales, Capacidad Máxima, Tasa Estándar (pago), Tasa Horas Extra, Costo/Uso y Acumular. Existen <strong>tres tipos de recursos</strong> con comportamientos técnicos distintos:</p>
+<ul>
+<li><strong>Trabajo (Work):</strong> capital humano (desarrolladores, Scrum Master, becarios) o maquinaria sometida a desgaste por tiempo. Se les asigna una capacidad máxima en porcentaje (100% si es tiempo completo) y una tasa por hora, día, semana o mes.</li>
+<li><strong>Material:</strong> consumibles o compras físicas de gasto único que se transfieren o cobran al cliente. No llevan tarifa por hora, sino un costo unitario por compra.</li>
+<li><strong>Costo (Cost):</strong> gastos fijos operativos e institucionales que deben pagarse exista o no el proyecto. Tampoco llevan tarifa por hora.</li>
+</ul>
+<p><strong>Ejercicio práctico resuelto en vivo</strong> con un equipo de trabajo hipotético: Paola, programadora 1 (Trabajo, $12/h); Luisa, programadora 2 (Trabajo, $10/h); Fernando, becario (Trabajo, $1/sem); Fernanda, Scrum Master (Trabajo, $150/día); Internet/Luz configurados como Costo (gastos fijos de oficina); PC1 con tarifa Trabajo de $3/sem (fondo de reserva para mantenimiento/desgaste); PC2 (Mac Mini) como Material con costo fijo de $27,000 (inversión necesaria para programar en iOS, cobrada al cliente); y PC3 como Costo (equipo propio del alumno que trabaja desde casa).</p>
+<p><strong>Asignación correcta vs. error de asignación masiva:</strong> el profesor mostró un error muy común (frecuente incluso en licitaciones de gobierno): asignar los recursos a nivel de la tarea resumen en vez de a cada subtarea. Al hacer esto, MS Project multiplica la tarifa de <em>todos</em> los recursos por la duración total del proyecto (51.13 días / 3,272 horas hombre), disparando el presupuesto de forma irreal a más de $34,000 dólares. La forma correcta exige asignar cada recurso únicamente a la subtarea específica en la que colabora (por ejemplo, Fernanda al Análisis del problema, Luisa al Análisis general, Paola a Requerimientos). Al distribuir los recursos por subtareas, MS Project recalculó las horas hombre reales a <strong>304 horas</strong> y el costo total bajó a <strong>$812.50 dólares</strong> — una demostración contundente de por qué la precisión en la planificación del cronograma importa tanto como elegir bien la metodología.</p>
+</details>
+
+<details class="section-block sec" id="c2-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> Relató su experiencia laboral trabajando bajo las órdenes de un jefe japonés: en Japón existe la cultura de llegar a las 9:00 AM y trabajar de forma autónoma sin necesidad de supervisión constante, en contraste (ironizó) con la costumbre en México y Latinoamérica.</li>
+<li><em>(Contexto)</em> Comentó un caso en Perú donde, al confiar en la flexibilidad de aplicar exámenes en línea, casi todo el grupo terminó copiando.</li>
+<li><em>(Contexto)</em> Explicó que durante la pandemia de COVID-19 en España, la plataforma de registro de vacunas se cayó por falta de pruebas de carga adecuadas.</li>
+<li><em>(Contexto)</em> Citó las casas de Infonavit y la Línea 12 del Metro de la Ciudad de México como ejemplos de mala aplicación de metodologías ágiles — en la Línea 12, las advertencias de topógrafos e ingenieros civiles sobre riesgos de descarrilamiento fueron ignoradas.</li>
+<li><em>(Contexto)</em> Relató (entre risas, como versión anecdótica no oficial) una historia alternativa sobre el origen del Metrobús de la Ciudad de México, distinta a la justificación oficial del hundimiento del suelo.</li>
+<li><em>(Contexto)</em> Analogías usadas en clase: comparó la falta de constancia al hacer software con quienes intentan mantener una rutina de gimnasio; comparó a los desarrolladores ágiles sin control con "albañiles sin arquitecto"; y usó la coordinación de un equipo Scrum como analogía de la comunicación necesaria entre compañeros al copiar en un examen.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c2-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Definición de metodología y asignación de roles:</strong> cada equipo debe definir si trabajará con Scrum o con Cascada/PMBOK, y asignar los roles específicos de cada integrante.</li>
+<li><strong>Entrega del Diagrama de Gantt digital:</strong> para la siguiente clase se debe entregar la planificación completa del proyecto cargada en Microsoft Project, GanttProject (opción gratuita) o Jira.</li>
+<li><strong>Condiciones del Gantt:</strong> el cronograma debe estar completamente configurado con dependencias y asignaciones de recursos.</li>
+<li><strong>Asignación de temas:</strong> en la siguiente clase el profesor asignará los temas del Proyecto Final a cada equipo.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Scrum no es una metodología en sí misma — es un marco que implementa la metodología ágil.</li>
+<li>Tradicional (PMBOK/Cascada) exige requisitos fijos y planificación exhaustiva desde el inicio; Ágil (Scrum) acepta cambios iterativos en sprints de 2–4 semanas pero exige alta disciplina.</li>
+<li>Scrum: 3 roles (PO, Scrum Master, Equipo), eventos (Planning, Daily 15 min, Review, Retrospective), artefactos (Product/Sprint Backlog).</li>
+<li>Recursos en MS Project: Trabajo (tarifa por tiempo), Material (compra de gasto único), Costo (gasto fijo operativo).</li>
+<li>Asignar recursos solo a subtareas, nunca a la tarea resumen — evita sobreasignaciones irreales de horas y costo.</li>
 </ul></div>
-
-<div class="examen"><h4>🎯 Para el examen y la entrega</h4><ul>
-<li>El semestre termina el <strong>28 de noviembre</strong>; el <strong>proyecto final se entrega el 16 de noviembre</strong>, fecha <strong>inamovible</strong> ("haya o no haya clases"). El profesor necesita dos semanas para revisar código, preguntar y calificar.</li>
-<li>El proyecto debe llevar un <strong>cronograma unificado</strong> y <strong>asignación estricta de roles</strong> por integrante (van en 10.º semestre: se exige metodología formal).</li>
-<li>En la evaluación oral <strong>cualquier integrante</strong> puede ser preguntado sobre la documentación: todos deben saber en qué diagrama y página está cada cosa.</li>
-<li><strong>Error típico en Project</strong>: asignar los recursos humanos en el <strong>nivel 1</strong> (la Tarea Resumen) en vez de en cada subtarea → sobreasignación: Project calcula 24 h/día durante todo el proyecto → <strong>3 272 horas</strong> y <strong>$34 000</strong>. Asignando por rol a nivel de subtarea → <strong>304 horas</strong> y <strong>$812.50</strong>.</li>
-</ul></div>
-
-<div class="section-block"><h4>Metodología tradicional (planificación predictiva / cascada)</h4>
-<p>"Enfoques de gestión de proyectos de software basados en una planificación exhaustiva y una secuencia de fases claramente definidas." Cada fase se completa <strong>antes</strong> de iniciar la siguiente y los requisitos se fijan rígidamente al inicio.</p>
-<ul>
-<li><strong>Fases (modelo cascada)</strong>: análisis → diseño → implementación → pruebas → mantenimiento. Se alinean con el ciclo de vida del software.</li>
-<li><strong>Triángulo de Hierro</strong>: las tres variables fijas desde el inicio — <strong>alcance, costo y tiempo</strong>.</li>
-<li><strong>Requerimientos</strong> (levantamiento formal): <strong>funcionales</strong>, <strong>no funcionales</strong> y <strong>del sistema</strong>. Sin ellos no se puede aplicar bien una metodología tradicional.</li>
-<li><strong>Trazabilidad</strong>: la documentación detallada permite, ante un fallo, revisar el historial exacto (p. ej. de qué enlace se sacó un código o configuración) y ubicar dónde se generó el error.</li>
-</ul>
-<p><strong>Ventajas</strong>: alta predictibilidad de alcance/costo/tiempo; documentación extensa con trazabilidad total; control contractual fácil (se evalúa por entregas fijas.)</p>
-<p><strong>Desventajas</strong>: rigidez ante cambios; el cliente no ve nada funcional hasta el final; los errores de arquitectura se detectan tarde.</p>
-<p><strong>Caso — falta de pruebas</strong>: en España, el portal oficial de vacunación COVID-19 se cayó <strong>10 minutos</strong> después de salir a producción por lanzar sin una etapa de pruebas formal.</p></div>
-
-<div class="section-block"><h4>Metodología ágil (planificación adaptativa)</h4>
-<p>Surge en <strong>2001</strong> con el <strong>Manifiesto Ágil</strong> para proyectos con mucha incertidumbre: ciclos de entrega tempranos y continuos de valor, adaptándose a los cambios sobre la marcha. Agile <strong>permite</strong> cambios, pero cada cambio implica un <strong>reajuste económico negociado</strong>.</p>
-<p><strong>Cuatro valores del Manifiesto Ágil</strong>:</p>
-<ol>
-<li>Individuos e interacciones sobre procesos y herramientas.</li>
-<li>Software funcionando desde etapas muy tempranas (semana o día uno).</li>
-<li>Colaboración con el cliente.</li>
-<li>Respuesta ante el cambio.</li>
-</ol>
-<p><strong>Cuatro pilares</strong>:</p>
-<ul>
-<li><strong>Iterativo</strong>: se construye en ciclos cortos y repetibles.</li>
-<li><strong>Incremental</strong>: cada ciclo añade una funcionalidad usable (junta 1: <em>main</em> + alta de usuarios; junta 2: <em>main</em> + alta + baja…).</li>
-<li><strong>Colaborativo</strong>: cliente y equipo trabajan juntos y de forma constante.</li>
-<li><strong>Respuesta al cambio</strong>: flexibilidad por encima de contratos rígidos.</li>
-</ul>
-<p><strong>"Scrum no es una metodología"</strong>: la metodología es ágil; Scrum la usa. Analogía del profesor: "Cisco no es redes; redes es el concepto y Cisco lo usa para su negocio".</p>
-<p><strong>Ejemplo técnico — auditoría ante un cambio ágil</strong>: el cliente pide de improviso conservar 60 días los registros borrados → hay que modificar la estructura de datos, crear tablas y <strong>triggers</strong>, y guardar con las variables del motor SQL <code>:new</code> (registro nuevo) y <code>:old</code> (registro anterior) para auditar quién borró y cuándo.</p>
-<p><strong>Ventajas</strong>: adaptación inmediata a cambios en cualquier etapa; los errores lógicos se detectan pronto por las entregas frecuentes; el cliente sigue involucrado todo el ciclo.</p>
-<p><strong>Desventajas</strong>: exige mucha autodisciplina y comunicación (no dejar la entrega para el final); menos control preventivo de alcance/costo → se recomienda un <strong>colchón del 15 %</strong> sobre lo cotizado; difícil de escalar en proyectos grandes; documentación mínima e informal (WhatsApp, correos, minutas de la daily).</p>
-<p><strong>Caso — ágil mal aplicado</strong>: viviendas de Infonavit y <strong>Línea 12 del Metro</strong> (CDMX) gestionadas respondiendo a caprichos del cliente sobre la marcha, ignorando advertencias de ingenieros civiles y topógrafos sobre desgaste de vías y hundimiento del suelo → sobrecostos y fallas estructurales. También el candelabro en la estación Hidalgo: adorno sin función bajo "el cliente siempre tiene la razón".</p></div>
-
-<div class="section-block"><h4>Tradicional vs. ágil — comparativa</h4>
-<table><thead><tr><th></th><th>Tradicional (cascada / PMBOK)</th><th>Ágil (Scrum)</th></tr></thead><tbody>
-<tr><td>Planificación</td><td>Completa y por adelantado</td><td>Continua, por Sprint</td></tr>
-<tr><td>Requisitos</td><td>Fijos desde el contrato</td><td>Evolucionan (Product Backlog)</td></tr>
-<tr><td>Entregas</td><td>Una, al final</td><td>Incrementos cada 2–4 semanas</td></tr>
-<tr><td>Cliente</td><td>Al inicio y al final</td><td>Involucrado todo el tiempo</td></tr>
-<tr><td>Documentación</td><td>Extensa y formal</td><td>Mínima e informal</td></tr>
-<tr><td>Costo del cambio</td><td>Alto (comité de control de cambios)</td><td>Asumible, pero se renegocia</td></tr>
-</tbody></table></div>
-
-<div class="section-block"><h4>Scrum a fondo</h4>
-<p>Marco ágil para software, basado en <strong>Sprints de 2 a 4 semanas</strong>; pilares: <strong>transparencia, inspección y adaptación</strong>.</p>
-<p><strong>Roles</strong>:</p>
-<ul>
-<li><strong>Product Owner</strong> — representa las reglas de negocio (el cliente o su voz); le hace peticiones al Scrum Master.</li>
-<li><strong>Scrum Master</strong> — líder que coordina el marco ágil y traslada las peticiones técnicas al equipo; gestiona bloqueos.</li>
-<li><strong>Equipo de Desarrollo</strong> — quienes programan los entregables.</li>
-</ul>
-<p><strong>Eventos del Sprint</strong>:</p>
-<ul>
-<li><strong>Sprint</strong> — ciclo cerrado que produce un incremento potencialmente utilizable (2–4 semanas).</li>
-<li><strong>Sprint Planning</strong> — se planifica en detalle todo el trabajo del Sprint.</li>
-<li><strong>Daily Scrum</strong> — sincronización diaria de <strong>15 minutos</strong> (no es para repartir culpas ni durar horas).</li>
-<li><strong>Sprint Review</strong> — se valida el avance con el producto corriendo en un entorno real y su bitácora.</li>
-<li><strong>Retrospective</strong> — el equipo reflexiona: qué funcionó, qué no, la dinámica de trabajo y la salud del equipo.</li>
-</ul>
-<p><strong>Artefactos</strong>:</p>
-<ul>
-<li><strong>Product Backlog</strong> — lista priorizada de todos los requisitos como historias de usuario, para toda la vida de la app.</li>
-<li><strong>Sprint Backlog</strong> — los elementos tomados del Product Backlog + el plan para entregarlos en el Sprint en curso.</li>
-</ul></div>
-
-<div class="section-block"><h4>PMBOK (PMI) a fondo</h4>
-<p>Estándar de gestión <strong>predictiva</strong> ("libro rojo" del PMI), aplicable a cualquier industria, basado en cascada.</p>
-<p><strong>5 fases</strong>: Inicio → Planificación → Ejecución → Monitoreo y Control → Cierre.</p>
-<p><strong>10 áreas de conocimiento</strong>: 1) Integración · 2) Alcance · 3) Cronograma · 4) Costos · 5) Calidad · 6) Recursos · 7) Comunicaciones · 8) Riesgos · 9) Adquisiciones · 10) Interesados.</p>
-<p><strong>Project Manager (PM)</strong>: centraliza la gestión y el control de cambios; carga con toda la responsabilidad del éxito o fracaso y, por eso y por la carga administrativa, percibe el mayor ingreso del equipo. Todo cambio de alcance pasa por un <strong>comité de control de cambios</strong>; si se aprueba, tiene costo directo para el cliente.</p></div>
-
-<div class="section-block"><h4>Microsoft Project — planificación del Gantt</h4>
-<p>Herramientas de planeación: <strong>Microsoft Project</strong>, <strong>GanttProject</strong> (gratuita) y <strong>Jira</strong>.</p>
-<ul>
-<li><strong>Modo de programación</strong>: Manual (fechas a mano) o <strong>Automático</strong> (Project calcula fechas por predecesoras, duraciones y calendarios). <strong>Usar Automático.</strong></li>
-<li><strong>Fases del ciclo de vida en el Gantt</strong> (ejemplo de la clase, bajo la tarea resumen <code>proyectito ADS</code>): <code>Problemas</code> (1 semana) · <code>Análisis del problema</code> (2 meses) · <code>Diseño</code> (1 mes) · <code>Implementación</code> (1 mes) · <code>Mantenimiento y pruebas</code> (1 día) · <code>Cierre</code> (1 hora).</li>
-<li><strong>Vincular tareas</strong>: seleccionarlas en orden y pulsar <code>Ctrl + F2</code> → enlace Fin-a-Comienzo.</li>
-<li><strong>Comienzo-a-Comienzo (CC / SS)</strong>: se escribe <code>nCC</code> en la columna Predecesoras para que dos tareas empiecen la misma fecha. Ej.: <code>2CC</code> = empieza a la vez que la tarea 2. En el desglose del análisis: requerimientos no funcionales con predecesora <code>4</code> (empieza al terminar la 4); requerimientos de sistema con <code>4CC</code> (empieza a la vez que la 4).</li>
-<li><strong>Insertar tareas</strong>: clic derecho en el número de fila → "Insertar tarea" (si seleccionas 3 filas, inserta 3).</li>
-<li><strong>Sangrías / esquema (WBS)</strong>: bajar de nivel varias tareas convierte a la superior en <strong>Tarea Resumen</strong>, que suma sola la duración de sus subtareas.</li>
-<li><strong>Ajuste a fecha límite</strong>: si la suma de duraciones pasa del 16 de noviembre, Project marca error; hay que recortar a mano (p. ej. Análisis a 1.5 meses) para que la ruta crítica quepa en los ~60 días.</li>
-<li><strong>Estadísticas</strong> (duración, horas hombre, costo): <code>Pestaña Proyecto → Información del proyecto → Estadísticas</code>.</li>
-</ul></div>
-
-<div class="section-block"><h4>Hoja de Recursos</h4>
-<p>Ruta: <code>Pestaña Tarea → Diagrama de Gantt → Hoja de recursos</code>.</p>
-<p><strong>Columnas</strong>: Nombre · <strong>Tipo</strong> · Etiqueta de material (pza, caja…) · Iniciales · Grupo · <strong>Capacidad máxima</strong> (100 % dedicación total; 50 % o 33 % si se comparte) · <strong>Tasa estándar</strong> (por hora / día / semana / mes) · Tasa horas extra · Costo/Uso · Acumulado (prorrateo / comienzo / fin).</p>
-<p><strong>Tres tipos de recurso</strong>:</p>
-<ul>
-<li><strong>Trabajo</strong> — personas o maquinaria que se desgasta y cobra por tiempo.</li>
-<li><strong>Material</strong> — tangibles consumibles o una compra directa facturada.</li>
-<li><strong>Costo</strong> — gastos fijos que no dependen de la duración de la tarea.</li>
-</ul>
-<p><strong>Ejemplo de la clase — personas</strong>: Paola (programadora) $12/h · Luisa (programadora) $10/h · Fernando (becario) $1/h · Fernanda (Scrum Master) $150/día.</p>
-<p><strong>Ejemplo — computadoras, tres formas de modelarlas</strong>:</p>
-<ul>
-<li><strong>PC1 (Trabajo)</strong>: tasa de $3/semana como fondo de depreciación; si falla, ese acumulado paga el reemplazo sin trámites.</li>
-<li><strong>PC2 / Mac Mini (Material)</strong>: costo único de <strong>$27 000</strong> sin unidad de tiempo; hardware comprado para el proyecto (p. ej. una Mac para programar iOS) que se entrega al cliente y se desglosa en su factura.</li>
-<li><strong>PC3 (Costo)</strong>: el programador trabaja desde casa con su propio equipo; la empresa se ahorra la compra y la depreciación.</li>
-<li><strong>Luz, renta, internet (Costo)</strong>: gastos fijos que la empresa paga haya o no proyectos; no se cobran como insumo variable al cliente.</li>
-</ul>
-<p><strong>Asignación</strong>: asignar personal en el nivel 1 (Tarea Resumen) → sobreasignación (24 h/día todo el proyecto) → <strong>3 272 h / $34 000</strong>. Asignar por rol a nivel de subtarea (Fernanda→Problemas, Luisa→Análisis, Paola→requerimientos funcionales y de sistema, Fernando→no funcionales) → sin conflictos, <strong>304 h / $812.50</strong>.</p></div>
-
-<div class="section-block"><h4>Tarea para la siguiente clase (por equipos)</h4>
-<ol>
-<li><strong>Elegir metodología</strong>: Tradicional (PMBOK / cascada) o Ágil (Scrum).</li>
-<li><strong>Roles</strong>: si es Scrum, quién es Product Owner, Scrum Master y Equipo de Desarrollo; si es PMBOK, quién es Project Manager y las responsabilidades del resto.</li>
-<li><strong>Gantt digital</strong> en Microsoft Project, GanttProject o Jira, con los tiempos estructurados para entregar a más tardar el <strong>16 de noviembre</strong>.</li>
-</ol></div>
-
-<p class="empty" style="margin-top:28px">Resumen también en el <a href="index.html#tema-1" style="color:var(--indigo)">Tema 1</a>; fechas y entregables en <a href="evaluacion.html" style="color:var(--indigo)">Evaluación</a>.</p>
 
 </div>
 </body>
