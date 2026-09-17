@@ -12,95 +12,108 @@
 <div class="wrap">
 <a class="back" href="index.html">← Administración de Servicios de Internet</a>
 <div class="detail-head" style="border-color:#7C9CD6"><h2>Clase 05</h2>
-  <p class="prof">Mtro. Juan Ángel Calvillo Pérez · 9 sep 2026 · Definición de metodologías de trabajo (Scrum vs. Cascada) y especificación de proyectos de infraestructura con virtualización: requerimientos funcionales/no funcionales, reglas de VMs cruzadas y detalle de las 10 propuestas de proyecto.</p>
+  <p class="prof">Mtro. Juan Ángel Calvillo Pérez · 9 sep 2026 · Formatos documentales por metodología (Scrum vs. Cascada/PMBOK), requisitos técnicos base de infraestructura, catálogo completo de las 10 propuestas de proyecto con equipo asignado, entregables finales y mecánica de evaluación en vivo.</p>
 </div>
 
-<div class="encorto"><h4>En corto</h4><ul>
-<li><strong>Scrum:</strong> entregas semanales de incrementos potenciales de valor, registro diario de experimentos/impedimentos y mínimo dos actualizaciones semanales en Git.</li>
-<li><strong>Cascada:</strong> alcance y requerimientos documentados de forma rígida desde el inicio; no se permite modificar módulos a mitad del proyecto.</li>
-<li><strong>Arquitectura obligatoria:</strong> mínimo 2 a 3 máquinas virtuales cruzando sistemas operativos cliente-servidor (Windows/Linux).</li>
-<li><strong>RF vs. RNF:</strong> los funcionales definen qué hace el sistema; los no funcionales, sus métricas de rendimiento y tiempo de respuesta.</li>
-<li><strong>Entregables finales:</strong> manual técnico, manual de usuario y video demostrativo de instalación (máximo 15 minutos).</li>
-<li><strong>Evaluación:</strong> operativa y en vivo ante el profesor, con preguntas individuales a cualquier integrante del equipo.</li>
-<li><strong>Prohibición:</strong> no se permite usar Microsoft SQL Server en proyectos de servidor web, por licenciamiento.</li>
-</ul></div>
-
-<div class="examen"><h4>🎯 Para el examen</h4><ul>
-<li><strong>RF vs. RNF con ejemplo:</strong> RF — "El sistema deberá registrar la entrada de un vehículo"; RNF — "El sistema deberá responder en un tiempo máximo definido".</li>
-<li><strong>Historias de usuario (Scrum) vs. RF/RNF + casos de uso (Cascada):</strong> Scrum organiza por prioridad (alta/media/baja) en tablero; Cascada define fases formales con diagramas de casos de uso.</li>
-<li><strong>Control formal de cambios en Cascada:</strong> toda modificación requiere justificación, análisis de impacto y actualización completa de la documentación.</li>
-<li><strong>Estudio del estado del arte:</strong> obligatorio en Cascada cuando no hay datos económicos para un estudio de factibilidad financiera.</li>
-<li><strong>Evidencia en Git (Scrum):</strong> mínimo dos días de trabajo/revisión y dos modificaciones semanales verificables en el historial.</li>
-<li><strong>Regla de heterogeneidad de SO:</strong> servidor Windows Server → cliente Linux; servidor Ubuntu Server → cliente Windows.</li>
-<li><strong>Restricción de licenciamiento:</strong> SQL Server prohibido para servidores web con base de datos.</li>
-</ul></div>
-
-<details class="section-block sec" id="c5-metodologias" open><summary><span class="stitle">Metodologías de desarrollo: Scrum vs. Cascada</span></summary>
-<p><strong>Scrum (agilidad e incrementos):</strong></p>
+<details class="section-block sec" id="c5-formatos" open><summary><span class="stitle">Formatos documentales y seguimiento periódico: Scrum vs. Cascada</span></summary>
+<p>El profesor detalló la dinámica de entrega de formatos según la metodología elegida. Para los equipos en <strong>Scrum</strong>, el volumen documental inicial es más ligero, pero exige actualización constante <strong>cada 8 días</strong> (semana a semana) derivados de cada sprint — se debe presentar un <strong>incremento potencialmente entregable</strong> cada semana. El profesor aclaró explícitamente que un cambio menor en el código (como modificar un "Hola Mundo" por "Hola Mundo Juan") <strong>no cuenta</strong> como incremento válido. Cada equipo, sea Scrum o Cascada, debió seleccionar a su líder de proyecto en un lapso de 5 minutos durante la clase.</p>
+<p>Los formatos obligatorios para equipos de <strong>Scrum</strong>:</p>
 <ul>
-<li><strong>Ciclo de trabajo:</strong> organizado en sprints semanales, con entrega continua de "incrementos potenciales". El profesor enfatizó que pasar de <code>"Hola Mundo"</code> a <code>"Hola Mundo Juan"</code> NO constituye un incremento potencial.</li>
-<li><strong>Artefactos requeridos:</strong> ficha de inicio, visión del producto, product backlog, historias de usuario con criterios de aceptación, sprint backlog.</li>
-<li><strong>Historias de usuario (ejemplos):</strong> H1 — Registrar vehículo (prioridad alta); H2 — Consultar espacios disponibles (prioridad alta); H5 — Calcular costo de estancia. Se organizan en tableros por prioridad (alta/media/baja).</li>
-<li><strong>Seguimiento y Git:</strong> reuniones diarias enfocadas en verificar objetivos; bitácora de experimentos para registrar impedimentos (falta de licencias, problemas de configuración, límites de RAM). El progreso se audita en Git, exigiendo mínimo dos modificaciones semanales.</li>
+<li><strong>Ficha de inicio y visión del producto:</strong> establece los objetivos y la meta final de la solución.</li>
+<li><strong>Product Backlog:</strong> lista priorizada de todas las historias de usuario y requerimientos pendientes.</li>
+<li><strong>Historias de Usuario (HU) y Criterios de Aceptación:</strong> funcionalidades clasificadas por prioridad (Alta, Media, Baja) en un tablero. Ejemplos dados con un sistema de estacionamiento: "Registrar el vehículo" (Alta), "Consultar espacios disponibles" (Alta), "Calcular el costo de la estancia".</li>
+<li><strong>Sprint Backlog:</strong> seguimiento de los elementos seleccionados para el sprint en curso.</li>
+<li><strong>Diario de Experimentos (bitácora de juntas):</strong> registro formal de acuerdos e impedimentos/bloqueos. Causas válidas de bloqueo ejemplificadas: falta de licencias, problemas de configuración.</li>
+<li><strong>Sprint Review y Retrospective:</strong> documentación de la revisión funcional del incremento y la reflexión del equipo sobre mejoras operativas.</li>
+<li><strong>Evidencias del incremento:</strong> pruebas tangibles (código, capturas, repositorios) que respaldan las nuevas funcionalidades.</li>
 </ul>
-<p><strong>Cascada (enfoque tradicional):</strong></p>
+<p>Aunque el enfoque ágil no se rige por fases rígidas, los equipos de Scrum también deben presentar un <strong>Diagrama de Gantt</strong> con fecha estimada de término a mediados de noviembre. Toda la bitácora y control de versiones debe gestionarse obligatoriamente mediante <strong>Git</strong>, exigiendo un mínimo de <strong>2 actualizaciones/commits por semana</strong> por integrante (coincidiendo con los dos días de clase a la semana), para poder auditar el trabajo real.</p>
+<p>Los equipos en <strong>Cascada/PMBOK</strong> deben definir y documentar de manera estricta y rigurosa todo el alcance y los requerimientos desde el inicio. Bajo este esquema <strong>no se permiten cambios arbitrarios a mitad de semestre</strong> (ejemplo del profesor: no se puede cancelar a medio camino un módulo de red neuronal para sustituirlo por un chatbot). Si se requiere una modificación justificada, se debe presentar un proceso formal de <strong>Control de Cambios</strong> demostrando el impacto documental y financiero. Cascada se evaluará únicamente en <strong>3 revisiones formales</strong> en el semestre: la inicial de acuerdos, una intermedia de avance, y la final del producto. Los documentos exigidos son:</p>
 <ul>
-<li><strong>Definición inicial:</strong> todo el alcance y requerimientos quedan documentados formalmente desde el principio; no se permiten cambios arbitrarios durante el desarrollo (ej. cambiar un modelo de red neuronal por un chatbot a medio proyecto).</li>
-<li><strong>Etapas secuenciales:</strong> definición de solución → desarrollo → pruebas → implementación.</li>
-<li><strong>Documentación exigida:</strong> planteamiento del problema, objetivos, alcances, estudio de factibilidad (o estudio del estado del arte si no hay datos financieros), especificaciones RF/RNF, diagramas de casos de uso, diseño del sistema y bases de datos, plan y casos de prueba, acta de control de cambios.</li>
-<li><strong>Revisiones del semestre:</strong> inicial (acuerdo de alcance) · intermedia (verificación de avance real y control formal) · final.</li>
+<li>Planteamiento del problema, objetivos y alcances.</li>
+<li>Estudio de Factibilidad o Estado del Arte (si el equipo no tiene datos financieros para un estudio económico, entrega una investigación de estado del arte en su lugar).</li>
+<li>Especificación de Requerimientos Funcionales (RF) y No Funcionales (RNF). Ejemplos dados: RF1 "El sistema deberá registrar la entrada de un vehículo", RF2 "El sistema deberá registrar la salida de un vehículo", RNF1 "El sistema deberá responder en un tiempo máximo definido".</li>
+<li>Diagrama de Casos de Uso (orientado al usuario final).</li>
+<li>Diseño del sistema y de bases de datos relacionales o no relacionales.</li>
+<li>Plan y casos de prueba.</li>
+<li>Documento de Control de Cambios (si aplica).</li>
+</ul>
+<p>El profesor aclaró explícitamente que <strong>se excluye la entrega del "Acta de Inicio"</strong> para el esquema de Cascada en este curso. Señaló que este marco exige un control formal estricto para evitar el "síndrome del estudiante de ya casi acabo", permitiendo verificar objetivamente el avance real.</p>
+</details>
+
+<details class="section-block sec" id="c5-infraestructura" open><summary><span class="stitle">Requisitos técnicos base para la infraestructura</span></summary>
+<p>Independientemente del tema asignado o la metodología elegida, el profesor estableció los requisitos técnicos mínimos de infraestructura para todos los proyectos:</p>
+<ul>
+<li><strong>Máquinas virtuales:</strong> cada equipo debe implementar obligatoriamente entre 2 y 3 VMs en funcionamiento.</li>
+<li><strong>Combinación de sistemas operativos:</strong> una VM actúa como servidor (Ubuntu Server o Windows Server); la máquina cliente debe ser del sistema operativo contrario para forzar la interoperabilidad en red — si el servidor es Windows Server, el cliente debe ser Linux; si el servidor es Ubuntu Server, el cliente debe ser Windows.</li>
+<li><strong>Servicios e integración:</strong> el proyecto debe abarcar configuración de red, servicios específicos, mecanismos de seguridad e integración entre los componentes.</li>
 </ul>
 </details>
 
-<details class="section-block sec" id="c5-requerimientos" open><summary><span class="stitle">Requerimientos funcionales (RF) y no funcionales (RNF)</span></summary>
+<details class="section-block sec" id="c5-proyectos" open><summary><span class="stitle">Catálogo completo de los 10 proyectos y equipo asignado</span></summary>
+<table><thead><tr><th>Proyecto</th><th>Alcance técnico</th><th>Equipo</th></tr></thead><tbody>
+<tr><td>Intranet empresarial</td><td>Servidor DNS con dominio interno; servidor web Apache con <em>virtual hosts</em>; HTTPS; documentación completa de IPs, rutas y archivos de configuración.</td><td>Equipo 4 (Scrum)</td></tr>
+<tr><td>Servidor de correo electrónico empresarial</td><td>DNS con dominio propio (ej. <code>juanito@empresa.com</code>); protocolos SMTP, POP3 e IMAP.</td><td>Equipo 3</td></tr>
+<tr><td>Servidor de acceso remoto seguro</td><td>Instalación y configuración de SSH y SSL; creación de usuarios y grupos con permisos específicos.</td><td>Equipo 5</td></tr>
+<tr><td>Servidor de archivos empresariales</td><td>Samba o NFS; usuarios/grupos por departamento (Administración, Ventas, Sistemas, Público); permisos rwx en carpetas compartidas. Toda la configuración estrictamente por línea de comandos (CLI), no interfaz gráfica.</td><td>Equipo 9</td></tr>
+<tr><td>Servidor web con base de datos</td><td>Frontend/backend en PHP, Java o Python conectado a una base de datos relacional o no relacional (Microsoft SQL Server prohibido por licenciamiento). DNS obligatorio (nada de <code>localhost:8080</code>). La app debe ejecutar un CRUD completo.</td><td>Equipo 7 (Scrum)</td></tr>
+<tr><td>Servidor web con balanceo de cargas</td><td>Arquitectura de sistemas distribuidos; proxy/proxy inverso (Apache/Nginx) que distribuya tráfico entre Web 1 y Web 2; prueba de alta disponibilidad con servidor espejo (si A cae, B asume el servicio automáticamente).</td><td>Equipo 1</td></tr>
+<tr><td>Infraestructura de servicios para una escuela</td><td>Servidor DHCP (asignación y rangos) y DNS; página web informativa; Samba para gestión compartida de archivos.</td><td>Equipo 10</td></tr>
+<tr><td>Servidor web HTTPS con certificados</td><td>Servidor web en red virtual con certificados SSL/TLS; migración/redirección de HTTP a HTTPS; autenticación a dos factores (2FA).</td><td>Equipo 8</td></tr>
+<tr><td>Servidor de archivos y acceso remoto multi-cliente</td><td>Combinación de Samba, NFS, SSH y SFTP con gestión de usuarios tanto en Windows como en Linux.</td><td>Equipo 6</td></tr>
+<tr><td>Servidor de proxy y control de accesos</td><td>Servidor proxy con reglas de acceso estrictas; disparadores (triggers) para bitácora de seguridad: usuario, fecha, hora, método de acceso, acciones.</td><td>Equipo 2</td></tr>
+</tbody></table>
+</details>
+
+<details class="section-block sec" id="c5-entregables" open><summary><span class="stitle">Entregables finales y la dinámica de evaluación en vivo</span></summary>
+<p>Para la entrega final, cada equipo debe entregar obligatoriamente tres productos:</p>
 <ul>
-<li><strong>RF (Requerimientos Funcionales):</strong> definen comportamientos directos del sistema. Ej.: <em>"RF1: El sistema deberá registrar la entrada de un vehículo"</em>; <em>"RF2: El sistema deberá registrar la salida de un vehículo"</em>.</li>
-<li><strong>RNF (Requerimientos No Funcionales):</strong> miden calidad o restricciones operativas. Ej.: <em>"RNF1: El sistema deberá responder en un tiempo máximo definido"</em>.</li>
+<li><strong>Manual Técnico:</strong> especificaciones técnicas completas para instalación e implementación (tipo de red/cable, sistema operativo, comandos ejecutados y archivos de configuración).</li>
+<li><strong>Manual de Usuario:</strong> guía operativa orientada al usuario final sobre cómo utilizar la aplicación o servicio.</li>
+<li><strong>Video de demostración:</strong> máximo 15 minutos, donde los integrantes ejecutan en vivo la instalación y configuración del proyecto.</li>
+</ul>
+<p>El profesor rechazó tajantemente hacer exposiciones grupales tradicionales frente a la clase, calificándolas como <em>"la cosa más triste que me tocó ver en esta facultad"</em>. La evaluación será presencial y directa en la mesa del profesor:</p>
+<ul>
+<li>Los equipos deben presentar sus 2 o 3 máquinas virtuales previamente cargadas y funcionando en vivo — no se aceptan pretextos de "afuera sí jalaba y ahorita ya no".</li>
+<li>El profesor observará el funcionamiento del sistema y hará preguntas técnicas individuales a cualquier integrante del equipo, al azar.</li>
+<li><strong>Criterio estricto de reprobación:</strong> si el alumno seleccionado no sabe responder sobre la arquitectura, código o configuración, <strong>todo el equipo queda reprobado automáticamente</strong> — por eso se instruyó a los equipos a enseñarse mutuamente para que todos dominen la totalidad del proyecto, no solo su parte.</li>
 </ul>
 </details>
 
-<details class="section-block sec" id="c5-infraestructura" open><summary><span class="stitle">Especificaciones de infraestructura para los proyectos</span></summary>
+<details class="section-block sec" id="c5-individual" open><summary><span class="stitle">Proyectos individuales y solicitudes de cambio de tema</span></summary>
+<p>Tras el pase de lista, el profesor estableció dos reglas administrativas:</p>
 <ul>
-<li><strong>Entorno virtualizado:</strong> obligatorio 2 a 3 VMs por proyecto (o hardware dedicado equivalente, ej. Raspberry Pi, si se justifica).</li>
-<li><strong>Sistemas operativos permitidos:</strong> Ubuntu Server o Windows Server como base.</li>
-<li><strong>Cruce de SO:</strong> servidor Windows Server exige cliente Linux; servidor Ubuntu Server exige cliente Windows.</li>
-<li><strong>Ejes de evaluación:</strong> configuración de red, gestión de servicios, seguridad, evidencias de funcionamiento.</li>
+<li><strong>Proyectos individuales:</strong> se autoriza a quien lo desee realizar el Proyecto Final de forma individual, pero la carga de trabajo, complejidad técnica, planeación y documentación exigidas son <strong>exactamente las mismas</strong> que para un equipo completo. Fecha límite para declararse en esta modalidad: la siguiente clase.</li>
+<li><strong>Cambio de tema:</strong> si un equipo no está satisfecho con el tema asignado por la ruleta (excepto el <strong>Equipo 3</strong>, que no tiene permitido cambiar), puede proponer un nuevo tema por Google Classroom a más tardar el <strong>viernes</strong>. Para ser aprobada, la propuesta debe estar perfectamente justificada e incluir la arquitectura de servicios con 2 a 3 máquinas virtuales. Si no se envía ninguna propuesta antes del viernes, el tema asignado en clase se considera definitivo.</li>
 </ul>
-</details>
-
-<details class="section-block sec" id="c5-proyectos"><summary><span class="stitle">Las 10 propuestas de proyecto (detalle técnico)</span></summary>
-<ol>
-<li><strong>Intranet empresarial:</strong> servidor DNS y dominio interno; Apache con virtual hosts; HTTPS (SSL/TLS); documentación de direccionamiento IP y archivos de configuración.</li>
-<li><strong>Servidor de correo electrónico empresarial:</strong> DNS con dominio corporativo (ej. <code>juanito@empresa.com</code>); protocolos SMTP, POP3, IMAP; creación de usuarios, autenticación, cifrado TLS/SSL.</li>
-<li><strong>Servidor de acceso remoto seguro:</strong> SSH con llaves criptográficas; administración de usuarios/grupos/permisos; SFTP; políticas de seguridad.</li>
-<li><strong>Servidor de archivos empresariales:</strong> Samba y NFS; grupos por departamento (administración, ventas, sistemas, público) con permisos de lectura/escritura/ejecución. <strong>Restricción:</strong> toda la administración por línea de comandos, sin interfaz gráfica.</li>
-<li><strong>Servidor web con base de datos:</strong> frontend/backend con PHP, Java o Python; base de datos relacional o no relacional (SQL Server prohibido por licencias); DNS e HTTPS (nada de <code>localhost:8080</code>); CRUD completo.</li>
-<li><strong>Servidor web con balanceo de cargas:</strong> arquitectura distribuida, proxy de balanceo apuntando a Web 1 y Web 2; publicación con DNS; pruebas de disponibilidad con servidor espejo (alta disponibilidad ante fallas).</li>
-<li><strong>Infraestructura de servicios para una escuela:</strong> integración de DHCP, DNS, sitio web informativo y servidor de archivos Samba.</li>
-<li><strong>Servidor web con HTTPS y seguridad:</strong> red virtual, certificados SSL/TLS migrando de HTTP a HTTPS, modelos de autenticación (plus por implementar 2FA).</li>
-<li><strong>Servidor de archivos y acceso remoto multiplataforma:</strong> Samba + NFS + SSH + SFTP con permisos por departamento, interoperable entre Windows y Linux.</li>
-<li><strong>Servidor proxy y control de accesos:</strong> proxy con reglas de filtrado, autenticación, triggers para bitácoras de auditoría de seguridad (usuario, fecha, hora, acciones, tiempo conectado).</li>
-</ol>
 </details>
 
 <details class="section-block sec" id="c5-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
 <ul>
-<li><em>(Contexto)</em> El profesor recordó que en la primera clase preguntó "¿quién viene por el 6?" y todos dijeron que venían a aprender; advirtió que no quiere que a fin de semestre anden buscándolo para pedir puntos.</li>
-<li><em>(Contexto)</em> En tono de broma dijo que los alumnos le caen mal y él a ellos, "tenemos un trato"; ante una petición de cambiar la integración de un equipo respondió "quiero cambiarlos de alumnos, pero eso no se puede".</li>
-<li><em>(Contexto)</em> Anécdota: comiendo una torta en el laboratorio de bases de datos le tomaron una foto que terminó convertida en sticker.</li>
-<li><em>(Contexto)</em> Contó que solo una vez hizo exponer a un grupo y fue "la cosa más triste que me tocó ver en esta facultad", por eso prefiere evaluaciones prácticas individuales.</li>
-<li><em>(Contexto)</em> Ironizó sobre pretextos clásicos de entrega ("le juro que afuera sí estaba jalando y ahorita que entré ya no jaló", el patrón de "ya casi acabo" durante meses); sobre el video de 15 min sugirió "en lo posible se echen un baño y salgan ahí si es posible".</li>
+<li><em>(Contexto)</em> Relató entre risas una anécdota de cuando comía una torta dentro del laboratorio de bases de datos y le tomaron una foto que terminó convertida en sticker circulando en los grupos de WhatsApp.</li>
+<li><em>(Contexto)</em> Al organizar los temas, bromeó diciendo que en lugar de cambiar de metodología preferiría "cambiar de alumnos", agregando en tono irónico "todos me caen mal y yo les caigo mal a todos, tenemos un trato".</li>
+<li><em>(Contexto)</em> Criticó la falta de control formal en proyectos de ingeniería reales y escolares, señalando el vicio del "ya casi acabo" que termina en solicitudes de prórroga el día de la entrega.</li>
+<li><em>(Contexto)</em> Explicó por qué eliminó las exposiciones grupales frente al grupo, recordando malas experiencias previas.</li>
+<li><em>(Contexto)</em> Comentó la incertidumbre de las clases presenciales por la cercanía de paros académicos y puentes lectivos.</li>
+<li><em>(Contexto)</em> Un alumno preguntó al final de la sesión si podía usar hardware físico (una Raspberry Pi) en vez de máquinas virtuales.</li>
 </ul>
 </details>
 
 <details class="section-block sec" id="c5-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
 <ul>
-<li><strong>Modalidad individual:</strong> quien decida hacer el proyecto solo, tiene como límite la próxima clase para notificarlo, con los mismos requerimientos de entrega que un equipo completo.</li>
-<li><strong>Cambio de tema de proyecto:</strong> equipos que quieran cambiar su tema asignado (excepto el Equipo 3) tienen hasta el viernes para enviar propuesta justificada por Classroom (2 a 3 VMs). Sin propuesta el viernes, se confirma el tema asignado.</li>
-<li><strong>Próxima sesión:</strong> lunes, según calendario oficial — estar pendientes de Classroom por avisos de modificación de calendario o paros.</li>
-<li><strong>Material publicado:</strong> presentación en PDF y formatos/guías de apoyo para los proyectos, subidos a Classroom.</li>
+<li><strong>Viernes (fecha límite):</strong> plazo máximo para enviar por Google Classroom una solicitud justificada de cambio de tema de proyecto (no aplica para el Equipo 3).</li>
+<li><strong>Próxima clase:</strong> fecha límite para notificar al profesor si alguien trabajará el Proyecto Final de manera individual.</li>
+<li><strong>Entregar:</strong> la Ficha de Inicio y Visión del Producto (en Scrum) o el planteamiento de requerimientos (en Cascada) correspondiente al tema asignado.</li>
 </ul>
 </details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Scrum exige reportes cada 8 días, Sprint Backlog y mínimo 2 commits por semana en Git; Cascada exige documentación rígida desde el inicio y solo 3 revisiones en el semestre.</li>
+<li>El "Acta de Inicio" queda explícitamente excluida de los requerimientos de Cascada en este curso.</li>
+<li>Todo proyecto necesita 2-3 VMs cruzando sistemas operativos servidor/cliente (Windows Server ↔ Linux o Ubuntu Server ↔ Windows).</li>
+<li>Entregables finales: Manual Técnico, Manual de Usuario y video de máximo 15 min.</li>
+<li>Evaluación en vivo con pregunta individual al azar — si esa persona no responde, reprueba todo el equipo.</li>
+</ul></div>
 
 </div>
 </body>
