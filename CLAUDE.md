@@ -31,24 +31,37 @@ UNAM) del usuario, hosteado gratis en GitHub Pages:
 ACS **no usa Google Classroom** (profesor tiene su propio sitio en
 `cromanzamitiz.github.io/arquitectura-cliente-servidor/`); las otras 8 sí.
 
-## Horario oficial (confirmado por el usuario el 16 sep 2026 — fuente de verdad)
+## Horario oficial (fuente: PDF de la Secretaría de Servicios Académicos, UNAM —
+## periodo 2027-1, cuenta 420054085, confirmado por el usuario el 16 sep 2026)
 
-Patrón fijo semanal, **no inferir de memoria ni de "cuadra con el patrón de
-fechas anteriores"** — usar esta tabla directamente:
+**No inferir fechas de memoria ni de "cuadra con el patrón de páginas
+anteriores"** — usar esta tabla directamente, incluye hora de inicio para
+poder ordenar el día:
 
-| Día | Materias (en orden) |
-|---|---|
-| Lunes | RP → OAC → FSE → ASI |
-| Martes | SIB, MD |
-| Miércoles | OAC, FSE, ASI |
-| Jueves | SIB, MD, ACS |
-| Viernes | RP |
+| Día | Orden real (por hora) | Materia | Horario | Salón |
+|---|---|---|---|---|
+| Lunes | 1 | RP | 07:00–08:30 | S227 |
+| Lunes | 2 | OAC | 09:00–10:30 | A107 |
+| Lunes | 3 | FSE | 13:00–14:30 | A107 |
+| Lunes | 4 | ASI | 17:00–19:00 | D004 |
+| Martes | 1 | ACS | 07:00–08:30 | A305 |
+| Martes | 2 | SIB | 09:00–11:00 | A206 |
+| Martes | 3 | Lab FSE | 13:00–15:00 | T101 |
+| Martes | 4 | MD | 15:00–17:00 | A306 |
+| Miércoles | 1 | Lab OAC | 07:00–09:00 | Q209 |
+| Miércoles | 2 | OAC | 09:00–10:30 | A107 |
+| Miércoles | 3 | FSE | 13:00–14:30 | A107 |
+| Miércoles | 4 | ASI | 17:00–19:00 | D004 |
+| Jueves | 1 | ACS | 07:00–08:30 | A305 |
+| Jueves | 2 | SIB | 09:00–11:00 | A206 |
+| Jueves | 3 | MD | 15:00–17:00 | A306 |
+| Viernes | 1 | RP | 07:00–08:30 | S227 |
 
-Lab FSE y Lab OAC **no están en este patrón semanal** — sus prácticas se
-agendan aparte, no son clase teórica recurrente. Si una fecha propuesta para
-Clase de RP/OAC/FSE/ASI/SIB/MD/ACS no cae en el día que le toca según esta
+Si una fecha propuesta no cae en el día que le toca a esa materia según esta
 tabla, es un error — decirlo explícitamente y pedir confirmación antes de
-usarla.
+usarla. Recordar también los días sin clase por calendario oficial (asuetos,
+suspensiones) cuando el usuario los mencione — no asumir que "todos los
+lunes hay clase" sin corroborar.
 
 ## El origen de todo el contenido: nunca se inventa nada
 
