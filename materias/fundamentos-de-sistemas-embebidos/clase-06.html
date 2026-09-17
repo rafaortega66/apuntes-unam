@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 06 — Fundamentos de Sistemas Embebidos</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Fundamentos de Sistemas Embebidos</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 06</h2>
+  <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 14 sep 2026 · Tema 2 (cierre) — Memorias no volátiles, magnéticas y ópticas (funcionamiento en ráfaga, disipación térmica, Flash/SSD y wear leveling, medios magnéticos/ópticos), y arranque del bloque de Modos de Direccionamiento de microprocesadores (modelo Motorola 6800).</p>
+</div>
+
+<details class="section-block sec" id="c6-burst-disipacion" open><summary><span class="stitle">Funcionamiento en ráfaga (burst mode) y disipación térmica: SRAM vs. microcontrolador</span></summary>
+<p>La clase cerró formalmente el bloque de memorias retomando el <strong>funcionamiento en ráfaga (burst mode)</strong> de las memorias dinámicas modernas: en vez de leer y reescribir capacitor por capacitor, la memoria abre una fila completa y la reescribe en cada ciclo, usando señales de control que van de simples a más complejas según el protocolo. Esta es la razón física de que la RAM moderna pueda transferir bloques de datos mucho más rápido que si tuviera que direccionar cada bit por separado.</p>
+<p>De ahí, el profesor conectó con una comparación muy concreta de <strong>disipación térmica</strong> entre una caché SRAM pequeña y una grande, usando dos ejemplos reales:</p>
+<ul>
+<li><strong>RP2040 (la Raspberry Pi Pico):</strong> tiene entre 264 KB y 360 KB de RAM, corre a 150 MHz, y opera a una temperatura "tibia" de aproximadamente 50 °C.</li>
+<li><strong>Procesadores Intel (Core i7 / Xeón):</strong> tienen entre 8 MB y más de caché SRAM, corren de 1.5 GHz a 4.2 GHz, y disipan hasta <strong>100 veces más energía térmica</strong> que el RP2040.</li>
+</ul>
+<p>El punto que el profesor remarcó es que esta disipación <strong>no escala de forma lineal</strong>: depende a la vez de la frecuencia de reloj, del tipo de memoria y de su tamaño — no basta con comparar solo capacidad o solo frecuencia por separado.</p>
+</details>
+
+<details class="section-block sec" id="c6-no-volatiles-historia" open><summary><span class="stitle">Memorias no volátiles de estado sólido: de los bulbos a la EEPROM</span></summary>
+<p>El profesor definió con precisión qué significa "estado sólido": se refiere estrictamente a componentes construidos con <strong>transistores de silicio</strong>, en contraste con la tecnología antigua basada en <strong>bulbos o tubos de vacío</strong>. A partir de esa definición recorrió la evolución histórica de las memorias de solo lectura:</p>
+<ul>
+<li><strong>ROM:</strong> matrices fijas de transistores, no modificables una vez fabricadas.</li>
+<li><strong>PROM / UV-EPROM:</strong> memorias con una ventanita de cristal en la cápsula; se borraban exponiéndolas a <strong>luz ultravioleta durante 15 minutos</strong> dentro de una cajita especial, y se reprogramaban aplicando un pulso de <strong>13 V</strong> (mientras operaban normalmente a 5 V TTL).</li>
+<li><strong>EEPROM:</strong> ya se borran y escriben de forma eléctrica, aplicando pulsos de <strong>25 V</strong>, con una durabilidad típica de <strong>1 millón de ciclos de escritura</strong>.</li>
+</ul>
+<p>Esta cadena histórica es la que explica por qué después nace la memoria Flash: la EEPROM, aunque ya no necesitaba luz ultravioleta, seguía teniendo un problema de velocidad que se resuelve en el siguiente bloque.</p>
+</details>
+
+<details class="section-block sec" id="c6-flash-ssd" open><summary><span class="stitle">La invención de la memoria Flash y la arquitectura interna del SSD</span></summary>
+<p><strong>El cuello de botella de la EEPROM:</strong> leer un dato de una EEPROM a 5 V cuesta nanosegundos, pero escribir requiere decenas de milivoltios sostenidos durante aproximadamente <strong>1 milisegundo</strong> — que en un procesador corriendo a 20 MHz equivale a perder miles de ciclos de reloj solo esperando a que termine una escritura.</p>
+<p><strong>La solución por clústeres, que es justamente lo que define a la memoria Flash:</strong> en lugar de escribir byte por byte, las celdas se organizan en clústeres o bloques (por ejemplo de 64 KB, 128 KB o 4 MB) y se escriben miles de bytes <strong>en paralelo</strong> de una sola vez. El profesor lo tradujo a números: si escribir en paralelo un clúster completo de 64 KB tarda 50 ms, el tiempo <em>promedio</em> por byte cae a apenas ~0.8 microsegundos (y a nanosegundos por byte en clústeres de varios megabytes) — de ahí que la Flash se sienta ordenes de magnitud más rápida que la EEPROM aunque el mecanismo eléctrico de fondo sea parecido.</p>
+<p><strong>Estructura de celdas en los SSD modernos</strong>, de mayor a menor durabilidad:</p>
+<ul>
+<li><strong>SLC (Single-Level Cell):</strong> 1 bit por celda, sustrato grueso, baja densidad y costo elevado, pero entre 100 millones y 1,000 millones (1 giga) de ciclos de escritura — se usa casi exclusivamente en servidores de alto rendimiento (Google, Facebook, Oracle).</li>
+<li><strong>MLC (Multi-Level Cell):</strong> 2 bits por celda, en capas 3D/multicapa, con buena durabilidad comercial.</li>
+<li><strong>TLC (Triple-Level Cell):</strong> 3 bits por celda, sustrato más delgado y mayor probabilidad de error.</li>
+<li><strong>QLC (Quad-Level Cell):</strong> 4 bits por celda (un nibble completo por celda), sustrato sumamente delgado, alta densidad y la menor durabilidad — es el estándar en los SSD económicos actuales.</li>
+</ul>
+<p><strong>Balanceador de carga (wear leveling):</strong> el disco mantiene una <strong>Tabla de Contenido (TOC)</strong> que guarda el mapa de archivos y cuántas veces se ha escrito cada celda. Un circuito balanceador redirige dinámicamente las escrituras nuevas hacia las celdas menos desgastadas, para repartir el deterioro de forma pareja. El profesor señaló una consecuencia crítica de este diseño: <strong>si la celda donde vive la propia TOC llega a fallar, el disco completo queda inutilizable</strong>, aunque el resto de las celdas de datos estén sanas.</p>
+<p>Otros dos puntos prácticos que dio sobre el comportamiento real de un SSD:</p>
+<ul>
+<li><strong>Sensibilidad electromagnética:</strong> colocar memorias USB o SSD cerca de fuentes de radiación continua (un microondas, un router WiFi) puede afectarlas.</li>
+<li><strong>Caída de rendimiento por espacio ocupado:</strong> al superar el 30%–50% de capacidad ocupada, el balanceador tiene que reorganizar datos constantemente y la velocidad nominal del SSD cae a cerca del 70%; si la ocupación supera el 70%, el desempeño cae por debajo del 60%. Por esto el archivo de intercambio (swap/pagefile) de Windows, que escribe constantemente (~10 escrituras por segundo, ≈3.15 millones de ciclos al año), es especialmente agresivo para el desgaste de un SSD. Las optimizaciones recomendadas: en Windows, asignar el pagefile a un disco mecánico secundario; en Linux, usar <code>zram</code> (un demonio que comprime el espacio de intercambio directamente en RAM, sin tocar el disco).</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c6-magneticos-opticos" open><summary><span class="stitle">Medios magnéticos y ópticos</span></summary>
+<p>En medios <strong>magnéticos</strong> se repasó la evolución de los disquetes: de las cintas magnéticas de acceso secuencial, a los disquetes de 8", luego los de 5¼" (320 KB a 720 KB), y finalmente los de 3½" (720 KB a 1.44 MB, o 2.88 MB en versiones especiales). El avance clave de los disquetes de 3½" fue incorporar una plaquita metálica soldada que mejoraba la precisión del motor a pasos del lector.</p>
+<p>En medios <strong>ópticos</strong>, la comparación se organizó por la longitud de onda del láser usado, que es lo que determina cuánta información cabe en el disco:</p>
+<ul>
+<li><strong>CD (ISO 9660):</strong> láser rojo de 7 µm de longitud de onda. Capacidad de 650 MB a 700 MB.</li>
+<li><strong>DVD:</strong> lente despegada sin fricción, láser rojo de 4 µm. Capacidad de 4.7 GB en capa sencilla, o 9.6 GB en doble capa (<em>dual layer</em>), ajustando la distancia focal del lector.</li>
+<li><strong>Blu-ray:</strong> láser azul-ultravioleta de apenas 0.04 µm (40 nm) — la longitud de onda mucho más corta es lo que permite las densidades necesarias para video Full HD y 4K.</li>
+</ul>
+<p><em>(Cultura general, mencionado de paso)</em> El profesor comentó también el almacenamiento holográfico o cristalino: tecnología basada en láseres de clase 10 (1 kW) que alteran el estado molecular del medio en tres dimensiones, produciendo un almacenamiento prácticamente inalterable — no es algo que vaya a examen, pero da contexto de hacia dónde apunta el almacenamiento óptico a futuro.</p>
+</details>
+
+<details class="section-block sec" id="c6-modos-direccionamiento" open><summary><span class="stitle">Modos de direccionamiento de microprocesadores (modelo Motorola 6800)</span></summary>
+<p>Con el bloque de memorias cerrado, la clase entró de inmediato al siguiente tema: los <strong>modos de direccionamiento</strong>, usando la arquitectura del <strong>Motorola 6800 / 68HC11</strong> como estándar didáctico. El profesor presentó seis modos:</p>
+<ul>
+<li><strong>Inherente (operando implícito):</strong> la instrucción no necesita ningún operando externo porque la operación ya está implícita en el código de operación mismo. Ejemplos: <code>NOP</code> (no operación), <code>RTS</code> (retorno de subrutina), <code>RESET</code>, y los corrimientos de acumulador.</li>
+<li><strong>Inmediato:</strong> el dato constante viene ubicado en las posiciones de memoria inmediatamente después del código de la instrucción. Ejemplo: <code>ADD A, #8</code> suma el valor constante 8 al acumulador A.</li>
+<li><strong>Extendido:</strong> el código de operación va seguido de la dirección completa de memoria, de 16 bits, donde está el dato. Ejemplo: <code>ADD A, $1000</code> busca el dato en la dirección <code>$1000</code> y lo suma a A.</li>
+<li><strong>Directo:</strong> es como el extendido, pero usa solo la parte baja de la memoria — los primeros 256 bytes, conocidos como "página cero" — con direcciones de 8 bits en vez de 16. La ventaja es ahorrar ciclos de reloj al no tener que leer los bytes superiores, que siempre serían cero.</li>
+<li><strong>Indexado:</strong> suma el contenido de un registro de índice (X o Y) más un desplazamiento constante (<em>offset</em> o delta) para calcular la dirección final. Ejemplo: <code>ADD A, 5, X</code> suma a A el dato ubicado en la dirección <code>X + 5</code>. Este modo es indispensable para manipular vectores, arreglos y matrices en ensamblador.</li>
+<li><strong>Relativo:</strong> modifica directamente el contador de programa sumándole un desplazamiento con signo (<code>PC = PC + delta</code>). Se usa en instrucciones de salto condicional e incondicional como <code>JMP</code>, <code>JNE</code>, <code>JNZ</code> y <code>CALL</code>.</li>
+</ul>
+<p>Para cerrar el tema, el profesor comparó cómo resuelven este mismo problema otras arquitecturas ya vistas en el curso:</p>
+<ul>
+<li><strong>PIC (PIC18F4550):</strong> instrucciones de tamaño fijo de 16 bits, arquitectura Harvard que no mezcla datos e instrucciones; mover datos a RAM puede requerir dos ciclos de reloj.</li>
+<li><strong>AVR (ATmega / Arduino):</strong> instrucciones de 1 o 2 operandos, ejecutadas habitualmente en un solo ciclo de reloj.</li>
+<li><strong>ARM (Cortex-M):</strong> arquitectura Load/Store pura — manipula constantes por valor inmediato o transfiere datos entre registros y memoria explícitamente, sin los modos "extendido/directo" clásicos del 6800.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c6-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Cierre oficial del Tema 2:</strong> con memorias y modos de direccionamiento ya cubiertos, el Tema 2 (Organización, arquitectura y plataformas embebidas) queda cerrado.</li>
+<li><strong>Próxima clase — inicio del Tema 3:</strong> Sistemas Operativos para Plataformas Embebidas.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>La Flash resuelve el cuello de botella de la EEPROM escribiendo por clústeres en paralelo, no byte por byte.</li>
+<li>Durabilidad de celdas SSD: SLC (100M–1000M ciclos) &gt; MLC &gt; TLC &gt; QLC (la de menor durabilidad, más común en discos baratos).</li>
+<li>Wear leveling reparte el desgaste entre celdas vía la Tabla de Contenido (TOC); si la TOC falla, el disco entero queda inutilizable.</li>
+<li>No usar un SSD por encima del 50–70% de capacidad — el rendimiento cae fuerte por la reorganización constante del balanceador.</li>
+<li>6 modos de direccionamiento del Motorola 6800: Inherente, Inmediato, Extendido, Directo, Indexado y Relativo.</li>
+</ul></div>
+
+</div>
+</body>
+</html>
