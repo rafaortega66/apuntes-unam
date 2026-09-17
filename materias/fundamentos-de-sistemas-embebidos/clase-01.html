@@ -12,61 +12,119 @@
 <div class="wrap">
 <a class="back" href="index.html">← Fundamentos de Sistemas Embebidos</a>
 <div class="detail-head" style="border-color:#A98BD1"><h2>Clase 01</h2>
-  <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 26 ago 2026 · Tema 1 — Introducción a los sistemas embebidos · qué es (y qué no es) un sistema embebido, lazo de control, propiedades de materiales y definición formal de computadora.</p>
+  <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 26 ago 2026 · Tema 1 — Delimitación conceptual del sistema embebido frente a lo mecánico/analógico, docenas de ejemplos clasificados en vivo, electromecánica de motores, propiedades científicas de los materiales, y definición formal de computadora.</p>
 </div>
 
-<div class="encorto"><h4>En corto</h4><ul>
-<li>Sistema embebido = sistema <strong>digital</strong> (µC / procesador) dedicado a <strong>una</strong> tarea; distinto de una computadora de propósito general y de lo puramente mecánico / analógico.</li>
-<li>Criterio de ingeniería: ¿de verdad necesita cómputo digital, o basta con electrónica / mecánica robusta?</li>
-<li>Lazo de control <strong>abierto</strong> (por tiempo) vs. <strong>cerrado</strong> (los sensores deciden cuándo parar).</li>
-<li>Propiedades de materiales: <strong>dureza</strong>, <strong>tenacidad</strong> y <strong>ductilidad</strong> — no confundirlas.</li>
-<li>Cierre: definición formal de computadora (entrada, salida, procesador, memoria) → abre el tema de procesadores.</li>
-</ul></div>
+<details class="section-block sec" id="c1-definicion-infimo" open><summary><span class="stitle">Definición inicial: el sistema embebido como "ínfimo"</span></summary>
+<p>El profesor abrió la asignatura planteando el problema de definir con rigor qué es un sistema embebido. Para construirla desde una base técnica, recurrió a un concepto de las matemáticas puras: el <strong>ínfimo</strong>, que define textualmente como "la máxima cota inferior". Con esto estableció que un sistema embebido representa la cota mínima e indispensable de hardware y software necesaria para resolver una tarea específica — ni más ni menos de lo que la tarea exige.</p>
+<p>Para aterrizar la definición, analizó ejemplos cotidianos:</p>
+<ul>
+<li><strong>Serie navideña:</strong> alimentada a 9V, los focos se encienden y permanecen encendidos sin lógica programable ni procesamiento digital — no es un sistema embebido.</li>
+<li><strong>Control remoto:</strong> no integra una computadora personal completa, sino un microcontrolador especializado cuya única función es generar el tren de pulsos — sí es un sistema embebido, aunque mínimo.</li>
+<li><strong>Aspersor de jardín</strong> (el de los jardines de la universidad): un tubo metálico con una pieza con pico y una manguerita. Cuando el agua sale a presión, empuja el pico, que tiene un resorte que hace girar mecánicamente el aspersor. El profesor lo definió como "un mecánico maravilloso" que ejecuta su "algoritmo" mediante hardware y software puramente mecánico, sin ningún componente digital — no es un sistema embebido.</li>
+<li><strong>Marcapasos:</strong> distinción tajante — los marcapasos digitales sí son sistemas embebidos; los modelos puramente mecánicos antiguos, no.</li>
+<li><strong>Reloj Casio:</strong> incorpora un sistema de control digital integrado diseñado específicamente para gobernar la pantalla — sí es un sistema embebido.</li>
+</ul>
+</details>
 
-<div class="examen"><h4>🎯 Para el examen</h4><ul>
-<li>Distinguir solución <strong>mecánica / analógica / electromecánica</strong> vs. <strong>sistema embebido digital</strong>. Es error grave llamar sistema embebido a algo puramente físico, aunque haga una función "inteligente".</li>
-<li>Definiciones precisas: <strong>dureza</strong> (resistencia a rayarse, suele venir con fragilidad), <strong>tenacidad</strong> (se dobla sin romperse), <strong>ductilidad</strong> (se estira sin fracturarse).</li>
-<li>Saber cuándo se justifica un microcontrolador y cuándo basta con electrónica analógica robusta.</li>
-</ul></div>
+<details class="section-block sec" id="c1-debate-ejemplos" open><summary><span class="stitle">Dinámica de clasificación: propuestas de los estudiantes</span></summary>
+<p>El profesor abrió una dinámica de debate evaluando propuestas de dispositivos de los propios estudiantes, aplicando el criterio digital/computadora vs. mecánico/analógico:</p>
+<ul>
+<li><strong>Cámara de seguridad:</strong> digital — sensor + microcontrolador que procesa e interfaz la señal.</li>
+<li><strong>Horno de microondas analógico</strong> (puerta y dos perillas mecánicas): el temporizador funciona con un resorte interno que hace un sonido físico de "tac tac tac tac" y corta de golpe la corriente al llegar al origen. La perilla de temperatura, como en las licuadoras, usa un arreglo de capacitores. No contiene ninguna computadora — el profesor enfatizó que un microondas analógico no es digital.</li>
+<li><strong>Lavadora manual mecánica de tina:</strong> motor y perilla mecánica que hace "taca". Sin ciclos de lavado programados ni "cuerpo" digital — el usuario la llena a mano, vierte el jabón y gira la perilla durante 3 minutos (no más, para no dañar la ropa). Contraste directo con las lavadoras automáticas modernas, donde el usuario solo introduce la ropa.</li>
+<li><strong>Alarma contra incendios analógica:</strong> el profesor demostró en el pizarrón que no se requiere una computadora para hacer una alarma funcional: un sensor de humo conectado directamente a la base de un transistor; la línea de colector se conecta a la alimentación, y el emisor en serie con una resistencia y un zumbador (buzzer) hacia tierra. Al detectar humo, el sensor envía una corriente mínima a la base, el transistor entra en saturación y permite que la corriente fluya directo hacia el zumbador, cerrando el circuito a tierra y haciéndolo chillar.</li>
+<li><strong>Tamagotchi y calculadora:</strong> el Tamagotchi es "una computadora con un poquito"; la calculadora electrónica es una computadora digital dedicada.</li>
+</ul>
+</details>
 
-<div class="section-block"><h4>Idea central</h4>
-<p>Un sistema embebido es un sistema <strong>digital</strong> (tiene microcontrolador o procesador) dedicado a <strong>una tarea específica</strong>, a diferencia de una computadora personal, que es de propósito general. Lo que se resuelve de forma puramente mecánica, analógica o electromecánica <strong>no</strong> es un sistema embebido, aunque haga una función aparentemente inteligente.</p></div>
+<details class="section-block sec" id="c1-medidor-cfe" open><summary><span class="stitle">Caso de estudio: el medidor de consumo eléctrico de la CFE</span></summary>
+<p>El <strong>medidor electromecánico antiguo</strong> funcionaba con un inductor por el que circulaba la corriente de la vivienda, generando un campo magnético que hacía girar un disco. Ese giro se transmitía a un tren de engranajes suaves que movían físicamente los contadores numéricos. El lastre de este sistema era su propia <strong>fricción mecánica</strong>: si el consumo de la casa era mínimo (del orden de un nanoamperio), el torque generado por el campo magnético era insuficiente para vencer la fricción de los engranes, y ese consumo simplemente no se registraba.</p>
+<p>En un <strong>medidor digital</strong>, cada transistor tiene una corriente de activación específica; si esa corriente de activación es mayor que el consumo real del hogar, el medidor tampoco se "despierta" ni registra la lectura. El profesor conectó esto con el fenómeno del <strong>consumo fantasma</strong>: los aparatos modernos conectados continuamente en modo de espera (standby) generan un consumo mínimo cada uno. Aunque cada consumo individual sea infinitesimal, matemáticamente la suma de infinitos consumos diminutos no es cero, sino que tiende a un valor significativo — el profesor lo explicó apoyándose en la idea de una sumatoria/límite matemático. Para capturar ese cobro que antes se perdía, la CFE implementó nuevos medidores digitales con corrientes de activación mucho más bajas, capaces de registrar cualquier flujo mínimo de corriente de los aparatos conectados.</p>
+</details>
 
-<div class="section-block"><h4>El criterio que hay que saber aplicar</h4>
-<p>Ante cualquier dispositivo, preguntarse: ¿de verdad necesita procesamiento digital, o basta con electrónica analógica / mecánica robusta? Un ingeniero debe saber <strong>cuándo</strong> poner un microcontrolador y cuándo no. Llamar "sistema embebido" a algo que es puramente físico es el error de fondo.</p></div>
+<details class="section-block sec" id="c1-mas-ejemplos" open><summary><span class="stitle">Más ejemplos: oxímetro, planchadora de tarjetas, termostato bimetálico, semáforo</span></summary>
+<ul>
+<li><strong>Oxímetro:</strong> sistema embebido digital — integra un procesador para controlar el sensor óptico de luz.</li>
+<li><strong>Lector manual de tarjetas de crédito ("planchadora"):</strong> dispositivo mecánico arcaico donde se coloca la tarjeta con números en relieve, se superpone papel carbón y se pasa un rodillo para imprimir los números — puramente físico, no lee los códigos de seguridad traseros ni ejecuta transacción alguna.</li>
+<li><strong>Termostato analógico bimetálico:</strong> formado por una tira bimetálica (como nitinol, o aleaciones de níquel y titanio) enrollada. Al cambiar la temperatura, un metal se dilata más rápido que el otro, generando una torsión mecánica. El profesor aclaró que no se puede usar aluminio con hierro porque el aluminio se dilata demasiado y el par se rompería. Para evitar requerir temperaturas extremas para lograr una vuelta completa, se agregan engranes reductores ("granitos") de modo que 1/8 de vuelta física se transforme en 1/2 vuelta de ajuste sobre una llave de bola — regulando la temperatura de forma completamente mecánica.</li>
+<li><strong>Semáforo electromecánico tradicional</strong> (creados a finales del siglo XIX): funcionan mediante un plato de madera o metal con agujeros o láminas de cobre, girado a velocidad constante sincronizada con la frecuencia de la red eléctrica. Al girar, las láminas de cobre tocan físicamente tres escobillas correspondientes a las luces verde, amarilla y roja.</li>
+</ul>
+</details>
 
-<div class="section-block"><h4>Ejemplos por categoría</h4>
-<table><thead><tr><th>Sí es sistema embebido (digital)</th><th>No lo es (mecánico / analógico / electromecánico)</th></tr></thead><tbody>
-<tr><td>Control remoto (µC genera el tren de pulsos IR)</td><td>Semáforo electromecánico (plato giratorio con escobillas)</td></tr>
-<tr><td>Cámara de seguridad, oxímetro, termómetro digital</td><td>Alarma de incendios con transistor 2N2222 + buzzer</td></tr>
-<tr><td>Calculadora, piano digital, Apple Pencil</td><td>Termostato bimetálico (mercurio / nitinol)</td></tr>
-<tr><td>Frenos ABS, puerta automática con sensores</td><td>Microondas de perillas, lavadora de tina manual</td></tr>
-<tr><td>Cerradura electrónica, lector RFID / biométrico</td><td>Medidor electromecánico antiguo de CFE</td></tr>
-<tr><td>Roomba, bocinas inteligentes, audífonos Bluetooth</td><td>Radio analógico, walkie-talkie 80s, tornamesa</td></tr>
+<details class="section-block sec" id="c1-electromecanica" open><summary><span class="stitle">Electromecánica de motores y por qué se usa carbón</span></summary>
+<p>Al detectar que los estudiantes de Ingeniería en Computación desconocían el funcionamiento de herramientas eléctricas básicas, el profesor explicó el <strong>taladro de corriente alterna</strong>: no contiene imanes permanentes, sino bobinas tanto en el estator como en el rotor. En el eje del rotor hay un conjunto de escobillas que hacen contacto físico con bloques de carbón (el conmutador). Al aplicar corriente se generan polos Norte y Sur magnéticos en estator y rotor, provocando el giro. Para evitar que el motor se detenga cuando los polos opuestos se alinean (Norte con Sur), el propio conmutador invierte la polaridad mecánicamente en cada media vuelta, manteniendo el giro continuo.</p>
+<p>¿Por qué carbón? El contacto entre las escobillas y el conmutador genera fricción intensa; si se usara metal contra cobre, la fricción destruiría las piezas. Se necesita un material suave, conductor de electricidad, que además funcione como lubricante sólido: el carbón cumple las tres condiciones. Se desgasta paulatinamente hasta que el resorte ya no logra empujarlo contra el conmutador, momento en el que el motor se detiene. En vez de desechar la herramienta, el profesor recomendó reemplazar los carbones por unos cuantos pesos en tiendas de refacciones (mencionó la calle República de Uruguay como ejemplo), extendiendo la vida útil del motor de forma muy económica.</p>
+</details>
+
+<details class="section-block sec" id="c1-propiedades-materiales" open><summary><span class="stitle">Definiciones científicas de propiedades de los materiales</span></summary>
+<ul>
+<li><strong>Dureza:</strong> definida rigurosamente en ingeniería como "alta resistencia a la fricción, no se raya". Suele estar asociada a la <strong>fragilidad</strong>. Ejemplo del diamante: es el material más duro químicamente estable en la Tierra, raya cualquier superficie, pero al ser frágil se puede fracturar de un golpe seco. Ejemplo del aluminio: es duro y quebradizo en comparación con el acero.</li>
+<li><strong>Tenacidad o extensibilidad:</strong> el acero, bajo la definición científica estricta, no es "duro" (se raya si se le talla con algo más duro), pero tiene la capacidad de deformarse o doblarse sin romperse, lo que lo hace ideal para estructuras.</li>
+<li><strong>Ductilidad:</strong> capacidad de un material de estirarse significativamente en hilos o láminas sin fracturarse. El oro es sumamente dúctil y extensible, pero blando (carece de dureza).</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c1-tabla-final" open><summary><span class="stitle">Clasificación exhaustiva del resto de ejemplos propuestos</span></summary>
+<table><thead><tr><th>Dispositivo</th><th>Clasificación</th><th>Justificación</th></tr></thead><tbody>
+<tr><td>Frenos ABS</td><td>Sistema embebido / digital</td><td>Control completamente electrónico con sensores de velocidad en las ruedas y procesamiento digital.</td></tr>
+<tr><td>Impresora</td><td>Sistema embebido / digital</td><td>Requiere microcontrolador para coordinar el motor a pasos e inyectar las burbujas de tinta.</td></tr>
+<tr><td>Multímetro</td><td>Híbrido</td><td>El de aguja analógico es puramente electromecánico; el digital sí es un sistema embebido.</td></tr>
+<tr><td>Elevador</td><td>Híbrido</td><td>Han existido desde Roma y Babilonia con tracción hidráulica/neumática; los antiguos tienen indicador de aguja mecánico; los modernos son digitales.</td></tr>
+<tr><td>Puerta automática</td><td>Sistema embebido / digital</td><td>Sensor de presencia digital que activa el motor.</td></tr>
+<tr><td>Rover de Marte</td><td>Sistema embebido / digital</td><td>Ejecuta algoritmos complejos de descompresión y control.</td></tr>
+<tr><td>Máquinas expendedoras</td><td>Híbrido</td><td>Existen modelos puramente eléctricos o mecánicos (se mencionó el antecedente histórico de una máquina expendedora hidráulica en la India, accionada por una moneda).</td></tr>
+<tr><td>Cerradura electrónica</td><td>Sistema embebido / digital</td><td>Sistema de control de acceso digital.</td></tr>
+<tr><td>Lector RFID / biométrico</td><td>Sistema embebido / digital</td><td>Integra sensores biométricos o de radiofrecuencia con procesamiento.</td></tr>
+<tr><td>Máquina de diálisis</td><td>Híbrido / digital</td><td>Bombea sangre a través de filtros. En lazo abierto opera por tiempo fijo (3 horas); en lazo cerrado mide electrónicamente la conductividad eléctrica de la sangre (el ácido úrico y las sales aumentan la conductividad) para decidir cuándo detenerse.</td></tr>
+<tr><td>Hub de red vs. hub USB</td><td>Híbrido</td><td>Un hub de red pasivo solo distribuye señales eléctricas sin interpretar paquetes; un hub USB sí es digital.</td></tr>
+<tr><td>Radio</td><td>Híbrido</td><td>El radio analógico tradicional (sintonización LC) es analógico; los radios digitales modernos con algoritmos de encriptación (como SHA-256) sí contienen procesador.</td></tr>
+<tr><td>Detonador de C4</td><td>Eléctrico / no embebido</td><td>Se activa cerrando un circuito eléctrico directo con una pila.</td></tr>
+<tr><td>Termómetro digital</td><td>Sistema embebido / digital</td><td>Procesa la señal del sensor térmico mediante un circuito digital.</td></tr>
+<tr><td>Cafetera tradicional (de estufa a gas)</td><td>Mecánico / analógico</td><td>Sin ningún componente digital.</td></tr>
+<tr><td>Roomba</td><td>Sistema embebido / digital</td><td>Robot de limpieza con sensores y navegación programada.</td></tr>
+<tr><td>Sistema de inyección de combustible</td><td>Híbrido</td><td>El modelo mecánico/electrónico tradicional opera con amplificadores y presión del pistón; las computadoras de motor modernas son digitales.</td></tr>
+<tr><td>Cámara fotográfica de rollo</td><td>Mecánico</td><td>Funciona con arrastre mecánico de carrete de película.</td></tr>
+<tr><td>Piano digital y bocinas Bluetooth</td><td>Sistema embebido / digital</td><td>Procesan señales digitales de audio y protocolos de comunicación inalámbrica.</td></tr>
+<tr><td>Bomba de insulina</td><td>Eléctrico / mecánico</td><td>En su forma básica es un motor de empuje, sin necesidad intrínseca de microcomputadora.</td></tr>
+<tr><td>Lector de código de barras</td><td>Híbrido</td><td>Si es un transceptor óptico analógico básico, no requiere microprocesador; si tiene interfaz USB, sí es digital.</td></tr>
+<tr><td>Semáforo peatonal con botón</td><td>Electromecánico</td><td>Se resuelve con un botón que dispara un relé eléctrico, que se resetea con un termostato de retardo.</td></tr>
+<tr><td>Apple Pencil</td><td>Sistema embebido / digital</td><td>Integra microcontrolador y sensores de presión internos.</td></tr>
+<tr><td>Walkie-talkie de los 80, aire acondicionado analógico, lector de cinta magnética, tornamesa</td><td>Analógicos / mecánicos</td><td>Basados en RF analógica, circuitos de refrigeración analógicos y cabezales magnéticos convencionales.</td></tr>
 </tbody></table>
-<p>Casos "depende": marcapasos (digital sí / analógico no), multímetro (solo el digital), lector de código de barras (con USB sí; transceptor láser simple no), máquina expendedora (hay modelos solo mecánicos), bomba de insulina (en esencia es un motor de empuje).</p></div>
+<p>Al concluir la revisión, el profesor señaló a la clase que quienes clasificaron ejemplos analógicos o mecánicos como "sistemas embebidos" cometieron el error conceptual central que la clase buscaba corregir.</p>
+</details>
 
-<div class="section-block"><h4>Lazo de control abierto vs. cerrado (ejemplo: máquina de diálisis)</h4>
+<details class="section-block sec" id="c1-computadora" open><summary><span class="stitle">Definición formal de computadora y procesadores</span></summary>
+<p>Para cerrar la sesión e iniciar formalmente el estudio de los procesadores, el profesor definió una computadora como: <em>"una máquina que consta de elementos de entrada, elementos de salida, procesador central y memoria"</em>.</p>
+</details>
+
+<details class="section-block sec" id="c1-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
 <ul>
-<li><strong>Lazo abierto:</strong> se fija por tiempo (3 horas y se asume que la sangre quedó limpia), sin retroalimentación.</li>
-<li><strong>Lazo cerrado:</strong> sensores miden en tiempo real. Conforme se filtran sales y ácido úrico, la conductividad de la sangre baja; el sistema usa ese dato para decidir cuándo detenerse.</li>
-</ul></div>
+<li><em>(Contexto)</em> El profesor relató que en la preparatoria (2017) su papá le daba una mesada semanal; el camión costaba unos centavos y necesitaba tomar dos de ida y uno de vuelta, sumando varios pesos diarios — usó esta historia para exhortar a los alumnos a valorar el dinero y el esfuerzo.</li>
+<li><em>(Contexto)</em> Al hablar del reloj Casio, bromeó con la letra de una canción de Shakira.</li>
+<li><em>(Contexto)</em> Compartió que durante su estancia en Alemania, su compañera de departamento (flatmate), vegana, solo enjuagaba los platos con agua fría y no entendía por qué no bajaba de peso comiendo espagueti con pasta de tomate varias veces por semana.</li>
+<li><em>(Contexto)</em> Mencionó que un verdadero ingeniero no tira a la basura una licuadora o un taladro cuando deja de funcionar — paga unos pesos para reparar el motor él mismo.</li>
+<li><em>(Contexto)</em> Contó una anécdota sobre la construcción de la Torre Latinoamericana: se contrataron miles de ingenieros que tuvieron que calcular manualmente las ecuaciones diferenciales de distribución de carga sobre el edificio, por grupos independientes — si un grupo se equivocaba, se repetían los cálculos desde el inicio. Contrastó esa disciplina con la actitud de alumnos actuales que se quejan cuando su programa marca un error.</li>
+<li><em>(Contexto)</em> Relató que hace un par de años, en una tienda se fue la luz y los empleados sacaron una máquina "planchadora" de tarjetas como respaldo; los clientes se quejaron creyendo que les clonarían la tarjeta, y el profesor explicó por qué eso técnicamente no es posible con ese dispositivo.</li>
+<li><em>(Contexto)</em> Bromeó sobre que el pH del cuerpo humano oscila entre 7.1 y 7.2 (ligeramente por encima del 7.0 neutro), por lo que somos "una bola de básicos".</li>
+</ul>
+</details>
 
-<div class="section-block"><h4>Propiedades de los materiales</h4>
+<details class="section-block sec" id="c1-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
 <ul>
-<li><strong>Dureza:</strong> resistencia a rayarse / a la fricción. Suele venir acompañada de fragilidad. Ej.: diamante (raya todo pero se hace añicos de un martillazo); aluminio (duro y quebradizo frente al acero).</li>
-<li><strong>Tenacidad / extensibilidad:</strong> se dobla o deforma sin romperse. Ej.: acero (se raya fácil, pero es flexible → parrillas, estructuras).</li>
-<li><strong>Ductilidad:</strong> se estira mucho sin fracturarse. Ej.: oro (muy dúctil pero blando); níquel y titanio (usados en termostatos bimetálicos).</li>
+<li><strong>Próxima sesión:</strong> inicio formal del estudio de los procesadores y arquitecturas de microcontroladores (PIC, AVR, entre otros).</li>
+<li><strong>Indicación académica:</strong> repasar y estudiar las definiciones fundamentales de sistemas embebidos vistas hoy, diferenciando claramente lo digital de lo mecánico/analógico/electromecánico.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Sistema embebido = "ínfimo" (máxima cota inferior) de cómputo, memoria y periféricos necesaria para una tarea específica, mediante control digital.</li>
+<li>Muchos problemas cotidianos (termostatos bimetálicos, semáforos de plato giratorio, motores de taladro) se resuelven sin cómputo digital — no son sistemas embebidos aunque parezcan "inteligentes".</li>
+<li>Propiedades de materiales: dureza = resistencia a rayarse (asociada a fragilidad, ej. diamante); tenacidad = deformarse sin romperse (ej. acero); ductilidad = estirarse sin fracturarse (ej. oro).</li>
+<li>Los motores de CA usan carbón como conmutador porque es conductor y a la vez lubricante sólido — sin él, el contacto metal-cobre se destruiría por fricción.</li>
+<li>El consumo fantasma (aparatos en standby) es la razón por la que la CFE migró a medidores digitales de corriente de activación ultra baja.</li>
 </ul></div>
-
-<div class="section-block"><h4>Motor eléctrico de CA (taladro, licuadora)</h4>
-<p>No usa imanes permanentes: bobinas en el estator y en el rotor. Al energizar se forman polos N-S y el rotor empieza a girar. Las <strong>escobillas + carbones</strong> invierten la polaridad mecánicamente en cada media vuelta, para que los polos se repelan y el giro no se detenga al alinearse. Se usa carbón porque conduce bien y además es suave (lubricante sólido); metal rozando cobre se destruiría por fricción. El carbón se desgasta con el uso y se reemplaza barato en vez de tirar la herramienta.</p></div>
-
-<div class="section-block"><h4>Cierre — definición formal de computadora</h4>
-<p>Máquina que consta de: elementos de entrada, elementos de salida, procesador central y memoria. En esencia, algo que realiza cálculos. Con esto el profesor abrió el tema siguiente: procesadores.</p></div>
-
-<div class="section-block"><h4>Contexto de clase — <em>no va para examen</em></h4>
-<p>Comentarios de pasada, sin peso para el examen: etimología árabe de "algoritmo" (<em>al-Ḵwārizmī</em>) y "álgebra" (<em>al-yabr</em>); la máquina de Turing como modelo abstracto de "lo que una computadora puede calcular"; menciones sueltas a "vacunas 1880" y las Puertas de Ishtar de Babilonia.</p></div>
 
 <p class="empty" style="margin-top:28px">Este material también está en el <a href="index.html#tema-1" style="color:var(--indigo)">Tema 1</a> de la materia.</p>
 
