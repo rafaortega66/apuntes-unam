@@ -30,32 +30,42 @@ Si el usuario todavía no tiene el resultado de NotebookLM, dale este prompt
 Eres mi asistente de apuntes de clase. Te voy a dar el audio de una clase de
 la materia "<MATERIA>", impartida por <PROFESOR/A>, del <DÍA fecha> (Clase <NN>).
 
-A partir del audio, genera notas de clase en este formato exacto:
+Necesito apuntes de estudio completos y bien redactados — NO un resumen
+ejecutivo. El objetivo es que, leyéndolos, pueda "revivir" la clase: que no
+se pierda nada técnico de lo que se explicó, pero que esté redactado como
+prosa clara y bien organizada, no como fragmentos sueltos.
+
+Genera el resultado en este formato:
 
 1. UNA LÍNEA de resumen del tema principal de la clase (para usar como subtítulo).
 
-2. "EN CORTO" — lista de 5 a 8 bullets con los conceptos clave más importantes,
-   cada uno en una línea corta y autocontenida.
+2. "TEMAS" — divide el contenido de la clase en secciones temáticas, en el
+   MISMO ORDEN en que se explicaron (no por importancia ni alfabético). Usa el
+   título de cada tema como encabezado. Dentro de cada sección, escribe
+   PÁRRAFOS COMPLETOS (no solo bullets) explicando: qué es el concepto, por
+   qué importa, cómo se conecta con lo anterior, toda definición o fórmula
+   exacta que se haya dado, y cualquier ejemplo o ejercicio resuelto en vivo
+   con sus números/pasos reales (no "se resolvió un ejemplo", sino el ejemplo
+   completo). Usa bullets o tablas solo para lo genuinamente tabular
+   (comparaciones, pasos numerados, fórmulas). Si el profesor hizo una
+   pregunta y un alumno respondió (bien o mal), inclúyelo — es información
+   real de la clase. No omitas nada técnico por parecer menor: prioriza
+   completitud sobre brevedad.
 
-3. "PARA EL EXAMEN" — lista de bullets con los puntos que el profesor/a marcó
-   explícitamente como importantes para evaluación, o que por su énfasis
-   probablemente entren en examen.
+3. "CONTEXTO — NO EXAMEN" — anécdotas, comentarios personales, referencias a
+   experiencias laborales, o tangentes que no son contenido académico pero dan
+   contexto.
 
-4. "TEMAS DETALLADOS" — divide el contenido de la clase en secciones temáticas
-   (usa el título de cada tema como encabezado). Dentro de cada sección, explica
-   los conceptos con el mismo nivel de detalle y tecnicismo que usó el profesor/a,
-   incluyendo definiciones exactas, ejemplos, comandos/código/fórmulas si los
-   hubo, y analogías que haya usado.
-
-5. "CONTEXTO — NO EXAMEN" — anécdotas, comentarios personales, referencias a
-   experiencias laborales, o tangentes que no son material de examen pero dan
-   contexto interesante.
-
-6. "PENDIENTE / PRÓXIMA CLASE" — tareas asignadas, prácticas a entregar,
+4. "PENDIENTE / PRÓXIMA CLASE" — tareas asignadas, prácticas a entregar,
    fechas límite, o lo que se dijo que se verá en la siguiente sesión.
 
-No resumas de más — prefiero que el detalle técnico quede completo aunque el
-texto sea largo. Escribe en español.
+5. "PUNTOS CLAVE" (al final, no al principio) — 3 a 5 bullets cortos como
+   repaso rápido, SOLO como cierre tras el detalle completo, nunca como
+   sustituto de él.
+
+No resumas de más en las secciones de "Temas" — ahí es donde debe estar todo
+el detalle técnico, con el nivel de tecnicismo que usó el profesor/a. Escribe
+en español.
 ```
 
 Si el usuario faltó a esa clase, en vez de esto usa el patrón de
@@ -68,10 +78,13 @@ contexto propios (no hay audio del que sacarlos).
 
 Con el resultado de NotebookLM (o el material oficial reconstruido), arma
 `materias/<slug>/clase-NN.html` siguiendo exactamente la plantilla descrita en
-`CLAUDE.md` (detail-head, encorto, examen, secciones `<details>` con `id`
-único por sección tipo `cNN-slug`, contexto, pendiente). Usa el color de
-acento correcto de la tabla en `CLAUDE.md`. Mira 2-3 páginas de clase
-recientes de esa misma materia para igualar tono y densidad.
+`CLAUDE.md` (detail-head, secciones `<details>` en prosa completa con `id`
+único por sección tipo `cNN-slug`, contexto, pendiente, puntos-clave al
+final). Usa el color de acento correcto de la tabla en `CLAUDE.md`. Mira 2-3
+páginas de clase recientes de esa misma materia para igualar tono y
+densidad — pero nota que a partir de sep 2026 el formato cambió (ver
+`CLAUDE.md`): ya no se usan las cajas "En corto"/"🎯 Para el examen" como
+resumen principal, el cuerpo detallado es la prosa completa.
 
 ## Paso 4 — Actualizar el índice de la materia
 

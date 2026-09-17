@@ -203,6 +203,12 @@ details.collapsible[open] > summary { margin-bottom: 12px; }
 .encorto ul, .examen ul { margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.7; }
 .encorto li, .examen li { margin: 4px 0; }
 
+/* cierre al final de la página (formato desde sep 2026): repaso corto, no sustituto del cuerpo */
+.puntos-clave { border-radius: 10px; padding: 13px 16px; margin: 22px 0 0; background: rgba(69,184,168,0.09); border-left: 3px solid var(--verde,#45B8A8); }
+.puntos-clave > h4 { margin: 0 0 8px; font-family: 'Fraunces', serif; font-size: 15px; font-weight: 600; }
+.puntos-clave ul { margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.7; }
+.puntos-clave li { margin: 4px 0; }
+
 /* secciones plegables de contenido */
 details.sec { margin-bottom: 6px; }
 details.sec > summary {

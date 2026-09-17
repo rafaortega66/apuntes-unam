@@ -73,16 +73,30 @@ pintando de azul conforme se cubre en clase (con enlace a la clase que lo vio).
 
 ### Plantilla de una página `clase-NN.html`
 
-Ver cualquier `clase-*.html` reciente como referencia exacta de estructura y
-clases CSS. Secciones típicas, en este orden:
+**Cambio de formato (desde el 16 sep 2026):** el usuario dejó claro que las
+cajas "En corto" / "🎯 Para el examen" como resumen principal NO sirven para
+estudiar — se perdía información real de la clase. El objetivo ahora es que
+el apunte se pueda leer y "revivir" la clase completa, con prosa bien
+redactada y nada del contenido técnico recortado. Ver cualquier `clase-*.html`
+**anterior** a esta fecha como ejemplo del formato viejo (ya no se usa para
+clases nuevas); no reprocesar las viejas a menos que el usuario lo pida
+explícitamente.
+
+Secciones de una página nueva, en este orden:
 1. `detail-head` — número de clase, profesor, fecha, resumen de una línea.
-2. `.encorto` — 5-8 bullets de lo más importante.
-3. `.examen` (🎯 Para el examen) — lo que el profesor remarcó para evaluación.
-4. Uno o más `<details class="section-block sec" id="cNN-slug">` — el
-   contenido detallado por tema, con el mismo nivel técnico que dio el
-   profesor (no resumir de más).
-5. `<details ... id="cNN-contexto">` — anécdotas, tangentes, no-examen.
-6. `<details ... id="cNN-pendiente">` — tareas asignadas, próxima clase.
+2. Uno o más `<details class="section-block sec" id="cNN-slug">` — el
+   contenido **completo en prosa**, en el mismo orden en que se explicó en
+   clase, con el mismo nivel técnico que dio el profesor (definiciones
+   exactas, ejemplos resueltos con sus números/pasos reales, preguntas y
+   respuestas en vivo). Bullets/tablas solo para lo genuinamente tabular
+   (comparaciones, pasos, fórmulas) — el resto en párrafos. Esta es la parte
+   que antes iba comprimida en "En corto"/"Para el examen"; ahora es el
+   cuerpo principal, sin recortar.
+3. `<details ... id="cNN-contexto">` — anécdotas, tangentes, no-examen.
+4. `<details ... id="cNN-pendiente">` — tareas asignadas, próxima clase.
+5. `.puntos-clave` (opcional, al final de todo) — 3-5 bullets cortos de
+   repaso, solo como cierre después del detalle completo, nunca como
+   sustituto.
 
 Los `id` en los `<details>` son importantes: el buscador global enlaza
 directo a ellos (ver más abajo).
