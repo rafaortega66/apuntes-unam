@@ -15,25 +15,7 @@
   <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 31 ago 2026 · Tema 2 — Organización, arquitectura y plataformas · arquitecturas RISC vs. CISC recorriendo PIC, AVR, ESP32, RP2040/Cortex-M e Intel x86; memoria caché y el cuello de botella CPU–RAM.</p>
 </div>
 
-<div class="encorto"><h4>En corto</h4><ul>
-<li><strong>RISC</strong>: memoria de programa y de datos separadas (Harvard), catálogo ~1000 instrucciones, todas simples y de ancho fijo, casi todo es <em>load/store</em> a través de un registro. Verboso, pero el <em>pipeline</em> lo compensa.</li>
-<li><strong>CISC</strong> (Intel x86, heredero del 8086 / IA-32): instrucciones complejas de ancho variable, millones de combinaciones, operan directo sobre memoria.</li>
-<li>Direccionamiento por potencias de 2: bus de datos de 8 bits → <strong>2⁸ = 256 bytes</strong> de RAM; bus de programa de 14 bits → <strong>2¹⁴ = 16 K</strong>.</li>
-<li>En µC con pila chica (PIC: <strong>8 niveles</strong>, fuera de la RAM) <strong>no se usa recursión</strong> → <em>stack overflow</em>.</li>
-<li><strong>Caché = "almacenamiento en proxy"</strong>: copiar lo más usado a un medio más rápido y cercano. En multinúcleo es obligatorio tener <strong>≥ 2 niveles</strong> (L1+L2 por núcleo, L3 global) para evitar colisiones sobre la RAM lenta.</li>
-<li>Elegir <strong>Cortex-M</strong> por costo e infraestructura: M0 barato sin FPU · M3 multiplica · M4/M7 FPU nativa · M7 además DSP/vectores.</li>
-<li><strong>Intel moderno = CISC por fuera, RISC por dentro</strong>: un predecodificador parte cada instrucción CISC en micro-operaciones RISC.</li>
-</ul></div>
-
-<div class="examen"><h4>🎯 Para el examen (lo que el profesor marcó explícito)</h4><ul>
-<li>Dominar <strong>de memoria</strong> las potencias de 2 para calcular direccionamiento: 2⁸=256, 2¹⁰=1024, 2¹¹=2048, 2¹²=4096, 2¹³=8192, 2¹⁴=16384 (16 K).</li>
-<li><strong>No recursión</strong> en microcontroladores con pila pequeña (PIC = 8 niveles físicos, independientes de la RAM) → desbordamiento de pila inmediato.</li>
-<li>Saber <strong>elegir la familia Cortex-M</strong> según costo e infraestructura interna: M0 (~1 USD, sin FPU, flotantes por software) · M3 (hardware de multiplicación, divide por inverso multiplicativo) · M4 (FPU nativa, multiplica y divide flotante por hardware) · M7 (FPU + unidad vectorial / DSP).</li>
-<li><strong>Caché</strong> como "almacenamiento en proxy" y la regla de <strong>mínimo dos niveles</strong> en procesadores multinúcleo para mitigar colisiones de acceso a la RAM.</li>
-<li><strong>Práctica de mañana</strong>: la versión enfocada a <strong>Windows</strong> exige <strong>Raspberry Pi 3</strong>; <strong>no funciona en la Raspberry Pi 4</strong>.</li>
-</ul></div>
-
-<div class="section-block"><h4>RISC vs. CISC — el eje de la clase</h4>
+<details class="section-block sec" id="c2-risc-cisc" open><summary><span class="stitle">RISC vs. CISC — el eje de la clase</span></summary>
 <table><thead><tr><th></th><th>RISC (ARM, PIC, AVR…)</th><th>CISC (Intel x86)</th></tr></thead><tbody>
 <tr><td>Memoria</td><td>Programa y datos separados (Harvard)</td><td>Unificada; instrucciones operan directo sobre memoria</td></tr>
 <tr><td>Catálogo</td><td>~1000 instrucciones, ancho fijo</td><td>Millones de combinaciones de mnemónicos, ancho variable</td></tr>
@@ -42,9 +24,9 @@
 <tr><td></td><td>…pero el <em>pipeline</em> vuelve ese costo irrelevante en rendimiento</td><td>…a cambio de un decodificador mucho más caro</td></tr>
 </tbody></table>
 <p>"La pata donde cojean" las RISC: todo trabajo aritmético pasa por un registro, lo que obliga a accesos constantes a memoria. El <em>pipeline</em> es lo que las hace competitivas.</p>
-<p>Todos los Intel de escritorio están basados, por herencia, en la arquitectura del <strong>8086</strong> (80x86 / IA-32).</p></div>
+<p>Todos los Intel de escritorio están basados, por herencia, en la arquitectura del <strong>8086</strong> (80x86 / IA-32).</p></details>
 
-<div class="section-block"><h4>PIC — arquitectura RISC de 8 bits</h4>
+<details class="section-block sec" id="c2-pic"><summary><span class="stitle">PIC — arquitectura RISC de 8 bits</span></summary>
 <ul>
 <li><strong>Flash</strong> (memoria de programa) físicamente separada de la <strong>RAM</strong> (memoria de datos). Un <strong>bus de datos único</strong> conecta RAM, registro W, registros de control, puerto paralelo y periféricos → se accede a cualquiera de ellos en un ciclo de reloj, como si todo fuera dato inmediato.</li>
 <li><strong>Direccionamiento</strong>: bus de datos de 8 bits → 2⁸ = <strong>256 bytes de RAM</strong>. Bus de programa de 14 bits → 2¹⁴ = <strong>16 K</strong>. (El profesor pidió las potencias de 2 de memoria: 2¹⁰=1024, 2¹¹=2048, 2¹²=4096, 2¹³=8192, 2¹⁴=16384.)</li>
@@ -57,17 +39,19 @@
 <li><strong>ALU</strong>: dos entradas. La izquierda viene de un multiplexor (dato de la instrucción, de la memoria o de un periférico); la derecha está cableada al <strong>registro acumulador W</strong> (<em>working register</em>). Sumar <code>A + B</code> cuesta <strong>tres accesos</strong>: (1) cargar A en W, (2) W = W + B, (3) escribir W en el destino.</li>
 <li><strong>Expansión externa</strong>: usando 2 puertos como bus de direcciones + 1 puerto como bus de datos se direcciona RAM externa de 2¹⁶ = <strong>64 KB</strong>. Sumando el puerto A (5 bits) → 21 bits → más de 2²¹ = <strong>1 MB</strong>. La RAM interna pasa a funcionar como <em>caché / scratchpad</em> de esa memoria externa.</li>
 </ul>
-</div>
+</details>
 
-<div class="section-block"><h4>AVR — el microcontrolador de Arduino</h4>
+<details class="section-block sec" id="c2-avr"><summary><span class="stitle">AVR — el microcontrolador de Arduino</span></summary>
 <ul>
 <li>También RISC: memoria de programa separada de la <strong>SRAM</strong> de datos.</li>
 <li>Diferencia clave con el PIC: <strong>32 registros de propósito general</strong> en vez de un único acumulador W.</li>
 <li>Flujo para operar en la ALU: mover el dato de la SRAM a uno de los 32 registros → alimentar la ALU → el resultado vuelve a un registro o a la SRAM. Trabaja <strong>sobre registros, no sobre memoria directa</strong>. Direcciona hasta <strong>8 K de RAM</strong>.</li>
+<li>Corre hasta <strong>50 MHz</strong>, muy por encima de un PIC típico.</li>
 </ul>
-</div>
+<p>Broma recurrente del profesor: cuando alguien confunde la sigla SRAM, la traduce en broma como "Status RAM" en vez de <em>Static RAM</em> — la insistencia es que la S es de "estática" (no se refresca periódicamente como la DRAM).</p>
+</details>
 
-<div class="section-block"><h4>ESP32 — sistema integrado con red</h4>
+<details class="section-block sec" id="c2-esp32"><summary><span class="stitle">ESP32 — sistema integrado con red</span></summary>
 <ul>
 <li>Núcleo RISC rodeado de mucho hardware dedicado: bloque de <strong>RF</strong> (WiFi), reloj de tiempo real, sensores, aceleración por hardware y <strong>criptografía</strong>. Todo ese "fierro" es lo que hace cómodo programar comunicaciones.</li>
 <li>La <strong>ROM no es memoria de programa</strong>: trae conectores <strong>JTAG</strong> para depuración externa y una memoria caché.</li>
@@ -75,43 +59,44 @@
 <li>El decodificador <strong>SHA por hardware</strong> encripta el flujo de la RAM sin cargar la CPU → permite guardar llaves complejas (p. ej. claves de AWS de 256 bits) en memoria externa de forma segura.</li>
 <li>ISA: Xtensa / RISC-V.</li>
 </ul>
-</div>
+</details>
 
-<div class="section-block"><h4>Memoria caché y latencia de acceso</h4>
+<details class="section-block sec" id="c2-cache"><summary><span class="stitle">Memoria caché y latencia de acceso</span></summary>
 <ul>
 <li><strong>Definición formal</strong>: caché = "almacenamiento en proxy" — copiar lo más frecuente a un medio más rápido y cercano.</li>
 <li><strong>Disco vs. RAM</strong>: un HDD electromecánico ronda 100 MB/s; una DDR, 500 MB/s (5×). El disco arrastra retardo mecánico: posicionar la aguja en la pista, esperar el giro del plato, leer la tabla de contenidos, y repetir si el archivo está fragmentado. Copiar la tabla de contenidos y los archivos frecuentes a la DDR evita el giro físico.</li>
 <li><strong>Caché "inteligente"</strong>: reconoce el sistema operativo y los programas activos; mantiene una tabla reservada de los archivos y librerías más usados y los precarga a RAM al arrancar. En Linux: el kernel y los binarios básicos de <code>bash</code> quedan en caché.</li>
 <li><strong>Cuello de botella CPU–RAM</strong>: CPU a 4.2 GHz (overclock) con DDR4 a 2.6 GHz. Si cada instrucción tuviera que ir a la RAM, la CPU nunca correría a 4.2. Solución: caché interna a la velocidad del núcleo; se toca la RAM lenta <strong>una sola vez</strong> para traer un bloque grande (p. ej. 8 MB). Como un programa típico pesa ~500 KB, cabe entero en caché y el núcleo ejecuta a máxima velocidad.</li>
 <li><strong>Multinúcleo</strong>: obligatorio un mínimo de <strong>dos niveles</strong> — L1 y L2 por núcleo, L3 global. La L1 se parte en <strong>L1-D</strong> (datos) y <strong>L1-I</strong> (instrucciones). Sin esto, los núcleos colisionan al acceder a la misma memoria.</li>
-</ul></div>
+</ul></details>
 
-<div class="section-block"><h4>RP2040 — Raspberry Pi Pico</h4>
+<details class="section-block sec" id="c2-rp2040"><summary><span class="stitle">RP2040 — Raspberry Pi Pico</span></summary>
 <ul>
 <li>Periféricos: GPIO de propósito general, oscilador, conector de <em>debugger</em>, conector a memoria flash externa, periféricos programables (PIO) y regulador de voltaje interno.</li>
 <li><strong>Dos procesadores</strong> + SRAM; la ROM es solo un periférico más.</li>
-<li><strong>Colisión de acceso</strong>: con dos núcleos, ambos no pueden tocar la misma memoria a la vez → se diseñan <strong>bloques de memoria independientes</strong> por los que los núcleos se turnan.</li>
+<li><strong>Colisión de acceso</strong>: con dos núcleos, ambos no pueden tocar la misma memoria a la vez → se diseñan <strong>bloques de memoria independientes</strong> por los que los núcleos se turnan. El profesor lo relacionó con la idea de <strong>entropía</strong>: sin ese orden impuesto (bancos separados, turnos definidos), el sistema tiende naturalmente al desorden de accesos simultáneos — como un "cuarto desordenado" donde nada tiene un lugar fijo y todo cuesta más trabajo encontrar.</li>
 <li>Núcleo: <strong>ARM Cortex-M0+</strong> (RISC — <em>Advanced RISC Machine</em>). Tiene caché de instrucciones, pero sigue mezclando datos en la misma memoria interna.</li>
 <li>Bloques internos del Cortex-M0+: controlador de interrupciones (NVIC), controlador para despertar del modo <em>sleep</em>, <strong>MPU</strong> (unidad de protección de memoria), conmutador de bus (<em>crossbar</em>), GPIO rápido, verificador de datos, unidad de <em>breakpoints</em>, tabla de traducción, puerto JTAG y controlador de <strong>DMA</strong>.</li>
 <li>La <strong>"M"</strong> de Cortex = pensada para <strong>sistemas embebidos</strong> (microcontrolador). La familia <strong>Cortex-A</strong> son procesadores de aplicación de alto rendimiento, con conjuntos de instrucciones multimedia y un compilador distinto.</li>
 </ul>
-</div>
+<p>Broma del profesor sobre la nomenclatura: dijo en tono sarcástico que la "M" bien podría ser de "mamacito" en vez de <em>microcontroller/embedded</em>, como forma de que se quedara grabado el significado real.</p>
+</details>
 
-<div class="section-block"><h4>Familia Cortex-M — cómo elegir (criterio de ingeniería)</h4>
+<details class="section-block sec" id="c2-cortex-m-familia"><summary><span class="stitle">Familia Cortex-M — cómo elegir (criterio de ingeniería)</span></summary>
 <table><thead><tr><th>Núcleo</th><th>Punto flotante</th><th>Cuándo</th></tr></thead><tbody>
 <tr><td><strong>Cortex-M0</strong></td><td>Sin FPU. Cada operación con decimales se aproxima por software inyectando ~30 instrucciones enteras en el <em>pipeline</em>.</td><td>El más barato (~1 USD). Sirve si casi no hay matemáticas de flotante.</td></tr>
 <tr><td><strong>Cortex-M3</strong></td><td>Soporta flotantes pero no optimizados; tiene hardware de multiplicación → divide calculando el <strong>inverso multiplicativo</strong> del divisor y multiplicando.</td><td>Punto intermedio.</td></tr>
 <tr><td><strong>Cortex-M4</strong></td><td>FPU nativa: multiplica y divide flotante por hardware en un paso.</td><td>Óptimo cuando la aplicación usa mucho punto flotante.</td></tr>
 <tr><td><strong>Cortex-M7</strong></td><td>FPU + unidad vectorial (DSP).</td><td><em>Overkill</em> salvo que se necesiten algoritmos avanzados de procesamiento de señales.</td></tr>
 </tbody></table>
-<p>Si el sistema necesita <strong>red</strong>, el ESP32 es buena opción por su cripto SHA por hardware. El desafío que lanzó el profesor: programar en C un cociente de flotantes usando solo variables enteras, con corrimientos de bits y manipulación de la mantisa.</p></div>
+<p>Si el sistema necesita <strong>red</strong>, el ESP32 es buena opción por su cripto SHA por hardware. El desafío que lanzó el profesor: programar en C un cociente de flotantes usando solo variables enteras, con corrimientos de bits y manipulación de la mantisa.</p></details>
 
-<div class="section-block"><h4>Compilación y micro-instrucciones</h4>
-<p>El compilador traduce el código de alto nivel a ensamblador de la arquitectura (<strong>ARMv6-M</strong> para Cortex-M0/M0+). Después, el <strong>decodificador de hardware</strong> descompone cada instrucción de ensamblador en <strong>micro-operaciones</strong> internas del núcleo (cargas, almacenamientos, operaciones de acumulador). Un <code>int</code> de C en RISC se traduce en varias instrucciones básicas de <em>load</em> y <em>store</em>.</p></div>
+<details class="section-block sec" id="c2-compilacion"><summary><span class="stitle">Compilación y micro-instrucciones</span></summary>
+<p>El compilador traduce el código de alto nivel a ensamblador de la arquitectura (<strong>ARMv6-M</strong> para Cortex-M0/M0+). Después, el <strong>decodificador de hardware</strong> descompone cada instrucción de ensamblador en <strong>micro-operaciones</strong> internas del núcleo (cargas, almacenamientos, operaciones de acumulador). Un <code>int</code> de C en RISC se traduce en varias instrucciones básicas de <em>load</em> y <em>store</em>.</p></details>
 
-<div class="section-block"><h4>Intel: CISC por fuera, RISC por dentro</h4>
+<details class="section-block sec" id="c2-intel"><summary><span class="stitle">Intel: CISC por fuera, RISC por dentro</span></summary>
 <ul>
-<li><strong>Retrocompatibilidad</strong>: un Core i9 ejecuta de forma nativa código escrito para un 8086 de finales de los 70, sin recompilar. Intel garantizó esa compatibilidad de 16 y 32 bits.</li>
+<li><strong>Retrocompatibilidad</strong>: un Core i9 ejecuta de forma nativa código escrito para un 8086 de finales de los 70, sin recompilar. Intel garantizó esa compatibilidad de 16 y 32 bits — el profesor bromeó, en tono sarcástico, con lo llamativo que resulta que un procesador de última generación siga "honrando citas" con instrucciones de hace casi 50 años.</li>
 <li><strong>Itanium (IA-64)</strong>: rompía la compatibilidad y obligaba a recompilar todo el software → fracaso que casi lleva a Intel a la quiebra.</li>
 <li>El estándar de 64 bits que sí triunfó es <strong>x86-64 / "Intel 64"</strong>, diseñado originalmente por AMD y retrocompatible con IA-32.</li>
 <li>Cambiar radicalmente el conjunto de instrucciones (Mac Intel → Apple Silicon RISC) obliga a recompilar los sistemas operativos completos, o a usar una capa de traducción / emulación (Rosetta).</li>
@@ -126,12 +111,34 @@
 <li><strong>Renombrado de registros</strong>: hay muchos más registros físicos que los 8 nominales de x86. El procesador renombra los nominales a físicos libres y puede correr <strong>dos programas independientes de 32 bits en paralelo por hardware</strong>, sin hilos del SO ni semáforos.</li>
 </ol>
 <p><strong>Puertos de ejecución</strong>: <em>Coffee Lake</em> (2017) tenía 8 puertos (0–7) → un Intel de 4 núcleos paraleliza hasta 32 µops por ciclo. <em>Golden Cove</em> (2021) sube a 12 puertos (P0–P11), con cola de reordenamiento de 512 entradas: 2 puertos de <em>store</em>, 2 de <em>load</em> y 5 de cómputo pesado (3 de ellos vectoriales).</p>
-<p><strong>Caché multinivel en multinúcleo</strong>: regla obligatoria de ≥ 2 niveles — L1 y L2 a nivel núcleo, L3 global —, con la L1 dividida en datos (D) e instrucciones (I).</p></div>
+<p><strong>Caché multinivel en multinúcleo</strong>: regla obligatoria de ≥ 2 niveles — L1 y L2 a nivel núcleo, L3 global —, con la L1 dividida en datos (D) e instrucciones (I).</p>
+<p>El profesor comparó el renombrado de registros y la ejecución fuera de orden con una <strong>empresa de 20 pisos</strong>: no hace falta que el mensajero suba piso por piso en orden — el sistema reparte el trabajo a quien esté libre y reordena el resultado al final, igual que el planificador de hardware reordena µops sin que el programador lo note.</p>
+</details>
 
-<div class="section-block"><h4>Práctica de laboratorio (sesión siguiente)</h4>
+<details class="section-block sec" id="c2-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
 <ul>
-<li>Cada quien elige la arquitectura de microcontrolador que prefiera de las vistas en clase.</li>
-<li><strong>Restricción</strong>: la práctica de sistemas operativos enfocada a <strong>Windows</strong> exige una <strong>Raspberry Pi 3</strong>. <strong>No funciona en la Raspberry Pi 4.</strong></li>
+<li>El profesor usó la analogía de una <strong>motocicleta atorada en el tráfico</strong> para explicar el desajuste de velocidades CPU–RAM: el núcleo (la moto) puede ir mucho más rápido que el flujo de datos que le llega (el tráfico de la RAM), y de nada sirve acelerar el núcleo si el camino de memoria no fluye igual de rápido — de ahí la necesidad de la caché como "carril rápido" intermedio.</li>
+<li>Referencia a la película <strong><em>Idiocracia</em></strong> como chiste sobre lo que pasa cuando un sistema (o una sociedad) deja de mantenerse y optimizarse con el tiempo — usada de forma jocosa al hablar de arquitecturas que no evolucionan.</li>
+<li>Broma recurrente: confundir la sigla <strong>SRAM</strong> con "Status RAM" en vez de <em>Static RAM</em>.</li>
+<li>Sarcasmo sobre la retrocompatibilidad de Intel: un procesador de última generación sigue "cumpliendo citas" con instrucciones del 8086 de hace casi 50 años.</li>
+<li>Broma sobre el significado de la <strong>"M"</strong> de Cortex-M ("de mamacito", en tono jocoso) para que se quedara grabado que en realidad es de <em>microcontroller/embedded</em>.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c2-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li>Cada quien elige, para la práctica de laboratorio, la arquitectura de microcontrolador que prefiera de las vistas en esta clase (PIC, AVR, ESP32, RP2040/Cortex-M).</li>
+<li><strong>Restricción de la práctica de sistemas operativos enfocada a Windows</strong>: exige obligatoriamente una <strong>Raspberry Pi 3</strong>. <strong>No funciona en la Raspberry Pi 4 bajo ninguna circunstancia.</strong></li>
+<li>Quedó abierto si la siguiente clase profundiza en la evolución histórica de las arquitecturas a más detalle, o si se avanza directo a otro tema del temario.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>RISC (Harvard, instrucciones simples de ancho fijo) vs. CISC (memoria unificada, instrucciones complejas de ancho variable) — el <em>pipeline</em> es lo que hace competitivo a RISC pese a ser más verboso.</li>
+<li>Direccionamiento por potencias de 2: memorizar 2⁸=256 hasta 2¹⁴=16384; en el PIC la pila (8 niveles) vive fuera de la RAM, por eso no se usa recursión.</li>
+<li>La caché es "almacenamiento en proxy": resuelve el desajuste de velocidad CPU–RAM tocando la memoria lenta una sola vez para traer un bloque grande; en multinúcleo son obligatorios ≥ 2 niveles (L1 D/I, L2, L3).</li>
+<li>Elegir Cortex-M por costo/infraestructura: M0 sin FPU (software) · M3 con multiplicación por hardware · M4 FPU nativa · M7 FPU + DSP.</li>
+<li>Intel moderno es CISC por fuera y RISC por dentro: un predecodificador parte cada instrucción en micro-operaciones que se ejecutan fuera de orden con renombrado de registros.</li>
 </ul></div>
 
 </div>
