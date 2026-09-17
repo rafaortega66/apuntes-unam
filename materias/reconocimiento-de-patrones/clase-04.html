@@ -16,32 +16,13 @@
   <p style="font-size:12px;color:var(--ink-soft);margin:2px 0 0">🔢 Numeración del profesor: corresponde a sus diapositivas <a href="material.html" style="color:var(--indigo)">Clase 7</a> (Evaluación de modelos) — no coincide 1:1 con "Clase 04" de este sitio.</p>
 </div>
 
-<div class="encorto"><h4>En corto</h4><ul>
-<li>Construir el modelo es el 50 % del trabajo; el otro 50 % es evaluarlo para saber si <strong>generaliza</strong> a datos no vistos.</li>
-<li>La <strong>exactitud sola engaña</strong> en problemas desbalanceados (predecir "todos sanos" da 95 % y detecta 0 casos).</li>
-<li><strong>Matriz de confusión:</strong> filas = clase real, columnas = predicción. Diagonal = aciertos. <strong>Error Tipo I</strong> = FP; <strong>Error Tipo II</strong> = FN (suele ser el más grave).</li>
-<li><strong>Métricas:</strong> Precisión = VP/(VP+FP) · Recall = VP/(VP+FN) · Especificidad = VN/(VN+FP) · F₁ = media armónica de precisión y recall · Exactitud balanceada = (Sensibilidad + Especificidad)/2.</li>
-<li><strong>ROC:</strong> TPR (=Recall) vs. FPR (=1−Especificidad) variando el umbral. <strong>AUC</strong>: 0.5 = azar; →1 = perfecto; &lt;0.5 = predicción invertida.</li>
-<li><strong>Sesgo</strong> alto → underfitting (error alto en train y val). <strong>Varianza</strong> alta → overfitting (error bajo en train, alto en val).</li>
-<li><strong>Validación:</strong> Hold-out → K-Fold → Stratified K-Fold (conserva proporción de clases; obligatorio con datos desbalanceados).</li>
-<li><strong>Data leakage</strong> (temporal / de procesamiento / del target) y <strong>data drift</strong> (sudden, gradual, incremental, recurrente).</li>
-</ul></div>
-
-<div class="examen"><h4>🎯 Para el examen</h4><ul>
-<li><strong>Matriz de confusión:</strong> construir e interpretar (filas = real, columnas = predicción), ubicar VP/VN/FP/FN y calcular todas las métricas derivadas.</li>
-<li><strong>Tipos de error:</strong> distinguir Error Tipo I (FP) y Error Tipo II (FN) y argumentar cuál es más crítico según el dominio (diagnóstico médico vs. sistema de alarma).</li>
-<li><strong>ROC / AUC:</strong> ejes (TPR vs. FPR), significado de la diagonal aleatoria (AUC = 0.5), escala de interpretación del AUC y qué hacer si AUC &lt; 0.5 (invertir la predicción).</li>
-<li><strong>Sesgo vs. varianza:</strong> diagnosticar underfitting / overfitting con los errores de train y val, y las técnicas de solución de cada caso (regularización, dropout, early stopping, más datos, más/menos complejidad).</li>
-<li><strong>Validación:</strong> explicar Hold-out, K-Fold y cuándo es necesario Stratified K-Fold.</li>
-<li><strong>Leakage y drift:</strong> identificar las fuentes de fuga (temporal, procesamiento, target) y las estrategias de monitoreo / reentrenamiento ante el drift.</li>
-</ul></div>
-
-<details class="section-block sec" id="c4-repaso-lda" open><summary><span class="stitle">Repaso de cierre — reducción de dimensionalidad</span></summary>
+<details class="section-block sec" id="c4-repaso-lda" open><summary><span class="stitle">Repaso de cierre — PCA vs. LDA y otros métodos de reducción</span></summary>
+<p>La sesión arrancó resolviendo dudas de logística de la Práctica 1 (el profesor dio libertad de exponer apoyándose en el código o en el reporte escrito, según lo que cada equipo prefiriera). Después, repasó la diferencia fundamental entre PCA y LDA con una pregunta directa: <em>"¿Se acuerdan cuál era la diferencia más importante entre lo que implica PCA y LDA?"</em> El alumno Sebastián respondió que LDA es un método <strong>supervisado</strong>. El profesor confirmó y precisó: LDA es supervisado porque requiere una <strong>etiqueta (label)</strong> que indica explícitamente a qué clase pertenece cada patrón; PCA, en cambio, es <strong>no supervisado</strong> — no necesita conocer de antemano la clase de los patrones.</p>
 <ul>
-<li><strong>PCA</strong> (no supervisado, maximiza la varianza proyectada) vs. <strong>LDA</strong> (supervisado, usa etiquetas, maximiza la separabilidad entre clases).</li>
-<li>Tres supuestos de <strong>LDA</strong>: 1) distribución gaussiana; 2) matriz de covarianza idéntica entre clases; 3) separabilidad lineal.</li>
+<li>En cuanto a objetivos matemáticos: PCA maximiza la varianza total proyectada; LDA maximiza la separabilidad entre clases.</li>
+<li>Tres supuestos de <strong>LDA</strong>: 1) distribución gaussiana por clase; 2) homocedasticidad (matriz de covarianza idéntica entre clases); 3) separabilidad lineal. Cuando estos supuestos no se cumplen del todo en datos reales, se introduce cierto error, pero LDA sigue siendo útil como aproximación.</li>
 <li><strong>QDA</strong> = LDA sin el supuesto de covarianza única: cada clase tiene su propia matriz de covarianza.</li>
-<li><strong>t-SNE</strong> (visualización) y <strong>Kernel PCA</strong> (kernel trick → proyectar a mayor dimensión donde sea linealmente separable, luego PCA).</li>
+<li><strong>t-SNE</strong> (visualización en 2D/3D) y <strong>Kernel PCA</strong> (kernel trick → proyectar a mayor dimensión donde sea linealmente separable, luego PCA).</li>
 </ul>
 </details>
 
@@ -78,6 +59,7 @@ Eje Y  = TPR (tasa de verdaderos positivos) = VP / (VP + FN) = Recall = Sensibil
 <li><code>AUC = 0.5</code> — equivale al azar (la diagonal).</li>
 <li><code>AUC &lt; 0.5</code> — peor que el azar: la predicción está <strong>invertida</strong> (el modelo distingue muy bien la clase contraria → invertir la predicción).</li>
 </ul>
+<p>El profesor lanzó una pregunta sobre este último caso: <em>"Si la curva ROC de un clasificador, en lugar de pegarse a la esquina superior izquierda, se desplaza hacia abajo de la diagonal, ¿qué significa?"</em> Un alumno respondió: <em>"Se equivocan todos"</em> / <em>"Detecta mejor la clase contraria"</em>. El profesor confirmó que la respuesta es correcta en el sentido práctico: si la curva está por debajo de la diagonal, el modelo es pésimo detectando la clase positiva pero sumamente efectivo detectando la clase negativa — en ese escenario el clasificador sigue siendo útil, basta con invertir la regla de predicción para transformarlo inmediatamente en un clasificador excelente. La única zona donde el modelo es completamente inservible es cuando se aproxima a la diagonal misma (AUC ≈ 0.5).</p>
 </details>
 
 <details class="section-block sec" id="c4-sesgo-varianza" open><summary><span class="stitle">Sesgo, varianza, underfitting y overfitting</span></summary>
@@ -89,20 +71,27 @@ Eje Y  = TPR (tasa de verdaderos positivos) = VP / (VP + FN) = Recall = Sensibil
 </ul>
 <p><strong>Partición de datos:</strong> Entrenamiento (60–80 %, ajusta los parámetros) · Validación (10–20 %, ajusta hiperparámetros y mide generalización) · Prueba (10–20 %, intocado hasta la evaluación final).</p>
 <p><strong>Degradación normal (no patológica):</strong> Accuracy Train 95 % → Val 91 % → Test 87 %.</p>
-<p><strong>Analogía de estudio:</strong> underfitting = memorizar una sola fórmula (el determinante) para todo el examen; overfitting = memorizar al pie de la letra los exámenes de los últimos 5 años y fallar cuando cambian los números.</p>
+<p><strong>Analogía de estudio:</strong> underfitting = un alumno decide memorizar únicamente una fórmula (por ejemplo, cómo calcular el determinante) para resolver absolutamente todo el examen — reprueba porque esa simplificación tan severa no sirve para la diversidad de preguntas reales. Overfitting = un alumno consigue los exámenes de los últimos 5 años y se memoriza las respuestas exactas con puntos y comas — reprueba igual porque el profesor cambia los números y variables en el examen real.</p>
+<p>Un alumno preguntó si, cuando un modelo cae en overfitting o underfitting, se puede arreglar o es mejor rehacerlo desde cero. El profesor respondió que sí se puede arreglar ajustando el proceso de entrenamiento: en underfitting, la causa habitual es haber detenido el entrenamiento antes de tiempo o usar un modelo demasiado simple; en overfitting, la solución es aplicar regularización, aumentación de datos, o <em>early stopping</em> (parada temprana) — una técnica que monitorea la métrica de validación y detiene el entrenamiento automáticamente en el momento óptimo, antes de que el modelo empiece a memorizar ruido.</p>
 </details>
 
 <details class="section-block sec" id="c4-desbalanceados"><summary><span class="stitle">Datos desbalanceados</span></summary>
-<p>Ejemplos reales: detección de fraude, cáncer, intrusiones en red.</p>
 <p><strong>Ejemplo — detección de cáncer:</strong> 1 000 pacientes (950 sanos = 95 %, 50 enfermos = 5 %). Un modelo que predice "todos sanos" → Accuracy = 950/1000 = <strong>95 %</strong>, pero detecta <strong>0 de 50</strong> casos de cáncer (50 falsos negativos). La exactitud alta esconde un modelo inútil.</p>
-<p><strong>Estrategias:</strong> usar métricas adecuadas (F₁, balanced accuracy, ROC) · pesos de clase (<em>class weights</em>) · re-muestreo (<em>resampling</em>) · ajuste de umbrales.</p>
+<p>El profesor dio ejemplos reales de qué tan severo puede ser el desbalance en la práctica: en <strong>detección de fraude financiero</strong>, solo cerca del 0.1% de las transacciones son realmente fraudulentas; en <strong>diagnóstico de cáncer</strong>, entre el 1% y el 5% de los pacientes analizados presentan la enfermedad; en <strong>detección de intrusos en redes</strong>, alrededor del 0.5% del tráfico web es verdaderamente malicioso.</p>
+<p><strong>Estrategias</strong> para evitar sesgos hacia la clase minoritaria: usar métricas adecuadas (F₁, balanced accuracy, ROC) · pesos de clase (<em>class weights</em>) · re-muestreo (<em>resampling</em>, incluyendo <em>oversampling</em> sintético de la clase minoritaria) · volver más exigente el umbral de decisión.</p>
 </details>
 
 <details class="section-block sec" id="c4-validacion"><summary><span class="stitle">Esquemas de validación</span></summary>
 <ul>
-<li><strong>Hold-out:</strong> división fija en Train / Val / Test. Limitación: el resultado depende de cómo cayó la partición.</li>
-<li><strong>K-Fold Cross Validation:</strong> se parte el entrenamiento en <code>K</code> folds; en <code>K</code> iteraciones, un fold distinto es validación y los <code>K−1</code> restantes son entrenamiento. <code>K</code> suele ser impar (5, 7, 9).</li>
-<li><strong>Stratified K-Fold:</strong> conserva la proporción original de las clases en cada fold. Necesario con datos desbalanceados.</li>
+<li><strong>Hold-out:</strong> división fija en Train / Val / Test. Desventaja: es altamente sensible a la partición — si por azar los datos "fáciles" quedan concentrados en un subconjunto, el resultado no representa el desempeño real.</li>
+<li><strong>K-Fold Cross Validation:</strong> se separa primero el conjunto de prueba final, y el resto se divide en <code>K</code> folds; el procedimiento itera <code>K</code> veces consecutivas, usando un fold distinto como validación cada vez. Por convención se usan números impares.</li>
+<li><strong>Stratified K-Fold:</strong> conserva la proporción original de las clases en cada fold. Necesario/obligatorio con datos desbalanceados.</li>
+</ul>
+<p>Durante esta parte surgieron varias preguntas que vale la pena tener presentes:</p>
+<ul>
+<li><em>"¿Sería posible entrenar con datos muy abstractos o difíciles y evaluar con datos más sencillos?"</em> — el profesor respondió que sería técnicamente posible, pero equivaldría a "hacer trampa": el resultado no sería justo ni representativo, porque el modelo debe observar datos que reflejen la distribución real completa.</li>
+<li><em>"¿La validación cruzada solo se aplica dentro del conjunto de entrenamiento?"</em> — el profesor confirmó que sí, exactamente: el conjunto de prueba se separa desde el principio y no se toca; la validación cruzada se ejecuta solo dentro de entrenamiento/validación, para encontrar la mejor combinación de hiperparámetros. Una vez identificados los mejores hiperparámetros, se reentrena el modelo con todo el conjunto de entrenamiento/validación y se hace la única evaluación definitiva sobre el conjunto de prueba reservado.</li>
+<li><em>"¿Cómo se determina el número de folds?"</em> — por convención se eligen números impares. En datasets reducidos (por ejemplo, 200 imágenes) se recomiendan menos folds; en datasets masivos con miles o millones de muestras se pueden usar 9 o más. Usar valores excesivamente altos (15 o 20) en modelos simples no aporta beneficio real y solo añade costo computacional.</li>
 </ul>
 </details>
 
@@ -112,16 +101,33 @@ Eje Y  = TPR (tasa de verdaderos positivos) = VP / (VP + FN) = Recall = Sensibil
 <li><strong>Temporal:</strong> usar información del futuro para predecir el pasado.</li>
 <li><strong>De procesamiento:</strong> calcular normalización / PCA con estadísticas del conjunto global en vez de solo las de entrenamiento.</li>
 <li><strong>Del target:</strong> incluir como característica de entrada variables derivadas directamente de la variable objetivo.</li>
+<li><strong>En modelos de lenguaje:</strong> entrenar una red neuronal mostrándole directamente la palabra o la oración completa que se supone debe predecir.</li>
 </ul>
-<p><strong>Data drift:</strong> cambio en las propiedades estadísticas de los datos en producción respecto a la distribución de entrenamiento. Se detecta con monitoreo estadístico y se maneja con reentrenamiento periódico. Tipos: <strong>sudden</strong> (repentino), <strong>gradual</strong>, <strong>incremental</strong>, <strong>recurrent</strong>.</p>
+<p><strong>Data drift:</strong> cambio en las propiedades estadísticas de los datos en producción respecto a la distribución de entrenamiento. El profesor advirtió que el data drift no provoca un fallo repentino en el sistema, sino una <strong>degradación silenciosa y progresiva</strong> del desempeño a lo largo del tiempo — por eso hay que monitorear constantemente los estadísticos del entorno de producción y compararlos contra los de entrenamiento.</p>
+<p>Un alumno preguntó: al encontrar un drift, ¿es mejor reentrenar un modelo nuevo desde cero o se puede rescatar el anterior? El profesor respondió que se reentrena desde cero, pero utilizando una <strong>ventana móvil de datos recientes</strong> — no tiene sentido incluir datos históricos obsoletos si las condiciones actuales ya cambiaron.</p>
 </details>
 
-<details class="section-block sec" id="c4-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<details class="section-block sec" id="c4-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
 <ul>
-<li>Viernes: exposición y revisión de la práctica.</li>
-<li>Lunes: inicio formal del bloque de <strong>clasificadores</strong>.</li>
+<li><em>(Contexto)</em> Los alumnos consultaron si para la exposición de la Práctica 1 debían proyectar el reporte o el código; el profesor dio libertad de elegir la modalidad con la que se sintieran más cómodos.</li>
+<li><em>(Contexto)</em> El profesor recalcó que en la práctica profesional no existe una métrica universal mágica que resuelva todo — evaluar un modelo exige entender el costo económico o humano real de cada tipo de error (por ejemplo, el costo de un falso positivo vs. un falso negativo varía completamente según el dominio de aplicación).</li>
 </ul>
 </details>
+
+<details class="section-block sec" id="c4-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Viernes:</strong> presentación y evaluación en clase de la Práctica 1.</li>
+<li><strong>Lunes:</strong> inicio del tema de <strong>Clasificadores y Modelado de Patrones</strong>.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>PCA es no supervisado (maximiza varianza); LDA es supervisado (usa etiquetas, maximiza separabilidad entre clases).</li>
+<li>Error Tipo I (falso positivo) = alarma sin incendio; Error Tipo II (falso negativo) = incendio sin alarma — normalmente el más grave.</li>
+<li>Si la curva ROC cae bajo la diagonal, el modelo no es inútil: basta con invertir la predicción para volverlo excelente.</li>
+<li>K-Fold se aplica solo dentro de entrenamiento/validación, nunca tocando el conjunto de prueba reservado.</li>
+<li>Data drift se combate reentrenando desde cero con una ventana móvil de datos recientes, no acumulando todo el histórico.</li>
+</ul></div>
 
 </div>
 </body>
