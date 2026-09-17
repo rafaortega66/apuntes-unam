@@ -31,6 +31,25 @@ UNAM) del usuario, hosteado gratis en GitHub Pages:
 ACS **no usa Google Classroom** (profesor tiene su propio sitio en
 `cromanzamitiz.github.io/arquitectura-cliente-servidor/`); las otras 8 sí.
 
+## Horario oficial (confirmado por el usuario el 16 sep 2026 — fuente de verdad)
+
+Patrón fijo semanal, **no inferir de memoria ni de "cuadra con el patrón de
+fechas anteriores"** — usar esta tabla directamente:
+
+| Día | Materias (en orden) |
+|---|---|
+| Lunes | RP → OAC → FSE → ASI |
+| Martes | SIB, MD |
+| Miércoles | OAC, FSE, ASI |
+| Jueves | SIB, MD, ACS |
+| Viernes | RP |
+
+Lab FSE y Lab OAC **no están en este patrón semanal** — sus prácticas se
+agendan aparte, no son clase teórica recurrente. Si una fecha propuesta para
+Clase de RP/OAC/FSE/ASI/SIB/MD/ACS no cae en el día que le toca según esta
+tabla, es un error — decirlo explícitamente y pedir confirmación antes de
+usarla.
+
 ## El origen de todo el contenido: nunca se inventa nada
 
 El usuario graba el audio de cada clase. Ese audio se procesa en **Gemini

@@ -15,11 +15,11 @@ pegado — revisa antes de preguntar nada que ya te hayan dado).
 Si no está claro por $ARGUMENTS o por el mensaje del usuario, pregunta:
 materia, número de clase, y fecha.
 
-**Verificación de fecha, siempre:** antes de aceptar una fecha dictada de
-memoria, revisa el patrón de días de esa materia (los dos días fijos a la
-semana que ya se ven en las clases anteriores del mismo `materias/<slug>/index.html`,
-vista "Por clase") y confirma que la fecha propuesta cae en uno de esos días.
-Si no cuadra, dilo explícitamente y pide confirmación en vez de asumir.
+**Verificación de fecha, siempre:** usa la tabla "Horario oficial" en
+`CLAUDE.md` (confirmada directamente por el usuario, no inferida) para
+verificar que la fecha propuesta cae en el día que le toca a esa materia. Si
+no cuadra, dilo explícitamente y pide confirmación en vez de asumir — nunca
+adivinar el patrón a partir de páginas anteriores.
 
 ## Paso 2 — Prompt para NotebookLM
 
