@@ -18,31 +18,14 @@
 
 <div class="section-block" style="background:#fff7ed;border-left:3px solid #45B8A8"><p style="margin:0"><strong>📝 Nota personal:</strong> no grabé mi propia exposición. El profesor me hizo preguntas durante la evaluación y no supe responderlas — me costó trabajo. Me falta estudiar más a fondo estos temas.</p></div>
 
-<div class="encorto"><h4>En corto</h4><ul>
-<li><strong>Centrado vs. estandarización:</strong> centrar resta la media para llevar el origen a (0,0); estandarizar además divide entre la desviación estándar para igualar escalas.</li>
-<li><strong>Número de autovectores:</strong> PCA siempre genera exactamente tantos autovectores como características tenga el dataset original.</li>
-<li><strong>Matriz de proyección W:</strong> para N características, W tiene dimensión N×K, con K = número de componentes elegidos.</li>
-<li><strong>Sensibilidad a la escala:</strong> en datasets no estandarizados con variables de magnitudes muy distintas (ej. Wine), la primera componente absorbe casi toda la varianza (~99.8%), anulando las demás.</li>
-<li><strong>Ortogonalidad:</strong> se comprueba con producto punto = 0 entre autovectores distintos, y con W·Wᵀ ≈ I.</li>
-<li><strong>Eigenfaces:</strong> las primeras componentes capturan la geometría general del rostro; las últimas, detalles finos o ruido.</li>
-<li><strong>Rostro promedio en reconstrucción:</strong> con pocas componentes, la reconstrucción se parece al rostro promedio porque al revertir el centrado es obligatorio sumar el vector de medias original.</li>
-</ul></div>
-
-<div class="examen"><h4>🎯 Para el examen</h4><ul>
-<li><strong>Centrar vs. estandarizar (pregunta directa del profesor):</strong> centrar = x − μ (desplaza el centro de masa al origen); estandarizar = (x − μ)/σ (además ajusta la escala para evitar distorsión por magnitudes dispares).</li>
-<li><strong>Regla de cuántos autovectores da PCA:</strong> sin importar el método (covarianza, SVD, scikit-learn), el número de autovectores siempre es igual a N (número de características originales).</li>
-<li><strong>Dimensiones exactas de las matrices:</strong> con X_C de M×N (M muestras, N características), W debe ser N×K para que la proyección Z = X_C·W resulte M×K.</li>
-<li><strong>Por qué PCA necesita estandarización con escalas distintas:</strong> en Wine (13 variables), la variable de magnitud más grande domina la matriz de covarianza, haciendo que el primer componente absorba 99.81% de la varianza y dejando inútiles a los demás.</li>
-<li><strong>Causa matemática del "rostro promedio" con pocas componentes:</strong> en la reconstrucción inversa, con K pequeño la señal proyectada (Z·Wᵀ) aporta poco; al sumar μ para revertir el centrado, ese término domina y produce visualmente la cara promedio.</li>
-</ul></div>
-
 <details class="section-block sec" id="c5-fundamentos" open><summary><span class="stitle">Fundamentos de PCA: centrado, estandarización y covarianza</span></summary>
+<p>PCA es una técnica estadístico-algebraica orientada a reducir dimensionalidad conservando la mayor cantidad posible de información, lo que permite trabajar de forma más eficiente en memoria y cómputo. El pipeline exige dos operaciones preliminares indispensables sobre los datos originales:</p>
 <ul>
-<li><strong>Centrado de datos:</strong> calcular el vector de medias originales y restárselo a cada muestra (xᵢ − μ). Ubica el centro geométrico de la nube de puntos en el origen.</li>
-<li><strong>Estandarización:</strong> dividir cada variable centrada entre su desviación estándar (σ). Imprescindible cuando las variables tienen unidades o magnitudes muy distintas, para evitar sesgos por escala.</li>
-<li><strong>Matriz de covarianza:</strong> dimensión N×N; varianzas en la diagonal, covarianzas cruzadas fuera de ella. Identifica qué variables varían juntas y en qué direcciones se concentra la mayor dispersión.</li>
-<li><strong>Comprobación de ortogonalidad</strong> de los vectores propios (independientes y ortogonales entre sí): 1) producto punto entre dos vectores propios distintos = 0 (v₁ᵀv₂ = 0); 2) el producto de la matriz de autovectores por su transpuesta aproxima la identidad (W·Wᵀ ≈ I).</li>
+<li><strong>Centrado:</strong> calcular el vector de medias de las variables originales y restárselo a cada muestra (xᵢ − μ). Ubica el centro geométrico de la nube de puntos en el origen del plano, evitando que la posición absoluta de los datos distorsione el análisis.</li>
+<li><strong>Estandarización:</strong> dividir cada variable centrada entre su desviación estándar (σ). Ajusta la escala de las variables para que tengan magnitudes comparables, sin destruir ni distorsionar su información relativa — imprescindible cuando las variables tienen unidades o magnitudes muy distintas.</li>
 </ul>
+<p><strong>Ejemplo trabajado en clase (dataset sintético, 200 muestras, 2 características):</strong> tras centrar los datos, se calculó la matriz de covarianza 2×2, obteniendo en la diagonal principal las varianzas 1.04 y 5.9, y fuera de la diagonal las covarianzas cruzadas de 2.1 y 2.1 — valores idénticos que confirman una fuerte correlación positiva entre ambas variables (al crecer una, la otra crece en la misma tendencia). Al resolver la descomposición de esta matriz se obtuvieron los autovectores ordenados: el primero, [0.35, 0.93], captura la máxima dispersión a lo largo del eje principal PC1; el segundo, [0.93, −0.35], corresponde a PC2. Para comprobar formalmente la ortogonalidad entre ambos ejes se hicieron dos verificaciones: el producto punto entre ellos dio 0, y el producto matricial de la matriz de autovectores por su transpuesta dio la matriz identidad — confirmando un ángulo de 90° exacto entre ambos, sin traslape de información entre subespacios.</p>
+<p><strong>Matriz de covarianza:</strong> dimensión N×N; varianzas en la diagonal, covarianzas cruzadas fuera de ella. Identifica qué variables varían juntas y en qué direcciones se concentra la mayor dispersión.</p>
 </details>
 
 <details class="section-block sec" id="c5-criterios-k" open><summary><span class="stitle">Criterios para elegir K (datasets Iris y Wine)</span></summary>
@@ -52,14 +35,14 @@
 <li><strong>Umbral de varianza acumulada:</strong> fijar un % deseado (90% o 95%) y elegir el mínimo de componentes que lo alcance.</li>
 </ul>
 <p><strong>Iris (4 características):</strong> PC1 explica 92.46%, PC2 explica 5.3%. Con umbral 90% basta 1 componente; con 95% se requieren 2 componentes (reducción del 50% de la dimensión original reteniendo 97.7% de la varianza).</p>
-<p><strong>Wine (13 características, datos estandarizados):</strong> la regla del codo y el criterio de Kaiser coinciden en 3 componentes. Con el umbral de varianza se necesitan 8 componentes para el 90% y 10 para el 95%.</p>
+<p><strong>Wine (13 características, procesado con SVD sobre datos estandarizados):</strong> la regla del codo y el criterio de Kaiser coinciden en 3 componentes. Los tres primeros autovalores resultaron 4.7, 2.5 y 2.1 (todos mayores a 1), descendiendo el cuarto por debajo de 1.0 — de ahí que Kaiser seleccione exactamente 3. El hecho de que los distintos criterios den números distintos (3, 8 o 10 según cuál se use) es normal: cada uno responde a una pregunta distinta (dónde está el "codo", cuántos componentes aportan más que una variable individual, o cuánta varianza total se quiere garantizar). Con el umbral de varianza se necesitan 8 componentes para el 90% y 10 para el 95%.</p>
 </details>
 
 <details class="section-block sec" id="c5-sensibilidad" open><summary><span class="stitle">Sensibilidad a la escala, reconstrucción y equivalencia de algoritmos</span></summary>
 <ul>
-<li><strong>Efecto de no estandarizar:</strong> en Wine (13 variables en escalas distintas) sin estandarizar, la primera componente absorbe 99.81% de la varianza total, dejando las demás virtualmente nulas y destruyendo la estructura multidimensional.</li>
-<li><strong>Reconstrucción y MSE:</strong> el error cuadrático medio entre datos originales y reconstruidos disminuye gradualmente conforme aumenta K, hasta llegar a 0 cuando K = N.</li>
-<li><strong>Equivalencia de implementaciones:</strong> covarianza manual, SVD y scikit-learn dan exactamente los mismos valores propios. Los vectores propios pueden diferir en signo (×−1) — no es un error, es la misma recta/eje con orientación opuesta.</li>
+<li><strong>Efecto de no estandarizar:</strong> en Wine (13 variables en escalas distintas) sin estandarizar, la primera componente absorbe 99.809% de la varianza total, dejando a la segunda con apenas 0.74% y volviendo prácticamente nulas a las 11 restantes — esto ocurre porque las características con magnitudes numéricas desproporcionadamente grandes dominan el cálculo de la matriz de covarianza.</li>
+<li><strong>Reconstrucción y MSE (Wine, 13 características):</strong> con 1 sola componente el MSE de reconstrucción fue de 0.6; al usar 2 componentes bajó a 0.4; y continuó disminuyendo progresivamente conforme se agregaban componentes hasta llegar exactamente a 0.0 al usar las 13 completas — cuantificando que a mayor varianza retenida, más fiel es la reconstrucción.</li>
+<li><strong>Equivalencia de implementaciones:</strong> covarianza manual (PCA_C), SVD (PCA_SVD) y scikit-learn dan autovalores estrictamente idénticos. Las magnitudes numéricas de los autovectores también son idénticas, pero pueden diferir en signo (×−1) — no es un error: algebraicamente definen exactamente la misma recta y el mismo eje de proyección en el espacio.</li>
 </ul>
 </details>
 
@@ -81,10 +64,23 @@
 </ul>
 </details>
 
+<details class="section-block sec" id="c5-ronda-preguntas" open><summary><span class="stitle">Ronda de preguntas del profesor (vale la pena repasarlas)</span></summary>
+<p>Al finalizar cada exposición, el profesor hizo una serie de preguntas directas para verificar que el equipo entendía la teoría detrás de su código, no solo que el código corriera. Estas son las que se resolvieron en esa ronda:</p>
+<ol>
+<li><strong>¿Cuál es la diferencia entre centrar y estandarizar datos?</strong> — Centrar es restar la media (μ) para ubicar el centro de los datos en el origen; estandarizar implica además dividir entre la desviación estándar (σ) para ajustar la escala.</li>
+<li><strong>En Iris, con 1 componente se obtiene 92.46% y con 2 se obtiene 97.7%. ¿Basta con 1 componente o hace falta el segundo?</strong> — Depende de la precisión requerida: para una clasificación rápida, 92.46% de un solo componente puede bastar, pero conservar el segundo (97.7%) da mayor certeza para separar clases que se traslapan (como Versicolor y Virginica).</li>
+<li><strong>¿Qué nos dice el criterio de Kaiser para decidir cuántos componentes conservar?</strong> — Busca los componentes cuyo autovalor sea mayor a 1. En Wine, los tres primeros autovalores (4.7, 2.5, 2.1) cumplen esa condición y el cuarto ya no, así que Kaiser elige exactamente 3.</li>
+<li><strong>Sin importar el dataset o el algoritmo (covarianza, SVD o scikit-learn), ¿cuántos autovectores arroja siempre PCA?</strong> — Siempre son tantos como características tenga el dataset original: 4 en Iris, 13 en Wine, 4096 en Olivetti Faces.</li>
+<li><strong>Si los datos centrados X_C tienen dimensión M×N, ¿qué dimensión debe tener la matriz de autovectores W para proyectar?</strong> — Para que la multiplicación matricial sea compatible, W debe ser N×K (N = número de características originales, K = componentes seleccionados), dando una proyección Z = X_C·W de dimensión M×K.</li>
+<li><strong>¿Por qué al usar pocas eigenfaces la imagen reconstruida se parece al rostro promedio?</strong> — Porque los datos se centraron restando el vector de medias μ antes de aplicar PCA. La reconstrucción es X̂ = Z·Wᵀ + μ; con K pequeño, el término Z·Wᵀ aporta muy poca variabilidad, así que al sumar obligatoriamente μ para revertir el centrado, ese término domina visualmente el resultado.</li>
+</ol>
+</details>
+
 <details class="section-block sec" id="c5-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
 <ul>
 <li><em>(Contexto)</em> Los alumnos expusieron resultados de sus códigos con gráficas comparativas de proyección en 2D, histogramas de características y reconstrucciones de imágenes.</li>
 <li><em>(Contexto)</em> Durante las exposiciones, varios compañeros comentaron que al inicio les confundió encontrar signos opuestos al comparar autovectores de su implementación manual contra los de scikit-learn, hasta aclarar que representan la misma dirección vectorial multiplicada por −1.</li>
+<li><em>(Contexto)</em> Durante la discusión sobre reconstrucción facial, el profesor preguntó a un alumno cuántas eigenfaces consideraría suficientes para un buen balance calidad/costo; el alumno respondió que entre 100 y 200 ofrecen ese balance. Al concluir la revisión, el profesor felicitó al equipo por la presentación y por la claridad de sus respuestas.</li>
 </ul>
 </details>
 
@@ -94,6 +90,14 @@
 <li><strong>Equipos de trabajo:</strong> el profesor pidió que dos alumnos se integren en un solo equipo, para quedar en dos equipos para la siguiente práctica.</li>
 </ul>
 </details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>PCA siempre genera tantos autovectores como características tenga el dataset original (4 en Iris, 13 en Wine, 4096 en Olivetti).</li>
+<li>Para proyectar X_C (M×N), la matriz de autovectores W debe ser N×K, dando una proyección M×K.</li>
+<li>Sin estandarizar, con variables de escalas muy distintas (Wine), la primera componente absorbe hasta 99.8% de la varianza.</li>
+<li>Con pocas componentes, la reconstrucción se parece al rostro/dato promedio, porque el término μ domina sobre una señal proyectada Z·Wᵀ todavía débil.</li>
+<li>Covarianza, SVD y scikit-learn dan los mismos autovalores; los autovectores solo pueden diferir en signo, no en dirección.</li>
+</ul></div>
 
 </div>
 </body>
