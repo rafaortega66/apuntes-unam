@@ -15,24 +15,10 @@
   <p class="prof">M.I. José Antonio de Jesús Arredondo Garza · 9 sep 2026 · Tema 2 (continuación) — ISA vs. Microarquitectura, CISC vs. RISC, RISC-V vs. ARM vs. x86. Raspberry Pi Pico 1 vs. Pico 2 (RP2350): FPU, benchmarks, PIO, mecanismo de selección de arquitectura en arranque. Videos técnicos: RISC-V vs ARM vs x86, Pico 2 architecture review.</p>
 </div>
 
-<div class="encorto"><h4>En corto</h4><ul>
-<li><strong>ISA vs Microarquitectura:</strong> ISA = especificación de instrucciones y registros (interfaz de programador) · Microarquitectura = implementación física en silicio (cambia cada generación).</li>
-<li><strong>CISC vs RISC:</strong> CISC = instrucciones complejas de longitud variable (1–15 bytes), más código pero heterogéneo · RISC = instrucciones simples de longitud fija, homogéneo, menor consumo.</li>
-<li><strong>Arquitecturas comerciales:</strong> x86 (CISC, servidores/PC) · ARM (RISC, móviles/Apple Silicon, licencias pagadas) · RISC-V (abierto, sin regalías, adoptado por Google/Nvidia/Alibaba).</li>
-<li><strong>Pico 1 (RP2040) vs Pico 2 (RP2350):</strong> Pico 2 = 4 núcleos (2x ARM Cortex-M33 + 2x RISC-V Hazard3), 520 KB SRAM, 4 MB Flash QSPI externa, FPU integrada, hasta 150 MHz (overclocking ~350 MHz).</li>
-<li><strong>FPU:</strong> acelerador de punto flotante integrado, 32 registros (s0–s31), reduce tiempo de ejecución de operaciones flotantes de 125 µs–220 ms a 102 µs.</li>
-<li><strong>PIO:</strong> mini-FPGA programable para crear periféricos personalizados (3 interfaces, 12 máquinas de estado en Pico 2) independientes de la CPU.</li>
-</ul></div>
-
-<div class="examen"><h4>🎯 Para el examen</h4><ul>
-<li><strong>ISA vs Microarquitectura:</strong> diferencia fundamental, ejemplos concretos (Intel x86 mantiene ISA pero cambia microarquitectura generación tras generación).</li>
-<li><strong>CISC vs RISC:</strong> características, trade-offs, ejemplos (x86 vs. RISC-V), consumo energético y densidad de código.</li>
-<li><strong>Arquitectura abierta vs propietaria:</strong> RISC-V libre de licencias · ARM con regalías · x86 cerrado.</li>
-<li><strong>Especificaciones Pico 2 (RP2350):</strong> cantidad de núcleos, SRAM, Flash externa, FPU, frecuencia base y overclocking máximo.</li>
-<li><strong>Ciclo Fetch:</strong> impacto del overclocking en la velocidad del ciclo de reloj.</li>
-<li><strong>FPU:</strong> beneficio de aceleradores de hardware en punto flotante; interpretación de benchmarks.</li>
-<li><strong>PIO:</strong> propósito como máquinas de estado programables independientes; no consume ciclos de CPU principal.</li>
-</ul></div>
+<details class="section-block sec" id="c4-fpu-benchmark-apertura" open><summary><span class="stitle">Apertura: rendimiento en punto flotante, Pico 1 vs. Pico 2</span></summary>
+<p>El profesor abrió la sesión con una pregunta directa a la clase para verificar sus antecedentes sobre el tema; tras recibir una respuesta afirmativa unánime, justificó por qué vale la pena medir en números concretos la diferencia de tener o no una FPU dedicada. Compartió mediciones reales de laboratorio: un algoritmo de muestreo que originalmente tardaba <strong>125 µs</strong> en ejecutarse, al incorporar operaciones de punto flotante procesadas por software en la Pico 1 (sin FPU), elevó su tiempo hasta <strong>220 ms</strong>. En contraste, al ejecutar el mismo algoritmo en la Pico 2 aprovechando la FPU dedicada por hardware, el tiempo bajó a apenas <strong>102 µs</strong> — una diferencia de varios órdenes de magnitud, no un ajuste marginal.</p>
+<p>Sobre el mecanismo dual ARM/RISC-V de la Pico 2: la selección del modo de operación al encender la placa se gestiona a través de un registro leído por el bootloader, que determina si la ejecución arranca en modo ARM o en modo RISC-V. El profesor aclaró que para lograr un funcionamiento <strong>simultáneo</strong> en ambos modos (no solo uno u otro al arrancar) sería necesario desarrollar un bootloader personalizado escrito íntegramente en ensamblador puro — no es algo que el bootloader oficial ofrezca de fábrica.</p>
+</details>
 
 <details class="section-block sec" id="c4-isa-microarq" open><summary><span class="stitle">ISA vs. Microarquitectura</span></summary>
 <p><strong>Instruction Set Architecture (ISA):</strong> organización funcional del procesador desde la perspectiva del software.</p>
@@ -135,6 +121,11 @@
 <p><strong>Mecanismo de Selección de Arquitectura en Arranque (Pico 2):</strong> proceso controlado por software en el bootloader que determina si la placa arrancará en modo ARM Cortex-M33 o en modo RISC-V Hazard3. Implementado mediante un registro de la CPU leído en el inicio (warm boot detection).</p>
 </details>
 
+<details class="section-block sec" id="c4-inline-assembly" open><summary><span class="stitle">Entornos de programación: C vs. Inline Assembly en MicroPython</span></summary>
+<p>Se discutieron las alternativas entre compilar en lenguaje C o trabajar directamente con MicroPython. El profesor manifestó su inconformidad ante la marcada preferencia de la plataforma Raspberry Pi por MicroPython, ya que oculta la arquitectura subyacente al programador. Como alternativa más accesible para trabajar a bajo nivel sin abandonar MicroPython, presentó el uso de <strong>ensamblador nativo incrustado (Inline Assembly)</strong> dentro de scripts de MicroPython: se declaran subrutinas especiales que contienen exclusivamente instrucciones de ensamblador, operando directamente sobre los registros de punto flotante de la FPU. El conjunto de instrucciones disponible en ese esquema está acotado a operaciones aritméticas elementales.</p>
+<p>El profesor enfatizó que el código máquina compilado para una arquitectura ARM específica no es automáticamente portable a cualquier otro chip ARM. Como caso comparativo citó la plataforma china <strong>Orange Pi</strong>: aunque usa procesadores ARM, su ISA no es 100% compatible con el de la Raspberry Pi, así que el código ensamblador optimizado para una placa no necesariamente corre en la otra sin adaptación.</p>
+</details>
+
 <details class="section-block sec" id="c4-fpu-benchmarks" open><summary><span class="stitle">FPU (Unidad de Punto Flotante) — Benchmarks Pico 1 vs Pico 2</span></summary>
 <p><strong>Problema:</strong> operaciones de punto flotante (multiplicación, división, trigonométricas, logaritmos) son costosas computacionalmente. En Pico 1 sin FPU integrada, la emulación por software (mediante rutinas compiladas en MicroPython) es lenta.</p>
 <p><strong>Benchmark (mismo algoritmo de procesamiento flotante):</strong></p>
@@ -156,7 +147,12 @@
 <li>Capacidad: crear periféricos personalizados como SPI de 20–30 MHz, I2S (audio digital), protocolos IR, PWM, etc.</li>
 </ul>
 <p><strong>Ventaja arquitectónica:</strong> en lugar de usar interrupciones de software (costosas) o polling (consume CPU), PIO ejecuta de forma asincrónica periodos de comunicación complejos. Ejemplo: protocolo WS2812 (LED RGB addressable) se implementa en 10–15 líneas de código PIO, sin cargar a la CPU.</p>
+<p><strong>Ejemplo de eficiencia — interfaz SPI:</strong> mientras que una interfaz SPI implementada por hardware dedicado nativo alcanza cierta velocidad límite fija, el mismo protocolo implementado sobre el bloque PIO puede alcanzar entre <strong>20 y 30 MHz</strong>, aprovechando que corre sincronizado con el reloj del sistema (150 MHz en la Pico 2) en vez de depender de un controlador SPI de propósito fijo.</p>
 <p><strong>Comparativa:</strong> PIO ≈ FPGA ultraminimalista integrada en el microcontrolador.</p>
+</details>
+
+<details class="section-block sec" id="c4-seguridad-rp2350" open><summary><span class="stitle">Módulos de seguridad del RP2350: TrustZone, cripto y OTP</span></summary>
+<p>El chip RP2350 incorpora módulos de seguridad nuevos respecto a la generación anterior: <strong>ARM TrustZone</strong>, que permite aislar código sensible y proteger claves o credenciales (por ejemplo, credenciales de Wi-Fi) en una zona de memoria separada e inaccesible desde el código normal de la aplicación; <strong>aceleración criptográfica por hardware</strong>, que agiliza operaciones de cifrado sin cargar al procesador principal; y memoria <strong>OTP (One-Time Programmable)</strong>, para grabar de forma permanente e inalterable ciertos datos críticos (como claves de fábrica) que no deben poder modificarse después.</p>
 </details>
 
 <details class="section-block sec" id="c4-nomenclatura-rp2350"><summary><span class="stitle">Desglose de la nomenclatura RP2350</span></summary>
@@ -229,6 +225,14 @@ def add_floats(r0, r1):
    * Implementación de una macro de delay en ciclos de reloj.</li>
 </ul>
 </details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Con FPU (Pico 2), un cálculo que tarda 220 ms por software en la Pico 1 baja a 102 µs — diferencia de órdenes de magnitud, no ajuste marginal.</li>
+<li>El bootloader elige ARM o RISC-V solo al arranque; correr ambos a la vez requeriría un bootloader propio en ensamblador puro.</li>
+<li>El código ARM compilado no es automáticamente portable entre chips ARM distintos (ej. Raspberry Pi vs. Orange Pi) — el ISA puede no coincidir al 100%.</li>
+<li>PIO puede implementar SPI a 20-30 MHz corriendo sincronizado al reloj del sistema, sin usar el controlador SPI de propósito fijo.</li>
+<li>RP2350 añade TrustZone, aceleración criptográfica y memoria OTP — seguridad que el RP2040 (Pico 1) no tenía.</li>
+</ul></div>
 
 </div>
 </body>
