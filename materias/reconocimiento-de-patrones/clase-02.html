@@ -18,22 +18,6 @@
 
 
 <div class="files"><a class="btn" href="files/Clase-05-Seleccion-y-Reduccion-de-Dimensionalidad.pdf" target="_blank">📄 Diapositivas Clase 5 (prof.)</a></div>
-<div class="encorto"><h4>En corto</h4><ul>
-<li><strong>Selección de características</strong> = quedarse con un subconjunto de las variables originales (no las transforma). <strong>Reducción de dimensionalidad</strong> = <em>proyectar</em> a un espacio nuevo donde las variables ya no representan lo mismo.</li>
-<li>Tres familias de <strong>selección</strong>: <strong>Filtrado</strong> (mide relevancia de cada variable por separado, antes de entrenar: Pearson, χ², ANOVA F, información mutua), <strong>Wrapper</strong> (usan el modelo como caja negra) y <strong>Embebidos</strong> (seleccionan durante el entrenamiento).</li>
-<li><strong>Wrapper</strong>: Forward (arranca vacío, añade), Backward (arranca con todas, quita), Exhaustive (todas las combinaciones, <code>O(2^d)</code>).</li>
-<li><strong>Embebidos</strong> (seleccionan durante el entrenamiento): <strong>Lasso / L1</strong> (penaliza <code>Σ|Wⱼ|</code>; peso → 0 = variable descartada) y <strong>árboles</strong> (importancia por reducción de impureza, normalizada a suma 1, umbral).</li>
-<li><strong>PCA</strong>: proyecta hacia las direcciones de <strong>máxima varianza</strong> (vectores/valores propios de la matriz de covarianza). PC1 = máx. varianza; los componentes son <strong>ortogonales</strong>.</li>
-<li><strong>SVD</strong> (<code>X = UΣVᵀ</code>): forma estable de calcular PCA; <em>V</em> = componentes, valores singulares = <code>√λ</code>.</li>
-</ul></div>
-<div class="examen"><h4>🎯 Para el examen</h4><ul>
-<li><strong>Varianza explicada en SVD:</strong> hay que <strong>elevar al cuadrado</strong> los valores singulares → <code>σᵢ² / Σσⱼ²</code>. Error muy común olvidarlo. (En el método de covarianza los <code>λ</code> se usan directos.)</li>
-<li><strong>Ortogonalidad en PCA:</strong> todos los componentes son estrictamente ortogonales entre sí → no correlacionados, no se obtienen por combinación lineal de los demás (base ortogonal).</li>
-<li>Los métodos wrapper y embebidos <strong>no</strong> requieren discriminación previa de variables — el algoritmo de selección <em>es</em> la discriminación.</li>
-<li>Complejidad de Exhaustive = <code>O(2^d)</code>; inviable con más de ~15–20 características.</li>
-<li>Criterios para elegir K: varianza explicada acumulada · regla del codo · umbral (ej. 90 %) · Kaiser (<code>λ &gt; 1</code>).</li>
-</ul></div>
-
 <details class="section-block sec" id="rdp-filtrado" open><summary><span class="stitle">Métodos de filtrado</span></summary>
 <p>Evalúan cada característica de forma <strong>independiente del algoritmo de aprendizaje</strong>, antes de entrenar: 1) calcular una medida de relevancia, 2) ordenar por puntuación, 3) quedarse con las <em>k</em> mejores o las que superan un umbral.</p>
 <p><strong>Correlación de Pearson</strong> — relación lineal entre dos variables cuantitativas continuas.</p>
@@ -54,7 +38,9 @@
 <p>Usan un algoritmo de aprendizaje como <strong>caja negra</strong> para evaluar iterativamente el rendimiento (exactitud del clasificador) de distintos subconjuntos de variables. El <strong>orden</strong> de las características en la matriz de entrada no importa para el modelo (<code>A+B</code> = <code>B+A</code>).</p>
 <p><strong>Forward Selection (hacia adelante):</strong> iniciar con subconjunto vacío (o con 1 característica; ej. <code>B</code> → 70 %). Añadir una variable a la vez, entrenar y evaluar; consolidar si mejora (<code>B+A</code> mejora; <code>B+A+C</code> → 80 %). Parar cuando añadir empeora (<code>B+A+C+D</code> baja 1 %). Óptimo: <code>{B, A, C}</code>.</p>
 <p><strong>Backward Selection (hacia atrás):</strong> iniciar con <strong>todas</strong> (<code>{A,B,C,D}</code> → 82 %). Quitar una variable a la vez; consolidar la remoción si mejora o mantiene (quitar <code>A</code> → 83 %; quitar <code>D</code> → 84 %). Parar cuando quitar <strong>cualquiera</strong> de las restantes desploma el desempeño (quitar <code>B</code> −24 %, quitar <code>C</code> −14 %). Óptimo: <code>{B, C}</code> con 84 %.</p>
+<p>Durante el ejercicio de Backward, un alumno preguntó si para el conjunto inicial se puede asumir que no importa el orden de las características — el profesor confirmó que el orden original de las columnas es completamente irrelevante para los modelos de aprendizaje.</p>
 <p><strong>Exhaustive Feature Selection:</strong> evaluar <strong>todas</strong> las combinaciones (individuales, parejas sin repetir, tríos, todas). Complejidad <code>O(2^d)</code>. <strong>Ventaja:</strong> garantiza el <strong>óptimo global</strong> (<code>{B,C}</code> 84 % &gt; 82 % con las 4). <strong>Desventaja:</strong> un modelo entrenado por combinación → inviable con más de ~15–20 características.</p>
+<p>El profesor preguntó al grupo qué problema técnico le veían a este método; un alumno respondió correctamente que "escala muy rápido hacia arriba" porque el crecimiento computacional es exponencial. El profesor confirmó: cada combinación implica entrenar e inferir un modelo completo (desde un árbol simple hasta uno más complejo), y aunque garantiza el óptimo global, se vuelve inviable con más de 15-20 características. Otro alumno preguntó si antes de llegar a la selección exhaustiva habría que hacer una discriminación previa — el profesor aclaró que este método realiza la discriminación por sí mismo; es una alternativa directa que no necesita un filtrado previo.</p>
 <table><thead><tr><th>Método</th><th>Cuándo conviene</th><th>Desventaja</th></tr></thead><tbody>
 <tr><td>Forward</td><td>Se espera que <strong>pocas</strong> características sean relevantes; ahorra cómputo</td><td>Una vez añadida, no la puede quitar → conserva redundantes / omite interacciones</td></tr>
 <tr><td>Backward</td><td>Se sospecha que <strong>la mayoría</strong> son relevantes; base sólida, capta interacciones</td><td>Costoso (entrenamientos con todas); inviable con miles de características</td></tr>
@@ -107,7 +93,8 @@ Z = W · X           (W = matriz de vectores propios; X = datos originales; Z = 
 <p><strong>Ejemplo 2:</strong> <code>Σ = [[4, 1], [2, 3]]</code></p>
 <pre><code>det(Σ − λI) = (4−λ)(3−λ) − 2 = λ² − 7λ + 10 = 0   →   λ₁ = 5 , λ₂ = 2
    v₁ = [1, 1]ᵀ ,  v₂ = [1, −2]ᵀ</code></pre>
-<p><strong>Recordatorio de las diapositivas:</strong> la suma de todos los valores propios = varianza total; varianza explicada acumulada = <code>(Σᵢ₌₁..ₖ λᵢ) / (Σᵢ₌₁..d λᵢ)</code>.</p></details>
+<p><strong>Recordatorio de las diapositivas:</strong> la suma de todos los valores propios = varianza total; varianza explicada acumulada = <code>(Σᵢ₌₁..ₖ λᵢ) / (Σᵢ₌₁..d λᵢ)</code>.</p>
+<p><strong>Ejercicio participativo en vivo:</strong> el profesor presentó una segunda matriz de covarianza y pidió al grupo resolver el determinante para obtener los valores propios. Los alumnos respondieron correctamente las dos soluciones de la ecuación característica, y al resolver el sistema homogéneo para cada una obtuvieron los vectores directores correspondientes (pendientes de normalizar) — confirmando en vivo que el procedimiento se puede replicar con cualquier matriz de covarianza 2×2.</p></details>
 
 <details class="section-block sec" id="rdp-elegir-k"><summary><span class="chip chip-examen">examen</span><span class="stitle">Cómo elegir K (número de componentes)</span></summary>
 <pre><code>varianza explicada (individual) = λᵢ / Σ λⱼ        (la acumulada llega a 1.0 = 100 %)</code></pre>
@@ -129,8 +116,28 @@ Z = W · X           (W = matriz de vectores propios; X = datos originales; Z = 
 <li><strong>Ventajas:</strong> estabilidad numérica muy superior; funciona sobre matrices <strong>no cuadradas</strong>; evita calcular <code>Xᵀ X</code> (costoso); eficiente para datasets masivos con <code>N ≫ D</code> o <code>D ≫ N</code>. Es lo que usan la mayoría de las bibliotecas.</li>
 </ul></details>
 
-<details class="section-block sec" id="tema-3-lda"><summary><span class="stitle">Cierre — próxima clase</span></summary>
-<p>Siguiente sesión: <strong>LDA (Análisis Discriminante Lineal)</strong>.</p></details>
+<details class="section-block sec" id="rdp-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> El profesor revisó la lista de inscritos para las prácticas: 5 alumnos en total (uno de ellos sin asistir ese día). Se acordó formar dos equipos — uno de 3 integrantes y uno de 2 — eligiendo libremente a sus compañeros.</li>
+<li><em>(Contexto)</em> Durante la discusión sobre si usar uno o dos métodos de selección, el profesor recalcó que en la ingeniería real es válido y recomendable comparar 2 o más métodos sobre el mismo problema, para justificar matemáticamente las decisiones de diseño — no hay una única respuesta correcta.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="tema-3-lda" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Prácticas del curso:</strong> darán inicio oficialmente la siguiente semana.</li>
+<li><strong>Dinámica de entrega:</strong> todas las prácticas tendrán un plazo de una semana (de viernes a viernes). Para la evaluación de cada práctica, los equipos dispondrán de tiempo suficiente en clase para presentar.</li>
+<li><strong>Próxima sesión (viernes):</strong> se concluirá un aspecto de aplicación de PCA y se iniciará el segundo método fundamental de reducción de dimensionalidad: <strong>Análisis Discriminante Lineal (LDA)</strong>.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Selección conserva las variables originales; reducción de dimensionalidad las proyecta a un espacio nuevo.</li>
+<li>Wrapper: Forward añade progresivamente, Backward quita progresivamente, Exhaustive prueba todas las combinaciones (O(2^d), inviable con &gt;15-20 características).</li>
+<li>Embebidos (Lasso/L1 y árboles) seleccionan durante el propio entrenamiento, sin paso previo de discriminación.</li>
+<li>PCA maximiza varianza vía autovectores ortogonales de la matriz de covarianza; SVD es la forma numéricamente estable de calcularlo (recordar elevar al cuadrado los valores singulares).</li>
+<li>3 criterios para elegir K: regla del codo, umbral de varianza (ej. 90%), criterio de Kaiser (λ &gt; 1).</li>
+</ul></div>
 
 <p class="empty" style="margin-top:28px">Estructurado seg&uacute;n el <a href="index.html#tema-3" style="color:var(--indigo)">Tema 3</a> del programa del profesor.</p>
 
