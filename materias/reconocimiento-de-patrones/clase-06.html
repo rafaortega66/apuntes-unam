@@ -16,26 +16,6 @@
   <p style="font-size:12px;color:var(--ink-soft);margin:2px 0 0">🔢 Numeración del profesor: corresponde a sus diapositivas <a href="material.html" style="color:var(--indigo)">Clase 8</a> (Funciones de decisión) — no coincide 1:1 con "Clase 06" de este sitio.</p>
 </div>
 
-<div class="encorto"><h4>En corto</h4><ul>
-<li><strong>Función de decisión g(x):</strong> modelo matemático que recibe un vector de características y devuelve un escalar cuyo signo determina la clase.</li>
-<li><strong>1 vs. Resto:</strong> c funciones de decisión para c clases; se asigna la clase i solo si su función es positiva y todas las demás negativas.</li>
-<li><strong>Regiones de ambigüedad:</strong> zonas donde no se puede clasificar porque varias funciones son positivas o todas son negativas.</li>
-<li><strong>Máquina Lineal:</strong> elimina las ambigüedades asignando la clase con el valor escalar máximo (gᵢ(x) &gt; gⱼ(x)).</li>
-<li><strong>Espacio de características vs. espacio de pesos:</strong> en el primero los puntos son patrones; en el segundo, los puntos son clasificadores completos.</li>
-<li><strong>Ortogonalidad de w:</strong> el vector de pesos es perpendicular al hiperplano g(x)=0; el escalar de g(x) mide la distancia a ese hiperplano.</li>
-<li><strong>Funciones ortogonales:</strong> descomponen funciones de decisión complejas en combinaciones lineales de polinomios base (Legendre, Laguerre, Hermite).</li>
-</ul></div>
-
-<div class="examen"><h4>🎯 Para el examen</h4><ul>
-<li><strong>Regla del signo:</strong> g(x) = wᵀx + w₀ — g(x)&gt;0 → clase 1, g(x)&lt;0 → clase 2. Si g(x)=0, cae en la frontera; se decide según el costo del error (ej. en diagnóstico médico, prefiere falso positivo sobre falso negativo).</li>
-<li><strong>Criterio estricto 1 vs. Resto:</strong> clase i solo si Dᵢ(x)&gt;0 y Dⱼ(x)&lt;0 para todo j≠i. Dos o más positivos, o todos negativos → región de ambigüedad.</li>
-<li><strong>Criterio de Máquina Lineal:</strong> asigna a ωᵢ si gᵢ(x) &gt; gⱼ(x) para todo j≠i — divide el espacio en c regiones sin zonas ambiguas.</li>
-<li><strong>Espacio de características (ejes = variables medibles, puntos = patrones) vs. espacio de pesos (ejes = w₀..wₙ, puntos = clasificadores completos).</strong></li>
-<li><strong>Distancia al hiperplano:</strong> depende del vector unitario ortogonal w y de la magnitud escalar de g(x).</li>
-<li><strong>Dominios de los polinomios ortogonales (pregunta frecuente):</strong> Legendre → [-1,1] · Laguerre → [0,∞) · Hermite → (-∞,∞).</li>
-<li><strong>Clasificación (supervisado, requiere x e y) vs. Agrupamiento/Clustering (no supervisado, solo x) vs. Reconocimiento de Patrones (término integral: detección, extracción, clasificación y clustering).</strong></li>
-</ul></div>
-
 <details class="section-block sec" id="c6-repaso" open><summary><span class="stitle">Repaso de la clase anterior — métricas, evaluación y validación cruzada</span></summary>
 <ul>
 <li><strong>Sesgo/varianza</strong> describen cómo aprende el clasificador; <strong>exactitud (accuracy)</strong> mide el rendimiento global. Repaso de precisión, recall, especificidad, F1 y exactitud balanceada.</li>
@@ -138,6 +118,14 @@
 <li>No se asignaron tareas ni fechas límite de prácticas adicionales en esta sesión.</li>
 </ul>
 </details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>g(x) = wᵀx + w₀ decide la clase por el signo; en la frontera g(x)=0 se decide según el costo del error (ej. diagnóstico médico prefiere falso positivo sobre falso negativo).</li>
+<li>1 vs. Resto asigna la clase i solo si Dᵢ(x)&gt;0 y todas las demás son negativas — dos o más positivas, o todas negativas, cae en región de ambigüedad.</li>
+<li>La Máquina Lineal elimina esa ambigüedad asignando la clase con el valor gᵢ(x) máximo, sin depender del signo.</li>
+<li>En el espacio de características los puntos son patrones; en el espacio de pesos, los puntos son clasificadores completos.</li>
+<li>Los polinomios ortogonales tienen dominios distintos: Legendre en [-1,1], Laguerre en [0,∞), Hermite en (-∞,∞).</li>
+</ul></div>
 
 </div>
 </body>
