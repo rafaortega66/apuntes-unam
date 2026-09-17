@@ -22,8 +22,6 @@
     <a class="btn" href="files/Clase-03-Extraccion-de-caracteristicas-II.pdf" target="_blank">📄 Extracción de características II (prof.)</a>
     <a class="btn" href="files/Clase-04-Extraccion-de-caracteristicas-III.pdf" target="_blank">📄 Extracción de características III (prof.)</a>
   </div>
-<div class="encorto"><h4>En corto</h4><ul><li>Extracción de características = pasar datos crudos (imagen / audio) a un vector numérico corto que separe clases (<code>y ∈ ℝᴺ → x ∈ ℝᵈ</code>, d ≪ N).</li><li>Imagen: estadísticas, histogramas, momentos geométricos (Hu = invariante a traslación / escala / rotación), textura <strong>GLCM</strong>, forma con <strong>HOG</strong>, puntos clave SIFT / SURF.</li><li>Audio: temporales (energía, RMS, ZCR), espectrales (centroide, ancho de banda, roll-off, flux, flatness), tiempo-frecuencia (<strong>MFCC</strong> + Δ / ΔΔ).</li><li>HOG de una imagen 64×128 → vector de <strong>3 780</strong>; audio → vector de <strong>80</strong> dimensiones.</li></ul></div>
-<div class="examen"><h4>🎯 Para el examen</h4><ul><li>Momentos: espaciales (dependen de la posición) → centrales (invariantes a traslación) → normalizados (+ escala) → <strong>Hu</strong> (+ rotación).</li><li>GLCM: parámetros N, d, θ; hacerla <strong>simétrica</strong> y <strong>normalizar</strong> antes de sacar descriptores (contraste, ASM / energía, entropía…).</li><li>MFCC: se descarta <strong>obligatoriamente el coeficiente 0</strong> (solo energía promedio); el proceso es <strong>irreversible</strong>.</li><li>Δ = velocidad del cambio del timbre; ΔΔ = aceleración.</li></ul></div>
 <details class="section-block sec" id="que-es-la-extraccion-de-caracteristicas" open><summary><span class="stitle">¿Qué es la extracción de características?</span></summary><p>Es el proceso que transforma un conjunto de <strong>datos crudos</strong> (imágenes, audio, series de tiempo…) en un <strong>vector de valores numéricos</strong> que describe de forma compacta la información relevante del patrón.</p>
 <pre><code>y ∈ ℝᴺ  →  x ∈ ℝᵈ ,   d ≪ N</code></pre>
 <p>En lugar de trabajar con los datos originales (alta dimensionalidad, ruidosos, redundantes), se representa cada muestra con un conjunto reducido de atributos que conserven la <strong>información discriminante</strong> necesaria para separar clases.</p></details>
@@ -103,6 +101,12 @@ Centroide (x̄, ȳ) = ( M(1,0)/M(0,0) ,  M(0,1)/M(0,0) )</code></pre>
 <li>Hacerla <strong>simétrica</strong> respecto a la diagonal principal: sumar la matriz "oeste→este" con la "este→oeste".</li>
 <li><strong>Normalizar</strong>: dividir cada celda entre el total de conteos.</li>
 </ol>
+<p><strong>Este procedimiento salió como una serie de preguntas del profesor al grupo, resueltas en vivo</strong>, que vale la pena revisar porque expone los puntos donde es fácil confundirse:</p>
+<ul>
+<li><em>"¿Cuáles son los dos parámetros iniciales que se deben definir para construir la matriz GLCM?"</em> — un alumno respondió que había que definirla con ceros y unos según la intensidad y establecer la dirección; el profesor precisó que los dos parámetros fundamentales son la <strong>dirección (ángulo θ)</strong> y la <strong>distancia (d)</strong> a la cual se evalúan los cambios de luminosidad entre píxeles.</li>
+<li><em>"Una vez obtenida la matriz en una dirección, ¿cómo se obtiene la matriz simétrica de forma sencilla?"</em> — un alumno respondió correctamente: calculando la <strong>transpuesta</strong>. El profesor confirmó que al sumar la matriz original con su transpuesta se obtiene la matriz simétrica.</li>
+<li><em>"¿Qué paso crítico falta para poder trabajar con la matriz simétrica?"</em> — el alumno respondió que hay que <strong>normalizar</strong>, dividiendo entre el total. El profesor confirmó: se divide cada componente de la matriz entre la suma total de conteos, y a partir de esa matriz normalizada se calculan los descriptores estadísticos de textura.</li>
+</ul>
 <p>A partir de la matriz normalizada se calculan estadísticos que forman el vector de características:</p>
 <ul>
 <li><strong>Grupo de contraste:</strong> Contraste, Dissimilarity, Homogeneity.</li>
@@ -266,10 +270,23 @@ Flatness = media geométrica / media aritmética           Ej. → ≈ 0.96 (esp
 <pre><code>Mel(f) = 2595 · log₁₀(1 + f/700)          f = 700 · (10^(m/2595) − 1)</code></pre>
 <p><strong>Etapas MFCC:</strong> 1) pre-énfasis <code>y[n] = x[n] − α x[n−1]</code>, α ≈ 0.95 · 2) framing 20–40 ms, 50 % de solape · 3) ventana de Hamming <code>w[n] = 0.54 − 0.46 cos(2πn/(N−1))</code> · 4) FFT y espectro de potencia · 5) banco de 20–40 filtros triangulares Mel, <code>energíaᵢ = Σ P(k) Hᵢ[k]</code> · 6) logaritmo · 7) DCT-II, quedarse con los primeros 12–13 → MFCC. Con Δ y ΔΔ: matriz <code>#ventanas × 39</code>.</p></details>
 
-<details class="section-block sec" id="para-investigar-siguiente"><summary><span class="stitle">Para investigar / siguiente</span></summary><ul>
-<li><strong>LBP</strong> (<em>Local Binary Patterns</em>) — método alternativo de análisis de textura en imágenes (es parte de la Tarea 1).</li>
-<li>Siguiente sesión: <strong>selección de características</strong> (Tema 3) — cómo quedarse solo con las dimensiones que más aportan al clasificador.</li>
-</ul></details>
+<details class="section-block sec" id="para-investigar-siguiente" open><summary><span class="stitle">Pendiente / próxima clase — Tarea 1</span></summary>
+<ul>
+<li><strong>Fecha de entrega:</strong> el próximo viernes, a través de Google Classroom. Puede hacerse a mano o digitalizada en tablet, en formato legible.</li>
+<li><strong>Momentos de Hu:</strong> calcularlos para una imagen binaria con forma de "C" — primero el momento geométrico M(p,q), luego los momentos centrales/espaciales, aplicar normalización para momentos rotacionales y llegar a los 7 momentos de Hu.</li>
+<li><strong>Matriz GLCM y descriptores:</strong> para una matriz de imagen cuantizada en niveles de gris dada, calcular la GLCM en dirección Oeste-Este (d=1) y en dirección Norte-Sur (d=1); para cada dirección, obtener la matriz simétrica (sumando su transpuesta), normalizar, y calcular Contraste, Energía y Entropía (6 características en total).</li>
+<li><strong>Investigación:</strong> redactar un párrafo corto explicando el concepto y funcionamiento de los <strong>Patrones Binarios Locales (LBP — Local Binary Patterns)</strong> como método alternativo de análisis de textura.</li>
+<li>Siguiente sesión: <strong>selección de características</strong> (Tema 3) — técnicas de filtrado y reducción de dimensionalidad para identificar las variables más relevantes.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Extracción de características = pasar datos crudos a un vector numérico corto que separe clases (y ∈ ℝᴺ → x ∈ ℝᵈ, d ≪ N).</li>
+<li>Momentos: espaciales → centrales (invariantes a traslación) → normalizados (+ escala) → Hu (+ rotación).</li>
+<li>GLCM: definir dirección (θ) y distancia (d); hacerla simétrica (sumar transpuesta) y normalizar antes de sacar descriptores.</li>
+<li>HOG de una imagen 64×128 → vector de 3,780; audio → vector de 80 dimensiones (13 MFCC + 2 temporales + 5 espectrales, × 4 estadísticos).</li>
+<li>MFCC: se descarta obligatoriamente el coeficiente 0 (solo energía promedio); el proceso es irreversible — no se puede reconstruir el audio original.</li>
+</ul></div>
 
 <p class="empty" style="margin-top:28px">Estructurado seg&uacute;n el <a href="index.html#tema-2" style="color:var(--indigo)">Tema 2</a> del programa del profesor.</p>
 
