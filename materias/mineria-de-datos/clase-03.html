@@ -15,23 +15,6 @@
   <p class="prof">M.C. José Concepción Roberto Olvera López · Fecha: 8 sep 2026 · Tema 2 (continuación) — Servidores de bases de datos, On-Premise vs. Nube, Data Lake vs. Data Warehouse, ecosistema Big Data (Kafka, Spark, Hadoop/HDFS/MapReduce). Exposiciones de KDD: News Corp, Bwood, Nu Bank.</p>
 </div>
 
-<div class="encorto"><h4>En corto</h4><ul>
-<li><strong>Servidores de BD:</strong> SAP HANA/Sybase IQ (columnares con 80–90% de compresión), Oracle, IBM, Microsoft SQL Server.</li>
-<li><strong>On-Premise vs. Cloud:</strong> On-Premise (~30% del mercado) = baja latencia, sistemas de producción físicos · Cloud = escalabilidad, costo inicial $10–20 K MXN, rápida implementación.</li>
-<li><strong>Data Lake vs. DW:</strong> Data Lake = datos crudos/no estructurados (imágenes, JSON), flexibilidad · Data Warehouse = estructurado, esquemas definidos, consultas de negocio.</li>
-<li><strong>Big Data:</strong> Spark (procesamiento en memoria ultra rápido) · Kafka (eventos en tiempo real) · Hadoop/HDFS/MapReduce (distribución por nodos).</li>
-<li><strong>KDD aplicado:</strong> News Corp (clustering + series de tiempo) · Bwood/Delivery (clasificación + regresión) · Nu Bank (LightGBM/XGBoost + Isolation Forest + PCA + RFM + SHAP).</li>
-<li><strong>Examen:</strong> Solo Tema 1 y Tema 2 (NO Tema 3). Énfasis en Cloud/On-Prem, Data Lake/DW, ecosistema Big Data, validación cruzada, ROC/AUC, KS.</li>
-</ul></div>
-
-<div class="examen"><h4>🎯 Para el examen</h4><ul>
-<li><strong>Arquitecturas On-Premise vs. Cloud:</strong> casos de uso, costos, latencia, escalabilidad.</li>
-<li><strong>Data Lake vs. Data Warehouse:</strong> diferencia fundamental, cuándo usar cada uno, flexibilidad vs. estructura.</li>
-<li><strong>Ecosistema Big Data:</strong> Kafka (eventos en tiempo real), Spark (procesamiento en memoria), Hadoop/HDFS/MapReduce (distribución).</li>
-<li><strong>Validación de modelos:</strong> validación cruzada (Cross-Validation), balanceo de clases (SMOTE), métricas ROC/AUC/KS.</li>
-<li><strong>Nota crítica:</strong> El Tema 3 (Métodos y algoritmos) NO entra en el examen. Se impartirá después del examen.</li>
-</ul></div>
-
 <details class="section-block sec" id="c3-servidores-bd" open><summary><span class="stitle">Servidores de bases de datos — Architeturas columnares</span></summary>
 <ul>
 <li><strong>SAP HANA y Sybase IQ:</strong> sistemas columnares que comprimen datos de forma drástica (80–90% de compresión). Ejemplo: 100 GB sin comprimir → 10–20 GB comprimidos. Basados en almacenamiento por columna en lugar de por fila.</li>
@@ -207,6 +190,14 @@
 <li><strong>Validación Cruzada (Tema 4):</strong> estrategias avanzadas de validación, comparación de esquemas, evaluación de predicción numérica, LDM.</li>
 </ul>
 </details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>On-Premise (~30% del mercado) da baja latencia y control total; Cloud (~70%) da rapidez de implementación y escalabilidad casi ilimitada.</li>
+<li>Data Lake almacena crudo y no estructurado con esquema al leer (flexible pero con riesgo de "pantano"); Data Warehouse exige esquema al escribir (estructurado, confiable, más caro).</li>
+<li>El ecosistema Big Data se apoya en Kafka (streaming de eventos), Spark (procesamiento en memoria, ~100x más rápido que MapReduce) y Hadoop/HDFS/MapReduce (procesamiento batch tolerante a fallos).</li>
+<li>Validar un modelo de riesgo exige más que precisión: ROC/AUC, estadístico KS, balanceo de clases (SMOTE) y explicabilidad (SHAP) cuando hay regulación de por medio.</li>
+<li>El examen cubre solo Temas 1 y 2 — el Tema 3 (métodos y algoritmos) se imparte después del examen.</li>
+</ul></div>
 
 </div>
 </body>

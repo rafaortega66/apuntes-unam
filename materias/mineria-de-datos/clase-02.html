@@ -15,26 +15,12 @@
   <p class="prof">M.C. José Concepción Roberto Olvera López · 3 sep 2026 · Tema 2 — Arquitectura de minería de datos · repositorio vs. base de datos, Data Warehouse, Data Mart, virtualización de datos, ERP y Data Lake. Presentaciones de los equipos 9, 13, 12 y 11.</p>
 </div>
 
-<div class="encorto"><h4>En corto</h4><ul>
-<li><strong>Base de datos</strong> (transaccional) → <strong>Repositorio</strong> (histórico, metadatos, gobernanza, TB–PB) → <strong>Data Warehouse</strong> (empresarial, integrado, estructurado, "única fuente confiable") → <strong>Data Lake</strong> (datos crudos y no estructurados en formato nativo).</li>
-<li><strong>Data Mart</strong> = un Data Warehouse acotado a un área de negocio (RR. HH., Finanzas) con usuarios limitados a esa área.</li>
-<li><strong>Virtualización de datos</strong>: consultar los datos en su origen en tiempo real sin moverlos; el usuario ve una vista reducida (p. ej. 14 campos de 180). ~70 % de los datos se manejan así hoy.</li>
-<li><strong>ERP</strong> (p. ej. SAP) = núcleo de la empresa: finanzas, nómina, facturación, inventarios. Alimenta los procesos de minería.</li>
-<li><strong>ETL vs. ELT</strong>: la Extracción-Transformación-Carga es solo una forma de alimentar un Warehouse.</li>
-</ul></div>
-
-<div class="examen"><h4>🎯 Para el examen</h4><ul>
-<li><strong>Diseñar esquemas de arquitectura de datos</strong> (obligatorio): diagramas con redes, servidores, capas de seguridad (firewalls) y acceso restringido por roles y horarios.</li>
-<li><strong>Distinguir técnicamente</strong>: Base de Datos (transaccional) · Repositorio (histórico / gobernanza) · Data Warehouse (empresarial / estructurado) · Data Lake (no estructurado / crudo).</li>
-<li><strong>Gobernanza</strong>: la seguridad moderna limita el acceso no solo por tabla, sino por <strong>columna</strong> y por <strong>tiempo de respuesta</strong>.</li>
-<li><strong>Transacciones distribuidas</strong>: <strong>Two-Phase Commit (2PC)</strong> para garantizar que los registros queden grabados correctamente en sistemas distribuidos.</li>
-<li><strong>ETL vs. ELT</strong> como formas de alimentar el Warehouse.</li>
-</ul></div>
-
 <details class="section-block sec" id="c2-arquitectura" open><summary><span class="stitle">Arquitectura de minería de datos — repositorios y gobernanza</span></summary>
 <ul>
 <li><strong>Repositorio de datos:</strong> contenedor de grandes volúmenes de información con esquemas de seguridad y gobernanza mucho más amplios que una base de datos básica. Se caracteriza por: uso de <strong>metadatos</strong>, almacenamiento de información <strong>histórica</strong> y capacidad para manejar volúmenes muy altos (terabytes o petabytes).</li>
 <li><strong>Gobernanza:</strong> el acceso se restringe por rol, por tabla, por columna y por horario; se controla también el tiempo de respuesta de las consultas.</li>
+<li><strong>Transacciones distribuidas:</strong> el <strong>Two-Phase Commit (2PC)</strong> garantiza que los registros queden grabados correctamente en sistemas distribuidos, evitando que una transacción quede a medias entre varios nodos.</li>
+<li><strong>Para examen y proyectos:</strong> es obligatorio saber diseñar esquemas de arquitectura de datos — diagramas que muestren redes, servidores, capas de seguridad (firewalls) y acceso restringido por roles y horarios.</li>
 </ul></details>
 
 <details class="section-block sec" id="c2-dw-dm" open><summary><span class="stitle">Data Warehouse, Data Mart y virtualización</span></summary>
@@ -109,6 +95,14 @@
 <li><strong>Proyecto 2:</strong> el martes se asignan <strong>proveedores tecnológicos</strong> (Oracle, Amazon, Google…). Cada equipo se "pone la camiseta" de su marca y vende técnicamente su solución al resto del grupo.</li>
 <li>Investigar y complementar por cuenta propia <strong>Data Warehouse</strong> y <strong>Data Lake</strong> para dominar los términos técnicos.</li>
 </ul></details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Jerarquía de conceptos: Base de datos (transaccional) → Repositorio (histórico, gobernanza, TB-PB) → Data Warehouse (empresarial, "única fuente confiable") → Data Lake (datos crudos no estructurados).</li>
+<li>Un Data Mart es un Data Warehouse acotado a un área de negocio específica.</li>
+<li>La virtualización de datos consulta el origen en tiempo real sin moverlo — así se maneja ~70% de los datos hoy.</li>
+<li>Un ERP (como SAP) es el núcleo transaccional de la empresa y alimenta los procesos de minería.</li>
+<li>El Two-Phase Commit garantiza transacciones consistentes en sistemas distribuidos.</li>
+</ul></div>
 
 </div>
 </body>

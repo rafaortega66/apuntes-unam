@@ -15,28 +15,18 @@
   <p class="prof">M.C. José Concepción Roberto Olvera López · Fecha: 10 sep 2026 · Tema 2 (continuación) — Bases de datos vectoriales y embeddings, vectorización de imagen/audio/video, bases de datos de conocimiento, arquitectura de datos para IA/minería. Exposición KDD: Nu Bank (evaluación crediticia en tiempo real).</p>
 </div>
 
-<div class="encorto"><h4>En corto</h4><ul>
-<li><strong>Bases de datos vectoriales:</strong> almacenan y gestionan embeddings (vectores numéricos de alta dimensión) para búsqueda por similitud semántica, no coincidencia exacta.</li>
-<li><strong>Embedding y chunking:</strong> transformación de datos no estructurados dividiéndolos en fragmentos (chunks) y convirtiéndolos a vectores matemáticos.</li>
-<li><strong>Visión por computadora (CNN):</strong> procesa imágenes a vectores usando convolución, ReLU y Softmax para clasificación probabilística.</li>
-<li><strong>Vectores de audio y video:</strong> extracción de frecuencia/timbre/ritmo para voz; procesamiento por frames para vigilancia y análisis deportivo.</li>
-<li><strong>Base de datos de conocimiento:</strong> almacén especializado para centralizar información organizacional mediante plantillas (templates) y cuestionarios.</li>
-<li><strong>Arquitectura de datos para IA/minería:</strong> conecta fuentes de origen, ETL, motores de almacenamiento, componentes de red (APIs, Gateways) y analítica.</li>
-<li><strong>Caso Nu:</strong> evaluación crediticia en tiempo real con ingesta continua (Kafka), procesamiento en flujo (Spark), modelos de ensamble (Random Forest, XGBoost) y explicabilidad (SHAP, WoE).</li>
-</ul></div>
-
-<div class="examen"><h4>🎯 Para el examen</h4><ul>
-<li><strong>Búsqueda tradicional (SQL) vs. vectorial:</strong> tradicional = coincidencia exacta/estructurada (ej. <code>edad &gt; 48</code>) con índices B-Tree/Hash; vectorial = similitud semántica aproximada, con clustering para crear índices por zonas y evitar recorrer toda la base.</li>
-<li><strong>Pasos obligatorios para diseñar una arquitectura de minería de datos</strong> (pregunta explícita de examen): 1) requerimientos funcionales/no funcionales (rendimiento, seguridad, escalabilidad, tolerancia a fallos) → 2) selección del tipo de BD (relacional, no relacional, vectorial, especializada) → 3) diseño del esquema y relaciones → 4) infraestructura (nube vs. local) y escalabilidad → 5) seguridad y control de accesos por roles → 6) plan de pruebas de volumen/rendimiento/optimización.</li>
-<li><strong>Componentes de red en arquitecturas:</strong> API (protocolo/reglas para acceder a funciones o datos de forma segura, vía conectores propietarios: Oracle, IBM, Python) · Gateway (elemento de red/IP que enruta tráfico entrante/saliente hacia servicios autorizados) · ETL Batch (extracción, transformación —estandarización de formatos, fórmulas—, carga masiva).</li>
-</ul></div>
-
 <details class="section-block sec" id="c4-vectoriales" open><summary><span class="stitle">Bases de datos vectoriales y embeddings</span></summary>
 <ul>
 <li><strong>Embedding:</strong> tomar datos no estructurados (PDFs, texto libre, imágenes, voz, video) y transformarlos en vectores numéricos de miles de dimensiones. Cada vector captura el contexto semántico o las características esenciales del objeto.</li>
 <li><strong>Chunking (fragmentación):</strong> división previa del contenido en fragmentos lógicos (chunks). Al consultar, el sistema convierte la pregunta del usuario en un vector de búsqueda y busca por similitud los chunks más cercanos para armar la respuesta — es el mecanismo base de los sistemas LLM/ChatGPT.</li>
 <li><strong>Índices y eficiencia de búsqueda:</strong> a diferencia de los métodos relacionales exactos, el índice vectorial genera clusters mediante algoritmos de agrupamiento. La consulta no revisa millones de registros uno a uno, sino que entra directamente al cluster correspondiente, permitiendo búsquedas por similitud ultrarrápidas.</li>
+<li><strong>Búsqueda tradicional (SQL) vs. vectorial</strong> (pregunta de examen): la tradicional busca coincidencia exacta/estructurada (ej. <code>edad &gt; 48</code>) apoyada en índices B-Tree/Hash; la vectorial busca similitud semántica aproximada, apoyada en clustering para crear índices por zonas y evitar recorrer toda la base.</li>
 </ul>
+</details>
+
+<details class="section-block sec" id="c4-diseno-arquitectura"><summary><span class="stitle">Pasos para diseñar una arquitectura de minería de datos</span></summary>
+<p>Pregunta explícita de examen — la secuencia obligatoria: 1) definir requerimientos funcionales y no funcionales (rendimiento, seguridad, escalabilidad, tolerancia a fallos); 2) seleccionar el tipo de base de datos (relacional, no relacional, vectorial, especializada); 3) diseñar el esquema y sus relaciones; 4) decidir la infraestructura (nube vs. local) y su escalabilidad; 5) definir seguridad y control de accesos por roles; 6) planear pruebas de volumen, rendimiento y optimización.</p>
+<p><strong>Componentes de red en estas arquitecturas:</strong> el <strong>API</strong> es el protocolo/conjunto de reglas para acceder a funciones o datos de forma segura, típicamente vía conectores propietarios (Oracle, IBM, Python); el <strong>Gateway</strong> es el elemento de red/IP que enruta el tráfico entrante y saliente hacia los servicios autorizados; el <strong>ETL Batch</strong> hace la extracción, transformación (estandarización de formatos, fórmulas) y carga masiva.</p>
 </details>
 
 <details class="section-block sec" id="c4-vectorizacion" open><summary><span class="stitle">Vectorización de imagen, audio y video</span></summary>
@@ -101,6 +91,14 @@
 <li><strong>Próxima sesión — exposiciones de proveedores Nube/BD:</strong> presentaciones de 8 minutos por equipo en rol de venta técnica. Sofía y su equipo expondrán AWS (incluyendo TimeStream y el Data Warehouse de Amazon). Equipos 6 y 11 presentarán sus temas sobre repositorios y bases de datos especializadas.</li>
 </ul>
 </details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Una base de datos vectorial busca por similitud semántica (embeddings + chunking), no por coincidencia exacta como SQL.</li>
+<li>Diseñar una arquitectura de minería sigue 6 pasos obligatorios: requerimientos → tipo de BD → esquema → infraestructura → seguridad → plan de pruebas.</li>
+<li>Imagen se vectoriza con CNN (convolución + ReLU + Softmax); audio extrae frecuencia/timbre/ritmo; video se procesa por frames.</li>
+<li>Una base de datos de conocimiento llega "vacía" como un Excel — necesita plantillas y cuestionarios para estructurar el contenido de cada área.</li>
+<li>El caso Nu combina ingesta en tiempo real (Kafka), procesamiento en flujo (Spark) y modelos de ensamble con explicabilidad obligatoria (SHAP, WoE) por regulación financiera.</li>
+</ul></div>
 
 </div>
 </body>
