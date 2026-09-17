@@ -12,143 +12,103 @@
 <div class="wrap">
 <a class="back" href="index.html">← Fundamentos de Sistemas Embebidos</a>
 <div class="detail-head" style="border-color:#E8735C"><h2>Clase 04</h2>
-  <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 7 sep 2026 · Tema 2 (continuación) — Evolución x86 (Pentium P5 a AMD64), pipelines U/V, ejecución fuera de orden, compilación GCC, alineación de datos, MMX/SSE, batalla IA-64 vs. AMD64, HyperTransport e IMC.</p>
+  <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 7 sep 2026 · Tema 2 (continuación) — tras un breve recordatorio de la historia x86 vista en la Clase 03, la clase continúa con el Pentium P5, herramientas de compilación GCC, alineación de memoria, MMX/SSE, Pentium Pro (P6), la segunda guerra de los 64 bits (IA-64 vs. AMD64/Opteron).</p>
 </div>
 
-<div class="encorto"><h4>En corto</h4><ul>
-<li><strong>Distribución estadística:</strong> 60–75 % cargas/almacenamientos (simples) · 25–40 % cómputo pesado (FPU).</li>
-<li><strong>Pentium P5 (1993):</strong> doble pipeline U (cualquier instrucción) y V (solo simple load/store), separación interna de caché I/D.</li>
-<li><strong>Compilación GCC:</strong> `-c` (objeto .o) · `-S` (ensamblador .s) · `ld` (enlazador) para inspeccionar instrucciones exactas.</li>
-<li><strong>Alineación (struct packing):</strong> memoria en palabras de 8 bytes; relleno (padding) vs. empaquetado (`__attribute__((packed))`) para transmisión en ráfaga.</li>
-<li><strong>Evolución:</strong> MMX (1997, 64 bits SIMD compartidos con FPU) → SSE (128 bits XMM independientes) → NetBurst (20+ etapas, alto consumo).</li>
-<li><strong>Pentium Pro (P6):</strong> PAE (36 bits/64 GB), ejecución fuera de orden, especulativa, renombrado de registros.</li>
-<li><strong>Guerra 64 bits:</strong> Intel Itanium (IA-64) no retrocompatible = fracaso · AMD64/Opteron (x86-64) retrocompatible = éxito.</li>
-<li><strong>AMD Opteron:</strong> IMC integrado, HyperTransport, controlador de memoria en el die.</li>
-</ul></div>
-
-<div class="examen"><h4>🎯 Para el examen</h4><ul>
-<li><strong>Distribución de instrucciones:</strong> explicar por qué ~75 % son load/store y cómo fundamenta pipelines U/V y filosofía RISC.</li>
-<li><strong>Reducción algorítmica:</strong> optimización de complejidad a O(N log N) mediante ordenamiento (cierre convexo); relación con manipulación de memoria.</li>
-<li><strong>Mecanismos de aceleración:</strong> diferenciar Out-of-Order Execution, Ejecución Especulativa y Renombrado de Registros en multitarea y servidores.</li>
-<li><strong>Alineación de memoria:</strong> efecto de padding en structs de 64 bits; empaquetado para transmisión en ráfaga.</li>
-<li><strong>Evolución x86:</strong> de Pentium P5 a AMD64; retrocompatibilidad vs. rendimiento.</li>
-</ul></div>
-
-<details class="section-block sec" id="c4-distribucion-instrucciones" open><summary><span class="stitle">Distribución estadística de instrucciones</span></summary>
-<p><strong>Regla del 75/25 (o 60/40):</strong> en cualquier programa compilado:</p>
-<ul>
-<li><strong>60–75 %</strong> = operaciones simples de <strong>carga y almacenamiento</strong> (load/store), comparaciones, incrementos de índices. Se resuelven en el pipeline secundario V en pocos ciclos.</li>
-<li><strong>25–40 %</strong> = cómputo pesado: cálculo numérico, trigonométricas (sen, cos), logaritmos, exponenciales, derivadas, integrales, sigmoides para IA, multiplicación de matrices. Requieren FPU y pueden consumir cientos/miles de ciclos.</li>
-</ul>
-<p><strong>Implicación arquitectónica:</strong> esta distribución fundamenta la separación de pipelines en el Pentium P5 y la filosofía RISC de mantener instrucciones simples rápidas para aprovechar los ciclos muertos.</p>
+<details class="section-block sec" id="c4-pentium-p5" open><summary><span class="stitle">Microarquitectura del Pentium (P5): pipeline superescalar U/V y distribución estadística de instrucciones</span></summary>
+<p>Tras el litigio con AMD, Intel abandonó la nomenclatura numérica y desarrolló la arquitectura <strong>P5</strong>, dando origen al procesador <strong>Pentium</strong> en 1993 a <strong>200 MHz</strong>. El Pentium introdujo una microarquitectura superescalar con <strong>doble pipeline de ejecución</strong>: el <strong>pipeline U</strong> (principal) es capaz de ejecutar cualquier instrucción del catálogo x86, incluyendo cómputo pesado en la FPU; el <strong>pipeline V</strong> (secundario) está optimizado exclusivamente para instrucciones simples de carga, almacenamiento y manipulación de índices en memoria.</p>
+<p>Esta separación se apoya en un dato estadístico que el profesor marcó como examinable: en cualquier programa compilado, entre el <strong>60 % y el 75 %</strong> de las instrucciones son operaciones simples de carga y almacenamiento (<em>load/store</em>) para mover datos entre registros y memoria; solo entre el <strong>25 % y el 40 %</strong> corresponde a cómputo matemático pesado (FPU, derivadas, integrales, funciones trigonométricas, multiplicación de matrices o evaluación de funciones sigmoides para IA). Esta distribución fundamenta el uso de pipelines dobles: mientras el pipeline U procesa una instrucción pesada de FPU (que puede tomar varios ciclos), el pipeline V ejecuta en paralelo múltiples instrucciones simples de lectura/escritura, maximizando el uso de los transistores disponibles.</p>
 </details>
 
-<details class="section-block sec" id="c4-pentium-p5" open><summary><span class="stitle">Pentium P5 (1993) — Arquitectura superescalar de doble pipeline</span></summary>
+<details class="section-block sec" id="c4-compilacion-gcc" open><summary><span class="stitle">Herramientas de compilación — el toolchain GCC en sistemas embebidos</span></summary>
+<p>En el desarrollo de sistemas embebidos se usa el toolchain de GNU GCC desde terminal:</p>
 <ul>
-<li><strong>Pipeline U (principal):</strong> capaz de ejecutar cualquier instrucción, incluyendo cómputo pesado en FPU.</li>
-<li><strong>Pipeline V (secundario):</strong> optimizado únicamente para instrucciones simples (load/store) en paralelo.</li>
-<li><strong>Caché separada:</strong> aunque la RAM sea unificada (Von Neumann/CISC), internamente se separan caché de código (I-cache) y datos (D-cache) para evitar cuellos de botella en el bus.</li>
-<li><strong>Transición arquitectónica:</strong> de la serie 286/386/486 (pipeline simple de 5 etapas) a superescalar con dos pipelines independientes.</li>
+<li><strong>Compilación directa</strong>: <code>gcc programa.c -o ejecutable</code> produce el binario final (o <code>a.out</code> si se omite <code>-o</code>).</li>
+<li><strong>Generación de archivo objeto (<code>-c</code>)</strong>: <code>gcc -c modulo1.c</code> genera <code>modulo1.o</code>. Se usa en automatizaciones con <code>make</code> o <code>cmake</code> para compilaciones incrementales — la herramienta compara la fecha de modificación del <code>.c</code> contra la del <code>.o</code>; si el origen es anterior, omite la recompilación. El profesor lo resumió con la frase: <em>"compilar es caro, checar fechas es gratis."</em></li>
+<li><strong>Generación de ensamblador (<code>-S</code>)</strong>: <code>gcc -S programa.c</code> produce <code>programa.s</code> en ensamblador legible, para que el ingeniero inspeccione la generación de código a nivel de registros, evalúe la eficiencia de las instrucciones que dictó el compilador y verifique la ocupación real del procesador.</li>
+<li><strong>El enlazador (<code>ld</code>)</strong>: toma todos los archivos objeto (<code>.o</code>) y librerías para construir el ejecutable final.</li>
 </ul>
 </details>
 
-<details class="section-block sec" id="c4-compilacion-gcc" open><summary><span class="stitle">Herramientas de compilación — GCC y banderas clave</span></summary>
-<p><strong>Proceso de compilación modular en sistemas embebidos:</strong></p>
-<ul>
-<li><strong>Compilación directa:</strong> <code>gcc programa.c -o ejecutable</code> → binario final (o <code>a.out</code> sin `-o`).</li>
-<li><strong>Compilación por paso de objeto (`-c`):</strong> <code>gcc -c modulo1.c</code> → genera `modulo1.o`. Permite compilación incremental mediante `make` o `CMake` (comparación de fechas de modificación: si `.c` no cambió, evita recompilar).</li>
-<li><strong>Generación de ensamblador (`-S`):</strong> <code>gcc -S programa.c</code> → genera `programa.s` en código ASM humanamente legible. <strong>Propósito en sistemas embebidos:</strong> inspeccionar a nivel de registros, detectar cuellos de botella de CPU, realizar optimizaciones finas.</li>
-<li><strong>El enlazador (`ld`):</strong> toma todos los archivos objeto (`.o`) y librerías para construir el ejecutable final.</li>
-</ul>
+<details class="section-block sec" id="c4-cierre-convexo"><summary><span class="stitle">Ejemplo de reducción algorítmica: el Cierre Convexo (Convex Hull)</span></summary>
+<p>Para ilustrar la importancia de la manipulación eficiente de memoria, el profesor usa el problema del <strong>Cierre Convexo</strong> en geometría computacional: dado un conjunto de puntos en un plano, encontrar el contorno que los delimita. La evaluación por fuerza bruta de una nube de puntos tiene complejidad O(Nᴺ) u O(N²); el algoritmo se puede reducir a su cota inferior <strong>O(N log N)</strong> si los puntos se ordenan previamente en el plano. Dado que los algoritmos de ordenamiento (Heapsort, Mergesort, Bubble sort) consisten en casi un <strong>95 %</strong> de operaciones de comparación, carga, almacenamiento e incremento de índices, esta reducción de complejidad algorítmica se resuelve mediante gestión eficiente de memoria, sin saturar la ALU ni la FPU — es decir, se apoya en el mismo pipeline de instrucciones simples (U/V) descrito arriba.</p>
 </details>
 
-<details class="section-block sec" id="c4-alineacion-memory" open><summary><span class="stitle">Alineación de memoria y struct packing</span></summary>
-<p>En arquitecturas de 64 bits, la memoria se organiza en <strong>palabras de 8 bytes</strong> (no por bytes).</p>
-<p><strong>Ejemplo de struct con padding (desperdicio):</strong></p>
+<details class="section-block sec" id="c4-alineacion-memory" open><summary><span class="stitle">Alineación de memoria y empaquetado de estructuras (struct packing)</span></summary>
+<p>En arquitecturas modernas de 64 bits, la RAM no se direcciona byte por byte de forma aislada, sino en <strong>palabras de 8 bytes</strong> (64 bits). Al definir una estructura estándar en C:</p>
 <pre><code>struct Datos {
-    int a;    // 4 bytes nominales → 8 bytes (alineado a palabra)
-    int b;    // 4 bytes nominales → 8 bytes
-    double c; // 8 bytes nominales → 8 bytes
-};
-// Cálculo teórico: 4 + 4 + 8 = 16 bytes
-// Realidad: 8 + 8 + 8 = 24 bytes (relleno/padding)</code></pre>
-<p><strong>Solución — Empaquetado (`packed`):</strong> directiva del compilador para forzar almacenamiento contiguo sin bytes de relleno, optimizando transmisión en ráfaga por bus serie/red:</p>
+    int a;    // 4 bytes nominales
+    int b;    // 4 bytes nominales
+    double c; // 8 bytes nominales
+};</code></pre>
+<p>aunque la suma teórica de los tipos primitivos es 4+4+8 = <strong>16 bytes</strong>, el compilador asigna una palabra completa de 8 bytes a cada miembro para alinearlos con el bus de 64 bits, insertando bytes de relleno (<em>padding</em>). Como resultado, la estructura ocupa <strong>24 bytes</strong> en RAM. Para transmitir esta estructura de forma contigua por un bus serie o una interfaz de red sin enviar bytes vacíos, se aplica la directiva de empaquetado:</p>
 <pre><code>struct Datos {
     int a;
     int b;
     double c;
-} __attribute__((packed));  // Ahora pesa exactamente 16 bytes</code></pre>
+} __attribute__((packed));  // Ahora ocupa exactamente 16 bytes</code></pre>
 </details>
 
-<details class="section-block sec" id="c4-mmx-sse" open><summary><span class="stitle">Extensiones SIMD — MMX y SSE</span></summary>
-<ul>
-<li><strong>MMX (1997):</strong> extensión SIMD de 64 bits (compartida físicamente con la FPU). Manipulable como 8 `char`, 4 `short`, 2 `int` o 1 `long`. Paralelismo a nivel de palabra.</li>
-<li><strong>Memoria DDR (Double Data Rate):</strong> tecnología que duplica ancho de banda efectivo transfiriendo datos en flanco de subida Y de bajada de reloj, sin ensanchar el bus físico.</li>
-<li><strong>SSE (Streaming SIMD Extensions):</strong> reemplaza MMX introduciendo 8 registros independientes de 128 bits (XMM), desvinculados de la FPU. 70 nuevas instrucciones vectoriales para paralelismo de datos más potente.</li>
-</ul>
+<details class="section-block sec" id="c4-mmx-sse" open><summary><span class="stitle">MMX, memorias DDR, y la llegada de SSE</span></summary>
+<p>En <strong>1997</strong> se introdujo <strong>MMX</strong> (<em>Multimedia Extensions</em>) en los procesadores Pentium: una extensión SIMD (<em>Single Instruction Multiple Data</em>) que añade un registro vectorial de <strong>64 bits</strong>, compartido físicamente con la FPU, manipulable dinámicamente como 8 variables <code>char</code>, 4 <code>short</code>, 2 <code>int</code> o 1 <code>long</code>. La arquitectura MMX incorporó un pipeline de <strong>5 etapas</strong>, <strong>32 KB de caché L1</strong> y <strong>57 nuevos mnemónicos</strong> (llegando a un catálogo de unas <strong>43,000 instrucciones</strong>), pensados para acelerar la interfaz gráfica de Windows 95 y el renderizado 2D.</p>
+<p>En este mismo periodo surgieron las memorias <strong>DDR</strong> (<em>Double Data Rate</em>), que duplican el ancho de banda efectivo transfiriendo datos tanto en el flanco de subida como en el de bajada de la señal de reloj, sin ensanchar el bus físico.</p>
+<p>El <strong>Pentium II</strong> (1997, 450 MHz, núcleo P6) refinó la ejecución de código de 16 bits. En <strong>1999</strong> se lanzó el <strong>Pentium III</strong> (1 GHz+), que introdujo <strong>SSE</strong> (<em>Streaming SIMD Extensions</em>) para reemplazar a MMX: SSE añadió <strong>8 registros independientes de 128 bits</strong> (registros XMM), desvinculados de la FPU, con <strong>70 nuevas instrucciones vectoriales</strong> pensadas para procesamiento 3D.</p>
 </details>
 
-<details class="section-block sec" id="c4-pentium-pro" open><summary><span class="stitle">Pentium Pro (P6) — Salto a arquitectura moderna</span></summary>
+<details class="section-block sec" id="c4-pentium-pro" open><summary><span class="stitle">Pentium Pro (P6) — el salto a ejecución fuera de orden</span></summary>
+<p>El <strong>Pentium Pro</strong> (1995) introdujo la microarquitectura de sexta generación <strong>P6</strong>, orientada a servidores. Sus innovaciones principales:</p>
 <ul>
-<li><strong>PAE (Physical Address Extension):</strong> extiende bus de direcciones a 36 bits para direccionar hasta 64 GB de RAM, manteniendo registros internos y espacio lógico en 32 bits.</li>
-<li><strong>Ejecución fuera de orden (Out-of-Order Execution):</strong> reordena dinámicamente instrucciones entrantes para ejecutar las que ya tienen datos listos en caché, aprovechando ciclos de reloj.</li>
-<li><strong>Ejecución especulativa:</strong> ejecuta por adelantado ramas de código o instrucciones antes de saber si serán necesarias.</li>
-<li><strong>Renombrado de registros (Register Renaming):</strong> mapeo dinámico de registros nominales (AX, BX) hacia banco de registros físicos libres más grande, permitiendo ejecutar múltiples hilos en paralelo sin conflictos de dependencia.</li>
-</ul>
-</details>
-
-<details class="section-block sec" id="c4-evolucion-x86"><summary><span class="stitle">Evolución de x86 — Pentium II, III, 4</span></summary>
-<ul>
-<li><strong>Pentium II (1997):</strong> integra P6 con cache L2 externo, mantiene SSE inicial.</li>
-<li><strong>Pentium III (1999):</strong> añade SSE (8 registros XMM de 128 bits), desvincula del FPU, 70 nuevas instrucciones vectoriales.</li>
-<li><strong>Pentium 4 / NetBurst (2000):</strong> pipeline profundo de <strong>más de 20 etapas</strong> diseñado para alcanzar altas frecuencias (hasta 3.8 GHz), pero altamente ineficiente energéticamente por disipación de calor (400–500 W de consumo).</li>
+<li><strong>PAE</strong> (<em>Physical Address Extension</em>): extiende el bus de direcciones a <strong>36 bits</strong> para direccionar hasta <strong>64 GB de RAM</strong>, manteniendo los registros internos y el espacio lógico en 32 bits.</li>
+<li><strong>Pipeline de 14 etapas</strong>, con 3 decodificadores en paralelo (1 decodificador IA-32 completo y 2 decodificadores simples) capaces de procesar 3 microoperaciones simultáneas.</li>
+<li><strong>Microoperaciones (µ-ops)</strong>: el núcleo P6 funciona internamente como una arquitectura RISC — las instrucciones CISC complejas de alto nivel se descomponen en microoperaciones RISC elementales que se ejecutan en paralelo sobre el pipeline.</li>
+<li><strong>Ejecución fuera de orden</strong> (<em>Out-of-Order Execution</em>): el procesador reordena dinámicamente las instrucciones entrantes para ejecutar primero aquellas cuyos datos ya están disponibles en caché, aprovechando ciclos de reloj que de otro modo quedarían inactivos.</li>
+<li><strong>Ejecución especulativa</strong>: evaluación anticipada de ramas de código antes de confirmar si serán necesarias.</li>
+<li><strong>Renombrado de registros</strong> (<em>Register Renaming</em>): el hardware mapea los registros nominales (AX, BX…) hacia un banco de registros físicos mucho más grande en el silicio, permitiendo ejecutar varios hilos o programas de 16/32 bits de forma concurrente sin conflictos de dependencia.</li>
 </ul>
 </details>
 
-<details class="section-block sec" id="c4-guerra-64bits" open><summary><span class="stitle">Guerra de los 64 bits — IA-64 vs. AMD64</span></summary>
-<ul>
-<li><strong>Intel Itanium (IA-64):</strong> arquitectura mononúcleo de 64 bits <strong>no retrocompatible</strong> con x86 (IA-32). Requería recompilar completamente sistemas operativos y aplicaciones → <strong>fracaso comercial</strong>.</li>
-<li><strong>AMD64 / Opteron (x86-64):</strong> arquitectura de 64 bits con <strong>retrocompatibilidad nativa total</strong>:
-<ul>
-<li>Modo Real (8086)</li>
-<li>Modo Protegido (286/386)</li>
-<li>Modo Largo (64 bits)</li>
-</ul>
-Esto permitió migración suave de software heredado → <strong>éxito global de x86-64</strong>.</li>
-</ul>
+<details class="section-block sec" id="c4-netburst"><summary><span class="stitle">Pentium 4 y NetBurst — cuando más frecuencia no significa más rendimiento</span></summary>
+<p>En el año <strong>2000</strong>, Intel lanzó el <strong>Pentium 4</strong> basado en la arquitectura <strong>NetBurst</strong>. NetBurst implementó un pipeline de <strong>más de 20 etapas</strong>, diseñado para alcanzar frecuencias teóricas de hasta <strong>10 GHz</strong>. Sin embargo, la arquitectura sufrió severos problemas de disipación térmica — procesadores de <strong>400 W</strong> que, dada la baja eficiencia (~60 %) de los transformadores de la época, requerían fuentes de poder de hasta <strong>1.4 kW</strong> — y ofrecía un rendimiento por ciclo inferior al del propio Pentium III o a los procesadores AMD Athlon de la competencia.</p>
 </details>
 
-<details class="section-block sec" id="c4-amd-opteron" open><summary><span class="stitle">AMD Opteron — Innovaciones arquitectónicas</span></summary>
-<ul>
-<li><strong>IMC (Integrated Memory Controller):</strong> integración del controlador de memoria directamente en el die del procesador, eliminando dependencia del Northbridge externo.</li>
-<li><strong>HyperTransport:</strong> conmutador crossbar de alta velocidad para interconectar múltiples núcleos e interprocesadores en sistemas servidores.</li>
-<li><strong>Coherencia de caché:</strong> protocolo de sincronización entre cachés de múltiples procesadores en el mismo die o en sistemas de múltiples procesadores.</li>
-</ul>
-</details>
-
-<details class="section-block sec" id="c4-algoritmo-cierre-convexo"><summary><span class="stitle">Ejemplo — Reducción de complejidad: cierre convexo</span></summary>
-<p><strong>Problema:</strong> dado un conjunto de puntos en un plano, encontrar el contorno convexo que los delimita.</p>
-<ul>
-<li><strong>Fuerza bruta:</strong> evaluar todas las combinaciones de puntos → O(N²) o peor.</li>
-<li><strong>Optimización matemática:</strong> ordenar previamente los puntos → O(N log N) (Heapsort, Mergesort).</li>
-<li><strong>Relación arquitectónica:</strong> el algoritmo de ordenamiento realiza casi en su totalidad (95 %) operaciones de comparación, carga y almacenamiento (intercambiar índices, mover variables en memoria). <strong>No satura la FPU</strong> → se resuelve en pipelines de instrucciones simples (U/V).</li>
-</ul>
+<details class="section-block sec" id="c4-guerra-64bits" open><summary><span class="stitle">La segunda guerra de los 64 bits: Intel Itanium (IA-64) vs. AMD Opteron (AMD64)</span></summary>
+<p>El límite de 4 GB de RAM de las arquitecturas de 32 bits obligó la transición a los 64 bits. Intel desarrolló la arquitectura <strong>Itanium (IA-64)</strong> entre <strong>1989 y 2001</strong>: un diseño de 64 bits mononúcleo completamente nuevo que <strong>rompió la retrocompatibilidad binaria</strong> con x86 (IA-32). Adoptar Itanium exigía a las empresas recompilar e invertir en nuevos desarrollos de software y sistemas operativos — resultó en un <strong>fracaso comercial</strong>.</p>
+<p>En <strong>2003</strong>, AMD lanzó el <strong>Opteron</strong> con la arquitectura <strong>AMD64 (x86-64)</strong>, que ofrecía 64 bits con <strong>retrocompatibilidad nativa total</strong> para Modo Real (8086), Modo Protegido (286/386), Modo Virtual y Modo Largo (64 bits). La comparación de segunda generación entre ambas arquitecturas:</p>
+<table><thead><tr><th>Característica</th><th>Intel Itanium (2ª gen.)</th><th>AMD Opteron (2ª gen.)</th></tr></thead><tbody>
+<tr><td>ISA</td><td>IA-64, no compatible con x86/IA-32</td><td>AMD64/x86-64, compatible con IA-32, x86, MMX, SSE2, SSE3</td></tr>
+<tr><td>Frecuencia</td><td>733 MHz – 1.26 GHz</td><td>Hasta 3.2 GHz</td></tr>
+<tr><td>Núcleos</td><td>1 a 8 (arquitectura P7)</td><td>Hasta 16 (arquitectura K10)</td></tr>
+<tr><td>Controlador de memoria</td><td>Externo, en el Northbridge de la tarjeta madre (alto costo)</td><td><strong>IMC</strong> integrado dentro del die del procesador</td></tr>
+<tr><td>Interconexión</td><td>Bus frontal tradicional (FSB)</td><td>3 enlaces <strong>HyperTransport</strong> de alta velocidad + conmutador <em>crossbar</em> coherente</td></tr>
+</tbody></table>
+<p>El éxito comercial de AMD64 obligó a Intel a licenciar la arquitectura de 64 bits de AMD e integrarla en sus propios procesadores bajo la denominación <strong>Intel 64 / x86-64</strong>.</p>
 </details>
 
 <details class="section-block sec" id="c4-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<p>La clase arrancó con un breve recordatorio de las mismas bromas y anécdotas de la Clase 03 (la crisis de pensiones para 2050, el entusiasmo por el silicio expuesto, la secretaria Conchita, el origen de la preparatoria, el susto con la rata — ver <a href="clase-03.html#c3-contexto">Contexto de la Clase 03</a>). Lo nuevo de esta sesión:</p>
 <ul>
-<li><em>(Contexto)</em> <strong>Anécdota del Dr. Urrutia:</strong> demostración en tres pizarrones de la reducción de cierre convexo a N log N para artículo científico.</li>
-<li><em>(Contexto)</em> <strong>Primera computadora del profesor (1995):</strong> Pentium 75 MHz, 8 MB RAM, disco 800 MB. Comparación con potencia de ESP32 actual.</li>
-<li><em>(Contexto)</em> <strong>Fuentes de poder de los 90s:</strong> eficiencia del 60%, transformadores basados, requería 1.4 kW para alimentar Pentium 4 de 400 W.</li>
-<li><em>(Contexto)</em> <strong>Cartas ASM:</strong> diseño de máquinas de estados a nivel de transistores (referencia al libro del Dr. Jesús Carmona).</li>
+<li><strong>Crítica a los hábitos de depuración modernos</strong>: el profesor critica con sarcasmo el uso excesivo de herramientas automáticas o de asistentes de IA en vez de analizar el código ensamblador a nivel de registros.</li>
+<li><strong>Referencias culturales</strong>: menciones jocosas a los círculos de sal usados contra demonios en el manga japonés, y a personajes de Bob Esponja.</li>
+<li><strong>Anécdota del Dr. Urrutia en la maestría</strong>: recuerda cuando el Dr. Urrutia demostró en tres pizarrones la reducción de la cota algorítmica del Cierre Convexo a O(N log N) para la redacción de un artículo científico.</li>
+<li><strong>Su primera computadora (1995)</strong>: un Pentium a 75 MHz con 8 MB de RAM y disco duro de 800 MB — lo compara con la potencia muy superior de un microcontrolador ESP32 actual.</li>
+<li><strong>Broma de discalculia</strong>: se ríe de sí mismo al confundir 23 por 32 en el pizarrón durante un trámite administrativo.</li>
 </ul>
 </details>
 
 <details class="section-block sec" id="c4-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
 <ul>
-<li>Profundización en arquitectura AMD Opteron: estructura interna de enlaces interprocesador (HyperTransport), matriz de conmutación crossbar, protocolo de coherencia de caché en Opteron.</li>
+<li><strong>Requisitos para la práctica de laboratorio</strong>: llevar grabada previamente la imagen del sistema operativo Raspbian en la tarjeta MicroSD, y presentar los circuitos ya cableados en la tablilla de pruebas (LEDs, resistencias, circuito integrado 747/ULN) — verificar la conexión manual de las líneas de tierra (V<sub>SS</sub>) y alimentación (V<sub>CC</sub>) al circuito integrado ULN, recordando que en los diagramas lógicos frecuentemente se omiten los pines de alimentación física.</li>
+<li><strong>Tema a continuar en teoría</strong>: finalizar los detalles de la arquitectura del AMD Opteron, profundizando en la estructura de sus enlaces HyperTransport y la matriz de conmutación <em>crossbar</em>.</li>
 </ul>
 </details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li><strong>Pipeline superescalar U/V del Pentium</strong>: se apoya en que 60–75 % del código compilado son operaciones simples de load/store, dejando solo 25–40 % para cómputo FPU pesado.</li>
+<li><strong>Alineación de memoria (struct packing)</strong>: en 64 bits la RAM se direcciona en palabras de 8 bytes; el padding infla una struct de 16 a 24 bytes salvo que se use <code>__attribute__((packed))</code>.</li>
+<li><strong>Pentium Pro (P6)</strong>: introduce ejecución fuera de orden, ejecución especulativa y renombrado de registros — mecanismos que perduran en los procesadores modernos.</li>
+<li><strong>MMX → SSE</strong>: de un registro de 64 bits compartido con la FPU a 8 registros XMM de 128 bits independientes, pensados primero para 2D (Windows 95) y luego para 3D.</li>
+<li><strong>IA-64 fracasó por romper la retrocompatibilidad</strong>; AMD64 triunfó por mantenerla — Intel terminó licenciando la arquitectura de 64 bits de su propio rival.</li>
+</ul></div>
 
 </div>
 </body>
