@@ -12,105 +12,125 @@
 <div class="wrap">
 <a class="back" href="index.html">← Administración de Servicios de Internet</a>
 <div class="detail-head" style="border-color:#7C9CD6"><h2>Clase 01</h2>
-  <p class="prof">Mtro. Juan Ángel Calvillo Pérez · 26 ago 2026 · Tema 1 — Introducción · repaso de arquitectura, jerarquía de directorios de Linux (FHS), distribuciones y práctica de terminal. De aquí sale la Práctica 0.</p>
+  <p class="prof">Mtro. Juan Ángel Calvillo Pérez · 26 ago 2026 · Tema 1 — De la Máquina de Turing a la arquitectura Von Neumann/Harvard, jerarquía de directorios de Linux (FHS), criterios para elegir distribución, y arranque de la Práctica 0 en terminal (procesos, archivos y permisos).</p>
 </div>
 
-<div class="encorto"><h4>En corto</h4><ul>
-<li>Repaso de arquitectura: Von Neumann vs. Harvard RISC y <em>pipeline</em> de 4 etapas.</li>
-<li><strong>FHS</strong>: jerarquía de directorios de Linux y su prioridad (<code>/boot /bin /dev /etc /usr /lib</code> alta; <code>/home /root /var</code> media; <code>/tmp</code> baja).</li>
-<li>Distribuciones de Linux y para quién es cada una.</li>
-<li>Terminal: <code>whereis</code>/<code>which</code>, <code>man</code>, <code>ps</code>/<code>ps aux</code>, <code>top</code>, <code>nano</code>, <code>cat</code>, <code>ls</code>, <code>mkdir</code>.</li>
-<li>De esta clase sale la <a href="evaluacion.html" style="color:var(--indigo)">Práctica 0</a>.</li>
+<details class="section-block sec" id="c1-turing" open><summary><span class="stitle">El procesador como Máquina de Turing</span></summary>
+<p>El profesor abrió el curso definiendo el <strong>procesador</strong> como el elemento central de la computadora, encargado de ejecutar los programas cargados en memoria. Explicó que este mecanismo electrónico no es más que la abstracción física de un modelo matemático mucho más antiguo: la <strong>Máquina de Turing</strong> propuesta por Alan Turing, formalizada como un autómata de doble pila con un lenguaje finito de operaciones. Su importancia histórica es que representa la demostración matemática de que un sistema autómata simple puede, en principio, computar cualquier cosa computable — es la base teórica de la que parte toda la arquitectura de computadoras que se vería después.</p>
+</details>
+
+<details class="section-block sec" id="c1-von-neumann" open><summary><span class="stitle">Arquitectura de Von Neumann y su cuello de botella</span></summary>
+<p>Para pasar del modelo abstracto de Turing a una implementación física real con componentes electrónicos, surge la <strong>arquitectura de Von Neumann</strong>, compuesta por: el <strong>controlador</strong> (genera las señales de activación internas), el <strong>registro de estado</strong> (guarda banderas y el estado del procesamiento), el <strong>registro de propósito general</strong> (datos de trabajo temporales), el <strong>contador de programa</strong> (apunta a la siguiente instrucción), la <strong>ALU</strong> (operaciones aritméticas y lógicas), una <strong>unidad de almacenamiento única</strong> que contiene en el mismo espacio de direccionamiento el programa, los datos y la pila, y el <strong>mapeo de entradas/salidas</strong>.</p>
+<p>El problema central de este diseño es el llamado <strong>cuello de botella de Von Neumann</strong>: al compartir un solo bus y un solo espacio de memoria entre instrucciones y datos, el ciclo de ejecución (<strong>Fetch → Decode → Execute → Write Back</strong>) tiene que correr en serie, y durante cada fase la mayoría de los demás componentes están inactivos — mientras se lee la instrucción (Fetch), la ALU y el decodificador no hacen nada; durante Decode, el bus y la ALU están ociosos; durante Execute, el bus de memoria y el decodificador tampoco trabajan. Para ilustrarlo, se analizó un ejemplo comparativo ejecutando un ciclo <code>for (int i = 0; i &lt; n; i++)</code> en ensamblador sobre una arquitectura CISC tradicional: se mostró que solo entre un <strong>20% y un 33%</strong> del tiempo la ALU está haciendo cómputo real, y el resto — entre un <strong>66% y un 80%</strong> del tiempo — se pierde en accesos a memoria e inactividad de componentes.</p>
+</details>
+
+<details class="section-block sec" id="c1-harvard-pipeline" open><summary><span class="stitle">Arquitectura Harvard/RISC y segmentación de instrucciones (pipelining)</span></summary>
+<p>Para resolver esta ineficiencia, los investigadores <strong>David Patterson y John Hennessy</strong> propusieron el modelo <strong>Load-Store (carga y almacenamiento)</strong>: demostraron matemáticamente que cualquier programa, sin importar su complejidad, puede reescribirse usando solo operaciones simples de carga y almacenamiento sobre una ALU básica. De esa idea nace la filosofía <strong>RISC (Reduced Instruction Set Computer)</strong> combinada con la <strong>arquitectura Harvard</strong>, que separa físicamente la memoria de instrucciones de la memoria de datos — permitiendo leer una instrucción y acceder a un dato de forma simultánea, sin las colisiones del modelo Von Neumann.</p>
+<p>Esta separación es lo que hace posible la <strong>segmentación de instrucciones (pipelining)</strong>: dividir la ejecución de cada instrucción en 4 etapas (Fetch, Decode, Execute, Write Back) que corren en ciclos de reloj traslapados. Así se ve en la tabla que se usó en clase, donde cada fila es un ciclo de reloj y cada columna una instrucción distinta avanzando por las etapas:</p>
+<table><thead><tr><th>Ciclo</th><th>Fetch (F)</th><th>Decode (D)</th><th>Execute (E)</th><th>Write Back (WB)</th></tr></thead><tbody>
+<tr><td>T1</td><td>I1</td><td></td><td></td><td></td></tr>
+<tr><td>T2</td><td>I2</td><td>I1</td><td></td><td></td></tr>
+<tr><td>T3</td><td>I3</td><td>I2</td><td>I1</td><td></td></tr>
+<tr><td>T4</td><td>I4</td><td>I3</td><td>I2</td><td>I1</td></tr>
+<tr><td>T5+</td><td>I5</td><td>I4</td><td>I3</td><td>I2</td></tr>
+</tbody></table>
+<p>Tras la latencia inicial de llenado del "tubo" (4 ciclos), el procesador logra completar <strong>una instrucción por cada ciclo de reloj</strong>, en vez de una instrucción cada 4 ciclos — de ahí el salto de eficiencia frente a Von Neumann.</p>
+</details>
+
+<details class="section-block sec" id="c1-fhs" open><summary><span class="stitle">Jerarquía de directorios del sistema operativo Linux (FHS)</span></summary>
+<p>En la segunda parte de la sesión se pasó de teoría de arquitectura a sistemas operativos, analizando la jerarquía del sistema de archivos Linux a partir de la raíz <code>/</code>. El profesor detalló los directorios esenciales del sistema, cada uno con su prioridad:</p>
+<table><thead><tr><th>Directorio</th><th>Prioridad</th><th>Qué contiene</th></tr></thead><tbody>
+<tr><td><code>/boot</code></td><td>Alta</td><td>Archivos esenciales para el arranque del sistema y la carga del kernel de Linux.</td></tr>
+<tr><td><code>/bin</code></td><td>Alta</td><td>Comandos y binarios esenciales, ejecutables por cualquier usuario del sistema.</td></tr>
+<tr><td><code>/dev</code></td><td>Alta</td><td>Archivos de dispositivos (<em>devices</em>): controladores y configuraciones para interactuar con hardware interno y externo.</td></tr>
+<tr><td><code>/etc</code></td><td>Alta</td><td>Configuración del sistema operativo y de las aplicaciones instaladas. El profesor lo comparó con borrar <code>System32</code> en Windows: tocarlo mal puede tumbar el sistema.</td></tr>
+<tr><td><code>/usr</code></td><td>Alta</td><td>Programas, bibliotecas, documentación y archivos estáticos accesibles por los usuarios.</td></tr>
+<tr><td><code>/lib</code></td><td>Alta</td><td>Bibliotecas y librerías compartidas esenciales para los binarios del sistema.</td></tr>
+<tr><td><code>/var</code></td><td>Media</td><td>Archivos de datos variables: logs, temporales del sistema, colas de impresión.</td></tr>
+<tr><td><code>/root</code></td><td>Media</td><td>Directorio personal del superusuario (administrador).</td></tr>
+<tr><td><code>/home</code></td><td>—</td><td>Directorios personales de los usuarios estándar.</td></tr>
+<tr><td><code>/tmp</code></td><td>Baja</td><td>Archivos temporales de sesión. Se eliminan al reiniciar o desenergizar el equipo, porque la RAM se reescribe.</td></tr>
+<tr><td><code>/opt</code></td><td>—</td><td>Software adicional y aplicaciones de terceros instaladas opcionalmente.</td></tr>
+</tbody></table>
+<p>A propósito de <code>/tmp</code> y la memoria RAM, el profesor aclaró la diferencia entre <strong>rutas relativas</strong> (cortas, respecto al directorio actual) y <strong>rutas absolutas</strong> (completas, desde la raíz), y explicó que al reiniciar un equipo la RAM se desenergiza, liberando esas direcciones de memoria — por eso lo que está en <code>/tmp</code> desaparece.</p>
+</details>
+
+<details class="section-block sec" id="c1-distros" open><summary><span class="stitle">Criterios de selección de distribuciones de Linux</span></summary>
+<p>El profesor presentó una clasificación técnica para elegir la distribución adecuada según el escenario de uso:</p>
+<table><thead><tr><th>Distribución</th><th>Perfil / uso recomendado</th><th>Características</th></tr></thead><tbody>
+<tr><td>Ubuntu</td><td>Principiantes / usuario final</td><td>Fácil de usar, entorno gráfico intuitivo y semejante a Windows.</td></tr>
+<tr><td>Debian</td><td>Servidores</td><td>Alta estabilidad operativa; actualización controlada de paquetes.</td></tr>
+<tr><td>Fedora</td><td>Desarrolladores / programación</td><td>Integración nativa con las últimas tecnologías y soporte de hardware.</td></tr>
+<tr><td>CentOS / AlmaLinux</td><td>Servidores y almacenamiento</td><td>Versiones gratuitas basadas en Red Hat. CentOS perdió soporte formal (2017–2019) y fue sustituido por AlmaLinux.</td></tr>
+<tr><td>Red Hat (RHEL)</td><td>Servidores empresariales</td><td>Entorno empresarial de paga con soporte oficial.</td></tr>
+<tr><td>Arch Linux</td><td>Usuarios avanzados</td><td>Instalación y configuración 100% personalizada y manual.</td></tr>
+<tr><td>Linux Mint</td><td>Migración empresarial</td><td>Interfaz casi idéntica a Windows; ideal para transición de usuarios.</td></tr>
+<tr><td>Kali Linux</td><td>Ciberseguridad</td><td>Distribución especializada 100% en pruebas de penetración y auditoría.</td></tr>
+</tbody></table>
+</details>
+
+<details class="section-block sec" id="c1-terminal-procesos" open><summary><span class="stitle">Terminal: localización de comandos y monitoreo de procesos</span></summary>
+<p>Arrancó la Práctica 0 con ejercicios guiados en terminal. Primero se comparó <code>whereis &lt;comando&gt;</code> con <code>which &lt;comando&gt;</code> — un alumno preguntó la diferencia respecto a los comandos equivalentes en Windows, y el profesor demostró en vivo que <code>whereis ls</code> muestra todas las rutas asociadas (binarios, fuentes y manuales comprimidos), mientras que <code>which ls</code> devuelve únicamente la ruta absoluta del archivo ejecutable.</p>
+<p>Después se vio <code>man &lt;comando&gt;</code>, que abre el manual oficial en terminal (por ejemplo <code>man ls</code>); se sale de la vista con la tecla <kbd>q</kbd> o con <kbd>Ctrl+Z</kbd>.</p>
+<p>Para procesos: <code>ps</code> muestra los procesos activos de la sesión actual (columnas PID, terminal, tiempo, comando), mientras que <code>ps aux</code> lista con detalle todos los procesos del sistema. El profesor desglosó el significado exacto de cada bandera:</p>
+<ul>
+<li><code>a</code> — muestra los procesos de todos los usuarios.</li>
+<li><code>u</code> — muestra información detallada de uso de recursos (%CPU, %MEM, usuario).</li>
+<li><code>x</code> — muestra procesos que no tienen una terminal (TTY) asociada.</li>
+</ul>
+<p><strong>Aplicación en ciberseguridad:</strong> la bandera <code>x</code> es la primera que se revisa ante sospecha de malware, porque los procesos maliciosos suelen correr sin terminal asociada, escondidos en segundo plano. Complementando esto, <code>top</code> monitoriza en tiempo real los procesos en ejecución y el consumo dinámico de recursos del sistema.</p>
+</details>
+
+<details class="section-block sec" id="c1-terminal-archivos" open><summary><span class="stitle">Manipulación de archivos de texto y concatenación</span></summary>
+<p>Se trabajó la creación y manipulación de archivos planos: <code>nano &lt;archivo&gt;</code> abre el editor de texto en terminal (se guarda y sale con <kbd>Ctrl+X</kbd>, confirmando la escritura); <code>cat &lt;archivo&gt;</code> despliega el contenido en pantalla, y <code>cat -n &lt;archivo&gt;</code> hace lo mismo pero numerando las líneas — útil para trabajo colaborativo o depuración de código.</p>
+<p>Sobre concatenación y redirección con <code>cat</code>: ejecutar <code>cat archivo1.txt archivo2.txt</code> imprime consecutivamente el contenido de ambos archivos en pantalla. Usando el operador de redirección se pueden fusionar en un archivo nuevo: <code>cat archivo1.txt archivo2.txt &gt; todito.txt</code> crea un archivo con el contenido combinado en el orden especificado. El profesor enfatizó un detalle que parece obvio pero se presta a errores: <strong>alterar el orden de los factores cambia el resultado</strong> — <code>cat archivo2.txt archivo1.txt &gt; todito2.txt</code> da un archivo distinto al anterior, con el contenido en el orden inverso.</p>
+</details>
+
+<details class="section-block sec" id="c1-ls-permisos" open><summary><span class="stitle">Listado detallado de archivos y sistema de permisos</span></summary>
+<p>Se analizaron las banderas del comando <code>ls</code>: <code>ls -l</code> muestra el formato largo (permisos, propietario, grupo, tamaño en bytes, fecha y nombre); <code>ls -a</code> muestra todos los archivos incluyendo los ocultos (los que empiezan con punto) y las referencias <code>.</code> (directorio actual) y <code>..</code> (directorio anterior); <code>ls -s</code> y <code>ls -h</code> muestran el tamaño en kilobytes o en formato legible. Las banderas se pueden combinar libremente: <code>ls -la</code>, <code>ls -lsa</code>, etc.</p>
+<p><strong>Estructura octal de permisos:</strong> la primera columna de <code>ls -l</code> expone los permisos como una cadena de 10 caracteres (por ejemplo <code>drwxrwxrwx</code>), dividida en 4 bloques: el primer carácter indica el tipo de elemento (<code>-</code> archivo plano, <code>d</code> directorio); las posiciones 2–4 son los permisos del propietario (<em>Owner</em>); las posiciones 5–7 son los del grupo (<em>Group</em>); las posiciones 8–10 son los de otros/invitados (<em>Others</em>). Los valores numéricos son: Read = 4, Write = 2, Execute = 1 — se suman para formar cada dígito octal.</p>
+<p>El profesor advirtió con firmeza que <strong>nunca se debe usar la asignación 777</strong> (acceso total a todos), porque permite que cualquier usuario o proceso no autorizado escriba o ejecute contenido en ese archivo o carpeta — un riesgo de seguridad grave e innecesario en la inmensa mayoría de los casos.</p>
+</details>
+
+<details class="section-block sec" id="c1-mkdir" open><summary><span class="stitle">Creación avanzada de directorios (mkdir)</span></summary>
+<p>Para cerrar el bloque de terminal se vieron las variantes avanzadas de <code>mkdir</code>:</p>
+<ul>
+<li><code>mkdir &lt;nombre&gt;</code> — crea una carpeta con los permisos por defecto del sistema (habitualmente 755).</li>
+<li><code>mkdir -m &lt;octal&gt; &lt;nombre&gt;</code> — asigna explícitamente la máscara de permisos al crear el directorio. Ejemplo usado en clase: <code>mkdir -m 700 reprobados21</code>, que otorga acceso exclusivo al propietario.</li>
+<li><code>mkdir -p &lt;ruta_completa&gt;</code> — crea de forma recursiva un árbol completo de directorios y subdirectorios en un solo comando. Ejemplo: <code>mkdir -p reprobados/271/ads</code>.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c1-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> Explicó las raíces árabes de la palabra "algoritmo", asociándola a Al-Juarismi (Al-Khwarizmi) y a los términos "al-gabr"/"al-gorm", con pasajes históricos y filosóficos sobre el intelecto como regalo divino.</li>
+<li><em>(Contexto)</em> Mencionó que hace más de 2,000 años los matemáticos árabes ya estudiaban problemas de búsqueda relacionados con lo que hoy es la Biblioteca de Alejandría.</li>
+<li><em>(Contexto)</em> Contó que Isaac Newton pasó gran parte de su vida intentando transmutar plomo en oro mediante procesos alquímicos.</li>
+<li><em>(Contexto)</em> Mencionó la existencia de un diamante gigante en Urano y bromeó sobre lo poco que valdría comercialmente si se pudiera traer a la Tierra (por la sobreoferta).</li>
+<li><em>(Contexto)</em> Relató la trágica historia personal de Alan Turing junto con sus contribuciones al diseño del autómata abstracto.</li>
+<li><em>(Contexto)</em> Contó el clásico chiste académico de la "vaca esférica en el vacío que consume un flujo constante de masa", sobre cómo distintas facultades simplifican los problemas.</li>
+<li><em>(Contexto)</em> Advirtió que en el entorno laboral real no siempre habrá interfaces gráficas disponibles — hay que dominar la terminal.</li>
+<li><em>(Contexto)</em> Bromeó con el grupo sobre ser grabado en clase y sobre hacer videos de TikTok.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c1-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<p>De esta clase sale la <a href="evaluacion.html" style="color:var(--indigo)">Práctica 0 — "Uso básico de Linux"</a>, con estos requisitos:</p>
+<ul>
+<li><strong>Sección de Desarrollo:</strong> todas las instrucciones y comandos explicados y ejecutados de forma guiada durante la clase.</li>
+<li><strong>Sección de Resultados:</strong> investigación, prueba y captura de pantalla ejecutando los comandos <code>tree</code>, <code>ls -d</code>, <code>ls -h</code>, <code>ls -R</code>, <code>grep</code>, <code>touch</code> y <code>tee</code> (no vistos en clase — quedan de tarea de investigación).</li>
+<li><strong>Formato de entrega:</strong> archivo único individual en PDF.</li>
+<li><strong>Nomenclatura oficial obligatoria:</strong> <code>P0_usobasico_INICIALES.pdf</code> (ejemplo: <code>P0_usobasico_JACP.pdf</code>).</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Von Neumann tiene un cuello de botella por bus y memoria compartidos; Harvard/RISC lo resuelve separando instrucciones y datos, habilitando el pipelining.</li>
+<li>Jerarquía Linux: <code>/etc</code>, <code>/bin</code> y <code>/boot</code> son de prioridad alta — tocarlos mal puede tumbar el sistema.</li>
+<li>Permisos: nunca usar 777. Se dividen en Propietario/Grupo/Otros, con valores Read=4, Write=2, Execute=1.</li>
+<li><code>ps aux</code> con bandera <code>x</code> (procesos sin terminal) es el primer chequeo ante sospecha de malware.</li>
+<li><code>whereis</code> da toda la instalación (útil para migraciones); <code>which</code> solo el binario ejecutable.</li>
 </ul></div>
-
-<div class="examen"><h4>🎯 Para el examen</h4><ul>
-<li>El permiso <code>777</code> nunca se usa por defecto.</li>
-<li>En carpetas, el permiso <code>x</code> deja <em>entrar</em> a otros usuarios; a un atacante le basta el permiso de ejecución → nunca dejar carpetas/archivos dudosos con <code>x</code> para terceros.</li>
-<li><code>ps aux</code> (modificador <code>x</code>): procesos <strong>sin terminal asociada</strong> = primer indicio de malware.</li>
-<li><code>whereis</code> (toda la carpeta de instalación + config, para migraciones) vs. <code>which</code> (solo el binario ejecutable).</li>
-</ul></div>
-
-<div class="section-block"><h4>Repaso de arquitectura</h4>
-<p>El <strong>procesador</strong> ejecuta el algoritmo y los datos, que están juntos en la <strong>memoria principal</strong> — "un adminículo electrónico que ejecuta máquinas de Turing".</p>
-<p><strong>Von Neumann</strong> — compatible con la máquina de Turing. Componentes: controlador (señales de activación), registro de estado, registro de propósito general, contador de programa (PC), ALU y <strong>una sola unidad de almacenamiento</strong> (programa + datos + pila).</p>
-<p><strong>Cuello de botella de Von Neumann</strong>: "de un pasito a la vez" — el procesador va a memoria, hace <em>fetch</em> de la instrucción, la decodifica, vuelve por los datos, los procesa en la ALU y escribe. Mientras una fase ocurre, las demás unidades y buses están inactivos.</p>
-<p><strong>Modelo Load-Store (Peterson)</strong>: cualquier programa se puede reescribir con más instrucciones cortas basadas solo en <strong>carga</strong> y <strong>almacenamiento</strong> y una ALU simple.</p>
-<p><strong>Harvard RISC</strong>: separa físicamente instrucciones (solo lectura) y datos (lectura/escritura) → se puede leer y escribir a la vez.</p>
-<p><strong>Segmentación (pipelining)</strong>: 4 etapas concurrentes por ciclo — <strong>Fetch → Decode → Execute → Write Back</strong>; tras el arranque sale una instrucción por ciclo.</p>
-<pre><code>       T1    T2    T3    T4    T5    T6    T7
-I1     F     D     E     WB
-I2           F     D     E     WB
-I3                 F     D     E     WB
-I4                       F     D     E     WB
-                         └── desde aquí: 1 resultado por ciclo</code></pre></div>
-
-<div class="section-block"><h4>Jerarquía de directorios de Linux (FHS)</h4>
-<table><thead><tr><th>Directorio</th><th>Prioridad</th><th>Para qué sirve</th></tr></thead><tbody>
-<tr><td><code>/</code></td><td>—</td><td>Raíz de toda la estructura.</td></tr>
-<tr><td><code>/boot</code></td><td>alta</td><td>Arranque del SO y almacenamiento del <strong>kernel</strong>.</td></tr>
-<tr><td><code>/bin</code></td><td>alta</td><td>Binarios esenciales que todos pueden ejecutar (<code>cd</code>, <code>ls</code>).</td></tr>
-<tr><td><code>/dev</code></td><td>alta</td><td>Dispositivos y configuración de <strong>drivers</strong> (impresoras, discos, escáneres).</td></tr>
-<tr><td><code>/etc</code></td><td>alta</td><td>Archivos de configuración del SO y de las apps instaladas.</td></tr>
-<tr><td><code>/usr</code></td><td>alta</td><td>Programas, bibliotecas, documentación y archivos <strong>estáticos</strong>.</td></tr>
-<tr><td><code>/lib</code></td><td>alta</td><td>Librerías esenciales del sistema.</td></tr>
-<tr><td><code>/home</code></td><td>media</td><td>Carpetas personales de los usuarios.</td></tr>
-<tr><td><code>/root</code></td><td>media</td><td>Directorio del superusuario. Media porque hay métodos inseguros para reponer su contraseña.</td></tr>
-<tr><td><code>/var</code></td><td>media</td><td>Archivos variables: temporales, ocultos y <strong>logs</strong>. Borrarlo no tira el SO; elimina de inmediato.</td></tr>
-<tr><td><code>/tmp</code></td><td>baja</td><td>Temporales. Lo borrado se puede recuperar con un script de Bash <strong>mientras no se reinicie</strong> (al reiniciar, la RAM se desenergiza y esos espacios quedan libres).</td></tr>
-<tr><td><code>/opt</code></td><td>—</td><td>Software adicional instalado por un usuario común.</td></tr>
-<tr><td><code>/proc</code></td><td>—</td><td>Información de procesos del kernel.</td></tr>
-</tbody></table></div>
-
-<div class="section-block"><h4>Distribuciones de Linux</h4>
-<table><thead><tr><th>Distro</th><th>Perfil / uso</th></tr></thead><tbody>
-<tr><td><strong>Linux Mint</strong></td><td>"Principiante del principiante"; la más parecida a Windows → puente inicial en migraciones antes de Ubuntu.</td></tr>
-<tr><td><strong>Ubuntu</strong></td><td>Principiantes / usuario final. Para aprender. No recomendada para servidores críticos por sus actualizaciones inestables.</td></tr>
-<tr><td><strong>Debian</strong></td><td>Usuarios estables. Muy recomendada para <strong>servidores</strong> por su estabilidad.</td></tr>
-<tr><td><strong>Fedora</strong></td><td>Desarrollo y programadores; conexiones ágiles con tecnologías inalámbricas recientes.</td></tr>
-<tr><td><strong>CentOS / AlmaLinux</strong></td><td>CentOS = copia gratuita de RedHat para servidores de almacenamiento; perdió soporte pero se sigue usando. AlmaLinux es su sucesor.</td></tr>
-<tr><td><strong>RedHat (RHEL)</strong></td><td>Distribución comercial líder para servidores empresariales; su licencia frena la adopción en algunas organizaciones.</td></tr>
-<tr><td><strong>Arch Linux</strong></td><td>Usuarios avanzados. Instalación manual personalizada.</td></tr>
-<tr><td><strong>Kali Linux</strong></td><td>100 % auditoría de seguridad y hacking ético.</td></tr>
-</tbody></table></div>
-
-<div class="section-block"><h4>Terminal — localización y ayuda</h4>
-<pre><code>whereis ls      # ruta completa del paquete + sus directorios de config
-                #   (útil para migraciones)   ej. -> /usr/bin/ls
-which ls        # SOLO la ruta del archivo ejecutable
-pwd             # directorio actual (print working directory)
-man ls          # manual local del comando (funciona sin internet); salir con  q</code></pre>
-<p><strong>⚠️ Examen</strong>: distinguir <code>whereis</code> (mapea toda la instalación, documentación y binarios) de <code>which</code> (solo el binario ejecutable).</p></div>
-
-<div class="section-block"><h4>Terminal — procesos</h4>
-<pre><code>ps              # procesos de esta terminal: PID, terminal, TIME, comando
-kill &lt;PID&gt;       # termina un proceso
-ps aux          # TODOS los procesos del sistema (incluidos los del kernel)
-                #   a = de todos los usuarios
-                #   u = uso de recursos (%CPU, %MEM)
-                #   x = procesos SIN terminal asociada
-top             # monitoreo dinámico en tiempo real</code></pre>
-<p><strong>⚠️ Examen / seguridad</strong>: ante sospecha de malware, la primera herramienta es <code>ps aux</code> mirando el modificador <code>x</code>: un proceso sin <code>tty</code> es síntoma inmediato de virus (suelen correr en background).</p></div>
-
-<div class="section-block"><h4>Terminal — ver, editar y crear</h4>
-<pre><code>nano archivo            # editor de texto plano; guardar/salir con  Ctrl + X
-cat archivo             # muestra el contenido
-cat -n archivo          # con líneas numeradas
-cat a b                 # concatena a y b en la salida
-cat a b &gt; salida        # une a y b en un archivo nuevo (el ORDEN importa)
-
-ls -l           # vista larga: permisos, propietario, grupo, tamaño, fecha
-ls -a           # incluye ocultos (empiezan con  .  )
-ls -s           # tamaño en KB
-ls -las         # las tres juntas (= ls -l -a -s)
-
-mkdir nombre            # por defecto: dueño rwx ; grupo y otros r-x
-mkdir -m 700 nombre     # crea con un modo de permisos específico
-mkdir -p a/b/c          # crea todo el árbol de subcarpetas en una línea</code></pre></div>
-
-<div class="section-block"><h4>Contexto de clase — <em>no va para examen</em></h4>
-<p>Etimología: "álgebra" ← <em>al-jabr</em>; "algoritmo" ← <em>Al-Juarismi</em>. Recorrido euleriano (pasar por cada calle una sola vez). Transmutación de metales: posible salvo cruzar el hierro (el más estable) — antes es fusión, después fisión; no se hace por costo energético. Máquina de Turing: autómata de doble pila, operaciones mover izquierda/derecha/leer; sirve para demostrar que una solución converge.</p></div>
-
-<p class="empty" style="margin-top:28px">Este material también está en el <a href="index.html#tema-1" style="color:var(--indigo)">Tema 1</a> de la materia.</p>
 
 </div>
 </body>
