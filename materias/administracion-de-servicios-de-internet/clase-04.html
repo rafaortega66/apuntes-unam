@@ -11,147 +11,121 @@
 <body>
 <div class="wrap">
 <a class="back" href="index.html">← Administración de Servicios de Internet</a>
-<div class="detail-head" style="border-color:#45B8A8"><h2>Clase 04</h2>
-  <p class="prof">Mtro. Baldomero de Jesús Hernández Bañuelos · 7 sep 2026 · DHCP (Dynamic Host Configuration Protocol) — proceso DORA, componentes de configuración, seguridad, ISC DHCP vs. Kea DHCP. Relación con DNS. Práctica de laboratorio: instalación y configuración de ambos servidores en Linux.</p>
+<div class="detail-head" style="border-color:#7C9CD6"><h2>Clase 04</h2>
+  <p class="prof">Mtro. Baldomero de Jesús Hernández Bañuelos (profesor invitado) · 7 sep 2026 · DHCP (Dynamic Host Configuration Protocol): fundamentos, seguridad, el proceso DORA, los 6 componentes de configuración, y transición de ISC DHCP a KEA DHCP. Práctica de laboratorio: instalación y configuración de ambos servidores en Linux.</p>
 </div>
 
-<div class="encorto"><h4>En corto</h4><ul>
-<li><strong>DNS:</strong> traductor de nombres de dominio a IPs (como agenda telefónica).</li>
-<li><strong>DHCP:</strong> asignación automática de IPs, máscaras de subred, gateways y servidores DNS a clientes de red.</li>
-<li><strong>Proceso DORA:</strong> Discover (broadcast) → Offer (servidor responde) → Request (cliente acepta) → Acknowledge (confirmación).</li>
-<li><strong>6 componentes:</strong> Ámbito (rango de IPs) · Tiempo de concesión · Puerta de enlace · Servidor DNS · Reservas (fijas por MAC) · Exclusiones (no asignar).</li>
-<li><strong>Riesgos:</strong> DoS por agotamiento de IPs · Servidores DHCP falsos (Rogue DHCP) · inyección SQL · DMZ/VPN como defensa.</li>
-<li><strong>Servidores:</strong> ISC DHCP (descontinuado 2022) → Kea DHCP (sucesor: JSON, multihilo, APIs).</li>
-<li><strong>Configuración de red en VM:</strong> la IP de la VM debe estar en la MISMA subred que el DHCP para que funcione.</li>
-</ul></div>
+<details class="section-block sec" id="c4-dns-dhcp" open><summary><span class="stitle">DNS vs. DHCP: la analogía de la agenda telefónica</span></summary>
+<p>El profesor invitado, Mtro. Baldomero de Jesús Hernández Bañuelos, abrió la clase explicando la diferencia entre el servidor <strong>DNS (Domain Name System)</strong> y el servidor <strong>DHCP (Dynamic Host Configuration Protocol)</strong>. El DNS es el "traductor" de la red: transforma nombres de dominio en direcciones IP (por ejemplo del rango 192.168.x.x o 172.x.x.x). Para ilustrarlo, usó la analogía de la agenda telefónica de un celular — guardamos nombres, no números, y el teléfono hace la traducción por nosotros.</p>
+<p>Pero detrás del DNS hay un actor indispensable: el <strong>DHCP</strong>. Mientras el DNS traduce nombres, el DHCP es el encargado de administrar y distribuir las direcciones IP mismas. Sin un servidor DHCP, la asignación de direcciones IP tendría que hacerse manualmente, dispositivo por dispositivo.</p>
+</details>
 
-<div class="examen"><h4>🎯 Para el examen</h4><ul>
-<li><strong>Proceso DORA:</strong> orden correcto y definición exacta de cada fase.</li>
-<li><strong>6 componentes de DHCP:</strong> Ámbito, Tiempo de concesión, Gateway, Servidor DNS, Reservas (por MAC), Exclusiones (ej. 127.0.0.1).</li>
-<li><strong>Vulnerabilidades:</strong> DoS por agotamiento de IPs, Servidores DHCP falsos (Rogue DHCP).</li>
-<li><strong>Evolución de servidores:</strong> ISC DHCP descontinuado 2022 → Kea DHCP es el sucesor (JSON, multihilo, APIs).</li>
-<li><strong>Configuración de interfaz en VM:</strong> la IP de la máquina debe pertenecer a la misma subred del DHCP para que arranque.</li>
-</ul></div>
+<details class="section-block sec" id="c4-historia" open><summary><span class="stitle">Evolución histórica: de las operadoras manuales a la automatización</span></summary>
+<p>Para explicar la necesidad de automatizar la asignación de IPs, el profesor hizo un repaso histórico recordando el funcionamiento de Teléfonos de México (Telmex): en sus inicios, las llamadas no se enrutaban automáticamente, sino que requerían operadoras humanas conectando físicamente los cables. Al crecer el volumen de llamadas, fue necesario automatizar ese proceso.</p>
+<p>En la administración de redes ocurrió una transición idéntica: antes se requería la presencia física de ingenieros expertos en equipos Cisco o Frecom para configurar direccionamiento manualmente. Con la creación del servidor DHCP, ese proceso se automatizó por completo — el administrador de red define reglas generales y el servidor se encarga de asignar cada IP.</p>
+</details>
 
-<details class="section-block sec" id="c4-dns-dhcp" open><summary><span class="stitle">Relación entre DNS y DHCP</span></summary>
+<details class="section-block sec" id="c4-iot" open><summary><span class="stitle">La explosión de IoT y la impracticabilidad del direccionamiento estático</span></summary>
+<p>La importancia del DHCP ha aumentado drásticamente por la masiva proliferación de dispositivos IoT: en un hogar promedio puede haber entre 15, 20 o hasta 100 dispositivos conectados (celulares, smart TVs, focos inteligentes, asistentes de voz, etc.). El profesor preguntó al grupo si alguien configuraba manualmente la dirección MAC de cada dispositivo en casa — si el direccionamiento manual resulta impráctico incluso en un hogar, en una empresa con cientos de nodos es sencillamente inviable. El servidor DHCP ahorra tener que hacer subneteo manual y configuraciones complejas en cada router.</p>
+</details>
+
+<details class="section-block sec" id="c4-seguridad" open><summary><span class="stitle">Seguridad en DHCP: amenazas y mecanismos de protección</span></summary>
+<p>A pesar de sus ventajas, el direccionamiento automático introduce vulnerabilidades importantes. El profesor introdujo el concepto de <strong>DMZ (Zonas Desmilitarizadas)</strong>, que funcionan como "campos minados virtuales" con alarmas para detectar intrusiones. Las principales amenazas analizadas:</p>
 <ul>
-<li><strong>DNS (Domain Name System):</strong> traductor de red que convierte nombres de dominio legibles en direcciones IP numéricas (equivalente a una agenda de contactos telefónicos). Ejemplo: `google.com` → `142.251.32.110`.</li>
-<li><strong>DHCP (Dynamic Host Configuration Protocol):</strong> protocolo de configuración dinámica de hosts encargado de asignar de manera automática direcciones IP, máscaras de subred, puertas de enlace y servidores DNS a los clientes de una red.</li>
-<li><strong>Necesidad histórica:</strong> evolución desde asignación manual (centrales telefónicas de conmutación manual) hasta automatización con servidores de red.</li>
+<li><strong>Ataque de Denegación de Servicio (DoS) por agotamiento de IP:</strong> como el servidor DHCP administra un pool limitado de direcciones, un atacante puede solicitar masivamente IPs falsas hasta agotar el rango disponible, dejando sin servicio a usuarios legítimos.</li>
+<li><strong>Inyecciones SQL combinadas con DoS:</strong> los ataques DoS suelen acompañarse de inyecciones SQL que envían instrucciones masivas al servidor. Cuando los usuarios perciben lentitud e intentan reiniciar el módem, esa misma interrupción puede agravar el ataque.</li>
+<li><strong>Servidor DHCP falso (Rogue DHCP Server):</strong> un atacante levanta un servidor DHCP no autorizado dentro de la red para repartir direcciones IP maliciosas y redirigir tráfico.</li>
+<li><strong>Fuga de datos por exposición de IP y DNS:</strong> si un atacante descubre la IP y el DNS del servidor DHCP, puede vulnerar el enrutamiento y acceder a tráfico ajeno.</li>
+</ul>
+<p>Para contrarrestar estas vulnerabilidades, el profesor recomendó el uso de <strong>VPNs</strong>, que crean túneles de conexión cifrada que aíslan el tráfico de red. Resaltó también el elevado impacto económico de estas fallas, citando casos reales de ciberataques a empresas.</p>
+</details>
+
+<details class="section-block sec" id="c4-ventajas" open><summary><span class="stitle">Ventajas operativas y empresariales del DHCP</span></summary>
+<p>La automatización del DHCP elimina la necesidad de llevar una bitácora manual detallada que vincule cada nodo de la empresa con sus puertos e IPs asignadas, liberando tiempo del administrador de red. El profesor aclaró que instituciones con requerimientos de seguridad extremos (como bancos o el ejército) sí pueden preferir asignación estática pese al costo operativo, precisamente para minimizar superficie de ataque. Entre las ventajas principales:</p>
+<ul>
+<li><strong>Simplificación de la administración:</strong> genera un mapa o árbol de la topología de red que permite identificar rápidamente los dominios de colisión.</li>
+<li><strong>Prevención de conflictos de direcciones IP:</strong> evita la duplicidad de IPs. Ejemplo resuelto en clase: Rafael (turno matutino) e Iván (turno vespertino) trabajan en la misma oficina; si a Iván se le asignara manualmente la IP <code>.100</code> que Rafael ya usó en la mañana, se generaría un conflicto de duplicidad — el DHCP gestiona estas asignaciones automáticamente y evita la colisión.</li>
+<li><strong>Escalabilidad y movilidad:</strong> facilita agregar nuevos dispositivos y migrar sistemas sin reconfigurar manualmente cada uno.</li>
 </ul>
 </details>
 
-<details class="section-block sec" id="c4-ventajas-dora" open><summary><span class="stitle">Ventajas de DHCP y el proceso DORA</span></summary>
-<p><strong>Ventajas operativas en empresas:</strong></p>
+<details class="section-block sec" id="c4-dora" open><summary><span class="stitle">El proceso DORA y el caso PC Puma vs. RIU (UNAM)</span></summary>
+<p>El funcionamiento interno del DHCP para asignar una IP se ejecuta mediante el proceso <strong>DORA</strong>:</p>
+<table><thead><tr><th>Paso</th><th>Acción técnica</th></tr></thead><tbody>
+<tr><td><strong>D</strong>iscover (Descubrir)</td><td>El dispositivo cliente envía un mensaje de difusión (broadcast) a la red buscando un servidor DHCP activo.</td></tr>
+<tr><td><strong>O</strong>ffer (Ofrecer)</td><td>El servidor DHCP responde al cliente ofreciendo una dirección IP disponible dentro de su rango.</td></tr>
+<tr><td><strong>R</strong>equest (Solicitar)</td><td>El cliente solicita formalmente el uso de la dirección IP ofrecida.</td></tr>
+<tr><td><strong>A</strong>cknowledge (Confirmar)</td><td>El servidor confirma la asignación y entrega la configuración completa (IP, máscara, gateway, DNS).</td></tr>
+</tbody></table>
+<p>Para contextualizar el proceso, el profesor comparó dos redes de la UNAM: la <strong>Red RIU</strong>, que operaba con procesos manuales donde cada usuario debía ingresar su cuenta y configurar parámetros a mano — al asignar IPs permanentes que no se liberaban al desconectarse el usuario, la red se saturaba rápidamente. En contraste, la <strong>Red PC Puma</strong> implementa un servidor DHCP con el proceso DORA: cuando el usuario llega, la red le otorga automáticamente una IP; en cuanto se retira, libera la IP y la pone a disposición de otros usuarios, optimizando el ancho de banda.</p>
+</details>
+
+<details class="section-block sec" id="c4-componentes" open><summary><span class="stitle">Los 6 componentes esenciales de la configuración DHCP</span></summary>
 <ul>
-<li>Manejo automático de direccionamiento dinámico ante saturación de dispositivos en redes domésticas, corporativas e IoT (15–50 dispositivos en un hogar moderno).</li>
-<li>Reducción de costos de personal técnico (no hay administración manual).</li>
-<li>Eliminación de bitácoras manuales y prevención de conflictos por duplicidad de direcciones IP.</li>
+<li><strong>Ámbito (Scope):</strong> rango delimitado de direcciones IP que el servidor está autorizado a entregar (ej. de la <code>192.168.1.100</code> a la <code>192.168.1.200</code>). El profesor recordó que la primera IP identifica la red, la terminación <code>.255</code> se reserva para broadcast, y habitualmente la <code>.1</code> se asigna a la puerta de enlace. En empresas, los ámbitos se segmentan por departamento (ej. Contabilidad IPs 10-20, Finanzas 20-40).</li>
+<li><strong>Tiempo de concesión (Lease Time):</strong> periodo durante el cual el cliente puede conservar la IP asignada. Puede configurarse en segundos, minutos u horas, para desconectar nodos inactivos y liberar espacio. Se comparó el comportamiento de proveedores móviles frente a redes Wi-Fi domésticas.</li>
+<li><strong>Puerta de enlace predeterminada (Default Gateway):</strong> la IP del router que los clientes usan para salir a Internet o redes externas. El profesor enfatizó que todos los clientes deben enviarse a la misma puerta de enlace — configurar múltiples gateways multiplica por cinco la superficie de ataque y exige replicar firewalls.</li>
+<li><strong>Servidores DNS:</strong> las IPs de los servidores encargados de resolver nombres de dominio (ej. <code>8.8.8.8</code> y <code>8.8.4.4</code> de Google).</li>
+<li><strong>Reservas:</strong> asignación fija e inmutable de una IP específica vinculada a la dirección MAC de un dispositivo. Aunque la MAC se puede clonar, las reservas se usan exclusivamente para equipos críticos.</li>
+<li><strong>Exclusiones:</strong> direcciones IP dentro del rango que se excluyen de la entrega automática (por ejemplo, la dirección <code>127.0.0.1</code> o IPs estáticas de infraestructura).</li>
 </ul>
-<p><strong>Proceso DORA — cuatro etapas del ciclo de concesión de una IP:</strong></p>
+</details>
+
+<details class="section-block sec" id="c4-practica" open><summary><span class="stitle">Práctica de laboratorio: de ISC DHCP a KEA DHCP</span></summary>
+<p><strong>Requisitos de la máquina virtual:</strong> la interfaz de red de la VM en VirtualBox/VMware debe configurarse en modo Puente (Bridge) o NAT, asegurando que la IP asignada esté dentro del rango del servidor DHCP, con permisos <code>sudo</code> y conexión a Internet.</p>
+<p><strong>Implementación con ISC DHCP tradicional:</strong></p>
 <ol>
-<li><strong>Discover:</strong> cliente envía un mensaje de difusión (broadcast) en la red buscando un servidor DHCP activo.</li>
-<li><strong>Offer:</strong> servidor DHCP responde al cliente ofreciéndole una dirección IP disponible dentro de su rango.</li>
-<li><strong>Request:</strong> cliente acepta formalmente la oferta y solicita el uso de la dirección IP entregada.</li>
-<li><strong>Acknowledge:</strong> servidor confirma la concesión y entrega la configuración completa de red al cliente (mascara, gateway, DNS).</li>
+<li>Actualizar repositorios e instalar el paquete: <code>sudo apt install isc-dhcp-server</code></li>
+<li>Editar el archivo de configuración: <code>sudo nano /etc/dhcp/dhcpd.conf</code></li>
+<li>Estructurar la subred: red <code>192.168.1.0</code> con máscara <code>255.255.255.0</code>, rango de asignación de <code>192.168.1.100</code> a <code>192.168.1.200</code>, puerta de enlace <code>192.168.1.1</code>, servidores DNS <code>8.8.8.8</code> y <code>8.8.4.4</code>.</li>
+<li>Identificar la interfaz de red activa (ej. <code>enp0s3</code>, <code>eth33</code>).</li>
+<li>Reiniciar el servicio: <code>sudo systemctl restart isc-dhcp-server</code>, y verificar el estado con <code>sudo systemctl status isc-dhcp-server</code>.</li>
 </ol>
-<p><em>Analogía universitaria:</em> la red RIU requería credenciales y asignación manual previa; la red PC Puma opera mediante DHCP (DORA), liberando dinámicamente las IPs cuando los usuarios se desconectan.</p>
-</details>
-
-<details class="section-block sec" id="c4-seguridad"><summary><span class="stitle">Seguridad y riesgos en DHCP</span></summary>
-<ul>
-<li><strong>Ataque DoS por agotamiento de DHCP:</strong> un atacante solicita masivamente direcciones IP ficticias hasta agotar el ámbito del servidor, impidiendo que dispositivos legítimos obtengan acceso a la red.</li>
-<li><strong>Servidor DHCP falso (Rogue DHCP):</strong> servidor no autorizado introducido en la red por un atacante para distribuir direcciones IP y servidores DNS fraudulentos, interceptando tráfico o desviando clientes.</li>
-<li><strong>Otras vulnerabilidades:</strong> inyección SQL, envenenamiento de caché.</li>
-<li><strong>Defensas:</strong> DMZ (zona desmilitarizada), VPNs, firewalls, políticas de seguridad.</li>
-</ul>
-</details>
-
-<details class="section-block sec" id="c4-componentes" open><summary><span class="stitle">6 componentes de configuración de DHCP</span></summary>
-<ul>
-<li><strong>Ámbito (Scope):</strong> rango o segmento continuo de direcciones IP que el servidor está autorizado a entregar (ej. de `192.168.1.100` a `192.168.1.200`).</li>
-<li><strong>Tiempo de concesión (Lease time):</strong> periodo temporal durante el cual un cliente puede usar la IP asignada antes de renovarla o ser liberada.</li>
-<li><strong>Puerta de enlace (Gateway/Router):</strong> dirección IP de la interfaz del router para encaminar paquetes hacia redes externas.</li>
-<li><strong>Servidor DNS:</strong> direcciones IP de servidores de nombres asignados a los clientes para resolución de dominios (ej. `8.8.8.8` y `8.8.4.4`).</li>
-<li><strong>Reservas:</strong> asignación estática vinculada permanentemente a la dirección MAC del adaptador de red de un dispositivo (mismo cliente, siempre la misma IP).</li>
-<li><strong>Exclusiones:</strong> direcciones o rangos dentro del ámbito que se reservan y NO se asignan automáticamente (ej. `127.0.0.1`, direcciones fijas de servidores).</li>
-</ul>
-</details>
-
-<details class="section-block sec" id="c4-isc-kea"><summary><span class="stitle">ISC DHCP vs. Kea DHCP — Evolución</span></summary>
-<ul>
-<li><strong>ISC DHCP Server:</strong> servidor DHCP clásico desarrollado por Internet Systems Consortium (ISC), cuyo mantenimiento oficial finalizó a finales de 2022.</li>
-<li><strong>Kea DHCP Server:</strong> sucesora moderna de ISC DHCP; ofrece:
-<ul>
-<li>Soporte para IPv4 e IPv6.</li>
-<li>Archivos de configuración en formato JSON (fácil de automatizar).</li>
-<li>Arquitectura multihilo.</li>
-<li>Integración con APIs.</li>
-<li>Recomendación: usar versión estable 2.4 en producción (evitar 2.6/beta).</li>
-</ul></li>
-</ul>
-</details>
-
-<details class="section-block sec" id="c4-practica" open><summary><span class="stitle">Práctica de laboratorio — Servidores DHCP en Linux</span></summary>
-
-<p><strong>Requisito crítico:</strong> la dirección IP asignada a la VM debe pertenecer obligatoriamente a la MISMA subred configurada en el servidor DHCP (ej. si DHCP está en 192.168.1.0/24, la VM debe tener una IP en ese rango). De lo contrario, el servicio no arranca.</p>
-
-<p><strong>Parte A: ISC DHCP Server (descontinuado, pero aún usado)</strong></p>
-<pre><code># Instalación
-sudo apt update
-sudo apt install isc-dhcp-server
-
-# Edición de /etc/dhcp/dhcpd.conf
-subnet 192.168.1.0 netmask 255.255.255.0 {
-  range 192.168.1.100 192.168.1.200;
-  option routers 192.168.1.1;
-  option domain-name-servers 8.8.8.8, 8.8.4.4;
-  default-lease-time 600;
-  max-lease-time 7200;
-}
-
-# Especificar interfaz en /etc/default/isc-dhcp-server
-# (ej. eth0, enp0s3)
-
-# Reinicio y verificación
-sudo systemctl restart isc-dhcp-server
-sudo systemctl status isc-dhcp-server
-</code></pre>
-
-<p><strong>Parte B: Kea DHCP Server (moderno, recomendado)</strong></p>
-<pre><code># Instalación
-sudo apt install kea-dhcp4-server
-
-# Verificar versión (preferir 2.4 estable)
-apt list --installed | grep kea
-
-# Configuración en /etc/kea/kea-dhcp4.conf (JSON)
-# Definir: interfaz de escucha, bloque subnet 192.168.1.0/24,
-# pools (rango de asignación), router y servidores DNS
-
-# Reinicio y verificación
-sudo systemctl status kea-dhcp4-server
-
-# Verificar ejecución multihilo activa
-</code></pre>
-
-<p><strong>Entrega:</strong> Práctica 2 debe incluir en el apartado de Desarrollo las evidencias de instalación, configuración y estado activo (`systemctl status`) de ambos servicios.</p>
+<p><strong>Deprecación de ISC DHCP y migración a KEA DHCP:</strong> el profesor reveló un dato técnico crucial: <strong>ISC DHCP quedó oficialmente sin soporte ni mantenimiento (End of Life) a finales de 2022</strong> por parte del Internet Systems Consortium — está obsoleto para nuevas implementaciones. Su sucesor oficial es <strong>KEA DHCP</strong>:</p>
+<table><thead><tr><th>Criterio</th><th>ISC DHCP</th><th>KEA DHCP</th></tr></thead><tbody>
+<tr><td>Estado de desarrollo</td><td>Descontinuado desde 2022</td><td>En desarrollo activo continuo</td></tr>
+<tr><td>Arquitectura</td><td>Monohilo (atiende una petición a la vez)</td><td>Multihilo (procesa múltiples peticiones simultáneas)</td></tr>
+<tr><td>Formato de configuración</td><td>Archivos de texto plano</td><td>Archivos estructurados en JSON (fáciles de automatizar)</td></tr>
+<tr><td>Protocolos y APIs</td><td>Limitado a DHCPv4 tradicional</td><td>Soporte nativo DHCPv4, DHCPv6 y APIs REST</td></tr>
+<tr><td>Alta disponibilidad</td><td>Compleja de implementar</td><td>Mediante pares de servidores y reservas</td></tr>
+</tbody></table>
+<p><strong>Pasos para instalar y configurar KEA DHCP:</strong></p>
+<ol>
+<li>Instalar el paquete: <code>sudo apt install kea-dhcp4-server</code>. El profesor recomendó la versión 2.4 y evitar la 2.6 por ser una release muy reciente con posibles inestabilidades.</li>
+<li>Verificar la versión instalada: <code>dpkg -l kea-dhcp4-server</code> o <code>apt list</code>.</li>
+<li>Editar el archivo de configuración JSON con <code>sudo nano</code>, agregando los parámetros de subred, rangos e interfaces.</li>
+<li>Reiniciar el servicio y comprobar el estatus operativo en la terminal.</li>
+</ol>
 </details>
 
 <details class="section-block sec" id="c4-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
 <ul>
-<li><em>(Contexto)</em> <strong>Historia de conmutación manual:</strong> época previa a automatización en "Teléfonos de México", donde operadoras humanas conectaban cables manualmente en paneles de clavijas según llamadas solicitadas.</li>
-<li><em>(Contexto)</em> <strong>Políticas comerciales de ISPs:</strong> comparativa entre Infinitum (Telmex) y Totalplay en asignación de IPs; comportamiento de reconexiones automáticas en redes WiFi abiertas (Starbucks, Cielito Querido).</li>
-<li><em>(Contexto)</em> <strong>Impresoras de red corporativas:</strong> tecnología de gestión en HP/Dell usando colas centralizadas para redirigir trabajos a equipos desocupados.</li>
+<li><em>(Contexto)</em> Bromeó sobre los nombres y apodos raros con los que la gente guarda contactos en su celular.</li>
+<li><em>(Contexto)</em> Mencionó escenas de películas antiguas en blanco y negro donde las operadoras telefónicas conectaban las llamadas manualmente.</li>
+<li><em>(Contexto)</em> Bromeó calificando de "unicornio dorado" a cualquier estudiante que afirme tener configurado correctamente su módem doméstico.</li>
+<li><em>(Contexto)</em> Comentó la situación cotidiana de llegar con amigos al departamento a tomar unas cervezas y saturar el Wi-Fi entre todos.</li>
+<li><em>(Contexto)</em> Relató cómo algunos estudiantes acuden a la red PC Puma únicamente para descargar contenido pesado.</li>
+<li><em>(Contexto)</em> El Mtro. Baldomero recordó con nostalgia sus años de estudiante trabajando en los laboratorios de la facultad.</li>
+<li><em>(Contexto)</em> Mencionó que aproximadamente 15 días antes, empresas como Liverpool y Avante Textil sufrieron ciberataques.</li>
+<li><em>(Contexto)</em> Al final de la sesión, alumnos y profesor comentaron sobre la falta de contactos eléctricos en el salón de clases.</li>
 </ul>
 </details>
 
-<details class="section-block sec" id="c4-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<details class="section-block sec" id="c4-pendiente" open><summary><span class="stitle">Pendiente / próxima clase — Práctica 2 de Laboratorio</span></summary>
 <ul>
-<li>Elaboración y entrega individual de la <strong>Práctica 2</strong> (Servidores DHCP con ISC y Kea) con evidencias de instalación, configuración y estatus activo de ambos servicios.</li>
-<li>Próxima sesión: continuación del bloque de administración de servicios de red e infraestructura.</li>
+<li><strong>Contenido:</strong> el reporte debe incluir la documentación completa de <strong>ambas instalaciones</strong> (<code>isc-dhcp-server</code> y <code>kea-dhcp4-server</code>), mostrando los comandos ejecutados, la edición de los archivos de configuración, el reinicio del servicio y la verificación del <code>status</code>.</li>
+<li><strong>Estructura del reporte:</strong> todas las capturas y explicaciones de ambas instalaciones van dentro de la sección "Desarrollo". Para esta práctica <strong>no se incluye la sección de Resultados</strong>.</li>
+<li><strong>Fecha límite y modalidad:</strong> debido a la falta de contactos eléctricos en el aula, el profesor otorgó entrega individual a más tardar el próximo miércoles al inicio de la clase.</li>
 </ul>
 </details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>DNS traduce nombres a IPs (como una agenda telefónica); DHCP asigna y administra esas IPs.</li>
+<li>El proceso DORA: Discover, Offer, Request, Acknowledge.</li>
+<li>6 componentes de DHCP: Ámbito, Tiempo de concesión, Puerta de enlace, Servidores DNS, Reservas, Exclusiones.</li>
+<li>Riesgos: DoS por agotamiento de IP, inyección SQL, Rogue DHCP Server, fuga de datos — se mitigan con VPNs y DMZ.</li>
+<li>ISC DHCP quedó deprecado en 2022 (monohilo, texto plano); el estándar actual es KEA DHCP (multihilo, JSON, APIs REST).</li>
+</ul></div>
 
 </div>
 </body>
