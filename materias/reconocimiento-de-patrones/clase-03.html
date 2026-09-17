@@ -16,21 +16,6 @@
   <p style="font-size:12px;color:var(--ink-soft);margin:2px 0 0">🔢 Numeración del profesor: corresponde a sus diapositivas <a href="material.html" style="color:var(--indigo)">Clase 6</a> — no coincide 1:1 con "Clase 03" de este sitio.</p>
 </div>
 
-<div class="encorto"><h4>En corto</h4><ul>
-<li><strong>Reconstrucción con PCA:</strong> como es una transformación lineal, se puede volver del espacio reducido al original: <code>X̂ = Z·Wₖᵀ + μ</code>. No es perfecta salvo que se usen todos los componentes; el error <code>‖X − X̂‖²</code> es mínimo con los k componentes de mayor varianza (mejor aproximación de rango k).</li>
-<li><strong>EigenFaces:</strong> PCA sobre una matriz de rostros <code>N×P</code> (N imágenes, P píxeles). Las primeras componentes capturan rasgos anatómicos; las últimas son ruido.</li>
-<li><strong>LDA</strong> = reducción <strong>supervisada</strong>: maximiza separación entre clases y minimiza dispersión intra-clase. Da como máximo <code>min(K−1, d)</code> discriminantes.</li>
-<li><strong>Elegir K:</strong> regla del codo · umbral de varianza (90–95 %) · criterio de Kaiser (<code>λ &gt; 1</code>).</li>
-<li><strong>Audio:</strong> sin <strong>estandarizar</strong>, el primer componente absorbe casi toda la varianza; estandarizando, la curva acumulada sube de forma uniforme. Las diferencias de <strong>signo</strong> entre métodos (covarianza / SVD / <code>sklearn</code>) no afectan: los vectores siguen siendo ortogonales.</li>
-</ul></div>
-
-<div class="examen"><h4>🎯 Para el examen</h4><ul>
-<li><strong>Centrado y escalado:</strong> entender cómo la ausencia de estandarización sesga los componentes principales hacia las variables de mayor magnitud numérica.</li>
-<li><strong>Criterios para elegir K:</strong> regla del codo, criterio de Kaiser (<code>λ &gt; 1</code>) y umbral de varianza explicada acumulada (90–95 %).</li>
-<li><strong>EigenFaces:</strong> por qué las primeras componentes capturan rasgos faciales reconocibles (ojos, boca, contorno) y las últimas solo ruido de alta frecuencia.</li>
-<li><strong>Reconstrucción:</strong> el error de reconstrucción decrece al aumentar k y es mínimo con los k componentes de mayor varianza; se relaciona con la varianza descartada.</li>
-</ul></div>
-
 <details class="section-block sec" id="c3-reconstruccion" open><summary><span class="stitle">Reconstrucción con PCA</span></summary>
 <p>PCA es una transformación lineal; si se puede proyectar a un espacio reducido, también se puede aplicar el camino inverso. La reconstrucción <strong>no es perfecta</strong> a menos que se usen todos los componentes, y permite ver cuánta información se conservó tras reducir la dimensionalidad.</p>
 <pre><code>X ∈ ℝ^(m×n)      datos originales
@@ -46,7 +31,7 @@ X̂c = Z·Wₖᵀ       (W ortonormal)        →     X̂ = Z·Wₖᵀ + μ</cod
 <p>Conjunto de vectores propios que pueden usarse para el reconocimiento facial.</p>
 <ul>
 <li>Las imágenes deben estar en una matriz <code>X</code> de <code>N×P</code>: <code>N</code> = número de imágenes de rostros, <code>P</code> = número total de píxeles por imagen. Se <strong>centra</strong> la matriz y se aplica PCA (por SVD).</li>
-<li><strong>Rostro promedio</strong> (media de <code>X</code>): primera visualización obligatoria. Se ve completamente liso, sin facciones particulares de ninguno de los rostros de la muestra.</li>
+<li><strong>Rostro promedio</strong> (media de <code>X</code>): primera visualización obligatoria. Se ve completamente liso, sin facciones particulares de ninguno de los rostros de la muestra. El alumno Roberto comentó en clase que el rostro promedio se percibe como una imagen lisa que no muestra las facciones de nadie en particular; el profesor confirmó su observación, señalando que al desplegarlo se obtiene justamente esa imagen "genérica" — es el comportamiento esperado, no un error.</li>
 <li><strong>Primeras ~10 eigenfaces:</strong> capturan la mayor cantidad de información y rasgos estructurales; se distinguen boca, ojos, contorno.</li>
 <li><strong>Últimas ~10 eigenfaces:</strong> sin información estructural útil; visualmente son como la estática / ruido blanco de una TV sin señal.</li>
 <li><strong>Validación:</strong> reconstruir una imagen del dataset con subconjuntos progresivos de 10, 20, 50, 100 … hasta 300 eigenfaces, mostrar los resultados en una sola figura y analizar cómo decrece el MSE conforme aumenta el número de eigenfaces. El error disminuye porque se recupera más varianza; se relaciona inversamente con la varianza descartada.</li>
@@ -91,9 +76,29 @@ X̂c = Z·Wₖᵀ       (W ortonormal)        →     X̂ = Z·Wₖᵀ + μ</cod
 </ul>
 </details>
 
-<details class="section-block sec" id="c3-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
-<p>Al terminar las instrucciones de la práctica (reporte IEEE a dos columnas), el profesor cierra la sesión. La próxima clase: <strong>revisión presencial del código</strong> en las computadoras de los alumnos y continuación de la planeación hacia <strong>LDA</strong> y la selección avanzada de características.</p>
+<details class="section-block sec" id="c3-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> El profesor explicó que la exigencia de redactar los reportes en formato IEEE de dos columnas responde a que tanto en el ámbito laboral como en la industria y la investigación se solicita de forma habitual ese formato — es una práctica para acostumbrarse desde ahora.</li>
+</ul>
 </details>
+
+<details class="section-block sec" id="c3-pendiente" open><summary><span class="stitle">Pendiente / próxima clase — Práctica 1</span></summary>
+<ul>
+<li><strong>Formato de reporte:</strong> resultados, gráficas y respuestas a las preguntas de análisis, obligatoriamente en formato IEEE de dos columnas.</li>
+<li><strong>Un alumno preguntó</strong> si las respuestas a las preguntas planteadas solo deben incluirse en el reporte escrito o también exponerse oralmente — el profesor aclaró que deben responderse <strong>tanto en el reporte escrito como exponerse oralmente</strong>. Al exponer, los equipos deben explicar el comportamiento de sus propias gráficas (por ejemplo, justificar por qué su curva de varianza se ve como se ve).</li>
+<li><strong>Fecha límite de entrega y presentación:</strong> el viernes de la siguiente semana.</li>
+<li><strong>Requisitos para la presentación:</strong> llevar una computadora por equipo, con el código funcional y los resultados listos para proyectar. Los alumnos se dividieron en dos equipos: uno de 3 integrantes y uno de 2.</li>
+<li><strong>Próxima clase:</strong> revisión presencial del código en las computadoras de los alumnos y continuación de la planeación hacia <strong>LDA</strong> y la selección avanzada de características.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Reconstrucción con PCA: X̂ = Z·Wₖᵀ + μ; el error es mínimo usando los k componentes de mayor varianza.</li>
+<li>Sin estandarizar, la primera componente absorbe casi toda la varianza; estandarizando, la varianza se reparte de forma gradual.</li>
+<li>PCA_C (covarianza), PCA_SVD y sklearn.PCA dan autovalores idénticos; los autovectores solo pueden diferir en signo, sin afectar la ortogonalidad.</li>
+<li>Eigenfaces: las primeras ~10 capturan rasgos faciales estructurales; las últimas ~10 son solo ruido de alta frecuencia.</li>
+<li>Reporte de Práctica 1 en formato IEEE a dos columnas — entrega y exposición el viernes de la siguiente semana.</li>
+</ul></div>
 
 </div>
 </body>
