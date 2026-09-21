@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 07 — Fundamentos de Sistemas Embebidos</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Fundamentos de Sistemas Embebidos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 07</h2>
+  <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 21 sep 2026 · Tema 2 (subtemas 2.3 y 2.4) — Unidades controladoras de interrupción (enmascarables y no enmascarables, monivel/multinivel, resolución por tabla o por vector), disparo por valor y por flanco, controlador DMA, chipset (Puente Norte/Sur) y temporizadores (timers).</p>
+</div>
+
+<div class="section-block" style="background:#fff7ed;border-left:3px solid #A98BD1"><p style="margin:0"><strong>📋 Nota sobre el temario:</strong> en la <a href="clase-06.html">Clase 06</a> el subtema 2.3 (Controlador de interrupciones) había quedado marcado como “omitido intencionalmente”. En esta clase sí se vio, junto con 2.4 (Temporizadores); el índice ya refleja el cambio.</p></div>
+
+<details class="section-block sec" id="c7-icu" open><summary><span class="stitle">Unidades controladoras de interrupción (ICU): enmascarables vs. no enmascarables</span></summary>
+<p>La sesión inició con la Unidad Controladora de Interrupciones (ICU, <em>Interrupt Controller Unit</em>). Una <strong>interrupción</strong> es un mecanismo de hardware que altera o interrumpe el flujo normal de ejecución del programa principal para obligar al procesador a atender la petición de una señal enviada por un evento externo.</p>
+<p>Según la capacidad del sistema para bloquearlas, se clasifican en dos categorías:</p>
+<ul>
+<li><strong>Enmascarables (ignorables):</strong> el procesador puede ignorarlas o diferirlas temporalmente según el estado de un registro de configuración.</li>
+<li><strong>No enmascarables (NMI, no ignorables):</strong> interrupciones críticas que el procesador no puede bloquear bajo ninguna circunstancia y que deben atenderse de inmediato y con prioridad.</li>
+</ul>
+<p>El enmascaramiento se implementa con un <strong>registro o vector de máscara de interrupciones</strong>, en el que cada bit representa el estado de habilitación de una interrupción específica mediante lógica combinatoria:</p>
+<ul>
+<li><strong>Máscara en ‘0’ (habilitada):</strong> el ‘0’ del vector se niega externamente y se convierte en ‘1’, que entra a una compuerta AND junto con la señal del periférico. Si la interrupción emite un ‘1’, la salida de la AND es ‘1’ y se genera la señal física para que el procesador detenga su ejecución.</li>
+<li><strong>Máscara en ‘1’ (bloqueada/enmascarada):</strong> el ‘1’ se niega y se convierte en ‘0’. Al entrar a la AND, la salida es ‘0’ sin importar lo que envíe el periférico, así que la interrupción se ignora.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c7-prioridad" open><summary><span class="stitle">Niveles de prioridad (monivel vs. multinivel) y resolución (por tabla vs. por vector)</span></summary>
+<p>El profesor clasificó la gestión de interrupciones según la jerarquía de prioridad y según el mecanismo para localizar la rutina de servicio.</p>
+<p><strong>Niveles de prioridad:</strong></p>
+<ul>
+<li><strong>Monivel:</strong> todas las interrupciones tienen exactamente la misma prioridad. El procesador las atiende en el orden en que llegan, sin privilegiar a ningún periférico.</li>
+<li><strong>Multinivel:</strong> hay jerarquías de prioridad explícitas. Si mientras se atiende una interrupción de baja prioridad se dispara una de mayor jerarquía, el procesador suspende la atención actual para atender de inmediato la prioritaria.</li>
+</ul>
+<p><strong>Mecanismos de resolución o identificación:</strong></p>
+<ul>
+<li><strong>Por tabla (software; microcontroladores y arquitecturas ARM):</strong> el sistema mantiene en memoria una tabla con todas las interrupciones y las direcciones de sus rutinas de servicio. En microcontroladores simples la estructura es física y cableada; en procesadores de alto rendimiento (como ARM Cortex-A e Intel) el procesador pierde su configuración al apagarse (“sufre de amnesia”) y requiere que el sistema operativo explore la tabla por software. Ese software ejecuta un algoritmo de búsqueda que revisa la tabla registro por registro para saber qué interrupción se activó y dónde está su rutina. <strong>Desventaja:</strong> es lento, con complejidad de búsqueda O(N) y varios ciclos de reloj; su ventaja es que es muy económico en hardware. Es el esquema estándar de las arquitecturas ARM.</li>
+<li><strong>Por vector (hardware; arquitectura Intel x86):</strong> la ICU/APIC es un módulo de hardware inteligente. Ella misma revisa la tabla por hardware, localiza la rutina de atención y la precarga directamente en la RAM; después entrega al procesador la señal junto con todos los datos y direcciones ya listos. <strong>Ventaja:</strong> el proceso es instantáneo y no le cuesta ciclos de búsqueda en software al procesador.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c7-disparo" open><summary><span class="stitle">Desencadenamiento: por valor (nivel) vs. por flanco</span></summary>
+<p>Las señales de interrupción se desencadenan en los pines físicos del procesador con dos esquemas eléctricos.</p>
+<p><strong>Por valor (nivel, <em>level-triggered</em>).</strong> La interrupción se mantiene activa todo el tiempo que el pin conserve un nivel lógico específico (alto o bajo). Era el estándar en sistemas de las décadas de 1970 y 1980. Ejemplos:</p>
+<ul>
+<li><strong>Botón de reset en PCs de escritorio:</strong> si se mantiene presionado, el pin conserva el nivel lógico y la computadora se queda congelada, sin arrancar, hasta que se libera el botón.</li>
+<li><strong>Señal de sobrecalentamiento (<em>overheat</em>):</strong> se activa de forma continua al alcanzar una temperatura crítica. <em>Caso de estudio, bug de Windows 11:</em> el procesador envía una interrupción por valor al kernel cuando entra en <em>overheat</em>, para que el sistema baje la frecuencia de trabajo o suspenda la GPU. En la actualización de abril de 2024 de Windows 11, una refactorización de código borró por error el manejador de esta interrupción en el controlador del kernel. En computadoras de alto rendimiento la GPU siguió generando calor sin que el sistema operativo detectara el <em>overheat</em>, lo que, según se explicó en clase, llegó a fundir las soldaduras de los procesadores por sobrecalentamiento crítico.</li>
+</ul>
+<p><strong>Por flanco (<em>edge-triggered</em>).</strong> El procesador no evalúa el nivel de voltaje sostenido sino la transición o salto lógico: de bajo a alto (flanco de subida) o de alto a bajo (flanco de bajada). La detección ocurre en la duración de <strong>un solo pulso o ciclo de reloj</strong>.</p>
+<p><strong>Por qué se prefiere el flanco.</strong> En una transmisión serie lenta a 9,600 baudios (~960 Hz, ~1 ms por byte), si la interrupción se gestionara por valor, el pin permanecería en alto todo el tiempo que tarda en llegar el byte. Para un procesador básico de 8 MHz, 1 ms equivale a 8,000 ciclos de reloj retenidos y desperdiciados. Por flanco, la transición inicial genera un pulso de un ciclo de reloj, el procesador registra la llegada del dato y el periférico deja de interrumpir de inmediato.</p>
+</details>
+
+<details class="section-block sec" id="c7-dma" open><summary><span class="stitle">IRQ, bus PCI y controlador DMA</span></summary>
+<p>La evolución de los buses transformó la gestión de las líneas de interrupción:</p>
+<ul>
+<li><strong>Líneas IRQ dedicadas (bus ISA de 16 bits):</strong> cada tarjeta de expansión tenía un alambre físico dedicado (línea IRQ) conectado directamente desde el zócalo al controlador de interrupciones. Consumía pines exclusivos e imponía un ruteo complejo en la placa madre para mantener longitudes de pista idénticas por las altas frecuencias.</li>
+<li><strong>IRQ multiplexadas (bus PCI de 32 bits a 150 MHz, según los apuntes):</strong> usan líneas de control multiplexadas. Con 4 líneas de control se pueden multiplexar hasta 2⁴ = 16 dispositivos. Si el controlador detecta dos líneas activas a la vez fuera del protocolo de multiplexación, lo interpreta como un error.</li>
+</ul>
+<p><strong>Controlador DMA (<em>Direct Memory Access</em>).</strong></p>
+<ul>
+<li><strong>El problema:</strong> el procesador opera en el orden de GHz, mientras que los periféricos transmiten en MHz o MB/s. Usar al procesador para mover manualmente cada byte de un periférico a la RAM es un desperdicio severo de recursos.</li>
+<li><strong>Cómo funciona:</strong> es un módulo de hardware externo ubicado en el <em>chipset</em> que gestiona las interrupciones de los periféricos y transfiere los bloques de datos directamente a la RAM sin intervención de la CPU.</li>
+<li><strong>Ejemplo, RP2040:</strong> el microcontrolador RP2040 (32 bits a 150 MHz) integra 2 núcleos y 2 controladores DMA independientes, de modo que los DMA mueven internamente altas tasas de datos entre periferias (por ejemplo USB a SPI) mientras los núcleos ejecutan algoritmos en paralelo.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c7-chipset" open><summary><span class="stitle">Arquitectura de chipset: Puente Norte y Puente Sur</span></summary>
+<p>La arquitectura tradicional de las tarjetas madre organiza la transferencia de datos en dos bloques o puentes de interconexión:</p>
+<ul>
+<li><strong>Puente Norte (<em>Northbridge</em>):</strong> canal de ultra alta velocidad conectado directamente con el procesador (3 GHz), la memoria RAM (2.66 GHz), la tarjeta gráfica (GPU en ranuras PCIe x16) y las unidades de estado sólido (SSD, NVMe por PCIe).</li>
+<li><strong>Puente Sur (<em>Southbridge</em>):</strong> gestiona los periféricos de menor velocidad: discos SATA (60 MB/s), ranuras PCI (150 MHz / 2 GB/s), puertos USB 3.0/3.1 y red Gigabit Ethernet (125 MB/s). Adapta estas velocidades y envía la información hacia el Puente Norte.</li>
+</ul>
+<p>La CPU se conecta al Puente Norte por un bus de ultra alta velocidad, y el Puente Norte al Puente Sur por un enlace de alta velocidad.</p>
+<p><strong>Carga de datos en videojuegos:</strong> durante la pantalla de carga de un juego, el controlador DMA del chipset transfiere texturas y matrices directamente del SSD a la RAM de la GPU sin despertar a la CPU. Una vez cargados los datos, la CPU delega el procesamiento gráfico a la GPU y queda en estado de bajo consumo.</p>
+<p>⚠️ <em>Por verificar con el audio:</em> las cifras de velocidad de este bloque (PCI a 150 MHz / 2 GB/s, SATA a 60 MB/s, RAM a 2.66 GHz) están tal como salieron en los apuntes de NotebookLM.</p>
+</details>
+
+<details class="section-block sec" id="c7-timers" open><summary><span class="stitle">Temporizadores (timers): definición, papel en el SO y las 4 características</span></summary>
+<p>Al concluir las interrupciones, la clase abordó los <strong>temporizadores</strong> (<em>timers</em>).</p>
+<p><strong>Definición formal (pregunta de examen):</strong> <em>“Un temporizador en hardware es un contador que activa una interrupción al llegar a cero y reinicia el conteo automáticamente (o se reconfigura mediante software).”</em></p>
+<p><strong>Los 3 componentes de un sistema operativo (relación con la Unidad 3).</strong> El profesor enfatizó que no puede existir un sistema operativo multitarea sin un timer. La arquitectura de una computadora tiene 3 componentes físicos básicos (procesador, memoria y periféricos), y por eso todo sistema operativo se compone de 3 módulos fundamentales:</p>
+<ol>
+<li><strong><em>Scheduler</em> / calendarizador de tareas:</strong> administra el procesador.</li>
+<li><strong>Sistema de asignación de memoria (<em>memory allocation system</em>):</strong> administra la RAM.</li>
+<li><strong>Manejadores de dispositivos (<em>drivers</em>):</strong> administran los periféricos.</li>
+</ol>
+<p>El <em>scheduler</em> requiere obligatoriamente un timer de hardware que actúe como “reloj de pared” o director de orquesta: interrumpe periódicamente a la CPU para quitarle el control al programa actual y asignarlo a la siguiente tarea en cola.</p>
+<p><strong>Las 4 características o parámetros de un timer (preguntas de examen):</strong></p>
+<ol>
+<li><strong>Modo de ejecución:</strong> <em>Free running</em> (el contador corre continuamente en bucle sin detenerse) o <em>One shot</em> (corre una sola vez, dispara la interrupción al llegar a cero y se detiene).</li>
+<li><strong>Dirección del conteo:</strong> <em>Up</em> (ascendente: 0, 1, 2, 3…) o <em>Down</em> (descendente: 255, 254, 253…).</li>
+<li><strong>Rango / ancho de bits:</strong> típicamente de <strong>8 bits</strong> (0 a 255) o <strong>16 bits</strong> (65,536 valores posibles); los anchos de 10 y 12 bits son poco comunes. <em>Ejemplo en audio:</em> la frecuencia de muestreo estándar del audio digital (CD / Spotify) es de 44,100 Hz (44.1 kHz). Un timer de 16 bits alcanza para gestionar ese muestreo porque 65.536 kHz &gt; 44.1 kHz.</li>
+<li><strong>Fuente de reloj (<em>clock source</em>):</strong> <em>oscilador interno</em>, sincronizado con la señal de reloj del propio procesador, o <em>señal externa</em>, proveniente de un evento físico exterior (por ejemplo un <em>encoder</em> en cuadratura de un motor para medir vueltas y sentido de giro, un decodificador de audio o un miógrafo para frecuencia cardíaca).</li>
+</ol>
+<p><strong>Aplicación de bajo consumo (NTP + timer).</strong> En sistemas embebidos remotos (collares de rastreo GPS, estaciones meteorológicas), el timer de bajo consumo mantiene apagado al procesador principal. El timer despierta al chip cada cierto intervalo (por ejemplo cada 3 segundos); este se conecta por <strong>NTP</strong> (<em>Network Time Protocol</em>) para actualizar fecha y hora, transmite los datos de la bitácora y vuelve a apagar el sistema para preservar la batería.</p>
+</details>
+
+<details class="section-block sec" id="c7-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> <strong>Bug de Windows 11:</strong> el profesor comentó con sarcasmo la actualización de abril de Windows 11 que dañó procesadores y tarjetas de video de usuarios gamers al borrar el manejador de la interrupción de <em>overheat</em>, y recomendó leer blogs de tecnología.</li>
+<li><em>(Contexto)</em> <strong>Botón de reset en PCs antiguas:</strong> recuerdos de cómo en los años 90 un rodillazo o patada accidental al botón de reset borraba el trabajo de la sesión.</li>
+<li><em>(Contexto)</em> <strong>Analogías:</strong> para explicar la inmediatez de la interrupción por vector en Intel usó el ejemplo humorístico de alguien sosteniendo un pastel de cumpleaños; para comparar la velocidad del procesador frente a los periféricos usó a Goku Super Saiyan Azul contra Yamcha (Dragon Ball Super) y referencias a Pokémon.</li>
+<li><em>(Contexto)</em> <strong>Lentes inteligentes y privacidad:</strong> reflexiones jocosas sobre el uso de gafas inteligentes (Apple Vision Pro, Ray-Ban Meta) en situaciones íntimas, y críticas a las condiciones laborales del etiquetado de datos para empresas como Meta.</li>
+<li><em>(Contexto)</em> <strong>Perfil del egresado:</strong> exposición sobre el papel del ingeniero en computación de la UNAM como puente entre los programadores de alto nivel de Ciencias y el hardware de Electrónica.</li>
+<li><em>(Contexto)</em> <strong>Currícula y planes de estudio:</strong> críticas a la eliminación de optativas de hardware (sistemas embebidos avanzados) frente al exceso de materias administrativas o de consultas básicas en SQL, y a la falta de cursos de estadística avanzada para entender el funcionamiento interno de matrices en modelos de lenguaje y <em>transformers</em>.</li>
+<li><em>(Contexto)</em> <strong>Condiciones docentes:</strong> comentarios sobre el pago por hora a profesores de asignatura y la carga de trámites para acreditaciones ISO; anécdota de los cinchos con los que los docentes sujetaron el cable dañado del proyector del salón.</li>
+<li><em>(Contexto)</em> <strong>Etimología:</strong> origen náhuatl de “cacomixtle” (<em>taco-miztli</em> / <em>caco-miztli</em>, “medio gato”).</li>
+<li><em>(Contexto)</em> <strong>Recuerdos de estudiante:</strong> la materia de Estructuras de Datos y Algoritmos (EDA) abarcaba en una semana colas dobles, circulares y listas ligadas; mención de docentes históricos (Laura Sandoval, Luci y Javier Juárez).</li>
+<li><em>(Contexto)</em> Se omiten aquí comentarios sobre política y una funcionaria pública que el profesor hizo como tangente; no son contenido de la materia.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c7-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<p>⚠️ <strong>Fechas que no cuadran con el horario:</strong> según los apuntes, el profesor proyectó sesiones el <em>23, 25 y 30 de septiembre y 1 y 3 de octubre</em>, y el Primer Examen Parcial “tentativamente entre el <em>7 y el 10 de octubre</em>”. FSE solo tiene clase lunes y miércoles (13:00–14:30), y el 25 sep es viernes, el 1 oct jueves, el 3 oct sábado y el 10 oct sábado. Probablemente se trata de un error de transcripción; <strong>confirmar con el audio o con el profesor</strong> antes de usar estas fechas.</p>
+<ul>
+<li>Fechas que sí caen en lunes o miércoles: 23 y 30 de septiembre, 7 de octubre.</li>
+<li>No se anotó ninguna tarea asignada en esta sesión.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Enmascarables se bloquean con un vector de máscara (‘1’ bloquea, vía compuerta AND); las NMI no se pueden bloquear.</li>
+<li>Resolución por tabla (ARM): software, O(N), lenta pero barata. Por vector (Intel x86): la ICU/APIC lo hace por hardware, instantáneo.</li>
+<li>Por flanco detecta la transición en un ciclo de reloj y libera a la CPU; por valor la retiene mientras el pin siga en el nivel.</li>
+<li>El DMA (en el chipset) mueve bloques de datos periférico ↔ RAM sin la CPU; Puente Norte = alta velocidad (CPU, RAM, GPU, SSD), Puente Sur = periféricos lentos.</li>
+<li>Timer = contador que interrumpe al llegar a cero; 4 parámetros: modo (free running / one shot), dirección (up / down), ancho de bits (8 / 16) y fuente de reloj (interna / externa). Es indispensable para el scheduler del SO.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

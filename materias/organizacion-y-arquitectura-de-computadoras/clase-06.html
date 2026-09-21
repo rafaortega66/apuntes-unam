@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 06 — Organización y Arquitectura de Computadoras</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Organización y Arquitectura de Computadoras</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Clase 06</h2>
+  <p class="prof">M.I. José Antonio de Jesús Arredondo Garza · 21 sep 2026 · Tema 3 (continuación) — Mapa de memoria de datos y direccionamiento de periféricos, identificación del hardware (Pico ID) con <code>mem32</code> y con ensamblador inline ARM Thumb, y rutinas aritméticas (multiplicación y suma).</p>
+</div>
+
+<details class="section-block sec" id="c6-memoria" open><summary><span class="stitle">Mapa de memoria de datos y dirección efectiva de periféricos</span></summary>
+<p>El estudio de la arquitectura de microcontroladores exige diferenciar entre la memoria de programa y la memoria de datos, relacionando el código en ensamblador con el mapa de memoria físico del procesador. En la familia Raspberry Pi Pico, cada periférico interno tiene asignada una dirección fija dentro del espacio de direcciones de datos. En el mapa de datos, la RAM interna se localiza aproximadamente a partir de la dirección <code>0x20000000</code>. La capacidad física depende del modelo: la Pico 1 dispone de 2 MB de flash y la Pico 2 de 4 MB.</p>
+<p>La región destinada al control de periféricos internos comienza a partir de <code>0x40000000</code>. Para acceder a cualquier registro de entrada o salida sin recurrir a librerías de abstracción, el procesador debe calcular la dirección efectiva del periférico:</p>
+<p style="text-align:center"><em>Dirección efectiva = Dirección base del periférico + Offset específico del periférico</em></p>
+<p>Una excepción a esta regla de desplazamiento es el identificador único del chip (<em>Pico ID</em> o <em>Chip ID</em>), que se ubica en una dirección absoluta fija dentro del bloque <code>0x40000000</code> (la dirección base más un desplazamiento de 4 bytes, <code>0x40000004</code>). En esta localidad coinciden la Pico 1 y la Pico 2. Leer esa posición permite que un programa identifique dinámicamente el modelo de procesador sobre el que se ejecuta y tome decisiones de bifurcación (<code>if</code> / <code>branch</code>) para evitar errores de ejecución.</p>
+</details>
+
+<details class="section-block sec" id="c6-mem32" open><summary><span class="stitle">Identificación de hardware en MicroPython con <code>machine.mem32</code></span></summary>
+<p>Para acceder a direcciones físicas desde MicroPython sin librerías auxiliares se emplea <code>machine.mem32</code>, que permite leer y escribir directamente palabras de 32 bits dentro del mapa de memoria del microcontrolador. El procedimiento de lectura e identificación:</p>
+<ol>
+<li><strong>Importar el módulo:</strong> <code>from machine import mem32</code>.</li>
+<li><strong>Definir la dirección física:</strong> la del registro de revisión del chip: <code>revision_addr = 0x40000000 + 4</code> (es decir, <code>0x40000004</code>).</li>
+<li><strong>Leer el registro:</strong> <code>revision = machine.mem32[revision_addr]</code>.</li>
+<li><strong>Evaluar los códigos hexadecimales:</strong> comparar el valor leído contra los códigos de identificación del fabricante.</li>
+</ol>
+<table>
+<tr><th>Modelo</th><th>Código identificador</th></tr>
+<tr><td>Raspberry Pi Pico (Pico 1 normal)</td><td><code>0x10002927</code></td></tr>
+<tr><td>Raspberry Pi Pico W</td><td><code>0x20002927</code></td></tr>
+<tr><td>Raspberry Pi Pico 2</td><td><code>0x10004927</code></td></tr>
+</table>
+<p>En clase se hizo una demostración práctica conectando primero una Pico 1 y luego una Pico 2; el programa desplegaba automáticamente en la terminal el modelo exacto de la placa conectada.</p>
+</details>
+
+<details class="section-block sec" id="c6-asm-id" open><summary><span class="stitle">Identificación de hardware en ensamblador inline (<code>@micropython.asm_thumb</code>)</span></summary>
+<p>Para hacer la misma lectura a más bajo nivel se usa el ensamblador incrustado (<em>inline assembly</em>) de MicroPython con el decorador <code>@micropython.asm_thumb</code>. En ARM, el procesador dispone de los registros generales <code>R0</code> a <code>R15</code>.</p>
+<p>El ensamblador incrustado de MicroPython no permite cargar directamente un valor inmediato de 32 bits (como <code>0x40000000</code>) en un registro en una sola instrucción; hacerlo produce un error de compilación. Se recurre entonces a un desplazamiento lógico a la izquierda (<code>LSL</code>):</p>
+<ol>
+<li><strong>Cargar el valor base:</strong> <code>mov(R1, 0x40)</code>.</li>
+<li><strong>Desplazar:</strong> <code>lsl(R1, R1, 24)</code>. Desplaza el byte <code>0x40</code> exactamente 24 bits a la izquierda y construye el valor de 32 bits <code>0x40000000</code> en <code>R1</code>.</li>
+<li><strong>Lectura indirecta (<code>LDR</code>):</strong> <code>ldr(R0, [R1, 0])</code> extrae el contenido de la dirección apuntada por <code>R1</code> (<code>0x40000000</code>, o con offset) y lo deposita en <code>R0</code>.</li>
+</ol>
+<p><strong>Regla de retorno:</strong> toda subrutina escrita en ensamblador incrustado devuelve a Python el valor que esté en el registro <code>R0</code> al terminar. Por eso, al invocar <code>val = id_func()</code> el sistema retorna el contenido de <code>R0</code>, que se imprime en hexadecimal con <code>print(hex(val))</code>.</p>
+</details>
+
+<details class="section-block sec" id="c6-aritmetica" open><summary><span class="stitle">Operaciones aritméticas en ensamblador: multiplicación y suma multivariable</span></summary>
+<p>Con ejercicios en el entorno de desarrollo se establecieron las reglas de sintaxis y restricciones de las operaciones aritméticas elementales:</p>
+<ul>
+<li><strong>Paso de parámetros y registros:</strong> al definir una función en ensamblador con argumentos (por ejemplo <code>def multiplica(r0, r1, r2):</code>), el compilador exige registros consecutivos comenzando estrictamente en <code>R0</code> (<code>R0</code>, <code>R1</code>, <code>R2</code>…). Definir parámetros en registros no consecutivos o empezar en <code>R3</code> genera error de compilación.</li>
+<li><strong>Sintaxis de <code>MUL</code>:</strong> en ARM Thumb, <code>MUL</code> no admite tres operandos independientes. Se usan dos: <code>mul(R1, R2)</code>, que realiza R1 = R1 × R2.</li>
+</ul>
+<p><strong>Ejercicio de multiplicación resuelto en clase</strong> — multiplicar 10 y 50:</p>
+<pre><code>@micropython.asm_thumb
+def multiplica(r0, r1):
+    mov(R2, R1)     # Copia el segundo operando
+    mov(R1, R0)     # Copia el primer operando
+    mul(R1, R2)     # R1 = R1 * R2 (10 * 50 = 500)
+    mov(R0, R1)     # Mueve el resultado a R0 para retornar</code></pre>
+<p>La ejecución de <code>multiplica(10, 50)</code> devolvió correctamente <strong>500</strong>.</p>
+<p><strong>Ejercicio de suma multivariable</strong> — para sumar varios operandos pasados desde variables de Python (<code>def suma(r0, r1, r2, r3):</code>) se encadenan sumas de dos operandos:</p>
+<ul>
+<li><code>add(R2, R2, R3)</code> → R2 = R2 + R3</li>
+<li><code>add(R1, R1, R2)</code> → R1 = R1 + R2</li>
+<li><code>add(R0, R0, R1)</code> → R0 = R0 + R1 (resultado final en <code>R0</code>)</li>
+</ul>
+<p><strong>Restricción de operandos inmediatos:</strong> el ensamblador incrustado de MicroPython limita los valores inmediatos dentro de las instrucciones a un máximo de 8 bits (0 a 255). Para operar con valores mayores en registros de 32 bits, los números deben declararse como variables de Python e importarse por los argumentos de la función.</p>
+</details>
+
+<details class="section-block sec" id="c6-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> <strong>Reestructuración del plan de estudios:</strong> el profesor comentó que existe la propuesta de fusionar Organización y Arquitectura de Computadoras con Microcomputadoras. Le parece una decisión acertada en lo práctico para evitar redundancia, y puso como ejemplo que Sistemas Embebidos debió ser originalmente una extensión de Microcomputadoras.</li>
+<li><em>(Contexto)</em> <strong>Información técnica poco documentada:</strong> resaltó que los códigos hexadecimales del <em>Pico ID</em> no son fáciles de encontrar en los manuales oficiales de Raspberry Pi; le tomó una investigación exhaustiva encontrar las direcciones y valores exactos.</li>
+<li><em>(Contexto)</em> <strong>Anécdota de la raíz cuadrada por impares:</strong> contó que le enseñó a su sobrino de primaria el cálculo de raíz cuadrada por restas sucesivas de impares; el niño sorprendió a su profesora resolviendo raíces exactas mentalmente y con los dedos en pocos segundos.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c6-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Tarea práctica:</strong> implementar en ensamblador incrustado un algoritmo para calcular la <strong>raíz cuadrada entera</strong> mediante restas sucesivas de números impares consecutivos (1, 3, 5, 7, 9…).
+  <ul>
+  <li><em>Raíz exacta, √25:</em> 25 − 1 = 24; 24 − 3 = 21; 21 − 5 = 16; 16 − 7 = 9; 9 − 9 = 0. Se hicieron 5 restas exitosas antes de llegar a 0, así que la raíz es <strong>5</strong>.</li>
+  <li><em>Raíz no exacta, √27:</em> 27 − 1 = 26; 26 − 3 = 23; 23 − 5 = 18; 18 − 7 = 11; 11 − 9 = 2. La siguiente resta (2 − 11 = −9) da negativo y invalida la condición. La parte entera de la raíz es <strong>5</strong> y el residuo es <strong>2</strong>.</li>
+  <li><em>Extensión opcional:</em> calcular cifras decimales multiplicando el operando por potencias pares de 10 (100, 10000…).</li>
+  </ul>
+</li>
+<li><strong>Próxima sesión:</strong> continuar con el direccionamiento directo de periféricos internos (puertos GPIO, temporizadores) usando <code>mem32</code> y ensamblador Thumb.</li>
+<li><strong>Material:</strong> el profesor dio a los alumnos la carpeta de código fuente con los programas de identificación de hardware y las rutinas en ensamblador de la clase. Pendiente subirlos a <a href="material.html" style="color:var(--indigo)">Material</a> cuando se tengan los archivos.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>RAM interna desde <code>0x20000000</code>; periféricos desde <code>0x40000000</code>; dirección efectiva = base + offset del periférico.</li>
+<li><code>0x40000004</code> identifica el modelo: Pico 1 <code>0x10002927</code>, Pico W <code>0x20002927</code>, Pico 2 <code>0x10004927</code>.</li>
+<li>En ensamblador inline: parámetros en registros consecutivos desde <code>R0</code>, el retorno siempre en <code>R0</code>, y las direcciones de 32 bits se arman con una carga inmediata más <code>LSL</code>.</li>
+<li>Inmediatos limitados a 8 bits (0–255); <code>mul</code> usa dos operandos.</li>
+<li>Tarea: raíz cuadrada entera por restas de impares consecutivos, contando cuántas restas caben.</li>
+</ul></div>
+
+</div>
+</body>
+</html>
