@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 07 — Reconocimiento de Patrones</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Reconocimiento de Patrones</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Clase 07</h2>
+  <p class="prof">Ing. Rubén Omar Azuara Domínguez · 18 sep 2026 · Tema 6 — Métodos de clasificación no supervisados y algoritmos de agrupamiento de datos: funciones de distancia, clustering, K-Means, LBG e ISODATA.</p>
+</div>
+
+<details class="section-block sec" id="c7-distancia" open><summary><span class="stitle">Clasificación no supervisada y funciones de distancia</span></summary>
+<p>La sesión inició repasando la clasificación de patrones como un proceso en el cual se busca asignar un objeto o vector de características a una categoría predefinida, apoyándose en mediciones de semejanza o diferencia con prototipos representativos de cada clase. A diferencia de los métodos supervisados, los no supervisados no disponen de información previa ni etiquetas sobre la clase a la que pertenecen los datos de entrenamiento; su objetivo principal es inferir la forma en que los datos se agrupan de manera natural. En este formalismo, un <strong>patrón</strong> es el vector de características que describe un objeto o fenómeno, mientras que una <strong>clase</strong> o categoría es el conjunto de patrones que comparten propiedades similares o un mismo origen.</p>
+<p>Para cuantificar qué tan alejados o cercanos están dos puntos en el espacio de características se introduce la <strong>función de distancia</strong>. La intuición detrás de los modelos de clasificación por distancia mínima es que a menor distancia entre dos puntos, mayor es su similitud y la probabilidad de que pertenezcan a la misma clase; a mayor distancia, menor similitud. Bajo este esquema, un patrón desconocido <em>X</em> se asigna a la clase cuyo prototipo o centroide es el más cercano según la función de distancia elegida.</p>
+<p>Se repasaron las funciones de distancia más habituales:</p>
+<ul>
+<li><strong>Distancia Euclidiana:</strong> mide la distancia en línea recta entre puntos en el espacio.</li>
+<li><strong>Distancia Manhattan:</strong> suma de las diferencias absolutas entre las coordenadas de los puntos.</li>
+<li><strong>Distancia de Mahalanobis:</strong> incorpora la matriz de covarianza de la clase. El profesor destacó que, mientras la Euclidiana o la Manhattan evalúan la separación punto a punto, Mahalanobis mide la distancia entre un punto y una distribución general de puntos, tomando en cuenta la dispersión interna de la clase completa.</li>
+</ul>
+<p>Sobre cómo representar las clases, el profesor explicó dos enfoques:</p>
+<ul>
+<li><strong>Un solo prototipo por clase:</strong> se usa un único punto representativo o centroide (M₁, M₂, M₃) que engloba toda la información de la clase para compararse contra el patrón <em>X</em>, asignándolo a la clase con la distancia mínima.</li>
+<li><strong>Múltiples prototipos por clase:</strong> se evalúa la distancia entre el patrón desconocido <em>X</em> y múltiples ejemplos de entrenamiento de cada clase. Ante una duda del grupo sobre si cada punto del diagrama representaba un centroide, el profesor aclaró que en este enfoque cada punto es un ejemplo de entrenamiento real de la clase (por ejemplo, una clase con seis ejemplos reales). Se mide la distancia de <em>X</em> a todos los puntos de todas las clases y se asigna a la clase que contenga la distancia individual mínima. Es útil cuando los centroides globales no reflejan bien la cercanía a distribuciones específicas.</li>
+</ul>
+<p>La <strong>regla de decisión por distancia mínima</strong>: el patrón <em>X</em> se asigna a la clase W<sub>k</sub> si se cumple</p>
+<p style="text-align:center"><em>d(X, M<sub>k</sub>) &lt; d(X, M<sub>j</sub>)</em> &nbsp; para todo <em>j ≠ k</em></p>
+<p>donde M<sub>k</sub> es el centroide o prototipo de la clase W<sub>k</sub>. Sus ventajas son la simplicidad conceptual y el bajo costo computacional, y es muy efectivo cuando las clases están bien separadas. Tiene dos limitaciones severas: es muy sensible a la escala de las variables (las características con rangos más grandes dominan la distancia, por lo que se requiere normalización previa) y no considera la distribución ni la geometría interna de las clases, a menos que se emplee una métrica como Mahalanobis.</p>
+</details>
+
+<details class="section-block sec" id="c7-clustering" open><summary><span class="stitle">Fundamentos de agrupamiento (clustering) y medidas de similitud</span></summary>
+<p>Para resolver la asignación cuando no hay etiquetas surgen los algoritmos de <strong>clustering</strong>, base del aprendizaje no supervisado. El clustering busca organizar un conjunto de datos en grupos o <em>clusters</em> de forma que los objetos de un mismo grupo sean más similares entre sí que con respecto a los de otros grupos. En este paradigma no hay etiquetas a priori, se desconoce la estructura intrínseca de los datos y, en muchos casos, tampoco se conoce el número total de grupos.</p>
+<p>Un algoritmo de agrupamiento evalúa constantemente dos métricas de calidad:</p>
+<ul>
+<li><strong>Cohesión intracluster:</strong> qué tan juntos o similares están los elementos dentro de un mismo grupo.</li>
+<li><strong>Separación intercluster:</strong> qué tan distantes o diferenciados están los distintos grupos entre sí.</li>
+</ul>
+<p>Aplicaciones principales: compresión de datos (cuantización vectorial), segmentación de imágenes y señales, clasificación automática de documentos o textos, y detección de anomalías o patrones ocultos en el sector bancario (por ejemplo, prevención de fraudes).</p>
+<p>Además de las distancias geométricas, se expusieron las medidas de similitud más comunes:</p>
+<ul>
+<li><strong>Similitud Coseno:</strong> evalúa el ángulo entre dos vectores, independiente de sus magnitudes geométricas.</li>
+<li><strong>Coeficiente de correlación de Pearson:</strong> mide la relación lineal entre dos variables; se emplea frecuentemente en la selección de características.</li>
+<li><strong>Similitud de Jaccard:</strong> diseñada para conjuntos binarios y datos categóricos o texto.</li>
+<li><strong>Distancia de Minkowski:</strong> generalización paramétrica que abarca las distancias anteriores: D(X, Y) = ( Σ<sub>i=1..d</sub> |x<sub>i</sub> − y<sub>i</sub>|<sup>P</sup> )<sup>1/P</sup>. Según el exponente P se obtiene la distancia Manhattan (P = 1), la Euclidiana (P = 2) o la de Chebyshev (P → ∞).</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c7-kmeans" open><summary><span class="stitle">Algoritmo K-Means (K-Medias)</span></summary>
+<p>El primer algoritmo iterativo analizado fue <strong>K-Means</strong>, muy usado por su simplicidad. Su objetivo es dividir el conjunto de datos en <em>K</em> grupos, minimizando implícitamente la distancia cuadrada entre cada punto y el centro de su cluster, cantidad llamada <strong>inercia</strong>.</p>
+<p>Al revisar el pseudocódigo en pantalla, el profesor pidió a los alumnos que explicaran los pasos:</p>
+<ul>
+<li>Un alumno señaló que primero se definen los parámetros, luego se asigna cada punto al centroide más cercano, después se actualiza el centroide y se reasigna hasta que las asignaciones no cambian.</li>
+<li>Ante la pregunta de un estudiante sobre qué ocurre cuando un cluster se queda vacío (cero puntos asignados), el profesor aclaró que el algoritmo ejecuta una nueva inicialización para ese centroide, seleccionando cualquier punto aleatorio del dataset para reubicarlo antes de la siguiente iteración.</li>
+</ul>
+<p><strong>Flujo del algoritmo:</strong></p>
+<ol>
+<li>Definir el número de clusters (K).</li>
+<li>Inicializar K centroides (aleatoria o K-Means++).</li>
+<li><em>Asignación:</em> calcular la distancia de cada punto a todos los centroides y asignarlo al más cercano.</li>
+<li><em>Actualización:</em> recalcular los centroides como la media vectorial de los puntos asignados a cada cluster. Si un cluster está vacío, reinicializarlo aleatoriamente.</li>
+<li><em>Evaluación de convergencia:</em> verificar si los centroides/asignaciones ya no cambian o si el cambio en la inercia es menor a una tolerancia. Si converge, terminar; si no, volver al paso 3.</li>
+</ol>
+<p><strong>Detalle de cada paso:</strong></p>
+<ul>
+<li><strong>Selección de K:</strong> es el único parámetro obligatorio. Si K es muy pequeño no se captura el comportamiento real de los datos; si es excesivamente grande se generan subconjuntos reducidos que no aportan información.</li>
+<li><strong>Inicialización aleatoria:</strong> se eligen K puntos al azar del conjunto de datos.</li>
+<li><strong>Inicialización K-Means++:</strong> método más robusto. Se selecciona el primer centroide m₁ de forma aleatoria. Para el siguiente, se calcula la distancia de m₁ a todos los puntos restantes, se ordenan las distancias de forma decreciente y se elige el siguiente centroide mediante una probabilidad ponderada por la distancia: a mayor distancia respecto al centroide inicial, mayor probabilidad de ser elegido.</li>
+<li>A la pregunta de un alumno sobre si los centroides son puntos del dataset, el profesor precisó que al inicio sí se escogen de los puntos existentes, pero al iterar y promediar se mueven a posiciones del espacio de características que no necesariamente coinciden con ningún dato real.</li>
+<li><strong>Asignación de puntos:</strong> se calcula la distancia (Euclidiana, Manhattan, etc.) de cada patrón hacia los K centroides y se asigna al cluster más cercano.</li>
+<li><strong>Actualización de centroides:</strong> media aritmética de las características de todos los puntos asignados a cada cluster.</li>
+<li><strong>Criterios de parada:</strong> el bucle termina cuando los centroides o asignaciones ya no cambian entre iteraciones consecutivas, cuando la variación de la inercia es menor a un umbral de tolerancia (ε), o cuando se alcanza el número máximo de iteraciones.</li>
+</ul>
+<p>Con una traza gráfica de seis pasos (figuras A a F), el profesor mostró cómo se desplazan los centroides iteración tras iteración. Un alumno preguntó si la transición de la gráfica E a la F correspondía a la verificación final de convergencia; el profesor confirmó que en ese punto la actualización movió ligeramente los centroides pero las asignaciones de puntos no cambiaron en absoluto, alcanzando la convergencia.</p>
+<p><strong>Consideraciones y limitaciones de K-Means:</strong></p>
+<ul>
+<li><strong>Complejidad computacional:</strong> lineal, O(N·K·I·D), donde N es el número de puntos, K los grupos, I las iteraciones y D la dimensión del vector.</li>
+<li><strong>Sensibilidad a la inicialización:</strong> si dos centroides se inicializan muy juntos, el algoritmo puede quedar atrapado en un mínimo local mal distribuido.</li>
+<li><strong>Clusters esféricos:</strong> asume fronteras de decisión esféricas/circulares por usar radios de distancia. No puede separar estructuras complejas con fronteras no lineales (patrones entrelazados o en forma de media luna).</li>
+<li><strong>Outliers y escala:</strong> es sensible a ambos; requiere normalización estricta de variables.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c7-lbg" open><summary><span class="stitle">Algoritmo LBG (Linde-Buzo-Gray) y cuantización vectorial</span></summary>
+<p>El algoritmo <strong>LBG</strong>, de Linde, Buzo y Gray, se concibió para diseñar un libro de códigos (<em>codebook</em>) orientado a la cuantización vectorial. Un codebook es un conjunto óptimo de vectores prototipo llamados <em>codewords</em> que representan de forma condensada un conjunto masivo de datos. Ejemplo: en lugar de manejar 5,000 datos de pacientes con cáncer y 10,000 sin cáncer, LBG resume esa información en un grupo reducido de codewords representativos.</p>
+<p>A diferencia de K-Means, LBG minimiza explícitamente la <strong>distorsión</strong> (D), definida como la distancia cuadrática promedio entre cada punto de entrenamiento X y su codeword más cercano (C):</p>
+<p style="text-align:center"><em>D = (1/N) · Σ<sub>i=1..N</sub> ‖X<sub>i</sub> − C<sub>cercano</sub>‖²</em></p>
+<p>Al analizar la estructura del algoritmo, los alumnos notaron que LBG no parte de centroides aleatorios sino de un único centroide global. El profesor confirmó que LBG inicia calculando la media global de todo el dataset, lo que le da una inicialización mucho más estable y reproducible que la de K-Means.</p>
+<p><strong>Procedimiento de LBG:</strong></p>
+<ol>
+<li><strong>Inicialización:</strong> el codeword inicial es la media global de todos los vectores de entrenamiento.</li>
+<li><strong>División (splitting):</strong> cada codeword existente se duplica añadiendo una pequeña perturbación ε (típicamente ε ≈ 0.1) en dirección positiva y negativa: C⁺ = C·(1 + ε), C⁻ = C·(1 − ε). Esto duplica el número de codewords en cada etapa.</li>
+<li><strong>Asignación:</strong> cada vector del dataset se asigna al codeword más cercano.</li>
+<li><strong>Actualización:</strong> se recalculan los codewords como el promedio de los vectores asignados a cada uno.</li>
+<li><strong>Distorsión y convergencia:</strong> se evalúa la reducción relativa de distorsión entre iteraciones, |D<sub>anterior</sub> − D<sub>actual</sub>| / D<sub>anterior</sub> &lt; tolerancia. Si el cambio es menor a la tolerancia, la etapa termina. Ante la duda de un alumno sobre el valor de la tolerancia, el profesor indicó que la define el usuario según la precisión deseada.</li>
+<li><strong>Crecimiento del codebook:</strong> si la distorsión ya se redujo pero aún no se alcanza el tamaño final deseado, se regresa al paso 2 (splitting). Por construcción, el número final de codewords siempre es una potencia de 2 (1 → 2 → 4 → 8 → 16 …).</li>
+</ol>
+<p>Visualmente, este agrupamiento genera las <strong>regiones de Voronoi</strong>, que dividen el espacio en celdas poliédricas: cualquier punto nuevo que caiga dentro de una región se asigna al codeword de esa celda.</p>
+<p><strong>Clasificación con LBG</strong> (dos fases):</p>
+<ul>
+<li><strong>Entrenamiento:</strong> se construye un codebook independiente para cada clase (Clase 1 → Codebook 1; Clase 2 → Codebook 2, etc.), resumiendo la geometría de cada categoría.</li>
+<li><strong>Clasificación:</strong> para un patrón desconocido X se calcula la distancia entre X y el codeword más cercano de cada codebook de clase. X se asigna a la clase cuyo codebook registre la distancia mínima. Un estudiante preguntó si era necesario hacer primero un codebook general y luego dividirlo por clases; el profesor aclaró que se entrena directamente un codebook separado por cada clase desde sus propios datos.</li>
+</ul>
+<p><strong>Consideraciones:</strong> un codebook muy pequeño genera subajuste (<em>underfitting</em>) y uno muy grande sobreajuste (<em>overfitting</em>). Ofrece una representación muy compacta y clasificación rápida, pero sigue limitado por el supuesto de fronteras esféricas y por el tamaño restringido a potencias de 2.</p>
+</details>
+
+<details class="section-block sec" id="c7-isodata" open><summary><span class="stitle">Algoritmo ISODATA (Self-Organizing Data Analysis Technique)</span></summary>
+<p><strong>ISODATA</strong> es una evolución heurística de K-Means. El profesor enfatizó que no nace de un principio de optimización matemática riguroso que garantice un mínimo global, sino que se diseñó a partir de heurísticas y experiencia práctica para resolver los defectos conocidos de K-Means.</p>
+<p>A diferencia de K-Means (número de grupos fijo), ISODATA ajusta dinámicamente el número de clusters con tres operaciones:</p>
+<ol>
+<li><strong>División (splitting):</strong> si la dispersión/desviación estándar dentro de un cluster supera un umbral máximo, el cluster se divide en dos subclusters.</li>
+<li><strong>Fusión (merging):</strong> si la distancia entre dos centroides es menor a un umbral mínimo, ambos clusters se fusionan en uno.</li>
+<li><strong>Eliminación (removal):</strong> si un cluster contiene menos puntos que un mínimo especificado, se elimina y sus puntos se redistribuyen.</li>
+</ol>
+<p><strong>Parámetros que requiere:</strong></p>
+<ul>
+<li>K₀: número inicial de clusters.</li>
+<li>N<sub>min</sub>: número mínimo de puntos permitidos por cluster.</li>
+<li>σ<sub>max</sub>: desviación estándar máxima permitida por característica.</li>
+<li>D<sub>min</sub>: distancia mínima permitida entre centroides.</li>
+<li>L<sub>max</sub>: número máximo de fusiones permitidas por iteración.</li>
+<li>I<sub>max</sub>: número máximo de iteraciones globales.</li>
+<li>Límites inferior y superior para la cantidad total de clusters.</li>
+</ul>
+<p>Al revisar el pseudocódigo de ISODATA, un estudiante preguntó a qué se refería el comentario <em>“recompute cluster mean”</em>; el profesor explicó que consiste en recalcular la media de los puntos asignados para reubicar la posición del centroide.</p>
+<p><strong>Pasos del algoritmo:</strong></p>
+<ol>
+<li>Inicializar K₀ centroides y hacer la asignación inicial de puntos.</li>
+<li>Actualizar las posiciones de los centroides calculando sus medias.</li>
+<li><em>Eliminación:</em> si un cluster tiene menos de N<sub>min</sub> puntos, eliminarlo y reasignar sus puntos en la siguiente iteración.</li>
+<li><em>División:</em> calcular la desviación estándar por dimensión. Si σ<sub>j</sub> máx &gt; σ<sub>max</sub> y K<sub>actual</sub> &lt; K<sub>límite</sub>, dividir el cluster en la dimensión j desplazando los centroides ±0.5·σ<sub>j</sub>.</li>
+<li><em>Fusión:</em> si la distancia entre centroides &lt; D<sub>min</sub>, fusionar el par mediante promedio ponderado por número de puntos.</li>
+<li><em>Convergencia:</em> verificar si los centroides no cambian o se alcanzó I<sub>max</sub>; si no, iterar de nuevo.</li>
+</ol>
+<ul>
+<li><strong>Mecanismo exacto de división:</strong> se calcula la desviación estándar por separado para cada una de las D dimensiones (σ<sub>k1</sub>, σ<sub>k2</sub>, …, σ<sub>kD</sub>). Se identifica la dimensión j con la mayor desviación (σ<sub>max_dim</sub>) y se evalúan a la vez dos condiciones: σ<sub>max_dim</sub> &gt; σ<sub>max</sub> y K<sub>actual</sub> &lt; K<sub>límite superior</sub>. Si ambas se cumplen, el centroide M<sub>k</sub> se divide a lo largo del eje j creando M<sub>k1</sub> = M<sub>k</sub> + 0.5·σ<sub>max_dim</sub>·e<sub>j</sub> y M<sub>k2</sub> = M<sub>k</sub> − 0.5·σ<sub>max_dim</sub>·e<sub>j</sub>, donde e<sub>j</sub> es un vector unitario en la dimensión j.</li>
+<li><strong>Mecanismo exacto de fusión:</strong> si la distancia entre M<sub>i</sub> y M<sub>j</sub> es menor a D<sub>min</sub>, se combinan con un promedio ponderado por el número de puntos N<sub>i</sub> y N<sub>j</sub>: M<sub>nuevo</sub> = (N<sub>i</sub>·M<sub>i</sub> + N<sub>j</sub>·M<sub>j</sub>) / (N<sub>i</sub> + N<sub>j</sub>). Las fusiones se ejecutan en orden creciente de distancia, limitadas por el contador L<sub>max</sub> por iteración.</li>
+</ul>
+<p><strong>Fronteras no lineales (“medias lunas”).</strong> El profesor mostró una comparativa de los tres algoritmos sobre un dataset sintético con dos “medias lunas” entrelazadas. Como K-Means e ISODATA construyen celdas basadas en distancias radiales (superficies esféricas o circulares), <strong>ninguno es capaz de separar fronteras de decisión no lineales</strong>. En el caso de ISODATA, al darle libertad de adaptar los grupos, terminó fragmentando las dos medias lunas en 7 pequeños clusters circulares, vacíos en el centro.</p>
+<p>Un alumno preguntó por qué preferir ISODATA sobre K-Means si en datos sencillos gráficamente dan un resultado similar. El profesor explicó que el resultado “bonito” de K-Means requirió múltiples corridas previas probando inicializaciones manuales específicas para no caer en mínimos locales malos, mientras que ISODATA logró la estructura de forma autónoma con una inicialización puramente aleatoria, gracias a sus reglas adaptativas.</p>
+</details>
+
+<details class="section-block sec" id="c7-comparativo" open><summary><span class="stitle">Aplicaciones reales y cuadro comparativo</span></summary>
+<p>Para cerrar el bloque de teoría, el profesor enumeró aplicaciones de estos algoritmos no supervisados:</p>
+<ul>
+<li><strong>Teledetección:</strong> clasificación de cobertura de suelo y vegetación en imágenes satelitales.</li>
+<li><strong>Medicina:</strong> segmentación automática de imágenes médicas (tomografías, resonancias).</li>
+<li><strong>Compresión e imágenes:</strong> reducción de paletas de color mediante cuantización vectorial.</li>
+<li><strong>Minería de datos:</strong> descubrimiento de patrones y perfiles en bases de datos masivas sin etiquetar.</li>
+<li><strong>Visión por computadora:</strong> segmentación de escenas y detección de objetos.</li>
+</ul>
+<table>
+<tr><th>Criterio</th><th>K-Means</th><th>LBG</th><th>ISODATA</th></tr>
+<tr><td><strong>Conocimiento previo de K</strong></td><td>Requiere definir K exacto y fijo desde el inicio.</td><td>No requiere K; se especifica el tamaño del codebook.</td><td>No requiere K fijo; se ajusta dinámicamente.</td></tr>
+<tr><td><strong>Estructura del resultado</strong></td><td>K clusters esféricos.</td><td>Codebook restringido a potencias de 2 (2<sup>m</sup>).</td><td>Número variable de clusters ajustados por heurística.</td></tr>
+<tr><td><strong>Sensibilidad a la inicialización</strong></td><td>Alta (depende críticamente de los centroides iniciales).</td><td>Baja (inicia con la media global de todos los datos).</td><td>Moderada / baja (sus heurísticas corrigen malas elecciones).</td></tr>
+<tr><td><strong>Geometría de fronteras</strong></td><td>Únicamente esféricas/circulares (falla en fronteras no lineales).</td><td>Regiones de Voronoi basadas en distancias esféricas.</td><td>Únicamente esféricas (falla en fronteras no lineales).</td></tr>
+<tr><td><strong>Criterios de parada</strong></td><td>Centroides fijos, inercia o iteraciones máximas.</td><td>Umbral de tolerancia en distorsión.</td><td>Convergencia de centroides o iteraciones máximas.</td></tr>
+</table>
+</details>
+
+<details class="section-block sec" id="c7-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> <strong>Complejidad de los ejercicios de examen:</strong> el profesor tranquilizó al grupo: los ejercicios numéricos sobre estos algoritmos serán sumamente sencillos. Se reducen a calcular distancias Euclidianas simples (diferencias al cuadrado) entre un punto y dos o tres centroides con coordenadas pequeñas (por ejemplo, evaluar los puntos (1,2) y (2,−5) respecto a los centroides (0,1) y (1,1)), hacer la asignación por distancia mínima y calcular la nueva media para una sola iteración de actualización.</li>
+<li><em>(Contexto)</em> <strong>Naturaleza de ISODATA:</strong> el profesor compartió que ISODATA se considera un algoritmo “artesanal” o puramente heurístico, derivado de la experiencia en ingeniería de los años 60 y 70; por eso carece de una prueba matemática elegante de convergencia global, a diferencia de métodos modernos, pero funcionó muy bien como puente histórico para mejorar K-Means.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c7-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Próxima sesión (lunes 21 de septiembre):</strong> se concluye el temario del primer bloque con <strong>clasificación por funciones de similitud</strong> — clasificadores probabilísticos basados en la regla de Bayes.</li>
+<li><strong>Entrega de la Práctica 2:</strong> viernes <strong>25 de septiembre de 2026</strong>. El tema se enfoca en clasificadores (trabajo más práctico que teórico).</li>
+<li><strong>Primer Examen Parcial:</strong> tras un debate en clase, los alumnos pidieron moverlo para tener la calificación y retroalimentación de la práctica como repaso previo. Se acordó por mayoría hacerlo el <strong>lunes 28 de septiembre de 2026</strong>.</li>
+<li><strong>Formato del examen:</strong> la clase del 28 se divide en dos bloques, 40 minutos de clase teórica inicial y 40 minutos para aplicar el examen. Abarca el contenido de la Práctica 1 y la Práctica 2 (teoría y ejercicios prácticos sencillos). Se permite <strong>calculadora científica física</strong> (está prohibido el celular). No se permite formulario personal: el profesor escribirá en el pizarrón todas las fórmulas necesarias durante el examen.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Aprendizaje no supervisado: agrupa vectores de características sin etiquetas, guiándose por cohesión intracluster y separación intercluster.</li>
+<li>K-Means minimiza la inercia; requiere fijar K de antemano, es sensible a la inicialización y solo traza fronteras esféricas.</li>
+<li>LBG construye un codebook por divisiones sucesivas (perturbación ε) desde la media global; minimiza la distorsión y su tamaño es siempre potencia de 2.</li>
+<li>ISODATA amplía K-Means ajustando K con división (por desviación estándar en la dimensión máxima), fusión (por cercanía) y eliminación (por pocos puntos).</li>
+<li>Ninguno de los tres resuelve fronteras no lineales (medias lunas), porque todos se basan en distancias radiales.</li>
+</ul></div>
+
+</div>
+</body>
+</html>
