@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 05 — Examen — Minería de Datos</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Minería de Datos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 05 — Examen</h2>
+  <p class="prof">M.C. José Concepción Roberto Olvera López · Fecha: 17 sep 2026 · Primer Examen Parcial (Temas 1 y 2): caso de negocio de una aseguradora, arquitectura de datos y proyectos de los equipos.</p>
+</div>
+
+<div class="section-block" style="background:#fff7ed;border-left:3px solid #A98BD1"><p style="margin:0"><strong>📋 Nota:</strong> esta sesión fue el <strong>Primer Examen Parcial</strong>, no una clase con tema nuevo. Abajo están mis respuestas, transcritas del PDF que entregué. El archivo original (con el diagrama hecho en hoja de papel) sigue en <a href="entregas.html">Entregas</a>: <a href="files/entregas/Examen-01-Caso-Aseguradora.pdf" target="_blank">Examen-01-Caso-Aseguradora.pdf</a>.</p></div>
+
+<details class="section-block sec" id="c5-caso" open><summary><span class="stitle">Caso de negocio: aseguradora (preguntas 1 y 2)</span></summary>
+<p>El caso: una compañía de seguros quiere reducir la siniestralidad por colisiones entre autos en zonas urbanas.</p>
+<p><strong>a) Puntos clave a validar antes de iniciar y beneficios esperados.</strong> Primero validar el objetivo real del negocio (reducir la siniestralidad en zonas urbanas derivada de colisiones). Después, qué tan completos y confiables son los datos históricos de pólizas y siniestros (pueden estar mal cargados o incompletos). Finalmente, el presupuesto y el tiempo disponibles y quién es el cliente que aprobará los cambios. Beneficios esperados: reducir el gasto por siniestros, tarificar mejor el riesgo según tipo de auto y zona, y detectar a tiempo los perfiles propensos a un accidente.</p>
+<p><strong>b) Información que se solicitaría.</strong> Qué sistemas manejan actualmente (pólizas y siniestros), si están conectados entre sí o son independientes, qué tan seguido se actualiza la información y en qué formato está guardada.</p>
+<p><strong>c) Transformación de datos con variables derivadas.</strong> Eliminar registros duplicados de pólizas y siniestros, tratar valores faltantes, estandarizar catálogos inconsistentes, detectar y revisar valores atípicos, normalizar los montos para poder compararlos, codificar variables categóricas (zona, tipo de póliza, tipo de auto) y generar variables derivadas.</p>
+<p><strong>d) Algoritmos.</strong> Primero un modelo de clasificación (regresión logística o random forest) para predecir la probabilidad de siniestro por póliza, porque el objetivo es predictivo y estos modelos manejan bien variables numéricas y categóricas combinadas. De forma complementaria, clustering (k-means) para segmentar zonas o perfiles de cliente con comportamientos similares durante la fase exploratoria.</p>
+<p><strong>e) Confianza en los resultados.</strong> Se evalúa con las métricas correspondientes al tipo de modelo, aplicando validación cruzada para evitar que el modelo esté sobreajustado a los datos de entrenamiento.</p>
+<p><strong>f) Presentación de resultados.</strong> Reportes y dashboards en lenguaje de negocio, con una prueba piloto antes del despliegue total. Criterios de aceptación: mejora medible frente a los indicadores iniciales, validación del área actuarial y aprobación de la dirección.</p>
+<p><strong>2. Plan de trabajo para el cliente.</strong> (1) Entendimiento del negocio, 1 a 2 semanas: objetivos y alcance. (2) Recolección y exploración de datos, 2 a 3 semanas: calidad y disponibilidad. (3) Limpieza y transformación, 2 a 3 semanas: corregir inconsistencias y generar variables derivadas. (4) Modelado, 3 a 4 semanas: aplicar los algoritmos propuestos. (5) Validación de resultados con el cliente, 1 a 2 semanas: confirmar que los hallazgos tengan sentido de negocio. (6) Implementación en piloto con monitoreo continuo. Se entregan avances parciales al cliente al final de cada etapa.</p>
+</details>
+
+<details class="section-block sec" id="c5-arquitectura" open><summary><span class="stitle">Tema: Arquitectura de datos</span></summary>
+<p>Se pedía revisar el caso y dar sugerencias en cinco puntos:</p>
+<ol>
+<li><strong>Diagrama:</strong> elaborado en hoja de papel (está en el PDF original).</li>
+<li><strong>Tecnología para optimizar el manejo de información</strong>, dada la dispersión de datos e información aislada: centralizar todo en un <strong>Data Lake</strong> que integre lo estructurado y lo no estructurado, mantener un <strong>Data Warehouse</strong> para el reporte histórico, incorporar herramientas <strong>ETL</strong> para automatizar la integración de las fuentes dispersas y usar <strong>procesamiento distribuido</strong> para escalar conforme crezca el volumen.</li>
+<li><strong>Información no estructurada:</strong> un Data Lake, porque almacena los datos en su formato original sin definir una estructura previa. Para las imágenes de siniestros, una <strong>base de datos vectorial</strong> que convierta imágenes y textos en vectores (embeddings) para búsquedas por similitud y clasificación automática.</li>
+<li><strong>Integración de datos:</strong> herramientas ETL para transformar y mover datos entre sistemas, un componente de mensajería como <strong>Kafka</strong> para integración en tiempo real y <strong>APIs</strong> para conectar los sistemas existentes, porque la información necesita unificarse.</li>
+<li><strong>Servicios de Big Data:</strong> almacenamiento distribuido (Data Lake), procesamiento distribuido, mecanismo de ingesta en tiempo real, capa de análisis y modelado, y componente de gobierno y seguridad de los datos.</li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c5-proyectos" open><summary><span class="stitle">Tema: Proyectos realizados por equipos</span></summary>
+<p><strong>1. Proyecto 1 (Nu Bank).</strong> El problema central fue el alto índice de incumplimiento de pago en los créditos otorgados por Nu, que generaba pérdidas financieras. El beneficio esperado es reducir esa tasa mediante un modelo de scoring de riesgo crediticio basado en datos alternativos y de comportamiento digital, lo que permite decidir con más precisión al aprobar créditos.</p>
+</details>
+
+<details class="section-block sec" id="c5-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li>Entrega del Proyecto del Tema 2 (Proyecto 2): fecha límite viernes 18 de septiembre de 2026, 2:00 pm (según Classroom, ver <a href="clase-04.html">Clase 04</a>).</li>
+<li>La revisión/cierre del tema, según lo dicho en la Clase 04, es a partir del 22 de septiembre.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Examen de Temas 1 y 2, con un caso de negocio (aseguradora), arquitectura de datos y proyectos de equipos.</li>
+<li>Modelos propuestos: clasificación (regresión logística / random forest) + clustering (k-means), con validación cruzada.</li>
+<li>Arquitectura propuesta: Data Lake + Data Warehouse + ETL + Kafka + APIs + base de datos vectorial para imágenes.</li>
+</ul></div>
+</div>
+</body>
+</html>
