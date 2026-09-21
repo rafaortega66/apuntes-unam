@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 08 — Reconocimiento de Patrones</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Reconocimiento de Patrones</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Clase 08</h2>
+  <p class="prof">Ing. Rubén Omar Azuara Domínguez · 21 sep 2026 · Tema 6 (cierre) y Tema 7 — Evaluación de agrupamientos con métricas internas (Dunn, Davies-Bouldin, Silueta) e inicio de la clasificación probabilística: regla de Bayes, riesgo condicional, QDA/LDA y Naive Bayes.</p>
+</div>
+
+<div class="section-block" style="background:#fff7ed;border-left:3px solid #45B8A8"><p style="margin:0"><strong>⚠️ Por verificar contra el audio:</strong> en esta clase, los apuntes generados por NotebookLM traen <strong>números que no cuadran</strong> en los ejemplos resueltos de Dunn, Davies-Bouldin, Silueta y Spam, y una <strong>fecha de práctica que contradice la Clase 07</strong>. Están marcados con ⚠️ dentro de cada sección; las fórmulas y los conceptos sí son consistentes.</p></div>
+
+<details class="section-block sec" id="c8-repaso" open><summary><span class="stitle">Repaso de algoritmos no supervisados y métricas internas de validación</span></summary>
+<p>La sesión inició con un repaso de los métodos de agrupamiento no supervisados de la clase anterior: en este enfoque no hay etiquetas previas para las instancias de entrenamiento. Sobre <strong>K-Means</strong> se recordó que requiere fijar el parámetro K durante todas las iteraciones, que asume clusters esféricos por usar distancias geométricas y que tiene serias dificultades con fronteras no lineales, como las dos medias lunas entrelazadas. De <strong>LBG</strong> (Linde-Buzo-Gray) se recordó que es un algoritmo de cuantización vectorial que genera un <em>codebook</em> de <em>codewords</em> minimizando la distorsión global, y que su tamaño queda restringido a potencias de 2 (2, 4, 8, 16, 32…) porque en cada iteración los vectores se duplican con una perturbación positiva y negativa en la dirección de la varianza. De <strong>ISODATA</strong> se reiteró que evoluciona K-Means con heurísticas para separar clusters muy dispersos, fusionar los excesivamente cercanos y eliminar los que no tienen un mínimo de elementos.</p>
+<p>Después el profesor introdujo las <strong>métricas de evaluación de agrupamientos</strong>, clasificadas como <strong>métricas internas</strong>: se llaman así porque evalúan la calidad de los grupos formados analizando únicamente la geometría del espacio de características, sin requerir conocimiento previo ni etiquetas reales de clase (<em>ground truth</em>). Se explicaron tres.</p>
+
+<h4>A. Índice de Dunn</h4>
+<p>Mide la relación entre la separación mínima entre clusters distintos y el diámetro máximo dentro de un mismo cluster.</p>
+<p style="text-align:center"><em>Dunn = min<sub>i≠j</sub> d(S<sub>i</sub>, S<sub>j</sub>) / max<sub>k</sub> Δ(S<sub>k</sub>)</em></p>
+<p>El numerador es la distancia mínima entre cualquier par de puntos de clusters diferentes (S<sub>i</sub> y S<sub>j</sub>); el denominador Δ(S<sub>k</sub>) es el diámetro del cluster, es decir, la distancia máxima entre dos puntos dentro del mismo cluster S<sub>k</sub>. Su rango va de 0 a +∞: <strong>un valor más alto es mejor</strong> (alta separación intercluster y baja dispersión intracluster).</p>
+<p><strong>Ejemplo resuelto en vivo (tres clusters S1, S2, S3 en una dimensión):</strong></p>
+<ul>
+<li>Separaciones mínimas intercluster: S1–S2 (puntos 3 y 7) d = 4; S1–S3 (puntos 3 y 15) d = 12; S2–S3 (puntos 8 y 15) d = 7. Numerador = mín(4, 12, 7) = 4.</li>
+<li>Diámetros intracluster: S1 (puntos 1 y 3) d = 2; S2 (puntos 7 y 8) d = 1; S3 (puntos 15 y 17) d = 2.</li>
+<li>Resultado según NotebookLM: denominador = 12 “(evaluando la escala global)”, Dunn = 4/12 = 0.333.</li>
+</ul>
+<p>⚠️ <em>Por verificar:</em> con los diámetros anotados (2, 1, 2), el máximo es 2, no 12; con esos datos el cálculo daría 4 / 2 = 2. El 12 parece venir de otro dato (la separación S1–S3) o de un error de transcripción. Confirmar con el audio cuál fue el resultado que dio el profesor.</p>
+
+<h4>B. Índice de Davies-Bouldin</h4>
+<p>Evalúa la similitud promedio entre cada cluster y su cluster más parecido, comparando la dispersión interna de los grupos contra la separación entre sus centroides.</p>
+<p style="text-align:center"><em>R<sub>ij</sub> = (S<sub>i</sub> + S<sub>j</sub>) / d(m<sub>i</sub>, m<sub>j</sub>) &nbsp;·&nbsp; D<sub>i</sub> = max<sub>j≠i</sub> R<sub>ij</sub> &nbsp;·&nbsp; DB = (1/K) · Σ<sub>i=1..K</sub> D<sub>i</sub></em></p>
+<p>S<sub>i</sub> es la dispersión promedio de los puntos del cluster i respecto a su centroide m<sub>i</sub>, y d(m<sub>i</sub>, m<sub>j</sub>) es la distancia Euclidiana entre los centroides de los clusters i y j. Su rango va de 0 a +∞ y, a diferencia de Dunn, <strong>mientras más pequeño sea el índice, mejor es el agrupamiento</strong>.</p>
+<p><strong>Ejemplo resuelto en vivo (clusters S1, S2, S3):</strong> dispersiones internas S<sub>1</sub> = 0.67, S<sub>2</sub> = 0.5, S<sub>3</sub> = 0.67; distancias entre centroides d(m<sub>1</sub>,m<sub>2</sub>) = 5.5, d(m<sub>1</sub>,m<sub>3</sub>) = 14, d(m<sub>2</sub>,m<sub>3</sub>) = 8.5. Cociente R<sub>12</sub> = (0.67 + 0.5)/5.5 = 0.212. Máximos por cluster según NotebookLM: D<sub>1</sub> = 0.33, D<sub>2</sub> = 0.213, D<sub>3</sub> = 0.138. Promedio: DB = (0.33 + 0.213 + 0.138)/3 = 0.188.</p>
+<p>⚠️ <em>Por verificar:</em> con los mismos datos, R<sub>12</sub> = 0.212, R<sub>13</sub> = 1.34/14 ≈ 0.096 y R<sub>23</sub> = 1.17/8.5 ≈ 0.138, así que D<sub>1</sub> saldría 0.212 (no 0.33) y D<sub>2</sub> = 0.212. El resultado global quedaría ≈ 0.187, casi igual al 0.188 anotado. También aparece un “aprox. 0.6 en gráfico simplificado” que no se explica.</p>
+
+<h4>C. Coeficiente de Silueta (Silhouette)</h4>
+<p>Evalúa qué tan bien asignado está un punto individual comparando su cercanía a los puntos de su propio cluster contra su cercanía a los del cluster vecino más próximo.</p>
+<p style="text-align:center"><em>s(i) = ( b(i) − a(i) ) / máx( a(i), b(i) )</em></p>
+<p>a(i) es la distancia media del punto i hacia todos los demás puntos de su mismo cluster; b(i) es la distancia media del punto i hacia los puntos del cluster vecino más cercano. La métrica global se obtiene calculando s(i) para cada dato del dataset y sacando la media aritmética.</p>
+<p><strong>Ejemplo resuelto en vivo (punto X = 2 del cluster S1):</strong> a = distancia media entre X = 2 y los puntos 1 y 3 de S1 = 1. b = distancia media de X = 2 a los puntos 15, 16 y 17 = 14. Entonces s(2) = (14 − 1) / máx(1, 14) = 13/14 = 0.818.</p>
+<p>⚠️ <em>Por verificar:</em> los apuntes llaman “S2” al cluster de los puntos 15, 16 y 17, pero en el ejemplo de Dunn esos puntos pertenecían a S3 (S2 eran 7 y 8). Además, el “cluster vecino más cercano” de X = 2 sería el de 7 y 8, no el de 15–17. Revisar en el audio qué cluster se tomó como vecino.</p>
+<p>Un alumno preguntó: si se pide calcular para el punto X = 2 en S1, ¿por qué se calcula entonces en S2 al final? El profesor aclaró que <em>a</em> mide la distancia interna en su propio cluster, mientras que <em>b</em> evalúa la distancia promedio hacia el resto de los clusters. Si se quisiera evaluar el punto X = 7 de S2, <em>a</em> se obtendría con respecto a los datos de S2 (distancia a X = 8), y para <em>b</em> se calcularían las distancias medias hacia S1 y hacia S3, eligiendo como <em>b</em> el valor mínimo (el del cluster vecino más cercano). Al evaluar X = 7 se obtuvo una silueta individual de 0.8.</p>
+<table>
+<tr><th>Rango de silueta</th><th>Estructura del agrupamiento</th></tr>
+<tr><td>&lt; 0.25</td><td>Sin estructura definida en los clusters.</td></tr>
+<tr><td>0.26 – 0.50</td><td>Estructura de agrupamiento débil.</td></tr>
+<tr><td>0.51 – 0.70</td><td>Estructura de agrupamiento razonable.</td></tr>
+<tr><td>0.71 – 1.00</td><td>Excelente estructuración de los clusters.</td></tr>
+</table>
+</details>
+
+<details class="section-block sec" id="c8-similitud" open><summary><span class="stitle">Clasificación por funciones de similitud y repaso de probabilidad</span></summary>
+<p>Concluido el bloque de métodos basados en distancias, el profesor pasó a los <strong>clasificadores basados en funciones de similitud y probabilidades</strong>. En vez de asignar patrones buscando la distancia mínima a un centroide o prototipo, la regla de decisión se modela evaluando qué tan probable o parecido es un patrón X con respecto a cada clase W<sub>i</sub>, mediante una función discriminante g<sub>i</sub>(X). La regla general: asignar X a la clase W<sub>i</sub> si</p>
+<p style="text-align:center"><em>g<sub>i</sub>(X) &gt; g<sub>j</sub>(X) &nbsp; para todo j ≠ i</em></p>
+<p>lo que equivale a que la probabilidad de pertenecer a la clase i sea estrictamente superior a la de cualquier otra clase j.</p>
+<p>Para cimentar el modelo probabilístico se repasaron conceptos de probabilidad:</p>
+<ul>
+<li><strong>Variable aleatoria:</strong> función real que mapea elementos del espacio muestral Ω al conjunto de los reales ℝ en un espacio de probabilidad (Ω, 𝒜, P).</li>
+<li><strong>Función de densidad de probabilidad (PDF):</strong> describe la distribución de probabilidad de variables continuas X. Cumple P(X) ≥ 0, el área total bajo la curva es 1 (∫ P(x) dx = 1 de −∞ a ∞) y la probabilidad en un intervalo [a, b] es ∫ P(x) dx de a a b.</li>
+<li><strong>Función de distribución acumulada (CDF):</strong> es monótonamente no decreciente al ir sumando las probabilidades acumuladas del intervalo.</li>
+<li><strong>Distribución normal (gaussiana):</strong> rige muchos fenómenos naturales. Su forma de campana queda completamente parametrizada por su media μ (desplazamiento central en el eje X) y su desviación estándar σ (nivel de agrupamiento o dispersión alrededor de la media).</li>
+<li><strong>Momentos de una distribución:</strong> describen la forma geométrica en que se concentran los datos; se calculan como el valor esperado E[(X − μ)<sup>r</sup>]. El primer momento respecto al origen es el centro de masa o media de la distribución.</li>
+<li><strong>Vector de medias (μ) y matriz de covarianza (Σ):</strong> en espacios multidimensionales, el vector de medias contiene la media de cada característica y la matriz de covarianza describe cómo varían las variables de forma conjunta. Para N patrones: Σ = (1/(N−1)) · Σ<sub>i=1..N</sub> (X<sub>i</sub> − μ)(X<sub>i</sub> − μ)<sup>T</sup>. La diagonal principal contiene las varianzas de cada característica (σ<sub>i</sub>²) y los términos fuera de la diagonal son las covarianzas cruzadas entre pares de características.</li>
+<li><strong>Matriz de correlación:</strong> versión normalizada de la covarianza, dividiendo cada término entre σ<sub>i</sub>σ<sub>j</sub>. Da valores positivos si hay relación directa, negativos si es inversa y 0 si no hay correlación. El profesor enfatizó de forma categórica que <strong>correlación cero NO implica independencia</strong>.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c8-bayes" open><summary><span class="stitle">Teoría de decisión de Bayes, función de costo y riesgo condicional</span></summary>
+<p>La <strong>probabilidad condicional</strong> P(X|W<sub>i</sub>) es la probabilidad de observar el vector de características X dado que pertenece a la clase W<sub>i</sub>. Para formalizar la decisión como un problema estadístico se definen las clases ω<sub>1</sub>, ω<sub>2</sub>, …, ω<sub>c</sub>, un vector de características X y un conjunto de acciones α<sub>1</sub>, α<sub>2</sub>, …, α<sub>c</sub>, donde la acción α<sub>i</sub> es decidir que X se asigna a la clase ω<sub>i</sub>.</p>
+<p>Para evaluar las consecuencias de una decisión se introduce la <strong>función de costo o pérdida</strong> λ(α<sub>i</sub> | ω<sub>j</sub>): la penalización numérica de tomar la acción α<sub>i</sub> (asignar a la clase i) cuando el patrón pertenece realmente a ω<sub>j</sub>.</p>
+<ul>
+<li><strong>Acierto:</strong> si i = j, el costo es 0.</li>
+<li><strong>Pérdida simétrica (0/1):</strong> costo 1 a cualquier error de clasificación y 0 a los aciertos.</li>
+<li><strong>Pérdida asimétrica:</strong> algunos errores son más costosos o peligrosos que otros (λ<sub>12</sub> ≠ λ<sub>21</sub>). Ejemplo del profesor: el diagnóstico médico, donde un falso negativo (decirle a un paciente que está sano cuando tiene cáncer) es inmensamente más costoso e inaceptable que un falso positivo (decirle que tiene cáncer cuando está sano, algo que se descarta con estudios posteriores).</li>
+</ul>
+<p>A partir de la función de costo y de la <strong>probabilidad posterior</strong> P(ω<sub>j</sub> | X) —la certeza de que el patrón pertenezca a ω<sub>j</sub> tras observar X— se define el <strong>riesgo condicional</strong> como la pérdida promedio esperada al tomar la acción α<sub>i</sub>:</p>
+<p style="text-align:center"><em>R(α<sub>i</sub> | X) = Σ<sub>j=1..c</sub> λ(α<sub>i</sub> | ω<sub>j</sub>) · P(ω<sub>j</sub> | X)</em></p>
+<p><strong>Ejemplo resuelto en vivo:</strong> dos clases (ω<sub>1</sub>, ω<sub>2</sub>), probabilidades a posteriori P(ω<sub>1</sub>|X) = 0.7 y P(ω<sub>2</sub>|X) = 0.3, matriz de costo simétrica 0/1 (λ<sub>11</sub> = 0, λ<sub>12</sub> = 1, λ<sub>21</sub> = 1, λ<sub>22</sub> = 0).</p>
+<ul>
+<li>R(α<sub>1</sub>|X) = (λ<sub>11</sub>·P(ω<sub>1</sub>|X)) + (λ<sub>12</sub>·P(ω<sub>2</sub>|X)) = (0·0.7) + (1·0.3) = <strong>0.3</strong></li>
+<li>R(α<sub>2</sub>|X) = (λ<sub>21</sub>·P(ω<sub>1</sub>|X)) + (λ<sub>22</sub>·P(ω<sub>2</sub>|X)) = (1·0.7) + (0·0.3) = <strong>0.7</strong></li>
+<li><strong>Regla de decisión óptima de Bayes:</strong> se elige la acción que minimiza el riesgo condicional. Como 0.3 &lt; 0.7, la decisión óptima es α<sub>1</sub> (clasificar como clase 1).</li>
+</ul>
+<p>Un alumno preguntó cómo se sustituye la matriz de pérdida en la fórmula de riesgo; el profesor confirmó que los valores de costo λ vienen de la matriz fijada por el problema y las probabilidades vienen del clasificador.</p>
+<p>El profesor demostró que, con pérdida simétrica (0/1), el riesgo de asignar a la clase i se simplifica a R(α<sub>i</sub> | X) = 1 − P(ω<sub>i</sub> | X). Por lo tanto, <strong>minimizar el riesgo condicional es idéntico a maximizar la probabilidad posterior P(ω<sub>i</sub> | X)</strong>.</p>
+<p>La probabilidad posterior se calcula con la <strong>regla de Bayes</strong>:</p>
+<p style="text-align:center"><em>P(ω<sub>i</sub> | X) = P(X | ω<sub>i</sub>) · P(ω<sub>i</sub>) / P(X)</em></p>
+<ul>
+<li>P(X | ω<sub>i</sub>) es la <strong>verosimilitud</strong> (<em>likelihood</em>): probabilidad de observar el patrón X en la clase ω<sub>i</sub>.</li>
+<li>P(ω<sub>i</sub>) es la <strong>probabilidad a priori</strong> (<em>prior</em>): probabilidad marginal de la clase antes de ver los datos.</li>
+<li>P(X) es la <strong>evidencia</strong>: probabilidad total de observar X. Como es constante para todas las clases al evaluar un mismo patrón, se elimina del cálculo sin alterar el orden de decisión.</li>
+</ul>
+<p>Aplicando el logaritmo natural (función monótonamente creciente), la función discriminante queda: <em>g<sub>i</sub>(X) = ln P(X | ω<sub>i</sub>) + ln P(ω<sub>i</sub>)</em>.</p>
+</details>
+
+<details class="section-block sec" id="c8-gaussianos" open><summary><span class="stitle">Clasificadores gaussianos de Bayes: QDA, LDA y Bayes ingenuo</span></summary>
+<p>Como calcular la verosimilitud P(X | ω<sub>i</sub>) de forma arbitraria es complejo, la aproximación estándar es suponer que los patrones de cada clase siguen una <strong>distribución normal multivariada</strong>. Sustituyendo la densidad gaussiana en la función de decisión con logaritmo, la expresión queda en términos de la <strong>distancia de Mahalanobis</strong>:</p>
+<p style="text-align:center"><em>g<sub>k</sub>(X) = −½ · d<sub>M</sub>²(X, μ<sub>k</sub>) − ½ · ln|Σ<sub>k</sub>| + ln P(ω<sub>k</sub>)</em></p>
+<p>donde d<sub>M</sub>²(X, μ<sub>k</sub>) = (X − μ<sub>k</sub>)<sup>T</sup> Σ<sub>k</sub><sup>−1</sup> (X − μ<sub>k</sub>) es la distancia de Mahalanobis al centroide μ<sub>k</sub>, |Σ<sub>k</sub>| es el determinante de la matriz de covarianza y P(ω<sub>k</sub>) es la probabilidad a priori. Según lo que se suponga de Σ<sub>k</sub>, salen tres clasificadores de la familia gaussiana de Bayes:</p>
+<table>
+<tr><th>Clasificador</th><th>Supuesto sobre la covarianza</th><th>Parámetros</th><th>Fronteras</th></tr>
+<tr><td><strong>QDA</strong> (Análisis Discriminante Cuadrático)</td><td>Una matriz de covarianza independiente y distinta por clase (Σ<sub>i</sub> ≠ Σ<sub>j</sub>).</td><td>Un vector de medias μ<sub>i</sub> y una matriz Σ<sub>i</sub> por clase.</td><td>Superficies de decisión cuadráticas y complejas.</td></tr>
+<tr><td><strong>LDA</strong> (Análisis Discriminante Lineal)</td><td>Todas las clases comparten una única matriz de covarianza común (Σ<sub>i</sub> = Σ).</td><td>Un vector de medias μ<sub>i</sub> por clase y una Σ compartida.</td><td>Hiperplanos lineales.</td></tr>
+<tr><td><strong>Bayes ingenuo gaussiano</strong> (Gaussian Naive Bayes)</td><td>Matriz de covarianza estrictamente diagonal: no hay covarianza entre características (son independientes).</td><td>Un vector de medias μ<sub>i</sub> y un vector de varianzas σ<sub>i</sub>² por clase (la diagonal).</td><td>—</td></tr>
+</table>
+</details>
+
+<details class="section-block sec" id="c8-naive" open><summary><span class="stitle">Naive Bayes: caso continuo, discreto (filtro de spam) y suavizado de Laplace</span></summary>
+<p>El clasificador <strong>Naive Bayes (Bayes ingenuo)</strong> se basa en la <strong>independencia condicional de las características dada la clase</strong>. En vez de evaluar la verosimilitud conjunta P(X<sub>1</sub>, …, X<sub>d</sub> | ω<sub>i</sub>) —impracticable en altas dimensiones— la independencia permite descomponerla en el producto de las probabilidades de cada característica:</p>
+<p style="text-align:center"><em>P(X | ω<sub>i</sub>) = Π<sub>j=1..d</sub> P(X<sub>j</sub> | ω<sub>i</sub>)</em></p>
+<p>Se llama “ingenuo” porque en el mundo real las características casi siempre están correlacionadas; aun así, en la práctica rinde sorprendentemente bien y es muy eficiente.</p>
+<ul>
+<li><strong>Caso continuo:</strong> cada característica X<sub>j</sub> se modela con una normal unidimensional de media μ<sub>ij</sub> y desviación estándar σ<sub>ij</sub>. Por ejemplo, con 6 características y 4 clases, el modelo solo necesita calcular y guardar 24 medias y 24 desviaciones estándar. Los priors salen contando: P(ω<sub>i</sub>) = N<sub>i</sub> / N<sub>total</sub>.</li>
+<li><strong>Caso discreto (multinomial):</strong> se usa el conteo de frecuencias de aparición de elementos o palabras en los datos.</li>
+</ul>
+<p><strong>Ejemplo resuelto en vivo — filtro de spam multinomial.</strong> Entrenamiento con 8 correos (3 spam, 5 no spam): P(Spam) = 3/8 = 0.375 y P(No Spam) = 5/8 = 0.625. Conteos de palabras clave: “oferta” Spam 1/10, No Spam 0/21; “gratis” Spam 2/10, No Spam 0/21; “hoy” Spam 1/10, No Spam 2/21; “es” Spam 1/10, No Spam 2/21; “secreto” Spam 3/10, No Spam 1/21.</p>
+<p>Mensaje entrante: <em>“hoy es secreto”</em>.</p>
+<ul>
+<li>Spam: P(“hoy”|Spam)·P(“es”|Spam)·P(“secreto”|Spam)·P(Spam) = (1/10)(1/10)(3/10)(3/8) = <strong>0.001125</strong>.</li>
+<li>No Spam: P(“hoy”|NoSpam)·P(“es”|NoSpam)·P(“secreto”|NoSpam)·P(NoSpam) = (2/21)(2/21)(1/21)(5/8) = <strong>0.000283</strong> según NotebookLM.</li>
+<li>Como 0.001125 &gt; 0.000283, el mensaje se clasifica como <strong>SPAM</strong>.</li>
+</ul>
+<p>⚠️ <em>Por verificar:</em> con esos conteos, (2/21)(2/21)(1/21)(5/8) da ≈ 0.00027, no 0.000283. La conclusión (spam) no cambia.</p>
+<h4>Frecuencia cero y suavizado de Laplace</h4>
+<p>Si llega un mensaje con una palabra que nunca apareció en el entrenamiento para cierta clase (por ejemplo “evento” en Spam u “oferta” en No Spam), la probabilidad P(X<sub>j</sub> | ω<sub>i</sub>) es 0. Al multiplicarse en la verosimilitud, <strong>anula toda la ecuación y la probabilidad posterior queda en cero</strong>, imposibilitando la clasificación.</p>
+<p>Se resuelve con el <strong>suavizado de Laplace</strong>: sumar una pequeña constante positiva a los conteos (típicamente 1/V, con V el tamaño del vocabulario, por ejemplo 1/12), tanto en las frecuencias dentro de la clase como fuera de ella. Así las palabras no vistas reciben una probabilidad muy pequeña pero distinta de cero. Ante la pregunta de un estudiante sobre si el valor del suavizado puede ser arbitrario, el profesor aclaró que debe mantener la suma total de la densidad de probabilidad en 1; de lo contrario se altera la función de densidad.</p>
+</details>
+
+<details class="section-block sec" id="c8-codigo" open><summary><span class="stitle">Implementación en código, evaluación en Iris y ventajas/desventajas</span></summary>
+<p>En Python, los cálculos se implementan con transformaciones logarítmicas para evitar el <em>underflow</em> numérico causado por multiplicar probabilidades decimales muy pequeñas: función de decisión = ln P(Gaussiana) + ln P(Prior).</p>
+<p>Se presentó la evaluación sobre el dataset <strong>Iris</strong> (120 muestras de entrenamiento, 30 de prueba, 4 características y 3 clases):</p>
+<ul>
+<li><strong>Naive Bayes gaussiano:</strong> en la matriz de confusión del conjunto de prueba cometió un solo error (clasificó una muestra de <em>Versicolor</em> como <em>Virginica</em>).</li>
+<li><strong>QDA:</strong> al modelar matrices de covarianza independientes por clase, capturó fronteras más complejas y alcanzó <strong>100 % de exactitud</strong> (0 errores).</li>
+</ul>
+<table>
+<tr><th>Ventajas</th><th>Desventajas</th></tr>
+<tr><td><strong>Pocos parámetros:</strong> solo requiere estimar medias, varianzas o covarianzas.</td><td><strong>Sensible a la correlación:</strong> la independencia degrada el modelo si las variables están fuertemente correlacionadas.</td></tr>
+<tr><td><strong>Pocas muestras:</strong> entrena bien con sets reducidos (ej. 100 muestras).</td><td><strong>No captura interacciones:</strong> al evaluar cada característica por separado, no detecta relaciones cruzadas implícitas.</td></tr>
+<tr><td><strong>Alta dimensionalidad:</strong> se adapta eficientemente a espacios con muchas características.</td><td><strong>Sensible a características irrelevantes:</strong> variables sin información pueden perjudicar el producto de verosimilitudes.</td></tr>
+<tr><td><strong>Actualización en línea:</strong> permite incorporar nuevos datos o palabras sin reentrenar desde cero.</td><td><strong>Sensible a frecuencias cero:</strong> requiere suavizado obligatorio en datos discretos.</td></tr>
+</table>
+</details>
+
+<details class="section-block sec" id="c8-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> <strong>Naive Bayes en la industria:</strong> aunque la independencia entre características es conceptualmente “ingenua” y casi nunca se cumple, sigue siendo de los modelos más usados en producción para filtrado de spam y clasificación masiva de textos, por su velocidad de cómputo y bajo consumo de memoria.</li>
+<li><em>(Contexto)</em> <strong>Underflow:</strong> en sistemas reales, multiplicar decenas de valores entre 0 y 1 genera rápidamente un cero por bajo flujo numérico, por eso en la práctica profesional se trabaja en el dominio logarítmico, sumando logaritmos en lugar de multiplicar probabilidades directas.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c8-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<p>⚠️ <strong>Discrepancia a resolver:</strong> en la <a href="clase-07.html">Clase 07</a> los apuntes dicen que la <strong>Práctica 2</strong> (clasificadores) se entrega el viernes 25 sep; en esta clase los apuntes hablan de la <strong>Práctica 3</strong> (algoritmos no supervisados) con la misma fecha, 25 sep. Puede ser una sola práctica con dos nombres, o dos prácticas con la misma fecha. Contrastar con Classroom (<code>/revisar-classroom</code>) o el audio.</p>
+<ul>
+<li><strong>Práctica 3 — Algoritmos no supervisados</strong> (según los apuntes de esta clase):
+  <ol>
+  <li>Implementar K-Means desde cero, con corridas de K = 4, distintas semillas aleatorias e inicialización K-Means++.</li>
+  <li>Implementar ISODATA desde cero con sus reglas de división, fusión y eliminación.</li>
+  <li>Evaluar los agrupamientos de ambos algoritmos con las métricas internas vistas hoy (Dunn, Davies-Bouldin y Silueta).</li>
+  <li>Construir una matriz de coincidencia/confusión que compare los clusters encontrados sin supervisión contra las clases reales del dataset sintético.</li>
+  </ol>
+</li>
+<li><strong>Entrega:</strong> viernes 25 de septiembre de 2026.</li>
+<li><strong>Próxima clase (viernes 25 sep):</strong> se resolverán dudas finales sobre las prácticas y el temario.</li>
+<li><strong>Primer Examen Parcial:</strong> lunes 28 de septiembre de 2026 (40 min de clase + 40 min de examen; calculadora científica física permitida; prohibido el celular; las fórmulas se escriben en el pizarrón).</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Métricas internas de clustering (sin etiquetas): Dunn y Silueta se maximizan; Davies-Bouldin se minimiza.</li>
+<li>Con pérdida simétrica 0/1, minimizar el riesgo condicional equivale a maximizar la probabilidad posterior P(ω<sub>i</sub> | X) de la regla de Bayes.</li>
+<li>Con verosimilitudes normales: QDA usa una covarianza por clase (fronteras cuadráticas), LDA una covarianza compartida (fronteras lineales) y Naive Bayes covarianza diagonal (independencia).</li>
+<li>Naive Bayes asume independencia condicional dada la clase; el suavizado de Laplace evita que una palabra no vista anule la probabilidad con un cero.</li>
+</ul></div>
+
+</div>
+</body>
+</html>
