@@ -66,19 +66,20 @@
 <ul>
 <li><strong>El problema:</strong> el procesador opera en el orden de GHz, mientras que los periféricos transmiten en MHz o MB/s. Usar al procesador para mover manualmente cada byte de un periférico a la RAM es un desperdicio severo de recursos.</li>
 <li><strong>Cómo funciona:</strong> es un módulo de hardware externo ubicado en el <em>chipset</em> que gestiona las interrupciones de los periféricos y transfiere los bloques de datos directamente a la RAM sin intervención de la CPU.</li>
-<li><strong>Ejemplo, RP2040:</strong> el microcontrolador RP2040 (32 bits a 150 MHz) integra 2 núcleos y 2 controladores DMA independientes, de modo que los DMA mueven internamente altas tasas de datos entre periferias (por ejemplo USB a SPI) mientras los núcleos ejecutan algoritmos en paralelo.</li>
+<li><strong>Ejemplo, RP2040:</strong> el microcontrolador RP2040 (32 bits a 150 MHz, según dijo el profesor) integra 2 núcleos y 2 controladores DMA independientes, de modo que los DMA mueven internamente altas tasas de datos entre periferias (por ejemplo USB a SPI) mientras los núcleos ejecutan algoritmos en paralelo.</li>
 </ul>
 </details>
 
 <details class="section-block sec" id="c7-chipset" open><summary><span class="stitle">Arquitectura de chipset: Puente Norte y Puente Sur</span></summary>
 <p>La arquitectura tradicional de las tarjetas madre organiza la transferencia de datos en dos bloques o puentes de interconexión:</p>
 <ul>
-<li><strong>Puente Norte (<em>Northbridge</em>):</strong> canal de ultra alta velocidad conectado directamente con el procesador (3 GHz), la memoria RAM (2.66 GHz), la tarjeta gráfica (GPU en ranuras PCIe x16) y las unidades de estado sólido (SSD, NVMe por PCIe).</li>
-<li><strong>Puente Sur (<em>Southbridge</em>):</strong> gestiona los periféricos de menor velocidad: discos SATA (60 MB/s), ranuras PCI (150 MHz / 2 GB/s), puertos USB 3.0/3.1 y red Gigabit Ethernet (125 MB/s). Adapta estas velocidades y envía la información hacia el Puente Norte.</li>
+<li><strong>Puente Norte (<em>Northbridge</em>):</strong> canal de ultra alta velocidad conectado directamente con el procesador (3 GHz), la memoria RAM (2.66 GHz), la tarjeta gráfica (GPU en ranuras PCIe x16; tampoco se dio cifra para la ranura) y las unidades de estado sólido (SSD; el profesor no dio ninguna cifra de velocidad para ellos).</li>
+<li><strong>Puente Sur (<em>Southbridge</em>):</strong> gestiona los periféricos de menor velocidad: discos SATA (60 MB/s), ranuras PCI (150 MHz / 2 GB/s), puertos USB 3.0/3.1 (el profesor citó 5 Gbps para el 3.1 y calculó, dividiendo entre 8, que no se llega al gigabyte por segundo) y red Gigabit Ethernet (1 Gbps ÷ 8 ≈ 125 MB/s). Adapta estas velocidades y envía la información hacia el Puente Norte.</li>
 </ul>
 <p>La CPU se conecta al Puente Norte por un bus de ultra alta velocidad, y el Puente Norte al Puente Sur por un enlace de alta velocidad.</p>
 <p><strong>Carga de datos en videojuegos:</strong> durante la pantalla de carga de un juego, el controlador DMA del chipset transfiere texturas y matrices directamente del SSD a la RAM de la GPU sin despertar a la CPU. Una vez cargados los datos, la CPU delega el procesamiento gráfico a la GPU y queda en estado de bajo consumo.</p>
-<p>⚠️ <em>Por verificar con el audio:</em> las cifras de velocidad de este bloque (PCI a 150 MHz / 2 GB/s, SATA a 60 MB/s, RAM a 2.66 GHz) están tal como salieron en los apuntes de NotebookLM.</p>
+<p>✔️ <em>Cifras verificadas contra la transcripción del audio (21 sep 2026):</em> CPU 3 GHz, RAM 2.66 GHz, SATA “60 MB por segundo”, PCI de 32 bits a 150 MHz y 2 GB/s (en otra mención la transcripción trae “150 Hz”, que es ambigua), Gigabit Ethernet ≈ 125 MB/s, USB 3.1 a 5 Gbps. Coinciden con lo que dijo el profesor.</p>
+<p>ℹ️ <em>Referencia externa, no dicha en clase:</em> según las especificaciones publicadas, SATA III llega a 600 MB/s (no 60) y el PCI convencional de 32 bits corre a 33 o 66 MHz (133 o 266 MB/s), no a 150 MHz / 2 GB/s. Puede que el profesor haya dado cifras aproximadas o que la transcripción haya comido un dígito. <strong>Para el examen conviene usar las cifras del profesor</strong>, y confirmar con él si alguna se pregunta con número.</p>
 </details>
 
 <details class="section-block sec" id="c7-timers" open><summary><span class="stitle">Temporizadores (timers): definición, papel en el SO y las 4 características</span></summary>
