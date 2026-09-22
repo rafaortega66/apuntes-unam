@@ -93,53 +93,69 @@
         });
         if (!items.length) { mount.innerHTML = ''; return; }
 
-        var slides = items.map(function (it) {
-          return '<div class="car-slide"><a class="car-card" href="' + SITE_ROOT + (it.link || '#') + '" style="--c:' + (it.color || '#7C9CD6') + '">' +
+        function cardHtml(it) {
+          return '<a class="car-card" href="' + SITE_ROOT + (it.link || '#') + '" style="--c:' + (it.color || '#7C9CD6') + '">' +
             '<div class="car-top"><span class="car-tag">' + (LABELS[it.urgencia] || '') + '</span><span class="car-fecha">' + fmtFechaCorta(it.fecha) + '</span></div>' +
             '<div class="car-materia">' + it.materia + '</div>' +
             '<div class="car-titulo">' + it.titulo + '</div>' +
-            '</a></div>';
-        }).join('');
-        var dots = items.map(function (_, i) {
-          return '<button class="car-dot' + (i === 0 ? ' active' : '') + '" data-i="' + i + '" aria-label="Pendiente ' + (i + 1) + '"></button>';
-        }).join('');
+            '</a>';
+        }
+        // el track lleva la lista duplicada (dos veces seguidas) para poder
+        // hacer scroll continuo infinito sin que se note el punto de reinicio
+        var multi = items.length > 1;
+        var loopItems = multi ? items.concat(items) : items;
+        var cardsHtml = loopItems.map(cardHtml).join('');
 
         mount.innerHTML =
           '<div class="pend-carousel-head"><h2>📌 Pendientes</h2><a href="' + SITE_ROOT + 'pendientes.html">Ver todo →</a></div>' +
           '<div class="car-viewport">' +
-            '<div class="car-track">' + slides + '</div>' +
-            (items.length > 1 ? '<button class="car-nav prev" aria-label="Anterior">‹</button><button class="car-nav next" aria-label="Siguiente">›</button>' : '') +
-          '</div>' +
-          (items.length > 1 ? '<div class="car-dots">' + dots + '</div>' : '');
+            (multi ? '<button class="car-nav prev" aria-label="Anterior">‹</button>' : '') +
+            '<div class="car-track">' + cardsHtml + '</div>' +
+            (multi ? '<button class="car-nav next" aria-label="Siguiente">›</button>' : '') +
+          '</div>';
 
+        if (!multi) return; // un solo pendiente: tarjeta fija, sin animación ni flechas
+
+        // ---- scroll continuo tipo "ticker" de bolsa, con flechas para saltar ----
         var track = mount.querySelector('.car-track');
-        var dotEls = mount.querySelectorAll('.car-dot');
-        var idx = 0, timer = null;
-
-        function render() {
-          track.style.transform = 'translateX(-' + (idx * 100) + '%)';
-          for (var i = 0; i < dotEls.length; i++) dotEls[i].classList.toggle('active', i === idx);
-        }
-        function go(i) { idx = (i + items.length) % items.length; render(); }
-        function stopAuto() { if (timer) clearInterval(timer); timer = null; }
-        function startAuto() {
-          stopAuto();
-          if (items.length > 1) timer = setInterval(function () { go(idx + 1); }, 5000);
-        }
-
         var viewport = mount.querySelector('.car-viewport');
-        viewport.addEventListener('mouseenter', stopAuto);
-        viewport.addEventListener('mouseleave', startAuto);
+        var CARD_STEP = 272; // ancho de tarjeta (260px) + gap (12px)
+        var SPEED = 18; // px por segundo — lento
+        var setWidth = items.length * CARD_STEP;
+        var pos = 0;
+        var paused = false;
+        var rafId = null, lastTs = null;
+
+        function apply() { track.style.transform = 'translateX(' + pos + 'px)'; }
+
+        function frame(ts) {
+          if (lastTs == null) lastTs = ts;
+          var dt = (ts - lastTs) / 1000;
+          lastTs = ts;
+          if (!paused) {
+            pos -= SPEED * dt;
+            if (pos <= -setWidth) pos += setWidth;
+            apply();
+          }
+          rafId = requestAnimationFrame(frame);
+        }
+        rafId = requestAnimationFrame(frame);
+
+        viewport.addEventListener('mouseenter', function () { paused = true; });
+        viewport.addEventListener('mouseleave', function () { paused = false; });
+
+        function jump(dir) {
+          track.style.transition = 'transform .35s cubic-bezier(.4,0,.2,1)';
+          pos -= dir * CARD_STEP;
+          if (pos <= -setWidth) pos += setWidth;
+          if (pos > 0) pos -= setWidth;
+          apply();
+          setTimeout(function () { track.style.transition = ''; }, 360);
+        }
         var prevBtn = mount.querySelector('.car-nav.prev');
         var nextBtn = mount.querySelector('.car-nav.next');
-        if (prevBtn) prevBtn.addEventListener('click', function (e) { e.preventDefault(); go(idx - 1); startAuto(); });
-        if (nextBtn) nextBtn.addEventListener('click', function (e) { e.preventDefault(); go(idx + 1); startAuto(); });
-        for (var d = 0; d < dotEls.length; d++) {
-          (function (dot) {
-            dot.addEventListener('click', function () { go(parseInt(dot.getAttribute('data-i'), 10)); startAuto(); });
-          })(dotEls[d]);
-        }
-        startAuto();
+        if (prevBtn) prevBtn.addEventListener('click', function (e) { e.preventDefault(); jump(-1); });
+        if (nextBtn) nextBtn.addEventListener('click', function (e) { e.preventDefault(); jump(1); });
       })
       .catch(function () { mount.innerHTML = ''; });
   }
