@@ -68,6 +68,82 @@
       .catch(function () {});
   }
 
+  // ================= Carrusel de pendientes (home) =================
+  function fmtFechaCorta(f) {
+    if (!f) return 'Sin fecha';
+    var meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+    var p = f.split('-');
+    return parseInt(p[2], 10) + ' ' + meses[parseInt(p[1], 10) - 1];
+  }
+
+  function initHomeCarousel() {
+    var mount = document.getElementById('pend-carousel');
+    if (!mount) return;
+    var ORDEN = ['hoy', 'manana', 'vencido', 'verificar', 'proxima', 'examen', 'pendiente', 'semanal'];
+    var LABELS = {
+      hoy: '🔥 Hoy', manana: '⏰ Mañana', vencido: '⚠️ Venció', verificar: '❓ Verificar',
+      proxima: '📅 Próxima', examen: '📝 Examen', pendiente: '📌 Pendiente', semanal: '🔁 Semanal'
+    };
+
+    fetch(SITE_ROOT + 'assets/pendientes.json')
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        var items = (data.items || []).slice().sort(function (a, b) {
+          return ORDEN.indexOf(a.urgencia) - ORDEN.indexOf(b.urgencia);
+        });
+        if (!items.length) { mount.innerHTML = ''; return; }
+
+        var slides = items.map(function (it) {
+          return '<div class="car-slide"><a class="car-card" href="' + SITE_ROOT + (it.link || '#') + '" style="--c:' + (it.color || '#7C9CD6') + '">' +
+            '<div class="car-top"><span class="car-tag">' + (LABELS[it.urgencia] || '') + '</span><span class="car-fecha">' + fmtFechaCorta(it.fecha) + '</span></div>' +
+            '<div class="car-materia">' + it.materia + '</div>' +
+            '<div class="car-titulo">' + it.titulo + '</div>' +
+            '</a></div>';
+        }).join('');
+        var dots = items.map(function (_, i) {
+          return '<button class="car-dot' + (i === 0 ? ' active' : '') + '" data-i="' + i + '" aria-label="Pendiente ' + (i + 1) + '"></button>';
+        }).join('');
+
+        mount.innerHTML =
+          '<div class="pend-carousel-head"><h2>📌 Pendientes</h2><a href="' + SITE_ROOT + 'pendientes.html">Ver todo →</a></div>' +
+          '<div class="car-viewport">' +
+            '<div class="car-track">' + slides + '</div>' +
+            (items.length > 1 ? '<button class="car-nav prev" aria-label="Anterior">‹</button><button class="car-nav next" aria-label="Siguiente">›</button>' : '') +
+          '</div>' +
+          (items.length > 1 ? '<div class="car-dots">' + dots + '</div>' : '');
+
+        var track = mount.querySelector('.car-track');
+        var dotEls = mount.querySelectorAll('.car-dot');
+        var idx = 0, timer = null;
+
+        function render() {
+          track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+          for (var i = 0; i < dotEls.length; i++) dotEls[i].classList.toggle('active', i === idx);
+        }
+        function go(i) { idx = (i + items.length) % items.length; render(); }
+        function stopAuto() { if (timer) clearInterval(timer); timer = null; }
+        function startAuto() {
+          stopAuto();
+          if (items.length > 1) timer = setInterval(function () { go(idx + 1); }, 5000);
+        }
+
+        var viewport = mount.querySelector('.car-viewport');
+        viewport.addEventListener('mouseenter', stopAuto);
+        viewport.addEventListener('mouseleave', startAuto);
+        var prevBtn = mount.querySelector('.car-nav.prev');
+        var nextBtn = mount.querySelector('.car-nav.next');
+        if (prevBtn) prevBtn.addEventListener('click', function (e) { e.preventDefault(); go(idx - 1); startAuto(); });
+        if (nextBtn) nextBtn.addEventListener('click', function (e) { e.preventDefault(); go(idx + 1); startAuto(); });
+        for (var d = 0; d < dotEls.length; d++) {
+          (function (dot) {
+            dot.addEventListener('click', function () { go(parseInt(dot.getAttribute('data-i'), 10)); startAuto(); });
+          })(dotEls[d]);
+        }
+        startAuto();
+      })
+      .catch(function () { mount.innerHTML = ''; });
+  }
+
   // ================= Buscador global =================
   // .src siempre resuelve a URL absoluta (no la ruta relativa cruda del atributo),
   // así que la raíz del sitio se obtiene quitando "assets/app.js" del final —
@@ -254,6 +330,7 @@
 
   function init() {
     initTopBar();
+    initHomeCarousel();
     initViewSwitch();
     initSearch();
     openHashTarget();

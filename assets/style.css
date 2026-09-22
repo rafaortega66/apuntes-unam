@@ -390,6 +390,39 @@ body.has-topbar { padding-top: 78px; }
   .tb-link { font-size: 12.5px; padding: 5px 8px; }
 }
 
+/* ================= Carrusel de pendientes (home) ================= */
+.pend-carousel { margin: 0 0 34px; }
+.pend-carousel-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 10px; }
+.pend-carousel-head h2 { font-family: 'Fraunces', serif; font-size: 18px; margin: 0; }
+.pend-carousel-head a { font-size: 12.5px; color: var(--ink-soft); text-decoration: none; }
+.pend-carousel-head a:hover { color: var(--ink); }
+.car-viewport { position: relative; overflow: hidden; border-radius: 12px; }
+.car-track { display: flex; transition: transform .45s cubic-bezier(.4,0,.2,1); }
+.car-slide { flex: 0 0 100%; box-sizing: border-box; padding: 0 2px; }
+.car-card {
+  display: block; text-decoration: none; color: var(--ink);
+  background: var(--white); border: 1px solid rgba(255,255,255,0.1);
+  border-left: 4px solid var(--c, var(--indigo));
+  border-radius: 12px; padding: 16px 44px;
+}
+.car-card:hover { border-color: rgba(255,255,255,0.22); }
+.car-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.car-tag { font-size: 11px; font-weight: 700; color: var(--coral); text-transform: uppercase; letter-spacing: .03em; }
+.car-fecha { font-size: 11.5px; color: var(--ink-soft); white-space: nowrap; }
+.car-materia { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--c, var(--indigo)); margin-top: 6px; }
+.car-titulo { font-family: 'Fraunces', serif; font-size: 15.5px; font-weight: 600; margin-top: 3px; line-height: 1.35; }
+.car-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: rgba(20,22,28,0.7); border: 1px solid rgba(255,255,255,0.14); color: var(--ink);
+  width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; font-size: 14px; line-height: 1;
+}
+.car-nav:hover { background: rgba(20,22,28,0.95); border-color: var(--coral); }
+.car-nav.prev { left: 6px; } .car-nav.next { right: 6px; }
+.car-dots { display: flex; gap: 6px; justify-content: center; margin-top: 10px; }
+.car-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.2); border: none; cursor: pointer; padding: 0; }
+.car-dot.active { background: var(--coral); width: 16px; border-radius: 4px; }
+
 /* ================= Buscador global ================= */
 .search-fab {
   position: fixed; right: 18px; bottom: 18px; z-index: 300;
