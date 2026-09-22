@@ -355,6 +355,41 @@ ul.proglist li.pg-h { list-style: none; padding: 0; text-indent: 0; margin: 12px
 ul.proglist li.pg-h:first-child { margin-top: 2px; }
 p.salida-lbl { font-size: 12px; color: var(--ink-soft); margin: 10px 0 4px; }
 
+/* ================= Barra superior fija ================= */
+body.has-topbar { padding-top: 78px; }
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  height: 46px; display: flex; align-items: center; justify-content: space-between;
+  padding: 0 18px; background: var(--white); border-bottom: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+}
+.tb-brand {
+  font-family: 'Fraunces', serif; font-weight: 700; font-size: 17px;
+  color: var(--ink); text-decoration: none; letter-spacing: -0.01em;
+}
+.tb-brand .dot { color: var(--coral); }
+.tb-right { display: flex; align-items: center; gap: 14px; }
+.tb-link {
+  display: flex; align-items: center; gap: 6px;
+  color: var(--ink-soft); text-decoration: none;
+  font-size: 13.5px; font-weight: 600;
+  padding: 6px 10px; border-radius: 8px;
+  transition: color .15s ease, background .15s ease;
+}
+.tb-link:hover { color: var(--ink); background: rgba(255,255,255,0.06); }
+.tb-link.tb-pendientes { color: var(--coral); }
+.tb-link.tb-pendientes:hover { color: var(--ink); background: rgba(232,115,92,0.16); }
+.tb-badge {
+  background: var(--coral); color: #1a0e0b; font-size: 10.5px; font-weight: 700;
+  border-radius: 999px; padding: 1px 6px; line-height: 1.4;
+}
+@media (max-width: 640px) {
+  body.has-topbar { padding-top: 72px; }
+  .topbar { padding: 0 12px; height: 44px; }
+  .tb-brand { font-size: 15px; }
+  .tb-link { font-size: 12.5px; padding: 5px 8px; }
+}
+
 /* ================= Buscador global ================= */
 .search-fab {
   position: fixed; right: 18px; bottom: 18px; z-index: 300;

@@ -1,0 +1,106 @@
+{
+  "actualizado": "2026-09-22",
+  "nota": "Esta lista se arma a mano a partir de lo dicho en clase (secciones \"Pendiente / próxima clase\" de cada materia) y de lo que el usuario reporta. Los ítems marcados \"verificar\" no están confirmados en Classroom.",
+  "items": [
+    {
+      "materia": "Seguridad Informática Básica",
+      "slug": "seguridad-informatica-basica",
+      "color": "#E8735C",
+      "titulo": "Llevar desayuno + hoja con fotos (frente: tu foto en el centro; reverso: fachada de tu casa sin dirección)",
+      "fecha": "2026-09-22",
+      "urgencia": "hoy",
+      "detalle": "Actividad práctica de la sesión de hoy (9:00–11:00). Envase cerrado para el desayuno; hoja carta con foto individual en el frente (centrada, con margen) y foto de la fachada de tu casa en el reverso, sin número exterior ni dirección visible.",
+      "link": "materias/seguridad-informatica-basica/clase-06.html"
+    },
+    {
+      "materia": "Fundamentos de Sistemas Embebidos",
+      "slug": "fundamentos-de-sistemas-embebidos",
+      "color": "#A98BD1",
+      "titulo": "Entregar Práctica 3",
+      "fecha": "2026-09-23",
+      "urgencia": "verificar",
+      "detalle": "El usuario reporta que se entrega mañana, pero esta práctica no está documentada en ninguna clase del sitio (solo aparecen mencionadas las Prácticas 6 y 8, de otras fechas). Verificar contenido y fecha exacta en Classroom o con el profesor.",
+      "link": "materias/fundamentos-de-sistemas-embebidos/material.html"
+    },
+    {
+      "materia": "Minería de Datos",
+      "slug": "mineria-de-datos",
+      "color": "#A98BD1",
+      "titulo": "Posible exposición del Proyecto 2",
+      "fecha": "2026-09-23",
+      "urgencia": "verificar",
+      "detalle": "El sitio solo tiene registrada la fecha de entrega del Proyecto 2 (viernes 18 sep, 2:00 pm, ya pasada) y que la revisión/cierre del tema es \"a partir del 22 de septiembre\". No hay confirmación de que la exposición sea mañana — revisar Classroom.",
+      "link": "materias/mineria-de-datos/clase-04.html"
+    },
+    {
+      "materia": "Administración de Servicios de Internet",
+      "slug": "administracion-de-servicios-de-internet",
+      "color": "#7C9CD6",
+      "titulo": "Primera Entrega del proyecto (Scrum: reporte + 2 commits/semana; Cascada: requerimientos y arquitectura)",
+      "fecha": "2026-09-20",
+      "urgencia": "vencido",
+      "detalle": "Fecha límite indicada en clase: domingo 20 de septiembre. Ya pasó — confirmar si se subió a Classroom. El proyecto lleva avance semanal: si es Scrum, la norma es registrar al menos 2 actualizaciones en GitHub por semana (lunes y miércoles sugeridos).",
+      "link": "materias/administracion-de-servicios-de-internet/clase-06.html"
+    },
+    {
+      "materia": "Administración de Servicios de Internet",
+      "slug": "administracion-de-servicios-de-internet",
+      "color": "#7C9CD6",
+      "titulo": "Subir diagramas estructurales y de comportamiento del proyecto (individual)",
+      "fecha": null,
+      "urgencia": "semanal",
+      "detalle": "Sin fecha límite explícita en el audio. La entrega es individual aunque el modelado se haga en equipo — el código debe coincidir exactamente con estos diagramas.",
+      "link": "materias/administracion-de-servicios-de-internet/clase-07.html"
+    },
+    {
+      "materia": "Organización y Arquitectura de Computadoras",
+      "slug": "organizacion-y-arquitectura-de-computadoras",
+      "color": "#45B8A8",
+      "titulo": "Raíz cuadrada entera en ensamblador (restas sucesivas de impares)",
+      "fecha": null,
+      "urgencia": "pendiente",
+      "detalle": "Sin fecha límite dada en clase. Algoritmo: restar impares consecutivos (1, 3, 5, 7, 9…) al número y contar cuántas restas caben antes de llegar a 0 o dar negativo — ese conteo es la raíz entera. Ejemplo: √25 → 5 restas exactas → raíz = 5. Extensión opcional: cifras decimales multiplicando por potencias pares de 10.",
+      "link": "materias/organizacion-y-arquitectura-de-computadoras/clase-06.html"
+    },
+    {
+      "materia": "Reconocimiento de Patrones",
+      "slug": "reconocimiento-de-patrones",
+      "color": "#45B8A8",
+      "titulo": "Entrega de Práctica (clasificadores / algoritmos no supervisados)",
+      "fecha": "2026-09-25",
+      "urgencia": "proxima",
+      "detalle": "⚠️ La Clase 07 la llama \"Práctica 2\" (clasificadores) y la Clase 08 la llama \"Práctica 3\" (K-Means, ISODATA, métricas internas, matriz de confusión) — ambas con fecha 25 sep. Puede ser una sola práctica con dos nombres o dos prácticas distintas. Verificar con /revisar-classroom.",
+      "link": "materias/reconocimiento-de-patrones/clase-08.html"
+    },
+    {
+      "materia": "Reconocimiento de Patrones",
+      "slug": "reconocimiento-de-patrones",
+      "color": "#45B8A8",
+      "titulo": "Primer Examen Parcial (Prácticas 1 y 2, teoría + ejercicios)",
+      "fecha": "2026-09-28",
+      "urgencia": "examen",
+      "detalle": "40 min de clase teórica + 40 min de examen. Se permite calculadora científica física (no celular). No se permite formulario personal — el profesor escribe las fórmulas en el pizarrón.",
+      "link": "materias/reconocimiento-de-patrones/clase-08.html"
+    },
+    {
+      "materia": "Fundamentos de Sistemas Embebidos",
+      "slug": "fundamentos-de-sistemas-embebidos",
+      "color": "#A98BD1",
+      "titulo": "Primer Examen Parcial (tentativo)",
+      "fecha": "2026-10-07",
+      "urgencia": "verificar",
+      "detalle": "⚠️ El profesor lo proyectó \"entre el 7 y el 10 de octubre\", pero esas fechas no cuadran del todo con el horario de la materia (lunes y miércoles). Se usa el 7 de octubre (miércoles) como referencia provisional — confirmar antes de estudiar con esta fecha.",
+      "link": "materias/fundamentos-de-sistemas-embebidos/clase-07.html"
+    },
+    {
+      "materia": "Arquitectura Cliente-Servidor",
+      "slug": "arquitectura-cliente-servidor",
+      "color": "#E8735C",
+      "titulo": "Leer los 8 PDFs del Tema 3 del sitio del profesor (routers, módems, OSI/TCP, puertos, firewall)",
+      "fecha": null,
+      "urgencia": "pendiente",
+      "detalle": "Lectura obligatoria antes de que se retome el Tema 3 (sockets en C). Sin fecha límite explícita.",
+      "link": "materias/arquitectura-cliente-servidor/clase-07.html"
+    }
+  ]
+}

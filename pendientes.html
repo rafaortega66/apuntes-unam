@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pendientes — Apuntes</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/app.js" defer></script>
+<style>
+  .pend-updated { color: var(--ink-soft); font-size: 12.5px; margin: -20px 0 28px; }
+  .pend-group { margin-bottom: 30px; }
+  .pend-group h2 {
+    font-family: 'Fraunces', serif; font-size: 18px; margin: 0 0 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .pend-card {
+    display: block; text-decoration: none; color: var(--ink);
+    background: var(--white); border: 1px solid rgba(255,255,255,0.1);
+    border-left: 4px solid var(--c, var(--indigo));
+    border-radius: 10px; padding: 14px 16px; margin-bottom: 10px;
+  }
+  .pend-card:hover { border-color: rgba(255,255,255,0.22); background: rgba(255,255,255,0.03); }
+  .pend-top { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+  .pend-materia { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--c, var(--indigo)); }
+  .pend-fecha { font-size: 12px; color: var(--ink-soft); white-space: nowrap; }
+  .pend-titulo { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 600; margin: 4px 0 6px; }
+  .pend-detalle { font-size: 13.5px; color: var(--ink-soft); line-height: 1.55; }
+  .pend-empty { color: var(--ink-soft); font-size: 14px; padding: 20px 0; }
+  .tag-verificar { color: var(--coral); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Apuntes</a>
+<h1 class="title">Pendientes<span class="dot">.</span></h1>
+<p class="sub">Todo lo que hay que entregar, estudiar o llevar, de las 9 materias — sacado de lo dicho en clase. Lo que dice "verificar" no está confirmado en Classroom todavía.</p>
+<p class="pend-updated" id="pend-updated"></p>
+
+<div id="pend-root"><p class="pend-empty">Cargando…</p></div>
+</div>
+
+<script>
+(function () {
+  var GRUPOS = [
+    { key: 'hoy', label: '🔥 Hoy' },
+    { key: 'manana', label: '⏰ Mañana' },
+    { key: 'vencido', label: '⚠️ Ya venció — revisar si se entregó' },
+    { key: 'verificar', label: '❓ Por confirmar en Classroom' },
+    { key: 'proxima', label: '📅 Próximos días' },
+    { key: 'examen', label: '📝 Exámenes' },
+    { key: 'pendiente', label: '📌 Sin fecha límite' },
+    { key: 'semanal', label: '🔁 Recurrente / semanal' }
+  ];
+
+  function fmtFecha(f) {
+    if (!f) return 'Sin fecha';
+    var meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+    var p = f.split('-');
+    return parseInt(p[2], 10) + ' ' + meses[parseInt(p[1], 10) - 1] + ' ' + p[0];
+  }
+
+  fetch('assets/pendientes.json')
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      document.getElementById('pend-updated').textContent = 'Actualizado a mano el ' + fmtFecha(data.actualizado) + '. ' + (data.nota || '');
+      var items = data.items || [];
+      var root = document.getElementById('pend-root');
+      root.innerHTML = '';
+      var any = false;
+      GRUPOS.forEach(function (g) {
+        var grupo = items.filter(function (it) { return it.urgencia === g.key; });
+        if (!grupo.length) return;
+        any = true;
+        grupo.sort(function (a, b) { return (a.fecha || '9999').localeCompare(b.fecha || '9999'); });
+        var sec = document.createElement('div');
+        sec.className = 'pend-group';
+        var h = document.createElement('h2');
+        h.textContent = g.label;
+        sec.appendChild(h);
+        grupo.forEach(function (it) {
+          var a = document.createElement('a');
+          a.className = 'pend-card';
+          a.href = it.link || '#';
+          a.style.setProperty('--c', it.color || '#7C9CD6');
+          a.innerHTML =
+            '<div class="pend-top"><span class="pend-materia">' + it.materia + '</span>' +
+            '<span class="pend-fecha">' + fmtFecha(it.fecha) + '</span></div>' +
+            '<div class="pend-titulo">' + it.titulo + '</div>' +
+            '<div class="pend-detalle">' + it.detalle + '</div>';
+          sec.appendChild(a);
+        });
+        root.appendChild(sec);
+      });
+      if (!any) root.innerHTML = '<p class="pend-empty">No hay pendientes registrados. 🎉</p>';
+    })
+    .catch(function () {
+      document.getElementById('pend-root').innerHTML = '<p class="pend-empty">No se pudo cargar la lista de pendientes.</p>';
+    });
+})();
+</script>
+</body>
+</html>
