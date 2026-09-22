@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 07 — Administración de Servicios de Internet</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Administración de Servicios de Internet</a>
+<div class="detail-head" style="border-color:#7C9CD6"><h2>Clase 07</h2>
+  <p class="prof">Mtro. Juan Ángel Calvillo Pérez · 21 sep 2026 · Sesión de trabajo en equipo (no hubo tema nuevo de teoría del temario): modelado de arquitectura con UML (diagramas de componentes y despliegue), importancia de la documentación, y ejercicio práctico de elaboración de diagramas del proyecto.</p>
+</div>
+
+<div class="section-block" style="background:#fff7ed;border-left:3px solid #7C9CD6"><p style="margin:0"><strong>📋 Nota:</strong> como la <a href="clase-06.html">Clase 06</a>, esta sesión fue una clase de trabajo aplicado al proyecto final, no una clase de teoría nueva del temario. El contenido de abajo son los conceptos de UML que se explicaron y los acuerdos/reglas que se fijaron ese día.</p></div>
+
+<details class="section-block sec" id="c7-uml" open><summary><span class="stitle">Modelado con UML y documentación de software</span></summary>
+<p>En la arquitectura y administración de servicios de internet, el modelado gráfico es indispensable para plasmar la infraestructura y la organización del sistema. El profesor destacó que los diagramas centrales para la materia son el <strong>diagrama de componentes</strong> y el <strong>diagrama de despliegue</strong>, y definió explícitamente <strong>UML</strong> como el <strong>Lenguaje Unificado de Modelado</strong> (<em>Unified Modeling Language</em>).</p>
+<p>Se enfatizó que toda empresa de desarrollo o profesional que trabaje con seriedad debe documentar sus sistemas, aunque muchos desarrolladores lo perciban como una tarea molesta o una pérdida de tiempo. La documentación con UML no es un trámite burocrático, sino una herramienta técnica cuyo propósito es <strong>facilitar el entendimiento del software</strong> entre los miembros del equipo y estandarizar la comunicación — algo especialmente importante en entornos laborales dinámicos donde distintos colaboradores interactúan con el mismo sistema o se incorpora personal nuevo.</p>
+</details>
+
+<details class="section-block sec" id="c7-coincidencia" open><summary><span class="stitle">Coincidencia estricta entre los diagramas UML y el código</span></summary>
+<p>Un punto técnico crítico de la clase es la relación directa entre el diseño arquitectónico y la implementación en código. El profesor advirtió explícitamente que <strong>toda la programación del proyecto debe coincidir de forma exacta con los diagramas UML entregados</strong>. Si al evaluar o auditar el proyecto hay una discrepancia entre la arquitectura modelada en los diagramas (componentes, despliegue, estructuras) y el código fuente o la configuración del servidor implementado, el proyecto estará mal.</p>
+</details>
+
+<details class="section-block sec" id="c7-actividad" open><summary><span class="stitle">Actividad práctica: elaboración de los diagramas del proyecto</span></summary>
+<p>La sesión funcionó como trabajo práctico aplicado al proyecto final. El profesor abrió una asignación en la plataforma para que los alumnos elaboraran y entregaran los <strong>diagramas estructurales y de comportamiento</strong> de sus respectivos proyectos. Reglas fijadas durante la actividad:</p>
+<ul>
+<li><strong>Tiempo asignado:</strong> de 20 a 40 minutos dentro del horario de la sesión para hacer el modelado y subir el archivo.</li>
+<li><strong>Trabajo vs. entrega:</strong> el análisis y diseño de los diagramas se hace de forma colaborativa en equipo, pero <strong>la entrega en la plataforma es estrictamente individual</strong> por cada integrante.</li>
+<li><strong>Material de consulta:</strong> ante la duda de una alumna (Carla) sobre el material de apoyo, el profesor confirmó que las diapositivas de referencia con los tipos de diagramas se adjuntaron directamente en la publicación de la asignación.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c7-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> <strong>Ejemplo de roles en un equipo (Carla y Kevin):</strong> para ilustrar la importancia de documentar con UML, el profesor planteó un escenario hipotético: Carla como <em>Project Manager</em> ("la bonaza"), con quien la comunicación y el proyecto fluyen; en contraste, un Kevin desorganizado al que nadie entiende, que si no sabe interpretar los diagramas UML no puede operar con seriedad ni dar instrucciones técnicas precisas sobre la interfaz o infraestructura.</li>
+<li><em>(Contexto)</em> <strong>Broma sobre delegar UML:</strong> el profesor comentó, entre bromas, que cuando los alumnos tengan sus propias empresas de desarrollo, contraten becarios y los pongan a documentar para aligerar la carga de trabajo que representa UML.</li>
+<li><em>(Contexto)</em> <strong>Disciplina y puntualidad:</strong> al entrar alumnos tarde durante el pase de lista, el profesor interrumpió para recordar las reglas fijadas desde el primer día: quien llega tarde debe entrar en silencio, sentarse directamente y no saludar ni interrumpir al grupo.</li>
+<li><em>(Contexto)</em> <strong>Simulación de tráfico con Python:</strong> en un diálogo sobre infraestructura y pruebas de carga, se comentó el escenario de probar en masa sistemas o dispositivos conectados (como control de acceso o sensores), usando scripts en Python para simular eventos o conexiones simultáneas (por ejemplo, 200 o hasta 5,000 peticiones/conexiones), en casos donde probar manualmente puerta por puerta es inviable.</li>
+<li><em>(Contexto)</em> Se hizo el pase de lista formal del grupo durante la sesión.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c7-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Entregable en Classroom:</strong> subir los <strong>diagramas estructurales y de comportamiento</strong> del proyecto integrador.</li>
+<li><strong>Modalidad de entrega:</strong> individual y obligatoria para todos los integrantes del equipo, aunque el modelado se haga en equipo.</li>
+<li><strong>Verificación futura:</strong> el código fuente y la arquitectura que se programe para el proyecto deben coincidir exactamente con estos diagramas — es criterio estricto de evaluación.</li>
+<li><strong>Recursos disponibles:</strong> las diapositivas con los diagramas de referencia están en la asignación de Google Classroom.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>UML = Lenguaje Unificado de Modelado; para esta materia, los diagramas principales son los de componentes y de despliegue.</li>
+<li>La documentación es obligatoria en proyectos profesionales, para que el equipo entienda el sistema y se estandarice la comunicación.</li>
+<li>La programación del proyecto debe coincidir estrictamente con los diagramas UML entregados; cualquier discrepancia afecta la evaluación.</li>
+<li>La entrega de los diagramas estructurales y de comportamiento en Classroom es individual, aunque el trabajo de modelado se haga en equipo.</li>
+</ul></div>
+
+</div>
+</body>
+</html>
