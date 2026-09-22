@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 07 — Seguridad Informática Básica</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20260922b">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js?v=20260922b" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Seguridad Informática Básica</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 07</h2>
+  <p class="prof">Dra. Cintia Quezada Reyes · 22 sep 2026 · Tema 2 (2.2) — Actividad práctica individual de identificación de amenazas (hoja con foto personal y de la casa) y concepto formal de vulnerabilidad: sus seis clasificaciones y la regla de la "pregunta de carencia".</p>
+</div>
+
+<div class="section-block" style="background:#fff7ed;border-left:3px solid #E8735C"><p style="margin:0"><strong>📋 Nota:</strong> esta sesión fue mayormente práctica. Primero se terminó la actividad individual de identificación de amenazas asignada en la <a href="clase-06.html">Clase 06</a>, y después se dio la teoría nueva de vulnerabilidades.</p></div>
+
+<details class="section-block sec" id="c7-actividad" open><summary><span class="stitle">Actividad práctica individual: identificación de activos y amenazas en hoja carta</span></summary>
+<p>La sesión comenzó dando tiempo a los alumnos para terminar la dinámica práctica individual que se había dejado en la sesión anterior. En el <strong>frente</strong> de una hoja tamaño carta, alrededor de la fotografía individual de cada quien, se escribieron todas las situaciones adversas o amenazas que le podrían ocurrir a la propia persona o en sus rutinas cotidianas y deportivas (por ejemplo, imprevistos con mascotas: que un perro chihuahuense muerda, o que se le peguen pulgas al pasearlo y el alumno amanezca picado). En el <strong>reverso</strong>, alrededor de una foto de la fachada de la vivienda (sin número exterior ni dirección visible, por privacidad), se anotaron todos los eventos dañinos que le podrían suceder a la propiedad.</p>
+<p>Durante la actividad, la profesora permitió consumir el desayuno personal que cada quien llevó en recipientes cerrados, con la instrucción estricta de limpiar y recoger la basura al terminar.</p>
+<p><strong>Propósito pedagógico:</strong> enfrentar al estudiante con la dificultad real de concientizarse sobre la identificación de sus propios activos —respondiendo la primera pregunta de la seguridad, "¿Qué quiero proteger?"— y evaluar el espectro completo de amenazas y escenarios de pérdida total o irreversible, tanto para la persona como para su casa.</p>
+</details>
+
+<details class="section-block sec" id="c7-vulnerabilidad" open><summary><span class="stitle">Concepto formal de vulnerabilidad y su distinción con la amenaza</span></summary>
+<p>Después de la actividad, la profesora introdujo formalmente el tema de las <strong>vulnerabilidades</strong>. Subrayó que las vulnerabilidades <strong>no son amenazas</strong> — un error conceptual recurrente que se ve en internet, donde se explican vulnerabilidades de red usando ejemplos que en realidad son amenazas.</p>
+<p><strong>Definición formal:</strong> una vulnerabilidad es una debilidad o punto débil (en procedimientos, diseño o implementación) que puede ser explotada por una o varias acciones dañinas (amenazas). Aunque las amenazas son eventos latentes difíciles de controlar por completo, si no existe una sola vulnerabilidad en el sistema, la amenaza nunca podrá causar daño ni concretarse. Por eso la gestión de seguridad busca atenuar, minimizar o eliminar las vulnerabilidades. Identificar las vulnerabilidades responde a la segunda pregunta clave de la seguridad: <strong>"¿De qué quiero proteger a estos bienes?"</strong></p>
+<p>Se aclaró también que no existe una relación de uno a uno entre un activo y una vulnerabilidad: un bien o una persona suele tener múltiples puntos débiles a la vez (2, 3, 20 o hasta 50 vulnerabilidades).</p>
+</details>
+
+<details class="section-block sec" id="c7-organizacional" open><summary><span class="stitle">Análisis organizacional, perfiles de comportamiento y exceso de confianza</span></summary>
+<p>La profesora señaló que en las organizaciones suele pensarse erróneamente que todos los ataques vendrán del exterior o de agentes terroristas. Sin embargo, es fundamental analizar qué controles existen para detectar intenciones dañinas <strong>dentro de la propia organización</strong>, considerando que las personas maliciosas visten y actúan con amabilidad cotidiana.</p>
+<p>Para gestionar esto se recurre a la <strong>perfilación de conductas</strong> (donde expertos deducen edad, características físicas y hábitos de una persona a partir de sus comportamientos) y al diseño de <strong>escenarios o simulacros organizacionales</strong> que evalúan la reacción de los empleados ante situaciones inusuales — recordando la máxima "en arca abierta el justo peca".</p>
+<p>En este panorama, la <strong>fuente humana</strong> se ubica como el origen más recurrente de amenazas y como la mayor vulnerabilidad, debido al exceso de confianza. Pecar de confiado al suponer que alguien no hará daño simplemente porque saluda sonriente, o al caminar dentro del campus de la Facultad de Ingeniería (donde no existen controles de acceso ni torniquetes de revisión), constituye una vulnerabilidad humana crítica.</p>
+</details>
+
+<details class="section-block sec" id="c7-clasificaciones" open><summary><span class="stitle">Las seis clasificaciones de vulnerabilidades y la "pregunta de carencia"</span></summary>
+<p>A diferencia de las cinco fuentes de origen de las amenazas (vistas en la Clase 06), las vulnerabilidades se estructuran en <strong>seis clasificaciones</strong>:</p>
+<ul>
+<li><strong>Humanas:</strong> vinculadas a conductas, omisiones y exceso de confianza de las personas.</li>
+<li><strong>Hardware:</strong> fallos o debilidades en componentes físicos.</li>
+<li><strong>Software:</strong> errores en código, aplicaciones o sistemas operativos.</li>
+<li><strong>Red:</strong> puntos débiles en la infraestructura de comunicaciones integradas.</li>
+<li><strong>Naturales:</strong> vulnerabilidades ante inclemencias ambientales o fenómenos climáticos.</li>
+<li><strong>Físicas o de edificaciones:</strong> las relacionadas con la construcción e infraestructura física donde se alojan los activos.</li>
+</ul>
+<p>Se enfatizó que de nada sirve capacitar al personal o colocar candados si la infraestructura es deficiente; como ejemplo real, se mencionó el salón A301 de la Facultad de Ingeniería, donde durante las lluvias intensas el agua se filtra y daña los muros, acumulando polvo húmedo por fallas estructurales.</p>
+<p>Finalmente, la profesora dio el método para diferenciar la identificación de amenazas de la de vulnerabilidades: mientras que la <strong>amenaza</strong> se identifica preguntando "¿Qué malo me podría pasar?", la <strong>vulnerabilidad</strong> se determina preguntando "¿Qué me hace falta?", "¿Qué no he implementado?", "¿Qué he omitido?" o "¿De qué carezco?". Lo ilustró con dos ejemplos exactos:</p>
+<ul>
+<li>Si la amenaza es que llueva y la persona se moje, la vulnerabilidad es la carencia de un paraguas.</li>
+<li>Si la amenaza es que unos tacos al pastor causen malestar estomacal, la vulnerabilidad es carecer de una buena digestión, faltar anticuerpos o tener un estómago delicado.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c7-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> <strong>El perro chihuahuense y las pulgas:</strong> ejemplo anecdótico sobre cómo la mascota de un estudiante puede morder cuando se enoja, o cómo al sacarlo a pasear se le pueden pegar pulgas y el alumno amanece todo picado.</li>
+<li><em>(Contexto)</em> <strong>El desayuno durante la actividad:</strong> la profesora permitió comer tortas o alimentos en recipientes cerrados mientras trabajaban, bromeando que quien no comiera "no contaba", y recordando recoger toda la basura.</li>
+<li><em>(Contexto)</em> <strong>Corazonadas e intuición:</strong> menciones de experiencias personales como "sentir corazonadas", presagiar que algo saldrá mal, o "que te tiemble el ojo" antes de un evento.</li>
+<li><em>(Contexto)</em> <strong>El atacante del "cuchillo cebollero":</strong> representación gráfica del peligro de asumir la buena voluntad de las personas solo porque entran sonriendo, mientras por detrás sostienen un cuchillo cebollero para atacar.</li>
+<li><em>(Contexto)</em> <strong>Pasear por la Facultad de Ingeniería:</strong> observación sobre no saber si ciertos pasillos están en el sótano o en la planta baja por el nivel de los arbolitos, y la falsa suposición de que cualquiera en el campus es un alumno honesto al no haber controles estrictos en las entradas.</li>
+<li><em>(Contexto)</em> <strong>Filtraciones en el salón A301:</strong> cómo el agua entra al salón durante la lluvia, afectando las paredes y mojando el polvo acumulado.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c7-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Avisos en Google Classroom:</strong> la profesora publicará ahí las indicaciones y requerimientos específicos para preparar el material de la siguiente sesión.</li>
+<li><strong>Próxima clase:</strong> se terminará el tema de vulnerabilidades y se hará una nueva dinámica práctica basada en la publicación de Classroom.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Amenaza vs. vulnerabilidad: la amenaza es el evento dañino latente; la vulnerabilidad es el punto débil u omisión que le permite causar daño. Sin vulnerabilidad, la amenaza no se concreta.</li>
+<li>Seis clasificaciones de vulnerabilidades: humanas, hardware, software, red, naturales y físicas/edificaciones (a diferencia de las 5 fuentes de amenazas).</li>
+<li>Para identificar una vulnerabilidad no se pregunta qué malo puede pasar, sino "¿Qué me hace falta?" / "¿De qué carezco?" (ejemplo: mojarse por la lluvia = amenaza; no tener paraguas = vulnerabilidad).</li>
+<li>La fuente humana es la principal vulnerabilidad en las organizaciones, por el exceso de confianza y la falta de controles formales de acceso.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 08 — Arquitectura Cliente-Servidor</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20260922b">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js?v=20260922b" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Arquitectura Cliente-Servidor</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 08</h2>
+  <p class="prof">Mtro. Carlos Alberto Román Zamitiz · 22 sep 2026 · Tema 2 — Sockets: modelo cliente-servidor a nivel software, comunicación síncrona/asíncrona, familias de direcciones (AF_INET, AF_UNIX…), descriptores de archivo en Unix/Linux, y las estructuras <code>sockaddr_in</code> y <code>hostent</code> en C.</p>
+</div>
+
+<details class="section-block sec" id="c8-modelo" open><summary><span class="stitle">Sockets y el modelo cliente-servidor a nivel de software</span></summary>
+<p>Se retoma la definición de la <a href="clase-07.html">Clase 07</a>: un <strong>socket</strong> es cada uno de los extremos finales de un canal de comunicación. El profesor insiste en que no debe concebirse como un canal de hardware físico, sino como un canal lógico de software para interconectar procesos.</p>
+<p>La premisa central es que los procesos involucrados pueden ejecutarse en la misma máquina física o en máquinas distintas distribuidas en red. Por eso un mismo equipo puede fungir simultáneamente como cliente y como servidor. Aunque la mente humana tiende a asociar "servidor" con un equipo físico por ser algo tangible, en esta materia el modelo cliente-servidor se aborda estrictamente a <strong>nivel de software</strong>, donde cliente y servidor son dos procesos independientes:</p>
+<ul>
+<li><strong>Cliente:</strong> aplicación o sistema (software) que asume un rol activo para solicitar un servicio o recurso.</li>
+<li><strong>Servidor:</strong> aplicación o sistema (software) que permanece a la espera para proveer o "servir" un recurso específico.</li>
+</ul>
+<p>Para que un cliente pueda solicitar y establecer una conexión con un servidor, necesita conocer al menos dos datos: su <strong>dirección IP</strong> (o nombre de dominio) y su <strong>puerto lógico</strong> (convencionalmente <code>dirección_IP:puerto</code>).</p>
+<p><strong>El ciclo de comunicación por sockets:</strong></p>
+<ol>
+<li><strong>Creación y escucha del servidor:</strong> el proceso servidor crea su socket y se coloca en modo de escucha (<em>listening</em>), esperando solicitudes entrantes.</li>
+<li><strong>Creación y solicitud del cliente:</strong> cuando un cliente necesita el servicio, crea su propio socket y solicita la conexión al servidor.</li>
+<li><strong>Establecimiento del canal:</strong> se vinculan los sockets de ambos extremos.</li>
+<li><strong>Intercambio de datos:</strong> el cliente envía peticiones por su socket y el servidor procesa y responde por el suyo.</li>
+<li><strong>Cierre de sockets:</strong> al terminar la tarea o cuando el cliente se desconecta, ambas partes deben cerrar explícitamente sus sockets. El profesor subraya que no cerrar un socket deja el canal bloqueado para otros procesos, de forma análoga a un archivo que se queda abierto en el sistema de archivos.</li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c8-sincrona" open><summary><span class="stitle">Comunicación síncrona vs. asíncrona</span></summary>
+<ul>
+<li><strong>Síncrona:</strong> sigue un orden estricto de envío y recepción en secuencia lineal — el cliente envía una petición y no puede enviar otra hasta recibir y leer la respuesta del servidor (cliente envía → servidor recibe → servidor envía → cliente recibe → cliente vuelve a enviar). Una alumna propuso como ejemplo la radio o la televisión; el profesor lo confirmó y añadió el correo postal tradicional (redactar la carta, pegar la estampilla y esperar la respuesta por correo) como ejemplo analógico de comunicación síncrona.</li>
+<li><strong>Asíncrona:</strong> no exige un orden secuencial estricto ni espera inmediata. El cliente puede enviar varios mensajes consecutivos mientras el servidor los lee y responde en paralelo. Ejemplos cotidianos: WhatsApp o Telegram. Se reflexionó sobre cómo la sociedad digital actual vive con más prisa y usa predominantemente comunicaciones asíncronas.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c8-af" open><summary><span class="stitle">Familias o dominios de sockets (Address Family — AF)</span></summary>
+<p>Además del <strong>dominio o familia del socket</strong> (<em>Address Family</em>), existe el <strong>tipo de socket</strong>. En C, las familias se representan con macros en mayúsculas con el prefijo <code>AF_</code>:</p>
+<ul>
+<li><strong><code>AF_INET</code>:</strong> familia de direcciones para sockets de dominio Internet bajo IPv4. Usa direcciones de 4 octetos (4 bytes), cada uno de 0 a 255 (2⁸ = 256 valores).</li>
+<li><strong><code>AF_INET6</code>:</strong> familia orientada al protocolo IPv6.</li>
+<li><strong><code>AF_UNIX</code> (o <code>AF_LOCAL</code>):</strong> sockets de dominio Unix para comunicación entre procesos de la <strong>misma máquina física</strong>. En vez de IP y puerto, se asocian a un archivo del sistema de archivos. Ejemplo: bases de datos como MySQL o PostgreSQL vienen configuradas por defecto con sockets Unix locales, para permitir conexiones únicamente por <code>localhost</code> por seguridad.</li>
+<li><strong>Otras familias mencionadas:</strong> <code>AF_NETLINK</code> (comunicación directa entre el kernel de Linux y procesos de usuario), <code>AF_BLUETOOTH</code> (enlaces Bluetooth) y <code>AF_PACKET</code> (sockets a nivel de paquetes/tramas de red en capa baja, usados para herramientas de monitoreo o <em>sniffers</em>).</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c8-descriptores" open><summary><span class="stitle">Descriptores de archivo en Unix/Linux y redirección de entradas/salidas</span></summary>
+<p>Se repasa el principio de diseño de Unix/Linux: <em>"todo es un archivo"</em> (<em>everything is a file</em>). Cualquier recurso del sistema —una partición de disco, un puerto de red, el teclado o la pantalla— se representa internamente como un archivo y se manipula mediante un <strong>descriptor de archivo</strong> (<em>file descriptor</em>): un número entero asociado a un recurso abierto. Hay tres descriptores estándar reservados por el sistema operativo:</p>
+<table>
+<tr><th>Descriptor</th><th>Nombre</th><th>Uso</th></tr>
+<tr><td><code>0</code></td><td><code>stdin</code></td><td>Entrada estándar (teclado)</td></tr>
+<tr><td><code>1</code></td><td><code>stdout</code></td><td>Salida estándar de éxito (pantalla)</td></tr>
+<tr><td><code>2</code></td><td><code>stderr</code></td><td>Salida estándar de error (pantalla)</td></tr>
+</table>
+<p><strong>Demostración en vivo en la terminal de Linux:</strong></p>
+<ol>
+<li><code>ls -l /tmp</code> (éxito) despliega su salida por el descriptor <code>1</code>.</li>
+<li><code>ls -l /otro</code> (directorio inexistente) proyecta el error por el descriptor <code>2</code>.</li>
+<li><code>ls -l /tmp > salida_exito.txt</code>: al redirigir con <code>&gt;</code>, por defecto se toma el descriptor <code>1</code> y se escribe el resultado en el archivo (creándolo si no existe).</li>
+<li>Al correr <code>ls -l /tmp /otro</code> (éxito y error juntos): <strong>la salida de error (descriptor 2) tiene prioridad sobre la de éxito (descriptor 1)</strong>. Por eso en la terminal se imprime primero el error de <code>/otro</code> y después el listado de <code>/tmp</code>, aunque este se pidió primero en el comando.</li>
+<li><code>ls -l /tmp /otro > salida.txt</code>: solo la salida de éxito (<code>1</code>) va al archivo; el error (<code>2</code>) se imprime en pantalla.</li>
+<li>Para separar ambas salidas en archivos distintos: <code>ls -l /tmp /otro 1&gt; salida_exito.txt 2&gt; salida_error.txt</code>. Esto genera <code>salida_exito.txt</code> con el contenido de <code>/tmp</code> y <code>salida_error.txt</code> con el mensaje de fallo — el mismo mecanismo que usan los servidores reales para separar bitácoras en <code>server.log</code> y <code>server-error.log</code>.</li>
+</ol>
+<p>Un alumno preguntó si es posible mandar la salida de éxito y la de error al mismo archivo de bitácora. El profesor confirmó que sí, y que hay librerías como <em>Log4j</em> (muy usada en Java) que lo gestionan; por línea de comandos se puede lograr con el símbolo <em>ampersand</em> (<code>&amp;</code>), pero advirtió que no hay que poner el mismo nombre de archivo en <code>1&gt;</code> y <code>2&gt;</code> directamente, porque uno de los descriptores bloquearía el archivo para el otro.</p>
+<p><strong>Asignación de descriptores para sockets:</strong> como los enteros <code>0</code>, <code>1</code> y <code>2</code> están reservados, cuando se crea el primer socket en un programa en C, el descriptor que devuelve el sistema operativo es el <strong><code>3</code></strong>. El segundo socket recibe el <code>4</code>, el tercero el <code>5</code>, y así sucesivamente.</p>
+</details>
+
+<details class="section-block sec" id="c8-sockaddr" open><summary><span class="stitle">Estructuras en C para sockets de red: <code>sockaddr_in</code> y <code>hostent</code></span></summary>
+<p>Para programar sockets en C en la Capa 4 (Transporte) se usa el protocolo fiable orientado a conexión <strong>TCP</strong> (a diferencia de UDP, que maneja datagramas no confiables). El manejo de sockets requiere definir y llenar la estructura <code>struct sockaddr_in</code> (para IPv4):</p>
+<pre><code>struct sockaddr_in {
+    sa_family_t    sin_family; /* Familia de direcciones (AF_INET) */
+    in_port_t      sin_port;   /* Número de puerto (entero sin signo) */
+    struct in_addr sin_addr;   /* Dirección IP (convertida a binario) */
+    unsigned char  sin_zero;   /* Arreglo de 8 ceros char para relleno */
+};</code></pre>
+<ul>
+<li><strong>Prefijo <code>sin_</code>:</strong> viene de "socket internet".</li>
+<li><strong><code>sin_family</code>:</strong> se le asigna la macro <code>AF_INET</code> para IPv4.</li>
+<li><strong><code>sin_port</code>:</strong> el número de puerto lógico, en entero positivo sin signo.</li>
+<li><strong><code>sin_addr</code>:</strong> la dirección IP. No se ingresa como texto en notación decimal punteada, sino que se convierte a formato binario para que el hardware la entienda.</li>
+<li><strong><code>sin_zero</code>:</strong> arreglo de 8 ceros <code>char</code> (representados entre comillas simples <code>'0'</code>, no como ceros numéricos) usado históricamente para rellenar la estructura al tamaño de <code>struct sockaddr</code>. Se aclaró que en distribuciones modernas de Linux este relleno es opcional y la estructura funciona aun sin incluirlo.</li>
+</ul>
+<p>También se introdujo <code>struct hostent</code>, que facilita la resolución de nombres de dominio y la obtención de información sobre los extremos de la conexión (por ejemplo, resolver <code>www.google.com</code>). Devuelve el nombre oficial del host, su lista de alias, el tipo de dirección (<code>AF_INET</code>), la longitud en bytes (4 bytes para IPv4) y un arreglo con la lista de direcciones IP asociadas a ese dominio. Un mismo dominio puede tener varias direcciones IP asociadas, para dar alta disponibilidad y balanceo entre distintos centros de datos en el mundo.</p>
+</details>
+
+<details class="section-block sec" id="c8-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> <strong>Red del salón:</strong> al inicio, el profesor comentó entre risas que la conexión a internet parecía haber "despegado más rápido", buena señal tras los problemas de red de la clase anterior.</li>
+<li><em>(Contexto)</em> <strong>Hardware "transparente":</strong> propuso imaginar que el hardware fuera transparente y pudiéramos ver los impulsos eléctricos viajando por los cables de red, como miles de destellos de unos y ceros en forma de bits.</li>
+<li><em>(Contexto)</em> <strong>Seguridad en redes domésticas y malware:</strong> habló de las IPs privadas que asignan los proveedores (Totalplay, Izzi, Infinitum) en los módems de casa (<code>192.168.x.x</code>), y del "movimiento lateral" del malware: cuando alguien descarga software malicioso o abre un correo infectado, el código ataca lateralmente a otros dispositivos de la misma red local (pantallas, celulares, laptops).</li>
+<li><em>(Contexto)</em> <strong>Demostración real de pfSense y VPN en la DGP UNAM:</strong> el profesor se conectó a la red de su oficina en la Dirección General de Personal (DGP) de la UNAM para mostrar un firewall perimetral en vivo. Explicó que por seguridad solo se permite acceso remoto por VPN (túnel cifrado, con OpenVPN), y mostró la consola de <strong>pfSense</strong> (sistema operativo de código abierto sobre FreeBSD, edición Community), con sus interfaces WAN (exterior) y LAN (interna). Mostró los logs en vivo de bloqueos a IPs "latosas" que intentaban escanear puertos, incluyendo rangos bloqueados manualmente de Oracle, AWS, Microsoft y DigitalOcean en Virginia, EE. UU. También explicó cómo calcular el número de hosts de una red a partir de la máscara: con máscara /11, se resta 32 − 11 = 21, lo que da 2²¹ nodos posibles.</li>
+<li><em>(Contexto)</em> <strong>Infraestructura global, cables submarinos y geopolítica de la nube:</strong> mostró mapas de los centros de datos de AWS y Oracle en Norteamérica (incluyendo Querétaro, México) y Sudamérica (Brasil, Chile), y el mapa interactivo de cables submarinos de fibra óptica (submarinecablemap.com). Explicó que, pese al avance de las redes inalámbricas, el tráfico intercontinental depende abrumadoramente de estos cables. Mencionó el proyecto de Google del cable submarino <em>Umoja</em>, de Australia a Sudáfrica, que entra por tierra para conectar a África a la red global. Comentó con humor cómo los ciberdelincuentes rentan servidores en Europa para atacar América, haciendo parecer europea la IP de origen.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c8-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Revisión de tareas:</strong> el profesor ya empezó a calificar la Tarea 2 (envió retroalimentación a las primeras 20 entregas); al terminar la Tarea 2 seguirá con la Tarea 3.</li>
+<li><strong>Sin tarea nueva:</strong> no se dejó ninguna práctica o entregable obligatorio para la siguiente clase. La única indicación es repasar la teoría de hoy: <code>sockaddr_in</code>, descriptores de archivo y familias de sockets.</li>
+<li><strong>Pase de lista definitivo:</strong> se presentó la lista final del grupo, ya con las altas y bajas procesadas. Quien tenga una falta justificable por correo o comprobante debe recordárselo al profesor para el asterisco de justificación.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Un socket es cada extremo lógico de software de un canal de comunicación entre procesos, en la misma máquina o en red.</li>
+<li>Para conectarse, el cliente necesita la IP (o dominio) y el puerto lógico del servidor.</li>
+<li><code>AF_INET</code> es para IPv4 (4 bytes); <code>AF_UNIX</code> es para procesos de la misma máquina, vía el sistema de archivos.</li>
+<li>Los descriptores 0, 1 y 2 (stdin, stdout, stderr) están reservados; el primer socket creado en un programa recibe el descriptor 3.</li>
+<li><code>struct sockaddr_in</code> define un socket IPv4 en C: familia (<code>AF_INET</code>), puerto, IP en binario y relleno opcional.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

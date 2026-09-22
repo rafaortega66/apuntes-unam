@@ -574,7 +574,8 @@ Pista: spawn() crea un proceso hijo con fork() y reemplaza ese hijo con el progr
 </details>
 </div></details>
 
-<details class="section-block tema off" id="tema-2"><summary><span class="stitle">Tema 2 — Creación de socket servidor y cliente</span> <span class="thrs">· sin ver</span></summary><div class="tema-body">
+<details class="section-block tema" id="tema-2" open><summary><span class="stitle">Tema 2 — Creación de socket servidor y cliente</span> <span class="thrs">· Clases 07–08 (introducción)</span></summary><div class="tema-body">
+<p class="empty">Introducido en la <a href="clase-07.html">Clase 07</a> y la <a href="clase-08.html">Clase 08</a> (22 sep 2026): concepto de socket y puerto lógico, modelo cliente-servidor a nivel de software, comunicación síncrona/asíncrona, familias de direcciones (AF_INET, AF_INET6, AF_UNIX, AF_NETLINK, AF_BLUETOOTH, AF_PACKET), descriptores de archivo (0/1/2 reservados, sockets desde el 3) y las estructuras <code>sockaddr_in</code> y <code>hostent</code> en C. Aún no se ha escrito el código de servidor/cliente eco (2.1.1/2.1.2) ni visto UDP, hilos o daemons.</p>
 <ul class="subtemas">
 <li><span class="sn">2.1</span> Socket en TCP.</li>
 <ul>
@@ -687,6 +688,7 @@ Pista: spawn() crea un proceso hijo con fork() y reemplaza ese hijo con el progr
 <a class="clase-link" href="clase-05.html"><span class="cl-n">Clase 05</span><span class="cl-t">8 sep 2026 · Tema 1 (no asistida)</span><span class="cl-d">⚠️ No asistí por una entrevista — contenido reconstruido del sitio del profesor (Práctica 3): 9 estados de un proceso, las 19 señales de UNIX System V, función <code>wait()</code> y sus macros, procesos zombie, terminación con <code>kill()</code>/<code>abort()</code>.</span></a>
 <a class="clase-link" href="clase-06.html"><span class="cl-n">Clase 06</span><span class="cl-t">10 sep 2026 · Tema 1</span><span class="cl-d">Repaso confirmado de Clase 05 (huérfanos, SIGCHLD=17 en X86/ARM). Manejo de señales con <code>signal()</code>: 3 escenarios (ignorar, tratar, inalterable), handlers <code>void</code>, analogía Avada Kedavra para SIGKILL. Control fg/bg: Ctrl+Z, <code>bg</code>, <code>jobs</code>, <code>fg %N</code>.</span></a>
 <a class="clase-link" href="clase-07.html"><span class="cl-n">Clase 07</span><span class="cl-t">17 sep 2026 · Tema 1</span><span class="cl-d">Cierre de procesos: terminación natural/anormal, <code>kill()</code> por consola y en C (programa10/11), procesos zombie (SIGCHLD encolado, tabla de estados D/I/R/S/T/Z/X), soluciones SIG_IGN/wait(). Arranca puerto lógico (16 bits, 65,536), socket y el modelo cliente/servidor (analogía del restaurante, Cinco Nueves).</span></a>
+<a class="clase-link" href="clase-08.html"><span class="cl-n">Clase 08</span><span class="cl-t">22 sep 2026 · Tema 2</span><span class="cl-d">Sockets y modelo cliente-servidor a nivel de software; comunicación síncrona vs. asíncrona; familias de direcciones (AF_INET, AF_UNIX, AF_NETLINK, AF_BLUETOOTH, AF_PACKET); descriptores de archivo en Unix/Linux (0/1/2 reservados, sockets desde el 3) con demo de redirección en terminal; estructuras sockaddr_in y hostent en C. Demo en vivo de pfSense/VPN en la DGP UNAM.</span></a>
 </div>
 
 </div>
