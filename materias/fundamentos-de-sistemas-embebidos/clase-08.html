@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 08 — Fundamentos de Sistemas Embebidos</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20260922b">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js?v=20260922b" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Fundamentos de Sistemas Embebidos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 08</h2>
+  <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 23 sep 2026 · Tema 2 (subtemas 2.6 y 2.7) — Fisiología de la interacción hombre-máquina, límites de las interfaces legadas (Serie, Paralelo, SCSI), FireWire vs. USB 1.0/1.1, especificación USB 2.0 (modos de velocidad, topología de 7 niveles, par trenzado diferencial) y detección eléctrica de periferia.</p>
+</div>
+
+<details class="section-block sec" id="c8-fisiologia" open><summary><span class="stitle">Puertos legados y fisiología de la interacción humano-computadora</span></summary>
+<p>La sesión arrancó repasando los conectores físicos legados de las tarjetas madre —el puerto <strong>PS/2</strong> (teclado y ratón), el <strong>DB-9</strong> (puerto serie RS-232), el <strong>DB-15</strong> (puerto de juegos/MIDI o VGA) y el <strong>DB-25</strong> (puerto paralelo e interfaz SCSI)— para después contrastar sus tasas de transferencia contra la velocidad real a la que un ser humano puede generar datos de entrada.</p>
+<p>El profesor calculó la <strong>latencia fisiológica y neuromuscular</strong> de una pulsación de tecla: la propagación del impulso nervioso desde el cerebro hasta la yema del dedo toma como mínimo 20 ms; la contracción muscular y la retroalimentación táctil del sensor de presión consumen otros 40 ms; y el retorno neuromuscular para levantar el dedo y liberar la tecla toma 20 ms más. Una pulsación completa dura entonces entre <strong>60 ms y 100 ms</strong>, lo que limita la tasa física de entrada humana a un máximo teórico de aproximadamente 600 a 700 acciones por minuto (7 a 10 Hz).</p>
+<p>Como referencia de percepción visual, mencionó que el cine estándar opera a 24 cuadros por segundo (fps), mientras que monitores y películas modernas usan 30 fps (29.9 fps) o 60 fps para evitar el parpadeo; el ojo humano tiene una respuesta temporal estimada en 40 ms (25 Hz).</p>
+<p>También describió los rangos de frecuencia de la <strong>actividad eléctrica cerebral</strong>: en ondas gamma (~400 Hz, modo de alto estrés y privación de sueño disparado por cortisol y cafeína) el cerebro opera en "modo de solo lectura" o memoria caché, reteniendo información temporalmente pero descartándola al dormir porque las células gliales no alcanzan a reestructurar las conexiones sinápticas ni sintetizar proteínas a esa velocidad; en el rango de 120 a 240 Hz el cerebro está en su estado óptimo de trabajo consciente (alerta/operación cotidiana); entre 100 y 120 Hz el hipotálamo codifica y consolida el aprendizaje en memoria de largo plazo; y por debajo de 60 Hz el cerebro entra en estados de sueño o alteración.</p>
+<p>Por último señaló que un periférico como el ratón no depende de pulsaciones discretas sino de un <strong>codificador óptico (encoder)</strong> que convierte el movimiento lineal en angular, generando trenes de pulsos del orden de los kilohertz (kHz). Para no saturar la CPU con esa tasa, el sistema aplica multiplexación en el tiempo, muestreando la posición a una frecuencia fija de 100 Hz.</p>
+</details>
+
+<details class="section-block sec" id="c8-cuellos" open><summary><span class="stitle">Cuellos de botella de los puertos Serie, Paralelo y SCSI frente a archivos multimedia</span></summary>
+<p>Durante los años 90 la transferencia de periféricos estaba severamente limitada por la velocidad física de los puertos legados:</p>
+<ul>
+<li><strong>Puerto Serie (RS-232 / DB-9):</strong> transmite a 1.5 Mbit/s, equivalente a un ancho de banda efectivo de ~200 KB/s. Alcanzaba para módems telefónicos dial-up (56.6 kbit/s) o DSL inicial (256 kbit/s), pero era insuficiente para archivos pesados.</li>
+<li><strong>Puerto Paralelo (IEEE 1284 / DB-25):</strong> opera a 2.5 Mbit/s, con un rendimiento real de 0.31 MB/s (310 KB/s). Funcionaba bien con impresoras de matriz de puntos o inyección de tinta lentas (1 a 3 minutos por página), pero colapsaba con imágenes de cámaras digitales o escáneres.</li>
+<li><strong>Interfaz SCSI:</strong> alcanzaba hasta 20 MB/s (un tercio de la velocidad de un disco mecánico de la época), pero la tarjeta controladora de expansión costaba $9,000 pesos mexicanos, porque integraba su propio procesador independiente y memoria búfer para no saturar a la CPU principal.</li>
+</ul>
+<p>Para ejemplificar la saturación del puerto paralelo, el profesor resolvió en vivo dos cálculos de tamaño de archivo:</p>
+<ul>
+<li><strong>Fotografía digital no comprimida (año 1995):</strong> resolución de cámara 1024×768 píxeles, profundidad de color verdadero (RGB) de 3 bytes por píxel → tamaño = 1024 × 768 × 3 = 2,359,296 bytes ≈ 2.35 MB. Copiar una sola foto —o un lote de 50— por puerto paralelo tomaba decenas de minutos.</li>
+<li><strong>Escaneo/impresión de alta resolución (300 DPI):</strong> área de hoja carta con márgenes de 7.5 × 9 pulgadas, a 300 puntos por pulgada → (7.5×300) × (9×300) = 2250 × 2700 = 6,075,000 puntos; en color verdadero (3 bytes) = 6,075,000 × 3 = 18,225,000 bytes ≈ 18.2 MB. A los 0.31 MB/s del puerto paralelo, transferir una sola página escaneada tomaba casi un minuto completo de transmisión ininterrumpida.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c8-firewire" open><summary><span class="stitle">FireWire (IEEE 1394) vs. USB 1.0/1.1: la guerra de estándares de 1995</span></summary>
+<p>En 1995, ante el "infierno" de cables y controladores propietarios, la industria propuso dos soluciones competidoras para unificar las interfaces de entrada/salida: IEEE 1394 (FireWire) y USB (Universal Serial Bus) 1.0/1.1.</p>
+<table><thead><tr><th>Característica</th><th>IEEE 1394 (FireWire)</th><th>USB 1.0 / 1.1</th></tr></thead><tbody>
+<tr><td>Voltaje de alimentación</td><td>Dinámico, de 5 V a 30 V</td><td>Fijo, 5 V</td></tr>
+<tr><td>Corriente y potencia máxima</td><td>Hasta 1.5 A (45 W) — energiza discos y cámaras</td><td>Hasta 500 mA (2.5 a 5 W)</td></tr>
+<tr><td>Velocidad de transferencia (1995)</td><td>3 Gbit/s</td><td>12 Mbit/s</td></tr>
+<tr><td>Carga de procesamiento</td><td>Coprocesador independiente en la tarjeta (0% carga a la CPU)</td><td>La CPU principal hace todo el trabajo</td></tr>
+<tr><td>Uso de memoria y reloj</td><td>Búfer externo dedicado; modos síncrono y asíncrono</td><td>Usa la RAM del sistema; solo modo asíncrono</td></tr>
+<tr><td>Costo comercial</td><td>Muy elevado (tarjetas caras y complejas)</td><td>Sumamente económico</td></tr>
+</tbody></table>
+<p>A pesar de la superioridad técnica de FireWire, el consorcio de fabricantes adoptó masivamente el estándar USB por su bajo costo de implementación. USB 1.0 presentó fallas de diseño al estar anclado a la CPU; estas se corrigieron en el parche <strong>USB 1.1 (12 Mbit/s)</strong>, que se convirtió en el estándar comercial definitivo.</p>
+</details>
+
+<details class="section-block sec" id="c8-usb2" open><summary><span class="stitle">Especificación USB 2.0: modos de velocidad y aplicaciones hápticas/audio (tema de examen)</span></summary>
+<p>La especificación USB 2.0, popularizada comercialmente hacia 2004, incrementó la velocidad nominal a <strong>480 Mbit/s</strong> (con anchos de banda reales de 25 a 400 MB/s). Sus tres modos de operación —material de examen— son:</p>
+<ul>
+<li><strong>Baja velocidad (Low Speed) — 1.5 Mbit/s</strong> (10 a 100 kbit/s efectivos): diseñado exclusivamente para interactuar con la velocidad neuromuscular humana. Periféricos: teclados, ratones, estiletes, gamepads y mecanismos hápticos (dispositivos con retroalimentación de fuerza en tiempo real, como simuladores de conducción, manipuladores en robótica espacial o robots de microcirugía donde el cirujano siente la resistencia de venas y tejidos mediante motores con amplificación de fuerza).</li>
+<li><strong>Velocidad completa (Full Speed) — 12 Mbit/s</strong> (heredado de USB 1.1): diseñado para telefonía, audio digital y módems. Permite garantizar ancho de banda para descargas continuas, o latencia garantizada mediante transferencias isócronas e interrupciones periódicas, para evitar cortes en conversaciones de audio. Ejemplos de cálculo resueltos en clase: telefonía estándar = 8 kHz × 8 bits = 64 kbit/s; audio MP3 estéreo de alta fidelidad = 48 kHz × 16 bits × 2 canales = 1.536 Mbit/s; audio envolvente 7.1 (8 canales) = 48 kHz × 16 bits × 8 canales ≈ 6.14 Mbit/s, perfectamente soportado dentro de los 12 Mbit/s de Full Speed.</li>
+<li><strong>Alta velocidad (High Speed) — 480 Mbit/s</strong> (USB 2.0 nativo): diseñado para video digital, cámaras de alta resolución y almacenamiento externo (discos duros y SSD).</li>
+</ul>
+<p><strong>Evolución a USB 3.0/3.2/4.0 y video 4K.</strong> USB 3.0 introdujo tasas de 5 Gbit/s con líneas de transmisión dedicadas. Para justificar los 10 Gbit/s de USB 3.2 Gen 2 o USB4, el profesor calculó el ancho de banda que exige un monitor 4K a 60 fps: resolución 3840×2160 píxeles, profundidad de color de 32 bits y 60 fps → 3840 × 2160 × 32 bits × 60 fps = 15,925,248,000 bits/s ≈ 15.9 Gbit/s. Transmitir video 4K a 60 fps sin compresión excede la capacidad de USB 3.0, por lo que se requieren interfaces como DisplayPort, HDMI o USB 4.0 conectado directamente al Puente Norte.</p>
+</details>
+
+<details class="section-block sec" id="c8-topologia" open><summary><span class="stitle">Topología de red USB, par trenzado diferencial y detección eléctrica de conexión</span></summary>
+<p><strong>A. Topología en árbol de USB 2.0 (pregunta de examen).</strong> La red USB 2.0 se organiza en una topología jerárquica en árbol con un límite estricto de <strong>7 niveles de profundidad</strong>: el nivel 1 (cúpula) lo integran el Host (procesador central) y el Root Hub (concentrador raíz primario de la tarjeta madre); los niveles 2 al 7 los ocupan concentradores (hubs) intermedios encadenados y los dispositivos finales (functions). La regla estricta es que el número de concentradores encadenados no puede superar esos 7 niveles.</p>
+<p><strong>B. Par trenzado diferencial, líneas D+ y D- (pregunta de examen).</strong> La transmisión de datos en USB usa dos conductores trenzados señalizados de forma diferencial: Data+ (D+) y Data- (D-). Para transmitir un <strong>'1' lógico</strong>, D+ se energiza a nivel alto (5 V) y D- se lleva a nivel bajo (0 V); para transmitir un <strong>'0' lógico</strong>, D+ se lleva a nivel bajo (0 V) y D- se energiza a nivel alto (5 V). La arquitectura física impone que D+ y D- deben ser siempre complementarias: si el receptor lee el estado '1 1' (ambas en alto) o '0 0' (ambas en bajo), el hardware lo interpreta de inmediato como una falla de señal o error de bus. Además, el trenzado físico de los cables genera un campo magnético toroidal que blinda las líneas contra interferencia electromagnética (EMI) o fotones incidentes: si una radiación externa incide sobre el cable, ese blindaje inductivo protege las líneas y evita lecturas falsas.</p>
+<p><strong>C. Detección eléctrica de conexión y desconexión (pregunta de examen).</strong> El mecanismo para detectar cuándo un usuario enchufa o desenchufa un dispositivo USB no usa chips complejos, sino únicamente resistencias de acoplamiento (pull-down/pull-up). En reposo, sin dispositivo conectado, la línea de alimentación de 5 V (V<sub>CC</sub>) se mantiene abierta con una resistencia a tierra, registrando un nivel lógico de 5 V. Al insertar el conector del dispositivo, el circuito interno del periférico se cierra a tierra y el voltaje en la línea de control cae instantáneamente a 0 V; el Host detecta esa caída e interpreta el evento como "Dispositivo Conectado". Si el usuario desconecta el cable, el circuito se abre de nuevo y el voltaje sube automáticamente a 5 V, interpretándose como "Dispositivo Desconectado".</p>
+</details>
+
+<details class="section-block sec" id="c8-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> <strong>Libros de texto e historia afromexicana:</strong> el profesor comentó críticamente los contenidos del nuevo libro de texto de educación básica —redactado en parte por su esposa— cuestionando imprecisiones históricas al abordar a la población afromexicana en la época precolombina, antes de la llegada de los barcos negreros holandeses y españoles en los siglos XVI y XVII.</li>
+<li><em>(Contexto)</em> <strong>El tianguis y la compradora francesa:</strong> anécdota de haber escuchado en el tianguis a una mujer hablando en francés pidiendo precios de verduras; bromeó con que él respondería en náhuatl para defender las lenguas originarias.</li>
+<li><em>(Contexto)</em> <strong>Música, partituras y ChatGPT:</strong> mención de los puertos de joystick/MIDI en tarjetas de sonido antiguas para conectar sintetizadores, y cómo las nuevas generaciones usan IA para generar partituras sin aprender solfeo o cálculo.</li>
+<li><em>(Contexto)</em> <strong>Juegos de pelea en maquinitas:</strong> recuerdos del "button mashing" en arcades como Mortal Kombat, Samurai Shodown y Marvel vs. Capcom para zafarse de agarradas.</li>
+<li><em>(Contexto)</em> <strong>Edad y fatiga:</strong> bromas sobre la pérdida de reflejos neuromusculares con la edad y los dolores de espalda al levantarse de la cama.</li>
+<li><em>(Contexto)</em> <strong>El microbús y la Santa Muerte:</strong> comentarios sarcásticos sobre sus traslados en microbús en la Ciudad de México, observando si el chofer lleva altares a la Santa Muerte mientras escucha reguetón a todo volumen.</li>
+<li><em>(Contexto)</em> <strong>Células gliales vs. neuronas:</strong> explicación cómica sobre la especialización de las neuronas (30% de la masa cerebral), comparándolas con un anciano catatónico o con Stephen Hawking, mientras las células gliales actúan como "enfermeras" que limpian desechos metabólicos e inyectan ATP.</li>
+<li><em>(Contexto)</em> <strong>Proteínas, priones y canibalismo:</strong> advertencia científica en tono burlesco sobre los priones (proteínas mal dobladas que causan encefalopatía espongiforme) derivados del consumo de carne de primates o canibalismo, señalando que no existen vacunas ni cura.</li>
+<li><em>(Contexto)</em> <strong>Consumerismo vs. consumismo:</strong> reflexión sobre la obsolescencia programada y el "fast fashion" actual, comparándolo con la mentalidad de los 90, cuando los periféricos e interfaces se reparaban y actualizaban para durar 20 años.</li>
+<li><em>(Contexto)</em> <strong>Objetos extraños en urgencias:</strong> historias de conocidos que trabajan en Unidades de Cuidados Intensivos, sobre pacientes que ingresan por accidentes domésticos con objetos insólitos introducidos en el cuerpo.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c8-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Formato de entrega de tareas:</strong> el nombre del archivo debe iniciar con el número de lista formateado estrictamente a dos dígitos (ej. 01, 02, 09).</li>
+<li><strong>Anticipación de entrega:</strong> la entrega debe realizarse con 3 días de anticipación a la fecha límite.</li>
+<li><strong>Temas de examen confirmados en esta clase:</strong> el profesor reiteró que las preguntas de examen de este apartado incluirán la clasificación de los modos de velocidad de USB 2.0 (Low, Full, High Speed), la topología jerárquica en árbol limitada a 7 niveles, el funcionamiento del par trenzado diferencial (D+/D-) y la detección eléctrica de conexión/desconexión por cambio de voltaje.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Fisiología y latencia neuromuscular: una pulsación humana requiere entre 60 y 100 ms (máximo ~7 a 10 Hz), frente a los encoders de ratón que generan pulsos en kHz muestreados a 100 Hz.</li>
+<li>Modos de velocidad USB 2.0: Low Speed (1.5 Mbit/s) para entrada humana y hápticos; Full Speed (12 Mbit/s) para telefonía/audio con ancho de banda o latencia garantizados; High Speed (480 Mbit/s) para almacenamiento y video.</li>
+<li>Topología USB de 7 niveles: estructura jerárquica en árbol con un máximo estricto de 7 niveles desde el Host/Root Hub hasta el periférico final.</li>
+<li>Par trenzado diferencial (D+/D-): transmite datos con señales complementarias (1/0 o 0/1); leer '1 1' o '0 0' es un error de hardware; el trenzado inmuniza la línea contra ruido EMI.</li>
+<li>Detección eléctrica de periferia: resistencias pull-down/pull-up en V<sub>CC</sub> (5 V); al conectar un periférico el circuito se cierra a tierra y cae a 0 V, lo que el Host interpreta como "Dispositivo Conectado".</li>
+</ul></div>
+
+</div>
+</body>
+</html>

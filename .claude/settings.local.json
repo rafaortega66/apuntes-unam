@@ -13,7 +13,11 @@
       "WebFetch(domain:www.thegeekstuff.com)",
       "Bash(git rm *)",
       "Bash(python3 -c ' *)",
-      "Bash(pip3 install *)"
+      "Bash(pip3 install *)",
+      "Bash(cp /Users/rafa/.claude/uploads/b38f84db-cb98-40a1-9f45-07eb99b0736e/6cf68280-Equipo4T1.pdf /Users/rafa/Desktop/site/materias/seguridad-informatica-basica/files/entregas/Tarea-01-Perfiles-de-Proteccion-Equipo4.pdf)",
+      "Bash(cp /Users/rafa/.claude/uploads/b38f84db-cb98-40a1-9f45-07eb99b0736e/e705c46a-Equipo4T2.pdf.pdf /Users/rafa/Desktop/site/materias/seguridad-informatica-basica/files/entregas/Tarea-02-Linea-del-Tiempo-Equipo4.pdf)",
+      "Bash(python3 scripts/build_search_index.py)",
+      "Bash(git config *)"
     ]
   }
 }
