@@ -21,10 +21,18 @@
 <p>La profesora regresó calificaciones de la actividad anterior (no todos sacaron 10) y señaló el error conceptual más repetido: los ejercicios piden identificar "lo malo que podría pasar" con base en un escenario dado, no una acción o carencia disfrazada de amenaza. Ejemplo trabajado: si el escenario dice "falta personal", eso <strong>no es una amenaza</strong> — ya es en sí mismo una carencia, es decir, una <strong>vulnerabilidad</strong>. La amenaza correspondiente sería lo malo que esa falta de personal permite que ocurra, por ejemplo que alguien se robe cosas al no haber quién vigile. De la misma forma, "falta orden al manipular el material" no es una amenaza — lo malo que podría pasar es que alguien resulte dañado o que se pierdan cosas por esa falta de orden.</p>
 <p>Antes de seguir, varios alumnos repasaron en voz alta lo visto en la clase anterior: la vulnerabilidad es la debilidad de los procedimientos de seguridad (el "talón de Aquiles"); se identifica preguntando qué hace falta, qué no se ha hecho o implementado, o qué se omitió; puede clasificarse como humana, de hardware, de red, de software o física; y un riesgo existe cuando una amenaza tiene una vulnerabilidad correspondiente que le permite concretarse — pueden existir vulnerabilidades sin ninguna amenaza asociada, o amenazas sin ninguna vulnerabilidad que las haga posibles, sin que eso represente un riesgo real.</p>
 <p>La profesora insistió en un punto clave: la relación entre amenazas y vulnerabilidades <strong>no es de uno a uno</strong> — una sola amenaza puede aprovecharse de varias vulnerabilidades a la vez, y una vulnerabilidad puede ser explotada por más de una amenaza. Mencionó también que, en el ámbito profesional, a las herramientas o actividades que ayudan a detectar vulnerabilidades de forma sistemática se les conoce comúnmente como "exploits" (en el sentido de programas o pruebas diseñadas para identificarlas), aunque coloquialmente se dice que las amenazas "explotan" las vulnerabilidades.</p>
+<p>Las cinco reglas que dictó como resumen del tema, tal cual las proyectó:</p>
+<ol>
+<li>Las amenazas <strong>no son</strong> vulnerabilidades.</li>
+<li>Las amenazas <strong>explotan (aprovechan)</strong> vulnerabilidades.</li>
+<li>Una amenaza puede explotar <strong>1 vulnerabilidad o varias</strong> vulnerabilidades.</li>
+<li>Una vulnerabilidad puede ser explotada por <strong>1 amenaza o varias</strong> amenazas.</li>
+<li>Las vulnerabilidades son <strong>omisiones</strong>: algo que no se ha tomado en cuenta, algo que falta, algo de lo que se carece.</li>
+</ol>
 </details>
 
 <details class="section-block sec" id="c8-ejercicio-celular" open><summary><span class="stitle">Ejercicio dirigido: reformular vulnerabilidades como "carencia de..."</span></summary>
-<p>Para practicar la reformulación correcta, la profesora usó como activo el <strong>teléfono celular</strong> y preguntó al grupo qué cosas malas le podrían pasar. Las respuestas del grupo incluyeron: que lo roben, que se apague y no vuelva a encender, que se formatee, que se pierda, y que le roben información o dinero a través de la tecnología <strong>NFC</strong> (pagos sin contacto). Aclaró que si estas cosas son "malas" depende del contexto y del momento — por ejemplo, que el celular se apague no representa ningún daño si en ese momento no se iba a usar, pero sí es grave si se necesitaba justo entonces para inscribirse, resolver un cuestionario o leer un código QR.</p>
+<p>Para practicar la reformulación correcta, la profesora usó como activo el <strong>teléfono celular</strong> y preguntó al grupo qué cosas malas le podrían pasar (amenazas). La lista que se armó en clase, tal como quedó en las diapositivas: que se rompa, que lo roben, que se caiga al agua, que se infle la batería y explote, que se apague y ya no prenda, que se formatee solo, que se dañe la pantalla, y que le roben las tarjetas guardadas (por NFC). Aclaró que si estas cosas son "malas" depende del contexto y del momento — por ejemplo, que el celular se apague no representa ningún daño si en ese momento no se iba a usar, pero sí es grave si se necesitaba justo entonces para inscribirse, resolver un cuestionario o leer un código QR.</p>
 <p>Después trabajó, ejemplo por ejemplo, cómo convertir cada causa en la forma correcta de nombrar una vulnerabilidad (como una carencia, nunca como una acción):</p>
 <ul>
 <li><strong>Que se rompa</strong> → no por "los materiales son malos", sino reformulado como: <em>falta / carece de materiales de buena calidad</em>.</li>
@@ -47,29 +55,31 @@
 </details>
 
 <details class="section-block sec" id="c8-ejercicio20" open><summary><span class="stitle">Ejercicio de 20 reactivos: completar amenaza o vulnerabilidad</span></summary>
-<p>La profesora dictó un ejercicio de 20 enunciados (no se entregó, se calificó como participación oral al ir revisándolo en grupo): cada reactivo da una amenaza o una vulnerabilidad ya definida, y hay que completar con el elemento contrario correspondiente. Ejemplo de formato dado como modelo: si el enunciado es "no considerar cerrar bien la puerta" (una vulnerabilidad), hay que completar con la amenaza correspondiente — "que alguien pueda entrar a la casa y robar los bienes del interior".</p>
-<p>Algunas de las respuestas revisadas en grupo durante la sesión:</p>
-<ul>
-<li><strong>Alguien entra a mi cuenta de Facebook</strong> (amenaza) → vulnerabilidad: no cerrar la sesión / falta de cuidado.</li>
-<li><strong>Alguien me suplanta al hablar por teléfono</strong> (amenaza) → vulnerabilidad: falta de cuidado para identificar llamadas sospechosas / no conocer a quién se contesta.</li>
-<li><strong>No seguir el llenado correcto de la canaleta de cableado estructurado</strong> (vulnerabilidad) → amenaza: que la canaleta se caiga por sobrepeso.</li>
-<li><strong>No lavarse las manos antes de comer</strong> (vulnerabilidad) → amenaza: enfermarse por contaminación de bacterias o virus.</li>
-<li><strong>No tener antivirus</strong> (vulnerabilidad) → amenaza: que un virus infecte el dispositivo.</li>
-<li><strong>Resbalarse en el pasillo de la Facultad por correr en piso mojado</strong> (amenaza) → vulnerabilidad: falta de precaución / falta de calzado antiderrapante.</li>
-<li><strong>Reprobar el examen</strong> (amenaza) → vulnerabilidad: falta de estudio.</li>
-<li><strong>Confiar plenamente en lo que alguien dice</strong> (vulnerabilidad) → amenaza: que esa persona mienta, engañe o se aproveche.</li>
-<li><strong>Llegar tarde a una cita por no considerar tiempo y medio de transporte</strong> (vulnerabilidad) → amenaza: llegar tarde / perder la cita.</li>
-<li><strong>Perder el avance del proyecto final</strong> (amenaza) → vulnerabilidad: no tener un respaldo.</li>
-<li><strong>Descargar software de cualquier página sin cuidado</strong> (vulnerabilidad) → amenaza: descargar software malicioso que dañe el equipo o los datos.</li>
-<li><strong>No salir con cubrebocas estando enfermo</strong> (vulnerabilidad) → amenaza: contagiar a los demás (falta de empatía).</li>
-<li><strong>Enfermarse de COVID</strong> (amenaza) → vulnerabilidad: no haber cumplido con las normas de seguridad sanitaria.</li>
-<li><strong>Perder la tarea</strong> (amenaza) → vulnerabilidad: no tener un respaldo.</li>
-<li><strong>Carecer de los medios económicos</strong> (vulnerabilidad, dada como pista) → amenaza: no poder pagar productos o servicios.</li>
-<li><strong>Quedarse sin conexión durante una sesión en línea por confiar en la red</strong> (amenaza) → vulnerabilidad: falta de un respaldo o plan alterno de conexión / desconfianza necesaria en la estabilidad de la red.</li>
-<li><strong>Perder acceso a una cuenta</strong> (amenaza) → vulnerabilidad: no guardar las contraseñas en un lugar seguro.</li>
-<li><strong>No dar mantenimiento adecuado a las instalaciones</strong> (vulnerabilidad) → amenaza: que en caso de incendio, el fuego se propague más rápido y los daños sean mayores por falta de protecciones en el techo.</li>
-</ul>
-<p>La profesora cerró el ejercicio recordando que siempre habrá amenazas latentes (no se puede controlar que llueva, por ejemplo) — lo que sí se puede y se debe controlar son las vulnerabilidades propias, para que esas amenazas no encuentren cómo concretarse.</p>
+<p>La profesora dictó un ejercicio de 20 enunciados (no se entregó, se calificó como participación oral al ir revisándolo en grupo): cada reactivo da una amenaza o una vulnerabilidad ya definida, y hay que completar con el elemento contrario correspondiente. Ejemplos de formato dados como modelo: "no considerar cerrar bien la puerta" (vulnerabilidad) se completa con la amenaza "que alguien pueda entrar a la casa y robar los bienes del interior"; "caerse de las escaleras" (amenaza) se completa con la vulnerabilidad "no sujetarse del barandal".</p>
+<p>Las 20 respuestas correctas, tal como quedaron en el material oficial de la profesora:</p>
+<ol>
+<li><strong>Que alguien entre en mi cuenta de Facebook</strong> (amenaza) → vulnerabilidad: no usar contraseña segura ni verificación de dos pasos.</li>
+<li><strong>Que alguien me suplante al hablar por teléfono</strong> (amenaza) → vulnerabilidad: no verificar la identidad de quien llama antes de dar información.</li>
+<li><strong>No seguir las normas del cableado estructurado</strong> (vulnerabilidad) → amenaza: que se generen fallas en la red, cortocircuitos o pérdida de conectividad.</li>
+<li><strong>No lavarse las manos antes de comer</strong> (vulnerabilidad) → amenaza: que me enferme por contaminación con bacterias o virus.</li>
+<li><strong>No tener en el dispositivo un antivirus</strong> (vulnerabilidad) → amenaza: que el dispositivo se infecte con malware.</li>
+<li><strong>Resbalarse en el pasillo de la Facultad de Ingeniería</strong> (amenaza) → vulnerabilidad: el piso está mojado y no hay señalización de advertencia.</li>
+<li><strong>Posibilidad de reprobar algún examen</strong> (amenaza) → vulnerabilidad: no haber estudiado lo suficiente.</li>
+<li><strong>Confianza plena en lo que me dice mi amigo</strong> (vulnerabilidad) → amenaza: que me dé información falsa y tome una decisión equivocada.</li>
+<li><strong>Llegar tarde a una cita</strong> (amenaza) → vulnerabilidad: no calcular bien el tiempo de traslado ni salir con anticipación.</li>
+<li><strong>Perder el proyecto final que estaba almacenado en mi dispositivo</strong> (amenaza) → vulnerabilidad: no contar con un respaldo del proyecto.</li>
+<li><strong>No tener cuidado al instalar cierto software en el servidor</strong> (vulnerabilidad) → amenaza: que el servidor se vea comprometido o infectado.</li>
+<li><strong>No salir con cubrebocas a la calle estando enfermo</strong> (vulnerabilidad) → amenaza: que contagie mi enfermedad a otras personas.</li>
+<li><strong>Enfermarse de COVID</strong> (amenaza) → vulnerabilidad: no usar cubrebocas ni mantener sana distancia.</li>
+<li><strong>No contar con un respaldo</strong> (vulnerabilidad) → amenaza: que se pierda la información importante de forma definitiva.</li>
+<li><strong>Perder el trabajo</strong> (amenaza) → vulnerabilidad: no cumplir con las responsabilidades laborales asignadas.</li>
+<li><strong>Carecer de los medios económicos</strong> (vulnerabilidad) → amenaza: que no pueda cubrir mis necesidades básicas.</li>
+<li><strong>Quedarse sin red al momento de las sesiones en línea</strong> (amenaza) → vulnerabilidad: no contar con un respaldo de conexión (datos móviles).</li>
+<li><strong>Perder la contraseña para ingresar a algún servicio en línea</strong> (amenaza) → vulnerabilidad: no usar un gestor de contraseñas ni guardarla de forma segura.</li>
+<li><strong>Falta de pintura no inflamable en las paredes de la organización</strong> (vulnerabilidad) → amenaza: que un incendio se propague con mayor facilidad.</li>
+<li><strong>Omitir las protecciones contra filtraciones en el techo</strong> (vulnerabilidad) → amenaza: que se dañen equipos o documentos por filtraciones de agua.</li>
+</ol>
+<p>Como conclusión del ejercicio, la profesora dictó dos ideas centrales: una vulnerabilidad se identifica fácilmente si se analiza "¿qué es lo que NO se ha hecho?"; y en la medida en que se eliminen vulnerabilidades, se correrán menos riesgos, se contrarrestarán amenazas y, en consecuencia, disminuirán los ataques.</p>
 </details>
 
 <details class="section-block sec" id="c8-casos-reales" open><summary><span class="stitle">Casos reales: consecuencias de no gestionar vulnerabilidades</span></summary>
