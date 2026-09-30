@@ -263,6 +263,16 @@
    "detalle": "Fecha tentativa 30 nov según las diapositivas de encuadre; en audio solo se dijo que habrá detalles después. Vale 40 %.",
    "link": "materias/reconocimiento-de-patrones/index.html",
    "fecha_texto": "Tentativo 30 nov (por confirmar)"
+  },
+  {
+   "id": "labfse-proyecto",
+   "materia": "Lab FSE",
+   "color": "#E8735C",
+   "titulo": "Proyecto final — práctica-tutorial (entrega presencial)",
+   "vence": "2026-11-24T13:00:00-06:00",
+   "hora_confirmada": true,
+   "detalle": "Martes 24 nov, 13:00, en el salón. Diseñar una práctica-tutorial sobre sistemas embebidos; anexar video-evidencia y código según el PDF de especificaciones.",
+   "link": "materias/lab-de-fundamentos-de-sistemas-embebidos/material.html"
   }
  ]
 }
