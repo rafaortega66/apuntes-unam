@@ -192,6 +192,12 @@ una fila a `entregas.html` de esa materia con: qué es, cuándo, y enlace al
 PDF (en `files/entregas/` si es un archivo nuevo) o a la página de la clase
 donde se presentó (si fue una exposición en vivo, no un PDF).
 
+## Labs (decisión del usuario, 30 sep 2026)
+
+Los labs (Lab FSE, Lab OAC) **no tienen páginas `clase-NN` propias**: lo que
+se vea en el lab se documenta dentro de la página de teoría de su materia
+(FSE u OAC) del día correspondiente. Sus `index/material/entregas` se mantienen.
+
 ## Sección global "Pendientes" — oculta (29 sep 2026)
 
 A petición del usuario se quitó de la interfaz el enlace 📌 Pendientes de la
