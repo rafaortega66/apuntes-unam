@@ -10,8 +10,8 @@
    "titulo": "Tarea 05: Comentarios",
    "vence": "2026-09-30T23:59:00-06:00",
    "hora_confirmada": true,
-   "detalle": "Serie \"Código limpio\". Formato del archivo: PDF único, nombre NL-CURP-TXX.pdf (p. ej. 19-OEPR-T05.pdf).",
-   "link": "materias/fundamentos-de-sistemas-embebidos/entregas.html",
+   "detalle": "Serie \"Código limpio\". Formato del archivo: PDF único, nombre NL-CURP-TXX.pdf (p. ej. 19-OEPR-T05.pdf). Enunciado: materias/fundamentos-de-sistemas-embebidos/files/tarea-05-enunciado.pdf",
+   "link": "materias/fundamentos-de-sistemas-embebidos/files/tarea-05-enunciado.pdf",
    "classroom": "https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzQ4MDk5MzQ5/details"
   },
   {
@@ -21,8 +21,9 @@
    "titulo": "Tarea 06: Formato",
    "vence": "2026-10-07T23:59:00-06:00",
    "hora_confirmada": false,
-   "detalle": "Serie \"Código limpio\". PDF único: NL-CURP-T06.pdf.",
-   "link": "materias/fundamentos-de-sistemas-embebidos/entregas.html"
+   "detalle": "Serie \"Código limpio\". PDF único: NL-CURP-T06.pdf. Enunciado: materias/fundamentos-de-sistemas-embebidos/files/tarea-06-enunciado.pdf",
+   "link": "materias/fundamentos-de-sistemas-embebidos/files/tarea-06-enunciado.pdf",
+   "classroom": "https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzQ2MjA2NzEw/details"
   },
   {
    "id": "fse-t07",
@@ -31,8 +32,8 @@
    "titulo": "Tarea 07: Límites claros",
    "vence": "2026-10-14T23:59:00-06:00",
    "hora_confirmada": false,
-   "detalle": "Serie \"Código limpio\". PDF único: NL-CURP-T07.pdf.",
-   "link": "materias/fundamentos-de-sistemas-embebidos/entregas.html",
+   "detalle": "Serie \"Código limpio\". PDF único: NL-CURP-T07.pdf. Enunciado: materias/fundamentos-de-sistemas-embebidos/files/tarea-07-enunciado.pdf",
+   "link": "materias/fundamentos-de-sistemas-embebidos/files/tarea-07-enunciado.pdf",
    "classroom": "https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzQ4Njk2NDEy/details"
   },
   {
@@ -42,8 +43,8 @@
    "titulo": "Tarea 08: Cuando algo huele raro",
    "vence": "2026-10-21T23:59:00-06:00",
    "hora_confirmada": false,
-   "detalle": "Serie \"Código limpio\". PDF único: NL-CURP-T08.pdf.",
-   "link": "materias/fundamentos-de-sistemas-embebidos/entregas.html",
+   "detalle": "Serie \"Código limpio\". PDF único: NL-CURP-T08.pdf. Enunciado: materias/fundamentos-de-sistemas-embebidos/files/tarea-08-enunciado.pdf",
+   "link": "materias/fundamentos-de-sistemas-embebidos/files/tarea-08-enunciado.pdf",
    "classroom": "https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzQ3MDM4OTYy/details"
   },
   {
@@ -53,8 +54,8 @@
    "titulo": "Tarea 09: The Social Dilemma",
    "vence": "2026-10-28T23:59:00-06:00",
    "hora_confirmada": false,
-   "detalle": "PDF único: NL-CURP-T09.pdf.",
-   "link": "materias/fundamentos-de-sistemas-embebidos/entregas.html",
+   "detalle": "PDF único: NL-CURP-T09.pdf. Enunciado: materias/fundamentos-de-sistemas-embebidos/files/tarea-09-enunciado.pdf",
+   "link": "materias/fundamentos-de-sistemas-embebidos/files/tarea-09-enunciado.pdf",
    "classroom": "https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzQ5NDg0Nzc2/details"
   },
   {
