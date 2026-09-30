@@ -41,106 +41,144 @@
     }, 30);
   }
 
+  // ================= Pendientes con reloj =================
+  // Fuente: assets/pendientes.json. Cada ítem trae "vence" (ISO con zona, p. ej.
+  // 2026-10-06T23:59:00-06:00) o null. La hora "actual" es la del SERVIDOR
+  // (cabecera Date de la respuesta), no la del reloj del dispositivo, y el
+  // listado se recalcula cada 30 s: al pasar "vence", el ítem desaparece solo.
+  var TZ = 'America/Mexico_City';
+  var Pend = { items: [], offset: 0, loaded: false, listeners: [] };
+
+  Pend.now = function () { return Date.now() + Pend.offset; };
+  Pend.dayKey = function (ms) {
+    return new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(ms));
+  };
+  Pend.fmt = function (ms, opts) {
+    return new Intl.DateTimeFormat('es-MX', Object.assign({ timeZone: TZ }, opts)).format(new Date(ms));
+  };
+  Pend.esc = function (t) {
+    return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; });
+  };
+  Pend.vigentes = function () {
+    var now = Pend.now();
+    return Pend.items.filter(function (it) {
+      if (it.oculto) return false;
+      if (!it.vence) return true;            // sin fecha: se muestra aparte
+      return new Date(it.vence).getTime() > now;
+    }).sort(function (a, b) {
+      var ta = a.vence ? new Date(a.vence).getTime() : Infinity;
+      var tb = b.vence ? new Date(b.vence).getTime() : Infinity;
+      return ta - tb;
+    });
+  };
+  Pend.faltan = function (ms) {
+    var d = ms - Pend.now();
+    var min = Math.floor(d / 60000);
+    if (min < 60) return 'en ' + Math.max(min, 1) + ' min';
+    var h = Math.floor(min / 60);
+    if (h < 48) return 'en ' + h + ' h ' + (min % 60) + ' min';
+    return 'en ' + Math.floor(h / 24) + ' días';
+  };
+  Pend.grupo = function (it) {
+    if (!it.vence) return 'sin';
+    var t = new Date(it.vence).getTime();
+    var hoy = Pend.dayKey(Pend.now());
+    var k = Pend.dayKey(t);
+    if (k === hoy) return 'hoy';
+    if (k === Pend.dayKey(Pend.now() + 86400000)) return 'manana';
+    if (t - Pend.now() < 7 * 86400000) return 'semana';
+    return 'despues';
+  };
+  Pend.cardHtml = function (it, compact) {
+    var t = it.vence ? new Date(it.vence).getTime() : null;
+    var cuando = t
+      ? Pend.fmt(t, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hour12: false }) +
+        (it.hora_confirmada === false ? ' (fin del día)' : '')
+      : (it.fecha_texto || 'Sin fecha');
+    var faltan = t && (t - Pend.now() < 48 * 3600000) ? ' · ' + Pend.faltan(t) : '';
+    var href = it.link ? (SITE_ROOT + it.link) : (it.classroom || '#');
+    return '<a class="pend-card" href="' + Pend.esc(href) + '" style="--c:' + Pend.esc(it.color || '#7C9CD6') + '">' +
+      '<div class="pend-top"><span class="pend-materia">' + Pend.esc(it.materia) + '</span>' +
+      '<span class="pend-fecha">' + Pend.esc(cuando + faltan) + '</span></div>' +
+      '<div class="pend-titulo">' + Pend.esc(it.titulo) + '</div>' +
+      (compact || !it.detalle ? '' : '<div class="pend-detalle">' + Pend.esc(it.detalle) + '</div>') +
+      '</a>';
+  };
+  Pend.onChange = function (fn) { Pend.listeners.push(fn); if (Pend.loaded) fn(); };
+  Pend.tick = function () { Pend.listeners.forEach(function (fn) { fn(); }); };
+  Pend.load = function () {
+    return fetch(SITE_ROOT + 'assets/pendientes.json', { cache: 'no-store' })
+      .then(function (r) {
+        var d = r.headers.get('Date');
+        if (d) { var sv = new Date(d).getTime(); if (!isNaN(sv)) Pend.offset = sv - Date.now(); }
+        return r.json();
+      })
+      .then(function (data) {
+        Pend.items = data.items || [];
+        Pend.meta = data;
+        Pend.loaded = true;
+        Pend.tick();
+      })
+      .catch(function () { Pend.loaded = true; Pend.failed = true; Pend.tick(); });
+  };
+
   // ================= Barra superior fija =================
   function initTopBar() {
     var bar = document.createElement('div');
     bar.className = 'topbar';
     bar.innerHTML =
-      '<a class="tb-brand" href="' + SITE_ROOT + 'index.html">Apuntes<span class="dot">.</span></a>';
+      '<a class="tb-brand" href="' + SITE_ROOT + 'index.html">Apuntes<span class="dot">.</span></a>' +
+      '<div class="tb-right"><a class="tb-link tb-pendientes" href="' + SITE_ROOT + 'pendientes.html">📌 Pendientes<span class="tb-badge" style="display:none"></span></a></div>';
     document.body.insertBefore(bar, document.body.firstChild);
     document.body.classList.add('has-topbar');
+    var badge = bar.querySelector('.tb-badge');
+    Pend.onChange(function () {
+      var n = Pend.vigentes().filter(function (it) {
+        return it.vence && (new Date(it.vence).getTime() - Pend.now()) < 48 * 3600000;
+      }).length;
+      badge.textContent = n;
+      badge.style.display = n ? 'inline-block' : 'none';
+    });
   }
 
-  // ================= Carrusel de pendientes (home) =================
-  function fmtFechaCorta(f) {
-    if (!f) return 'Sin fecha';
-    var meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-    var p = f.split('-');
-    return parseInt(p[2], 10) + ' ' + meses[parseInt(p[1], 10) - 1];
-  }
-
-  function initHomeCarousel() {
+  // ================= Panel de pendientes (portada) =================
+  function initHomePendientes() {
     var mount = document.getElementById('pend-carousel');
     if (!mount) return;
-    var ORDEN = ['hoy', 'manana', 'vencido', 'verificar', 'proxima', 'examen', 'pendiente', 'semanal'];
-    var LABELS = {
-      hoy: '🔥 Hoy', manana: '⏰ Mañana', vencido: '⚠️ Venció', verificar: '❓ Verificar',
-      proxima: '📅 Próxima', examen: '📝 Examen', pendiente: '📌 Pendiente', semanal: '🔁 Semanal'
-    };
+    Pend.onChange(function () {
+      var v = Pend.vigentes().filter(function (it) { return it.vence; }).slice(0, 5);
+      if (!v.length) { mount.innerHTML = ''; return; }
+      mount.innerHTML =
+        '<div class="pend-carousel-head"><h2>📌 Próximos vencimientos</h2><a href="' + SITE_ROOT + 'pendientes.html">Ver todo →</a></div>' +
+        v.map(function (it) { return Pend.cardHtml(it, true); }).join('');
+    });
+  }
 
-    fetch(SITE_ROOT + 'assets/pendientes.json')
-      .then(function (r) { return r.json(); })
-      .then(function (data) {
-        var items = (data.items || []).slice().sort(function (a, b) {
-          return ORDEN.indexOf(a.urgencia) - ORDEN.indexOf(b.urgencia);
-        });
-        if (!items.length) { mount.innerHTML = ''; return; }
-
-        function cardHtml(it) {
-          return '<a class="car-card" href="' + SITE_ROOT + (it.link || '#') + '" style="--c:' + (it.color || '#7C9CD6') + '">' +
-            '<div class="car-top"><span class="car-tag">' + (LABELS[it.urgencia] || '') + '</span><span class="car-fecha">' + fmtFechaCorta(it.fecha) + '</span></div>' +
-            '<div class="car-materia">' + it.materia + '</div>' +
-            '<div class="car-titulo">' + it.titulo + '</div>' +
-            '</a>';
-        }
-        // el track lleva la lista duplicada (dos veces seguidas) para poder
-        // hacer scroll continuo infinito sin que se note el punto de reinicio
-        var multi = items.length > 1;
-        var loopItems = multi ? items.concat(items) : items;
-        var cardsHtml = loopItems.map(cardHtml).join('');
-
-        mount.innerHTML =
-          '<div class="pend-carousel-head"><h2>📌 Pendientes</h2><a href="' + SITE_ROOT + 'pendientes.html">Ver todo →</a></div>' +
-          '<div class="car-viewport">' +
-            (multi ? '<button class="car-nav prev" aria-label="Anterior">‹</button>' : '') +
-            '<div class="car-track">' + cardsHtml + '</div>' +
-            (multi ? '<button class="car-nav next" aria-label="Siguiente">›</button>' : '') +
-          '</div>';
-
-        if (!multi) return; // un solo pendiente: tarjeta fija, sin animación ni flechas
-
-        // ---- scroll continuo tipo "ticker" de bolsa, con flechas para saltar ----
-        var track = mount.querySelector('.car-track');
-        var viewport = mount.querySelector('.car-viewport');
-        var CARD_STEP = 272; // ancho de tarjeta (260px) + gap (12px)
-        var SPEED = 18; // px por segundo — lento
-        var setWidth = items.length * CARD_STEP;
-        var pos = 0;
-        var paused = false;
-        var rafId = null, lastTs = null;
-
-        function apply() { track.style.transform = 'translateX(' + pos + 'px)'; }
-
-        function frame(ts) {
-          if (lastTs == null) lastTs = ts;
-          var dt = (ts - lastTs) / 1000;
-          lastTs = ts;
-          if (!paused) {
-            pos -= SPEED * dt;
-            if (pos <= -setWidth) pos += setWidth;
-            apply();
-          }
-          rafId = requestAnimationFrame(frame);
-        }
-        rafId = requestAnimationFrame(frame);
-
-        viewport.addEventListener('mouseenter', function () { paused = true; });
-        viewport.addEventListener('mouseleave', function () { paused = false; });
-
-        function jump(dir) {
-          track.style.transition = 'transform .35s cubic-bezier(.4,0,.2,1)';
-          pos -= dir * CARD_STEP;
-          if (pos <= -setWidth) pos += setWidth;
-          if (pos > 0) pos -= setWidth;
-          apply();
-          setTimeout(function () { track.style.transition = ''; }, 360);
-        }
-        var prevBtn = mount.querySelector('.car-nav.prev');
-        var nextBtn = mount.querySelector('.car-nav.next');
-        if (prevBtn) prevBtn.addEventListener('click', function (e) { e.preventDefault(); jump(-1); });
-        if (nextBtn) nextBtn.addEventListener('click', function (e) { e.preventDefault(); jump(1); });
-      })
-      .catch(function () { mount.innerHTML = ''; });
+  // ================= Página de pendientes =================
+  function initPendientesPage() {
+    var root = document.getElementById('pend-root');
+    if (!root) return;
+    var GRUPOS = [
+      ['hoy', '🔥 Hoy'], ['manana', '⏰ Mañana'], ['semana', '📅 Esta semana'],
+      ['despues', '🗓 Después'], ['sin', '📌 Sin fecha límite (aún)']
+    ];
+    var clock = document.getElementById('pend-clock');
+    var upd = document.getElementById('pend-updated');
+    Pend.onChange(function () {
+      if (clock) clock.textContent = 'Ahora: ' + Pend.fmt(Pend.now(), { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false }) + ' (hora de la Ciudad de México)';
+      if (upd && Pend.meta) upd.textContent = 'Lista actualizada: ' + Pend.meta.actualizado + '. ' + (Pend.meta.nota || '');
+      if (Pend.failed) { root.innerHTML = '<p class="pend-empty">No se pudo cargar la lista de pendientes.</p>'; return; }
+      var v = Pend.vigentes();
+      if (!v.length) { root.innerHTML = '<p class="pend-empty">No hay pendientes obligatorios vigentes. 🎉</p>'; return; }
+      var html = '';
+      GRUPOS.forEach(function (g) {
+        var grupo = v.filter(function (it) { return Pend.grupo(it) === g[0]; });
+        if (!grupo.length) return;
+        html += '<div class="pend-group"><h2>' + g[1] + '<span class="pend-count">' + grupo.length + '</span></h2>' +
+          grupo.map(function (it) { return Pend.cardHtml(it, false); }).join('') + '</div>';
+      });
+      root.innerHTML = html;
+    });
   }
 
   // ================= Buscador global =================
@@ -329,7 +367,10 @@
 
   function init() {
     initTopBar();
-    initHomeCarousel();
+    initHomePendientes();
+    initPendientesPage();
+    Pend.load();
+    setInterval(Pend.tick, 30000);
     initViewSwitch();
     initSearch();
     openHashTarget();
