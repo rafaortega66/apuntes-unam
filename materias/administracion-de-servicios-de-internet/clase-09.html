@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 09 — Administración de Servicios de Internet</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20260929a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js?v=20260929a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Administración de Servicios de Internet</a>
+<div class="detail-head" style="border-color:#7C9CD6"><h2>Clase 09</h2>
+  <p class="prof">Mtro. Juan Ángel Calvillo Pérez · 28 sep 2026 · Ciberseguridad ofensiva (fuera del temario) — Repaso de Metasploit, escaneo avanzado de puertos y redes con Nmap (opciones -sn, -sS, -sV, -O, -A), automatización con Bash y Python, y asignación de una herramienta individual de Kali Linux.</p>
+</div>
+
+<div class="section-block" style="background:#fff7ed;border-left:3px solid #7C9CD6"><p style="margin:0"><strong>⚠️ Por verificar en Classroom:</strong> las fechas de entrega de esta clase (práctica individual de Kali y Reporte 1 de Scrum) salen solo del audio. Recuerda que Classroom es la fuente de verdad para fechas y ya hubo un caso donde difería del audio.</p></div>
+
+<details class="section-block sec" id="c9-repaso" open><summary><span class="stitle">Repaso de Kali Linux y Metasploit</span></summary>
+<p>La primera parte fue un repaso de la sesión anterior sobre Kali Linux y el framework Metasploit. El profesor preguntó qué es Kali Linux y un alumno respondió que es un sistema operativo enfocado en ciberseguridad. Se recordó que en la clase previa se usó Metasploit para escanear puertos abiertos e inspeccionar sitios web. Ante la pregunta de qué puertos se habían detectado, los alumnos identificaron el <strong>80 (HTTP)</strong> y el <strong>443 (HTTPS)</strong>, y mencionaron brevemente servicios como FTP.</p>
+<p>Se analizó por qué importa la <strong>dirección IP</strong> obtenida en la auditoría: permite saber si los servicios web están concentrados en un solo servidor local o virtualizados en la nube. El profesor comentó que algunas universidades alojan sus páginas localmente con servidores como Apache o Tomcat. También se recordó que en los ejercicios anteriores se analizaron cuatro segmentos de red y que sitios como el de la UNAM usan protección perimetral como <strong>Cloudflare</strong>; a la duda de por qué la universidad invierte en eso, explicó que ya sufrió ataques cibernéticos y busca resguardar su infraestructura.</p>
+<p>Reiteró que las herramientas de Metasploit no se usan con fines maliciosos, sino para <strong>recolección de información con propósitos académicos</strong>. En la terminal de Metasploit se trabaja con librerías auxiliares (<code>auxiliary</code>), la dirección objetivo se guarda en la variable <code>RHOSTS</code> (<em>Remote Host</em>) y la configuración se verifica con <code>show options</code>.</p>
+</details>
+
+<details class="section-block sec" id="c9-http" open><summary><span class="stitle">Escaneo de encabezados HTTP y detección de infraestructura</span></summary>
+<p>Con Metasploit se analizaron los encabezados HTTP de servidores objetivo, como el del Politécnico (<code>www.ipn.mx</code>). El profesor preguntó por qué tomarlo de ejemplo y señaló que en implementaciones débiles o sin protección todos los servicios corren dentro de una sola máquina. Eso es un riesgo crítico de <strong>disponibilidad</strong>: si un atacante compromete o tira ese equipo, no hay redundancia ni respaldos activos.</p>
+<p>Al ejecutar el módulo de escaneo de directorios y encabezados HTTP, el sistema devolvió un <strong>Error HTTP 404 (Not Found)</strong> y se quedó reintentando. Cuando el profesor preguntó qué estaba impidiendo el escaneo, los alumnos respondieron que la infraestructura está respaldada por la nube de <strong>Microsoft Azure</strong>, cuya protección perimetral filtra y bloquea las peticiones de Metasploit e impide navegar los directorios. Conclusión: en ese escenario Metasploit solo sirvió para identificar puertos abiertos, no para vulnerar la aplicación.</p>
+</details>
+
+<details class="section-block sec" id="c9-nmap" open><summary><span class="stitle">Detección de hosts y escaneo avanzado de puertos con Nmap</span></summary>
+<p>Tras ver las limitaciones de Metasploit en redes protegidas, el profesor presentó <strong>Nmap</strong> (<em>Network Mapper</em>) en la terminal de Kali. Escribir solo <code>nmap</code> muestra la sintaxis básica y exige una IP o un rango de red objetivo.</p>
+<p>Antes de escanear se revisó la configuración de red propia con <code>ip a</code> (o <code>ip addr</code>). Interfaces que se explicaron:</p>
+<ul>
+<li><strong>eth0:</strong> interfaz Ethernet física o virtual, para el tráfico hacia la red local o internet.</li>
+<li><strong>lo (loopback):</strong> interfaz de bucle local, asociada a 127.0.0.1 (<em>localhost</em>), con la que el sistema se comunica consigo mismo.</li>
+</ul>
+<p>En la práctica en vivo, la máquina virtual de Kali tenía la IP <strong>192.168.139.132</strong>. El profesor explicó que el segmento 192.168.x.x corresponde a direcciones IP privadas de Clase C, muy usadas en virtualización y redes locales. Se ejecutaron estas modalidades de Nmap:</p>
+<table>
+<tr><th>Comando</th><th>Propósito</th></tr>
+<tr><td><code>nmap [IP]</code></td><td>Escaneo básico de puertos TCP. En la prueba sobre el segmento de la máquina virtual detectó <strong>4 hosts activos en 8 segundos</strong>, con puertos abiertos e interfaces como NetBIOS (puerto 445 de Microsoft) y direcciones MAC.</td></tr>
+<tr><td><code>nmap -sn [IP/segmento]</code></td><td><em>Ping sweep</em> (descubrimiento de hosts): no escanea puertos, solo verifica qué dispositivos están encendidos (up) o apagados (down). Sirve para descartar IPs inactivas antes de un escaneo exhaustivo.</td></tr>
+<tr><td><code>nmap [IP]/24</code></td><td>Notación CIDR /24, equivalente a la máscara 255.255.255.0. Escanea las 254 direcciones del segmento de Clase C y reporta la latencia y las direcciones MAC de cada dispositivo.</td></tr>
+<tr><td><code>nmap -sS [IP]</code></td><td><em>SYN scan</em> (escaneo sigiloso): envía paquetes TCP SYN y espera el SYN-ACK sin completar el saludo de tres vías (sin el ACK final). Así el escaneo no queda en los logs convencionales del servidor objetivo.</td></tr>
+<tr><td><code>nmap -sV [IP]</code></td><td>Detección de versión: determina la versión exacta del software o servicio en cada puerto abierto.</td></tr>
+<tr><td><code>nmap -O [IP]</code></td><td>Detección de sistema operativo: analiza las respuestas del stack TCP/IP para identificar el SO del host.</td></tr>
+<tr><td><code>nmap -A [IP]</code></td><td>Escaneo agresivo: combina detección de SO (<code>-O</code>), de versiones (<code>-sV</code>), scripts predeterminados (<code>-sC</code>) y <em>traceroute</em>. Da la mayor cantidad de información, pero es muy detectable.</td></tr>
+</table>
+<p>También se repasaron los puertos estándar más comunes en administración de servicios de internet:</p>
+<table>
+<tr><th>Puerto</th><th>Servicio</th></tr>
+<tr><td>21</td><td>FTP (File Transfer Protocol)</td></tr>
+<tr><td>22</td><td>SSH (Secure Shell)</td></tr>
+<tr><td>23</td><td>Telnet</td></tr>
+<tr><td>25 / 110 / 143</td><td>Correo electrónico: SMTP, POP3, IMAP</td></tr>
+<tr><td>80 / 443</td><td>Web: HTTP y HTTPS</td></tr>
+<tr><td>445</td><td>Microsoft-DS / NetBIOS (servicios de red de Windows)</td></tr>
+<tr><td>1521</td><td>Base de datos Oracle</td></tr>
+<tr><td>3306</td><td>Base de datos MySQL / MariaDB</td></tr>
+</table>
+</details>
+
+<details class="section-block sec" id="c9-automatizacion" open><summary><span class="stitle">Automatización de auditorías con Bash e integración con Python</span></summary>
+<p>El profesor explicó cómo automatizar estos procesos en la administración de servidores. Al preguntar qué es Bash, un alumno respondió que es un intérprete de terminal y una forma de ejecutar comandos automáticamente. El profesor confirmó que en Linux la programación a nivel de sistema operativo se hace con <em>scripts</em> (extensión <code>.sh</code>) que ejecuta el intérprete Bash.</p>
+<p>Se planteó la estrategia de programar un script en Bash que lance un escaneo sigiloso (<code>nmap -sS</code>) con un temporizador (<em>cron job</em> o <em>timer</em>), por ejemplo cada hora, para auditar la red de forma constante y generar un reporte automático si se abre un puerto nuevo o aparece una vulnerabilidad. Además se destacó la integración con <strong>Python</strong>: un script conectado a las salidas de Nmap puede procesar los resultados y enviar alertas en tiempo real (por ejemplo, mensajes automáticos por WhatsApp o SMS) a los administradores cuando ocurra un evento crítico.</p>
+</details>
+
+<details class="section-block sec" id="c9-herramientas" open><summary><span class="stitle">Asignación individual de herramientas de hacking ético en Kali Linux</span></summary>
+<p>Para cerrar el trabajo práctico con Kali, el profesor fijó la dinámica de la <strong>práctica individual</strong>: cada alumno elige una herramienta de ciberseguridad incluida en Kali, la investiga y documenta su funcionamiento paso a paso en la sección de “Resultados” del reporte. Restricciones:</p>
+<ul>
+<li>Quedaron prohibidas <strong>Metasploit</strong> y <strong>Nmap</strong> (ya se explicaron a detalle en clase).</li>
+<li>Se prohibió <strong>Wireshark</strong> y las herramientas de análisis básico de redes.</li>
+<li>Se descartaron herramientas descontinuadas.</li>
+</ul>
+<p>Durante la sesión se pasó lista y se registraron las herramientas elegidas. Entre las que se mencionaron: <strong>Medusa</strong> (fuerza bruta de credenciales), <strong>Maltego</strong> (recolección de información / OSINT), <strong>OpenVAS</strong> (escáner de vulnerabilidades), <strong>NetExec</strong> (antes CrackMapExec, auditoría de entornos Active Directory) y <strong>John the Ripper</strong> (craqueo de contraseñas). Otros compañeros eligieron herramientas de forense, monitoreo y análisis.</p>
+<p>Observaciones técnicas del profesor sobre la dificultad de las herramientas:</p>
+<ul>
+<li>Las de auditoría forense de discos o dispositivos externos (como <strong>Autopsy</strong>) son complejas por el hardware y las imágenes de disco que requieren.</li>
+<li>Las de cracking de redes Wi-Fi necesitan antenas que soporten <strong>inyección de paquetes</strong> (<em>packet injection</em>), lo que puede complicarse por hardware.</li>
+<li>Las de escaneo de puertos, análisis de servicios y fuerza bruta son de monitoreo directo y más accesibles para la práctica.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c9-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> <strong>Conferencias de la Facultad:</strong> el profesor preguntó quiénes asistieron a las conferencias de la semana anterior. Comentó que fue a una plática de Inteligencia Artificial el miércoles, interesante en lo técnico aunque el ponente la enfocó a promover su empresa. De la plática de Cisco dijo, entre risas, que se centró en bases de datos vectoriales e IA. Mencionó que conserva su “cuadrito con dos certificaciones de Cisco”.</li>
+<li><em>(Contexto)</em> <strong>SIAFI:</strong> pidió difundir la invitación a la Sociedad de Inteligencia Artificial de la Facultad de Ingeniería (SIAFI); la describió como buena oportunidad para quienes aún no trabajan, porque ahí enseñan a programar proyectos desde cero y se gana experiencia para el currículum.</li>
+<li><em>(Contexto)</em> <strong>Bromas de clase:</strong> comentarios sobre achaques físicos y rodillas, y dinámicas de broma con algunos alumnos al elegir herramienta y al pedir que se pospusiera la entrega.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c9-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Práctica individual de Kali Linux (reporte de herramienta):</strong> reporte paso a paso con instalación/ejecución, comandos exactos, capturas de pantalla y funcionalidad de la herramienta asignada. Plazo de <strong>8 días</strong> (entrega la siguiente semana; contando desde el 28 sep caería hacia el 6 oct — confirmar en Classroom). El profesor pidió no entregar respuestas genéricas o breves copiadas de herramientas de IA como ChatGPT.</li>
+<li><strong>Reporte 1 de Scrum (proyecto final):</strong> los equipos con metodología Scrum debían subir su primer reporte a la plataforma esa misma noche (28 sep) a las 11:00 PM. Los equipos con metodología tradicional (PMBOK/cascada) entregan en fecha posterior.</li>
+<li><strong>Para la próxima sesión:</strong> el profesor subirá un archivo a la plataforma (una base de datos) antes de la siguiente clase; todos deben traerlo ya descargado para trabajar con él en clase.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Nmap: <code>-sn</code> descubre hosts, <code>/24</code> barre un segmento de Clase C, <code>-sS</code> es sigiloso (sin completar el saludo de tres vías), <code>-sV</code> detecta versiones, <code>-O</code> el SO y <code>-A</code> combina todo (muy detectable).</li>
+<li>Bash con cron o timer, más Python, permite escaneos periódicos y alertas cuando se abre un puerto nuevo.</li>
+<li>La protección perimetral en la nube (Azure, Cloudflare) bloquea escaneos de Metasploit y devuelve errores como el HTTP 404.</li>
+<li>Cada alumno tiene una herramienta de Kali asignada (no Metasploit, Nmap ni Wireshark) y debe entregar un reporte detallado en 8 días.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 09 — Arquitectura Cliente-Servidor</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20260929a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js?v=20260929a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Arquitectura Cliente-Servidor</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 09</h2>
+  <p class="prof">Mtro. Carlos Alberto Román Zamitiz · 24 sep 2026 · Tema 2 — <code>struct hostent</code> y <code>gethostbyname()</code>, conversión de IP con <code>inet_ntoa</code>/<code>inet_aton</code>, pruebas con Google y la UNAM (alta disponibilidad y clústers), puertos lógicos e IANA, y el ciclo de vida de un socket en C (socket, bind, listen, accept, connect, send/recv, close).</p>
+</div>
+
+<div class="section-block" style="background:#fff7ed;border-left:3px solid #E8735C"><p style="margin:0"><strong>ℹ️ Sobre esta página:</strong> se construyó con el audio <code>ACS-Clase9</code>, que continúa exactamente donde terminó la <a href="clase-08.html">Clase 08</a> (<code>sockaddr_in</code> y <code>hostent</code>) y termina hablando de “el martes”. Las IP y el número de direcciones que devuelven Google y la UNAM son las que salieron en esa demo; pueden cambiar en otro momento.</p></div>
+
+<details class="section-block sec" id="c9-hostent" open><summary><span class="stitle">struct hostent y la función gethostbyname()</span></summary>
+<p>La clase retomó lo visto en la sesión anterior: los sockets como puntos finales de comunicación entre procesos, la estructura <code>struct sockaddr_in</code> con el tipo <code>in_addr</code> y los dos datos que necesita un cliente para conectarse a un servidor: la <strong>dirección IP (o dominio)</strong> y el <strong>puerto lógico</strong>.</p>
+<p>El problema del día: cómo obtener, desde C, la IP (o la lista de IPs) de un nombre de dominio legible como <code>www.google.com</code>. La biblioteca de C ofrece <code>gethostbyname(const char *name)</code>, que consulta la base de hosts o el servidor DNS del sistema y devuelve un apuntador a una estructura <code>struct hostent</code> (o <code>NULL</code> si el dominio no existe o la consulta falla). Campos principales de <code>struct hostent</code>:</p>
+<table>
+<tr><th>Campo</th><th>Tipo</th><th>Contenido</th></tr>
+<tr><td><code>h_name</code></td><td><code>char *</code></td><td>Nombre oficial o principal del host.</td></tr>
+<tr><td><code>h_aliases</code></td><td><code>char **</code></td><td>Arreglo terminado en <code>NULL</code> con los nombres alternativos (alias) del dominio.</td></tr>
+<tr><td><code>h_addrtype</code></td><td>entero</td><td>Tipo de dirección devuelta (por ejemplo <code>AF_INET</code> para IPv4).</td></tr>
+<tr><td><code>h_length</code></td><td>entero</td><td>Longitud en bytes de la dirección (4 en IPv4).</td></tr>
+<tr><td><code>h_addr_list</code></td><td><code>char **</code></td><td>Arreglo de apuntadores con la lista de direcciones IP asociadas al dominio.</td></tr>
+</table>
+<p><strong>Detalle técnico clave sobre <code>h_addr_list</code>.</strong> En la definición de la estructura está declarado genéricamente como arreglo de cadenas (<code>char **</code>), pero en C las direcciones IP de Internet se representan con el tipo <code>struct in_addr</code>. Para recorrer el arreglo correctamente y sin corromper memoria hay que declarar una variable <code>struct in_addr **addr_list</code> y hacer un <strong>cast explícito</strong>:</p>
+<pre><code>struct in_addr **addr_list;
+addr_list = (struct in_addr **) he-&gt;h_addr_list;</code></pre>
+<p>Distintos dominios devuelven un número variable de IPs (un sitio sencillo puede devolver una, una infraestructura masiva como Google muchas), así que el arreglo no tiene longitud fija. Se recorre aprovechando que <strong>el último elemento es un puntero <code>NULL</code></strong>:</p>
+<pre><code>for (int i = 0; addr_list[i] != NULL; i++) {
+    /* Procesamiento de cada IP */
+}</code></pre>
+<p>Para que la salida en consola se vea natural, dentro del bucle se imprime <code>i + 1</code>, de modo que aparezca “IP 1”, “IP 2”… y no “IP 0” ante el usuario.</p>
+</details>
+
+<details class="section-block sec" id="c9-inet" open><summary><span class="stitle">Conversión de IP entre binario y decimal punteado: inet_ntoa e inet_aton</span></summary>
+<p>El kernel de Linux y los sockets guardan las IP internamente como enteros en <strong>formato binario de red</strong> (<em>network format</em>), mientras que las personas leemos <strong>notación decimal punteada</strong> (como 142.251.x.x). C ofrece dos funciones para traducir en ambos sentidos, y el profesor desglosó su nemotecnia para evitar confusiones:</p>
+<ul>
+<li><strong><code>inet_</code></strong>: Internet.</li>
+<li><strong><code>n</code></strong>: <em>Network</em> (formato binario de red, como lo entiende la máquina).</li>
+<li><strong><code>a</code></strong>: ASCII / <em>Address</em> (texto decimal punteado, legible por humanos).</li>
+<li><strong><code>to</code></strong>: “hacia”, indica el sentido de la conversión.</li>
+</ul>
+<p><code>inet_ntoa()</code> (<em>Network to ASCII</em>) recibe una <code>struct in_addr</code> con la IP en binario de red y devuelve una cadena (<code>char *</code>) en decimal punteado. <code>inet_aton()</code> (<em>ASCII to Network</em>) hace lo inverso: toma la cadena que escribió el usuario y la convierte a la <code>struct in_addr</code> que entiende la máquina. En el código de clase, como <code>addr_list[i]</code> es un apuntador a <code>struct in_addr</code>, se desreferencia con un asterisco para pasárselo a <code>inet_ntoa()</code> e imprimirlo con <code>%s</code>:</p>
+<pre><code>printf("IP %d: %s\n", i + 1, inet_ntoa(*addr_list[i]));</code></pre>
+</details>
+
+<details class="section-block sec" id="c9-demo" open><summary><span class="stitle">Demostración en vivo: dominios, alta disponibilidad y clústers</span></summary>
+<p>El profesor compiló y ejecutó el programa de prueba con varios dominios:</p>
+<ul>
+<li><strong><code>www.google.com</code>:</strong> devolvió <strong>8 direcciones IP distintas</strong>, todas con prefijo 142.251.x.x. Al consultar una en una herramienta de geolocalización (IP Location) resultó pertenecer a servidores de Google en Mountain View, California. Los alumnos lo corrieron a la vez en el salón y obtuvieron las mismas 8 IPs, pero <strong>en distinto orden</strong>.</li>
+<li><strong><code>google.com</code> (sin <code>www</code>):</strong> devolvió solo <strong>1 IP</strong>. El profesor explicó que el prefijo <code>www</code> apunta a la granja de servidores web (tráfico HTTP/HTTPS), mientras que el dominio raíz atiende también servicios que no son web.</li>
+<li><strong><code>www.unam.mx</code>:</strong> devolvió 2 IPs (104.17.118.46 y 104.17.117.46): el sitio principal de la UNAM está alojado en la nube de Cloudflare (EE. UU.) en un esquema de alta disponibilidad de 2 nodos.</li>
+<li><strong><code>www.ingenieria.unam.mx</code>:</strong> devolvió 1 sola IP (132.248.54.20), un servidor local dentro del rango de la UNAM (132.248.x.x).</li>
+</ul>
+<p><strong>Alta disponibilidad (HA) y clústers.</strong> Aprovechando que Google devuelve varias IPs, el profesor explicó el <strong>clúster de alta disponibilidad</strong>: un conjunto de dos o más computadoras o servidores que trabajan coordinados para comportarse como un solo sistema. Dos estrategias de reparto de carga:</p>
+<table>
+<tr><th>Estrategia</th><th>Cómo funciona</th><th>Cuándo conviene</th></tr>
+<tr><td>Por capacidad / jerarquía (del más fuerte al más débil)</td><td>Todas las peticiones van al servidor principal (el de mayor poder de cómputo). Cuando está por llegar al 100 % de su capacidad, “pasa la estafeta” al segundo; si este también se satura, al tercero, y así sucesivamente.</td><td>Cuando los equipos del clúster tienen capacidades distintas.</td></tr>
+<tr><td>Round-robin (anillo / reparto equitativo)</td><td>Las peticiones se reparten cíclicamente: la 1 al servidor 1, la 2 al 2, …, la 8 al 8, y la 9 vuelve al servidor 1.</td><td>Cuando todos los servidores tienen hardware similar.</td></tr>
+</table>
+</details>
+
+<details class="section-block sec" id="c9-programa3" open><summary><span class="stitle">Formas de extraer la IP y el Programa 3</span></summary>
+<p>Se presentó el <strong>Programa 3 del tema</strong> (<code>programa3.c</code>), que amplía la inspección de <code>struct hostent</code> y muestra cuatro maneras de obtener e imprimir una IP desde C:</p>
+<ol>
+<li><strong>Método A — <code>inet_ntoa()</code>:</strong> conversión directa de la estructura binaria a texto.</li>
+<li><strong>Método B — <code>inet_ntop()</code></strong> (<em>Network to Presentation</em>): la versión moderna y más segura, compatible con IPv4 e IPv6.</li>
+<li><strong>Método C — acceso por octetos:</strong> se accede al campo <code>h_addr</code> con un cast explícito a <code>(unsigned char *)</code> para obtener un apuntador a los 4 bytes de la IP e imprimir cada octeto separado por puntos.</li>
+<li><strong>Método D — valor crudo de 32 bits:</strong> se trata el valor como un único entero sin signo.</li>
+</ol>
+<p>El programa también recorre el campo <code>h_aliases</code> para mostrar todos los nombres alternativos del host en el DNS.</p>
+</details>
+
+<details class="section-block sec" id="c9-puertos" open><summary><span class="stitle">Puertos lógicos y clasificación de la IANA</span></summary>
+<p>Un cliente necesita dos datos del servidor: IP (o dominio) y puerto lógico. El <strong>puerto lógico</strong> es una estructura de software representada por un número de <strong>16 bits sin signo</strong>, lo que da 2<sup>16</sup> = <strong>65,536 puertos</strong>, del 0 al 65535. La <strong>IANA</strong> (<em>Internet Assigned Numbers Authority</em>, iana.org) es la autoridad internacional que regula y asigna la correspondencia de números de puerto. Los puertos se dividen en tres rangos:</p>
+<table>
+<tr><th>Rango</th><th>Nombre</th><th>Reglas</th></tr>
+<tr><td>0 – 1023</td><td>Puertos del sistema (reservados)</td><td>Reservados para servicios esenciales del sistema operativo; solo el administrador (root / sudo) puede levantar un servicio ahí. El puerto 0 está reservado.</td></tr>
+<tr><td>1024 – 49151</td><td>Puertos de usuario (registrados)</td><td>Para aplicaciones y servicios comunes; cualquier usuario puede usarlos si el puerto no está ocupado por otro proceso.</td></tr>
+<tr><td>49152 – 65535</td><td>Puertos dinámicos o privados</td><td>Conexiones temporales, efímeras o de clientes privados.</td></tr>
+</table>
+<p>Puertos emblemáticos revisados en la lista de la IANA:</p>
+<ul>
+<li><strong>21</strong> — FTP (transferencia de archivos).</li>
+<li><strong>22</strong> — SSH (conexión remota cifrada).</li>
+<li><strong>23</strong> — Telnet (conexión remota antigua y no segura, todo en texto plano).</li>
+<li><strong>25</strong> — SMTP (correo electrónico).</li>
+<li><strong>80</strong> — HTTP (creado por Tim Berners-Lee; las peticiones viajan en texto plano).</li>
+<li><strong>443</strong> — HTTPS (versión cifrada y segura de HTTP).</li>
+<li><strong>666</strong> — el videojuego Doom, que tiene ese puerto asignado para sus servidores multijugador en el registro oficial (y, curiosamente, aparece en la página 13 del documento).</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c9-ciclo" open><summary><span class="stitle">Ciclo de vida de un socket: funciones de servidor y cliente</span></summary>
+<p>Al final el profesor proyectó el diagrama que guiará el resto del semestre: la secuencia de funciones en C que ejecutan el servidor y el cliente para comunicarse.</p>
+<pre><code>      SERVIDOR                                CLIENTE
+   +------------+                          +------------+
+   |  socket()  |                          |  socket()  |
+   +-----+------+                          +-----+------+
+         |                                       |
+  [Inicializa struct                       [Inicializa struct
+   sockaddr_in]                             sockaddr_in]
+         |                                       |
+   +-----+------+                                |
+   |   bind()   |                                |
+   +-----+------+                                |
+         |                                       |
+   +-----+------+                                |
+   |  listen()  |                                |
+   +-----+------+                                |
+         |                                       |
+   +-----+------+      Solicitud de        +-----+------+
+   |  accept()  |&lt;-------------------------|  connect() |
+   +-----+------+      conexión            +-----+------+
+         |                                       |
+   +----------------------------------------------------+
+   |  INTERCAMBIO DE DATOS (síncrono o asíncrono)       |
+   |  send() / recv()     o     write() / read()        |
+   +----------------------------------------------------+
+         |                                       |
+   +-----+------+                          +-----+------+
+   |   close()  |                          |   close()  |
+   +------------+                          +------------+</code></pre>
+<p><strong>Secuencia del servidor:</strong></p>
+<ol>
+<li><code>socket()</code>: crea el socket y devuelve un descriptor de archivo entero.</li>
+<li>Inicialización de <code>struct sockaddr_in</code> con la familia (<code>AF_INET</code>), la IP (<code>sin_addr</code>) y el puerto (<code>sin_port</code>).</li>
+<li><code>bind()</code>: “liga” la dirección IP y el puerto al socket creado.</li>
+<li><code>listen()</code>: pone al servidor en escucha activa e inicializa la cola de peticiones entrantes (<em>backlog</em>).</li>
+<li><code>accept()</code>: acepta la primera solicitud en cola; <strong>bloquea</strong> la ejecución hasta que llega un cliente y devuelve un <strong>nuevo descriptor de socket</strong> dedicado a esa sesión.</li>
+</ol>
+<p><strong>Secuencia del cliente:</strong> <code>socket()</code>, llenar su propia <code>struct sockaddr_in</code> con la IP y el puerto del servidor destino y <code>connect()</code>, que envía la solicitud de conexión y opera al mismo nivel que el <code>accept()</code> del servidor.</p>
+<p><strong>Intercambio de datos y buena práctica.</strong> Una vez conectados, la comunicación es envío y recepción de bytes, con dos pares de funciones: <code>send()</code>/<code>recv()</code> y <code>write()</code>/<code>read()</code> (en Linux un socket se maneja como descriptor de archivo). <strong>Regla estricta: usarlas siempre en parejas.</strong> Si un extremo usa <code>send()</code>, el otro debe usar <code>recv()</code>; si uno usa <code>write()</code>, el otro <code>read()</code>. Nunca mezclarlas (por ejemplo, <code>send()</code> con <code>read()</code> o <code>write()</code> con <code>recv()</code>).</p>
+<ul>
+<li><strong>Comunicación síncrona (lineal):</strong> orden alternado estricto; si un extremo hizo <code>send()</code>, no puede enviar otro mensaje hasta recibir la respuesta con <code>recv()</code>.</li>
+<li><strong>Comunicación asíncrona:</strong> permite enviar <em>n</em> mensajes seguidos sin esperar una recepción intermedia.</li>
+<li><strong>Cierre:</strong> ambos procesos llaman a <code>close()</code>. El cliente termina su ejecución, mientras que el servidor cierra el socket de ese cliente pero <strong>regresa a <code>accept()</code></strong> para seguir escuchando y atender al siguiente en la cola.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c9-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> <strong>La red de la Facultad en los años 90:</strong> el profesor contó que la red cableada estaba dividida en cuatro subredes: FI-A (administrada por el antiguo SECAFI, que luego se dividió en Única y USCAT), FI-B (edificios P y Q, a cargo del programa de becarios de Proteco/PTC), FI-C (edificio de Ciencias Básicas) y FI-P (Posgrado).</li>
+<li><em>(Contexto)</em> <strong>Curiosidades del sitio de la IANA:</strong> destacó a Tim Berners-Lee como creador de la World Wide Web (puerto 80) y mostró con humor la asignación del puerto 666 a Doom, en la página 13 del documento.</li>
+<li><em>(Contexto)</em> <strong>Revisión de tareas:</strong> informó el avance de la calificación de la Tarea 1 y la Tarea 2, y que seguiría calificando el fin de semana las entregas de la Tarea 2 y la Tarea 3.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c9-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Tarea moral (no entregable):</strong> repasar, compilar y ejecutar el <code>programa3.c</code> del tema. Ya recibe el nombre de dominio como argumento de línea de comandos (<code>argc</code>/<code>argv</code>) y ejercita las cuatro formas de obtener las IPs y los alias de un host.</li>
+<li><strong>Próxima clase (martes):</strong> se revisará el código en C del primer par cliente-servidor real, que usa el <strong>puerto 4898</strong> y envía la frase de prueba “conexión exitosa”, avanzando hacia comunicaciones síncronas y asíncronas.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li><code>gethostbyname()</code> hace la consulta DNS y devuelve un <code>struct hostent *</code> (o <code>NULL</code> si falla); <code>h_addr_list</code> se castea a <code>struct in_addr **</code> y se recorre hasta el <code>NULL</code> final.</li>
+<li><code>inet_ntoa()</code> pasa de binario de red a texto decimal punteado; <code>inet_aton()</code> hace lo contrario.</li>
+<li>La IANA divide los 65,536 puertos en sistema (0–1023, requieren root), usuario (1024–49151) y dinámicos (49152–65535).</li>
+<li>Servidor: <code>socket → bind → listen → accept</code>; cliente: <code>socket → connect</code>. Usar siempre parejas <code>send/recv</code> o <code>write/read</code>.</li>
+<li>Un clúster de alta disponibilidad reparte la carga por capacidad (del más fuerte al más débil) o en round-robin.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

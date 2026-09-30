@@ -46,26 +46,9 @@
     var bar = document.createElement('div');
     bar.className = 'topbar';
     bar.innerHTML =
-      '<a class="tb-brand" href="' + SITE_ROOT + 'index.html">Apuntes<span class="dot">.</span></a>' +
-      '<div class="tb-right">' +
-        '<a class="tb-link tb-pendientes" href="' + SITE_ROOT + 'pendientes.html">📌 Pendientes<span class="tb-badge" style="display:none"></span></a>' +
-      '</div>';
+      '<a class="tb-brand" href="' + SITE_ROOT + 'index.html">Apuntes<span class="dot">.</span></a>';
     document.body.insertBefore(bar, document.body.firstChild);
     document.body.classList.add('has-topbar');
-
-    fetch(SITE_ROOT + 'assets/pendientes.json')
-      .then(function (r) { return r.json(); })
-      .then(function (data) {
-        var urgentes = (data.items || []).filter(function (it) {
-          return it.urgencia === 'hoy' || it.urgencia === 'manana' || it.urgencia === 'vencido' || it.urgencia === 'verificar';
-        }).length;
-        if (urgentes > 0) {
-          var badge = bar.querySelector('.tb-badge');
-          badge.textContent = urgentes;
-          badge.style.display = 'inline-block';
-        }
-      })
-      .catch(function () {});
   }
 
   // ================= Carrusel de pendientes (home) =================

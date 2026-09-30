@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 08 — Minería de Datos</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20260929a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js?v=20260929a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Minería de Datos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 08</h2>
+  <p class="prof">M.C. José Concepción Roberto Olvera López · 29 sep 2026 · Tema 3 — Cierre del Proyecto 2 con AWS y SAP HANA (procesamiento en RAM), formación definitiva de equipos, y algoritmos de agrupación: K-Means, PCA/t-SNE, método del codo y silueta, DBSCAN, clustering jerárquico (caso Coca-Cola FEMSA), GMM, Mean-Shift y segmentación de imágenes.</p>
+</div>
+
+<details class="section-block sec" id="c8-hana" open><summary><span class="stitle">Cierre de exposiciones: AWS y SAP HANA</span></summary>
+<p>La sesión empezó cerrando la exposición sobre <strong>Amazon Web Services (AWS)</strong>: un compañero destacó cómo Amazon pasó de ser un gigante del comercio electrónico a dominar la infraestructura en la nube con un catálogo enorme de servicios. El profesor complementó que las decisiones tecnológicas en una empresa suelen evaluar a tres o cuatro proveedores (AWS, IBM, SAP…) con matrices de capacidad técnica e integración; las capacidades técnicas y la escalabilidad <strong>no se regatean</strong>, el regateo comercial se hace solo con la opción que gana la evaluación técnica.</p>
+<p>Después el <strong>Equipo 8</strong> presentó la arquitectura de <strong>SAP HANA</strong>. Su rasgo fundamental es que procesa los datos <strong>directamente en memoria RAM</strong> en lugar de leer del disco, lo que multiplica la velocidad miles de veces, y que almacena las tablas <strong>por columnas</strong> (<em>column-store</em>). Ejemplo: en una base hipotética de plantas, con 10,000 registros de plantas de México la palabra “México” se repetiría 10,000 veces, ocupando espacio y frenando las lecturas; SAP HANA lo resuelve con un <strong>diccionario de compresión</strong> en memoria que evita las repeticiones y acelera las consultas.</p>
+<p>Componentes y capas de la arquitectura expuesta:</p>
+<ul>
+<li><strong>SDI (Smart Data Integration):</strong> automatiza de forma transparente el proceso KDD (<em>Knowledge Discovery in Databases</em>).</li>
+<li><strong>Apache Kafka y Apache Spark:</strong> Kafka maneja la ingesta de eventos y flujos en tiempo real (<em>streaming</em>); Spark procesa datos masivos en memoria a alta velocidad.</li>
+<li><strong>Fuente única confiable (<em>Single Source of Truth</em>):</strong> repositorio concentrador con tres estructuras: datos estructurados para el negocio (conectados a dashboards), datos no estructurados (imágenes, video, XML, JSON, procesados en un <em>Data Lake</em>) y datos históricos (procesamiento distribuido sobre HDFS).</li>
+<li><strong>Librerías analíticas nativas PAL y APL:</strong> PAL (<em>Predictive Analysis Library</em>) incluye algoritmos de agrupamiento y clustering; APL (<em>Automated Predictive Library</em>) automatiza modelos predictivos y bases de datos vectoriales.</li>
+<li><strong>SAP Analytics Cloud (SAC) y Cockpit:</strong> SAC permite explorar datos y hacer analítica predictiva con dashboards, alertas de tendencia e índices predictivos; el Cockpit administra el rendimiento, el uso de memoria y el particionamiento de datos.</li>
+<li><strong>Aislamiento de memoria para consultoría externa:</strong> asigna a un consultor o investigador externo un espacio dedicado de RAM para que analice sin acceso al núcleo de la base de datos principal ni comprometer la operación.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c8-equipos" open><summary><span class="stitle">Equipos de trabajo y herramientas: RapidMiner y libro guía</span></summary>
+<p>El profesor dedicó un bloque a reorganizar y confirmar de forma definitiva los <strong>12 equipos</strong> de la materia, incluyendo a los alumnos que estaban pendientes por correo. Enfatizó que serán equipos de tres integrantes, definitivos para la parte programática y metodológica más exigente, donde se implementarán y evaluarán varios algoritmos de minería de datos.</p>
+<p>Preguntó quiénes ya habían instalado <strong>RapidMiner</strong>, que debían tener listo para la primera práctica. Explicó la diferencia entre herramientas: <strong>Python</strong> da control total de cada parámetro y del volumen de datos; <strong>RapidMiner</strong> ofrece un entorno visual con muchos algoritmos ya construidos, ideal para explorar rápido el comportamiento inicial de los datos. Recomendó que uno de los tres integrantes de cada equipo asuma el rol de explorar a fondo RapidMiner y capacitar al resto. Mencionó además un libro guía especializado que explica paso a paso todos los algoritmos de agrupación y segmentación con RapidMiner, y ofreció llevarlo físicamente a la siguiente clase.</p>
+</details>
+
+<details class="section-block sec" id="c8-clustering" open><summary><span class="stitle">Fundamentos de los algoritmos de agrupación (clustering)</span></summary>
+<p>El profesor abrió con una pregunta a una alumna:</p>
+<p><strong>Pregunta:</strong> <em>¿Qué entiendes por un algoritmo de cluster o de agrupación? ¿Cuál es su objetivo?</em><br>
+<strong>Respuesta de la alumna:</strong> separar toda la información e ir haciendo grupos con los valores más cercanos o más parecidos.</p>
+<p>El profesor validó la respuesta y precisó los criterios de calidad de un buen agrupamiento:</p>
+<ul>
+<li><strong>Homogeneidad intra-segmento:</strong> los elementos de un mismo clúster deben parecerse mucho entre sí.</li>
+<li><strong>Heterogeneidad inter-segmentos:</strong> los clústeres deben estar bien separados; a mayor distancia entre grupos, mayor calidad.</li>
+<li><strong>Estabilidad y manejabilidad:</strong> el agrupamiento debe mantenerse estable en el tiempo y permitir manipular los segmentos para tomar decisiones operativas o comerciales.</li>
+<li><strong>Reconocimiento y sentido de negocio (criterio principal de evaluación):</strong> ejecutar el código toma pocos minutos y genera los diagramas automáticamente; lo realmente valioso es que el alumno <strong>interprete los segmentos, les ponga un nombre reconocible y extraiga conocimiento de valor para el negocio</strong> (por ejemplo, identificar clientes propensos a comprar ciertos productos o distinguir pacientes con marcadores de leucemia).</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c8-kmeans" open><summary><span class="stitle">K-Means, reducción de dimensionalidad (PCA / t-SNE) y métricas de evaluación</span></summary>
+<p><strong>K-Means (K-medias)</strong> agrupa los datos con fronteras de decisión en forma de esferas o círculos basadas en la <strong>distancia Euclidiana</strong>.</p>
+<h4>Funcionamiento paso a paso</h4>
+<ol>
+<li><strong>Definir K:</strong> se fija de antemano el número de clústeres. El profesor recomendó no probar un solo valor, sino el valor central (por ejemplo K = 4) junto con sus vecinos (K = 3 y K = 5) para ver cómo cambia el conocimiento generado.</li>
+<li><strong>Inicializar centroides:</strong> el algoritmo coloca K centroides de forma heurística en el espacio de datos.</li>
+<li><strong>Asignar y recalcular:</strong> cada punto va al centroide más cercano, se calcula el promedio de los nuevos grupos y los centroides se desplazan. Se repite hasta que las posiciones se estabilizan; según el profesor, entre 10 y 50 iteraciones suele bastar para converger.</li>
+<li><strong>Volumen:</strong> K-Means es costoso con volúmenes masivos (ej. 100,000 datos). Se recomienda muestrear antes o segmentar por variables categóricas (por ejemplo, filtrar clientes menores de 25 años).</li>
+</ol>
+<h4>Parámetros de ajuste (las “perillas” en código)</h4>
+<table>
+<tr><th>Parámetro</th><th>Qué controla</th></tr>
+<tr><td><code>n_clusters</code> (K)</td><td>Número de grupos a formar.</td></tr>
+<tr><td><code>max_iter</code></td><td>Límite máximo de iteraciones.</td></tr>
+<tr><td><code>n_init</code></td><td>Número de inicializaciones distintas de centroides.</td></tr>
+<tr><td><code>random_state</code> / semilla</td><td>Dirige la inicialización aleatoria para que los resultados sean reproducibles.</td></tr>
+</table>
+<h4>Reducción de dimensionalidad con PCA y t-SNE</h4>
+<p>El profesor contó un proyecto propio con <strong>250 variables originales</strong> que saturaba el procesamiento. Aplicaron <strong>PCA (Principal Component Analysis)</strong> y consolidaron la información en 25 variables y luego en 3 componentes principales. El proceso que explicó:</p>
+<ol>
+<li>Aplicar PCA para proyectar las variables originales en componentes principales.</li>
+<li>Analizar la <strong>varianza explicada acumulada</strong> de cada componente para conservar la representatividad de los datos.</li>
+<li>Ejecutar K-Means sobre el espacio reducido de componentes.</li>
+</ol>
+<p>Para datos con estructura no lineal sugirió <strong>t-SNE</strong> (<em>t-Distributed Stochastic Neighbor Embedding</em>), que forma agrupaciones más compactas y separadas cuando las relaciones no son lineales.</p>
+<h4>Cómo elegir K y evaluar la calidad</h4>
+<ul>
+<li><strong>Método del codo (<em>Elbow</em>):</strong> grafica la inercia o WSS (<em>Within-Cluster Sum of Squares</em>, suma de distancias al cuadrado de los puntos a su centroide) contra K. El punto de inflexión sugiere el K óptimo (en el ejemplo de clase el codo estaba en K = 7).</li>
+<li><strong>Coeficiente de silueta:</strong> mide a la vez la compacidad de un punto dentro de su clúster y su separación de los demás.</li>
+<li><strong>Otras métricas mencionadas:</strong> índice de Davies-Bouldin, índice de Dunn y validación estructural visual.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c8-dbscan" open><summary><span class="stitle">DBSCAN y detección de ruido</span></summary>
+<p>El profesor contrapuso K-Means con <strong>DBSCAN</strong> (<em>Density-Based Spatial Clustering of Applications with Noise</em>). K-Means obliga a todos los puntos a caer en alguna esfera; DBSCAN agrupa según la <strong>densidad y la conectividad espacial</strong> entre puntos vecinos.</p>
+<ul>
+<li><strong>Épsilon (ε):</strong> radio máximo de distancia para que dos puntos se consideren vecinos. El profesor mostró cómo cambia el resultado con ε = 0.1, 0.2 y 0.4.</li>
+<li><strong>min_samples:</strong> cantidad mínima de puntos dentro del radio ε para formar un núcleo denso.</li>
+</ul>
+<p>Una gran ventaja es que identifica automáticamente los puntos aislados que no pertenecen a ningún grupo y los marca como <strong>ruido (<em>outliers</em>)</strong>, lo que permite investigar casos anómalos sin deformar los clústeres principales.</p>
+<p><strong>Usos:</strong> en medicina y salud se usa para detectar tumores en resonancias magnéticas y estudiar irregularidades en la córnea por variaciones de color y tono. <strong>Criterio de selección del profesor:</strong> K-Means para estudios comerciales o de mercadotecnia convencionales (ágil y directo), y DBSCAN para agrupamientos de formas complejas e irregulares o imágenes médicas.</p>
+</details>
+
+<details class="section-block sec" id="c8-jerarquico" open><summary><span class="stitle">Clustering jerárquico y el caso Coca-Cola FEMSA</span></summary>
+<p>El <strong>clustering jerárquico</strong> construye una estructura en árbol con dos enfoques:</p>
+<ul>
+<li><strong>Aglomerativo (ascendente):</strong> cada punto empieza como su propio clúster y se van uniendo los pares más cercanos.</li>
+<li><strong>Divisivo (descendente):</strong> empieza con todos los datos en un solo grupo y se subdivide recursivamente.</li>
+</ul>
+<p>Se visualiza con un <strong>dendrograma</strong>, que permite observar las jerarquías y decidir la altura del corte.</p>
+<p><strong>Caso real (Coca-Cola FEMSA).</strong> El profesor contó un proyecto en el que trabajó casi tres meses con Coca-Cola FEMSA: un universo de <strong>31,600 tiendas de abarrotes</strong> (misceláneas) en Monterrey, con una muestra inicial de 12,000, usando el lenguaje R. Con clustering jerárquico detectaron un segmento de tiendas que vendía un volumen extraordinariamente alto de bebidas energéticas (los apuntes mencionan “Grit”), mientras que la gran mayoría casi no las vendía. Al analizar ese clúster, encontraron patrones de situación: las tiendas de altas ventas estaban cerca de escuelas o campos deportivos, o tenían refrigeradores en lugares muy visibles. Con ese conocimiento, Coca-Cola aplicó estrategias enfocadas (dotación de refrigeradores y promociones con garantía de devolución) solo a las tienditas con esas características.</p>
+</details>
+
+<details class="section-block sec" id="c8-gmm" open><summary><span class="stitle">Modelo de mezcla gaussiana (GMM) y Mean-Shift</span></summary>
+<ul>
+<li><strong>GMM (<em>Gaussian Mixture Model</em>):</strong> supone que los datos vienen de una combinación de distribuciones gaussianas. Es más flexible que K-Means porque admite formas elípticas y varianzas distintas. Se usa sobre todo en reconocimiento de voz y clasificación de imágenes por textura y color.</li>
+<li><strong>Mean-Shift:</strong> desplaza una ventana o radio hacia la zona de mayor densidad de puntos. Se aplica al seguimiento de objetos en video.</li>
+</ul>
+<p><strong>Ejemplo comercial:</strong> en transmisiones deportivas (básquetbol, hockey) se analiza el rastro del movimiento; si las jugadas pasan más tiempo cerca de las canastas o porterías que en el centro de la cancha, las cadenas de televisión pueden cobrar más por los espacios publicitarios proyectados en esas zonas de mayor atención visual.</p>
+</details>
+
+<details class="section-block sec" id="c8-imagenes" open><summary><span class="stitle">Segmentación de imágenes por píxeles RGB y estandarización (StandardScaler)</span></summary>
+<p>Para aplicar agrupación a imágenes se toma cada píxel y se extraen sus valores en el espacio de color <strong>RGB</strong>. Con K-Means (K = 3) los píxeles se agrupan en regiones circulares o esféricas rígidas; con DBSCAN se detectan ramas, sombras y formas irregulares aisladas; con GMM se capturan gradientes y tonalidades con más suavidad.</p>
+<p>Por último, se recalcó el preprocesamiento con <strong>StandardScaler</strong>: los conjuntos de datos mezclan variables con escalas muy distintas (por ejemplo ingresos desde $3,500 hacia arriba frente a edades entre 18 y 60 años), así que es obligatorio estandarizar (normalmente a media 0 y desviación estándar 1) antes de calcular cualquier distancia euclidiana.</p>
+</details>
+
+<details class="section-block sec" id="c8-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> <strong>Amazon:</strong> el profesor comentó, en tono reflexivo, el respeto que impone Amazon en el sector por su infraestructura y su número de clientes a nivel global.</li>
+<li><em>(Contexto)</em> <strong>Negociación con proveedores:</strong> en las empresas los directivos reciben a varios proveedores, evalúan sus capacidades técnicas sin ceder en escalabilidad y solo al final “regatean” el precio con la opción técnica ganadora.</li>
+<li><em>(Contexto)</em> <strong>Coca-Cola FEMSA:</strong> relató que convivió casi tres meses con el equipo de FEMSA en Monterrey para validar los modelos de segmentación directamente en las tienditas.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c8-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Equipos y datos por Classroom:</strong> el profesor enviará la asignación oficial de los 12 equipos y un dataset de unos 50,000 registros.</li>
+<li><strong>Práctica 1 (plazo de una semana / 8 días; confirmar fecha en Classroom):</strong>
+  <ul>
+  <li>Elegir un enfoque de análisis del archivo (se sugiere segmentar por clientes o por grupo de productos / ventas).</li>
+  <li>Implementar <strong>al menos 3 algoritmos de agrupación distintos</strong> (por ejemplo K-Means, DBSCAN, jerárquico o GMM).</li>
+  <li>Pipeline completo: estandarización (<code>StandardScaler</code>), reducción de dimensionalidad (PCA), evaluación con métricas (WSS/inercia y silueta) y, indispensable, la <strong>interpretación de los clústeres con valor de negocio</strong>.</li>
+  </ul>
+</li>
+<li><strong>Próxima sesión:</strong> el profesor mostrará en pantalla un script completo en Python con la estructura base esperada para la práctica, y llevará el libro de referencia sobre algoritmos y RapidMiner.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>SAP HANA acelera las operaciones miles de veces al analizar en RAM con almacenamiento por columnas y diccionarios de compresión.</li>
+<li>El criterio principal de un clustering es su valor de negocio: nombrar e interpretar los grupos, no solo el tiempo de ejecución o las métricas.</li>
+<li>K-Means forma grupos esféricos con distancia euclidiana y obliga a todos los puntos a pertenecer a un clúster; DBSCAN agrupa por densidad (ε y min_samples) y detecta ruido.</li>
+<li>Pipeline obligatorio de la práctica: StandardScaler, PCA (o t-SNE), método del codo y silueta, y al menos 3 algoritmos distintos.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

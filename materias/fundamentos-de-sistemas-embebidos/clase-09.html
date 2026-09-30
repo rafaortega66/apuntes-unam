@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 09 — Fundamentos de Sistemas Embebidos</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20260929a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js?v=20260929a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Fundamentos de Sistemas Embebidos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 09</h2>
+  <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 28 sep 2026 · Tema 2 (subtemas 2.6 y 2.7) — Administración de potencia en USB, la clase HID y sus cartas de descriptores, los cuatro modos de transferencia (Control, Bulk, Interrupt e Isócrono) e inicio de las interfaces de baja velocidad: redes de sensores/actuadores y el bus I²C.</p>
+</div>
+
+<div class="section-block" style="background:#fff7ed;border-left:3px solid #A98BD1"><p style="margin:0"><strong>⚠️ Por verificar:</strong> tres datos de los apuntes de NotebookLM conviene contrastarlos con el audio o con la especificación antes de citarlos: (1) que USB 3.0 entrega <strong>800 mA</strong> (la especificación suele hablar de 900 mA); (2) que I²C lo <strong>inventó Philips en 1980</strong> (suele citarse 1982); (3) que el límite práctico de <strong>112 dispositivos</strong> viene de la capacitancia parásita (112 es 128 direcciones menos las 16 reservadas; la capacitancia del bus es otro límite aparte).</p></div>
+
+<details class="section-block sec" id="c9-potencia" open><summary><span class="stitle">Interfaz física (PHY) y administración de potencia en USB 2.0 y 3.0</span></summary>
+<p>La sesión inició con el diagrama del transceptor físico (PHY) de USB 1.1 y 2.0. A nivel electrónico la interfaz es muy económica: un circuito con puertas negadoras, un transceptor diferencial, un sensor de desconexión y un registro diferencial que entrega las señales positivas y negadas. Esa simplicidad, que contrasta con los diagramas de bloques de un microprocesador, explica el bajo costo comercial de los periféricos USB.</p>
+<p><strong>Alimentación por el bus.</strong> Durante la inicialización la especificación garantiza por defecto <strong>100 mA a 5 V</strong> a cualquier dispositivo que se conecte, sin negociar. El profesor calificó esta política, en tono de broma, de “absoluto comunismo”. Para un teclado, un ratón u otro periférico sencillo, 100 mA sobran. Si un dispositivo necesita más, debe iniciar una <strong>negociación por software</strong> con el controlador maestro para pedir más corriente.</p>
+<p>El máximo de USB 2.0 es <strong>500 mA a 5 V</strong>, es decir, una potencia nominal de <em>P = V × I = 5 V × 0.5 A = 2.5 W</em>. Para dar la escala, el profesor comparó consumos típicos:</p>
+<ul>
+<li><strong>Pin de señal digital (transistor):</strong> corrientes del orden de microamperios; con los 500 mA del bus se podrían activar hasta 500,000 pines en paralelo.</li>
+<li><strong>LED:</strong> menos de 20 mA para operar nominalmente sin quemarse, o cerca de 1 mA para que se mantenga encendido de forma tenue.</li>
+<li><strong>Cargas inductivas y motores:</strong> motores, bobinas y solenoides demandan picos altos para vencer la inercia de arranque. Una impresora láser necesita al menos 40 W para arrancar el motor de arrastre y fundir el tóner, muy por encima de lo que da un puerto USB. Conclusión: USB se diseñó para transferir datos, no potencia.</li>
+</ul>
+<p>Los discos duros mecánicos externos USB 2.0 necesitaban al menos 1 A (1000 mA) por el motor y el movimiento del cabezal; con solo los 500 mA del bus el disco “se moría de hambre” y bajaba mucho su velocidad. Los fabricantes lo resolvían con <strong>cables en “Y”</strong> (sumaban la corriente de dos puertos) o con eliminadores externos dedicados de 3 W. Con USB 3.0 la corriente nativa subió a 800 mA (según los apuntes; ver aviso arriba), y hasta 5 A con las revisiones modernas de USB Power Delivery.</p>
+</details>
+
+<details class="section-block sec" id="c9-hid" open><summary><span class="stitle">La pila de software USB y la clase HID (Human Interface Device)</span></summary>
+<p>El profesor explicó el flujo de una transmisión desde el host (la computadora) hasta el dispositivo lógico, con el ejemplo de un videojuego que debe activar la vibración del control cuando el jugador recibe un golpe:</p>
+<ol>
+<li><strong>Aplicación:</strong> el juego genera un evento que requiere una respuesta del hardware.</li>
+<li><strong>Subsistema de software USB:</strong> el sistema operativo empaqueta los datos y los manda por la <em>tubería de control</em> (<em>Control Pipe</em>).</li>
+<li><strong>Controlador del host y bus físico:</strong> el controlador del host transfiere los paquetes a la interfaz del bus.</li>
+<li><strong>Dispositivo lógico y endpoints:</strong> el periférico recibe la transacción por sus <em>endpoints</em> y la redirige a la función de hardware (los motores de vibración).</li>
+</ol>
+<p>Para quien programa aplicaciones la comunicación es transparente. Para quien escribe controladores (<em>drivers</em>), el periférico se abstrae como un conjunto de dispositivos lógicos (endpoints) montados sobre la misma interfaz. Un gamepad moderno (Xbox, PlayStation, Nintendo Switch) es un <strong>dispositivo compuesto</strong>: tiene un mando analógico, una matriz de botones, acelerómetros, conector de audífonos, lector de tarjetas y retroalimentación háptica con motores de vibración.</p>
+<p><strong>Por qué existe HID.</strong> USB 1.0 y 1.1 solo definían las conexiones de bajo nivel y no traían clases de dispositivo estandarizadas, así que cada periférico necesitaba un disco con controladores propietarios. En Windows 98 o Windows XP el sistema pedía el disco al conectar el dispositivo, y si no era compatible con la versión del sistema, el aparato quedaba inutilizable (el “infierno de controladores”). Para resolverlo, el consorcio USB, con fabricantes como Microsoft y Genius, definió la especificación <strong>HID</strong>: los dispositivos se comunican con <strong>tablas o cartas de descriptores</strong> predefinidas. Al conectarlo, el host lee la carta de descriptores y carga el controlador genérico al vuelo (Plug and Play).</p>
+<table>
+<tr><th>Dispositivo</th><th>Qué reporta su carta de descriptores</th></tr>
+<tr><td>Mouse sencillo</td><td>2 enteros de 8 bits (0 a 255) con los desplazamientos en X e Y, y 1 byte donde los primeros bits marcan los botones (bit 0 = izquierdo, bit 1 = derecho).</td></tr>
+<tr><td>Mouse de alta resolución con rueda</td><td>2 valores de 32 bits en punto flotante para X e Y, 1 valor flotante más para la rueda central y 1 byte para hasta 8 botones.</td></tr>
+<tr><td>Gamepad de alto desempeño</td><td>ADC de 16 bits (65,536 valores por eje), 1 byte para hasta 8 botones digitales y señales PWM para los motores de vibración háptica.</td></tr>
+</table>
+</details>
+
+<details class="section-block sec" id="c9-modos" open><summary><span class="stitle">Los cuatro modos de transferencia de USB 2.0 y 3.0 (tema de examen)</span></summary>
+<p>Para gestionar el tráfico del bus, USB 2.0 y 3.0 definen cuatro modos de transferencia.</p>
+<h4>A. Modo Control</h4>
+<p><strong>Obligatorio:</strong> el 100 % de los dispositivos USB lo usan en su negociación inicial. Transmite paquetes cortos para configurar el dispositivo, consultar las cartas de descriptores, modificar parámetros (sensibilidad del sensor del ratón, patrones de iluminación de un teclado) o mandar comandos de inicialización y apagado. Ejemplo de diferencia entre sistemas operativos: al elegir “Extraer disco de forma segura”, Windows envía un paquete de control que desmonta el dispositivo lógicamente pero deja encendido el LED de alimentación; en Linux el paquete de control ordena apagar el controlador, se corta la alimentación y el disco mecánico deja de girar físicamente.</p>
+<h4>B. Modo Masivo o Ráfaga (Bulk)</h4>
+<p>Pensado para mover <strong>grandes volúmenes de datos</strong> a la máxima velocidad que permita el canal, <strong>sin garantía de latencia periódica</strong>. Se usa en almacenamiento masivo (discos externos, memorias USB), escáneres e impresoras. La ráfaga se negocia antes con paquetes de control; durante un intervalo (por ejemplo 200 ms) el dispositivo acapara el bus. Si una transferencia de interrupción necesita el bus, la de Bulk se pausa para cederlo y se reanuda cuando se libera la línea.</p>
+<h4>C. Modo Interrupción (Interrupt)</h4>
+<p>Garantiza transferencias <strong>periódicas de paquetes muy pequeños</strong> (menos de 1 KB) con <strong>latencia fija</strong> para atender eventos espontáneos. Se usa en teclados, ratones, estiletes y botones de escáner.</p>
+<p><strong>Inseguridad física del bus.</strong> Como los puertos USB actúan como un concentrador (<em>hub</em>) que transmite por difusión (<em>broadcast</em>), todos los dispositivos conectados escuchan todo el tráfico. Los datos de los periféricos no viajan cifrados a nivel físico, así que un dispositivo malicioso (por ejemplo, un <em>keylogger</em> de hardware) en el mismo bus puede capturar sin ser visto las pulsaciones de teclado, contraseñas e información privada.</p>
+<h4>D. Modo Isócrono (Isochronous)</h4>
+<p>Garantiza una <strong>transmisión continua en tiempo real</strong> mediante una <strong>reserva estricta de ancho de banda</strong> (“mismo tiempo”), y por eso <strong>renuncia a retransmitir paquetes con error</strong> para no introducir retardos. Se usa en controladores de motores de robótica industrial, equipos médicos de alta precisión (tomógrafos, ultrasonidos, resonancias) y transmisión de audio y video en tiempo real.</p>
+<p><strong>Ejemplo de robótica industrial:</strong> en líneas de ensamble automotriz (el profesor mencionó Ford, Hyundai, BYD) los brazos robóticos deben sincronizarse con exactitud para atornillar piezas sobre una banda en movimiento. Si la transmisión se desincroniza un milisegundo por un retardo en el bus, los motores fallan al compensar torque y aceleración y puede haber colisiones mecánicas graves.</p>
+<p><strong>Mecanismo de reserva:</strong> el host reserva una tajada fija del tiempo del bus (ejemplo del profesor: 10 % de cada segundo) exclusivamente para el dispositivo isócrono. Ningún otro periférico puede transmitir en esa rebanada.</p>
+<table>
+<tr><th>Modo</th><th>Rasgo distintivo</th><th>Ejemplos</th></tr>
+<tr><td>Control</td><td>Obligatorio; paquetes cortos de configuración y comandos.</td><td>Todos los dispositivos, para negociar.</td></tr>
+<tr><td>Bulk</td><td>Grandes volúmenes, máxima velocidad, sin latencia garantizada; cede el bus a Interrupt.</td><td>Discos, memorias, escáneres, impresoras.</td></tr>
+<tr><td>Interrupt</td><td>Paquetes menores a 1 KB, periódicos, latencia fija.</td><td>Teclados, ratones.</td></tr>
+<tr><td>Isócrono</td><td>Tiempo real, ancho de banda reservado, sin retransmisión.</td><td>Robótica industrial, equipo médico, audio/video.</td></tr>
+</table>
+</details>
+
+<details class="section-block sec" id="c9-baja-velocidad" open><summary><span class="stitle">Interfaces de baja velocidad y redes de sensores y actuadores</span></summary>
+<p>El profesor cerró el apartado de buses de alta velocidad (USB, Ethernet) y empezó con las interfaces de comunicación de bajo costo y baja velocidad (frecuencias menores a 1 MHz y pocos pines). Están orientadas al control industrial y a la interconexión de sensores, actuadores, memorias de respaldo (EEPROM, Flash) y pantallas pequeñas (LCD, OLED).</p>
+<ul>
+<li><strong>Transductor (sensor):</strong> convierte una magnitud física del entorno (temperatura, presión, luz) en una magnitud eléctrica (voltaje, corriente).</li>
+<li><strong>Actuador:</strong> hace lo opuesto: convierte energía eléctrica en otra magnitud física (calor con resistencias, campo magnético o movimiento con bobinas y motores, luz con LEDs).</li>
+</ul>
+<table>
+<tr><th>Topología</th><th>Cómo funciona</th></tr>
+<tr><td>Maestro-esclavo</td><td>Un único microcontrolador (maestro) coordina el reloj, pasa lista y autoriza las transmisiones de los periféricos (esclavos). Es muy económica, fácil de programar y evita colisiones en el bus.</td></tr>
+<tr><td>Entre pares (peer-to-peer)</td><td>Todos los nodos compiten por el canal “de forma democrática”. Requiere algoritmos de consenso complejos (como los relojes de Lamport) y microcontroladores más caros en cada sensor.</td></tr>
+</table>
+</details>
+
+<details class="section-block sec" id="c9-i2c" open><summary><span class="stitle">El bus I²C (Inter-Integrated Circuit)</span></summary>
+<p>El profesor presentó las especificaciones básicas del bus I²C, atribuido a Philips (los apuntes dicen 1980; ver aviso arriba).</p>
+<p><strong>Líneas.</strong> Es un bus serie síncrono que solo necesita <strong>2 alambres</strong> (sin contar tierra):</p>
+<ul>
+<li><strong>SCL (Serial Clock):</strong> línea de reloj, generada y controlada por el maestro.</li>
+<li><strong>SDA (Serial Data):</strong> línea de datos bidireccional.</li>
+</ul>
+<p><strong>Direccionamiento.</strong> La dirección de un dispositivo tiene <strong>7 bits</strong>, es decir, un rango teórico de 128 direcciones (0 a 127); en la práctica el bus soporta un máximo de <strong>112 dispositivos</strong>. El fabricante fija los primeros <strong>4 bits</strong> de la dirección en el silicio, y los <strong>3 bits restantes</strong> se configuran por hardware conectando los pines externos A<sub>2</sub>, A<sub>1</sub>, A<sub>0</sub> a V<sub>CC</sub> o a tierra. Eso permite hasta <strong>8 dispositivos idénticos</strong> del mismo fabricante en un mismo bus.</p>
+<table>
+<tr><th>Modo de velocidad</th><th>Frecuencia</th></tr>
+<tr><td>Estándar</td><td>hasta 100 kHz</td></tr>
+<tr><td>Rápido (Fast Mode)</td><td>hasta 400 kHz (el usual en microcontroladores como el RP2040)</td></tr>
+<tr><td>Rápido Plus</td><td>hasta 1 MHz</td></tr>
+<tr><td>Alta velocidad</td><td>de 1.7 MHz a 3.4 MHz</td></tr>
+</table>
+<p><strong>Electrónica: colector abierto y pull-up.</strong> Las salidas de SCL y SDA en los circuitos integrados son de <strong>colector/drenador abierto</strong> (<em>open-collector / open-drain</em>), y ambas líneas necesitan <strong>resistencias de pull-up</strong> a V<sub>CC</sub>. Los dispositivos solo pueden escribir ceros activos (“0”) derivando la corriente de la línea a tierra; si nadie escribe un “0”, las resistencias de pull-up suben la línea a nivel alto (“1”). Ventaja: permite conectar en el mismo bus dispositivos con distintos niveles de voltaje (por ejemplo, chips de 3.3 V y de 5 V) sin cortocircuitos ni daño en las etapas de salida.</p>
+</details>
+
+<details class="section-block sec" id="c9-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> <strong>Bromas sobre la inicialización de 100 mA:</strong> la comparó con una “beca garantizada por el simple hecho de conectarse”, y dijo que quien necesita más corriente debe esforzarse y negociar con el controlador.</li>
+<li><em>(Contexto)</em> <strong>Comparaciones sarcásticas:</strong> entre quienes compran teclados y ratones con iluminación RGB excesiva y quienes le ponen mufles ruidosos a una moto o un auto para llamar la atención.</li>
+<li><em>(Contexto)</em> <strong>Los “vochos”:</strong> recuerdos de usar alcohol de farmacia de 96° mezclado con gasolina en los Volkswagen para hacerlos andar cuando faltaba combustible.</li>
+<li><em>(Contexto)</em> <strong>Videojuegos:</strong> la historia de Shigeru Miyamoto programando el primer nivel de Super Mario Bros. en ensamblador a los 24 años, para un procesador de 8 MHz con 256 bytes de RAM.</li>
+<li><em>(Contexto)</em> <strong>Origen del lenguaje C:</strong> relato satírico de Dennis Ritchie y Ken Thompson creando C por la frustración de no poder acceder a bajo nivel con lenguajes como Ada y BASIC.</li>
+<li><em>(Contexto)</em> <strong>Tarjetas perforadas:</strong> descripción humorística de escribir programas a mano, comprar tarjetas en la papelería, formarse a las 6 a.m. en el centro de cómputo y esperar dos días para recibir una tira de papel con un error por un punto y coma faltante.</li>
+<li><em>(Contexto)</em> <strong>Proyectos con el PIC18F450:</strong> anécdotas de un joystick programado en ensamblador y de falsos contactos en el protoboard.</li>
+<li><em>(Contexto)</em> <strong>Semiconductores en México:</strong> comentarios satíricos sobre las declaraciones oficiales de convertir al país en potencia mundial de manufactura de semiconductores para 2030.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c9-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Práctica 5:</strong> demostración obligatoria en la tarjeta Raspberry Pi con Linux en <strong>modo consola (terminal pura)</strong>. No se acepta la práctica si se ejecuta con interfaz gráfica (Raspbian gráfico). No quedó fecha de entrega en los apuntes.</li>
+<li><strong>Siguiente sesión teórica:</strong> la trama física del bus I²C (condición de inicio, byte de dirección, bit R/W, ACK/NACK, datos y condición de paro).</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>USB entrega 100 mA a 5 V por defecto al inicializar, negociables hasta 500 mA (2.5 W) en USB 2.0; el bus se diseñó para datos, no para potencia.</li>
+<li>HID elimina los controladores propietarios con cartas de descriptores que el sistema lee al vuelo (Plug and Play).</li>
+<li>Cuatro modos de transferencia: Control (obligatorio), Bulk (grandes volúmenes, sin latencia garantizada), Interrupt (paquetes pequeños con latencia fija) e Isócrono (tiempo real con ancho de banda reservado y sin retransmisión).</li>
+<li>I²C: bus serie síncrono de 2 hilos (SCL y SDA), direcciones de 7 bits (4 fijos del fabricante y 3 configurables), velocidades de 100 kHz a 3.4 MHz.</li>
+<li>Las salidas de colector abierto con pull-up a V<sub>CC</sub> permiten mezclar dispositivos de 3.3 V y 5 V en el mismo bus.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

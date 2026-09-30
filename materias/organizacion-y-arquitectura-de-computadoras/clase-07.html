@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 07 — Organización y Arquitectura de Computadoras</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20260929a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js?v=20260929a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Organización y Arquitectura de Computadoras</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Clase 07</h2>
+  <p class="prof">M.I. José Antonio de Jesús Arredondo Garza · 28 sep 2026 · Tema 3 (continuación) — Tres formas de controlar un periférico en la Raspberry Pi Pico 1 y Pico 2: librerías <code>machine</code>, direccionamiento directo con <code>mem32</code> y ensamblador inline ARM Thumb; estructuras de campos de bits con <code>uctypes</code> y una reflexión sobre el Plan de Estudios 2026.</p>
+</div>
+
+<div class="section-block" style="background:#fff7ed;border-left:3px solid #45B8A8"><p style="margin:0"><strong>⚠️ Por verificar:</strong> los apuntes generados por NotebookLM dan como base de <code>IO_BANK0</code> en la Pico 2 la dirección <code>0x40000000</code>, y la rutina de ensamblador de la Pico 2 llega a <code>0x40000000</code> con <code>mov(R0, 0x40)</code> + <code>lsl(R0, R0, 24)</code>. Conviene contrastar ese valor con el datasheet del RP2350 y con el código que el profesor publique, antes de usarlo en una práctica. El fragmento de ensamblador del apunte también quedó incompleto (“…”) en la parte del PAD y del SIO.</p></div>
+
+<details class="section-block sec" id="c7-blink-machine" open><summary><span class="stitle">Blink con librerías estándar y el problema de los ciclos de reloj</span></summary>
+<p>La sesión comenzó con el método convencional para hacer parpadear un LED (programa <em>Blink</em>) en la Raspberry Pi Pico usando las librerías de alto nivel de MicroPython (<code>machine.Pin</code> y <code>time.sleep</code>). El pin 25, donde está el LED integrado de la placa, se declara con <code>Pin(25, Pin.OUT)</code> y su estado se conmuta dentro de un bucle infinito con <code>toggle()</code> o asignando valores directos:</p>
+<pre><code>from machine import Pin
+from time import sleep
+
+pin25 = Pin(25, Pin.OUT)
+while True:
+    pin25.toggle()
+    sleep(0.125)</code></pre>
+<p>El profesor enfatizó que el problema de fondo de las librerías de abstracción es la <strong>opacidad en el consumo de recursos</strong>: con este código no se puede saber cuántos ciclos de reloj consume exactamente la CPU ni cuándo se liberan las tareas. Al inspeccionar el código compilado a bajo nivel se observa que la rutina de configuración del puerto se reejecuta en cada iteración del <code>while True</code>, agregando al menos <strong>4 ciclos de reloj</strong> por vuelta. Por eso el control con librerías no sirve cuando se requiere sincronización determinista o temporización precisa a nivel de ciclos máquina.</p>
+</details>
+
+<details class="section-block sec" id="c7-mem32" open><summary><span class="stitle">Configuración de GPIO sin librerías: direccionamiento directo con machine.mem32</span></summary>
+<p>Para eliminar ese consumo indeterminado se presentó el acceso directo a registros de memoria con <code>machine.mem32</code>. A partir de un diagrama de flujo, el profesor explicó cómo calcular la dirección física absoluta de cada registro de control combinando una <strong>dirección base</strong> y un <strong>desplazamiento (offset)</strong>.</p>
+<table>
+<tr><th>Elemento</th><th>Pico 1</th><th>Pico 2 (RP2350)</th></tr>
+<tr><td>Base del bloque de puertos <code>IO_BANK0</code></td><td><code>0x40014000</code></td><td><code>0x40000000</code> (según los apuntes; ver aviso arriba). El mapa de memoria cambió al reestructurarse el chip.</td></tr>
+<tr><td>Base de la interfaz SIO</td><td colspan="2" style="text-align:center"><code>0xd0000000</code> (la misma en ambas placas)</td></tr>
+</table>
+<p><strong>Registro de control del pin 25 (<code>GPIO25_CTRL</code>).</strong> Se suma un offset de <code>0x060</code> a la dirección base: <em>Dirección de control = Base + 0x060</em>. En ese registro se asigna la <strong>función 5</strong> (<code>0x05</code>), que desvincula el pin de periféricos complejos y lo conecta a la interfaz <strong>SIO (Single Input Output)</strong>, una arquitectura de hardware de la Pico pensada para acceso rápido y de un solo ciclo a los pines de E/S.</p>
+<p><strong>Registros del SIO.</strong> Para manipular una salida sin alterar los demás pines, el SIO ofrece registros de operaciones atómicas:</p>
+<ul>
+<li><code>GPIO_OUT_ENABLE_SET</code> (offset <code>0x024</code>): configura el pin como salida escribiendo una máscara de bits.</li>
+<li><code>GPIO_OUT_XOR</code> (offset <code>0x01c</code>): invierte el estado. Al escribir un 1 en la posición 25 (con <code>1 &lt;&lt; 25</code>) la salida cambia de 0 a 1 o de 1 a 0 sin leer antes el registro.</li>
+</ul>
+<p><strong>Ciclos de máquina.</strong> La configuración inicial del pin por registros directos toma exactamente <strong>5 ciclos</strong> (1 para formar la dirección base, 2 a 3 para las direcciones secundarias, 1 para el modo de función y 1 para el SIO). A diferencia de la librería, esta configuración se hace una sola vez, al inicio, y no dentro del bucle.</p>
+<p><strong>Detección de la Pico W.</strong> En la Raspberry Pi Pico W el LED verde no está conectado al GPIO 25 de la CPU sino al chip de conectividad Wi-Fi CYW43439. El código de identificación evalúa el Chip ID y, si detecta una Pico W, conmuta usando la palabra reservada <code>'LED'</code> de la librería <code>Pin</code>.</p>
+<p>Código completo en MicroPython con <code>machine.mem32</code>, con intervalo de 125 ms:</p>
+<pre><code>from machine import mem32
+import time
+
+# Pico 1: BASE_PADS = 0x40014000 | Pico 2: BASE_PADS = 0x40000000
+BASE_PADS = 0x40014000
+SIO_BASE = 0xd0000000
+
+# Registro de control del GPIO 25 (offset 0x060) y función SIO (modo 5)
+GPIO25_CTRL = BASE_PADS + 0x060
+mem32[GPIO25_CTRL] = 5
+
+# GPIO 25 como salida en SIO (GPIO_OUT_ENABLE_SET, offset 0x024)
+GPIO_OUT_ENABLE_SET = SIO_BASE + 0x024
+mem32[GPIO_OUT_ENABLE_SET] = (1 &lt;&lt; 25)
+
+# Registro XOR para conmutación (GPIO_OUT_XOR, offset 0x01c)
+GPIO_OUT_XOR = SIO_BASE + 0x01c
+
+# Bucle determinista
+while True:
+    mem32[GPIO_OUT_XOR] = (1 &lt;&lt; 25)   # invierte el estado del pin 25
+    time.sleep_ms(125)</code></pre>
+</details>
+
+<details class="section-block sec" id="c7-asm" open><summary><span class="stitle">Ensamblador inline ARM Thumb (@micropython.asm_thumb)</span></summary>
+<p>Para la máxima precisión en la temporización y en el conteo de ciclos se presentó la implementación en ensamblador incrustado bajo el conjunto de instrucciones ARM Thumb (<code>@micropython.asm_thumb</code>). En Thumb no se puede cargar una constante o dirección de 32 bits (como <code>0x40014000</code> o <code>0xd0000000</code>) en un registro con una sola instrucción de carga inmediata (<code>mov</code>). La solución es construir la dirección por pasos, combinando cargas inmediatas de 8 bits con desplazamientos lógicos a la izquierda (<code>lsl</code>):</p>
+<ol>
+<li>Se carga el valor <code>0x40</code> en el registro R0.</li>
+<li>Se aplica un desplazamiento lógico a la izquierda de 24 bits, <code>lsl(R0, R0, 24)</code>, que deja <code>0x40000000</code> en R0.</li>
+<li>Se suman los offsets correspondientes con <code>add</code> para obtener las direcciones exactas de control y de SIO.</li>
+</ol>
+<p><strong>Novedad de la Pico 2 (RP2350): PAD Control.</strong> A diferencia de la Pico 1, la Pico 2 incluye un bloque de protección eléctrica llamado <em>Control de PAD</em>, que evita que el pin se dañe por sobrecorriente al conectarlo a circuitos o interfaces externas. En la rutina para Pico 2, el profesor configuró el registro de PAD para limitar la corriente del puerto a un máximo de <strong>12 mA</strong> (regulable por software entre 1 mA y 12 mA) antes de habilitar la salida SIO.</p>
+<pre><code>@micropython.asm_thumb
+def blink_asm():
+    # Construcción de la dirección base 0x40000000 en R0
+    mov(R0, 0x40)
+    lsl(R0, R0, 24)
+
+    # Offset de control del pin 25; en Pico 2 se limita el PAD a 12 mA
+    # y se establece la función SIO (modo 5)
+    ...
+    # Construcción de SIO_BASE (0xd0000000) en R1 y conmutación</code></pre>
+</details>
+
+<details class="section-block sec" id="c7-uctypes" open><summary><span class="stitle">Registros como estructuras de campos de bits con uctypes</span></summary>
+<p>La tercera metodología usa la librería de bajo nivel <code>uctypes</code>. Permite describir un registro de hardware campo por campo (<em>bitfield</em>), mapeando posiciones y longitudes de bits específicas, y manipularlo como propiedades de un objeto de Python, sin enmascarar a mano con operadores lógicos (<code>&amp;</code>, <code>|</code>, <code>&lt;&lt;</code>).</p>
+<p>Como ejemplo se usó el registro de control y estado del convertidor analógico-digital (ADC_CS / ADC_CTRL):</p>
+<ul>
+<li><strong>EN</strong> (habilitación del ADC): bit 0, longitud 1.</li>
+<li><strong>TS_EN</strong> (sensor de temperatura): bit 1, longitud 1.</li>
+<li><strong>RROBIN</strong> (selección round-robin): desde el bit 16, longitud 4.</li>
+</ul>
+<pre><code>from uctypes import BF_POS, BF_LEN, UINT32, struct
+
+ADC_CTRL_STRUCT = {
+    "EN":     0 | BF_POS(0)  | BF_LEN(1) | UINT32,
+    "TS_EN":  0 | BF_POS(1)  | BF_LEN(1) | UINT32,
+    "RROBIN": 0 | BF_POS(16) | BF_LEN(4) | UINT32,
+}
+
+# Instanciación sobre la dirección física del ADC
+ADC_BASE = 0x4000c000
+adc_cs = struct(ADC_BASE + 0x00, ADC_CTRL_STRUCT)
+
+adc_cs.EN = 1   # modifica solo el bit 0 en memoria, sin alterar los demás</code></pre>
+<p>El profesor destacó que esta técnica exige estudiar con cuidado las hojas de datos (<em>datasheets</em>) del fabricante. Contó que él mismo dedicó semanas a construir estas estructuras en MicroPython para controlar directamente la unidad de DMA antes de que la plataforma tuviera soporte oficial, y que logró transferencias con la mitad de los ciclos de reloj de las soluciones convencionales. Añadió que la misma metodología con <code>uctypes</code> puede usarse desde Python para acceder a direcciones de memoria físicas en una PC.</p>
+</details>
+
+<details class="section-block sec" id="c7-plan" open><summary><span class="stitle">Reflexión: Plan de Estudios 2026 e inteligencia artificial en ingeniería</span></summary>
+<p>En la parte final el profesor abrió una discusión sobre las propuestas de actualización del plan de estudios 2026 de Ingeniería en Computación. Expresó su preocupación por la falta de claridad en los temarios de materias nuevas como “Inteligencia Artificial 1, 2 y 3” y por la intención de fusionar Arquitectura de Computadoras.</p>
+<p>Advirtió que la IA no debe enseñarse solo desde el consumo superficial de librerías o APIs, sino entendiendo la cadena de procesamiento en hardware que la sustenta:</p>
+<ul>
+<li><strong>Análisis de señales y sistemas / modelado matemático:</strong> señales temporales, dinámica de sistemas y su paso al dominio de la frecuencia con la transformada de Fourier.</li>
+<li><strong>Procesamiento digital de señales (DSP):</strong> conversión de secuencias espectrales en arreglos matriciales o espectrogramas.</li>
+<li><strong>Reconocimiento de patrones y redes neuronales:</strong> clasificación vectorial y procesamiento matricial intensivo (mencionó sus propios trabajos con vectores de estado y redes neuronales).</li>
+<li><strong>Hardware dedicado:</strong> arquitectura de procesadores, unidades vectoriales y FPU para ejecutar estos algoritmos en tiempo real de forma eficiente.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c7-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> <strong>Investigación personal en control de DMA:</strong> el desarrollo de la estructura de campos de bits para el DMA en MicroPython le costó mucho trabajo, leyendo el manual a nivel de registros. Esa labor le permitió construir una librería de DMA más rápida y eficiente que la versión que después liberó el equipo oficial de MicroPython.</li>
+<li><em>(Contexto)</em> <strong>Proyectos de IA y procesamiento de señales:</strong> relató su experiencia aplicando redes neuronales al procesamiento digital de señales: transformaba señales en el tiempo a imágenes de frecuencia con transformadas para alimentar vectores de patrones. Subrayó que detrás de la IA hay una base sólida de matemáticas, control y procesamiento que casi nunca se detalla en los planes de estudio.</li>
+<li><em>(Contexto)</em> <strong>Opinión sobre la reforma al Plan 2026:</strong> manifestó reservas sobre reducir el contenido de Arquitectura de Computadoras y recomendó estar atentos a los contenidos de las asignaturas para exigir formación sólida en hardware y software de bajo nivel.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c7-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Prácticas:</strong> según los apuntes, se asignarán ejercicios que aplican las tres técnicas vistas: librerías estándar, direccionamiento directo con <code>mem32</code> y ensamblador inline / <code>uctypes</code>. No quedó una fecha de entrega confirmada.</li>
+<li><strong>Próxima sesión:</strong> se seguirá con el ensamblador ARM Thumb, las estructuras de control más comunes y ejercicios de programación de puertos e interfaces.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Las librerías de abstracción (<code>machine.Pin</code>) reejecutan la configuración en cada iteración y agregan al menos 4 ciclos; la configuración manual por registros toma 5 ciclos fijos, una sola vez, al inicio.</li>
+<li><code>IO_BANK0</code> cambia de base entre Pico 1 (<code>0x40014000</code>) y Pico 2 (según los apuntes, <code>0x40000000</code>); el SIO conserva <code>0xd0000000</code> en ambas.</li>
+<li>La Pico 2 agrega el bloque PAD Control para limitar la corriente del pin (12 mA en la práctica del profesor).</li>
+<li>En ARM Thumb una dirección de 32 bits se construye con carga inmediata de 8 bits más <code>lsl</code>.</li>
+<li><code>uctypes</code> mapea campos de bits (<code>BF_POS</code>, <code>BF_LEN</code>) para modificar registros como propiedades de un objeto, sin enmascarar a mano.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

@@ -192,6 +192,15 @@ una fila a `entregas.html` de esa materia con: qué es, cuándo, y enlace al
 PDF (en `files/entregas/` si es un archivo nuevo) o a la página de la clase
 donde se presentó (si fue una exposición en vivo, no un PDF).
 
+## Sección global "Pendientes" — oculta (29 sep 2026)
+
+A petición del usuario se quitó de la interfaz el enlace 📌 Pendientes de la
+barra superior y el carrusel de la portada (`assets/app.js`, `index.html`).
+`pendientes.html` y `assets/pendientes.json` **se conservaron sin enlazar** para
+restaurarlos cuando el usuario lo pida (`git log` tiene la versión anterior).
+Las secciones "Pendiente / próxima clase" dentro de cada `clase-NN.html` siguen
+siendo parte de la plantilla de apuntes y no se tocaron.
+
 ## Memoria persistente (fuera de este repo)
 
 Hay memoria de proyecto en
