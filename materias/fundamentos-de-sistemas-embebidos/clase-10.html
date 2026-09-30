@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 10 — Fundamentos de Sistemas Embebidos</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20260930a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js?v=20260930a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Fundamentos de Sistemas Embebidos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 10</h2>
+  <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 30 sep 2026 · Tema 2 (subtema 2.7) — Colector abierto y trama del bus I²C, SMBus, familia SPI (QSPI y Octa-SPI), I²S para audio digital y UART / RS-232 / MAX232 con paridad.</p>
+</div>
+
+<div class="section-block" style="background:#fff7ed;border-left:3px solid #A98BD1"><p style="margin:0"><strong>⚠️ Por verificar:</strong> (1) el ancho de banda de I²C a 2 MHz (“100 KB/s”) y de SPI/QSPI/Octa-SPI salen de los cálculos de los apuntes; conviene contrastarlos con el audio; (2) el apunte dice que la paridad tiene “50 % de efectividad”, cifra citada por el profesor que conviene confirmar; (3) el modo de 2 MHz de I²C no corresponde a los modos estándar (100 kHz, 400 kHz, 1 MHz), así que confirmar a qué variante se refería.</p></div>
+
+<details class="section-block sec" id="c10-i2c-fisica" open><summary><span class="stitle">Electrónica del bus I²C: colector abierto y resistencias pull-up</span></summary>
+<p>La sesión retomó el bus I²C (Inter-Integrated Circuit) y profundizó en su capa física. Las líneas de señal, el reloj serie <strong>SCL</strong> y los datos serie <strong>SDA</strong>, se implementan con transistores en configuración de <strong>colector abierto</strong> (open-collector, o drenador abierto / open-drain), y requieren <strong>resistencias de pull-up</strong> conectadas a V<sub>CC</sub>.</p>
+<p>Funcionamiento eléctrico: cuando se inyecta corriente a la base del transistor, este conduce, la energía fluye del colector al emisor y la diferencia de potencial de la línea cae a un nivel cercano a 0 V (cero lógico). Si no se inyecta corriente a la base, el transistor no conduce y la resistencia de pull-up eleva la línea a V<sub>CC</sub> (uno lógico).</p>
+<p>Para hacerlo intuitivo, el profesor usó una <strong>analogía hidráulica</strong>: la corriente es un río; al poner piedras en el cauce (resistencia) el agua se represa arriba (nivel alto), mientras que río abajo el nivel cae al drenarse la presa.</p>
+<p>Esta arquitectura permite escribir ceros activos conmutando el transistor a tierra y garantiza además una configuración <strong>multimaestro</strong>: un maestro principal coordina la matriz de sensores y, si se incorpora un maestro secundario, este permanece a la escucha del bus y, en cuanto la línea queda libre, puede tomar el control y solicitar información a los esclavos.</p>
+</details>
+
+<details class="section-block sec" id="c10-i2c-trama" open><summary><span class="stitle">Protocolo y trama I²C: Start, dirección, R/W, ACK/NACK y Stop</span></summary>
+<p>Toda transacción la coordina el maestro. Primero escucha el canal para verificar que esté libre (que ni SCL ni SDA estén oscilando) y luego genera la secuencia:</p>
+<ol>
+<li><strong>Condición de Start:</strong> flanco de bajada en SDA mientras SCL está en alto (1→0).</li>
+<li><strong>Dirección y bit R/W:</strong> un byte con los 7 bits de dirección del esclavo (de MSB a LSB) y, como octavo bit, la operación: escritura (‘0’) o lectura (‘1’).</li>
+<li><strong>ACK / NACK:</strong> tras enviar el byte, el maestro libera SDA y el esclavo debe responder bajando SDA a cero durante el siguiente ciclo de reloj (ACK). Si la línea permanece en alto, jalada por el pull-up, se interpreta que el esclavo no respondió o no existe (NACK). El esclavo puede retener el bus con <strong>clock stretching</strong>: mantiene SCL en bajo para pausar al maestro mientras prepara su búfer.</li>
+<li><strong>Condición de Stop:</strong> flanco de subida en SDA mientras SCL está en alto (0→1).</li>
+</ol>
+<p><strong>Ejercicio: conteo de bits y ancho de banda efectivo.</strong></p>
+<ul>
+<li>Trama de dirección: 1 bit de Start + 7 de dirección + 1 de R/W + 1 de ACK = <strong>10 bits</strong>.</li>
+<li>Cada byte de datos: 8 bits de datos + 1 de ACK = <strong>9 bits</strong>.</li>
+<li>Mover el primer byte de datos cuesta al bus <strong>20 bits</strong> de transmisión física (según el conteo del apunte).</li>
+<li>A 400 kHz (Fast Mode): 400,000 Hz ÷ 20 bits/byte = 20,000 bytes/s ≈ <strong>20 KB/s</strong>.</li>
+<li>Comparación con UART N81 a 115,200 baudios (1 bit de inicio + 8 de datos + 1 de paro + 0.5 de margen ≈ 10.5 bits/byte): 115,200 ÷ 10.5 ≈ <strong>11 KB/s</strong>.</li>
+</ul>
+<p>Por tanto, I²C a 400 kHz ofrece casi el doble de velocidad efectiva que un puerto serie tradicional a 115.2 kbps. En modos avanzados de 2 MHz la tasa efectiva llega hasta unos 100 KB/s.</p>
+</details>
+
+<details class="section-block sec" id="c10-smbus" open><summary><span class="stitle">SMBus (System Management Bus)</span></summary>
+<p>SMBus es una variante simplificada y más lenta derivada de I²C, desarrollada por Intel y Philips. Conserva la capa física de 2 alambres (SCL y SDA) a colector abierto con pull-ups, pero es una arquitectura <strong>punto a punto</strong> (un maestro conectado a su esclavo dedicado), lo que elimina la necesidad de transmitir la dirección del esclavo en cada trama.</p>
+<p>Opera entre <strong>10 kHz y 100 kHz</strong> y es el estándar de gestión interna en las tarjetas madre: control de encendido y apagado de la fuente, lectura de sensores térmicos de la CPU, velocidad de ventiladores, módulos de memoria RAM y manejo de interrupciones. Sus comandos permiten rutinas de control rápido, lectura de registros en formato short o long, refresco automático de DRAM y transferencias en ráfaga (burst).</p>
+</details>
+
+<details class="section-block sec" id="c10-spi" open><summary><span class="stitle">Bus SPI, QSPI y Octa-SPI</span></summary>
+<p>SPI (Serial Peripheral Interface) es un bus síncrono, punto a punto y de alta velocidad con <strong>4 alambres</strong>:</p>
+<ul>
+<li><strong>SCLK:</strong> reloj generado por el maestro.</li>
+<li><strong>MOSI</strong> (Master Out Slave In): datos del maestro al esclavo.</li>
+<li><strong>MISO</strong> (Master In Slave Out): datos del esclavo al maestro.</li>
+<li><strong>SS / CS</strong> (Slave / Chip Select): habilita al esclavo.</li>
+</ul>
+<p>Es <strong>full duplex</strong> real: mientras el maestro envía un byte por MOSI, el esclavo responde simultáneamente otro por MISO. La especificación permite relojes superiores a 80 MHz.</p>
+<p><strong>Variantes.</strong> <strong>QSPI (Quad-SPI)</strong> usa 4 líneas de datos en esquema simétrico 2×2 (dos de entrada y dos de salida) para transferir nibbles; es la interfaz con que Intel lee la Flash de la BIOS/UEFI e inicializa la RAM, y es la base de las tarjetas MicroSD. <strong>Octa-SPI</strong> extiende el bus a 8 líneas de datos, para pantallas de relojes inteligentes y memorias de alta velocidad.</p>
+<p><strong>Rendimiento resuelto en clase (reloj de 80 MHz):</strong></p>
+<ul>
+<li>SPI estándar: 80 MHz ÷ 8 bits/byte = 10 MB/s de lectura + 10 MB/s de escritura = <strong>20 MB/s</strong> combinados.</li>
+<li>QSPI: 20 MB/s por sentido (<strong>40 MB/s</strong> combinados).</li>
+<li>Octa-SPI: 40 MB/s por sentido (<strong>80 MB/s</strong> combinados).</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c10-i2s" open><summary><span class="stitle">Bus I²S (Inter-IC Sound) para audio digital</span></summary>
+<p>I²S es una variante síncrona, derivada de I²C, diseñada por Philips exclusivamente para audio digital entre circuitos integrados (lectores/decodificadores MP3, procesadores de señal, ecualizadores, DACs amplificadores). Es una conexión punto a punto con reloj de hasta <strong>3 MHz</strong>. Sus líneas son el reloj, los datos y <strong>Word Select (WS)</strong>, que conmuta en tiempo real para indicar si lo transmitido pertenece al canal izquierdo o derecho del flujo estéreo, evitando enviar direcciones.</p>
+<p><strong>Tráfico de audio resuelto en clase:</strong></p>
+<ul>
+<li>Capacidad del canal a 2 MHz: 2 MHz ÷ 10 bits de empaquetado = <strong>200 KB/s</strong>.</li>
+<li>Audio CD (44.1 kHz × 2 canales × 16 bits): 44,100 × 4 bytes = 176,400 B/s = <strong>176.4 KB/s</strong> &lt; 200 KB/s, pasa holgadamente.</li>
+<li>Audio a 48 kHz: 48,000 × 4 = <strong>192 KB/s</strong>, también por debajo del límite.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c10-uart" open><summary><span class="stitle">USART / UART, RS-232, MAX232 y paridad</span></summary>
+<p>USART/UART (Universal Synchronous/Asynchronous Receiver-Transmitter) es asíncrono: no hay línea de reloj compartida; cada extremo tiene un generador interno configurado a la misma velocidad en <strong>baudios</strong> (p. ej. 115,200). La conexión es en modo <strong>null-modem</strong>: TX de un dispositivo cruzado con RX del otro.</p>
+<p><strong>Niveles físicos y MAX232.</strong> RS-232 opera con voltajes industriales de −12 V a +12 V (24 V pico a pico). Para conectarlo a la electrónica TTL de un microcontrolador (5 V o 3.3 V) es obligatorio un acoplador como el <strong>MAX232</strong>. Conectar +12 V directo a los pines de un Arduino lo destruye al instante (“le sale humo”).</p>
+<p><strong>Paquete y paridad.</strong> La línea está en alto (1) en reposo; la transmisión empieza con un bit de inicio (flanco 1→0) que activa el reloj del receptor. A diferencia de I²C o SPI, UART permite paquetes de 6, 7 u 8 bits seguidos de un bit de paridad y bits de paro.</p>
+<p><strong>Ejemplo de paridad:</strong> el byte 1F hexadecimal = 0001 1111; suma de unos = 5 (impar). Si se configuró paridad par y el receptor lee suma impar, el hardware detecta error. El profesor enfatizó que la paridad es un método básico de detección con una efectividad de aproximadamente 50 %.</p>
+</details>
+
+<details class="section-block sec" id="c10-plan" open><summary><span class="stitle">Debate sobre el plan de estudios de Ingeniería en Computación</span></summary>
+<p>Un alumno relató que comentó a un profesor que los alumnos deberían poder crear un procesador desde cero, y este respondió molesto: “si quieren más hardware, mejor sean eléctricos/electrónicos”. El M.C. Matamoros rechazó esa postura: el Ingeniero en Computación es el <strong>pegamento entre el hardware y el software</strong>, el especialista de bajo nivel. Quien no quiera trabajar con hardware debió elegir Ciencias de la Computación (Facultad de Ciencias) o Informática (Contaduría).</p>
+</details>
+
+<details class="section-block sec" id="c10-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> Anécdotas de la Facultad en los 80 y 90: baja matrícula femenina (4 mujeres por cada 100 alumnos en su generación) y descripciones burlescas de las distintas facultades de CU.</li>
+<li><em>(Contexto)</em> Historia de paros y fiestas en CU, veto a los de Ingeniería en fiestas de otras facultades, críticas a grupos políticos que organizaban paros.</li>
+<li><em>(Contexto)</em> Sarcasmo sobre el ranking de la UNAM, certificaciones, nivel de exigencia y egresados que solo saben Python básico.</li>
+<li><em>(Contexto)</em> Noticias locales: falta de pago a la policía y operativo de la FGR y el Ejército en “FR Plaza” por mercancía pirata.</li>
+<li><em>(Contexto)</em> Anécdotas personales y recuerdos de las tarjetas perforadas.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c10-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Próxima sesión teórica:</strong> terminar los detalles del empaquetado del puerto serie/UART y continuar con los protocolos de bus industrial restantes (RS-485, CAN bus).</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>I²C: 2 líneas (SCL, SDA) a colector abierto con pull-up; 7 bits de dirección + R/W, ACK en cero lógico y clock stretching.</li>
+<li>SMBus: derivado punto a punto de I²C para gestión en tarjetas madre, 10–100 kHz.</li>
+<li>SPI: síncrono full duplex de 4 hilos (SCLK, MOSI, MISO, CS); QSPI (4 líneas de datos) y Octa-SPI (8) multiplican el ancho de banda hasta 80 MB/s combinados a 80 MHz.</li>
+<li>I²S: audio digital punto a punto con Word Select para canal izquierdo/derecho; el audio CD (176.4 KB/s) cabe en 200 KB/s.</li>
+<li>UART: asíncrono en baudios; RS-232 (±12 V) necesita MAX232 para niveles TTL; la paridad solo detecta errores básicos.</li>
+</ul></div>
+
+</div>
+</body>
+</html>
