@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 10 — Fundamentos de Sistemas Embebidos</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930a">
+<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
-<script src="../../assets/app.js?v=20260930a" defer></script>
+<script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
 <body>
 <div class="wrap">
@@ -15,7 +15,7 @@
   <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 30 sep 2026 · Tema 2 (subtema 2.7) — Colector abierto y trama del bus I²C, SMBus, familia SPI (QSPI y Octa-SPI), I²S para audio digital y UART / RS-232 / MAX232 con paridad.</p>
 </div>
 
-<div class="section-block" style="background:#fff7ed;border-left:3px solid #A98BD1"><p style="margin:0"><strong>⚠️ Por verificar:</strong> (1) el ancho de banda de I²C a 2 MHz (“100 KB/s”) y de SPI/QSPI/Octa-SPI salen de los cálculos de los apuntes; conviene contrastarlos con el audio; (2) el apunte dice que la paridad tiene “50 % de efectividad”, cifra citada por el profesor que conviene confirmar; (3) el modo de 2 MHz de I²C no corresponde a los modos estándar (100 kHz, 400 kHz, 1 MHz), así que confirmar a qué variante se refería.</p></div>
+<div class="section-block nota" style="border-left:3px solid #A98BD1"><p style="margin:0"><strong>⚠️ Por verificar:</strong> (1) el ancho de banda de I²C a 2 MHz (“100 KB/s”) y de SPI/QSPI/Octa-SPI salen de los cálculos de los apuntes; conviene contrastarlos con el audio; (2) el apunte dice que la paridad tiene “50 % de efectividad”, cifra citada por el profesor que conviene confirmar; (3) el modo de 2 MHz de I²C no corresponde a los modos estándar (100 kHz, 400 kHz, 1 MHz), así que confirmar a qué variante se refería.</p></div>
 
 <details class="section-block sec" id="c10-i2c-fisica" open><summary><span class="stitle">Electrónica del bus I²C: colector abierto y resistencias pull-up</span></summary>
 <p>La sesión retomó el bus I²C (Inter-Integrated Circuit) y profundizó en su capa física. Las líneas de señal, el reloj serie <strong>SCL</strong> y los datos serie <strong>SDA</strong>, se implementan con transistores en configuración de <strong>colector abierto</strong> (open-collector, o drenador abierto / open-drain), y requieren <strong>resistencias de pull-up</strong> conectadas a V<sub>CC</sub>.</p>

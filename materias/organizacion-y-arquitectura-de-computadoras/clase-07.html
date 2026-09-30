@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 07 — Organización y Arquitectura de Computadoras</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930a">
+<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
-<script src="../../assets/app.js?v=20260930a" defer></script>
+<script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
 <body>
 <div class="wrap">
@@ -15,7 +15,7 @@
   <p class="prof">M.I. José Antonio de Jesús Arredondo Garza · 28 sep 2026 · Tema 3 (continuación) — Tres formas de controlar un periférico en la Raspberry Pi Pico 1 y Pico 2: librerías <code>machine</code>, direccionamiento directo con <code>mem32</code> y ensamblador inline ARM Thumb; estructuras de campos de bits con <code>uctypes</code> y una reflexión sobre el Plan de Estudios 2026.</p>
 </div>
 
-<div class="section-block" style="background:#fff7ed;border-left:3px solid #45B8A8"><p style="margin:0"><strong>⚠️ Por verificar:</strong> los apuntes generados por NotebookLM dan como base de <code>IO_BANK0</code> en la Pico 2 la dirección <code>0x40000000</code>, y la rutina de ensamblador de la Pico 2 llega a <code>0x40000000</code> con <code>mov(R0, 0x40)</code> + <code>lsl(R0, R0, 24)</code>. Conviene contrastar ese valor con el datasheet del RP2350 y con el código que el profesor publique, antes de usarlo en una práctica. El fragmento de ensamblador del apunte también quedó incompleto (“…”) en la parte del PAD y del SIO.</p></div>
+<div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>⚠️ Por verificar:</strong> los apuntes generados por NotebookLM dan como base de <code>IO_BANK0</code> en la Pico 2 la dirección <code>0x40000000</code>, y la rutina de ensamblador de la Pico 2 llega a <code>0x40000000</code> con <code>mov(R0, 0x40)</code> + <code>lsl(R0, R0, 24)</code>. Conviene contrastar ese valor con el datasheet del RP2350 y con el código que el profesor publique, antes de usarlo en una práctica. El fragmento de ensamblador del apunte también quedó incompleto (“…”) en la parte del PAD y del SIO.</p></div>
 
 <details class="section-block sec" id="c7-blink-machine" open><summary><span class="stitle">Blink con librerías estándar y el problema de los ciclos de reloj</span></summary>
 <p>La sesión comenzó con el método convencional para hacer parpadear un LED (programa <em>Blink</em>) en la Raspberry Pi Pico usando las librerías de alto nivel de MicroPython (<code>machine.Pin</code> y <code>time.sleep</code>). El pin 25, donde está el LED integrado de la placa, se declara con <code>Pin(25, Pin.OUT)</code> y su estado se conmuta dentro de un bucle infinito con <code>toggle()</code> o asignando valores directos:</p>

@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 09 — Fundamentos de Sistemas Embebidos</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930a">
+<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
-<script src="../../assets/app.js?v=20260930a" defer></script>
+<script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
 <body>
 <div class="wrap">
@@ -15,7 +15,7 @@
   <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 28 sep 2026 · Tema 2 (subtemas 2.6 y 2.7) — Administración de potencia en USB, la clase HID y sus cartas de descriptores, los cuatro modos de transferencia (Control, Bulk, Interrupt e Isócrono) e inicio de las interfaces de baja velocidad: redes de sensores/actuadores y el bus I²C.</p>
 </div>
 
-<div class="section-block" style="background:#fff7ed;border-left:3px solid #A98BD1"><p style="margin:0"><strong>⚠️ Por verificar:</strong> tres datos de los apuntes de NotebookLM conviene contrastarlos con el audio o con la especificación antes de citarlos: (1) que USB 3.0 entrega <strong>800 mA</strong> (la especificación suele hablar de 900 mA); (2) que I²C lo <strong>inventó Philips en 1980</strong> (suele citarse 1982); (3) que el límite práctico de <strong>112 dispositivos</strong> viene de la capacitancia parásita (112 es 128 direcciones menos las 16 reservadas; la capacitancia del bus es otro límite aparte).</p></div>
+<div class="section-block nota" style="border-left:3px solid #A98BD1"><p style="margin:0"><strong>⚠️ Por verificar:</strong> tres datos de los apuntes de NotebookLM conviene contrastarlos con el audio o con la especificación antes de citarlos: (1) que USB 3.0 entrega <strong>800 mA</strong> (la especificación suele hablar de 900 mA); (2) que I²C lo <strong>inventó Philips en 1980</strong> (suele citarse 1982); (3) que el límite práctico de <strong>112 dispositivos</strong> viene de la capacitancia parásita (112 es 128 direcciones menos las 16 reservadas; la capacitancia del bus es otro límite aparte).</p></div>
 
 <details class="section-block sec" id="c9-potencia" open><summary><span class="stitle">Interfaz física (PHY) y administración de potencia en USB 2.0 y 3.0</span></summary>
 <p>La sesión inició con el diagrama del transceptor físico (PHY) de USB 1.1 y 2.0. A nivel electrónico la interfaz es muy económica: un circuito con puertas negadoras, un transceptor diferencial, un sensor de desconexión y un registro diferencial que entrega las señales positivas y negadas. Esa simplicidad, que contrasta con los diagramas de bloques de un microprocesador, explica el bajo costo comercial de los periféricos USB.</p>

@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 09 — Arquitectura Cliente-Servidor</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930a">
+<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
-<script src="../../assets/app.js?v=20260930a" defer></script>
+<script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
 <body>
 <div class="wrap">
@@ -15,7 +15,7 @@
   <p class="prof">Mtro. Carlos Alberto Román Zamitiz · 24 sep 2026 · Tema 2 — <code>struct hostent</code> y <code>gethostbyname()</code>, conversión de IP con <code>inet_ntoa</code>/<code>inet_aton</code>, pruebas con Google y la UNAM (alta disponibilidad y clústers), puertos lógicos e IANA, y el ciclo de vida de un socket en C (socket, bind, listen, accept, connect, send/recv, close).</p>
 </div>
 
-<div class="section-block" style="background:#fff7ed;border-left:3px solid #E8735C"><p style="margin:0"><strong>ℹ️ Sobre esta página:</strong> se construyó con el audio <code>ACS-Clase9</code>, que continúa exactamente donde terminó la <a href="clase-08.html">Clase 08</a> (<code>sockaddr_in</code> y <code>hostent</code>) y termina hablando de “el martes”. Las IP y el número de direcciones que devuelven Google y la UNAM son las que salieron en esa demo; pueden cambiar en otro momento.</p></div>
+<div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>ℹ️ Sobre esta página:</strong> se construyó con el audio <code>ACS-Clase9</code>, que continúa exactamente donde terminó la <a href="clase-08.html">Clase 08</a> (<code>sockaddr_in</code> y <code>hostent</code>) y termina hablando de “el martes”. Las IP y el número de direcciones que devuelven Google y la UNAM son las que salieron en esa demo; pueden cambiar en otro momento.</p></div>
 
 <details class="section-block sec" id="c9-hostent" open><summary><span class="stitle">struct hostent y la función gethostbyname()</span></summary>
 <p>La clase retomó lo visto en la sesión anterior: los sockets como puntos finales de comunicación entre procesos, la estructura <code>struct sockaddr_in</code> con el tipo <code>in_addr</code> y los dos datos que necesita un cliente para conectarse a un servidor: la <strong>dirección IP (o dominio)</strong> y el <strong>puerto lógico</strong>.</p>

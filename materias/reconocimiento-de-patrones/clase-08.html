@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 08 — Reconocimiento de Patrones</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930a">
+<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
-<script src="../../assets/app.js?v=20260930a" defer></script>
+<script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
 <body>
 <div class="wrap">
@@ -15,7 +15,7 @@
   <p class="prof">Ing. Rubén Omar Azuara Domínguez · 21 sep 2026 · Tema 6 (cierre) y Tema 7 — Evaluación de agrupamientos con métricas internas (Dunn, Davies-Bouldin, Silueta) e inicio de la clasificación probabilística: regla de Bayes, riesgo condicional, QDA/LDA y Naive Bayes.</p>
 </div>
 
-<div class="section-block" style="background:#fff7ed;border-left:3px solid #45B8A8"><p style="margin:0"><strong>⚠️ Por verificar contra el audio:</strong> en esta clase, los apuntes generados por NotebookLM traen <strong>números que no cuadran</strong> en los ejemplos resueltos de Dunn, Davies-Bouldin, Silueta y Spam, y una <strong>fecha de práctica que contradice la Clase 07</strong>. Están marcados con ⚠️ dentro de cada sección; las fórmulas y los conceptos sí son consistentes.</p></div>
+<div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>⚠️ Por verificar contra el audio:</strong> en esta clase, los apuntes generados por NotebookLM traen <strong>números que no cuadran</strong> en los ejemplos resueltos de Dunn, Davies-Bouldin, Silueta y Spam, y una <strong>fecha de práctica que contradice la Clase 07</strong>. Están marcados con ⚠️ dentro de cada sección; las fórmulas y los conceptos sí son consistentes.</p></div>
 
 <details class="section-block sec" id="c8-repaso" open><summary><span class="stitle">Repaso de algoritmos no supervisados y métricas internas de validación</span></summary>
 <p>La sesión inició con un repaso de los métodos de agrupamiento no supervisados de la clase anterior: en este enfoque no hay etiquetas previas para las instancias de entrenamiento. Sobre <strong>K-Means</strong> se recordó que requiere fijar el parámetro K durante todas las iteraciones, que asume clusters esféricos por usar distancias geométricas y que tiene serias dificultades con fronteras no lineales, como las dos medias lunas entrelazadas. De <strong>LBG</strong> (Linde-Buzo-Gray) se recordó que es un algoritmo de cuantización vectorial que genera un <em>codebook</em> de <em>codewords</em> minimizando la distorsión global, y que su tamaño queda restringido a potencias de 2 (2, 4, 8, 16, 32…) porque en cada iteración los vectores se duplican con una perturbación positiva y negativa en la dirección de la varianza. De <strong>ISODATA</strong> se reiteró que evoluciona K-Means con heurísticas para separar clusters muy dispersos, fusionar los excesivamente cercanos y eliminar los que no tienen un mínimo de elementos.</p>

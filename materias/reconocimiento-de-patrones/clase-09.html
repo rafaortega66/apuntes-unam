@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 09 — Reconocimiento de Patrones</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930a">
+<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
-<script src="../../assets/app.js?v=20260930a" defer></script>
+<script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
 <body>
 <div class="wrap">
@@ -15,7 +15,7 @@
   <p class="prof">Ing. Rubén Omar Azuara Domínguez · 25 sep 2026 · Tema 6 (cierre) — Sesión de presentaciones de los equipos: comparativa de K-Means, K-Means++ e ISODATA sobre un dataset sintético (K = 4) y sobre el dataset real Wine con estandarización y PCA, evaluados con Silueta, Davies-Bouldin e Índice de Rand Ajustado.</p>
 </div>
 
-<div class="section-block" style="background:#f0fdfa;border-left:3px solid #45B8A8"><p style="margin:0"><strong>ℹ️ Sobre esta sesión:</strong> no fue una clase de teoría nueva, sino de <strong>exposición de los equipos</strong> con los resultados de sus experimentos. Los algoritmos y las métricas se explicaron en la <a href="clase-07.html">Clase 07</a> y la <a href="clase-08.html">Clase 08</a>; aquí se ven aplicados, con números reales de las corridas.</p></div>
+<div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>ℹ️ Sobre esta sesión:</strong> no fue una clase de teoría nueva, sino de <strong>exposición de los equipos</strong> con los resultados de sus experimentos. Los algoritmos y las métricas se explicaron en la <a href="clase-07.html">Clase 07</a> y la <a href="clase-08.html">Clase 08</a>; aquí se ven aplicados, con números reales de las corridas.</p></div>
 
 <details class="section-block sec" id="c9-repaso" open><summary><span class="stitle">Repaso: clasificación por distancia mínima, métricas y clustering</span></summary>
 <p>La sesión comenzó revisando el marco conceptual del reconocimiento de patrones y la clasificación basada en prototipos. En este enfoque, la <strong>regla de decisión por distancia mínima</strong> asigna un patrón o vector de características desconocido <em>x ∈ R<sup>d</sup></em> a la clase ω<sub>k</sub> cuyo centroide o prototipo representativo m<sub>k</sub> es el más cercano en el espacio vectorial: <em>x se asigna a ω<sub>k</sub> si d(x, m<sub>k</sub>) &lt; d(x, m<sub>j</sub>) para todo j ≠ k</em>. Cuando una clase cuenta con varios prototipos z<sub>i</sub><sup>λ</sup>, la distancia efectiva a la clase es la distancia al prototipo más próximo: <em>D<sub>i</sub> = min<sub>λ</sub> ‖x − z<sub>i</sub><sup>λ</sup>‖</em>.</p>

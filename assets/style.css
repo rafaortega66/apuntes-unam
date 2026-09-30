@@ -479,3 +479,7 @@ body.has-topbar { padding-top: 78px; }
   100% { background: transparent; }
 }
 .hash-hit { animation: hashFlash 2s ease-out; border-radius: 8px; }
+
+/* Notas "Por verificar": fondo oscuro translúcido, texto legible */
+.section-block.nota { background: rgba(232,115,92,0.10); color: var(--ink, #E8E6E3); padding: 12px 14px; border-radius: 8px; }
+.section-block.nota p, .section-block.nota strong { color: inherit; }
