@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 10 — Arquitectura Cliente-Servidor</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20260929a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js?v=20260929a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Arquitectura Cliente-Servidor</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 10</h2>
+  <p class="prof">Mtro. Carlos Alberto Román Zamitiz · 29 sep 2026 · Tema 2 — El socket servidor en C, paso a paso: <code>socket()</code>, inicialización de <code>struct sockaddr_in</code> (<code>INADDR_ANY</code>, <code>htons()</code>), <code>bind()</code>, <code>listen()</code> y <code>accept()</code>, y por qué todo servidor maneja dos sockets.</p>
+</div>
+
+<details class="section-block sec" id="c10-socket" open><summary><span class="stitle">Documentación de The Open Group y la función socket()</span></summary>
+<p>La sesión empezó revisando la documentación oficial en el sitio de The Open Group (opengroup.org). El profesor recomendó una buena práctica: buscar directamente el nombre de la función en el navegador para llegar a la especificación estándar POSIX, en inglés técnico. Se retomó la <a href="clase-09.html">Clase 09</a> (<code>struct hostent</code>, <code>gethostbyname()</code>, conversiones de IP, puertos de la IANA y la introducción teórica al ciclo de vida de los sockets) para ahora implementar el lado del servidor.</p>
+<p>La primera función del servidor es <code>socket()</code>, declarada en <code>&lt;sys/socket.h&gt;</code>. Su propósito formal es crear un extremo <strong>no ligado</strong> (<em>unbound</em>) de un canal de comunicación:</p>
+<pre><code>int socket(int domain, int type, int protocol);</code></pre>
+<table>
+<tr><th>Argumento</th><th>Qué especifica</th></tr>
+<tr><td><code>domain</code> (familia)</td><td>Dominio o familia de direcciones. Se usa <code>AF_INET</code> (IPv4). Otras: <code>AF_INET6</code>, <code>AF_UNIX</code> / <code>AF_LOCAL</code> (comunicación local entre procesos de la misma máquina), <code>AF_BLUETOOTH</code>, <code>AF_PACKET</code>.</td></tr>
+<tr><td><code>type</code></td><td>Esquema de transporte. <code>SOCK_STREAM</code> para TCP (orientado a conexión y confiable); <code>SOCK_DGRAM</code> para UDP (datagramas no confiables). También existen <code>SOCK_SEQPACKET</code> y <code>SOCK_RAW</code>.</td></tr>
+<tr><td><code>protocol</code></td><td>Protocolo particular de la familia. Con <code>0</code> el sistema elige el protocolo por defecto para esa combinación (para <code>AF_INET</code> + <code>SOCK_STREAM</code>, TCP/IP). También puede ponerse <code>IPPROTO_TCP</code>.</td></tr>
+</table>
+<p><strong>Valor de retorno.</strong> Si tiene éxito, devuelve un entero no negativo: el <strong>descriptor de archivo</strong> (<em>fd</em>) del socket. Como 0, 1 y 2 están reservados para stdin, stdout y stderr, el primer socket de un programa suele recibir el <strong>3</strong>. Si falla, devuelve <code>-1</code> y deja el código de error en la variable global <code>errno</code>. Ese descriptor se pasa como primer argumento a todas las funciones siguientes (<code>bind</code>, <code>listen</code>, <code>accept</code>).</p>
+</details>
+
+<details class="section-block sec" id="c10-sockaddr" open><summary><span class="stitle">Inicialización de struct sockaddr_in (paso intermedio)</span></summary>
+<p>Entre <code>socket()</code> y <code>bind()</code> es obligatorio inicializar la estructura de dirección del servidor, declarada como <code>struct sockaddr_in servidor;</code>. Si no se configura bien, las llamadas posteriores fallan y el servidor no arranca. En el <strong>Programa 04 del profesor</strong> (<code>004_servidor.c</code>) los pasos son:</p>
+<ol>
+<li><strong>Limpiar la memoria con <code>memset()</code></strong>, para eliminar valores basura:
+<pre><code>memset(&amp;servidor, 0, sizeof(servidor));</code></pre></li>
+<li><strong>Familia (<code>sin_family</code>):</strong> debe coincidir exactamente con el dominio usado en <code>socket()</code>:
+<pre><code>servidor.sin_family = AF_INET;</code></pre></li>
+<li><strong>Dirección IP (<code>sin_addr.s_addr</code>):</strong> lleva dos puntos porque <code>servidor</code> es un <code>struct sockaddr_in</code> cuyo atributo <code>sin_addr</code> es a su vez una estructura anidada de tipo <code>struct in_addr</code>; para llegar a <code>s_addr</code> (la IP binaria de 32 bits) se necesita un segundo punto, como acceder al atributo de un atributo en programación orientada a objetos:
+<pre><code>servidor.sin_addr.s_addr = INADDR_ANY;</code></pre></li>
+<li><strong>Puerto (<code>sin_port</code>) con <code>htons()</code>:</strong> el ejemplo usa el <strong>puerto 4898</strong>. Los humanos escribimos el puerto en decimal, pero el hardware y los protocolos de red lo procesan en binario con orden de bytes de red (<em>network byte order</em>), por eso se aplica <code>htons()</code>:
+<pre><code>servidor.sin_port = htons(4898);</code></pre>
+La nemotecnia: <strong>H</strong> = Host, <strong>N</strong> = Network, <strong>T</strong> = To (“hacia”), <strong>S</strong> = Short (entero corto de 16 bits sin signo, adecuado para puertos).</li>
+<li><strong>Relleno (<code>sin_zero</code>):</strong> arreglo de 8 caracteres en cero que existe por razones históricas para igualar el tamaño de <code>struct sockaddr_in</code> con el de la estructura genérica <code>struct sockaddr</code>. En Linux moderno es opcional, pero se pone explícitamente en ceros:
+<pre><code>memset(servidor.sin_zero, '\0', 8);</code></pre></li>
+</ol>
+<p><strong>¿Por qué el servidor especifica una IP y qué significa <code>INADDR_ANY</code>?</strong> El profesor lo planteó como pregunta: si el cliente es quien busca al servidor, ¿por qué el servidor define una IP? Porque un equipo puede tener varias interfaces de red (Ethernet, Wi-Fi, loopback 127.0.0.1, adaptadores virtuales). Con <code>INADDR_ANY</code> el servidor le indica al sistema operativo que escuchará las peticiones que lleguen por <strong>todas las direcciones IP de todas las interfaces</strong>. Así un cliente local puede conectarse por 127.0.0.1 y uno externo por la IP pública o privada de la tarjeta de red.</p>
+</details>
+
+<details class="section-block sec" id="c10-bind" open><summary><span class="stitle">La función bind()</span></summary>
+<p><code>bind</code> se traduce como “ligar”, “asociar” o “nombrar” el socket. En sockets de Internet (<code>AF_INET</code>), nombrar un socket significa vincular de forma definitiva el descriptor devuelto por <code>socket()</code> con una IP y un puerto concretos.</p>
+<pre><code>int bind(int socket, const struct sockaddr *address, socklen_t address_len);</code></pre>
+<ul>
+<li><strong><code>socket</code>:</strong> el descriptor devuelto por <code>socket()</code> (<code>fd_s</code>).</li>
+<li><strong><code>address</code>:</strong> apuntador al tipo genérico <code>struct sockaddr *</code>. Como se usa <code>struct sockaddr_in</code>, se pasa la dirección de la estructura con un <strong>cast explícito</strong>: <code>(struct sockaddr *) &amp;servidor</code>.</li>
+<li><strong><code>address_len</code>:</strong> tamaño en bytes de la estructura, con <code>sizeof(servidor)</code>.</li>
+</ul>
+<p>Invocación exacta en <code>004_servidor.c</code>:</p>
+<pre><code>if (bind(fd_s, (struct sockaddr *) &amp;servidor, sizeof(servidor)) == -1) {
+    perror("bind");
+    exit(EXIT_FAILURE);
+}</code></pre>
+<p><strong>Permisos de puerto.</strong> Los puertos menores a 1024 están reservados para el administrador (root / sudo). Un usuario sin privilegios solo puede hacer <code>bind()</code> en el rango 1024 a 65535 y solo si el puerto no lo ocupa otro proceso.</p>
+</details>
+
+<details class="section-block sec" id="c10-listen" open><summary><span class="stitle">listen(), la cola de conexiones (backlog) y el saludo de tres vías</span></summary>
+<p><code>listen()</code> pone el socket en <strong>modo de escucha activa</strong> para atender solicitudes de conexión:</p>
+<pre><code>int listen(int socket, int backlog);</code></pre>
+<p><code>socket</code> es el descriptor del socket servidor (<code>fd_s</code>) y <code>backlog</code> es el número máximo de conexiones entrantes pendientes que el sistema mantiene en la cola de espera.</p>
+<p><strong>Cómo funciona la cola.</strong> Al arrancar, la cola está vacía. La primera petición de un cliente entra a la cola y el servidor la atiende de inmediato. Si llegan más peticiones mientras el servidor está ocupado con la primera, esos clientes quedan encolados esperando; <code>backlog</code> define el límite de esa cola. Detrás del encolamiento está el establecimiento de conexión TCP conocido como <strong>saludo de tres vías</strong> (<em>three-way handshake</em>: paquetes SYN, SYN-ACK y ACK).</p>
+</details>
+
+<details class="section-block sec" id="c10-accept" open><summary><span class="stitle">accept() y los dos sockets del servidor</span></summary>
+<p>Después de <code>listen()</code>, el servidor llama a <code>accept()</code>, una <strong>llamada bloqueante</strong>: detiene la ejecución hasta que un cliente intenta conectarse y la conexión se extrae de la cola de <code>listen()</code>.</p>
+<pre><code>int accept(int socket, struct sockaddr *restrict address, socklen_t *restrict address_len);</code></pre>
+<ul>
+<li><strong><code>socket</code>:</strong> el descriptor del socket servidor (<code>fd_s</code>).</li>
+<li><strong><code>address</code>:</strong> apuntador a <code>struct sockaddr *</code> (en la práctica <code>(struct sockaddr *) &amp;cliente</code>), que el kernel rellena automáticamente con la IP y el puerto del cliente que se conecta.</li>
+<li><strong><code>address_len</code>:</strong> apuntador a una variable con el tamaño de la estructura del cliente (<code>&amp;longitud_cliente</code>).</li>
+</ul>
+<p><strong>La clave de la arquitectura cliente-servidor.</strong> El profesor enfatizó que entender <code>accept()</code> es la base de todo el curso: todo servidor maneja <strong>al menos dos sockets</strong> independientes.</p>
+<table>
+<tr><th></th><th>Socket servidor (de conexión)</th><th>Socket cliente en el servidor (de comunicación)</th></tr>
+<tr><td>Cómo se crea</td><td>Con <code>socket()</code></td><td>Es el valor de retorno de <code>accept()</code></td></tr>
+<tr><td>Variable en el código</td><td><code>fd_s</code> (descriptor del servidor)</td><td><code>fd_c</code> (descriptor del cliente)</td></tr>
+<tr><td>Valor típico</td><td>3 (si es el primer socket)</td><td>4 (el siguiente descriptor libre)</td></tr>
+<tr><td>Función</td><td>Guarda la IP y el puerto de escucha del propio servidor; recibe y encola solicitudes.</td><td>Guarda la IP y el puerto del cliente aceptado; se usa para el flujo de datos (<code>read</code>/<code>write</code> o <code>send</code>/<code>recv</code>).</td></tr>
+</table>
+<p><strong>Pregunta de una alumna:</strong> <em>¿Un mismo cliente puede conectarse a varios servidores al mismo tiempo?</em> <strong>Respuesta del profesor:</strong> sí, es una observación perfectamente válida. Ejemplos: un sistema de bases de datos distribuidas o una aplicación empresarial que consume datos de tres servidores de base de datos en hosts distintos; o un cliente conectado a la vez a un servidor web (puerto 443), a uno de base de datos MySQL (3306) y a uno de correo SMTP (25). En ese caso el proceso cliente debe crear tres estructuras <code>struct sockaddr_in</code> independientes y tres sockets distintos, uno por servicio.</p>
+</details>
+
+<details class="section-block sec" id="c10-close" open><summary><span class="stitle">Por qué el servidor hace dos close() y el ciclo secuencial</span></summary>
+<p>Al revisar el cierre de sockets se explicó por qué el cliente llama una sola vez a <code>close()</code> y el servidor dos:</p>
+<ul>
+<li><strong>Cliente:</strong> <code>close(fd)</code> cierra su único socket.</li>
+<li><strong>Servidor secuencial (no concurrente):</strong> atiende a un cliente a la vez. Intercambia datos con <code>fd_c</code> y, cuando el cliente termina, cierra ese socket con el primer <code>close(fd_c)</code>. Luego, con un bucle, regresa a <code>accept()</code> a esperar al siguiente cliente de la cola. Solo cuando el servidor se apaga por completo se ejecuta el segundo <code>close(fd_s)</code>, que libera el socket servidor y termina el proceso.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c10-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> <strong>Red del aula:</strong> al inicio hubo demoras para cargar The Open Group y los PDF por interrupciones temporales de la red de la Facultad.</li>
+<li><em>(Contexto)</em> <strong>Traducción de inglés técnico:</strong> comentó que los traductores automáticos del navegador alteran términos estandarizados (como <em>unbound</em> o <em>file descriptor</em>) en la documentación POSIX/Unix, y recomendó acostumbrarse a leer el inglés técnico directamente.</li>
+<li><em>(Contexto)</em> <strong>Comandos de red:</strong> mostró la diferencia entre <code>ipconfig</code> (Windows) e <code>ifconfig</code> (Linux/Unix) para inspeccionar las interfaces de red.</li>
+<li><em>(Contexto)</em> <strong>Tareas:</strong> avisó que ya terminó de calificar la Tarea 2 y que dedicará los siguientes días a las entregas de la Tarea 3.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c10-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Tarea moral (no entregable):</strong> no se asignó tarea entregable. Se sugiere repasar el flujo del servidor (<code>socket</code>, <code>bind</code>, <code>listen</code>, <code>accept</code>), la inicialización de estructuras y el papel de los dos descriptores <code>fd_s</code> y <code>fd_c</code>.</li>
+<li><strong>Próxima clase (jueves):</strong> el código en C del cliente (<code>connect()</code>), la prueba completa del par cliente-servidor en la terminal y el paso de argumentos (IP y puerto) por línea de comandos (<code>argc</code>/<code>argv</code>).</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li><code>socket(domain, type, protocol)</code> crea un socket no ligado y devuelve un descriptor (habitualmente 3): <code>AF_INET</code> para IPv4 y <code>SOCK_STREAM</code> para TCP.</li>
+<li>Antes de <code>bind()</code> se limpia <code>struct sockaddr_in</code> con <code>memset()</code>, se usa <code>INADDR_ANY</code> en <code>sin_addr.s_addr</code> para escuchar en todas las interfaces y <code>htons()</code> en el puerto.</li>
+<li><code>bind()</code> liga el descriptor con la IP y el puerto; <code>listen()</code> lo pone a escuchar y fija el límite de la cola (<code>backlog</code>).</li>
+<li><code>accept()</code> es bloqueante y devuelve un nuevo descriptor (<code>fd_c</code>) para el cliente aceptado.</li>
+<li>Todo servidor maneja dos sockets (<code>fd_s</code> y <code>fd_c</code>), por eso lleva dos <code>close()</code>.</li>
+</ul></div>
+
+</div>
+</body>
+</html>
