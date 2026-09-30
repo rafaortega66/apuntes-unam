@@ -137,7 +137,7 @@
    "color": "#7C9CD6",
    "titulo": "Evaluación presencial del Proyecto Final",
    "vence": "2026-11-23T17:00:00-06:00",
-   "hora_confirmada": false,
+   "hora_confirmada": true,
    "detalle": "Lunes 23 y miércoles 25 nov, en el salón (clase de 17:00). Se pregunta a cualquier integrante y se ejecuta el sistema.",
    "link": "materias/administracion-de-servicios-de-internet/index.html"
   },
