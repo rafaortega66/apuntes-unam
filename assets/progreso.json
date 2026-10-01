@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T16:45:20+00:00",
+ "generatedAt": "2026-10-01T16:49:10+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -151,7 +151,7 @@
     "fecha": "2026-09-02",
     "resumen": "Tema 2 — evolución histórica completa de la arquitectura x86 de Intel (4004 al 486 y Pentium), retrocompatibilidad binaria, Modo Real/Protegido/VM86, el coprocesador matemático (80387), pipeline fuertemente acoplado, bus",
     "url": "materias/fundamentos-de-sistemas-embebidos/clase-03.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 4,
@@ -482,6 +482,11 @@
  },
  "gitlog": [
   {
+   "hash": "3b8ff1c",
+   "fecha": "2026-10-01T10:45:20-06:00",
+   "mensaje": "ASI Clase 03: formato de estudio"
+  },
+  {
    "hash": "28b1e0d",
    "fecha": "2026-10-01T10:18:39-06:00",
    "mensaje": "OAC Clase 08 (30 sep) y ACS Clase 11 (1 oct): formato de estudio"
@@ -775,11 +780,6 @@
    "hash": "0c248f6",
    "fecha": "2026-09-30T16:11:40-06:00",
    "mensaje": "Quitar documentos de equipo que incluyen nombres de compañeros"
-  },
-  {
-   "hash": "62cbd79",
-   "fecha": "2026-09-30T16:08:06-06:00",
-   "mensaje": "ACS: archivos del profesor de los Temas 2 y 3 (PDF, código C, imágenes) y material general"
   }
  ]
 }

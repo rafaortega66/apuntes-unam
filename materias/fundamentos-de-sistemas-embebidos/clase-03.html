@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 03 — Fundamentos de Sistemas Embebidos</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -15,6 +16,18 @@
   <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 2 sep 2026 · Tema 2 — evolución histórica completa de la arquitectura x86 de Intel (4004 al 486 y Pentium), retrocompatibilidad binaria, Modo Real/Protegido/VM86, el coprocesador matemático (80387), pipeline fuertemente acoplado, bus coherente y la guerra legal Intel vs. AMD.</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #A98BD1"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c3-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Definición de bus coherente vs. bus no coherente</strong><span class="evid">Evidencia: Lo dijo explícitamente en la clase cuando exclamó: "Examen, explique qué es un bus coherente".</span></li>
+<li><strong>Concepto de pipeline fuertemente acoplado</strong><span class="evid">Evidencia: Lo dijo explícitamente explicando la codependencia entre bloques del procesador y haciendo la analogía con el patrón Modelo-Vista-Controlador frente a tener todo el código en el main.</span></li>
+<li><strong>La paradoja de por qué el Intel 8080 a 2 MHz ejecuta menos MIPS efectivos que el 4004 a 740 kHz</strong><span class="evid">Evidencia: Lo preguntó directamente a la clase y explicó la diferencia entre instrucciones simples y mnemónicos complejos calculados en la ALU entera mediante series de Taylor.</span></li>
+<li><strong>Función del coprocesador matemático 80387 frente al cálculo por software</strong><span class="evid">Evidencia: Lo explicó en el pizarrón deduciendo la serie de Maclaurin del seno de cero y mostrando la reducción de tiempo a 4-5 ciclos mediante tablas de interpolación en silicio.</span></li>
+<li><strong>Pleito legal entre Intel y AMD y su relación con el derecho anglosajón y la retrocompatibilidad</strong><span class="evid">Evidencia: Lo explicó en el pizarrón al abordar la ingeniería inversa del Am386DX-40 y los fallos judiciales de 1991 y 1995.</span></li>
+</ol>
+</details>
+
 <details class="section-block sec" id="c3-silicio" open><summary><span class="stitle">Reconocimiento y estructura de silicio de un procesador de cuatro núcleos</span></summary>
 <p>El profesor proyecta la fotografía del silicio (<em>die</em>) de un procesador de cuatro núcleos y pregunta a la clase qué es. Al identificarlo como un procesador, lo describe con entusiasmo como "un delicioso, maravilloso, hermoso y suculento procesador", insistiendo en que a los estudiantes de computación debería emocionarles contemplar la microarquitectura tanto como cualquier otra pasión.</p>
 <p>Revisando el diagrama de bloques del silicio se identifican estas características estructurales:</p>
@@ -23,6 +36,12 @@
 <li><strong>Componentes identificados en el silicio</strong>: caché de Nivel 2 (L2), caché de Nivel 1 de datos (L1D), caché de Nivel 1 de instrucciones (L1I), bus de interconexión interna, lógica de control, registros internos (incluyendo registros vectoriales), la FPU y la ALU.</li>
 <li><strong>Relevancia de la ALU</strong>: el profesor señala que la ALU es, en superficie de silicio, un bloque muy pequeño — el chip está dominado casi por completo por la memoria (cachés y registros), no por el cómputo aritmético.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como ver la foto panorámica de un edificio de cuatro departamentos idénticos acomodados dos a dos frente a frente, donde casi todo el espacio son clósets y bodegas y no las salas.<span class="rompe">Dónde falla la analogía: Los departamentos guardan muebles y ropa, mientras que el silicio guarda datos digitales e instrucciones en memorias caché (L1I, L1D, L2) y registros, ocupando la ALU un espacio mínimo.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra que la mayor parte del área física en el silicio de un procesador moderno está dominada por memorias y registros de almacenamiento, y no por la ALU.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-historia-temprana"><summary><span class="stitle">Perspectiva histórica: los procesadores de 4 y 8 bits de Intel (1971–1976)</span></summary>
@@ -36,6 +55,13 @@
 </tbody></table>
 <p>Con estos datos el profesor lanza una dinámica a la clase — <strong>pregunta</strong>: ¿por qué el 8080, a pesar de operar a 2 MHz (tres veces más rápido que el 4004) y manejar 8 bits, tiene una menor tasa de MIPS efectivos que lo esperado? Un estudiante responde que se debe a la arquitectura RISC y a que sus instrucciones son muy simples. El profesor explica la razón real: en el 4004 las instrucciones son elementales (contar, cargar, escribir, sumar enteros de 4 bits); en cambio, el 8080 calcula operaciones complejas como senos, cosenos, tangentes y cotangentes, pero internamente sigue usando la misma ALU entera que el 4004 — por eso el 8080 requiere ejecutar muchas más instrucciones internas para completar un solo mnemónico complejo. En el 4004 el ingeniero debía programar la Serie de Taylor a mano en ensamblador; en el 8080 el ingeniero simplemente llama a la instrucción de seno en el registro y obtiene el resultado, aunque por dentro cueste igual de caro en ciclos.</p>
 <p>El profesor aclara que el <strong>8085 es esencialmente el mismo 8080</strong> pero con mayor frecuencia de reloj, y advierte que subir la frecuencia no era trivial: si se colocaba un cristal demasiado rápido, los transistores de la época no alcanzaban a responder a esa velocidad y empezaban a fallar.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como comparar un motor pequeño que solo sabe dar vueltas despacio con uno más grande que intenta hacer malabares complejos con las mismas piezas simples por dentro.<span class="rompe">Dónde falla la analogía: Los motores mueven piezas mecánicas, mientras que el 4004 (4 bits, 740 kHz) y el 8080 (8 bits, 2 MHz) procesan instrucciones electrónicas sobre una ALU entera.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Explica la paradoja de por qué el 8080 a 2 MHz entregaba menos MIPS que el 4004, al tener que descomponer instrucciones complejas (trigonométricas) en muchas operaciones sobre la misma ALU entera.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Un estudiante respondió que el 8080 era más lento por ser arquitectura RISC con instrucciones simples; el profesor lo corrigió explicando que el 8080 no era RISC y calculaba funciones complejas en su ALU entera.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-promesa-8085"><summary><span class="stitle">La promesa de Intel y la microarquitectura del 8085</span></summary>
@@ -43,6 +69,12 @@
 <p>Para dominar el mercado, Intel introdujo con el <strong>8085</strong> una promesa comercial y técnica decisiva: <em>"Con Intel yo te prometo que todos los programas que tú hagas van a funcionar en el procesador siguiente."</em> Esta promesa de compatibilidad futura fue lo que convenció a empresas e ingenieros de adoptar la plataforma Intel de forma masiva — es el origen de lo que hoy se conoce como <strong>retrocompatibilidad binaria</strong>.</p>
 <p>La microarquitectura del 8085 se compone de: ALU entera y señales de control; controlador de interrupciones y puerto serie; acumulador de 8 bits, registro temporal y registro de banderas (<em>flags</em>); registro de instrucción actual y decodificador de instrucciones; registros de propósito general (que se pueden combinar en pares de 16 bits para operaciones de memoria); y apuntador a pila (<em>Stack Pointer</em>), contador de programa (<em>Program Counter</em>) e incrementador/decrementador.</p>
 <p>Para ilustrar lo verboso que resulta este diseño, se analiza indexar un arreglo (<code>i = 1</code>): el procesador debe cargar la dirección en el par de registros HL, enviarla a la ALU, sumarle uno, y usar el resultado como la nueva dirección para traer el dato — varios pasos explícitos para una operación que en un lenguaje de alto nivel es una sola línea.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como un fabricante de consolas que te garantiza que todos los videojuegos que compres hoy seguirán funcionando exactamente igual en la siguiente consola que saque al mercado.<span class="rompe">Dónde falla la analogía: Los videojuegos son entretenimiento en disco o descarga, mientras que la promesa de Intel garantizó la compatibilidad binaria del código ensamblador sin reescribir programas desde cero al cambiar de microcontrolador.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Fue la estrategia comercial que consolidó el dominio de Intel sobre competidores como Texas Instruments, Cyrix y Motorola, definiendo la microarquitectura base del 8085 (registros B, C, D, E, H, L y par HL).</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-8086-x86"><summary><span class="stitle">El Intel 8086 y el nacimiento de la ISA x86</span></summary>
@@ -57,6 +89,12 @@
 <li>16 registros de propósito cuasi general, con instrucciones que operan hasta dos direcciones de memoria de forma directa.</li>
 </ul>
 <p>El diagrama del 8086 integra registros de segmento, bus de control, bus interno de registros, registros temporales, ALU, banderas y una <strong>palabra de instrucciones</strong> (cola de <em>prefetch</em>) que precarga varias instrucciones en los ciclos donde no se está accediendo a memoria, acelerando la ejecución. El <strong>Intel 186</strong> se describe como "un 8086 en esteroides", robustecido para el sector industrial pero con las mismas especificaciones base.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como un diccionario gigantesco con veinte mil palabras que permite que un libro escrito en 1978 pueda ser leído por una persona moderna sin traducirlo ni cambiarle una sola letra.<span class="rompe">Dónde falla la analogía: Los libros son texto impreso en papel, mientras que la ISA x86 es una arquitectura de conjunto de instrucciones binarias ejecutables directamente en el procesador.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Nace la arquitectura x86 de 16 bits (1 MB de direccionamiento) con la promesa de retrocompatibilidad binaria total que hoy permite ejecutar un binario de 1978 en un Intel Core i9 moderno.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-286"><summary><span class="stitle">Evolución al Intel 286: disipación térmica, MMU y Modo Protegido</span></summary>
@@ -69,6 +107,12 @@
 <li>Añade <strong>30 nuevos mnemónicos</strong> (unas 3,000 instrucciones nuevas, llegando a 23,000 en total).</li>
 </ul>
 <p>El <strong>Modo Protegido</strong> (<em>Protected Mode</em>) nace aquí. Para garantizar la retrocompatibilidad, todo procesador Intel al encenderse arranca siempre en el <strong>Modo Real (8086)</strong>, donde cada dirección lógica corresponde directamente a un pin físico del procesador. Al cambiar un bit de modo por software, el procesador pasa al <strong>Modo Protegido (286)</strong>, que administra la memoria mediante tres esquemas de hardware: <strong>paginación</strong>, <strong>multitarea</strong> y <strong>segmentación</strong>. En arquitecturas antiguas sin Modo Protegido, la falla de una sola aplicación colapsaba todo el procesador; en Modo Protegido la memoria se divide en segmentos con niveles de privilegio, así que si una aplicación falla el procesador simplemente la elimina y continúa ejecutando las demás sin colapsar el sistema.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como un señor de ochenta años con pérdida de memoria que despierta creyendo que está en el pasado hasta que alguien le recuerda quién es y qué capacidades tiene.<span class="rompe">Dónde falla la analogía: El señor es una persona humana, mientras que el procesador 286 arranca siempre en Modo Real (8086) y cambia por software un bit de modo para pasar a Modo Protegido.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Introduce la segunda ALU para cálculo de direcciones (base + offset), la MMU y el Modo Protegido (paginación, segmentación y multitarea) para evitar que la falla de un programa colapse todo el procesador.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-386"><summary><span class="stitle">El Intel 386 de 32 bits, Modo Virtual 8086 y la necesidad del coprocesador matemático</span></summary>
@@ -82,6 +126,12 @@
 <p><strong>Justificación técnica del coprocesador matemático</strong>: la ALU del 386 es estrictamente una ALU de enteros (sumador, multiplicador, divisor y desplazador de enteros) — no posee Unidad de Punto Flotante (FPU). Procesos de audio (como el algoritmo de compresión MP3 de Fraunhofer) y algoritmos criptográficos requieren operaciones con números decimales o de punto flotante. Sin una FPU por hardware, el ingeniero debía aproximar las funciones trigonométricas mediante la <strong>Serie de Taylor / Maclaurin</strong> alrededor de x₀ = 0:</p>
 <pre><code>sin(x) ≈ x − x³/3! + x⁵/5! − x⁷/7! + …</code></pre>
 <p>Como el cálculo de factoriales y divisiones en una ALU entera requiere miles o millones de ciclos de reloj por cada ángulo, el procesamiento por software resultaba extremadamente lento. El <strong>coprocesador matemático externo (80387)</strong> resuelve el problema incorporando tablas de interpolación gigantes directamente en su silicio: cuando el procesador necesita un seno, coseno, tangente, exponencial o logaritmo, transfiere la operación al coprocesador por el bus, éste busca el valor en sus tablas y devuelve el resultado en solo <strong>4 o 5 ciclos de reloj</strong> — una reducción drástica frente a la aproximación por software.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como las muñecas rusas (matrioskas), donde dentro de un estuche grande de treinta y dos bits puedes meter varias muñequitas pequeñas e independientes que trabajan sin tocarse entre sí.<span class="rompe">Dónde falla la analogía: Las muñecas son objetos de madera estáticos, mientras que el Modo Virtual 8086 (VM86) del 386 simula múltiples entornos aislados de 16 bits en memoria segmentada.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es el primer procesador x86 de 32 bits (40 MHz, 10 MIPS, 4 GB RAM) e incorpora pines para el coprocesador matemático 80387, el cual resuelve funciones trigonométricas en 4-5 ciclos mediante tablas de interpolación en silicio en lugar de lentas series de Taylor en la ALU entera.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-486"><summary><span class="stitle">El Intel 486: caché L1 y FPU integrada</span></summary>
@@ -94,6 +144,12 @@
 <li>Agrega <strong>6 nuevos mnemónicos</strong> al catálogo de instrucciones.</li>
 </ul>
 <p>El conflicto legal con AMD (ver más abajo) llevó al desarrollo de la arquitectura <strong>P5</strong> de Intel, dando origen al procesador <strong>Pentium</strong> en 1993, a <strong>200 MHz</strong>.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como integrar la calculadora científica y la pequeña bodega de documentos directamente dentro de la oficina principal para no tener que salir al pasillo a buscar nada.<span class="rompe">Dónde falla la analogía: La oficina es un espacio físico, mientras que el 486 integró en el mismo silicio la FPU (coprocesador matemático) y la memoria caché L1 dividida en instrucciones (L1I) y datos (L1D) con un pipeline de 5 etapas.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Marca el salto a los 100 MHz y 77 MIPS, eliminando el chip externo de la FPU y separando la caché L1I/L1D para hacer prefetch de instrucciones sin colisionar con accesos a datos.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-evaluables"><summary><span class="stitle">Conceptos de arquitectura marcados explícitamente para examen</span></summary>
@@ -104,6 +160,12 @@
 <li><strong>Bus no coherente</strong>: la escritura se realiza únicamente en la memoria caché, dejando la memoria RAM física desactualizada con valores viejos.</li>
 <li><strong>Bus coherente</strong>: el bus garantiza que la escritura actualice de manera simultánea tanto la caché como la RAM física — es un proceso más lento, pero asegura la integridad e igualdad de los datos en todo el sistema.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como un auto donde todas las piezas están pegadas con soldadura fuerte y si quieres cambiar el volante tienes que volver a armar todo el coche desde cero.<span class="rompe">Dónde falla la analogía: El auto es una máquina de transporte, mientras que un pipeline fuertemente acoplado es una arquitectura de procesador con alta codependencia interna entre sus bloques.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Define los dos conceptos explícitos de examen: Pipeline Fuertemente Acoplado (frente a componentes separados en RISC) y Bus Coherente (que frena la CPU para actualizar simultáneamente la caché y la RAM física).</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-intel-amd"><summary><span class="stitle">La guerra de titanes: Intel vs. AMD (litigio y derecho comparado)</span></summary>
@@ -111,6 +173,24 @@
 <p>Al notar el impacto comercial, Intel intentó bloquear judicialmente que AMD fabricara procesadores de 32 bits (el 386). Los abogados de AMD argumentaron que el 386 era una extensión del 286 por su retrocompatibilidad binaria total, y exigieron los esquemáticos. Mientras el pleito se extendía por 5 años, AMD le aplicó <strong>ingeniería inversa</strong> al 386 y produjo el <strong>Am386DX-40</strong>: el chip de Intel corría a 33 MHz, el de AMD operaba a <strong>40 MHz</strong>, consumía menos corriente y costaba un tercio de su valor.</p>
 <p>El profesor compara los dos sistemas legales en disputa con CISC y RISC: el <strong>derecho romano/germánico</strong> (como el mexicano) es análogo a <strong>CISC</strong> — constituciones barrocas con unos 15,000 artículos ya normados de antemano; el <strong>derecho anglosajón</strong> (como el de EE. UU.) es análogo a <strong>RISC</strong> — basado en precedentes judiciales (<em>Case Law</em>) y leyes cortas e independientes.</p>
 <p>Gracias al precedente que ganó AMD en <strong>1991</strong> sobre el 386, en <strong>1995</strong> ganaron en automático el juicio sobre el 486 ante la Suprema Corte de EE. UU. Este conflicto legal es, en buena medida, lo que empujó a Intel a desarrollar la arquitectura P5 y lanzar el Pentium.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como contratar a un constructor para hacer las casas sencillas mientras tú te enfocas en diseñar rascacielos, pero luego el constructor aprende tus planos, los mejora y vende una casa mejor y más barata que la tuya.<span class="rompe">Dónde falla la analogía: La construcción maneja tabiques y cemento, mientras que AMD aplicó ingeniería inversa al procesador 386 de Intel para producir el Am386DX-40 (40 MHz vs 33 MHz).</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Explica la guerra legal de 1982 a 1995 bajo el derecho anglosajón (basado en precedentes, como RISC) frente al derecho germánico/romano barroco (como CISC), lo que obligó a Intel a crear la arquitectura P5 y la marca Pentium en 1993.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c3-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Por qué el procesador Intel 8080 a 2 MHz registraba una tasa efectiva de MIPS menor que el Intel 4004 a 740 kHz?</summary><p>Porque el 8080 ejecutaba mnemónicos de funciones complejas (como senos y cosenos) descomponiéndolos en muchas operaciones internas sobre su misma ALU entera de 8 bits, mientras el 4004 solo ejecutaba operaciones elementales de 4 bits.</p></details>
+<details class="qa"><summary>2. Explica en tus palabras qué significó la promesa de Intel iniciada con el 8085 para el mercado de la ingeniería en los años 70.</summary><p>Fue la garantía comercial y técnica de que todo código en ensamblador desarrollado para un procesador funcionaría de manera compatible en la siguiente generación de hardware, evitando que las empresas gastaran fortunas en reescribir programas desde cero al cambiar de chip.</p></details>
+<details class="qa"><summary>3. Si un ingeniero en 1985 necesitaba calcular el seno de un ángulo en un sistema basado en un procesador Intel 386 sin coprocesador matemático, ¿cómo debía realizar dicho cálculo la CPU y cuánto tiempo le tomaba?</summary><p>Debía aproximar la función trigonométrica mediante la Serie de Taylor/Maclaurin en software realizando factoriales, potencias y divisiones en la ALU entera, lo que requería miles o millones de ciclos de reloj por cada ángulo.</p></details>
+<details class="qa"><summary>4. Compara el bus coherente y el bus no coherente en términos de velocidad y garantía de integridad de datos según lo explicado en clase.</summary><p>El bus no coherente escribe únicamente en la memoria caché siendo más rápido pero dejando la RAM física desactualizada; el bus coherente es más lento porque frena al procesador para actualizar simultáneamente la caché y la RAM, garantizando la igualdad absoluta de los datos.</p></details>
+<details class="qa"><summary>5. ¿Por qué el procesador Intel 286 incorporó una segunda ALU entera en su estructura de silicio?</summary><p>Para dedicar esa segunda ALU exclusivamente al cálculo de la dirección base más el offset en el acceso a memoria y arreglos, evitando saturar la ALU principal de cómputo.</p></details>
+<details class="qa"><summary>6. ¿Qué diferencia física y de enfriamiento existe entre los encapsulados de los procesadores 8086/286 y el procesador Intel 486?</summary><p>Los modelos 8086 y 286 no requerían disipador térmico o usaban uno de aluminio muy pequeño y opcional, mientras que el 486 incorporó una placa metálica en el encapsulado que exigía obligatoriamente disipador de aluminio y ventilador por su alta temperatura de operación.</p></details>
+<details class="qa"><summary>7. Compara el sistema de Derecho Germánico/Romano frente al Derecho Anglosajón usando la analogía que presentó el profesor con las arquitecturas CISC y RISC.</summary><p>El Derecho Germánico/Romano es como CISC por ser barroco y estar basado en constituciones con miles de artículos previamente normados; el Derecho Anglosajón es como RISC por basarse en leyes cortas y precedentes judiciales independientes (Case Law).</p></details>
+<details class="qa"><summary>8. Si el procesador Am386DX-40 de AMD operaba a 40 MHz frente a los 33 MHz del Intel 386, calcula el porcentaje aproximado de incremento en la frecuencia de reloj que ofrecía el chip de AMD sobre el de Intel.</summary><p>La diferencia es de 7 MHz sobre 33 MHz (7 / 33 ≈ 0.212), lo que representa aproximadamente un 21.2% de incremento en la frecuencia de reloj.</p></details>
 </details>
 
 <details class="section-block sec" id="c3-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
