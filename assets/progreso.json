@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T08:03:49+00:00",
+ "generatedAt": "2026-10-01T08:05:27+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -388,7 +388,7 @@
     "fecha": "2026-09-22",
     "resumen": "Tema 2 (2.2) — Actividad práctica individual de identificación de amenazas (hoja con foto personal y de la casa) y concepto formal de vulnerabilidad: sus seis clasificaciones y la regla de la \"pregunta de carencia\".",
     "url": "materias/seguridad-informatica-basica/clase-07.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 8,
@@ -467,6 +467,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "476c357",
+   "fecha": "2026-10-01T02:03:50-06:00",
+   "mensaje": "MD Clase 06: formato de estudio"
+  },
   {
    "hash": "e3da7c0",
    "fecha": "2026-10-01T02:01:36-06:00",
@@ -761,11 +766,6 @@
    "hash": "3468109",
    "fecha": "2026-09-21T23:48:14-06:00",
    "mensaje": "ASI: agregar Clase 07 (21 sep 2026) — modelado UML (componentes y despliegue), sesión de proyecto"
-  },
-  {
-   "hash": "d5add1e",
-   "fecha": "2026-09-21T16:52:25-06:00",
-   "mensaje": "FSE: verificar cifras del chipset de la Clase 07 contra la transcripción y corregir SSD/USB"
   }
  ]
 }
