@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 03 — Minería de Datos</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -15,6 +16,17 @@
   <p class="prof">M.C. José Concepción Roberto Olvera López · Fecha: 8 sep 2026 · Tema 2 (continuación) — Servidores de bases de datos, On-Premise vs. Nube, Data Lake vs. Data Warehouse, ecosistema Big Data (Kafka, Spark, Hadoop/HDFS/MapReduce). Exposiciones de KDD: News Corp, Bwood, Nu Bank.</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #A98BD1"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c3-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Diseñar un esquema de arquitectura de datos integrando ingesta, almacenamiento y procesamiento analítico</strong><span class="evid">Evidencia: El profesor lo ligó directamente al Proyecto 2 y confirmó al cierre de la clase que la arquitectura de datos es una pregunta obligatoria de examen.</span></li>
+<li><strong>Diferenciar la estructura y uso de un Data Lake frente a un Data Warehouse</strong><span class="evid">Evidencia: Lo explicó detalladamente al contrastar el almacenamiento de datos crudos heterogéneos sin supervisión contra el repositorio estructurado para toma de decisiones.</span></li>
+<li><strong>Evaluación de modelos crediticios mediante la separación matemática del estadístico Kolmogorov-Smirnov (KS) y la curva ROC AUC</strong><span class="evid">Evidencia: Se expuso en el caso Nu Bank como el estándar para distinguir entre buenos y malos pagadores.</span></li>
+<li><strong>Comparación entre arquitecturas On-Premise y Nube considerando costos, rapidez de despliegue y latencia crítica</strong><span class="evid">Evidencia: Dedicó un bloque teórico a explicar la migración a la nube y las situaciones excepcionales donde se exige infraestructura física On-Premise.</span></li>
+</ol>
+</details>
+
 <details class="section-block sec" id="c3-servidores-bd" open><summary><span class="stitle">Servidores de bases de datos — Architeturas columnares</span></summary>
 <ul>
 <li><strong>SAP HANA y Sybase IQ:</strong> sistemas columnares que comprimen datos de forma drástica (80–90% de compresión). Ejemplo: 100 GB sin comprimir → 10–20 GB comprimidos. Basados en almacenamiento por columna en lugar de por fila.</li>
@@ -23,6 +35,13 @@
 <li><strong>Microsoft SQL Server:</strong> integración con ecosistema Azure, soporta OLTP y OLAP.</li>
 <li><strong>PostgreSQL / MySQL:</strong> opciones open-source de bajo costo para startups y proyectos sin presupuesto elevado.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como una cocina central de un restaurante que atiende los pedidos de muchos meseros a la vez, enviando los platillos preparados desde la despensa sin que los clientes entren a la cocina.<span class="rompe">Dónde falla la analogía: Falla porque la cocina maneja platillos físicos, mientras que un servidor atiende muchas peticiones digitales simultáneas.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite la arquitectura cliente-servidor para atender miles de peticiones en tiempo real, conectando aplicaciones con bases de datos estructuradas o columnares.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir el equipo físico o servidor con la base de datos misma, cuando el profesor aclaró que el servidor administra las conexiones, la seguridad y el software intermedio.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-onprem-vs-cloud" open><summary><span class="stitle">Arquitecturas On-Premise vs. Nube (Cloud)</span></summary>
@@ -42,6 +61,13 @@
 <li>Responsabilidad compartida de seguridad y actualizaciones con el proveedor.</li>
 </ul>
 <p><strong>Decisión de Gerentes TI/DBAs:</strong> evaluación de infraestructura preexistente, compatibilidad con stack tecnológico actual y comparativa de costos de almacenamiento para Data Lakes.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como decidir si compras una planta generadora de luz para tu casa o te conectas a la red eléctrica pagando solo por los kilovatios que consumes al mes.<span class="rompe">Dónde falla la analogía: Se rompe porque en la nube no solo pagas electricidad, sino que puedes aumentar o reducir la memoria y capacidad de los servidores virtuales en minutos.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Define la estrategia de costos e infraestructura de la empresa, acelerando despliegues y garantizando la recuperación ante desastres sin comprar hardware físico.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Asumir que la nube siempre elimina por completo la necesidad de servidores físicos, cuando se explicó que en casos como la bolsa de valores se requiere baja latencia On-Premise.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-datalake-vs-dw" open><summary><span class="stitle">Data Lake vs. Data Warehouse</span></summary>
@@ -62,6 +88,13 @@
 <li>Excelente para toma de decisiones gerencial con datos validados.</li>
 </ul>
 <p><strong>Analogía:</strong> Data Lake es la cantera de minerales; Data Warehouse es la joyería terminada y pulida.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Un Data Lake es como un gran depósito de agua donde entra todo el líquido de lluvia sin filtrar; un Data Warehouse es el dispensador de agua purificada embotellada lista para beber.<span class="rompe">Dónde falla la analogía: La analogía falla porque el Data Lake almacena múltiples tipos de datos (audio, video, JSON, transacciones) sin mezclarlos físicamente en un solo líquido homogéneo.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite decidir entre almacenar grandes volúmenes crudos de forma económica o construir repositorios estructurados y centralizados como fuente única de verdad para el negocio.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Creer que un Data Lake reemplaza totalmente al Data Warehouse, cuando en clase se enfatizó que son complementarios dentro de la arquitectura analítica.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-bigdata-ecosystem" open><summary><span class="stitle">Ecosistema Big Data — Kafka, Spark, Hadoop</span></summary>
@@ -86,6 +119,13 @@
 <li>Más lento que Spark pero altamente confiable para procesamiento batch nocturno de petabytes.</li>
 <li>Fundamento de gran parte de la infraestructura de Big Data histórica (2008–2015).</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como una autopista de carga pesada donde Kafka organiza el tráfico de camiones, Spark procesa la carga a gran velocidad en el camino y Hadoop funciona como el gran almacén distribuido.<span class="rompe">Dónde falla la analogía: Falla porque los componentes de Big Data procesan eventos y datos digitales distribuidos en paralelo sobre RAM y sistemas de archivos, no vehículos físicos.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite gestionar flujos masivos de información en tiempo real mediante streaming con Kafka, procesamiento en memoria con Spark y almacenamiento distribuido con HDFS.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Pensar que Spark y Hadoop son incompatibles, cuando el profesor mostró que Spark se integra sobre HDFS para acelerar el análisis masivo de datos.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-caso-newscorp" open><summary><span class="stitle">Caso 1: News Corporation (Equipo 3)</span></summary>
@@ -106,6 +146,12 @@
 <li><strong>Modelos de Optimización:</strong> balancear ingreso (30% de opinión) vs. credibilidad (máx. confianza).</li>
 </ul>
 <p><strong>Solución Recomendada:</strong> reducir programas de opinión en 15% e incrementar programación informativa/noticias para recuperar índice de confianza sin sacrificar ingresos críticos.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un periódico que para vender más portadas comenzó a publicar rumores escandalosos, aumentando sus ventas a corto plazo pero haciendo que la gente dejara de creer en sus noticias serias.<span class="rompe">Dónde falla la analogía: Falla porque una cadena de televisión maneja una parrilla de programación diversa con ingresos por anuncios publicitarios medidos por ratings y encuestas de confiabilidad.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra cómo aplicar KDD para equilibrar la rentabilidad financiera y la reputación de la marca, recomendando reducir un 15% el contenido de opinión para recuperar confianza.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-caso-bwood" open><summary><span class="stitle">Caso 2: Bwood / App de Delivery (Equipo 1)</span></summary>
@@ -128,6 +174,13 @@
 <li>Criterios de despliegue: velocidad de desarrollo (1 semana), facilidad de implementación en API, bajo costo de mantenimiento.</li>
 </ul>
 <p><strong>Impacto Esperado:</strong> mejora en predicción de tiempos (±5 minutos de error), reducción de cancelaciones, mejor asignación de repartidores en tiempo real.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un despachador de taxis de sitio que coordina las llamadas de los clientes, la cocina de los restaurantes y las rutas de los chóferes para que la comida no se enfríe.<span class="rompe">Dónde falla la analogía: Se rompe porque una app multilateral procesa datos espaciales, telemetría y variables externas como clima y tráfico en tiempo real mediante algoritmos de minería.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Ilustra la optimización operativa con minería de datos mediante clasificación para retrasos y cancelaciones, regresión para tiempo de entrega y clústers para comportamiento de usuarios.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Intentar resolver la insatisfacción del cliente modificando la interfaz visual en lugar de corregir la inexactitud en las estimaciones del tiempo de entrega y el desbalance de repartidores.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-caso-nubank" open><summary><span class="stitle">Caso 3: Nu Bank (Equipo 10) — Evaluación de Riesgo Crediticio</span></summary>
@@ -153,6 +206,13 @@
 <li><strong>SHAP (SHapley Additive exPlanations):</strong> explicabilidad por contrato regulatorio (mostrar por qué se aprobó/rechazó cada solicitud a cliente y regulador).</li>
 </ul>
 <p><strong>Impacto Esperado:</strong> ampliar acceso crediticio a millones de usuarios bancarizados sin historial formal, mantener tasa de incumplimiento baja (< 3%), cumplir regulación de explicabilidad.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como evaluar si le prestas dinero a un joven que no tiene historial en el buró examinando cómo administra su saldo de ahorro en el teléfono y si paga a tiempo sus recargas.<span class="rompe">Dónde falla la analogía: Falla porque una persona decide por intuición, mientras que la fintech utiliza modelos supervisados como LightGBM o XGBoost respaldados por métricas de evaluación rigurosas.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Demuestra cómo evaluar el riesgo crediticio en sectores desatendidos mediante datos alternativos (telemetría de la app y transacciones móviles) manteniendo bajo control la morosidad a 30, 60 y 90 días.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Proponer un modelo de caja negra: la CNBV y Banxico exigen poder explicar la decisión crediticia.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-rubrica-proyecto" open><summary><span class="stitle">Rúbrica y Logística del Proyecto Arquitectura de Datos</span></summary>
@@ -171,6 +231,24 @@
 <li>Desenvolvimiento, seguridad y confianza al hablar.</li>
 </ol>
 <p><strong>Fecha de Examen:</strong> confirmada al cierre de la clase (consúltalo con tus compañeros).</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como recibir las instrucciones exactas y el catálogo de piezas para armar un modelo a escala y presentarlo ante un jurado como si fueras el vendedor oficial.<span class="rompe">Dónde falla la analogía: La analogía se rompe porque el proyecto exige defender técnicamente una arquitectura de datos real con un documento anexo detallado y 10 láminas en PowerPoint.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Establece la logística y los criterios de evaluación del Proyecto 2, exigiendo incluir capas de ingesta, almacenamiento, gobernanza y capacidades de minería de datos.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Enfocar la presentación únicamente en aspectos comerciales sin incluir el diagrama de arquitectura técnica o los componentes de integración.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c3-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. Explica con tus palabras la ventaja de usar procesamientos en memoria con Apache Spark en un ecosistema de Big Data.</summary><p>Permite ejecutar algoritmos y transformaciones sobre los datos cargados directamente en la memoria RAM, lo que acelera el procesamiento miles de veces en comparación con las lecturas y escrituras continuas en disco duro.</p></details>
+<details class="qa"><summary>2. ¿Qué diferencia existe entre un conector ODBC y uno JDBC en la comunicación cliente-servidor?</summary><p>El conector ODBC ofrece un acceso más abierto y general para rescatar datos desde el cliente, mientras que JDBC se utiliza en aplicaciones basadas en Java con esquemas de seguridad y definición específicos.</p></details>
+<details class="qa"><summary>3. Si una empresa de transporte necesita procesar datos de sensores para predecir fallas mecánicas sin depender de la conexión a internet en carreteras aisladas, ¿debe usar una arquitectura Cloud o On-Premise?</summary><p>Debe utilizar una arquitectura local u On-Premise en el vehículo o sitio, ya que la falta de conectividad e internet en carretera impediría enviar solicitudes a la nube en tiempo real.</p></details>
+<details class="qa"><summary>4. Compara el modelo de almacenamiento de un Data Lake frente al de un Data Warehouse según lo expuesto en clase.</summary><p>El Data Lake almacena grandes volúmenes de datos heterogéneos y crudos sin supervisión de estructura previa, mientras que el Data Warehouse recopila y organiza datos bajo un esquema estructurado para consultas de negocio.</p></details>
+<details class="qa"><summary>5. ¿Por qué no se pueden utilizar variables como el género o el estado de salud en el modelo de evaluación crediticia de Nu Bank?</summary><p>Porque son variables con restricción ética y regulatoria prohibidas por la CNBV y Banxico para evitar cualquier tipo de discriminación en el otorgamiento de créditos.</p></details>
+<details class="qa"><summary>6. ¿Qué solución propuso el equipo para el problema de News Corporation sin comprometer los ingresos financieros de la televisora?</summary><p>Reducir un 15% la programación de opinión e incrementar los contenidos informativos y de negocios, preservando la mayor parte de las ganancias publicitarias mientras se recupera la confianza del público.</p></details>
+<details class="qa"><summary>7. ¿Cuáles son las dos entregas obligatorias que exige el profesor para el Proyecto 2 de arquitectura de datos?</summary><p>Una exposición de 7 minutos respaldada por 10 láminas en PowerPoint y un documento técnico anexo detallado en formato Word o PDF.</p></details>
 </details>
 
 <details class="section-block sec" id="c3-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>

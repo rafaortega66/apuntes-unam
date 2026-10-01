@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T12:15:24+00:00",
+ "generatedAt": "2026-10-01T12:17:29+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -302,7 +302,7 @@
     "fecha": "2026-09-08",
     "resumen": "Tema 2 — Estados de un proceso, señales de UNIX System V, función wait() , procesos zombie y terminación de procesos con kill() / abort() .",
     "url": "materias/arquitectura-cliente-servidor/clase-05.html",
-    "formato": "prosa"
+    "formato": "no-aplica"
    },
    {
     "num": 6,
@@ -426,7 +426,7 @@
     "fecha": "2026-09-08",
     "resumen": "Tema 2 (continuación) — Servidores de bases de datos, On-Premise vs. Nube, Data Lake vs. Data Warehouse, ecosistema Big Data (Kafka, Spark, Hadoop/HDFS/MapReduce). Exposiciones de KDD: News Corp, Bwood, Nu Bank.",
     "url": "materias/mineria-de-datos/clase-03.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 4,
@@ -467,6 +467,16 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "8d9a248",
+   "fecha": "2026-10-01T06:15:35-06:00",
+   "mensaje": "ACS Clase 05 (no asistida, sin audio) marcada como no-aplica"
+  },
+  {
+   "hash": "9c74422",
+   "fecha": "2026-10-01T06:15:25-06:00",
+   "mensaje": "OAC Clase 04: formato de estudio"
+  },
   {
    "hash": "babdff6",
    "fecha": "2026-10-01T06:13:25-06:00",
@@ -756,16 +766,6 @@
    "hash": "18bf9c7",
    "fecha": "2026-09-30T10:02:53-06:00",
    "mensaje": "Pendientes con reloj: tareas obligatorias de las 9 materias, ocultas automáticamente al vencer"
-  },
-  {
-   "hash": "4235026",
-   "fecha": "2026-09-30T09:41:37-06:00",
-   "mensaje": "FSE/Lab FSE: traer de Classroom material general, diapositivas 01-06, guiones de prácticas 1-4 y entregas (Tarea 01, P3, P4)"
-  },
-  {
-   "hash": "3665d0f",
-   "fecha": "2026-09-30T07:30:34-06:00",
-   "mensaje": "RP: agregar Clase 10 (28 sep, examen) y documentar que los labs van en la página de teoría"
   }
  ]
 }
