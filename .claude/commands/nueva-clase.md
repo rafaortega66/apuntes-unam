@@ -12,6 +12,12 @@ pegado — revisa antes de preguntar nada que ya te hayan dado).
 
 ## Paso 1 — Identificar la clase
 
+**Primero mira qué falta:** abre `progreso.html` (o corre
+`python3 scripts/build_progress.py` y cruza `assets/progreso.json` contra
+`assets/horario.json`). Ahí sale cuál es la siguiente clase por meter y todas
+las faltantes, calculadas con el horario oficial. No le pidas al usuario el
+horario: está en `assets/horario.json`.
+
 Si no está claro por $ARGUMENTS o por el mensaje del usuario, pregunta:
 materia, número de clase, y fecha.
 
@@ -21,52 +27,62 @@ verificar que la fecha propuesta cae en el día que le toca a esa materia. Si
 no cuadra, dilo explícitamente y pide confirmación en vez de asumir — nunca
 adivinar el patrón a partir de páginas anteriores.
 
-## Paso 2 — Prompt para NotebookLM
+## Paso 2 — Prompt para NotebookLM (formato de estudio, desde 1 oct 2026)
 
 Si el usuario todavía no tiene el resultado de NotebookLM, dale este prompt
-(ajustado con el nombre real del profesor/a, materia y fecha):
+(ajustado con el nombre real del profesor/a, materia y fecha). Si tienes
+Claude en Chrome conectado y el usuario ya subió el audio a NotebookLM,
+puedes pegarlo tú mismo en el cuaderno de la materia y leer la respuesta.
 
 ```
-Eres mi asistente de apuntes de clase. Te voy a dar el audio de una clase de
-la materia "<MATERIA>", impartida por <PROFESOR/A>, del <DÍA fecha> (Clase <NN>).
+Eres mi asistente de estudio. Usa SOLO las fuentes de este cuaderno (el audio
+de la clase de "<MATERIA>" con <PROFESOR/A>, del <DÍA fecha>, Clase <NN>, y
+el material del profesor que esté cargado). No inventes nada: si algo no se
+dijo en clase ni está en el material, no lo pongas. Cuando algo venga del
+material y no del audio, márcalo con [material].
 
-Necesito apuntes de estudio completos y bien redactados — NO un resumen
-ejecutivo. El objetivo es que, leyéndolos, pueda "revivir" la clase: que no
-se pierda nada técnico de lo que se explicó, pero que esté redactado como
-prosa clara y bien organizada, no como fragmentos sueltos.
+Mi objetivo: entender cada concepto tan bien que se lo pueda explicar a
+cualquier persona, y llegar preparado al examen. Genera, en español:
 
-Genera el resultado en este formato:
+1. RESUMEN — una línea con el tema principal de la clase.
 
-1. UNA LÍNEA de resumen del tema principal de la clase (para usar como subtítulo).
+2. LO QUE PROBABLEMENTE VIENE EN EL EXAMEN — de 3 a 6 puntos. Para cada uno,
+   di POR QUÉ crees que viene, con evidencia de la clase: el profesor lo dijo
+   explícitamente, lo repitió, lo escribió en el pizarrón, resolvió un
+   ejercicio de eso, o lo conectó con una tarea/práctica. Si no hay evidencia
+   fuerte, dilo.
 
-2. "TEMAS" — divide el contenido de la clase en secciones temáticas, en el
-   MISMO ORDEN en que se explicaron (no por importancia ni alfabético). Usa el
-   título de cada tema como encabezado. Dentro de cada sección, escribe
-   PÁRRAFOS COMPLETOS (no solo bullets) explicando: qué es el concepto, por
-   qué importa, cómo se conecta con lo anterior, toda definición o fórmula
-   exacta que se haya dado, y cualquier ejemplo o ejercicio resuelto en vivo
-   con sus números/pasos reales (no "se resolvió un ejemplo", sino el ejemplo
-   completo). Usa bullets o tablas solo para lo genuinamente tabular
-   (comparaciones, pasos numerados, fórmulas). Si el profesor hizo una
-   pregunta y un alumno respondió (bien o mal), inclúyelo — es información
-   real de la clase. No omitas nada técnico por parecer menor: prioriza
-   completitud sobre brevedad.
+3. TEMAS — en el MISMO ORDEN en que se explicaron. Para cada concepto
+   importante, usa esta estructura:
+   a) Qué es — la definición exacta como la dio el profesor.
+   b) Explicado en simple — cómo se lo explicarías a alguien sin la carrera,
+      con una analogía cotidiana (y aclara dónde la analogía deja de servir).
+   c) Cómo funciona — el detalle técnico completo en PÁRRAFOS: pasos,
+      fórmulas, comandos, ejemplos y ejercicios resueltos en vivo con sus
+      números reales, preguntas que hizo el profesor y lo que respondieron
+      los alumnos. No recortes nada técnico por parecer menor.
+   d) Por qué importa / con qué se conecta — relación con clases anteriores,
+      con prácticas o con el mundo real (según lo dicho en clase).
+   e) Errores comunes — confusiones que el profesor señaló o que se notaron
+      en las respuestas de los alumnos (solo si las hubo).
 
-3. "CONTEXTO — NO EXAMEN" — anécdotas, comentarios personales, referencias a
-   experiencias laborales, o tangentes que no son contenido académico pero dan
-   contexto.
+4. PONTE A PRUEBA — de 6 a 10 preguntas con su respuesta, mezclando:
+   recordar (definiciones), explicar con tus palabras, aplicar (un ejercicio
+   como los de clase con otros datos) y comparar conceptos. La respuesta debe
+   salir de la clase o del material.
 
-4. "PENDIENTE / PRÓXIMA CLASE" — tareas asignadas, prácticas a entregar,
-   fechas límite, o lo que se dijo que se verá en la siguiente sesión.
+5. CONTEXTO — NO EXAMEN — anécdotas, tangentes, experiencias del profesor.
 
-5. "PUNTOS CLAVE" (al final, no al principio) — 3 a 5 bullets cortos como
-   repaso rápido, SOLO como cierre tras el detalle completo, nunca como
-   sustituto de él.
-
-No resumas de más en las secciones de "Temas" — ahí es donde debe estar todo
-el detalle técnico, con el nivel de tecnicismo que usó el profesor/a. Escribe
-en español.
+6. PENDIENTE / PRÓXIMA CLASE — tareas, entregas, fechas y lo que se verá
+   después, tal como se dijo.
 ```
+
+**Por qué este formato** (para no rediseñarlo en cada sesión): combina las
+técnicas de estudio con más evidencia según la revisión de Dunlosky et al.
+(2013) — práctica de recuperación (*Ponte a prueba*, Roediger y Karpicke
+2006) e interrogación elaborativa (*por qué importa*) — con ejemplos resueltos
+(Sweller) y la técnica Feynman (*explicado en simple*). La predicción de
+examen siempre lleva evidencia de la clase, nunca adivinanzas.
 
 Si el usuario faltó a esa clase, en vez de esto usa el patrón de
 "clase reconstruida" — revisa `arquitectura-cliente-servidor/clase-05.html`
@@ -78,9 +94,8 @@ contexto propios (no hay audio del que sacarlos).
 
 Con el resultado de NotebookLM (o el material oficial reconstruido), arma
 `materias/<slug>/clase-NN.html` siguiendo exactamente la plantilla descrita en
-`CLAUDE.md` (detail-head, secciones `<details>` en prosa completa con `id`
-único por sección tipo `cNN-slug`, contexto, pendiente, puntos-clave al
-final). Usa el color de acento correcto de la tabla en `CLAUDE.md`. Mira 2-3
+`CLAUDE.md` ("Plantilla de una página clase-NN.html — formato de estudio").
+Ejemplo de referencia: `materias/administracion-de-servicios-de-internet/clase-10.html`. Usa el color de acento correcto de la tabla en `CLAUDE.md`. Mira 2-3
 páginas de clase recientes de esa misma materia para igualar tono y
 densidad — pero nota que a partir de sep 2026 el formato cambió (ver
 `CLAUDE.md`): ya no se usan las cajas "En corto"/"🎯 Para el examen" como
@@ -105,7 +120,7 @@ dos (ver "Regla de oro de archivos" en `CLAUDE.md`).
 ## Paso 5 — Buscador y publicación
 
 ```bash
-python3 scripts/build_search_index.py
+python3 scripts/build_search_index.py   # también regenera assets/progreso.json
 git add -A
 git commit -m "<Sigla>: agregar Clase NN (fecha) — resumen corto del contenido"
 git push origin main

@@ -1,19 +1,8 @@
 {
-  "actualizado": "2026-09-30 (Classroom + audios de NotebookLM)",
+  "actualizado": "2026-10-01 (Classroom + audios de NotebookLM + lo que reporta el usuario)",
   "zona": "America/Mexico_City",
   "nota": "Solo tareas obligatorias. Cuando Classroom no muestra hora, se asume fin del día (23:59). Classroom manda sobre lo dicho en clase. Los ítems sin fecha exacta no se ocultan solos.",
   "items": [
-    {
-      "id": "fse-t05",
-      "materia": "FSE",
-      "color": "#A98BD1",
-      "titulo": "Tarea 05: Comentarios",
-      "vence": "2026-09-30T23:59:00-06:00",
-      "hora_confirmada": true,
-      "detalle": "Serie \"Código limpio\". Formato del archivo: PDF único, nombre NL-CURP-TXX.pdf (p. ej. 19-OEPR-T05.pdf).",
-      "link": "materias/fundamentos-de-sistemas-embebidos/files/tarea-05-enunciado.pdf",
-      "classroom": "https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzQ4MDk5MzQ5/details"
-    },
     {
       "id": "fse-t06",
       "materia": "FSE",
@@ -154,6 +143,17 @@
       "classroom": "https://classroom.google.com/c/ODcwOTAwMDQ4Njcw/a/ODg4MTYxMDY0MzQ2/details"
     },
     {
+      "id": "laboac-de10",
+      "materia": "Lab OAC",
+      "color": "#7C9CD6",
+      "titulo": "Conseguir la tarjeta DE10-Lite (preguntarle a María)",
+      "vence": null,
+      "hora_confirmada": false,
+      "detalle": "Para el Laboratorio de OAC. Probablemente te la pueden prestar; si no, ver si hay que comprarla. Preguntarle también a María qué hay que hacer.",
+      "link": "materias/lab-de-organizacion-y-arquitectura-de-computadoras/index.html",
+      "fecha_texto": "Sin fecha"
+    },
+    {
       "id": "laboac-rp1",
       "materia": "Lab OAC",
       "color": "#7C9CD6",
@@ -208,6 +208,17 @@
       "detalle": "Asignada en la Clase 06 sin fecha límite.",
       "link": "materias/organizacion-y-arquitectura-de-computadoras/clase-06.html",
       "fecha_texto": "Sin fecha (el profesor no la dio)"
+    },
+    {
+      "id": "oac-pico",
+      "materia": "OAC",
+      "color": "#45B8A8",
+      "titulo": "Comprar o conseguir una Raspberry Pi Pico",
+      "vence": null,
+      "hora_confirmada": false,
+      "detalle": "Hace falta para la tarea de la raíz cuadrada entera en ensamblador (la única tarea de OAC por ahora).",
+      "link": "materias/organizacion-y-arquitectura-de-computadoras/clase-06.html",
+      "fecha_texto": "Sin fecha — antes de hacer la tarea de la raíz"
     },
     {
       "id": "acs-parcial",

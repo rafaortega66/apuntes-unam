@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Progreso — Apuntes</title>
+<link rel="stylesheet" href="assets/style.css?v=20260930b">
+<script src="assets/app.js?v=20260930b" defer></script>
+<style>
+  .pg-next { background: var(--white); border: 1px solid rgba(255,255,255,0.1); border-left: 6px solid var(--c, var(--coral));
+    border-radius: 12px; padding: 18px 20px; margin-bottom: 14px; }
+  .pg-next .k { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); }
+  .pg-next .v { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 600; margin: 4px 0 2px; }
+  .pg-next .d { font-size: 13.5px; color: var(--ink-soft); }
+  .pg-two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 30px; }
+  .pg-two .pg-next { margin: 0; }
+  h2.pg-h { font-family: 'Fraunces', serif; font-size: 20px; margin: 34px 0 12px; }
+  .pg-row { background: var(--white); border: 1px solid rgba(255,255,255,0.08); border-left: 4px solid var(--c);
+    border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; }
+  .pg-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .pg-name { font-weight: 600; font-size: 14.5px; }
+  .pg-name a { color: var(--ink); text-decoration: none; }
+  .pg-sig { font-size: 11.5px; font-weight: 700; color: var(--c); margin-right: 6px; }
+  .pg-count { font-size: 12.5px; color: var(--ink-soft); }
+  .pg-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .chip { font: 500 12px 'IBM Plex Mono', monospace; padding: 3px 8px; border-radius: 6px; text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.12); color: var(--ink); white-space: nowrap; }
+  .chip.ok { background: rgba(255,255,255,0.04); }
+  .chip.estudio { border-color: var(--teal); color: var(--teal); }
+  .chip.falta { border-color: var(--coral); color: var(--coral); border-style: dashed; }
+  .chip.dudosa { border-color: var(--ink-soft); color: var(--ink-soft); border-style: dotted; }
+  .pg-legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12.5px; color: var(--ink-soft); margin: -4px 0 14px; }
+  .pg-legend .chip { margin-right: 4px; }
+  .pg-log { list-style: none; padding: 0; margin: 0; }
+  .pg-log li { display: grid; grid-template-columns: 110px 1fr; gap: 12px; padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 13.5px; }
+  .pg-log .when { color: var(--ink-soft); font-size: 12.5px; }
+  .pg-log a { color: var(--ink); text-decoration: none; }
+  .pg-log a:hover { color: var(--indigo); }
+  .pg-note { font-size: 12.5px; color: var(--ink-soft); margin-top: 8px; }
+  @media (max-width: 640px) {
+    .pg-two { grid-template-columns: 1fr; }
+    .pg-log li { grid-template-columns: 1fr; gap: 2px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Apuntes</a>
+<h1 class="title">Progreso<span class="dot">.</span></h1>
+<p class="sub">Qué clases ya están en el sitio, cuáles faltan según tu horario oficial, y qué se ha hecho en cada push.</p>
+
+<div id="pg-root"><p class="pg-count">Cargando…</p></div>
+
+<h2 class="pg-h">Bitácora de cambios</h2>
+<ul class="pg-log" id="pg-log"><li><span class="when">…</span><span>Cargando…</span></li></ul>
+<p class="pg-note" id="pg-log-note"></p>
+</div>
+
+<script>
+(function () {
+  var REPO = 'rafaortega66/apuntes-unam';
+  var DIAS = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'];
+  var MESES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+
+  function iso(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  function parseISO(s) { var p = s.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function corto(s) { var d = parseISO(s); return d.getDate() + ' ' + MESES[d.getMonth()]; }
+  function largo(s) { var d = parseISO(s); return DIAS[(d.getDay() + 6) % 7] + ' ' + d.getDate() + ' ' + MESES[d.getMonth()]; }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function minutos(hhmm) { var p = hhmm.split(':'); return +p[0] * 60 + +p[1]; }
+
+  Promise.all([
+    fetch('assets/horario.json', { cache: 'no-store' }).then(function (r) { return r.json(); }),
+    fetch('assets/progreso.json', { cache: 'no-store' }).then(function (r) { return r.json(); })
+  ]).then(function (res) { render(res[0], res[1]); })
+    .catch(function () { document.getElementById('pg-root').innerHTML = '<p class="pg-count">No se pudo cargar el progreso.</p>'; });
+
+  function render(horario, prog) {
+    var ahora = new Date();
+    var hoy = iso(ahora);
+    var minAhora = ahora.getHours() * 60 + ahora.getMinutes();
+    var sinClase = {};
+    (horario.sin_clase || []).forEach(function (x) { sinClase[x.fecha] = x; });
+
+    function aplicaSinClase(fecha, sigla) {
+      var x = sinClase[fecha];
+      if (!x) return null;
+      if (x.materias && x.materias.length && x.materias.indexOf(sigla) < 0) return null;
+      return x;
+    }
+
+    var faltantes = [];   // {m, fecha, ses}
+    var proximas = [];
+    var filas = [];
+
+    horario.materias.forEach(function (m) {
+      // próxima sesión según el horario (hoy si aún no empieza, o el siguiente día que toque)
+      for (var k = 0; k < 14; k++) {
+        var d = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate() + k);
+        var dia = (d.getDay() + 6) % 7;
+        var ses = m.sesiones.filter(function (s) { return s.dia === dia; })[0];
+        if (!ses || aplicaSinClase(iso(d), m.sigla)) continue;
+        if (k === 0 && minutos(ses.inicio) <= minAhora) continue;
+        proximas.push({ m: m, fecha: iso(d), ses: ses });
+        break;
+      }
+      if (m.sin_paginas_de_clase) return;
+
+      var clases = (prog.materias[m.slug] || []).filter(function (c) { return c.fecha; });
+      var porFecha = {};
+      clases.forEach(function (c) { porFecha[c.fecha] = c; });
+      var chips = [];
+      var nFalta = 0;
+      // el conteo empieza en la primera clase registrada (antes no se grababa / no hubo clase)
+      if (clases.length) {
+        var d0 = parseISO(clases[0].fecha);
+        for (var d = d0; iso(d) <= hoy; d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1)) {
+          var f = iso(d), dia = (d.getDay() + 6) % 7;
+          var ses = m.sesiones.filter(function (s) { return s.dia === dia; })[0];
+          if (!ses) continue;
+          if (f === hoy && minutos(ses.fin) > minAhora) continue;   // aún no termina
+          if (porFecha[f]) continue;
+          var sc = aplicaSinClase(f, m.sigla);
+          if (sc && sc.confirmado) continue;
+          if (sc) { chips.push({ fecha: f, html: '<span class="chip dudosa" title="' + esc(sc.motivo) + '">? ' + corto(f) + '</span>' }); continue; }
+          nFalta++;
+          faltantes.push({ m: m, fecha: f, ses: ses });
+          chips.push({ fecha: f, html: '<span class="chip falta" title="Falta meter esta clase">+ ' + corto(f) + '</span>' });
+        }
+      }
+      clases.forEach(function (c) {
+        chips.push({ fecha: c.fecha, html: '<a class="chip ' + (c.formato === 'estudio' ? 'estudio' : 'ok') + '" href="' + c.url +
+          '" title="' + esc(c.resumen) + '">' + String(c.num).padStart(2, '0') + ' · ' + corto(c.fecha) + '</a>' });
+      });
+      chips.sort(function (a, b) { return a.fecha.localeCompare(b.fecha); });
+      filas.push({ m: m, n: clases.length, nFalta: nFalta, chips: chips,
+        nEstudio: clases.filter(function (c) { return c.formato === 'estudio'; }).length });
+    });
+
+    faltantes.sort(function (a, b) { return (a.fecha + a.ses.inicio).localeCompare(b.fecha + b.ses.inicio); });
+    proximas.sort(function (a, b) { return (a.fecha + a.ses.inicio).localeCompare(b.fecha + b.ses.inicio); });
+
+    var out = '';
+    out += '<div class="pg-two">';
+    if (faltantes.length) {
+      var f0 = faltantes[0];
+      var cl = (prog.materias[f0.m.slug] || []).filter(function (c) { return c.fecha; });
+      var antes = cl.filter(function (c) { return c.fecha < f0.fecha; }), despues = cl.filter(function (c) { return c.fecha > f0.fecha; });
+      var donde = despues.length
+        ? 'Va entre la Clase ' + String(antes.length).padStart(2, '0') + ' y la ' + String(despues[0].num).padStart(2, '0') + ' (hay que renumerar). '
+        : 'Sería la Clase ' + String(antes.length + 1).padStart(2, '0') + '. ';
+      out += '<div class="pg-next" style="--c:' + f0.m.color + '"><div class="k">Siguiente clase por meter</div>' +
+        '<div class="v">' + esc(f0.m.sigla) + ' · ' + largo(f0.fecha) + '</div>' +
+        '<div class="d">' + donde + f0.ses.inicio + '–' + f0.ses.fin + ' · ' + esc(f0.m.nombre) +
+        (faltantes.length > 1 ? '<br>Faltan ' + faltantes.length + ' en total (abajo, en rojo).' : '') + '</div></div>';
+    } else {
+      out += '<div class="pg-next" style="--c:var(--teal)"><div class="k">Siguiente clase por meter</div><div class="v">Todo al día ✓</div>' +
+        '<div class="d">No falta ninguna clase que ya haya terminado.</div></div>';
+    }
+    if (proximas.length) {
+      var p0 = proximas[0];
+      var cuando = p0.fecha === hoy ? 'hoy' : largo(p0.fecha);
+      out += '<div class="pg-next" style="--c:' + p0.m.color + '"><div class="k">Tu próxima clase</div>' +
+        '<div class="v">' + esc(p0.m.sigla) + ' · ' + cuando + '</div>' +
+        '<div class="d">' + p0.ses.inicio + '–' + p0.ses.fin + ' · salón ' + esc(p0.ses.salon) + ' · ' + esc(p0.m.nombre) + '</div></div>';
+    }
+    out += '</div>';
+
+    out += '<h2 class="pg-h">Clases por materia</h2>';
+    out += '<div class="pg-legend"><span><span class="chip ok">03 · 1 sep</span>en el sitio</span>' +
+      '<span><span class="chip estudio">03 · 1 sep</span>formato de estudio</span>' +
+      '<span><span class="chip falta">+ 1 sep</span>falta meterla</span>' +
+      '<span><span class="chip dudosa">? 1 sep</span>¿hubo clase? por confirmar</span></div>';
+    filas.forEach(function (r) {
+      var cuenta = r.n + ' clase' + (r.n === 1 ? '' : 's') +
+        (r.nFalta ? ' · <span style="color:var(--coral)">faltan ' + r.nFalta + '</span>' : ' · al día') +
+        ' · ' + r.nEstudio + '/' + r.n + ' en formato de estudio';
+      out += '<div class="pg-row" style="--c:' + r.m.color + '"><div class="pg-top"><span class="pg-name"><span class="pg-sig">' + esc(r.m.sigla) +
+        '</span><a href="materias/' + r.m.slug + '/index.html">' + esc(r.m.nombre) + '</a></span><span class="pg-count">' + cuenta + '</span></div>' +
+        '<div class="pg-chips">' + r.chips.map(function (c) { return c.html; }).join('') + '</div></div>';
+    });
+    out += '<p class="pg-note">Los laboratorios no tienen páginas de clase propias y no se cuentan aquí. El conteo de cada materia empieza en su primera clase registrada. ' +
+      'Horario y días sin clase: <a href="assets/horario.json" style="color:var(--indigo)">horario.json</a>.</p>';
+    document.getElementById('pg-root').innerHTML = out;
+
+    renderLog(prog.gitlog || []);
+  }
+
+  function renderLog(local) {
+    var ul = document.getElementById('pg-log');
+    var note = document.getElementById('pg-log-note');
+    function pinta(items, fuente) {
+      ul.innerHTML = items.slice(0, 40).map(function (c) {
+        var d = new Date(c.fecha);
+        var when = d.getDate() + ' ' + MESES[d.getMonth()] + ' · ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+        return '<li><span class="when">' + when + '</span><a href="https://github.com/' + REPO + '/commit/' + c.hash + '" target="_blank" rel="noopener">' + esc(c.mensaje) + '</a></li>';
+      }).join('');
+      note.textContent = fuente;
+    }
+    fetch('https://api.github.com/repos/' + REPO + '/commits?per_page=40')
+      .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .then(function (arr) {
+        pinta(arr.map(function (c) {
+          return { hash: c.sha.slice(0, 7), fecha: c.commit.author.date, mensaje: c.commit.message.split('\n')[0] };
+        }), 'En vivo desde GitHub: cada push aparece aquí solo.');
+      })
+      .catch(function () {
+        if (local.length) pinta(local, 'Copia guardada al generar el sitio (GitHub no respondió).');
+        else ul.innerHTML = '<li><span class="when"></span><span>No se pudo cargar la bitácora.</span></li>';
+      });
+  }
+})();
+</script>
+</body>
+</html>

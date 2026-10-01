@@ -1,0 +1,764 @@
+{
+ "generatedAt": "2026-10-01T06:57:32+00:00",
+ "materias": {
+  "reconocimiento-de-patrones": [
+   {
+    "num": 1,
+    "fecha": "2026-08-28",
+    "resumen": "Tema 2 — Extracción de características · características estadísticas, histograma, momentos geométricos (Hu), textura GLCM, HOG, SIFT/SURF y descriptores de audio (temporales, espectrales, MFCC + Δ/ΔΔ).",
+    "url": "materias/reconocimiento-de-patrones/clase-01.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 2,
+    "fecha": "2026-08-31",
+    "resumen": "Tema 3 — Selección y reducción de dimensionalidad · métodos Wrapper (Forward / Backward / Exhaustive), métodos embebidos (Lasso, árboles), PCA, cómo elegir K y PCA por SVD.",
+    "url": "materias/reconocimiento-de-patrones/clase-02.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 3,
+    "fecha": "2026-09-04",
+    "resumen": "Tema 3 — Reducción de dimensionalidad II. Reconstrucción con PCA, EigenFaces, LDA y otros métodos (t-SNE, Kernel PCA, QDA). El audio de esta sesión es parcial (solo el tramo final, sobre la práctica); la teoría se comple",
+    "url": "materias/reconocimiento-de-patrones/clase-03.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 4,
+    "fecha": "2026-09-07",
+    "resumen": "Tema 4 — Evaluación de modelos. Matriz de confusión y métricas, curva ROC / AUC, sesgo–varianza, datos desbalanceados, esquemas de validación, fuga de datos y data drift. Repaso de cierre de LDA al inicio.",
+    "url": "materias/reconocimiento-de-patrones/clase-04.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 5,
+    "fecha": "2026-09-11",
+    "resumen": "Tema 3 (continuación) — Presentación y evaluación de la Práctica 1: PCA, SVD, estandarización y reconstrucción en datasets sintéticos, Iris, Wine y Olivetti Faces.",
+    "url": "materias/reconocimiento-de-patrones/clase-05.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 6,
+    "fecha": "2026-09-14",
+    "resumen": "Tema 5 — Funciones de decisión lineales y multiclase, interpretación geométrica en espacios de características y pesos, algoritmo de aprendizaje y sistemas de funciones ortogonales.",
+    "url": "materias/reconocimiento-de-patrones/clase-06.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 7,
+    "fecha": "2026-09-18",
+    "resumen": "Tema 6 — Métodos de clasificación no supervisados y algoritmos de agrupamiento de datos: funciones de distancia, clustering, K-Means, LBG e ISODATA.",
+    "url": "materias/reconocimiento-de-patrones/clase-07.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 8,
+    "fecha": "2026-09-21",
+    "resumen": "Tema 6 (cierre) y Tema 7 — Evaluación de agrupamientos con métricas internas (Dunn, Davies-Bouldin, Silueta) e inicio de la clasificación probabilística: regla de Bayes, riesgo condicional, QDA/LDA y Naive Bayes.",
+    "url": "materias/reconocimiento-de-patrones/clase-08.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 9,
+    "fecha": "2026-09-25",
+    "resumen": "Tema 6 (cierre) — Sesión de presentaciones de los equipos: comparativa de K-Means, K-Means++ e ISODATA sobre un dataset sintético (K = 4) y sobre el dataset real Wine con estandarización y PCA, evaluados con Silueta, Dav",
+    "url": "materias/reconocimiento-de-patrones/clase-09.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 10,
+    "fecha": "2026-09-28",
+    "resumen": "Primer Examen Parcial.",
+    "url": "materias/reconocimiento-de-patrones/clase-10.html",
+    "formato": "viejo"
+   }
+  ],
+  "organizacion-y-arquitectura-de-computadoras": [
+   {
+    "num": 1,
+    "fecha": "2026-08-31",
+    "resumen": "Temas 1, 2 y 4 — panorama histórico de la evolución del hardware (de la máquina de Pascal a las FPGA), y estructura básica de una computadora: Von Neumann vs. Harvard, CISC vs. RISC y el ciclo del procesador con pipeline",
+    "url": "materias/organizacion-y-arquitectura-de-computadoras/clase-01.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 2,
+    "fecha": "2026-09-02",
+    "resumen": "Presentación del entorno y material del curso, y diferencias de hardware entre Raspberry Pi Pico 1 y Pico 2 (FPU, DMA, bootloader). Sesión corta: el profesor la terminó antes para entregar un informe de su candidatura de",
+    "url": "materias/organizacion-y-arquitectura-de-computadoras/clase-02.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 3,
+    "fecha": "2026-09-07",
+    "resumen": "Tema 2 (continuación) — Diferencias físicas Pico 1 vs. Pico 2, filosofía y modularidad de RISC-V, CISC vs. RISC (Intel/ARM/RISC-V), independencia funcional de periféricos (ADC+DMA), mecanismo de selección de arquitectura",
+    "url": "materias/organizacion-y-arquitectura-de-computadoras/clase-03.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 4,
+    "fecha": "2026-09-09",
+    "resumen": "Tema 2 (continuación) — ISA vs. Microarquitectura, CISC vs. RISC, RISC-V vs. ARM vs. x86. Raspberry Pi Pico 1 vs. Pico 2 (RP2350): FPU, benchmarks, PIO, mecanismo de selección de arquitectura en arranque. Videos técnicos",
+    "url": "materias/organizacion-y-arquitectura-de-computadoras/clase-04.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 5,
+    "fecha": "2026-09-14",
+    "resumen": "Tema 3 — Modelo de programación en ensamblador ARM para la Raspberry Pi Pico 1 (Cortex-M0) y Pico 2 (Cortex-M33 + FPU), sintaxis de Inline Assembly en MicroPython, y repertorio completo de instrucciones de movimiento, ar",
+    "url": "materias/organizacion-y-arquitectura-de-computadoras/clase-05.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 6,
+    "fecha": "2026-09-21",
+    "resumen": "Tema 3 (continuación) — Mapa de memoria de datos y direccionamiento de periféricos, identificación del hardware (Pico ID) con mem32 y con ensamblador inline ARM Thumb, y rutinas aritméticas (multiplicación y suma).",
+    "url": "materias/organizacion-y-arquitectura-de-computadoras/clase-06.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 7,
+    "fecha": "2026-09-28",
+    "resumen": "Tema 3 (continuación) — Tres formas de controlar un periférico en la Raspberry Pi Pico 1 y Pico 2: librerías machine , direccionamiento directo con mem32 y ensamblador inline ARM Thumb; estructuras de campos de bits con ",
+    "url": "materias/organizacion-y-arquitectura-de-computadoras/clase-07.html",
+    "formato": "prosa"
+   }
+  ],
+  "fundamentos-de-sistemas-embebidos": [
+   {
+    "num": 1,
+    "fecha": "2026-08-26",
+    "resumen": "Tema 1 — Delimitación conceptual del sistema embebido frente a lo mecánico/analógico, docenas de ejemplos clasificados en vivo, electromecánica de motores, propiedades científicas de los materiales, y definición formal d",
+    "url": "materias/fundamentos-de-sistemas-embebidos/clase-01.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 2,
+    "fecha": "2026-08-31",
+    "resumen": "Tema 2 — Organización, arquitectura y plataformas · arquitecturas RISC vs. CISC recorriendo PIC, AVR, ESP32, RP2040/Cortex-M e Intel x86; memoria caché y el cuello de botella CPU–RAM.",
+    "url": "materias/fundamentos-de-sistemas-embebidos/clase-02.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 3,
+    "fecha": "2026-09-02",
+    "resumen": "Tema 2 — evolución histórica completa de la arquitectura x86 de Intel (4004 al 486 y Pentium), retrocompatibilidad binaria, Modo Real/Protegido/VM86, el coprocesador matemático (80387), pipeline fuertemente acoplado, bus",
+    "url": "materias/fundamentos-de-sistemas-embebidos/clase-03.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 4,
+    "fecha": "2026-09-07",
+    "resumen": "Tema 2 (continuación) — tras un breve recordatorio de la historia x86 vista en la Clase 03, la clase continúa con el Pentium P5, herramientas de compilación GCC, alineación de memoria, MMX/SSE, Pentium Pro (P6), la segun",
+    "url": "materias/fundamentos-de-sistemas-embebidos/clase-04.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 5,
+    "fecha": "2026-09-09",
+    "resumen": "Tema 2 (continuación) — mapas de memoria de AVR/Arduino, ESP32, RP2040 y ARM Cortex-M (v6M); la secuencia de arranque (bootloader) en Raspberry Pi; espacio virtual vs. físico y sistemas de archivos virtuales de Linux; cl",
+    "url": "materias/fundamentos-de-sistemas-embebidos/clase-05.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 6,
+    "fecha": "2026-09-14",
+    "resumen": "Tema 2 (cierre) — Memorias no volátiles, magnéticas y ópticas (funcionamiento en ráfaga, disipación térmica, Flash/SSD y wear leveling, medios magnéticos/ópticos), y arranque del bloque de Modos de Direccionamiento de mi",
+    "url": "materias/fundamentos-de-sistemas-embebidos/clase-06.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 7,
+    "fecha": "2026-09-21",
+    "resumen": "Tema 2 (subtemas 2.3 y 2.4) — Unidades controladoras de interrupción (enmascarables y no enmascarables, monivel/multinivel, resolución por tabla o por vector), disparo por valor y por flanco, controlador DMA, chipset (Pu",
+    "url": "materias/fundamentos-de-sistemas-embebidos/clase-07.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 8,
+    "fecha": "2026-09-23",
+    "resumen": "Tema 2 (subtemas 2.6 y 2.7) — Fisiología de la interacción hombre-máquina, límites de las interfaces legadas (Serie, Paralelo, SCSI), FireWire vs. USB 1.0/1.1, especificación USB 2.0 (modos de velocidad, topología de 7 n",
+    "url": "materias/fundamentos-de-sistemas-embebidos/clase-08.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 9,
+    "fecha": "2026-09-28",
+    "resumen": "Tema 2 (subtemas 2.6 y 2.7) — Administración de potencia en USB, la clase HID y sus cartas de descriptores, los cuatro modos de transferencia (Control, Bulk, Interrupt e Isócrono) e inicio de las interfaces de baja veloc",
+    "url": "materias/fundamentos-de-sistemas-embebidos/clase-09.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 10,
+    "fecha": "2026-09-30",
+    "resumen": "Tema 2 (subtema 2.7) — Colector abierto y trama del bus I²C, SMBus, familia SPI (QSPI y Octa-SPI), I²S para audio digital y UART / RS-232 / MAX232 con paridad.",
+    "url": "materias/fundamentos-de-sistemas-embebidos/clase-10.html",
+    "formato": "prosa"
+   }
+  ],
+  "administracion-de-servicios-de-internet": [
+   {
+    "num": 1,
+    "fecha": "2026-08-26",
+    "resumen": "Tema 1 — De la Máquina de Turing a la arquitectura Von Neumann/Harvard, jerarquía de directorios de Linux (FHS), criterios para elegir distribución, y arranque de la Práctica 0 en terminal (procesos, archivos y permisos)",
+    "url": "materias/administracion-de-servicios-de-internet/clase-01.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 2,
+    "fecha": "2026-08-31",
+    "resumen": "Metodología del proyecto del curso: tradicional/cascada (PMBOK) vs. ágil (Scrum), y práctica guiada de planificación con Diagrama de Gantt, recursos y costos en Microsoft Project.",
+    "url": "materias/administracion-de-servicios-de-internet/clase-02.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 3,
+    "fecha": "2026-09-02",
+    "resumen": "Tema 1 — Qué es un servidor (vs. repositorio), Pirámide DIC, tríada de seguridad CIA/SIT, tipos de servidor y puertos, levantamiento de requerimientos, y demostración práctica de aprovisionamiento y costos en Microsoft A",
+    "url": "materias/administracion-de-servicios-de-internet/clase-03.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 4,
+    "fecha": "2026-09-07",
+    "resumen": "DHCP (Dynamic Host Configuration Protocol): fundamentos, seguridad, el proceso DORA, los 6 componentes de configuración, y transición de ISC DHCP a KEA DHCP. Práctica de laboratorio: instalación y configuración de ambos ",
+    "url": "materias/administracion-de-servicios-de-internet/clase-04.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 5,
+    "fecha": "2026-09-09",
+    "resumen": "Formatos documentales por metodología (Scrum vs. Cascada/PMBOK), requisitos técnicos base de infraestructura, catálogo completo de las 10 propuestas de proyecto con equipo asignado, entregables finales y mecánica de eval",
+    "url": "materias/administracion-de-servicios-de-internet/clase-05.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 6,
+    "fecha": "2026-09-14",
+    "resumen": "Sesión de trabajo en equipo (no hubo tema nuevo de teoría): requisitos de evidencia técnica por metodología, negociación del calendario definitivo de entregas, mecánica de evaluación presencial por ruleta y entregables f",
+    "url": "materias/administracion-de-servicios-de-internet/clase-06.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 7,
+    "fecha": "2026-09-21",
+    "resumen": "Sesión de trabajo en equipo (no hubo tema nuevo de teoría del temario): modelado de arquitectura con UML (diagramas de componentes y despliegue), importancia de la documentación, y ejercicio práctico de elaboración de di",
+    "url": "materias/administracion-de-servicios-de-internet/clase-07.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 8,
+    "fecha": "2026-09-23",
+    "resumen": "Introducción a Kali Linux y ciberseguridad ofensiva: tipos de hacker, y primera práctica en vivo con Metasploit y Nmap escaneando puertos de sitios reales (CETIS 9, Google, Unitec, UNAM).",
+    "url": "materias/administracion-de-servicios-de-internet/clase-08.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 9,
+    "fecha": "2026-09-28",
+    "resumen": "Ciberseguridad ofensiva (fuera del temario) — Repaso de Metasploit, escaneo avanzado de puertos y redes con Nmap (opciones -sn, -sS, -sV, -O, -A), automatización con Bash y Python, y asignación de una herramienta individ",
+    "url": "materias/administracion-de-servicios-de-internet/clase-09.html",
+    "formato": "prosa"
+   }
+  ],
+  "arquitectura-cliente-servidor": [
+   {
+    "num": 1,
+    "fecha": "2026-08-25",
+    "resumen": "Tema 1 — Linux y procesos: imagen de un proceso, segmentos de memoria, PCB, comandos de análisis (size, pmap, ps, top), árbol PID/PPID, time-sharing, race condition y deadlock.",
+    "url": "materias/arquitectura-cliente-servidor/clase-01.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 2,
+    "fecha": "2026-08-27",
+    "resumen": "Tema 1 — Permisos UGO y chmod decimal, bit SetUID (chmod 4xxx), /etc/passwd, ID real vs. efectivo, Tarea 2, y fork() (retorno pid_t, PID del hijo al padre / 0 al hijo, deadlock).",
+    "url": "materias/arquitectura-cliente-servidor/clase-02.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 3,
+    "fecha": "2026-09-01",
+    "resumen": "Tema 1 — Demo del bit SetUID paso a paso en Codespaces, bits especiales (SetGID / sticky), /etc/shadow, errno y códigos de error, y la red de la Facultad de Ingeniería (subredes e IPs de la UNAM).",
+    "url": "materias/arquitectura-cliente-servidor/clase-03.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 4,
+    "fecha": "2026-09-03",
+    "resumen": "Tema 1 — strerror() y perror() , control de flujo de fork() , procesos huérfanos y reapers , y la familia de funciones exec .",
+    "url": "materias/arquitectura-cliente-servidor/clase-04.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 5,
+    "fecha": "2026-09-08",
+    "resumen": "Tema 2 — Estados de un proceso, señales de UNIX System V, función wait() , procesos zombie y terminación de procesos con kill() / abort() .",
+    "url": "materias/arquitectura-cliente-servidor/clase-05.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 6,
+    "fecha": "2026-09-10",
+    "resumen": "Manejo de señales con signal() , escenarios de tratamiento de interrupciones y control de procesos en primer/segundo plano ( fg / bg ).",
+    "url": "materias/arquitectura-cliente-servidor/clase-06.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 7,
+    "fecha": "2026-09-17",
+    "resumen": "Cierre del Tema 2 (terminación de procesos, kill() , procesos zombie) e inicio del Tema 3 — Arquitectura Cliente-Servidor, sockets y puertos lógicos.",
+    "url": "materias/arquitectura-cliente-servidor/clase-07.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 8,
+    "fecha": "2026-09-22",
+    "resumen": "Tema 2 — Sockets: modelo cliente-servidor a nivel software, comunicación síncrona/asíncrona, familias de direcciones (AF_INET, AF_UNIX…), descriptores de archivo en Unix/Linux, y las estructuras sockaddr_in y hostent en ",
+    "url": "materias/arquitectura-cliente-servidor/clase-08.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 9,
+    "fecha": "2026-09-24",
+    "resumen": "Tema 2 — struct hostent y gethostbyname() , conversión de IP con inet_ntoa / inet_aton , pruebas con Google y la UNAM (alta disponibilidad y clústers), puertos lógicos e IANA, y el ciclo de vida de un socket en C (socket",
+    "url": "materias/arquitectura-cliente-servidor/clase-09.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 10,
+    "fecha": "2026-09-29",
+    "resumen": "Tema 2 — El socket servidor en C, paso a paso: socket() , inicialización de struct sockaddr_in ( INADDR_ANY , htons() ), bind() , listen() y accept() , y por qué todo servidor maneja dos sockets.",
+    "url": "materias/arquitectura-cliente-servidor/clase-10.html",
+    "formato": "prosa"
+   }
+  ],
+  "seguridad-informatica-basica": [
+   {
+    "num": 1,
+    "fecha": "2026-08-27",
+    "resumen": "Tema 1 — Fundamentos teóricos · esquema de seguridad, ciclo PTCA/PDCA, auditorías, hallazgos, modelo de contexto y principios.",
+    "url": "materias/seguridad-informatica-basica/clase-01.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 2,
+    "fecha": "2026-09-01",
+    "resumen": "Tema 1 (1.2 Normatividad) · TCSEC / ITSEC / CTCPEC, Common Criteria (ISO 15408), familia ISO 27000, COBIT, NIST, HIPAA — ejercicio del Equipo 4.",
+    "url": "materias/seguridad-informatica-basica/clase-02.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 3,
+    "fecha": "2026-09-03",
+    "resumen": "Tema 1 (1.2 Normatividad y 1.3 Perfiles de protección) · normas vs. estándares, TCSEC / ITSEC / CTCPEC, Common Criteria (TOE/PP/ST), BS 7799 → ISO 17799 → serie ISO 27000, ISO 27002:2022, HIPAA, NIST, COBIT.",
+    "url": "materias/seguridad-informatica-basica/clase-03.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 4,
+    "fecha": "2026-09-08",
+    "resumen": "Tema 1 (1.3 Perfiles de protección) · esquema de seguridad y metodología para construirlo mediante Perfiles de Protección (PP) — las 11 partes; introducción a los 6 servicios de seguridad.",
+    "url": "materias/seguridad-informatica-basica/clase-04.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 5,
+    "fecha": "2026-09-10",
+    "resumen": "Tema 1 (1.4, a fondo) — Servicios y mecanismos de seguridad informática, autenticación de entidades, el fenómeno del bolero y aplicación práctica en escenarios reales.",
+    "url": "materias/seguridad-informatica-basica/clase-05.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 6,
+    "fecha": "2026-09-17",
+    "resumen": "Tema 2 — Amenazas y vulnerabilidades: definiciones formales, la fórmula del riesgo, las cinco fuentes de origen, y las clasificaciones por flujo de información, objetivo y ubicación.",
+    "url": "materias/seguridad-informatica-basica/clase-06.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 7,
+    "fecha": "2026-09-22",
+    "resumen": "Tema 2 (2.2) — Actividad práctica individual de identificación de amenazas (hoja con foto personal y de la casa) y concepto formal de vulnerabilidad: sus seis clasificaciones y la regla de la \"pregunta de carencia\".",
+    "url": "materias/seguridad-informatica-basica/clase-07.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 8,
+    "fecha": "2026-09-24",
+    "resumen": "Tema 2 (2.2, continuación) — corrección del método para no confundir amenaza con vulnerabilidad, vulnerabilidades humanas (contraseñas, fotos con IA, imágenes de menores), ejercicio de 20 reactivos amenaza/vulnerabilidad",
+    "url": "materias/seguridad-informatica-basica/clase-08.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 9,
+    "fecha": "2026-09-29",
+    "resumen": "Tema 2 (2.2, continuación) — Recapitulación de la relación amenaza–vulnerabilidad–riesgo, ejercicio en equipo para identificar amenazas y vulnerabilidades de los personajes de un video, y dinámica individual del “Escudo ",
+    "url": "materias/seguridad-informatica-basica/clase-09.html",
+    "formato": "prosa"
+   }
+  ],
+  "lab-de-fundamentos-de-sistemas-embebidos": [],
+  "mineria-de-datos": [
+   {
+    "num": 1,
+    "fecha": "2026-09-01",
+    "resumen": "Temas 1 y 2 — introducción a la minería de datos y al proceso KDD (con 5 casos de estudio de los equipos) y arranque de la arquitectura de minería de datos.",
+    "url": "materias/mineria-de-datos/clase-01.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 2,
+    "fecha": "2026-09-03",
+    "resumen": "Tema 2 — Arquitectura de minería de datos · repositorio vs. base de datos, Data Warehouse, Data Mart, virtualización de datos, ERP y Data Lake. Presentaciones de los equipos 9, 13, 12 y 11.",
+    "url": "materias/mineria-de-datos/clase-02.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 3,
+    "fecha": "2026-09-08",
+    "resumen": "Tema 2 (continuación) — Servidores de bases de datos, On-Premise vs. Nube, Data Lake vs. Data Warehouse, ecosistema Big Data (Kafka, Spark, Hadoop/HDFS/MapReduce). Exposiciones de KDD: News Corp, Bwood, Nu Bank.",
+    "url": "materias/mineria-de-datos/clase-03.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 4,
+    "fecha": "2026-09-10",
+    "resumen": "Tema 2 (continuación) — Bases de datos vectoriales y embeddings, vectorización de imagen/audio/video, bases de datos de conocimiento, arquitectura de datos para IA/minería. Exposición KDD: Nu Bank (evaluación crediticia ",
+    "url": "materias/mineria-de-datos/clase-04.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 5,
+    "fecha": "2026-09-17",
+    "resumen": "Primer Examen Parcial (Temas 1 y 2): caso de negocio de una aseguradora, arquitectura de datos y proyectos de los equipos.",
+    "url": "materias/mineria-de-datos/clase-05.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 6,
+    "fecha": "2026-09-22",
+    "resumen": "Cierre de exposiciones del Proyecto 2 (Databricks, Pinecone, MongoDB, Milvus) y arranque del Tema 3: aprendizaje supervisado vs. no supervisado.",
+    "url": "materias/mineria-de-datos/clase-06.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 7,
+    "fecha": "2026-09-24",
+    "resumen": "Cierre de exposiciones del Proyecto 2 (Oracle, Cassandra, Azure, Snowflake), repaso de modelos descriptivos y arranque de modelos predictivos (clasificación, regresión, series de tiempo, redes neuronales), asignación de ",
+    "url": "materias/mineria-de-datos/clase-07.html",
+    "formato": "prosa"
+   },
+   {
+    "num": 8,
+    "fecha": "2026-09-29",
+    "resumen": "Tema 3 — Cierre del Proyecto 2 con AWS y SAP HANA (procesamiento en RAM), formación definitiva de equipos, y algoritmos de agrupación: K-Means, PCA/t-SNE, método del codo y silueta, DBSCAN, clustering jerárquico (caso Co",
+    "url": "materias/mineria-de-datos/clase-08.html",
+    "formato": "prosa"
+   }
+  ],
+  "lab-de-organizacion-y-arquitectura-de-computadoras": []
+ },
+ "gitlog": [
+  {
+   "hash": "fd3a3f8",
+   "fecha": "2026-09-30T19:59:06-06:00",
+   "mensaje": "Entregas: fechas y adjuntos confirmados en Classroom (ASI SCRUM 1/Formato 1, MD Proyecto 2)"
+  },
+  {
+   "hash": "ea45b8f",
+   "fecha": "2026-09-30T17:51:27-06:00",
+   "mensaje": "Pasada final de entregas: MD Proyecto 2, ASI SCRUM 1 y Formato 1; quitar pendiente ASI Formato"
+  },
+  {
+   "hash": "67f8841",
+   "fecha": "2026-09-30T17:28:45-06:00",
+   "mensaje": "FSE Clase 10: datos verificados con NotebookLM"
+  },
+  {
+   "hash": "cb0c76e",
+   "fecha": "2026-09-30T17:25:44-06:00",
+   "mensaje": "Arreglar notas con fondo claro ilegibles en tema oscuro"
+  },
+  {
+   "hash": "92737b8",
+   "fecha": "2026-09-30T17:22:55-06:00",
+   "mensaje": "FSE: Clase 10 (30 sep) — I²C, SMBus, SPI, I²S, UART"
+  },
+  {
+   "hash": "647f58b",
+   "fecha": "2026-09-30T16:11:47-06:00",
+   "mensaje": "SIB: quitar enlaces a documentos de equipo retirados"
+  },
+  {
+   "hash": "0c248f6",
+   "fecha": "2026-09-30T16:11:40-06:00",
+   "mensaje": "Quitar documentos de equipo que incluyen nombres de compañeros"
+  },
+  {
+   "hash": "62cbd79",
+   "fecha": "2026-09-30T16:08:06-06:00",
+   "mensaje": "ACS: archivos del profesor de los Temas 2 y 3 (PDF, código C, imágenes) y material general"
+  },
+  {
+   "hash": "1058d85",
+   "fecha": "2026-09-30T16:06:46-06:00",
+   "mensaje": "SIB: material de la clase del 29 sep (Escudos.pdf)"
+  },
+  {
+   "hash": "1aaa64a",
+   "fecha": "2026-09-30T16:05:15-06:00",
+   "mensaje": "RP: enunciado Práctica 2, Clase 10 y entrega de la Práctica 2"
+  },
+  {
+   "hash": "dd237d6",
+   "fecha": "2026-09-30T16:02:36-06:00",
+   "mensaje": "Lab OAC: guiones de Prácticas 2 y 3, formato de reporte y presentación del día 1"
+  },
+  {
+   "hash": "08f2e45",
+   "fecha": "2026-09-30T16:00:38-06:00",
+   "mensaje": "MD: enunciado Proyecto 1, equipos, dataset de la práctica 3.1 y entregas de Proyecto 1 y 2"
+  },
+  {
+   "hash": "c822574",
+   "fecha": "2026-09-30T15:41:46-06:00",
+   "mensaje": "ASI: láminas UML completas y entregas (Formatos Scrum, Sprint 1, Diagramas UML)"
+  },
+  {
+   "hash": "b659e50",
+   "fecha": "2026-09-30T15:36:37-06:00",
+   "mensaje": "ASI: enunciados P1 y P3, presentación Kali, láminas UML y Proyectito (pptx)"
+  },
+  {
+   "hash": "738e9ab",
+   "fecha": "2026-09-30T14:19:42-06:00",
+   "mensaje": "Lab FSE: guiones y archivos de las Prácticas 6, 7 y 8"
+  },
+  {
+   "hash": "9326792",
+   "fecha": "2026-09-30T14:17:50-06:00",
+   "mensaje": "Pendientes: limpiar texto de detalle"
+  },
+  {
+   "hash": "3d3f15d",
+   "fecha": "2026-09-30T14:17:42-06:00",
+   "mensaje": "FSE: enunciados de Tareas 02-09 y enlaces desde Pendientes"
+  },
+  {
+   "hash": "9791dcc",
+   "fecha": "2026-09-30T14:06:50-06:00",
+   "mensaje": "Lab FSE: especificaciones del proyecto final y su fecha de entrega (24 nov 13:00) en Pendientes"
+  },
+  {
+   "hash": "c5f490a",
+   "fecha": "2026-09-30T10:42:55-06:00",
+   "mensaje": "FSE: agregar entregas de Tareas 02, 03 y 04 y fuente .tex de la Práctica 4"
+  },
+  {
+   "hash": "a0ff414",
+   "fecha": "2026-09-30T10:35:04-06:00",
+   "mensaje": "Lab FSE: agregar guion y archivos de la Práctica 5"
+  },
+  {
+   "hash": "ece624a",
+   "fecha": "2026-09-30T10:23:34-06:00",
+   "mensaje": "Pendientes: corregir etiqueta de hora en la evaluación de ASI"
+  },
+  {
+   "hash": "18bf9c7",
+   "fecha": "2026-09-30T10:02:53-06:00",
+   "mensaje": "Pendientes con reloj: tareas obligatorias de las 9 materias, ocultas automáticamente al vencer"
+  },
+  {
+   "hash": "4235026",
+   "fecha": "2026-09-30T09:41:37-06:00",
+   "mensaje": "FSE/Lab FSE: traer de Classroom material general, diapositivas 01-06, guiones de prácticas 1-4 y entregas (Tarea 01, P3, P4)"
+  },
+  {
+   "hash": "3665d0f",
+   "fecha": "2026-09-30T07:30:34-06:00",
+   "mensaje": "RP: agregar Clase 10 (28 sep, examen) y documentar que los labs van en la página de teoría"
+  },
+  {
+   "hash": "34fc62b",
+   "fecha": "2026-09-30T07:28:31-06:00",
+   "mensaje": "ACS: agregar Clase 10 (29 sep) — socket servidor en C: socket, sockaddr_in, bind, listen, accept"
+  },
+  {
+   "hash": "5f71409",
+   "fecha": "2026-09-29T19:28:12-06:00",
+   "mensaje": "Agregar 7 clases nuevas y ocultar la sección global de Pendientes"
+  },
+  {
+   "hash": "d2ed597",
+   "fecha": "2026-09-28T21:19:21Z",
+   "mensaje": "SIB Clase 08: corregir ejercicio de 20 reactivos con el material oficial de la profesora"
+  },
+  {
+   "hash": "ffdefee",
+   "fecha": "2026-09-28T21:17:57Z",
+   "mensaje": "SIB: agregar Clase 08 (24 sep 2026) — vulnerabilidades humanas, ejercicio de 20 reactivos y casos reales (Línea 12 del Metro)"
+  },
+  {
+   "hash": "5d49afa",
+   "fecha": "2026-09-28T20:17:10Z",
+   "mensaje": "MD Clase 07: confirmar herramienta de la demo como RapidMiner"
+  },
+  {
+   "hash": "ccfe811",
+   "fecha": "2026-09-28T20:13:57Z",
+   "mensaje": "MD: agregar Clase 07 (24 sep 2026) — cierre de exposiciones Proyecto 2 (Oracle, Cassandra, Azure, Snowflake), modelos predictivos y descriptivos"
+  },
+  {
+   "hash": "a2d5aac",
+   "fecha": "2026-09-28T19:43:06Z",
+   "mensaje": "ASI: agregar Clase 08 (23 sep 2026) — introducción a Kali Linux, tipos de hacker, práctica con Metasploit y Nmap"
+  },
+  {
+   "hash": "f9ed57f",
+   "fecha": "2026-09-28T16:06:37Z",
+   "mensaje": "MD: agregar Clase 06 (22 sep 2026) — cierre de exposiciones Proyecto 2 (Databricks, Pinecone, MongoDB, Milvus) y arranque Tema 3 (supervisado/no supervisado)"
+  },
+  {
+   "hash": "7ef8c92",
+   "fecha": "2026-09-28T15:56:48Z",
+   "mensaje": "Limpiar más pendientes vencidos: ASI diagramas y RP examen parcial"
+  },
+  {
+   "hash": "01a739b",
+   "fecha": "2026-09-28T15:53:18Z",
+   "mensaje": "Limpiar carrusel de pendientes: quitar tareas ya vencidas"
+  },
+  {
+   "hash": "fa78e13",
+   "fecha": "2026-09-23T16:48:08-06:00",
+   "mensaje": "FSE: agregar Clase 08 (23 sep 2026) — USB, FireWire vs USB, topología y detección eléctrica"
+  },
+  {
+   "hash": "557871c",
+   "fecha": "2026-09-22T17:37:03-06:00",
+   "mensaje": "RP: agregar diapositivas del profesor Clase 9 (funciones de distancia) y su equivalencia con Clase 07 del sitio"
+  },
+  {
+   "hash": "9830133",
+   "fecha": "2026-09-22T16:56:31-06:00",
+   "mensaje": "SIB: complementar Clase 07 con apuntes propios (definición exacta, talón de Aquiles, relación riesgo-amenaza-vulnerabilidad)"
+  },
+  {
+   "hash": "660839d",
+   "fecha": "2026-09-22T16:31:04-06:00",
+   "mensaje": "ACS: agregar Clase 08 (22 sep 2026) — sockets, AF, descriptores de archivo, sockaddr_in SIB: agregar Clase 07 (22 sep 2026) — actividad de amenazas y concepto de vulnerabilidad"
+  },
+  {
+   "hash": "30d2773",
+   "fecha": "2026-09-22T00:59:31-06:00",
+   "mensaje": "Carrusel de pendientes: scroll continuo tipo ticker de bolsa, conservando las flechas"
+  },
+  {
+   "hash": "e2c9c9f",
+   "fecha": "2026-09-22T00:35:21-06:00",
+   "mensaje": "Agregar cache-busting (?v=) a app.js y style.css en todas las páginas"
+  },
+  {
+   "hash": "d4f0b9a",
+   "fecha": "2026-09-22T00:28:46-06:00",
+   "mensaje": "Home: agregar carrusel de pendientes arriba de las materias"
+  },
+  {
+   "hash": "4ada41c",
+   "fecha": "2026-09-22T00:23:11-06:00",
+   "mensaje": "Agregar barra superior fija (Inicio + Pendientes) y página de pendientes del semestre"
+  },
+  {
+   "hash": "3468109",
+   "fecha": "2026-09-21T23:48:14-06:00",
+   "mensaje": "ASI: agregar Clase 07 (21 sep 2026) — modelado UML (componentes y despliegue), sesión de proyecto"
+  },
+  {
+   "hash": "d5add1e",
+   "fecha": "2026-09-21T16:52:25-06:00",
+   "mensaje": "FSE: verificar cifras del chipset de la Clase 07 contra la transcripción y corregir SSD/USB"
+  },
+  {
+   "hash": "848c4fd",
+   "fecha": "2026-09-21T16:45:45-06:00",
+   "mensaje": "OAC: agregar Clase 06 (21 sep 2026) — mem32, Pico ID y ensamblador inline FSE: agregar Clase 07 (21 sep 2026) — interrupciones, DMA, chipset y timers"
+  },
+  {
+   "hash": "778032d",
+   "fecha": "2026-09-21T16:35:07-06:00",
+   "mensaje": "RP: agregar Clase 08 (21 sep 2026) — métricas internas de clustering y Bayes/Naive Bayes"
+  },
+  {
+   "hash": "47710a1",
+   "fecha": "2026-09-21T16:03:27-06:00",
+   "mensaje": "RP: agregar Clase 07 (18 sep 2026) — clasificación no supervisada, K-Means, LBG e ISODATA"
+  },
+  {
+   "hash": "e818acf",
+   "fecha": "2026-09-21T15:11:45-06:00",
+   "mensaje": "MD: agregar Clase 05 — Examen (17 sep 2026) con las respuestas del Primer Examen Parcial"
+  },
+  {
+   "hash": "f63d9dc",
+   "fecha": "2026-09-17T20:10:58-06:00",
+   "mensaje": "SIB: registrar Tarea 1 y Tarea 2 del Equipo 4 en Entregas"
+  },
+  {
+   "hash": "4d28d26",
+   "fecha": "2026-09-17T17:30:42-06:00",
+   "mensaje": "SIB: agregar Clase 06 (17 sep 2026) — Tema 2, amenazas y vulnerabilidades"
+  },
+  {
+   "hash": "9d63ec7",
+   "fecha": "2026-09-17T17:14:23-06:00",
+   "mensaje": "MD: registrar el Primer Examen Parcial en Entregas"
+  },
+  {
+   "hash": "54a66cb",
+   "fecha": "2026-09-17T08:55:46-06:00",
+   "mensaje": "ACS: agregar Clase 07 (17 sep 2026) — cierre de procesos + inicio Tema 3"
+  },
+  {
+   "hash": "98ec821",
+   "fecha": "2026-09-17T08:43:51-06:00",
+   "mensaje": "ACS: mover el link al sitio del profesor a los datos de la asignatura"
+  },
+  {
+   "hash": "24a5173",
+   "fecha": "2026-09-17T08:37:41-06:00",
+   "mensaje": "MD: re-verificar las 4 clases contra audio real (NotebookLM)"
+  },
+  {
+   "hash": "8e33453",
+   "fecha": "2026-09-17T08:12:08-06:00",
+   "mensaje": "SIB: re-verificar Clases 01, 03, 04, 05 contra audio real (NotebookLM)"
+  },
+  {
+   "hash": "e62bfd6",
+   "fecha": "2026-09-17T07:29:15-06:00",
+   "mensaje": "ACS: evitar títulos huérfanos al final de página en Tarea 3"
+  },
+  {
+   "hash": "8855d66",
+   "fecha": "2026-09-17T07:23:42-06:00",
+   "mensaje": "ACS: corregir Tarea 3 (capturas como imagen real, no texto)"
+  },
+  {
+   "hash": "0f497e2",
+   "fecha": "2026-09-17T07:10:55-06:00",
+   "mensaje": "ACS: registrar entrega de la Tarea 3"
+  },
+  {
+   "hash": "2367814",
+   "fecha": "2026-09-17T07:04:14-06:00",
+   "mensaje": "ACS: revertir registro prematuro de la Tarea 3 en entregas.html"
+  },
+  {
+   "hash": "678873e",
+   "fecha": "2026-09-17T06:40:37-06:00",
+   "mensaje": "ACS: agregar link al sitio del profesor en homepage + entregar Tarea 3"
+  }
+ ]
+}

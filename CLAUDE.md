@@ -57,6 +57,14 @@ poder ordenar el día:
 | Jueves | 3 | MD | 15:00–17:00 | A306 |
 | Viernes | 1 | RP | 07:00–08:30 | S227 |
 
+**La misma tabla vive como dato en `assets/horario.json`** (junto con los días
+sin clase: asuetos y suspensiones, con `confirmado: true/false`). De ahí sale
+la página **`progreso.html`**, que calcula sola qué clases faltan y cuál es
+la siguiente por meter. **Al empezar cualquier sesión, revisa ahí qué falta
+antes de preguntarle nada al usuario** — nunca le vuelvas a pedir el horario.
+Si cambia el horario o el usuario menciona un día sin clase, edita
+`horario.json` (y esta tabla).
+
 Si una fecha propuesta no cae en el día que le toca a esa materia según esta
 tabla, es un error — decirlo explícitamente y pedir confirmación antes de
 usarla. Recordar también los días sin clase por calendario oficial (asuetos,
@@ -114,7 +122,33 @@ redactada y nada del contenido técnico recortado. Ver cualquier `clase-*.html`
 clases nuevas); no reprocesar las viejas a menos que el usuario lo pida
 explícitamente.
 
-Secciones de una página nueva, en este orden:
+**Formato de estudio (desde el 1 oct 2026) — el actual para clases nuevas.**
+El usuario quiere entender cada concepto lo bastante bien para explicárselo
+a cualquiera y llegar preparado al examen. Se mantiene todo lo del formato
+del 16 sep (prosa completa, nada técnico recortado) y se le agregan
+herramientas de estudio con respaldo en investigación (detalle y prompt de
+NotebookLM en `/nueva-clase`). Ejemplo de referencia:
+`materias/administracion-de-servicios-de-internet/clase-10.html`. Las páginas
+con este formato llevan `<meta name="formato" content="estudio">` en el
+`<head>` — así `progreso.html` cuenta cuántas clases ya están migradas. Las
+anteriores se migran solo cuando el usuario lo pida, materia por materia.
+
+Secciones de una página en formato de estudio, en este orden:
+1. `detail-head` — número de clase, profesor, fecha, resumen de una línea.
+2. `<details ... id="cNN-examen" open>` "🎯 Lo que probablemente viene en el
+   examen" — 3 a 6 puntos, **cada uno con su evidencia de la clase** (lo
+   dijo, lo repitió, lo resolvió, se liga a una práctica). Es una guía de
+   qué priorizar, no un resumen que sustituya el detalle.
+3. Un `<details class="section-block sec" id="cNN-slug">` por tema, en orden
+   de clase. Dentro, por concepto: **Qué es** (definición exacta) →
+   **Explicado en simple** (analogía, `div.simple`) → **Cómo funciona**
+   (prosa completa, ejemplos con números reales, preguntas en vivo) →
+   **Por qué importa / con qué se conecta** → **Errores comunes** (si hubo).
+4. `<details ... id="cNN-prueba">` "🧠 Ponte a prueba" — 6 a 10 preguntas;
+   cada respuesta oculta en un `<details class="qa">` anidado.
+5. `<details ... id="cNN-contexto">` y `<details ... id="cNN-pendiente">`.
+
+Formato del 16 sep (prosa, sin las secciones de estudio) — secciones, en este orden:
 1. `detail-head` — número de clase, profesor, fecha, resumen de una línea.
 2. Uno o más `<details class="section-block sec" id="cNN-slug">` — el
    contenido **completo en prosa**, en el mismo orden en que se explicó en
@@ -143,7 +177,8 @@ python3 scripts/build_search_index.py
 ```
 
 **Correr este script y commitear el JSON actualizado cada vez que se agregue
-o edite una página.** Si se te olvida, el buscador sigue funcionando pero con
+o edite una página.** El mismo script regenera `assets/progreso.json` (clases
+por materia + git log) para la página de Progreso. Si se te olvida, el buscador sigue funcionando pero con
 contenido desactualizado — no rompe nada, pero hay que evitarlo.
 
 ## Flujo para agregar una clase nueva

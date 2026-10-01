@@ -214,6 +214,10 @@ def main():
 
     print(f"OK: {len(items)} entradas indexadas -> {OUT_PATH}")
 
+    # De paso, regenerar assets/progreso.json (clases por materia + git log)
+    import build_progress
+    build_progress.main()
+
 
 if __name__ == "__main__":
     main()
