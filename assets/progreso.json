@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T17:03:38+00:00",
+ "generatedAt": "2026-10-01T17:05:41+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -216,7 +216,7 @@
     "fecha": "2026-08-31",
     "resumen": "Metodología del proyecto del curso: tradicional/cascada (PMBOK) vs. ágil (Scrum), y práctica guiada de planificación con Diagrama de Gantt, recursos y costos en Microsoft Project.",
     "url": "materias/administracion-de-servicios-de-internet/clase-02.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 3,
@@ -488,6 +488,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "ef309b6",
+   "fecha": "2026-10-01T11:03:38-06:00",
+   "mensaje": "ACS Clase 03: formato de estudio"
+  },
   {
    "hash": "1836990",
    "fecha": "2026-10-01T11:00:50-06:00",
@@ -782,11 +787,6 @@
    "hash": "ea45b8f",
    "fecha": "2026-09-30T17:51:27-06:00",
    "mensaje": "Pasada final de entregas: MD Proyecto 2, ASI SCRUM 1 y Formato 1; quitar pendiente ASI Formato"
-  },
-  {
-   "hash": "67f8841",
-   "fecha": "2026-09-30T17:28:45-06:00",
-   "mensaje": "FSE Clase 10: datos verificados con NotebookLM"
   }
  ]
 }
