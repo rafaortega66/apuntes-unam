@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 05 — Organización y Arquitectura de Computadoras</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -15,6 +16,19 @@
   <p class="prof">M.I. José Antonio de Jesús Arredondo Garza · 14 sep 2026 · Tema 3 — Modelo de programación en ensamblador ARM para la Raspberry Pi Pico 1 (Cortex-M0) y Pico 2 (Cortex-M33 + FPU), sintaxis de Inline Assembly en MicroPython, y repertorio completo de instrucciones de movimiento, aritmética, lógica, corrimientos, saltos y punto flotante.</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c5-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Mapeo y clasificación del banco de registros ARM Cortex-M0 (R0-R7 bajos, R8-R12 altos, R13 SP, R14 LR, R15 PC y PSR)</strong><span class="evid">Evidencia: Lo explicó explícitamente al detallar el modelo de programación de la Pico 1.</span></li>
+<li><strong>Estructura del banco de registros de punto flotante (S0-S31) en la Pico 2 y la incompatibilidad de este código en la Pico 1</strong><span class="evid">Evidencia: Lo enfatizó explícitamente advirtiendo que un programa compilado para la FPU no puede ejecutarse en la Pico 1.</span></li>
+<li><strong>Regla de sintaxis obligatoria en MicroPython inline assembly (uso de la directiva thumb y paréntesis en cada instrucción)</strong><span class="evid">Evidencia: Lo repitió explícitamente mostrando la diferencia entre ensamblador puro y la sintaxis inline.</span></li>
+<li><strong>Ausencia de la instrucción de división entera en el procesador ARM Cortex-M0 de la Pico 1</strong><span class="evid">Evidencia: Lo explicó explícitamente señalando que responde al diseño de conjunto reducido de instrucciones (RISC) de bajo consumo.</span></li>
+<li><strong>Límite máximo de 31 bits para corrimientos lógicos (LSL/LSR) y la reducción del tiempo de salto a 2 ciclos máquina en la Pico 2</strong><span class="evid">Evidencia: Lo explicó en detalle mostrando los tiempos en nanosegundos y señalando que en la Pico 1 los saltos tomaban 3 ciclos.</span></li>
+<li><strong>Capacidad y limitaciones de la FPU de la Pico 2 (soporte de VADD, VSUB, VMUL, VDIV y VSQRT, y la ausencia por hardware de funciones trascendentales)</strong><span class="evid">Evidencia: Lo dijo explícitamente advirtiendo a la clase que no esperen encontrar funciones como seno o coseno en la FPU.</span></li>
+</ol>
+</details>
+
 <details class="section-block sec" id="c5-registros-pico1" open><summary><span class="stitle">El banco de registros de la Pico 1 (Cortex-M0)</span></summary>
 <p>La clase retomó la comparación Pico 1 / Pico 2 de la sesión anterior, pero ahora bajando del nivel de especificaciones de hardware al nivel de <strong>modelo de programación</strong>: qué registros existen realmente y cómo se manipulan al escribir ensamblador. En el Cortex-M0 de la Pico 1, el banco de registros de propósito general es de 32 bits cada uno, y el profesor los dividió en dos grupos: los <strong>registros bajos</strong> (R0 a R7) y los <strong>registros altos</strong> (R8 a R12), aclarando que este segundo grupo tiene un acceso más restringido desde el juego de instrucciones Thumb que usa el Cortex-M0.</p>
 <p>Además de los de propósito general, hay cuatro registros con <strong>funciones reservadas</strong> que no deben usarse como almacenamiento genérico de datos:</p>
@@ -24,10 +38,24 @@
 <li><strong>R15 / PC (Program Counter):</strong> refleja en todo momento la dirección de la instrucción que se está ejecutando.</li>
 <li><strong>PSR (Program Status Register):</strong> registro de estado que contiene el registro de banderas (<em>flags</em>) del procesador — el resultado de comparaciones y operaciones aritméticas que después usan los saltos condicionales.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un conjunto de casilleros numerados del 0 al 15 en una oficina, donde los primeros 8 son de uso libre cotidiano y los últimos 3 están reservados para tareas administrativas exclusivas del gerente.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque los casilleros de oficina solo guardan objetos físicos, mientras que los registros de un procesador son celdas de memoria de 32 bits que operan eléctricamente a la velocidad del reloj.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Define el modelo de programación de la Pico 1 (Cortex-M0); divide los registros en bajos (R0-R7) y altos (R8-R12), y reserva R13 (SP), R14 (LR), R15 (PC) y el registro PSR para control del procesador.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Usar el registro SP (R13) como registro de propósito general para guardar datos ordinarios, lo cual altera el puntero de pila del sistema.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c5-registros-pico2" open><summary><span class="stitle">El banco de registros de punto flotante de la Pico 2 (FPU)</span></summary>
 <p>Al pasar a la Pico 2, el profesor mapeó el banco de <strong>32 registros de punto flotante</strong>, nombrados S0 a S31, exclusivos de la unidad de punto flotante (FPU) que la Pico 1 no tiene. Cada uno sigue el estándar <strong>IEEE 754 de precisión simple</strong> (32 bits), con capacidad de notación extendida. A diferencia de los registros generales R0–R12, estos S0–S31 solo pueden recibir instrucciones de la propia FPU — no se puede operar sobre ellos con las instrucciones aritméticas enteras normales (ADD, SUB, etc.).</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como añadir un juego de 32 casilleros especiales etiquetados con la letra S, diseñados exclusivamente para guardar y calcular números con coma decimal muy precisos.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque en un casillero normal puedes meter cualquier tipo de papel, pero los registros S0 a S31 descomponen mecánicamente el número en 32 bits con signo, exponente de 8 bits y mantisa de 23 bits según la norma IEEE 754.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Representa el banco de registros de la FPU en la Pico 2 (RP2350); sus 32 registros (S0-S31) operan en precisión simple y notación extendida, pero provocan que el código compilado sea incompatible con la Pico 1.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Intentar ejecutar código escrito para registros S0-S31 en una Raspberry Pi Pico 1, lo cual falla inmediatamente al carecer de unidad de punto flotante física.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c5-inline-assembly" open><summary><span class="stitle">Sintaxis de Inline Assembly en MicroPython</span></summary>
@@ -38,6 +66,13 @@
 <li>En Inline Assembly de MicroPython: la misma operación se escribe <code>add(RD, RN, RM)</code>, o en su forma simplificada de dos operandos <code>add(RD, RM)</code>, que calcula <code>RD = RD + RM</code>.</li>
 </ul>
 <p>Esta misma regla de "instrucción con paréntesis" aplica a todas las instrucciones que se revisaron después en la clase.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como escribir una nota en español dentro de un texto en inglés, pero encerrando cada palabra en español entre paréntesis para que el lector sepa exactamente dónde empieza y termina la orden en español.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque no se trata de dos idiomas humanos opcionales, sino de una directiva técnica (thumb) que hace que el intérprete de MicroPython entregue las instrucciones directo al procesador.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es el mecanismo para incrustar ensamblador en MicroPython usando la directiva thumb; exige encerrar los operandos entre paréntesis (por ejemplo add(RD, RN, RM) o add(RD, RM)) a diferencia del ensamblador puro.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Olvidar los paréntesis al escribir las instrucciones en el entorno de MicroPython inline assembly.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c5-mov-memoria" open><summary><span class="stitle">Instrucciones de movimiento y acceso a memoria</span></summary>
@@ -47,18 +82,39 @@
 <li><code>ldr(RD, [RN])</code> o <code>ldr(RD, [RN, offset])</code> — carga en <code>RD</code> el valor ubicado en la dirección de memoria apuntada por <code>RN</code> (opcionalmente desplazada por <code>offset</code>).</li>
 <li><code>str(RD, [RN])</code> o <code>str(RD, [RN, offset])</code> — la operación inversa: almacena el contenido de <code>RD</code> en la dirección de memoria indicada por <code>RN</code>.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como mover cajas entre habitaciones o traer una caja específica desde el almacén principal usando una carretilla con una etiqueta de distancia fija.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque mover datos en memoria altera o reemplaza directamente la carga eléctrica de los transistores en las direcciones físicas del chip.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Clasifica las operaciones de transferencia básica: MOV para mover entre registros (con restricción de offset de 8 bits para inmediatos en inline), LDR para leer de memoria a un registro y STR para almacenar de un registro a memoria.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Intentar cargar un valor inmediato mayor a 8 bits (255) directo en una instrucción mov dentro del entorno inline assembly sin construir previamente la dirección.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c5-aritmetica-logica" open><summary><span class="stitle">Instrucciones aritméticas y lógicas — y la ausencia de división</span></summary>
 <p>Para las operaciones aritméticas básicas, la sintaxis sigue el mismo patrón de tres operandos: <code>add(RD, RN, RM)</code> y <code>sub(RD, RN, RM)</code> para suma y resta. La multiplicación entera, en cambio, solo existe en su forma de dos operandos: <code>mul(RD, RN)</code> ejecuta <code>RD = RD * RN</code>.</p>
 <p>El punto que el profesor marcó explícitamente aquí es que <strong>el Cortex-M0 no tiene división entera</strong> como instrucción de hardware. La razón que dio es arquitectónica: al ser un procesador RISC orientado a bajo consumo energético, el circuito divisor (que es considerablemente más caro en silicio y en ciclos de reloj que un sumador o un multiplicador) se sacrifica a propósito. Cualquier división que se necesite en un programa para Cortex-M0 tiene que resolverse por software (con rutinas de corrimientos y restas sucesivas) en vez de con una sola instrucción.</p>
 <p>En el terreno lógico se revisaron los operadores bit a bit: <code>AND</code>, <code>ORR</code> (OR) y <code>EOR</code> (XOR), con la misma sintaxis de tres operandos que las aritméticas.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como usar una calculadora básica de bolsillo que solo sabe sumar, restar, multiplicar y combinar luces encendidas o apagadas, pero que no tiene botón para dividir.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque las calculadoras comunes muestran el resultado en pantalla, mientras que las instrucciones lógicas (AND, ORR, EOR) manipulan bit a bit las palabras de 32 bits dentro de los registros.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Detalla las instrucciones ADD, SUB, MUL y lógicas (AND, ORR, EOR) en ARM; explica que la división entera no existe en Cortex-M0 por ser una arquitectura RISC de instrucciones reducidas y bajo consumo.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Buscar o intentar ejecutar una instrucción de división entera en el procesador Cortex-M0 de la Pico 1.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c5-corrimientos-saltos" open><summary><span class="stitle">Corrimientos lógicos y saltos — la ganancia de velocidad de la Pico 2</span></summary>
 <p>Los corrimientos lógicos se manejan con <code>lsl(RD, RN, shift)</code> (desplazamiento a la izquierda) y <code>lsr(RD, RN, shift)</code> (desplazamiento a la derecha). El profesor señaló un límite concreto: como los registros son de 32 bits, el desplazamiento máximo permitido es de <strong>31 bits</strong> — especificar un valor mayor genera un error en tiempo de ensamblado, no en tiempo de ejecución.</p>
 <p>Para el control de flujo se vio el salto incondicional y la familia de saltos condicionales que leen el registro de banderas del PSR: <code>BEQ</code> (igual), <code>BNE</code> (distinto), <code>BCC</code> (sin acarreo), <code>BMI</code> (negativo) y <code>BVS</code> (con desbordamiento/overflow).</p>
 <p>Aquí es donde se conectó con la comparación de rendimiento entre las dos tarjetas que se había visto en la clase anterior: en la Pico 2, gracias a su pipeline más moderno, <strong>la latencia de un salto se redujo a 2 ciclos de máquina</strong> (entre 8 y 16 ns a 150 MHz), mientras que la Pico 1 necesitaba 3 ciclos para lo mismo. Es una mejora concreta y medible, no solo una diferencia de frecuencia de reloj.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como mover todos los dígitos de un número hacia la izquierda o derecha para multiplicarlo o dividirlo por dos, o saltar a otra página del libro si se cumple una condición.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque en los registros de 32 bits los bits desplazados que salen de la palabra de 32 bits se pierden o pasan al registro de banderas.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra las instrucciones LSL y LSR (con límite estricto de 31 bits de corrimiento), los saltos condicionales (BEQ, BNE, BCC, BMI, BVS) y la reducción del tiempo de salto a 2 ciclos máquina en la Pico 2 (frente a 3 ciclos en la Pico 1).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Especificar un corrimiento de bits mayor a 31 en una instrucción LSL o LSR, lo cual genera un error de ensamblado.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c5-fpu-instrucciones" open><summary><span class="stitle">El repertorio de instrucciones de la FPU (exclusivo de la Pico 2)</span></summary>
@@ -70,6 +126,25 @@
 <li><code>vldr</code> y <code>vstr</code> — la versión de carga/almacenamiento para intercambiar valores entre los registros de la FPU y variables o etiquetas de MicroPython.</li>
 </ul>
 <p>Un punto que el profesor enfatizó para que no se sobreestimara la FPU: solo hace aritmética elemental y raíz cuadrada por hardware. Textualmente advirtió <strong>"no esperen encontrar ni seno ni coseno ni nada de eso"</strong> — cualquier función trascendental (trigonométricas, logaritmos, exponenciales) sigue teniendo que resolverse por software, igual que en la Pico 1.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como tener un equipo de matemáticos especialistas vestidos de uniforme V que resuelven sumas, restas, multiplicaciones, divisiones y raíces cuadradas de decimales a gran velocidad, pero no saben calcular trigonometría.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque los matemáticos humanos se tardan tiempo razonando, mientras que la FPU ejecuta las operaciones en nanosegundos por hardware entre registros S0 a S31.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Presenta las instrucciones exclusivas de la Pico 2 precedidas por el prefijo V (VADD, VSUB, VMUL, VDIV, VSQRT), las conversiones VMOV y las transferencias VLDR/VSTR con MicroPython; enfatiza que la FPU no incluye seno ni coseno por hardware.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Esperar encontrar instrucciones de funciones trascendentales (como seno o coseno) por hardware en la FPU, o intentar usar valores inmediatos directos sin cargar previamente los registros S.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c5-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cómo se dividen los registros de usuario R0 a R12 en la arquitectura ARM Cortex-M0 de la Pico 1?</summary><p>Se dividen en registros bajos, que van de R0 a R7, y registros altos, que van de R8 a R12.</p></details>
+<details class="qa"><summary>2. Explica con tus palabras cuál es la diferencia principal de sintaxis entre escribir una instrucción de suma en ensamblador puro y en MicroPython inline assembly.</summary><p>En ensamblador puro la instrucción se escribe libremente con comas como ADD RD, RN, RM, mientras que en MicroPython inline assembly es obligatorio encerrar los registros entre paréntesis, como add(RD, RN, RM) o add(RD, RM).</p></details>
+<details class="qa"><summary>3. Si se ejecuta una instrucción de corrimiento lógico a la izquierda LSL sobre un registro de 32 bits con un desplazamiento de 12 posiciones, ¿por qué es válida esta operación y qué ocurriría si se intentara un desplazamiento de 35 posiciones?</summary><p>Es válida porque 12 es menor o igual al límite máximo permitido de 31 bits; si se especifican 35 posiciones la operación falla y el ensamblador marca un error de compilación por exceder los 32 bits del registro.</p></details>
+<details class="qa"><summary>4. Compara el tiempo de ejecución de las instrucciones de salto (branches) entre la Raspberry Pi Pico 1 y la Pico 2.</summary><p>En la Pico 1 las instrucciones de salto consumen 3 ciclos máquina, mientras que en la Pico 2 el tiempo de ejecución se reduce a 2 ciclos máquina (de 8 a 16 nanosegundos a 150 MHz).</p></details>
+<details class="qa"><summary>5. ¿Cuáles son las funciones fijas reservadas de los registros R13, R14 y R15 en el procesador Cortex-M0?</summary><p>R13 es el Stack Pointer (SP), R14 es el Link Register (LR) y R15 es el Program Counter (PC).</p></details>
+<details class="qa"><summary>6. Si se requiere calcular la raíz cuadrada del contenido de un registro flotante S4 y guardar el resultado en S8, ¿cuál es la instrucción de FPU correspondiente y qué tipo de operandos exige?</summary><p>La instrucción es vsqrt(S8, S4), la cual exige trabajar exclusivamente entre registros de punto flotante S y no admite valores inmediatos directos.</p></details>
+<details class="qa"><summary>7. Compara la disponibilidad de la instrucción de división entre el procesador Cortex-M0 de la Pico 1 y la FPU de la Pico 2.</summary><p>En el Cortex-M0 de la Pico 1 no existe la instrucción de división entera por ser una arquitectura RISC de código reducido, mientras que en la FPU de la Pico 2 sí existe la instrucción vdiv para división de punto flotante.</p></details>
+<details class="qa"><summary>8. Explica por qué un programa compilado que utiliza instrucciones con prefijo V (como VADD o VSQRT) no puede ejecutarse en una Raspberry Pi Pico 1.</summary><p>Porque las instrucciones con prefijo V pertenecen al repertorio de la Unidad de Punto Flotante (FPU) y la Pico 1 carece físicamente de ese bloque de hardware en su procesador.</p></details>
 </details>
 
 <details class="section-block sec" id="c5-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>

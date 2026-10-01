@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T11:59:59+00:00",
+ "generatedAt": "2026-10-01T12:01:48+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -107,7 +107,7 @@
     "fecha": "2026-09-14",
     "resumen": "Tema 3 — Modelo de programación en ensamblador ARM para la Raspberry Pi Pico 1 (Cortex-M0) y Pico 2 (Cortex-M33 + FPU), sintaxis de Inline Assembly en MicroPython, y repertorio completo de instrucciones de movimiento, ar",
     "url": "materias/organizacion-y-arquitectura-de-computadoras/clase-05.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 6,
@@ -468,6 +468,11 @@
  },
  "gitlog": [
   {
+   "hash": "d47dc79",
+   "fecha": "2026-10-01T06:00:00-06:00",
+   "mensaje": "FSE Clase 06: formato de estudio + aviso sobre longitudes de onda de CD/DVD/Blu-ray"
+  },
+  {
    "hash": "f564625",
    "fecha": "2026-10-01T05:57:48-06:00",
    "mensaje": "ASI Clase 06 (sesión de logística del proyecto) marcada como no-aplica para el formato de estudio"
@@ -761,11 +766,6 @@
    "hash": "f9ed57f",
    "fecha": "2026-09-28T16:06:37Z",
    "mensaje": "MD: agregar Clase 06 (22 sep 2026) — cierre de exposiciones Proyecto 2 (Databricks, Pinecone, MongoDB, Milvus) y arranque Tema 3 (supervisado/no supervisado)"
-  },
-  {
-   "hash": "7ef8c92",
-   "fecha": "2026-09-28T15:56:48Z",
-   "mensaje": "Limpiar más pendientes vencidos: ASI diagramas y RP examen parcial"
   }
  ]
 }
