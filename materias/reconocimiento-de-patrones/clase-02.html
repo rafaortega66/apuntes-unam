@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 02 — Reconocimiento de Patrones</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -15,6 +16,18 @@
   <p class="prof">Ing. Rubén Omar Azuara Domínguez · 31 ago 2026 · Tema 3 — Selección y reducción de dimensionalidad · métodos Wrapper (Forward / Backward / Exhaustive), métodos embebidos (Lasso, árboles), PCA, cómo elegir K y PCA por SVD.</p>
   <p style="font-size:12px;color:var(--ink-soft);margin:2px 0 0">🔢 Numeración del profesor: corresponde a sus diapositivas <a href="material.html" style="color:var(--indigo)">Clase 5</a> (Selección y Reducción de Dimensionalidad) — no coincide 1:1 con "Clase 02" de este sitio.</p>
 </div>
+
+<div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c2-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Formulación de la ecuación de varianza explicada en SVD elevando al cuadrado los valores singulares s_i²</strong><span class="evid">Evidencia: evidencia de la clase: el profesor lo remarcó explícitamente diciendo que no se les olvide elevar s_i al cuadrado porque si no da resultados raros al hacer los ejercicios.</span></li>
+<li><strong>Cálculo de eigenvalores y eigenvectores de una matriz de covarianza mediante el determinante det(C - lambda I) = 0</strong><span class="evid">Evidencia: evidencia de la clase: el profesor resolvió en vivo dos ejemplos numéricos completos en el pizarrón obteniendo lambdas y vectores propios.</span></li>
+<li><strong>Inviabilidad computacional de la selección exhaustiva (Exhaustive Feature Selection) para más de 15 a 20 características</strong><span class="evid">Evidencia: evidencia de la clase: lo dijo explícitamente al explicar la escala exponencial del espacio de búsqueda y el costo de entrenar cada modelo.</span></li>
+<li><strong>El centrado de datos (restar la media) como paso obligatorio previo a PCA y SVD</strong><span class="evid">Evidencia: evidencia de la clase: lo repitió múltiples veces enfatizando que jamás se les olvide centrar los datos antes de descomponer.</span></li>
+<li><strong>Selección de componentes principales mediante la regla del codo, el umbral de varianza (90%) y el criterio de Kaiser (lambda &gt; 1)</strong><span class="evid">Evidencia: evidencia de la clase: lo explicó detalladamente en el audio apoyándose en la gráfica de varianza acumulada.</span></li>
+</ol>
+</details>
 
 
 <div class="files"><a class="btn" href="files/Clase-05-Seleccion-y-Reduccion-de-Dimensionalidad.pdf" target="_blank">📄 Diapositivas Clase 5 (prof.)</a></div>
@@ -32,7 +45,13 @@
 <tr><td>Chi-cuadrado</td><td>Categórica</td><td>Categórica</td></tr>
 <tr><td>ANOVA F-score</td><td>Continua</td><td>Categórica</td></tr>
 <tr><td>Información mutua</td><td>Cualquiera</td><td>Cualquiera</td></tr>
-</tbody></table></details>
+</tbody></table><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como revisar las manzanas en una frutería y desechar las podridas antes de empezar a cocinar, basándote solo en su aspecto y no en el sabor del platillo final.<span class="rompe">Dónde falla la analogía: Deja de funcionar si dos ingredientes que por separado parecen inútiles se combinan para darle todo el sabor al platillo final.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Representa la alternativa de selección de características previa al entrenamiento del modelo, útil cuando no se tienen suficientes recursos computacionales para entrenar múltiples clasificadores.</p>
+</div>
+</details>
 
 <details class="section-block sec" id="rdp-wrapper" open><summary><span class="stitle">Métodos Wrapper (de envoltura)</span></summary>
 <p>Usan un algoritmo de aprendizaje como <strong>caja negra</strong> para evaluar iterativamente el rendimiento (exactitud del clasificador) de distintos subconjuntos de variables. El <strong>orden</strong> de las características en la matriz de entrada no importa para el modelo (<code>A+B</code> = <code>B+A</code>).</p>
@@ -45,7 +64,14 @@
 <tr><td>Forward</td><td>Se espera que <strong>pocas</strong> características sean relevantes; ahorra cómputo</td><td>Una vez añadida, no la puede quitar → conserva redundantes / omite interacciones</td></tr>
 <tr><td>Backward</td><td>Se sospecha que <strong>la mayoría</strong> son relevantes; base sólida, capta interacciones</td><td>Costoso (entrenamientos con todas); inviable con miles de características</td></tr>
 <tr><td>Exhaustive</td><td>Se necesita el <strong>óptimo global</strong></td><td>Solo viable con un clasificador simple (bayesiano &gt; red neuronal)</td></tr>
-</tbody></table></details>
+</tbody></table><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como probar distintas combinaciones de ingredientes preparando un platillo cada vez, agregando uno a uno (forward), quitando uno a uno (backward) o probando todas las recetas posibles (exhaustive).<span class="rompe">Dónde falla la analogía: Falla cuando tienes cientos de ingredientes, pues preparar una receta completa para cada combinación tomaría años o agotaría la cocina.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite evaluar combinaciones de características usando el desempeño del propio clasificador, donde Forward es ideal para pocas características relevantes, Backward da una buena línea base inicial y Exhaustive garantiza el óptimo global a costo exponencial.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Creer que en Forward Selection se pueden eliminar características ya agregadas o que en Backward Selection se pueden reincorporar variables previamente descartadas.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="rdp-embebidos"><summary><span class="stitle">Métodos Embebidos</span></summary>
 <p>La selección ocurre <strong>durante</strong> el entrenamiento: el propio modelo tiene un algoritmo de selección intrínseco que asigna pesos / importancias y penaliza o elimina las variables que no aportan.</p>
@@ -58,14 +84,34 @@
 <li>En cada nodo se evalúan todas las características y se elige la que da la <strong>mayor reducción de impureza</strong> (Gini o entropía).</li>
 <li>Importancia de una característica = <code>Σ (muestras del nodo / total) × reducción de impureza</code>, sumada sobre todos los nodos que usan esa variable.</li>
 <li>Las importancias se <strong>normalizan</strong> para que sumen 1.0 y se seleccionan las que superen un <strong>umbral</strong> (ej. &gt; 0.5) o las <em>top-K</em>.</li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un chef experimentado que mientras cocina va ajustando la flama y descartando condimentos sobre la marcha según el sabor que va tomando el guiso.<span class="rompe">Dónde falla la analogía: Deja de servir si el modelo utilizado carece de un mecanismo interno de penalización o reglas de decisión basadas en umbrales.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Integra la selección dentro del mismo algoritmo de entrenamiento mediante penalización de pesos L1 (Lasso en la función de pérdida) o cálculo de importancia normalizada en nodos de árboles de decisión.</p>
+</div>
+</details>
 
 <details class="section-block sec" id="rdp-criterios-diseno"><summary><span class="stitle">Criterios de diseño (selección de características)</span></summary>
-<p>No hay regla fija: la elección del método depende de los <strong>recursos de cómputo</strong> y de la naturaleza de los datos. Sin poder de cómputo → usar métodos embebidos o filtrado previo al entrenamiento (wrapper/exhaustive resultan inviables). En la práctica es válido y recomendable <strong>comparar 2 o más métodos</strong> sobre el mismo problema para contrastar resultados y justificar las decisiones de diseño.</p></details>
+<p>No hay regla fija: la elección del método depende de los <strong>recursos de cómputo</strong> y de la naturaleza de los datos. Sin poder de cómputo → usar métodos embebidos o filtrado previo al entrenamiento (wrapper/exhaustive resultan inviables). En la práctica es válido y recomendable <strong>comparar 2 o más métodos</strong> sobre el mismo problema para contrastar resultados y justificar las decisiones de diseño.</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como decidir qué herramientas llevar a un viaje considerando el espacio en tu mochila, cuánto pesa cada una y si vale la pena llevar dos herramientas parecidas.<span class="rompe">Dónde falla la analogía: La analogía no aplica si se asume que existe un único criterio perfecto e inmutable independientemente del problema o de la computadora disponible.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Guía la elección del método de selección según los recursos computacionales disponibles, el número total de características y la naturaleza del problema, permitiendo incluso comparar dos métodos para justificar decisiones de diseño.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Pensar que un método de selección es intrínsecamente más correcto que otro, cuando el profesor aclaró que es una decisión de diseño basada en recursos y criterios.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="rdp-reduccion-dim"><summary><span class="stitle">Reducción de dimensionalidad — qué es y por qué</span></summary>
 <p>A diferencia de la selección (conserva intactas las variables originales), la reducción de dimensionalidad <strong>proyecta</strong> los datos a un espacio nuevo de menor dimensión mediante combinaciones matemáticas: las nuevas variables <em>ya no representan lo mismo</em> (ya no son peso, edad o género, sino combinaciones de ellas).</p>
-<p>Importa porque operar con vectores de alta dimensión provoca: mucho más <strong>tiempo de cómputo</strong>, mucho más <strong>almacenamiento</strong>, y sobre todo <strong>degradación del rendimiento</strong> de los modelos (maldición de la dimensionalidad).</p></details>
+<p>Importa porque operar con vectores de alta dimensión provoca: mucho más <strong>tiempo de cómputo</strong>, mucho más <strong>almacenamiento</strong>, y sobre todo <strong>degradación del rendimiento</strong> de los modelos (maldición de la dimensionalidad).</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como tomar una escultura tridimensional y proyectar su sombra en una pared de dos dimensiones para ver su silueta más clara sin cargar la escultura completa.<span class="rompe">Dónde falla la analogía: Falla porque la sombra crea un espacio con variables combinadas completamente nuevas que ya no representan medidas individuales como peso o altura.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Transforma el espacio original de alta dimensión a uno de menor dimensión creando combinaciones lineales para reducir tiempo de cálculo, almacenamiento y degradación del modelo, proyectando hacia las direcciones de máxima varianza (PCA).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Asumir que la reducción de dimensionalidad conserva las variables originales con sus significados físicos, cuando en realidad las combina creando nuevos ejes ortogonales.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="rdp-pca"><summary><span class="chip chip-examen">examen</span><span class="stitle">PCA — Análisis de Componentes Principales</span></summary>
 <p>Transforma variables posiblemente correlacionadas en <strong>componentes principales</strong> no correlacionados, ordenados por la <strong>varianza que explican</strong>. Asume que la dirección de <strong>máxima varianza</strong> es la más informativa (ahí los patrones de las clases quedan más separados).</p>
@@ -94,7 +140,14 @@ Z = W · X           (W = matriz de vectores propios; X = datos originales; Z = 
 <pre><code>det(Σ − λI) = (4−λ)(3−λ) − 2 = λ² − 7λ + 10 = 0   →   λ₁ = 5 , λ₂ = 2
    v₁ = [1, 1]ᵀ ,  v₂ = [1, −2]ᵀ</code></pre>
 <p><strong>Recordatorio de las diapositivas:</strong> la suma de todos los valores propios = varianza total; varianza explicada acumulada = <code>(Σᵢ₌₁..ₖ λᵢ) / (Σᵢ₌₁..d λᵢ)</code>.</p>
-<p><strong>Ejercicio participativo en vivo:</strong> el profesor presentó una segunda matriz de covarianza y pidió al grupo resolver el determinante para obtener los valores propios. Los alumnos respondieron correctamente las dos soluciones de la ecuación característica, y al resolver el sistema homogéneo para cada una obtuvieron los vectores directores correspondientes (pendientes de normalizar) — confirmando en vivo que el procedimiento se puede replicar con cualquier matriz de covarianza 2×2.</p></details>
+<p><strong>Ejercicio participativo en vivo:</strong> el profesor presentó una segunda matriz de covarianza y pidió al grupo resolver el determinante para obtener los valores propios. Los alumnos respondieron correctamente las dos soluciones de la ecuación característica, y al resolver el sistema homogéneo para cada una obtuvieron los vectores directores correspondientes (pendientes de normalizar) — confirmando en vivo que el procedimiento se puede replicar con cualquier matriz de covarianza 2×2.</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como resolver una ecuación matemática en el pizarrón para encontrar los ángulos exactos donde se estira o encoge una figura sin cambiar su forma.<span class="rompe">Dónde falla la analogía: Deja de funcionar si la matriz no se centra previamente restando la media, provocando que los datos escalados incorrectamente distorsionen los valores propios.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra la resolución matemática paso a paso calculando el determinante det(C - lambda I) = 0 para obtener los eigenvalores (como lambda=8, lambda=1 o 5 y 2) y sus eigenvectores asociados que definen la nueva base ortogonal.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Olvidar elevar al cuadrado los valores singulares (s_i²) al calcular la varianza explicada cuando se utiliza SVD en lugar de las lambdas directas de la matriz de covarianza.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="rdp-elegir-k"><summary><span class="chip chip-examen">examen</span><span class="stitle">Cómo elegir K (número de componentes)</span></summary>
 <pre><code>varianza explicada (individual) = λᵢ / Σ λⱼ        (la acumulada llega a 1.0 = 100 %)</code></pre>
@@ -115,6 +168,18 @@ Z = W · X           (W = matriz de vectores propios; X = datos originales; Z = 
 <li><strong>⚠️ Varianza explicada en SVD:</strong> hay que <strong>elevar al cuadrado</strong> los valores singulares → <code>σᵢ² / Σ σⱼ²</code>. Olvidarlo da resultados erróneos (error muy común en exámenes y en código).</li>
 <li><strong>Ventajas:</strong> estabilidad numérica muy superior; funciona sobre matrices <strong>no cuadradas</strong>; evita calcular <code>Xᵀ X</code> (costoso); eficiente para datasets masivos con <code>N ≫ D</code> o <code>D ≫ N</code>. Es lo que usan la mayoría de las bibliotecas.</li>
 </ul></details>
+
+<details class="section-block sec" id="c2-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuál es la diferencia fundamental entre la selección de características y la reducción de dimensionalidad según lo expuesto en clase?</summary><p>La selección de características conserva un subconjunto de las variables originales manteniendo su significado físico (como edad o peso), mientras que la reducción de dimensionalidad proyecta los datos a un nuevo espacio de menor dimensión donde las nuevas variables son combinaciones lineales que ya no representan las características originales.</p></details>
+<details class="qa"><summary>2. Explica con tus palabras por qué la selección exhaustiva de características (Exhaustive Feature Selection) garantiza encontrar el óptimo global y cuál es su principal desventaja.</summary><p>Garantiza el óptimo global porque prueba absolutamente todas las combinaciones posibles de características evaluando un modelo para cada una; su principal desventaja es que escala de forma exponencial y se vuelve computacionalmente inviable cuando se tienen más de 15 o 20 características.</p></details>
+<details class="qa"><summary>3. Dada la matriz de covarianza C con ecuación característica obtenida det(C - lambda I) = 0 que resulta en lambdas igual a 5 y 2, ¿cuál es la varianza explicada por el primer componente principal?</summary><p>La varianza total es la suma de los valores propios (5 + 2 = 7), por lo que la varianza explicada por el primer componente asociado a lambda = 5 es 5 / 7, lo que equivale aproximadamente al 71.4% de la varianza total.</p></details>
+<details class="qa"><summary>4. Compara los algoritmos de selección de características Forward Selection y Backward Selection en términos de su punto de partida y sus limitaciones de modificación.</summary><p>Forward Selection inicia con un conjunto vacío y añade características una a una sin poder eliminar ninguna variable ya agregada; Backward Selection inicia con todas las características y las elimina una a una sin poder reincorporar ninguna variable previamente descartada.</p></details>
+<details class="qa"><summary>5. ¿Cómo funciona la regularización L1 de Lasso como método embebido para la selección de características?</summary><p>Lasso añade la norma L1 de los pesos W a la función de pérdida del modelo durante el entrenamiento, asignando penalizaciones a los pesos de modo que a las características menos importantes se les reduce su peso a valores muy pequeños o directamente a cero para eliminarlas.</p></details>
+<details class="qa"><summary>6. ¿Cuáles son las tres reglas o criterios heurísticos explicados en clase para determinar cuántos componentes principales K conservar en PCA?</summary><p>La regla del codo (elegir el punto donde la curva de varianza acumulada se dobla y detiene su cambio abrupto), el umbral de varianza (fijar un porcentaje deseado como el 90% y conservar los componentes necesarios) y el criterio de Kaiser (conservar los componentes cuyo valor propio lambda sea mayor a 1).</p></details>
+<details class="qa"><summary>7. En la implementación de PCA mediante Descomposición en Valores Singulares (SVD), ¿cuál es la fórmula para calcular la varianza explicada de cada componente y qué precaución enfatizó el profesor?</summary><p>La fórmula es s_i² / sum(s_j²), donde s_i representa los valores singulares de la matriz Sigma. El profesor enfatizó que no se debe olvidar elevar cada valor singular s_i al cuadrado, a diferencia de las lambdas directas de la matriz de covarianza.</p></details>
+<details class="qa"><summary>8. ¿Por qué PCA proyecta los datos hacia las direcciones de máxima varianza y qué asunción se hace al usarlo para clasificación?</summary><p>Proyecta hacia la máxima varianza para retener la mayor cantidad de información del conjunto original en una base ortogonal, asumiendo que en las direcciones donde existe mayor dispersión de los datos será más factible separar y clasificar los patrones.</p></details>
+</details>
 
 <details class="section-block sec" id="rdp-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
 <ul>
