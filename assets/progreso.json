@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T07:25:32+00:00",
+ "generatedAt": "2026-10-01T07:34:46+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -193,7 +193,7 @@
     "fecha": "2026-09-30",
     "resumen": "Tema 2 (subtema 2.7) — Colector abierto y trama del bus I²C, SMBus, familia SPI (QSPI y Octa-SPI), I²S para audio digital y UART / RS-232 / MAX232 con paridad.",
     "url": "materias/fundamentos-de-sistemas-embebidos/clase-10.html",
-    "formato": "prosa"
+    "formato": "estudio"
    }
   ],
   "administracion-de-servicios-de-internet": [
@@ -467,6 +467,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "e27e2c6",
+   "fecha": "2026-10-01T01:25:33-06:00",
+   "mensaje": "ACS: cotejo completo contra el sitio del profesor y los audios (NotebookLM)"
+  },
   {
    "hash": "4bcad55",
    "fecha": "2026-10-01T01:04:50-06:00",
@@ -761,11 +766,6 @@
    "hash": "8855d66",
    "fecha": "2026-09-17T07:23:42-06:00",
    "mensaje": "ACS: corregir Tarea 3 (capturas como imagen real, no texto)"
-  },
-  {
-   "hash": "0f497e2",
-   "fecha": "2026-09-17T07:10:55-06:00",
-   "mensaje": "ACS: registrar entrega de la Tarea 3"
   }
  ]
 }

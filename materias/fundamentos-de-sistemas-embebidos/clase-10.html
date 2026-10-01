@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 10 — Fundamentos de Sistemas Embebidos</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -15,6 +16,18 @@
   <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 30 sep 2026 · Tema 2 (subtema 2.7) — Colector abierto y trama del bus I²C, SMBus, familia SPI (QSPI y Octa-SPI), I²S para audio digital y UART / RS-232 / MAX232 con paridad.</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #A98BD1"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c10-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Transiciones de Start y Stop en el bus I²C</strong><span class="evid">Evidencia: Lo dijo explícitamente y remarcó que las transiciones de SDA con SCL en alto son la base física del protocolo.</span></li>
+<li><strong>Cálculo de rendimiento efectivo en I²C (20 bits por byte, 20 KB/s a 400 kHz)</strong><span class="evid">Evidencia: Lo resolvió en vivo en el pizarrón paso a paso para comparar su velocidad contra el puerto serie.</span></li>
+<li><strong>Variantes de SPI (QSPI y Octa-SPI) y cálculo de tasa de transferencia en MB/s</strong><span class="evid">Evidencia: Lo resolvió en vivo en el pizarrón mostrando el incremento de ancho de banda al aumentar las líneas de datos.</span></li>
+<li><strong>Acoplamiento de voltajes industriales con el circuito integrado MAX232 en UART/RS-232</strong><span class="evid">Evidencia: Lo dijo explícitamente al explicar la diferencia entre niveles de ±12 V y niveles TTL de 5 V.</span></li>
+<li><strong>Efectividad del bit de paridad en UART</strong><span class="evid">Evidencia: Lo explicó en vivo demostrando numéricamente que ante un doble error la paridad falla y solo tiene 50% de efectividad.</span></li>
+</ol>
+</details>
+
 <div class="section-block nota" style="border-left:3px solid #A98BD1"><p style="margin:0"><strong>✔️ Contrastado con el audio:</strong> las cifras de esta página fueron confirmadas contra el audio. Única observación aparte: el profesor habló de I²C a 2 MHz como “modo de alta velocidad”; las especificaciones de I²C no definen un modo de 2 MHz (sus modos son 100 kHz, 400 kHz, 1 MHz y 3.4 MHz), así que trátalo como la cifra de la clase.</p></div>
 
 <details class="section-block sec" id="c10-i2c-fisica" open><summary><span class="stitle">Electrónica del bus I²C: colector abierto y resistencias pull-up</span></summary>
@@ -22,6 +35,13 @@
 <p>Funcionamiento eléctrico: cuando se inyecta corriente a la base del transistor, este conduce, la energía fluye del colector al emisor y la diferencia de potencial de la línea cae a un nivel cercano a 0 V (cero lógico). Si no se inyecta corriente a la base, el transistor no conduce y la resistencia de pull-up eleva la línea a V<sub>CC</sub> (uno lógico).</p>
 <p>Para hacerlo intuitivo, el profesor usó una <strong>analogía hidráulica</strong>: la corriente es un río; al poner piedras en el cauce (resistencia) el agua se represa arriba (nivel alto), mientras que río abajo el nivel cae al drenarse la presa.</p>
 <p>Esta arquitectura permite escribir ceros activos conmutando el transistor a tierra y garantiza además una configuración <strong>multimaestro</strong>: un maestro principal coordina la matriz de sensores y, si se incorpora un maestro secundario, este permanece a la escucha del bus y, en cuanto la línea queda libre, puede tomar el control y solicitar información a los esclavos.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como un río donde pones piedras para formar un dique; el agua se represa arriba manteniendo nivel alto (1) y al abrir el dique el agua cae al drenaje (0).<span class="rompe">Dónde falla la analogía: La analogía usa masa continua de agua en un cauce, mientras que el bus conmuta pulsos de voltaje/corriente mediante transistores en una línea fija.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite la configuración multimaestro y la convivencia de dispositivos con diferentes niveles de voltaje (3.3 V y 5 V) sin quemar las salidas.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir si el transistor escribe unos o ceros; el profesor aclaró que solo se escriben ceros activos a tierra y el uno lo fija la resistencia de pull-up.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c10-i2c-trama" open><summary><span class="stitle">Protocolo y trama I²C: Start, dirección, R/W, ACK/NACK y Stop</span></summary>
@@ -41,11 +61,25 @@
 <li>Comparación con UART N81 a 115,200 baudios (1 bit de inicio + 8 de datos + 1 de paro + 0.5 de margen ≈ 10.5 bits/byte): 115,200 ÷ 10.5 ≈ <strong>11 KB/s</strong>.</li>
 </ul>
 <p>Por tanto, I²C a 400 kHz ofrece casi el doble de velocidad efectiva que un puerto serie tradicional a 115.2 kbps. Según el profesor, en los modos de alta velocidad a 2 MHz (cinco veces los 400 kHz) la tasa efectiva llega a unos 100 KB/s. Para un byte de datos cuentan los 10 bits de la trama de dirección + 9 bits (8 de datos + ACK) + el bit de Stop = 20 bits.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como mandar una carta con acuse de recibo; pones la dirección del destinatario, indicas si quieres leer o escribir y el receptor baja una mano para confirmar.<span class="rompe">Dónde falla la analogía: Las cartas no detienen el tiempo, mientras que en I²C el esclavo puede retener la línea de reloj (clock stretching) y pausar al maestro en tiempo real.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Define la secuencia síncrona de comunicación en 2 hilos (SCL y SDA) y permite calcular la tasa de transferencia real del bus.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir baudios con bytes o creer que el puerto serie es más rápido; el profesor demostró que I2C a 400 kHz rinde 20 KB/s frente a 11 KB/s de UART a 115,200 baudios.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c10-smbus" open><summary><span class="stitle">SMBus (System Management Bus)</span></summary>
 <p>SMBus es una variante simplificada y más lenta derivada de I²C, desarrollada por Intel y Philips. Conserva la capa física de 2 alambres (SCL y SDA) a colector abierto con pull-ups, pero es una arquitectura <strong>punto a punto</strong> (un maestro conectado a su esclavo dedicado), lo que elimina la necesidad de transmitir la dirección del esclavo en cada trama.</p>
 <p>Opera entre <strong>10 kHz y 100 kHz</strong> y es el estándar de gestión interna en las tarjetas madre: control de encendido y apagado de la fuente, lectura de sensores térmicos de la CPU, velocidad de ventiladores, módulos de memoria RAM y manejo de interrupciones. Sus comandos permiten rutinas de control rápido, lectura de registros en formato short o long, refresco automático de DRAM y transferencias en ráfaga (burst).</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como la orden directa de un jefe a su único empleado personal; como no hay nadie más escuchando, no hace falta pronunciar su nombre antes de hablar.<span class="rompe">Dónde falla la analogía: Un empleado puede responder con opiniones o frases complejas, mientras SMBus transmite comandos de control predefinidos (byte, short, long, ráfaga) entre registros.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la variante de I2C punto a punto (10 a 100 kHz) usada en motherboards para gestionar fuentes de poder, ventiladores, sensores térmicos y refresco DRAM.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Pensar que SMBus admite múltiples esclavos en el mismo bus como I2C; el profesor enfatizó que es estrictamente punto a punto sin dirección.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c10-spi" open><summary><span class="stitle">Bus SPI, QSPI y Octa-SPI</span></summary>
@@ -64,6 +98,13 @@
 <li>QSPI: 20 MB/s por sentido (<strong>40 MB/s</strong> combinados).</li>
 <li>Octa-SPI: 40 MB/s por sentido (<strong>80 MB/s</strong> combinados).</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como dos personas hablando por teléfono al mismo tiempo con dos canales dedicados de ida y vuelta (Full Duplex) mientras un metrónomo les marca el ritmo.<span class="rompe">Dónde falla la analogía: Las personas no pueden hablar y entenderse a 80 MHz, mientras que el hardware de SPI transmite y recibe bits simultáneamente en cada ciclo de reloj.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite transferencias síncronas de alta velocidad (80 MHz o más) en interfaces punto a punto como memorias Flash, BIOS/UEFI, tarjetas MicroSD y pantallas de relojes.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Intentar incluir bits de dirección en cada byte transmitido como en I2C, o confundir megabits con megabytes en el cálculo de ancho de banda.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c10-i2s" open><summary><span class="stitle">Bus I²S (Inter-IC Sound) para audio digital</span></summary>
@@ -74,6 +115,13 @@
 <li>Audio CD (44.1 kHz × 2 canales × 16 bits): 44,100 × 4 bytes = 176,400 B/s = <strong>176.4 KB/s</strong> &lt; 200 KB/s, pasa holgadamente.</li>
 <li>Audio a 48 kHz: 48,000 × 4 = <strong>192 KB/s</strong>, también por debajo del límite.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como un estéreo con dos bocinas donde un interruptor (Word Select) avisa en cada pulso si la música que va pasando es para la bocina izquierda o la derecha.<span class="rompe">Dónde falla la analogía: Las bocinas emiten ondas analógicas de aire, mientras I2S transporta streams digitales de bits de audio entre circuitos integrados (del lector MP3 al DAC/amplificador).</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es un protocolo síncrono especializado en audio digital punto a punto (hasta 3 MHz) que transmite audio estéreo calidad CD (44.1 kHz, 16 bits = 176.4 KB/s) sin overhead.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Asumir que I2S se conecta directamente a las bocinas o audífonos; el profesor aclaró que va del reproductor al amplificador y las bocinas reciben señal analógica.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c10-uart" open><summary><span class="stitle">USART / UART, RS-232, MAX232 y paridad</span></summary>
@@ -81,10 +129,36 @@
 <p><strong>Niveles físicos y MAX232.</strong> RS-232 opera con voltajes industriales de −12 V a +12 V (24 V pico a pico). Para conectarlo a la electrónica TTL de un microcontrolador (5 V o 3.3 V) es obligatorio un acoplador como el <strong>MAX232</strong>. Conectar +12 V directo a los pines de un Arduino lo destruye al instante (“le sale humo”).</p>
 <p><strong>Paquete y paridad.</strong> La línea está en alto (1) en reposo; la transmisión empieza con un bit de inicio (flanco 1→0) que activa el reloj del receptor. A diferencia de I²C o SPI, UART permite paquetes de 6, 7 u 8 bits seguidos de un bit de paridad y bits de paro.</p>
 <p><strong>Ejemplo de paridad:</strong> el byte 1F hexadecimal = 0001 1111; suma de unos = 5 (impar). Si se configuró paridad par y el receptor lee suma impar, el hardware detecta error. El profesor explicó que es una detección muy básica: si cambia un solo bit, la suma cambia y se detecta el error; pero si cambian dos bits a la vez, la suma vuelve a cuadrar y el sistema “ya no se da cuenta de nada”. Por eso dijo que tiene una efectividad de detección del 50 %, “mejor que nada”.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como dos personas que acordaron hablar a la misma velocidad sin ver un reloj externo; el emisor da un grito de inicio y el receptor empieza a contar el tiempo para escuchar.<span class="rompe">Dónde falla la analogía: Si los dos relojes se desalinean levemente en el tiempo, los datos se corrompen, a diferencia de los humanos que se entienden ajustando la voz.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es un protocolo asíncrono basado en baudios que requiere el chip MAX232 para adaptar los voltajes de ±12 V de RS-232 a los 5 V TTL del microcontrolador y evitar que se queme.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Pensar que el bit de paridad garantiza corrección total de errores; el profesor demostró que ante la alteración simultánea de dos bits la paridad falla y solo detecta el 50%.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c10-plan" open><summary><span class="stitle">Debate sobre el plan de estudios de Ingeniería en Computación</span></summary>
 <p>Un alumno relató que comentó a un profesor que los alumnos deberían poder crear un procesador desde cero, y este respondió molesto: “si quieren más hardware, mejor sean eléctricos/electrónicos”. El M.C. Matamoros rechazó esa postura: el Ingeniero en Computación es el <strong>pegamento entre el hardware y el software</strong>, el especialista de bajo nivel. Quien no quiera trabajar con hardware debió elegir Ciencias de la Computación (Facultad de Ciencias) o Informática (Contaduría).</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como un mecánico-electricista automotriz que sabe reparar tanto el motor físico como la computadora del auto, frente a quien solo sabe conducir o lavar la carrocería.<span class="rompe">Dónde falla la analogía: Los autos son máquinas terminadas, mientras que en computación el ingeniero diseña la interfaz de hardware y el código de bajo nivel que une ambos mundos.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Reafirma la identidad del Ingeniero en Computación como "el pegamento entre el hardware y el software", criticando la reducción de materias de hardware en el plan de estudios.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> La sugerencia de un profesor de la facultad de que los alumnos interesados en hardware se cambien a Eléctrica/Electrónica; el M.C. Matamoros rechazó la idea afirmando que el perfil exige dominar ambos.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c10-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cómo se definen electrónicamente las condiciones de Start y Stop en el protocolo I²C?</summary><p>La condición de Start es un flanco de bajada en la línea SDA (de 1 a 0) mientras SCL se mantiene en alto; la condición de Stop es un flanco de subida en SDA (de 0 a 1) mientras SCL está en alto.</p></details>
+<details class="qa"><summary>2. ¿Por qué en I²C las líneas SDA y SCL utilizan transistores de colector abierto con resistencias de pull-up en lugar de salidas totempole convencionales?</summary><p>Porque permite escribir ceros lógicos derivando la corriente a tierra sin causar cortocircuitos cuando hay múltiples maestros o esclavos en el bus, y hace posible conectar dispositivos de distintos voltajes (3.3 V y 5 V) utilizando la resistencia de pull-up para fijar el nivel alto.</p></details>
+<details class="qa"><summary>3. Si se transfiere un bloque de datos por I²C a una frecuencia de reloj de 800 kHz, considerando que cada byte de datos requiere 9 bits físicos y la trama de dirección inicial toma 10 bits, ¿cuál es la velocidad de transferencia efectiva en KB/s para enviar 5 bytes de datos en una sola transacción?</summary><p>La transacción total requiere 10 bits de dirección + (5 bytes * 9 bits) = 55 bits físicos. A 800 kHz, la tasa de transferencia en bytes es 800,000 / 55 ≈ 14,545.45 bytes/s, lo que equivale a aproximadamente 14.54 KB/s.</p></details>
+<details class="qa"><summary>4. Compara el bus I²C y el bus SPI en términos de número de hilos, modo de transmisión y rendimiento de velocidad según lo visto en clase.</summary><p>I²C usa 2 hilos (SCL, SDA), es Half Duplex con direccionamiento de 7 bits y opera típicamente entre 100 kHz y 2 MHz (20 a 100 KB/s); SPI usa 4 hilos (SCLK, MOSI, MISO, CS), es Full Duplex real sin overhead de dirección y alcanza velocidades superiores a 80 MHz (10 MB/s o más).</p></details>
+<details class="qa"><summary>5. ¿Para qué sirve el circuito integrado MAX232 al conectar una interfaz serie UART/RS-232 a un microcontrolador?</summary><p>Sirve para acoplar los niveles de voltaje del estándar RS-232 (que operan entre -12 V y +12 V) a los niveles TTL de 5 V o 3.3 V del microcontrolador, evitando que el exceso de voltaje queme la electrónica digital.</p></details>
+<details class="qa"><summary>6. ¿Por qué el profesor afirma que el bit de paridad en UART tiene una efectividad de detección de errores de solo el 50%?</summary><p>Porque la paridad solo detecta alteraciones en un número impar de bits; si dos bits cambian de valor simultáneamente durante la transmisión, la suma de unos vuelve a coincidir y el sistema no detecta la corrupción del dato.</p></details>
+<details class="qa"><summary>7. Calcula el ancho de banda requerido por el bus I²S para transmitir un flujo de audio estéreo sin compresión muestreado a 96 kHz con una resolución de 16 bits por canal, y determina si cabe en un canal I²S configurado a 2 MHz (con 200 KB/s disponibles).</summary><p>El tráfico es 96,000 Hz <em> 2 canales </em> 2 bytes = 384,000 bytes/s (384 KB/s). Como 384 KB/s supera la capacidad de 200 KB/s del canal a 2 MHz, ese flujo no cabe y requeriría subir la frecuencia del reloj o usar otro bus como SPI.</p></details>
+<details class="qa"><summary>8. Compara las funciones y ámbitos de aplicación del bus I²C frente al bus SMBus.</summary><p>I²C es un bus multimaestro y multiesclavo para conectar varios sensores y periféricos mediante direcciones de 7 bits; SMBus es una variante simplificada de I²C punto a punto (10 a 100 kHz) usada internamente en tarjetas madre para controlar fuentes de poder, ventiladores, sensores térmicos y refresco de DRAM sin enviar direcciones de esclavo.</p></details>
 </details>
 
 <details class="section-block sec" id="c10-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>

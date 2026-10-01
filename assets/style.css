@@ -501,3 +501,5 @@ details.qa[open] > summary { margin-bottom: 8px; }
 details.qa p { font-size: 14px; }
 .ojo { font-size: 13.5px; color: var(--ink-soft); border-left: 3px solid var(--ink-soft); padding: 6px 12px; margin: 10px 0; }
 .section-block table.izq td:last-child, .section-block table.izq th:last-child { text-align: left; }
+.estudio-extra { margin: 16px 0 6px; padding-top: 4px; border-top: 1px dashed rgba(255,255,255,0.12); }
+.estudio-extra p { white-space: normal; }

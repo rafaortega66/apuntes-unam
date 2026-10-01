@@ -131,7 +131,10 @@ NotebookLM en `/nueva-clase`). Ejemplo de referencia:
 `materias/administracion-de-servicios-de-internet/clase-10.html`. Las páginas
 con este formato llevan `<meta name="formato" content="estudio">` en el
 `<head>` — así `progreso.html` cuenta cuántas clases ya están migradas. Las
-anteriores se migran solo cuando el usuario lo pida, materia por materia.
+anteriores se están migrando (aprobado por el usuario el 1 oct 2026) **de la
+clase más reciente hacia atrás, mezclando materias** — usa `/migrar-clase`
+(`scripts/migrar_formato_estudio.py` conserva la prosa existente y solo
+agrega las partes de estudio).
 
 Secciones de una página en formato de estudio, en este orden:
 1. `detail-head` — número de clase, profesor, fecha, resumen de una línea.
