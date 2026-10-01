@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 06 — Seguridad Informática Básica</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -15,19 +16,51 @@
   <p class="prof">Dra. Cintia Quezada Reyes · 17 sep 2026 · Tema 2 — Amenazas y vulnerabilidades: definiciones formales, la fórmula del riesgo, las cinco fuentes de origen, y las clasificaciones por flujo de información, objetivo y ubicación.</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c6-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>El riesgo se define formalmente como el producto de la ocurrencia de una amenaza por su consecuencia (Riesgo = Ocurrencia x Consecuencia)</strong><span class="evid">Evidencia: Explicado y escrito por la profesora en el pizarrón al contrastar el riesgo con la amenaza como factor latente.</span></li>
+<li><strong>Entre el 85% y el 95% de los incidentes reales en las organizaciones corresponden a amenazas internas e intencionadas</strong><span class="evid">Evidencia: Mencionado explícitamente y recalcado por la profesora al explicar la clasificación por objetivo y por ubicación.</span></li>
+<li><strong>La descripción de las amenazas debe ser precisa en sus variables (magnitud sísmica exacta o modalidad de robo) y no enunciarse de forma vaga como "robo" o "que tiemble"</strong><span class="evid">Evidencia: Explicado detalladamente con los ejemplos de sismos de 1.3 frente a 8.1 y los protocolos sismológicos en Haití.</span></li>
+<li><strong>Las categorizaciones por flujo de información dividen las amenazas en intercepción (atenta contra la confidencialidad), interrupción (atenta contra la disponibilidad), modificación (atenta contra la integridad) y suplantación</strong><span class="evid">Evidencia: Explicado en el desglose formal de emisor, canal y receptor en el pizarrón.</span></li>
+</ol>
+</details>
+
 <details class="section-block sec" id="c6-transicion" open><summary><span class="stitle">Transición: equilibrio operacional y el Tema 2 — Amenazas y vulnerabilidades</span></summary>
 <p>La clase inicia con un repaso breve del concepto de <strong>equilibrio operacional</strong> y la graduación de los servicios de seguridad según las necesidades del negocio, retomando el ejemplo de Liverpool. A partir de ahí se da paso formal al Tema 2, dedicado a las amenazas y las vulnerabilidades. La profesora enfatiza que <strong>estos dos términos no son sinónimos</strong>, y que un error común en las organizaciones es detectar solo vulnerabilidades ignorando las amenazas, o viceversa. Tampoco existe una relación uno a uno entre una amenaza y una vulnerabilidad: dentro de una organización hay una amplia diversidad de amenazas que requieren análisis profundo para minimizar el riesgo. Para priorizar ese análisis es vital evaluar la <strong>frecuencia de aparición</strong> de las amenazas, que puede ir desde eventos que ocurren una vez al año hasta amenazas críticas que se presentan cada 24 horas, cada 2 horas o varias veces por semana. Identificar bien los activos, amenazas y vulnerabilidades permite responder la primera pregunta clave de la seguridad: <em>"¿qué quiero proteger?"</em>.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como administrar un restaurante donde debes cuidar tanto que no se te acaben los insumos como que la puerta trasera no se quede abierta; son problemas distintos que debes graduar según lo que necesita tu negocio.<span class="rompe">Dónde falla la analogía: La analogía se rompe porque en la seguridad informática no existe una relación simple de uno a uno entre cada tipo de amenaza y cada vulnerabilidad, y las amenazas varían en frecuencias desde una vez al año hasta cada 2 horas.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque evita el error común de las empresas de concentrarse únicamente en buscar vulnerabilidades u olvidar las amenazas, ayudando a contestar la primera pregunta de la seguridad: "¿qué quiero proteger?".</p>
+<div class="errores"><p><strong>Errores comunes:</strong> La profesora señaló que las organizaciones suelen cometer el error de buscar una correspondencia unívoca uno a uno entre amenaza y vulnerabilidad, o descuidar la frecuencia con la que aparecen.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c6-precision-amenazas" open><summary><span class="stitle">Precisión al describir amenazas y jerarquización de las pérdidas</span></summary>
 <p>Al identificar un bien o activo (por ejemplo, la propia vivienda), se puede analizar qué daños podría sufrir y por qué sería grave que ocurrieran: quedarse sin lugar para vivir, incurrir en gastos extraordinarios no contemplados, o perder bienes de alto valor irrecuperables. Para ilustrar la evaluación del impacto y la jerarquización de las inversiones de seguridad, se usó el ejemplo visual de una figura de globo con forma de perro que teme a un cerillo encendido, frente a una figura de origami de papel que teme a una chincheta: aunque una chincheta es una amenaza directa para el papel, una llama de cerillo provocaría una <strong>pérdida total e irreversible</strong> en ambos objetos. Como existen pérdidas totales que no se pueden recuperar "ni con todo el oro del mundo", organizaciones y personas deben establecer prioridades de inversión para prevenir los escenarios más catastróficos.</p>
 <p>También se recalcó la importancia de una <strong>descripción de amenazas precisa</strong>: no basta con enunciar de forma vaga "robo" o "que tiemble" — hay que detallar qué modalidad de robo, o qué magnitud sismológica se contempla (por ejemplo, sismos de magnitud 1.3 frente a eventos de 7.1, 7.5 u 8.1/8.5, recordando el sismo de 2017 con epicentro en la Ciudad de México, y la ausencia histórica de protocolos sismológicos en lugares como Haití). Aunque ciertos sucesos tengan frecuencia de aparición muy baja (como la caída de un meteorito o el desplome de un avión o helicóptero sobre una vivienda), no deben descartarse arbitrariamente del análisis de riesgo.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como comparar un perro de globo que le teme a un cerillo contra una pajarita de papel que le teme a una chincheta; si el cerillo se prende, quema ambos juguetes por completo y causa una pérdida total irrecuperable.<span class="rompe">Dónde falla la analogía: Se rompe porque en los sistemas los daños no siempre son destrucción física, sino la suspensión de servicios esenciales como el portal del SAT o la UNAM, generando pérdidas intangibles de tiempo e ineficiencias.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque permite a las organizaciones establecer jerarquías de inversión para prevenir pérdidas catastróficas que no se pueden recuperar ni con todo el oro del mundo, sin descartar arbitrariamente amenazas de baja frecuencia.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Se criticó el error de describir amenazas vagamente como "robo" o "que tiemble" sin especificar modalidades o magnitudes sísmicas, o asumir falsamente que el software se puede desarrollar "para ayer" sin principios de seguridad.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c6-definiciones" open><summary><span class="stitle">Definiciones formales: amenaza y riesgo</span></summary>
 <p><strong>Amenaza:</strong> cualquier actividad, evento o circunstancia que intenta o puede causar un daño a la información o a cualquier bien de la organización (incluyendo hardware, software, instalaciones, y el propio recurso humano, protegido mediante seguros de gastos médicos o de vida). La amenaza es un <strong>factor latente y multifactorial</strong> que siempre está presente — como la probabilidad de lluvia del 80%, sufrir un ataque cardíaco, ser víctima de un delito tras ganar la lotería, o lesionarse jugando fútbol o bajando escaleras.</p>
 <p><strong>Riesgo:</strong> se define formalmente como el producto de la ocurrencia de la amenaza y su consecuencia: <strong>Riesgo = Ocurrencia × Consecuencia</strong>. El riesgo determina la probabilidad concreta y la severidad del impacto en caso de que la amenaza llegue a materializarse.</p>
 <p>Sobre disponibilidad, se plantearon escenarios de <strong>denegación de servicio</strong> tanto en suministros cotidianos (agua, gas, internet, educación, compras y pagos en línea) como en instituciones: qué pasaría si la UNAM dejara de existir, o las consecuencias operativas de las fallas del portal del SAT durante las declaraciones anuales de abril, que generan pérdidas severas de tiempo e ineficiencias. Sobre puntos de acceso (físicos o lógicos), se revisaron las eventualidades al intentar ingresar a una instalación o las desconfiguraciones por ejecución inadvertida de software — desmintiendo la típica justificación de <em>"así estaba cuando llegué"</em>. También se trataron los errores de programación: gran parte del software actual se desarrolla sin principios básicos de seguridad por la urgencia de entrega ("para ayer"), desmontando la falsa creencia de que los especialistas en seguridad no necesitan saber programar, o que los desarrolladores no necesitan saber de seguridad.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>La amenaza es como la posibilidad latente de que llueva cuando sales a la calle, mientras que el riesgo es el cálculo real de qué tanto te vas a mojar y qué tan grave será arruinar tu ropa si cae la tormenta.<span class="rompe">Dónde falla la analogía: Deja de servir porque la amenaza en seguridad no es un evento climático natural inevitable, sino una circunstancia multifactorial que busca causar daño directo a bienes lógicos, físicos o personas aseguradas.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque brinda la fórmula matemática formal (Riesgo = Ocurrencia x Consecuencia) para evaluar la severidad de un impacto y determinar la probabilidad concreta de materialización de un daño.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> La confusión más común de los alumnos es tratar la amenaza y el riesgo como sinónimos, omitiendo que la amenaza es el factor latente y el riesgo es el resultado formal de su ocurrencia por la consecuencia.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c6-cinco-fuentes" open><summary><span class="stitle">Las cinco fuentes de origen de las amenazas</span></summary>
@@ -39,6 +72,13 @@
 <li><strong>Desastres naturales / Actos de Dios:</strong> eventos ambientales e imponderables de la naturaleza donde no existe responsabilidad humana directa (<em>Acts of God</em>).</li>
 </ul>
 <p>Todas estas fuentes se interrelacionan con el factor humano, ya que son las personas quienes diseñan, configuran y mantienen el hardware, el software y las redes.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como si en una casa las fallas eléctricas, las fugas de agua, las fisuras y las tormentas tuvieran todas como responsable al dueño que construyó mal, compró materiales corrientes y no dio mantenimiento.<span class="rompe">Dónde falla la analogía: La analogía rompe ante los desastres naturales o eventos imponderables ("actos de Dios"), donde no existe una responsabilidad humana directa en la generación del fenómeno climático.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque demuestra que, aunque existen cinco fuentes de origen (humano, hardware, software, red y desastres naturales), el factor humano es la causa raíz predominante al diseñar, configurar y operar toda la tecnología.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> El error principal de las empresas es concentrar sus defensas en fallas de hardware, software o red, descuidando que el factor humano es la fuente de amenazas más activa y frecuente.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c6-clasificaciones" open><summary><span class="stitle">Clasificación de las amenazas: por flujo, por objetivo y por ubicación</span></summary>
@@ -59,6 +99,25 @@
 <li><strong>Internas:</strong> generadas dentro de la organización por empleados o activos internos — constituyen del <strong>85% al 95%</strong> de los problemas reales, por el conocimiento directo que tienen los usuarios internos de la infraestructura.</li>
 <li><strong>Externas:</strong> se originan fuera de la organización, aunque para consumarse suelen requerir algún grado de complicidad o descuido interno.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como enviar una carta por correo: si alguien la lee en el camino es intercepción, si la rompen y no llega es interrupción, si le cambian las palabras es modificación, y si envían una carta falsa a tu nombre es suplantación.<span class="rompe">Dónde falla la analogía: Se rompe porque las amenazas internas no son simples mensajeros externos maliciosos, sino empleados autorizados que aprovechan credenciales legítimas, contraseñas débiles o sesiones abiertas.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque vincula las amenazas con el pilar de seguridad afectado (confidencialidad, disponibilidad e integridad) y demuestra que del 85% al 95% de los incidentes son provocados por amenazas internas e intencionadas.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Las organizaciones creen erróneamente que las amenazas más peligrosas provienen del exterior, ignorando que entre el 85% y el 95% de los problemas reales se originan internamente por empleados o descuidos como usar la clave "Hola123".</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c6-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuál es la definición formal de amenaza y de riesgo expuesta por la profesora en la Clase 6?</summary><p>La amenaza es cualquier actividad, evento o circunstancia latente que intenta o puede causar un daño a un activo; el riesgo es el producto de la ocurrencia de la amenaza por su consecuencia (Riesgo = Ocurrencia x Consecuencia).</p></details>
+<details class="qa"><summary>2. Explica con tus palabras por qué la profesora utilizó la analogía del perro de globo y la pajarita de origami.</summary><p>Para ilustrar cómo evaluar la gravedad de un daño y justificar que las organizaciones jerarquicen sus inversiones de seguridad para prevenir pérdidas totales e irreversibles que no se pueden recuperar ni con todo el oro del mundo.</p></details>
+<details class="qa"><summary>3. ¿Cuáles son las cinco fuentes de origen de las amenazas expuestas en clase y cuál es la principal?</summary><p>Las fuentes son factor humano, fallas de hardware, fallas de software, red y desastres naturales/actos de Dios; el factor humano es la fuente principal y más frecuente.</p></details>
+<details class="qa"><summary>4. ¿Por qué la profesora señala que no debe describirse una amenaza de forma vaga como "robo" o "que tiemble"?</summary><p>Porque una adecuada descripción de amenazas exige detallar variables específicas (como la modalidad de robo o la magnitud sísmica exacta) para poder definir los controles de seguridad requeridos.</p></details>
+<details class="qa"><summary>5. Un atacante intercepta una transferencia de datos en tránsito, modifica el archivo original y se lo entrega alterado al receptor. Clasifica esta amenaza por flujo e indica qué pilar de seguridad atenta.</summary><p>Es una amenaza de modificación (que incluyó intercepción) y atenta directamente contra la integridad del bien o información.</p></details>
+<details class="qa"><summary>6. Un gerente sostiene que su empresa solo debe preocuparse por ataques de hackers extranjeros. Con base en las clasificaciones por objetivo y ubicación vistas en clase, evalúa su postura.</summary><p>La postura es errónea porque entre el 85% y el 95% de los incidentes reales en las empresas corresponden a amenazas internas e intencionadas, debido al acceso y conocimiento previo de la infraestructura.</p></details>
+<details class="qa"><summary>7. Compara el impacto de una amenaza de intercepción frente a una de interrupción según lo explicado en clase.</summary><p>La intercepción viola la confidencialidad al permitir que un agente no autorizado observe o escuche la información en tránsito sin detener el flujo, mientras que la interrupción viola la disponibilidad al destruir o bloquear el acceso al bien o servicio.</p></details>
+<details class="qa"><summary>8. Compara las amenazas intencionadas frente a las no intencionadas en cuanto a su planificación y presencia en distintos entornos.</summary><p>Las intencionadas implican planificación deliberada y representan del 85% al 95% de los incidentes organizacionales, mientras que las no intencionadas ocurren por negligencia, despiste o accidentes y son las más comunes en el entorno doméstico.</p></details>
 </details>
 
 <details class="section-block sec" id="c6-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>

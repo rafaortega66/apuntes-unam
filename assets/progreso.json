@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T11:53:47+00:00",
+ "generatedAt": "2026-10-01T11:55:43+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -381,7 +381,7 @@
     "fecha": "2026-09-17",
     "resumen": "Tema 2 — Amenazas y vulnerabilidades: definiciones formales, la fórmula del riesgo, las cinco fuentes de origen, y las clasificaciones por flujo de información, objetivo y ubicación.",
     "url": "materias/seguridad-informatica-basica/clase-06.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 7,
@@ -440,7 +440,7 @@
     "fecha": "2026-09-17",
     "resumen": "Primer Examen Parcial (Temas 1 y 2): caso de negocio de una aseguradora, arquitectura de datos y proyectos de los equipos.",
     "url": "materias/mineria-de-datos/clase-05.html",
-    "formato": "prosa"
+    "formato": "no-aplica"
    },
    {
     "num": 6,
@@ -467,6 +467,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "1b55957",
+   "fecha": "2026-10-01T05:53:48-06:00",
+   "mensaje": "RP Clase 07: formato de estudio"
+  },
   {
    "hash": "0040b00",
    "fecha": "2026-10-01T05:52:11-06:00",
@@ -761,11 +766,6 @@
    "hash": "557871c",
    "fecha": "2026-09-22T17:37:03-06:00",
    "mensaje": "RP: agregar diapositivas del profesor Clase 9 (funciones de distancia) y su equivalencia con Clase 07 del sitio"
-  },
-  {
-   "hash": "9830133",
-   "fecha": "2026-09-22T16:56:31-06:00",
-   "mensaje": "SIB: complementar Clase 07 con apuntes propios (definición exacta, talón de Aquiles, relación riesgo-amenaza-vulnerabilidad)"
   }
  ]
 }
