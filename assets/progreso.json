@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T07:58:03+00:00",
+ "generatedAt": "2026-10-01T07:59:55+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -251,7 +251,7 @@
     "fecha": "2026-09-23",
     "resumen": "Introducción a Kali Linux y ciberseguridad ofensiva: tipos de hacker, y primera práctica en vivo con Metasploit y Nmap escaneando puertos de sitios reales (CETIS 9, Google, Unitec, UNAM).",
     "url": "materias/administracion-de-servicios-de-internet/clase-08.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 9,
@@ -467,6 +467,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "efadaa5",
+   "fecha": "2026-10-01T01:58:03-06:00",
+   "mensaje": "ACS Clase 09: formato de estudio"
+  },
   {
    "hash": "d2519c5",
    "fecha": "2026-10-01T01:56:07-06:00",
@@ -761,11 +766,6 @@
    "hash": "778032d",
    "fecha": "2026-09-21T16:35:07-06:00",
    "mensaje": "RP: agregar Clase 08 (21 sep 2026) — métricas internas de clustering y Bayes/Naive Bayes"
-  },
-  {
-   "hash": "47710a1",
-   "fecha": "2026-09-21T16:03:27-06:00",
-   "mensaje": "RP: agregar Clase 07 (18 sep 2026) — clasificación no supervisada, K-Means, LBG e ISODATA"
   }
  ]
 }

@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 08 — Administración de Servicios de Internet</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -15,6 +16,18 @@
   <p class="prof">Mtro. Juan Ángel Calvillo Pérez · 23 sep 2026 · Introducción a Kali Linux y ciberseguridad ofensiva: tipos de hacker, y primera práctica en vivo con Metasploit y Nmap escaneando puertos de sitios reales (CETIS 9, Google, Unitec, UNAM).</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #7C9CD6"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c8-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Diferencia técnica y económica entre asesorías y consultorías de ciberseguridad</strong><span class="evid">Evidencia: Lo explicó detalladamente al presentar Kali Linux, comparando costos, aprendizaje del personal y tiempos de respuesta.</span></li>
+<li><strong>Tipos de hackers (sombrero blanco, negro y gris) y su caracterización en el mundo real</strong><span class="evid">Evidencia: Lo desglosó al explicar quiénes utilizan Kali Linux, afirmando que el gris busca aprender y que en la vida real todos están en un punto medio.</span></li>
+<li><strong>Configuración y ejecución de módulos auxiliares en Metasploit Framework (use auxiliary, set RHOSTS, show options, exploit)</strong><span class="evid">Evidencia: Lo resolvió paso a paso en vivo en la terminal de Kali Linux analizando servidores objetivos.</span></li>
+<li><strong>Detección de puertos abiertos, servicios y versiones mediante Nmap para el análisis de vulnerabilidades</strong><span class="evid">Evidencia: Lo ejecutó en vivo en la terminal mostrando tiempos de respuesta, filtrado de puertos y versiones de software.</span></li>
+<li><strong>Límite máximo de recuperación de datos en ingeniería forense (80%) y apertura física de discos</strong><span class="evid">Evidencia: Lo mencionó explícitamente al describir el rol del ingeniero forense sobre unidades de almacenamiento dañadas.</span></li>
+</ol>
+</details>
+
 <div class="section-block nota" style="border-left:3px solid #7C9CD6"><p style="margin:0"><strong>📋 Nota:</strong> esta sesión no corresponde a un tema del temario oficial de la materia (servidores de correo, conexión remota, aplicaciones, archivos, directorios, web) — fue una introducción práctica a herramientas de ciberseguridad ofensiva (Kali Linux, Metasploit, Nmap), aplicada en vivo contra sitios reales con fines exclusivamente académicos.</p></div>
 
 <details class="section-block sec" id="c8-kali" open><summary><span class="stitle">Kali Linux: qué es y quién lo usa</span></summary>
@@ -22,10 +35,24 @@
 <p>Sobre su modelo de negocio: Kali es <strong>gratis, pero solo hasta cierto punto</strong> — las funciones más avanzadas se cobran a través de servicios de <strong>asesoría</strong> o <strong>consultoría</strong>. La diferencia entre ambas: en la <strong>asesoría</strong>, el proveedor le indica a alguien de la empresa cómo hacer las cosas — es más barata y, según el profesor, más conveniente a largo plazo porque el personal interno va aprendiendo a resolver problemas similares en el futuro. En la <strong>consultoría</strong>, el proveedor resuelve el problema directamente y se retira, sin explicar necesariamente qué hizo ni dejar ese conocimiento documentado — es más cara, pero muchas empresas la prefieren porque implica menos tiempo invertido de su parte.</p>
 <p>Características técnicas que mencionó: cuenta con más de <strong>600 herramientas</strong>, tiene buen soporte, ofrece la información en distintos idiomas, no es complicado de instalar, maneja sistemas de archivos y conexiones a bases de datos, y su última versión ya incorpora un bloque de inteligencia artificial. Contó también que en 2024 se rumoraba que Kali iba a desaparecer — desapareció unos meses y luego regresó — mientras que otra herramienta que sí desapareció por completo fue la que se usaba como "servidor para servidores" para manejar grandes volúmenes de información (mencionada de forma poco clara en el audio como "Centro"; se usaba mucho en conferencias sobre manejo de grandes volúmenes de datos).</p>
 <p>Sobre quién usa este tipo de herramientas en el mundo real: los <strong>administradores de servidores de seguridad</strong> y los <strong>arquitectos de red</strong> las necesitan para su trabajo diario. Los <strong>pentesters</strong> (de <em>penetration testing</em>) son, según explicó, el puesto ideal para quienes no saben programar pero se especializan en encontrar errores: se les da una página, aplicación o programa de consola y su trabajo es reportar qué vulnerabilidades encontraron — el pentesting también se usa mucho en la industria de videojuegos para reportar bugs de forma sistemática. Los <strong>ingenieros forenses</strong>, por su parte, se dedican a recuperar datos de unidades físicas dañadas (discos duros, memorias USB): abren el dispositivo físicamente y revisan capa por capa; nadie puede garantizar una recuperación del 100% — como máximo, dijo, se recupera alrededor de un 80%.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Kali Linux es como un estuche de herramientas preequipado para un inspector de edificios, que incluye todo lo necesario para revisar la solidez de las puertas y ventanas digitales sin tener que comprar o armar cada instrumento por separado.<span class="rompe">Dónde falla la analogía: La analogía se rompe porque un estuche físico contiene herramientas mecánicas tangibles, mientras que Kali Linux incluye más de 600 programas digitales, comandos y librerías que interactúan mediante tráfico de red y paquetes de datos.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque centraliza herramientas gratuitas para el análisis de vulnerabilidades, recolección de datos y mapeo de red, siendo utilizado por administradores de seguridad, arquitectos de red, pentesters e ingenieros forenses.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Creer que Kali Linux desapareció definitivamente: en 2024 se rumoró que iba a desaparecer, desapareció unos meses y luego regresó.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c8-hackers" open><summary><span class="stitle">Tipos de hacker</span></summary>
 <p>El profesor repasó la clasificación clásica: <strong>hacker blanco</strong> (el "bueno", que reporta vulnerabilidades de forma ética), <strong>hacker negro</strong> (el "malo", que las explota con fines dañinos) y <strong>hacker gris</strong>, que según él es donde debería ubicarse la mayoría de la gente que apenas está aprendiendo: "no soy ni bueno ni malo, simplemente quiero aprender". Insistió en que en la vida real no existe un bueno o malo puro — la mayoría de quienes trabajan en esto se mueven en ese punto intermedio.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como clasificar a los cerrajeros de una ciudad: el de sombrero blanco ayuda a la gente a reforzar sus casas, el de sombrero negro abre cerraduras para robar, y el de sombrero gris prueba cerraduras por curiosidad para entender cómo funcionan sin intención de saquear.<span class="rompe">Dónde falla la analogía: La analogía falla porque en la realidad no existen cerrajeros o hackers completamente puros o divididos en bandos extremos, sino que la mayoría se mueve en una gama intermedia o entusiasta de la seguridad.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa para comprender las intenciones, la ética y las responsabilidades profesionales al realizar pruebas de penetración o auditorías en sistemas universitarios e institucionales.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Pensar que los hackers de sombrero negro o blanco existen de forma absoluta e inmutable en el mundo real, cuando el profesor aclaró que casi todos se encuentran en el punto medio (gris).</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c8-metasploit" open><summary><span class="stitle">Práctica 1: Metasploit</span></summary>
@@ -48,6 +75,13 @@
 <p><strong>Cuarto objetivo: el sitio de la UNAM.</strong> El profesor comentó que él mismo trabaja, entre otras cosas, en la <strong>DGTIC</strong> (mencionada en el audio como "Degeti"/"Enfetic" — Dirección General de Cómputo y de Tecnologías de Información y Comunicación), y explicó que la UNAM tiene parte de sus servicios centralizados ahí, aunque no toda su infraestructura lo está. Señaló el riesgo de la centralización: si un atacante logra entrar al servidor central, hay que levantar protecciones tipo <strong>DMZ</strong> para contener el daño — reconoció que no es el enfoque más correcto, "pero es lo que hay con el presupuesto que dan".</p>
 <p>Sobre <strong>servidores espejo</strong>: explicó que anidar un servidor espejo dentro de otro servidor espejo (y otro, y otro) crea un efecto de bucle que hace perder tiempo al atacante sin que este sepa si está avanzando de verdad. Mientras tanto, ese mismo sistema puede configurarse para mandar alertas automáticas al equipo de seguridad en tiempo real (de ahí las guardias de madrugada cuando detectan un ataque en curso). Comparó brevemente la infraestructura del Tec de Monterrey, que parece estar mejor centralizada en la nube — atribuyéndolo a que, al ser una institución con más presupuesto, sí cuenta con personal dedicado a la seguridad.</p>
 <p>Sobre el riesgo de hacer este tipo de pruebas: el profesor advirtió que, al escanear un objetivo, también se expone la propia IP de quien ataca — por eso, dijo, él hace estas pruebas desde una página/servicio intermedio y no directamente desde su equipo. Recomendó que, para las prácticas del curso, siempre se trabaje desde una <strong>máquina virtual</strong> — en los laboratorios normalmente se usan máquinas virtuales o escritorios remotos, y en cursos de ciberseguridad es común usar IPs "de disfraz" o de dispositivos móviles.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como inyectar un líquido brillante en las tuberías de agua de una casa para ver por qué grieta o junta floja se escapa el agua y saber exactamente qué tubo reparar.<span class="rompe">Dónde falla la analogía: La analogía deja de funcionar porque no se inyecta un fluido físico, sino código y peticiones digitales a través de variables como RHOSTS y puertos de red para extraer información del servidor.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es el framework fundamental de código abierto para desarrollar y ejecutar exploits, permitiendo verificar si un servidor tiene vulnerabilidades, puertos abiertos (como el 80) o falta de redundancia.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Olvidar asignar la dirección IP objetivo a la variable RHOSTS antes de ejecutar exploit, o confundir un módulo auxiliar (auxiliary) con un exploit directo.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c8-nmap" open><summary><span class="stitle">Práctica: Nmap</span></summary>
@@ -56,6 +90,24 @@
 <p>En otro escaneo, el proceso tardó notablemente más que el de Google — el profesor explicó que esto indica que el objetivo <strong>no está tan expuesto</strong> como el anterior; ese es justamente el comportamiento de las empresas mejor protegidas. Insistió de nuevo en que las micro y medianas empresas suelen protegerse más por necesidad (no tienen personal capacitado disponible de inmediato) aunque tarden más en reaccionar cuando algo falla — puso el ejemplo cotidiano de formatear una computadora: una empresa pequeña sin equipo de sistemas tiene que contratar a alguien externo por ese servicio puntual, mientras que una empresa más grande ya tiene personal interno que hace de todo (redes, soporte, hasta páginas web).</p>
 <p>En un escaneo más detallado de Nmap contra una IP específica (identificada como una <strong>máquina virtual</strong> por su dirección MAC), encontró varios puertos abiertos —incluyendo el 135, 139, 445 y otros cercanos a 905/912— además de la dirección MAC y datos de latencia del objetivo.</p>
 <p>El profesor cerró la práctica indicando que la continuarán en la siguiente clase, profundizando en Nmap: escaneo de directorios, más opciones de puertos y servicios específicos, sin depender ya de Metasploit para el mapeo inicial. La presentación de la sesión no estaba terminada (falta la parte de escaneo de directorios) pero ya la subió a Classroom.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como enviar a un inspector a tocar rápidamente todas las puertas de un pasillo para que te dé una lista inmediata de cuáles están abiertas, cuáles cerradas y qué marca de cerrojo tiene cada una.<span class="rompe">Dónde falla la analogía: La analogía se rompe porque un inspector humano tarda minutos u horas, mientras que Nmap envía paquetes digitales en milisegundos, identificando la versión exacta del software y la dirección MAC.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite descubrir los puertos activos (HTTP 80, HTTPS 443), analizar las versiones exactas del software del servidor y determinar si la infraestructura está expuesta o virtualizada.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Pensar que un escaneo de Nmap realiza un ataque destructivo por sí solo, cuando únicamente identifica el estado de los puertos y las versiones de los servicios instalados.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c8-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuál es el porcentaje máximo de información que un ingeniero forense puede aspirar a recuperar de un disco duro o unidad física dañada según lo explicado en clase?</summary><p>El porcentaje máximo que se puede aspirar a recuperar de una unidad dañada es del 80%.</p></details>
+<details class="qa"><summary>2. Explica la diferencia entre una asesoría y una consultoría de ciberseguridad, y por qué a una empresa le conviene la asesoría a largo plazo.</summary><p>En la asesoría se guía al personal interno para que aprenda a resolver el problema (es más barata y capacita al equipo), mientras que en la consultoría un externo resuelve el problema rápidamente sin explicar el procedimiento (es más cara). A largo plazo conviene la asesoría porque deja capacidad instalada en la empresa.</p></details>
+<details class="qa"><summary>3. Si quieres escanear un servidor web objetivo con la IP 192.168.1.15 usando un módulo auxiliar de Metasploit, ¿cuáles son los comandos exactos que debes ejecutar en msfconsole para cargar el módulo, definir la IP y ejecutar la prueba?</summary><p>Debes ejecutar use auxiliary/scanner/http/http_version (o el módulo auxiliar deseado), luego set RHOSTS 192.168.1.15, verificar las opciones con show options y finalmente ejecutar exploit (o run).</p></details>
+<details class="qa"><summary>4. Compara el comportamiento de un hacker de sombrero blanco, uno de sombrero negro y uno de sombrero gris.</summary><p>El sombrero blanco busca vulnerabilidades para proteger y corregir el sistema, el sombrero negro busca vulnerabilidades para atacar o beneficiarse maliciosamente, y el sombrero gris no es ni bueno ni malo, sino que investiga por mera curiosidad y deseo de aprender.</p></details>
+<details class="qa"><summary>5. ¿Qué puertos de red específicos se identificaron como abiertos durante la prueba de Nmap sobre el servidor analizado en vivo en la Clase 8?</summary><p>Se identificaron abiertos los puertos 80 (HTTP) y 443 (HTTPS).</p></details>
+<details class="qa"><summary>6. Explica por qué la analogía del electrocardiograma y el líquido radiactivo explica el funcionamiento de Metasploit.</summary><p>Porque al igual que el líquido radiactivo revela dónde está bloqueada o abierta una vena al iluminarla, Metasploit inyecta código a través de un puerto de red para revelar la estructura interna del servidor y dónde están sus puntos vulnerables.</p></details>
+<details class="qa"><summary>7. Supón que realizas un escaneo con Nmap a un servidor web y detectas que el puerto 80 está abierto y ejecutando una versión antigua de Apache. ¿Qué utilidad técnica tiene conocer esa versión exacta?</summary><p>Conocer la versión exacta permite buscar o estructurar un exploit específico (como una inyección SQL o falla conocida de esa versión) para auditar o comprometer el sistema.</p></details>
 </details>
 
 <details class="section-block sec" id="c8-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
