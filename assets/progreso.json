@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T12:01:48+00:00",
+ "generatedAt": "2026-10-01T12:03:35+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -42,7 +42,7 @@
     "fecha": "2026-09-14",
     "resumen": "Tema 5 — Funciones de decisión lineales y multiclase, interpretación geométrica en espacios de características y pesos, algoritmo de aprendizaje y sistemas de funciones ortogonales.",
     "url": "materias/reconocimiento-de-patrones/clase-06.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 7,
@@ -468,6 +468,11 @@
  },
  "gitlog": [
   {
+   "hash": "897dde3",
+   "fecha": "2026-10-01T06:01:49-06:00",
+   "mensaje": "OAC Clase 05: formato de estudio"
+  },
+  {
    "hash": "d47dc79",
    "fecha": "2026-10-01T06:00:00-06:00",
    "mensaje": "FSE Clase 06: formato de estudio + aviso sobre longitudes de onda de CD/DVD/Blu-ray"
@@ -761,11 +766,6 @@
    "hash": "a2d5aac",
    "fecha": "2026-09-28T19:43:06Z",
    "mensaje": "ASI: agregar Clase 08 (23 sep 2026) — introducción a Kali Linux, tipos de hacker, práctica con Metasploit y Nmap"
-  },
-  {
-   "hash": "f9ed57f",
-   "fecha": "2026-09-28T16:06:37Z",
-   "mensaje": "MD: agregar Clase 06 (22 sep 2026) — cierre de exposiciones Proyecto 2 (Databricks, Pinecone, MongoDB, Milvus) y arranque Tema 3 (supervisado/no supervisado)"
   }
  ]
 }

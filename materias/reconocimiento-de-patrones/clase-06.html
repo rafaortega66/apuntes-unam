@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 06 — Reconocimiento de Patrones</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -16,6 +17,17 @@
   <p style="font-size:12px;color:var(--ink-soft);margin:2px 0 0">🔢 Numeración del profesor: corresponde a sus diapositivas <a href="material.html" style="color:var(--indigo)">Clase 8</a> (Funciones de decisión) — no coincide 1:1 con "Clase 06" de este sitio.</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c6-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Evaluación de funciones de decisión lineales punto por punto</strong><span class="evid">Evidencia: evidencia de la clase: el profesor lo resolvió en vivo en el pizarrón evaluando 6 puntos numéricos completos en las funciones d1, d2 y d3.</span></li>
+<li><strong>Identificación de regiones indeterminadas o de ambigüedad en clasificación multiclase 1 vs Resto</strong><span class="evid">Evidencia: evidencia de la clase: el profesor lo explicó en vivo al obtener resultados con dos valores positivos y preguntó a la clase qué significaba.</span></li>
+<li><strong>Regla de actualización de pesos del perceptrón w = w + alpha <em> y_i </em> x_i</strong><span class="evid">Evidencia: evidencia de la clase: el profesor explicó el pseudocódigo paso a paso en clase y detalló la condición de actualización por error de signo.</span></li>
+<li><strong>Selección del sistema de funciones ortogonales según el dominio de los datos (Legendre, Laguerre, Hermite)</strong><span class="evid">Evidencia: evidencia de la clase: el profesor lo repitió explícitamente y presentó una tabla comparativa de dominios [-1,1], [0, inf) y (-inf, inf).</span></li>
+</ol>
+</details>
+
 <details class="section-block sec" id="c6-repaso" open><summary><span class="stitle">Repaso de la clase anterior — métricas, evaluación y validación cruzada</span></summary>
 <ul>
 <li><strong>Sesgo/varianza</strong> describen cómo aprende el clasificador; <strong>exactitud (accuracy)</strong> mide el rendimiento global. Repaso de precisión, recall, especificidad, F1 y exactitud balanceada.</li>
@@ -24,6 +36,13 @@
 <li><strong>ROC/AUC:</strong> escala de interpretación — 1.0 perfecto, 0.9–1.0 excelente, 0.7–0.9 bueno/regular, 0.5 aleatorio, &lt;0.5 predicción invertida.</li>
 <li><strong>K-Fold Cross Validation:</strong> divide el entrenamiento en K subconjuntos e itera permutando los folds, para que el modelo no dependa de una partición particular.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como hacer exámenes simulados usando capítulos diferentes de un libro para verificar si realmente aprendiste o si solo memorizaste.<span class="rompe">Dónde falla la analogía: Deja de servir si las preguntas de los capítulos están descompensadas o si los datos tienen dependencias temporales que se rompen al mezclarlos al azar.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite medir cuantitativamente la precisión, el recall y la capacidad de generalización del modelo antes de ponerlo en producción.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Al repasar, costó explicar el recall y la precisión, confundiendo la muestra total analizada con los verdaderos positivos sobre los positivos predichos.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c6-pipeline" open><summary><span class="stitle">Pipeline de reconocimiento y funciones de decisión (lineales, cuadráticas, no lineales)</span></summary>
@@ -35,6 +54,12 @@
 <li><strong>Funciones no lineales:</strong> forma arbitraria, máxima adaptabilidad pero difíciles de entrenar e interpretar. Enfoque clásico: transformar/reducir a un nuevo espacio donde sí sean linealmente separables.</li>
 <li><strong>Interpretación de pesos:</strong> wᵢ = importancia de xᵢ para discriminar la clase. g(x)&gt;0 → clase 1; g(x)&lt;0 → clase 2; g(x)=0 → frontera (decisión aleatoria o según costo del error, ej. diagnóstico médico prefiere falso positivo).</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como una regla de un cadenero en una fiesta que suma tu edad y tu vestimenta: si el resultado da positivo entras y si da negativo te quedas fuera.<span class="rompe">Dónde falla la analogía: Deja de funcionar cuando la separación entre grupos es una curva sinuosa o un círculo, haciendo imposible dividirlos con una simple regla recta.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Constituye el núcleo matemático del clasificador al transformar un vector de características en un escalar cuyo signo define la clase asignada.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c6-multiclase" open><summary><span class="stitle">Clasificación multiclase: 1 vs. Resto, 1 vs. 1 y Máquinas Lineales</span></summary>
@@ -45,6 +70,13 @@
 <li><strong>Máquina Lineal:</strong> evalúa g₁(x)...g_c(x) y asigna a ωᵢ cuyo valor sea el máximo absoluto — no depende del signo sino de la magnitud, sin dejar zonas ambiguas.</li>
 <li><strong>Funciones generalizadas / ensambles:</strong> g(x) = Σwᵢfᵢ(x) = wᵀx*, donde x* son los resultados de modelos base y wᵢ representa la confianza/voto de cada clasificador.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>1 vs. Resto es preguntar si un animal es perro o no; 1 vs. 1 es comparar perro contra gato, perro contra pez; y la Máquina Lineal es una votación donde gana el candidato con mayor puntuación.<span class="rompe">Dónde falla la analogía: La Máquina Lineal falla si las regiones reales de las clases no son conexas o convexas, ya que solo puede trazar divisiones convexas rectilíneas.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Resuelve el problema de clasificar en múltiples categorías y elimina las zonas de ambigüedad donde las reglas de signo no dan una respuesta única.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confusión en los alumnos sobre cómo interpretar cuando dos funciones dan valor positivo en 1 vs. Resto, que el profesor aclaró como una región indeterminada.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c6-ejercicios" open><summary><span class="stitle">Ejercicios resueltos en clase</span></summary>
@@ -62,6 +94,13 @@
 <li>(2,6) — evaluado por Jorge: D₁=4(+), D₂=3(+), D₃=-5(-) → D₁ y D₂ positivos → región de ambigüedad.</li>
 <li>Los puntos evaluados por Santiago y Sebastián también cayeron en regiones indeterminadas — demuestra en la práctica las limitaciones de 1 vs. Resto.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como poner coordenadas GPS en tres mapas de municipios distintos para ver si exactamente un municipio reclama esa posición.<span class="rompe">Dónde falla la analogía: Se rompe cuando la coordenada cae en un terreno donde dos municipios reclaman la propiedad a la vez o ninguno la acepta.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Demuestra paso a paso con números reales cómo evaluar puntos en funciones de decisión y cómo identificar matemáticamente zonas ambiguas.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Un alumno preguntó si un resultado negativo significaba indeterminación, y el profesor aclaró que la indeterminación ocurre al tener dos o más positivos simultáneos.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c6-geometria" open><summary><span class="stitle">Interpretación geométrica y comparación de espacios</span></summary>
@@ -72,6 +111,12 @@
 <li><strong>Espacio de pesos:</strong> ejes = coeficientes w₀..wₙ, puntos = clasificadores completos, regiones = clasificadores válidos. Pregunta: ¿qué clasificador separa las clases?</li>
 <li><strong>Clase (Cᵢ):</strong> donde Dᵢ(x) supera a Dⱼ(x) para todo j≠i. <strong>Región de decisión:</strong> subespacio de una sola clase. <strong>Frontera:</strong> donde g(x)=0 o gᵢ(x)=gⱼ(x).</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>El espacio de características es una habitación donde te ubicas por tu altura y peso; el espacio de pesos es una habitación donde cada punto representa una recta trazada en el piso.<span class="rompe">Dónde falla la analogía: La interpretación geométrica de distancia perpendicular falla si las características no están en una escala métrica Euclidiana comparable.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Conecta la ecuación algebraica w^T x + w_0 con la distancia física perpendicular r = g(x)/||w|| de un punto a la frontera de decisión.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c6-perceptron" open><summary><span class="stitle">Algoritmo de aprendizaje de pesos (regla de actualización del perceptrón)</span></summary>
@@ -82,6 +127,12 @@
 <li>Iteración hasta converger (error mínimo aceptable o máximo de iteraciones).</li>
 <li>Inferencia: para un patrón nuevo, se calcula g(x) y se aplica la regla del signo.</li>
 </ol>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como ajustar el punto de mira de un rifle cada vez que fallas un tiro, moviéndolo un poco en la dirección del error hasta que todos los disparos den en el blanco.<span class="rompe">Dónde falla la analogía: No funciona ni llega a detenerse nunca si los dos grupos de datos están mezclados y no se pueden separar con una línea recta.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es el algoritmo iterativo fundamental que permite aprender automáticamente el vector de pesos w a partir de los errores en los datos de entrenamiento.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c6-ortogonales" open><summary><span class="stitle">Sistemas de funciones ortogonales</span></summary>
@@ -93,6 +144,12 @@
 <li><strong>Laguerre:</strong> x ∈ [0, ∞).</li>
 <li><strong>Hermite:</strong> x ∈ (-∞, ∞). Aplicaciones: reconocimiento de voz, audio, visión computacional, datos con distribución normal/gaussiana.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como componer una melodía usando diapasones de frecuencias puras e independientes que no se distorsionan entre sí.<span class="rompe">Dónde falla la analogía: Falla si eliges una familia de polinomios cuyo dominio matemático no coincide con el rango real en el que existen tus datos.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite descomponer fronteras de decisión y señales complejas en una suma ponderada de polinomios estables y numéricamente desacoplados.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c6-clasif-vs-cluster" open><summary><span class="stitle">Clasificación vs. Agrupamiento vs. Reconocimiento de Patrones</span></summary>
@@ -101,6 +158,25 @@
 <li><strong>Agrupamiento/Clustering (no supervisado):</strong> recibe x sin etiquetas; busca agrupaciones naturales (grupo 1, 2, 3...).</li>
 <li><strong>Reconocimiento de Patrones:</strong> proceso integral — adquisición de señales/imágenes, extracción de características, clasificación supervisada y clustering no supervisado.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Clasificar es separar correspondencia en buzones con etiqueta; Agrupar es juntar canicas por color sin saber cómo se llaman los colores; Reconocimiento es todo el sistema postal.<span class="rompe">Dónde falla la analogía: La distinción se vuelve borrosa en sistemas semi-supervisados donde se usan agrupamientos iniciales para etiquetar y luego clasificar.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Define con precisión académica las fronteras entre métodos supervisados con etiquetas, métodos no supervisados autónomos y la disciplina general.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Los alumnos solían usar la palabra clasificación para referirse a clustering no supervisado, lo cual fue corregido explícitamente por el profesor al final.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c6-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuál es la regla de decisión matemática para asignar un patrón x a la clase 1 o clase 2 en una función de decisión lineal d(x) = w^T x + w_0?</summary><p>Si d(x) &gt; 0 el patrón se asigna a la Clase 1, si d(x) &lt; 0 se asigna a la Clase 2, y si d(x) = 0 cae en la frontera de decisión.</p></details>
+<details class="qa"><summary>2. Explica con tus palabras por qué surgen regiones indeterminadas o de ambigüedad en el esquema multiclase Uno vs. Resto.</summary><p>Surgen porque al evaluar las M funciones de decisión independientes, un punto puede dar un valor positivo en dos o más funciones a la vez (o negativo en todas), lo que impide matemáticamente asignarlo a una sola clase de forma única.</p></details>
+<details class="qa"><summary>3. Dada la función d_1(x) = -x_1 + x_2, d_2(x) = x_1 + x_2 - 5 y d_3(x) = -x_2 + 1, evalúa el punto x = (0, 2) bajo el esquema 1 vs. Resto y determina a qué clase se asigna.</summary><p>Para d_1(0, 2) = -0 + 2 = 2 (+); para d_2(0, 2) = 0 + 2 - 5 = -3 (-); para d_3(0, 2) = -2 + 1 = -1 (-). Como d_1 es la única positiva y las demás negativas, el punto x = (0, 2) se asigna a la Clase 1.</p></details>
+<details class="qa"><summary>4. Compara cómo resuelven la clasificación multiclase el esquema Uno vs. Resto y la Máquina Lineal (Linear Machine).</summary><p>Uno vs. Resto evalúa el signo de M funciones asignando clase si solo una es positiva (creando regiones ambiguas), mientras que la Máquina Lineal evalúa c funciones discriminantes y asigna la clase del valor máximo escalar g_i(x) &gt; g_j(x), dividiendo el espacio en regiones convexas sin ambigüedad.</p></details>
+<details class="qa"><summary>5. ¿Cuál es la fórmula para calcular la distancia perpendicular r desde un punto x hasta el hiperplano de decisión g(x) = w^T x + w_0 = 0 en el espacio de características?</summary><p>La distancia perpendicular es r = g(x) / ||w||, donde ||w|| es la norma del vector de pesos.</p></details>
+<details class="qa"><summary>6. En la regla de actualización de pesos del perceptrón, si el modelo predice una etiqueta predicha distinta a la etiqueta real y_i para un patrón x_i, ¿cómo se actualizan los pesos w?</summary><p>Se actualizan sumando a los pesos actuales el producto de la tasa de aprendizaje alpha, la etiqueta real y_i y el vector del patrón x_i: w &lt;- w + alpha <em> y_i </em> x_i.</p></details>
+<details class="qa"><summary>7. Compara los dominios matemáticos y aplicaciones típicas de los polinomios de Legendre, Laguerre y Hermite.</summary><p>Legendre se define en [-1, 1] para datos acotados/contornos; Laguerre en [0, +\infty) para señales con decaimiento exponencial/radar; y Hermite en (-\infty, +\infty) para datos con distribución gaussiana/voz y audio.</p></details>
+<details class="qa"><summary>8. ¿En qué se diferencian conceptualmente la Clasificación, el Agrupamiento (Clustering) y el Reconocimiento de Patrones según lo expuesto en clase?</summary><p>La Clasificación es un proceso supervisado que asigna datos a clases predefinidas con etiquetas; el Agrupamiento es no supervisado y descubre grupos naturales sin etiquetas previas; y el Reconocimiento de Patrones es el término general que engloba ambos procesos desde la captura y extracción hasta la descripción final.</p></details>
 </details>
 
 <details class="section-block sec" id="c6-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
