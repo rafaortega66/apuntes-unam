@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 02 — Minería de Datos</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -15,13 +16,31 @@
   <p class="prof">M.C. José Concepción Roberto Olvera López · 3 sep 2026 · Tema 2 — Arquitectura de minería de datos · repositorio vs. base de datos, Data Warehouse, Data Mart, virtualización de datos, ERP y Data Lake. Presentaciones de los equipos 9, 13, 12 y 11.</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #A98BD1"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c2-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Diferencias conceptuales y operativas entre Data Warehouse, Data Mart y Data Lake</strong><span class="evid">Evidencia: El profesor lo explicó extensamente en la segunda mitad de la clase al detallar los tipos de repositorios de datos.</span></li>
+<li><strong>Concepto de virtualización de datos y su porcentaje de uso en las empresas</strong><span class="evid">Evidencia: Lo enfatizó como la técnica principal para consultar datos transaccionales en tiempo real sin duplicación física, indicando que representa cerca del 70% del manejo de datos.</span></li>
+<li><strong>Asignación del Proyecto 2 centrado en la venta técnica de proveedores de bases de datos</strong><span class="evid">Evidencia: Lo anunció explícitamente como la siguiente tarea obligatoria asignando un proveedor tecnológico por equipo para defenderlo técnicamente.</span></li>
+<li><strong>Reglas de gobernanza, seguridad y control de acceso en repositorios</strong><span class="evid">Evidencia: Lo repitió al explicar que el acceso debe estar limitado por roles, campos autorizados y restricciones de horario.</span></li>
+</ol>
+</details>
+
 <details class="section-block sec" id="c2-arquitectura" open><summary><span class="stitle">Arquitectura de minería de datos — repositorios y gobernanza</span></summary>
 <ul>
 <li><strong>Repositorio de datos:</strong> contenedor de grandes volúmenes de información con esquemas de seguridad y gobernanza mucho más amplios que una base de datos básica. Se caracteriza por: uso de <strong>metadatos</strong>, almacenamiento de información <strong>histórica</strong> y capacidad para manejar volúmenes muy altos (terabytes o petabytes).</li>
 <li><strong>Gobernanza:</strong> el acceso se restringe por rol, por tabla, por columna y por horario; se controla también el tiempo de respuesta de las consultas.</li>
 <li><strong>Transacciones distribuidas:</strong> el <strong>Two-Phase Commit (2PC)</strong> garantiza que los registros queden grabados correctamente en sistemas distribuidos, evitando que una transacción quede a medias entre varios nodos.</li>
 <li><strong>Para examen y proyectos:</strong> es obligatorio saber diseñar esquemas de arquitectura de datos — diagramas que muestren redes, servidores, capas de seguridad (firewalls) y acceso restringido por roles y horarios.</li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como el diseño de un edificio gubernamental con diferentes salas de archivo y guardias en cada puerta que revisan quién entra, qué documentos puede consultar y a qué hora.<span class="rompe">Dónde falla la analogía: Falla porque las estructuras físicas de un edificio son rígidas, mientras que una arquitectura de datos digital administra flujos masivos en tiempo real con crecimiento continuo y servidores virtuales.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite estructurar la integración de datos, orquestar tecnologías de análisis y garantizar la gobernanza con políticas de seguridad, registros de auditoría y alarmas.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> El profesor señaló que presentar un proyecto con faltas de ortografía destruye la confianza del cliente, contando una anécdota donde un cliente canceló la relación por un error ortográfico en las láminas.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="c2-dw-dm" open><summary><span class="stitle">Data Warehouse, Data Mart y virtualización</span></summary>
 <ul>
@@ -29,20 +48,40 @@
 <li><strong>Data Mart:</strong> versión de un repositorio enfocada exclusivamente en un <strong>área de negocio específica</strong> (RR. HH., Finanzas), con usuarios limitados a esa área.</li>
 <li><strong>Virtualización de datos:</strong> técnica que permite consultar los datos en su origen en <strong>tiempo real sin moverlos</strong> físicamente al repositorio. El usuario ve una estructura (p. ej. 14 campos) aunque el origen tenga otra (p. ej. 180 campos). Se estima que ~<strong>70 % de los datos</strong> se manejan así actualmente.</li>
 <li><strong>ETL / ELT:</strong> Extracción, Transformación y Carga es <strong>solo una</strong> de las formas de alimentar un Warehouse.</li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Un Data Warehouse es como el gran archivo central de una corporación multinacional, mientras que un Data Mart es la pequeña repisa de documentos que usa únicamente el departamento de recursos humanos.<span class="rompe">Dónde falla la analogía: La analogía se rompe porque la virtualización de datos permite consultar información remota en tiempo real como si estuviera en la repisa local sin necesidad de mover carpetas físicas.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Constituye la única fuente confiable de verdad para la toma de decisiones empresariales, integrando datos históricos y permitiendo consultas analíticas rápidas con herramientas de visualización.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Pensar que un Data Warehouse requiere años de desarrollo y millones de dólares como en el caso de Teradata en Bancomer; el profesor aclaró que con tecnologías modernas se construyen de forma elástica en dos o tres meses.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="c2-erp"><summary><span class="stitle">Sistemas ERP</span></summary>
 <ul>
 <li><strong>ERP (Enterprise Resource Planning):</strong> el corazón o núcleo de la empresa (p. ej. <strong>SAP</strong>). Integra la parte financiera, nómina, facturación e inventarios.</li>
 <li>Es fundamental para <strong>alimentar los procesos de minería</strong>.</li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como el sistema nervioso central de una empresa que registra automáticamente cada venta, cada cobro y cada movimiento de almacén al instante en que ocurren.<span class="rompe">Dónde falla la analogía: Se queda corta porque un ERP maneja reglas financieras complejas, costos unitarios, nóminas y transacciones multi-sucursal bajo estrictos estándares de auditoría.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Representa el corazón operativo y financiero de cualquier organización, alimentando los repositorios centrales y los modelos de minería de datos con transacciones validadas.</p>
+</div>
+</details>
 
 <details class="section-block sec" id="c2-datalake"><summary><span class="stitle">Data Lake</span></summary>
 <ul>
 <li><strong>Data Lake (lago de datos):</strong> repositorio para datos <strong>no estructurados</strong> (imágenes, audio, documentos, redes sociales) que se almacenan en su <strong>formato nativo sin procesar</strong>.</li>
 <li>No tiene reglas estrictas de organización como el Warehouse, lo que facilita el almacenamiento rápido de <strong>petabytes</strong> de información.</li>
 <li>Contrapartida: al no estar estructurado, encontrar y explotar la información es más difícil.</li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como una bodega gigante donde vas guardando cajas con fotos, grabaciones de voz, cartas y recibos sin clasificarlos de inmediato, acumulando todo tal como llega.<span class="rompe">Dónde falla la analogía: Falla porque una bodega física requiere espacio limitado, mientras que un Data Lake almacena terabytes o petabytes en la nube exigiendo catálogos y metadatos para no convertirse en un pantano de datos.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite almacenar masivamente datos crudos estructurados, semiestructurados y no estructurados a muy bajo costo para su posterior procesamiento en Big Data e inteligencia artificial.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Asumir que un Data Lake reemplaza totalmente a un Data Warehouse, cuando el profesor aclaró que almacena datos sin supervisión previa que requieren etiquetado y catalogación.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="c2-casos"><summary><span class="stitle">Presentaciones de los equipos (casos de estudio)</span></summary>
 <p>Continuación de los casos de la Clase 1. Cada equipo expone problemática, datos, limpieza, transformación y algoritmos.</p>
@@ -81,6 +120,25 @@
 <li><strong>Algoritmos:</strong> <strong>K-Means</strong> (plantas eficientes vs. no eficientes); <strong>Z-Score</strong> para detectar fugas en tiempo real; <strong>regresión lineal múltiple</strong> para los factores que aumentan el consumo.</li>
 <li><strong>Validación:</strong> Silhouette Score y comparación de predicciones contra el histórico real para evitar sobreajuste.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como cuando varios consultores presentan sus planes para arreglar diferentes negocios, desde filtrar falsos ataques cibernéticos hasta evitar que la gente deje de ir al gimnasio.<span class="rompe">Dónde falla la analogía: Falla porque en minería de datos no se usan corazonadas, sino que se aplican etapas de KDD, técnicas de limpieza, algoritmos de clustering y modelos predictivos sobre datos reales.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra la aplicación de la metodología KDD en ciberseguridad, manufactura con reducción de residuos en empaques, prevención de deserción en gimnasios y reducción de consumo de agua potable en concreto.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Incluir formatos técnicos como JSON o CSV en presentaciones ejecutivas para clientes, saturar las láminas de texto, o no enfocar el problema central desde el inicio en el elevator pitch.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c2-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Qué anécdota contó el profesor sobre las faltas de ortografía en una presentación ejecutiva?</summary><p>Relató que en una presentación muy importante con un cliente, tras ver dos o tres láminas con faltas de ortografía, el director se levantó y se fue, perdiéndose el proyecto y la relación comercial por ese detalle.</p></details>
+<details class="qa"><summary>2. ¿En qué consiste el concepto de Elevator Pitch o reunión de elevador según lo dicho en clase?</summary><p>Es la capacidad de definir y vender la propuesta de valor de un proyecto de forma clara y sintética en un lapso de uno a dos minutos, como si te encontraras con un ejecutivo en el elevador.</p></details>
+<details class="qa"><summary>3. Compara un Data Warehouse con un Data Mart según la explicación del profesor.</summary><p>Un Data Warehouse es un repositorio centralizado a nivel empresarial que integra datos de toda la organización, mientras que un Data Mart se enfoca exclusivamente en un área de negocio específica como Recursos Humanos.</p></details>
+<details class="qa"><summary>4. Si un gimnasio registra la entrada y salida de sus socios mediante huella digital y nota una alta deserción en horas pico, ¿cómo debe limpiar y transformar estos datos biométricos antes de aplicar clustering?</summary><p>Debe eliminar los registros biométricos dobles por errores del sistema, imputar la media de salida a quienes no la registraron, aislar estancias atípicas y normalizar las variables de tiempo en una escala de cero a uno.</p></details>
+<details class="qa"><summary>5. ¿Qué porcentaje del manejo actual de datos se realiza mediante virtualización de datos según el profesor?</summary><p>El profesor mencionó que aproximadamente el 70% de los datos se manejan mediante esquemas de virtualización.</p></details>
+<details class="qa"><summary>6. ¿Por qué en la presentación del caso de ciberseguridad no se debían eliminar los valores faltantes en el campo de tipo de malware ni los outliers?</summary><p>Porque un valor faltante en tipo de malware no significa falta de ataque sino información valiosa, y un outlier puede representar una amenaza o ataque real que no debe descartarse.</p></details>
+<details class="qa"><summary>7. Compara el almacenamiento de un Data Lake frente al de un Data Warehouse.</summary><p>El Data Lake almacena datos crudos heterogéneos sin supervisión de estructura previa a bajo costo, mientras que el Data Warehouse organiza los datos en esquemas estructurados para consultas de negocio.</p></details>
+<details class="qa"><summary>8. En una empresa productora de empaques que busca reducir residuos plásticos y papel, ¿cómo ayuda el algoritmo K-Means a clasificar sus productos?</summary><p>Permite agrupar los sets de productos en tres clústers bien definidos: empaques óptimos, sobredimensionamiento de bolsas y exceso de piezas extra, orientando las acciones de reducción.</p></details>
 </details>
 
 <details class="section-block sec" id="c2-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>

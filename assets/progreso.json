@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T12:31:32+00:00",
+ "generatedAt": "2026-10-01T12:33:29+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -419,7 +419,7 @@
     "fecha": "2026-09-03",
     "resumen": "Tema 2 — Arquitectura de minería de datos · repositorio vs. base de datos, Data Warehouse, Data Mart, virtualización de datos, ERP y Data Lake. Presentaciones de los equipos 9, 13, 12 y 11.",
     "url": "materias/mineria-de-datos/clase-02.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 3,
@@ -467,6 +467,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "c65bf99",
+   "fecha": "2026-10-01T06:31:33-06:00",
+   "mensaje": "RP Clase 03: formato de estudio"
+  },
   {
    "hash": "2ae116e",
    "fecha": "2026-10-01T06:29:18-06:00",
@@ -761,11 +766,6 @@
    "hash": "c822574",
    "fecha": "2026-09-30T15:41:46-06:00",
    "mensaje": "ASI: láminas UML completas y entregas (Formatos Scrum, Sprint 1, Diagramas UML)"
-  },
-  {
-   "hash": "b659e50",
-   "fecha": "2026-09-30T15:36:37-06:00",
-   "mensaje": "ASI: enunciados P1 y P3, presentación Kali, láminas UML y Proyectito (pptx)"
   }
  ]
 }
