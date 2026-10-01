@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T11:55:43+00:00",
+ "generatedAt": "2026-10-01T11:57:32+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -316,7 +316,7 @@
     "fecha": "2026-09-17",
     "resumen": "Cierre del Tema 2 (terminación de procesos, kill() , procesos zombie) e inicio del Tema 3 — Arquitectura Cliente-Servidor, sockets y puertos lógicos.",
     "url": "materias/arquitectura-cliente-servidor/clase-07.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 8,
@@ -467,6 +467,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "f5ea5bc",
+   "fecha": "2026-10-01T05:55:44-06:00",
+   "mensaje": "SIB Clase 06: formato de estudio; MD Clase 05 (examen) marcada como no-aplica"
+  },
   {
    "hash": "1b55957",
    "fecha": "2026-10-01T05:53:48-06:00",
@@ -761,11 +766,6 @@
    "hash": "fa78e13",
    "fecha": "2026-09-23T16:48:08-06:00",
    "mensaje": "FSE: agregar Clase 08 (23 sep 2026) — USB, FireWire vs USB, topología y detección eléctrica"
-  },
-  {
-   "hash": "557871c",
-   "fecha": "2026-09-22T17:37:03-06:00",
-   "mensaje": "RP: agregar diapositivas del profesor Clase 9 (funciones de distancia) y su equivalencia con Clase 07 del sitio"
   }
  ]
 }

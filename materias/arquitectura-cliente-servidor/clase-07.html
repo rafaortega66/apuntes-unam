@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 07 — Arquitectura Cliente-Servidor</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -15,20 +16,51 @@
   <p class="prof">Mtro. Carlos Alberto Román Zamitiz · 17 sep 2026 · Cierre del Tema 2 (terminación de procesos, <code>kill()</code>, procesos zombie) e inicio del Tema 3 — Arquitectura Cliente-Servidor, sockets y puertos lógicos.</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c7-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Diferenciación entre muerte natural de un proceso y muerte anormal por señales, y la conveniencia de usar el nombre de la macro de la señal en kill en lugar del número</strong><span class="evid">Evidencia: Lo dijo explícitamente el profesor en clase explicando que el número cambia entre arquitecturas de hardware como x86/ARM y SPARC, por lo que el nombre garantiza portabilidad.</span></li>
+<li><strong>Creación y comportamiento de un proceso zombie provocado por un hijo que termina mientras el padre duerme en sleep(), inspeccionado con el comando ps</strong><span class="evid">Evidencia: Lo resolvió en vivo en la terminal usando el programa 8, mostrando la etiqueta Z+ y defunct durante los 60 segundos del sleep del padre.</span></li>
+<li><strong>Envío programático de señales en C mediante la función kill(pid, sig) para que un proceso padre elimine a su hijo</strong><span class="evid">Evidencia: Lo explicó y resolvió en vivo en la terminal con el programa 11, demostrando cómo el hijo vive 10 segundos antes de ser eliminado por el padre.</span></li>
+<li><strong>Las dos soluciones en C para evitar procesos zombie mediante la ignoración de SIGCHLD (SIG_IGN) o el uso de wait/waitpid</strong><span class="evid">Evidencia: Lo asignó explícitamente como tarea moral de los programas 9 v1 y 9 v2 para revisar su comportamiento antes del examen.</span></li>
+<li><strong>Conceptos fundamentales del Tema 3: definición de socket de software, puerto lógico de 16 bits (65,536 puertos) y la regla de disponibilidad de los cinco nueves (99.999%)</strong><span class="evid">Evidencia: Lo explicó extensamente en el pizarrón al introducir el Tema 3 y la arquitectura cliente-servidor.</span></li>
+</ol>
+</details>
+
 <details class="section-block sec" id="c7-terminacion-kill" open><summary><span class="stitle">Formas de terminación de un proceso y envío de señales desde la terminal</span></summary>
 <p>La clase arranca cerrando los últimos pendientes del Tema 2 antes de dar paso a la programación cliente-servidor. Se explica formalmente que un proceso en Linux puede terminar de dos maneras: la <strong>muerte natural</strong>, que ocurre cuando el proceso completa toda la ejecución de su código, llega al final de <code>main()</code> y regresa —implícita o explícitamente— la señal de terminación a su padre; y la <strong>muerte anormal</strong>, producida cuando el proceso es interrumpido de forma abrupta por una señal externa (Ctrl+C envía <code>SIGINT</code>, o un <code>kill</code> desde consola) o cuando el propio proceso se manda a sí mismo una señal de aborto con <code>abort()</code> (<code>SIGABRT</code>, señal 6).</p>
 <p>Sobre el comando <code>kill</code> desde terminal: para forzar la destrucción de un proceso se usa <code>kill -9 &lt;PID&gt;</code>, donde <strong>-9</strong> corresponde al número de <code>SIGKILL</code> en arquitectura x86. Sin embargo, el profesor recalca que la sintaxis recomendada es usar el <strong>nombre explícito de la macro en mayúsculas</strong> — <code>kill -SIGKILL &lt;PID&gt;</code> o <code>kill -SIGxx &lt;PID&gt;</code> — por una razón técnica de portabilidad: en x86/ARM un número concreto corresponde a una señal determinada, pero en otras arquitecturas como <strong>SPARC</strong> ese mismo número entero (por ejemplo 7 o 10) representa una señal completamente distinta. Si se ejecuta <code>kill &lt;PID&gt;</code> sin especificar señal, el sistema asume por defecto la señal de terminación.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como apagar un televisor presionando el botón de apagar al terminar tu programa favorito frente a desenchufarlo de golpe a mitad de la transmisión.<span class="rompe">Dónde falla la analogía: Desenchufar el televisor corta la electricidad, pero la muerte por señal envía una interrupción de software que el sistema operativo procesa según el código de la señal.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Explica cómo finaliza un proceso en Linux (muerte natural al salir de main() o anormal por señales) y enseña a usar el comando kill desde terminal usando preferentemente la macro en lugar del número para garantizar la portabilidad entre arquitecturas de hardware.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c7-programa10" open><summary><span class="stitle">Demostración con programa10.c — switch/case de señales</span></summary>
 <p>Dentro del programa, cada bloque <code>case</code> atiende una señal específica (<code>SIGHUP</code>, <code>SIGINT</code>, <code>SIGQUIT</code>, <code>SIGILL</code>, <code>SIGTRAP</code>, <code>SIGABRT</code>, <code>SIGBUS</code>, <code>SIGFPE</code>, <code>SIGTERM</code>, <code>SIGCHLD</code>, entre otras) y termina con <code>break</code> para evitar la ejecución en cascada hacia otros casos; las señales sin <code>case</code> explícito caen en <code>default</code>. En <code>main()</code>, el programa intenta registrar el manejo de cada señal con llamadas sucesivas a <code>signal(SEÑAL, signal_handler)</code>: si tiene éxito imprime "Sí puedo manejar [SEÑAL]"; la única que da error, como era de esperarse, es <code>SIGKILL</code> (señal 9), imprimiendo "No puedo manejar SIGKILL". Tras registrar los manejadores, el programa entra en un <code>while(1)</code> que llama a <code>sleep(1)</code> en cada iteración sin imprimir nada, para no saturar la terminal.</p>
 <p>Para probarlo se abre una segunda terminal y se manda, por ejemplo, <code>kill -SIGHUP &lt;PID&gt;</code> o <code>kill -1 &lt;PID&gt;</code>: el proceso atrapa la señal, imprime dentro del <code>switch</code> y sigue vivo sin terminar.</p>
 <p>Como demostración adicional se provoca un <strong>bloqueo de señales</strong>: si un programa captura tanto <code>SIGINT</code> (Ctrl+C, señal 2) como <code>SIGTSTP</code> (Ctrl+Z, señal 20, <em>Terminal Stop</em>), el usuario queda sin poder interrumpirlo ni mandarlo a segundo plano desde esa misma terminal — la única salida es abrir una segunda terminal y mandarle <code>kill -9</code> por PID.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un tablero de botones donde cada botón enciende una luz de color diferente para avisar qué tipo de mensaje ha llegado.<span class="rompe">Dónde falla la analogía: Las luces de un tablero solo brillan, mientras que en C la función manejadora ejecuta un bloque switch/case con código específico para reaccionar ante cada señal recibida.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Demuestra mediante programa10.c que el comando kill puede enviar distintas señales registrándolas en un switch/case, y que la única señal que no se puede manejar ni capturar es SIGKILL.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Intentar capturar la señal SIGKILL en un case, lo cual es código inalcanzable porque el sistema operativo la entrega directamente para destruir el proceso.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c7-kill-c" open><summary><span class="stitle">Envío programático de señales en C — kill() y programa11.c</span></summary>
 <p>La clase pasa del uso de <code>kill</code> en consola a su uso programático con la llamada al sistema <code>kill(pid_t pid, int sig)</code>, que requiere las cabeceras <code>&lt;sys/types.h&gt;</code> y <code>&lt;signal.h&gt;</code>. Recibe como primer argumento el PID del proceso destino y como segundo el nombre de la macro de señal (p. ej. <code>SIGKILL</code> o <code>SIGTERM</code>), sin guion antes del nombre. Se recalca la diferencia entre <code>SIGTERM</code> (señal 15, puede capturarse o ignorarse) y <code>SIGKILL</code> (señal 9, destruye al proceso de forma fulminante e ineludible).</p>
 <p>Para ilustrar el control de un hijo por parte de su padre vía <code>kill()</code>, se analiza <strong>programa11.c</strong>: el padre llama <code>fork()</code> dentro de <code>if ((pid = fork()) == 0)</code>. Como <code>fork()</code> regresa 0 al hijo y el PID del hijo al padre, el hijo entra al <code>if</code>: imprime su PID y entra en un bucle donde cada iteración duerme 1 segundo con <code>sleep(1)</code> e imprime una línea de estado. El padre, en cambio, no entra al <code>if</code> (su variable <code>pid</code> no es 0), se salta ese bloque y ejecuta de inmediato <code>sleep(10)</code>. Durante esos 10 segundos el hijo alcanza a imprimir 10 iteraciones. Al despertar, el padre ejecuta <code>kill(pid, SIGKILL)</code>, mandando la señal letal al hijo — que muere fulminantemente tras vivir solo 10 segundos — y el padre termina limpiamente con <code>exit(0)</code>.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como cuando un árbitro en un partido le muestra la tarjeta roja a un jugador desde la cancha para expulsarlo de inmediato del juego.<span class="rompe">Dónde falla la analogía: El jugador camina hacia la banca, mientras que la función kill() en C envía una señal de software al kernel para interrumpir o destruir al proceso destino de forma instantánea.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite enviar señales programáticamente en C mediante kill(pid, sig), ilustrado en el programa11.c donde el padre espera 10 segundos y destruye al hijo con SIGKILL; también advierte que si un proceso captura SIGINT y SIGTSTP, queda atrapado en primer plano.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c7-zombie" open><summary><span class="stitle">Procesos zombie: cómo se forman, cómo se inspeccionan con ps y cómo evitarlos</span></summary>
@@ -46,6 +78,13 @@
 </tbody></table>
 <p>El profesor aclara con énfasis que el estado <code>X</code> jamás debería verse en la terminal: <code>ps</code> solo despliega procesos vivos o parcialmente vivos (como los zombies); uno marcado <code>X</code> ya fue eliminado de memoria por el kernel y no figura en la tabla de procesos.</p>
 <p>Como tarea moral se dejaron dos soluciones de programación para evitar zombies: <strong>Solución 1</strong> (<code>programa9_v1.c</code>) — el padre ignora explícitamente <code>SIGCHLD</code> con <code>signal(SIGCHLD, SIG_IGN)</code>, dejando que el sistema limpie al hijo de inmediato; <strong>Solución 2</strong> (<code>programa9_v2.c</code>) — el padre define un manejador dedicado a <code>SIGCHLD</code> que invoca <code>wait()</code> o <code>waitpid()</code> para recolectar la salida del hijo.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un paquete entregado en tu puerta que nadie ha metido a la casa, por lo que sigue ocupando espacio en la entrada aunque el repartidor ya se fue.<span class="rompe">Dónde falla la analogía: El paquete ocupa espacio físico, mientras que el proceso zombie es solo un registro retenido en la tabla de procesos del kernel esperando a que el padre lea su código de salida.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Enseña qué es un proceso zombie (un hijo muerto cuyo padre dormido no ha leído su señal SIGCHLD), cómo inspeccionarlo en ps con la letra Z y la etiqueta defunct, las letras de estado (D, I, R, S, T, Z, X) y las dos soluciones para evitarlo (SIG_IGN o wait/waitpid).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> El profesor aclaró que el código de estado X (muerto) jamás debería verse en la terminal porque ps solo muestra procesos vivos o parcialmente vivos como los zombies.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c7-tema3-intro" open><summary><span class="stitle">Introducción al Tema 3 — Arquitectura Cliente-Servidor, sockets y puertos lógicos</span></summary>
@@ -57,6 +96,25 @@
 <li><strong>Socket:</strong> cada uno de los extremos finales de un canal de comunicación bidireccional entre dos procesos. Se usa la analogía del socket/contacto eléctrico donde se conecta un foco en casa: así como la instalación eléctrica conecta focos, los sockets de software conectan procesos entre sí. En el curso se trabajará exclusivamente con sockets de software — el cliente y el servidor pueden correr en dos máquinas distintas conectadas en red, o dentro de la misma máquina física compartiendo memoria y procesador.</li>
 <li><strong>Puerto lógico:</strong> a diferencia de los puertos físicos de hardware (USB, HDMI, VGA), un puerto lógico en redes es un campo numérico de <strong>16 bits sin signo</strong> gestionado por software. Como consecuencia matemática de representarlo con 16 bits (2¹⁶), cada host tiene exactamente <strong>65,536 puertos lógicos</strong> (del 0 al 65535) para direccionar el tráfico de sus distintas aplicaciones y servicios.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como hacer un pedido en un restaurante, donde el comensal es el cliente que pide la comida, el mesero es la red que lleva el recado y la cocina es el servidor que prepara el platillo.<span class="rompe">Dónde falla la analogía: La comida del restaurante se consume en una mesa física, mientras que los sockets de software permiten conectar procesos dentro de la misma computadora o a través de internet.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Marca la transición al Tema 3 definiendo cliente (proceso activo), servidor (proceso pasivo), la disponibilidad de los cinco nueves (99.999%), el socket (extremo lógico de comunicación) y el puerto lógico (paquete de software de 16 bits que da 65,536 puertos por host).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir los puertos lógicos de software (16 bits) con los puertos físicos de hardware como las entradas USB o VGA.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c7-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuáles son las dos formas en que puede terminar un proceso en un sistema operativo tipo Linux?</summary><p>La muerte natural, que ocurre cuando el proceso completa su código y sale de la función main() regresando el control a su padre, y la muerte anormal, producida al recibir una señal externa como SIGINT o un comando kill.</p></details>
+<details class="qa"><summary>2. Explica con tus palabras por qué se recomienda usar el nombre de la macro de una señal en lugar de su número al ejecutar el comando kill.</summary><p>Porque la numeración de las señales varía entre diferentes arquitecturas de hardware, por lo que usar el nombre de la macro garantiza la portabilidad del código o comandos entre distintas computadoras.</p></details>
+<details class="qa"><summary>3. Un proceso hijo se ejecuta en bucle con sleep(1) mientras su proceso padre duerme con sleep(10) antes de ejecutar kill(pid, SIGKILL). ¿Cuántas iteraciones imprimirá el hijo antes de ser destruido?</summary><p>Imprimirá exactamente 10 iteraciones, una por cada segundo que el proceso padre permanece dormido antes de despertar y enviarle la señal SIGKILL.</p></details>
+<details class="qa"><summary>4. Compara el comportamiento de la señal SIGTERM frente al de la señal SIGKILL al enviarlas a un proceso.</summary><p>La señal SIGTERM (código 15) es una solicitud de terminación que el proceso destino puede capturar o ignorar, mientras que SIGKILL (código 9) es fulminante e ineludible y destruye al proceso de inmediato.</p></details>
+<details class="qa"><summary>5. ¿Qué es un proceso zombie y por qué aparece en la tabla de procesos del sistema?</summary><p>Es un proceso hijo que ya terminó su ejecución llamando a exit, pero cuya entrada permanece en la tabla de procesos porque su padre no ha procesado la señal SIGCHLD ni ha leído su estado de salida.</p></details>
+<details class="qa"><summary>6. ¿Por qué el profesor afirmó que el código de estado X del manual de ps nunca debería ser visto por un usuario en la terminal?</summary><p>Porque el estado X representa un proceso totalmente muerto que ya fue liberado de la memoria por el kernel, y el comando ps solo muestra procesos que están vivos o parcialmente vivos como los zombies.</p></details>
+<details class="qa"><summary>7. Explica en qué consisten las dos soluciones en C para evitar la formación de procesos zombie explicadas en la clase.</summary><p>La primera solución es hacer que el padre ignore explícitamente la señal SIGCHLD usando signal(SIGCHLD, SIG_IGN), y la segunda es implementar una función manejadora en el padre que invoque a wait() o waitpid().</p></details>
+<details class="qa"><summary>8. ¿Cuántos puertos lógicos existen en un host de red y de dónde proviene técnicamente esa cantidad?</summary><p>Existen exactamente 65,536 puertos lógicos (numerados del 0 al 65535), debido a que un puerto lógico se representa en software mediante una estructura de 16 bits sin signo (2 a la 16).</p></details>
 </details>
 
 <details class="section-block sec" id="c7-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
