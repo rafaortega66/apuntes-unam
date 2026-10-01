@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T11:52:11+00:00",
+ "generatedAt": "2026-10-01T11:53:47+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -49,7 +49,7 @@
     "fecha": "2026-09-18",
     "resumen": "Tema 6 — Métodos de clasificación no supervisados y algoritmos de agrupamiento de datos: funciones de distancia, clustering, K-Means, LBG e ISODATA.",
     "url": "materias/reconocimiento-de-patrones/clase-07.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 8,
@@ -468,6 +468,11 @@
  },
  "gitlog": [
   {
+   "hash": "0040b00",
+   "fecha": "2026-10-01T05:52:11-06:00",
+   "mensaje": "RP Clase 08: formato de estudio"
+  },
+  {
    "hash": "f85d19d",
    "fecha": "2026-10-01T02:12:29-06:00",
    "mensaje": "OAC Clase 06: formato de estudio"
@@ -761,11 +766,6 @@
    "hash": "9830133",
    "fecha": "2026-09-22T16:56:31-06:00",
    "mensaje": "SIB: complementar Clase 07 con apuntes propios (definición exacta, talón de Aquiles, relación riesgo-amenaza-vulnerabilidad)"
-  },
-  {
-   "hash": "660839d",
-   "fecha": "2026-09-22T16:31:04-06:00",
-   "mensaje": "ACS: agregar Clase 08 (22 sep 2026) — sockets, AF, descriptores de archivo, sockaddr_in SIB: agregar Clase 07 (22 sep 2026) — actividad de amenazas y concepto de vulnerabilidad"
   }
  ]
 }

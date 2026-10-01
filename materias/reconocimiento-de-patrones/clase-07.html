@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 07 — Reconocimiento de Patrones</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -15,6 +16,17 @@
   <p class="prof">Ing. Rubén Omar Azuara Domínguez · 18 sep 2026 · Tema 6 — Métodos de clasificación no supervisados y algoritmos de agrupamiento de datos: funciones de distancia, clustering, K-Means, LBG e ISODATA.</p>
   <p style="font-size:12px;color:var(--ink-soft);margin:2px 0 0">🔢 Numeración del profesor: corresponde a sus diapositivas <a href="material.html" style="color:var(--indigo)">Clase 9</a> (Clasificación por funciones de distancia) — no coincide 1:1 con "Clase 07" de este sitio.</p>
 </div>
+
+<div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c7-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Cálculo a mano de la asignación de un punto a su centroide por distancia Euclidiana y actualización de la media</strong><span class="evid">Evidencia: evidencia de la clase: el profesor lo dijo explícitamente al explicar cómo vendrán los ejercicios del examen (diferencias al cuadrado a mano).</span></li>
+<li><strong>Regla de decisión por distancia mínima y la necesidad de normalizar/estandarizar las variables</strong><span class="evid">Evidencia: evidencia de la clase: lo repitió explícitamente durante la explicación de clasificadores y al responder dudas sobre el impacto de la escala.</span></li>
+<li><strong>Diferencias operativas y de hiperparámetros entre K-Means, LBG e ISODATA</strong><span class="evid">Evidencia: evidencia de la clase: el profesor presentó la tabla comparativa explícita y explicó las condiciones de uso de cada uno al cierre de la sesión.</span></li>
+<li><strong>Límite de los algoritmos de agrupamiento basados en distancia ante fronteras de decisión no lineales (ejemplo de las dos lunas)</strong><span class="evid">Evidencia: evidencia de la clase: lo mostró gráficamente y explicó que tanto K-Means como ISODATA generan clústeres esféricos/convexos.</span></li>
+</ol>
+</details>
 
 <details class="section-block sec" id="c7-distancia" open><summary><span class="stitle">Clasificación no supervisada y funciones de distancia</span></summary>
 <p>La sesión inició repasando la clasificación de patrones como un proceso en el cual se busca asignar un objeto o vector de características a una categoría predefinida, apoyándose en mediciones de semejanza o diferencia con prototipos representativos de cada clase. A diferencia de los métodos supervisados, los no supervisados no disponen de información previa ni etiquetas sobre la clase a la que pertenecen los datos de entrenamiento; su objetivo principal es inferir la forma en que los datos se agrupan de manera natural. En este formalismo, un <strong>patrón</strong> es el vector de características que describe un objeto o fenómeno, mientras que una <strong>clase</strong> o categoría es el conjunto de patrones que comparten propiedades similares o un mismo origen.</p>
@@ -33,6 +45,13 @@
 <p>La <strong>regla de decisión por distancia mínima</strong>: el patrón <em>X</em> se asigna a la clase W<sub>k</sub> si se cumple</p>
 <p style="text-align:center"><em>d(X, M<sub>k</sub>) &lt; d(X, M<sub>j</sub>)</em> &nbsp; para todo <em>j ≠ k</em></p>
 <p>donde M<sub>k</sub> es el centroide o prototipo de la clase W<sub>k</sub>. Sus ventajas son la simplicidad conceptual y el bajo costo computacional, y es muy efectivo cuando las clases están bien separadas. Tiene dos limitaciones severas: es muy sensible a la escala de las variables (las características con rangos más grandes dominan la distancia, por lo que se requiere normalización previa) y no considera la distribución ni la geometría interna de las clases, a menos que se emplee una métrica como Mahalanobis.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como saber de qué país es un viajero midiendo en un mapa la distancia en línea recta desde su ubicación hasta la capital de cada país, asignándolo al más cercano.<span class="rompe">Dónde falla la analogía: Deja de servir si las ciudades tienen formas muy alargadas o si las carreteras imponen escalas diferentes, haciendo que la distancia en línea recta ignore el terreno real.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Constituye la regla fundamental para clasificar un patrón desconocido x asignándolo al prototipo o centroide mk que minimiza la función de distancia d(x, mk).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Ignorar la escala de las variables sin normalizarlas previamente, provocando que la característica con magnitudes más grandes domine desproporcionadamente la distancia.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c7-clustering" open><summary><span class="stitle">Fundamentos de agrupamiento (clustering) y medidas de similitud</span></summary>
@@ -50,6 +69,13 @@
 <li><strong>Similitud de Jaccard:</strong> diseñada para conjuntos binarios y datos categóricos o texto.</li>
 <li><strong>Distancia de Minkowski:</strong> generalización paramétrica que abarca las distancias anteriores: D(X, Y) = ( Σ<sub>i=1..d</sub> |x<sub>i</sub> − y<sub>i</sub>|<sup>P</sup> )<sup>1/P</sup>. Según el exponente P se obtiene la distancia Manhattan (P = 1), la Euclidiana (P = 2) o la de Chebyshev (P → ∞).</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como organizar una colección de ropa en un armario sin etiquetas previas, juntando pantalones con pantalones y camisetas con camisetas según qué tanto se parecen visualmente.<span class="rompe">Dónde falla la analogía: Falla si se intenta clasificar prendas con usos o diseños atípicos que no encajan en agrupaciones tradicionales o esféricas.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite descubrir la estructura intrínseca y latente de conjuntos de datos no etiquetados evaluando la cohesión intra-clúster y la separación inter-clúster.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir el agrupamiento no supervisado (donde no existen etiquetas a priori) con la clasificación supervisada (donde se conoce la clase de cada muestra de entrenamiento).</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c7-kmeans" open><summary><span class="stitle">Algoritmo K-Means (K-Medias)</span></summary>
@@ -85,6 +111,13 @@
 <li><strong>Clusters esféricos:</strong> asume fronteras de decisión esféricas/circulares por usar radios de distancia. No puede separar estructuras complejas con fronteras no lineales (patrones entrelazados o en forma de media luna).</li>
 <li><strong>Outliers y escala:</strong> es sensible a ambos; requiere normalización estricta de variables.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como colocar K torres de control en un parque, asignar a cada visitante a la torre más cercana y mover cada torre al centro geográfico de sus visitantes, repitiendo hasta que nadie cambie de grupo.<span class="rompe">Dónde falla la analogía: Se rompe por completo cuando la población del parque está distribuida en dos anillos concéntricos o en formas de media luna, ya que K-Means siempre traza cortes rectos y agrupaciones esféricas.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Minimiza la Inercia o suma de distancias cuadradas para particionar iterativamente un conjunto de datos en K grupos con una complejidad lineal O(n·k·i·d).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Seleccionar una inicialización aleatoria simple sobre datos complejos, lo que provoca que centroides iniciales mal posicionados queden atrapados en mínimos locales desfavorables.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c7-lbg" open><summary><span class="stitle">Algoritmo LBG (Linde-Buzo-Gray) y cuantización vectorial</span></summary>
@@ -108,6 +141,13 @@
 <li><strong>Clasificación:</strong> para un patrón desconocido X se calcula la distancia entre X y el codeword más cercano de cada codebook de clase. X se asigna a la clase cuyo codebook registre la distancia mínima. Un estudiante preguntó si era necesario hacer primero un codebook general y luego dividirlo por clases; el profesor aclaró que se entrena directamente un codebook separado por cada clase desde sus propios datos.</li>
 </ul>
 <p><strong>Consideraciones:</strong> un codebook muy pequeño genera subajuste (<em>underfitting</em>) y uno muy grande sobreajuste (<em>overfitting</em>). Ofrece una representación muy compacta y clasificación rápida, pero sigue limitado por el supuesto de fronteras esféricas y por el tamaño restringido a potencias de 2.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como resumir un diccionario entero en un minidiccionario de 8 palabras clave, partiendo primero todo el idioma en dos grupos y luego dividiendo cada grupo por la mitad en varios pasos.<span class="rompe">Dónde falla la analogía: Deja de funcionar si el usuario necesita un diccionario final con un número de palabras que no sea potencia de dos (como 3, 5 o 10 palabras), porque el algoritmo siempre duplica el tamaño.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Minimiza la distorsión promedio mediante un proceso divisivo jerárquico (splitting) para construir libros de códigos (codebooks) óptimos utilizados en cuantización vectorial y compresión.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Definir un parámetro de perturbación epsilon erróneo (si es muy pequeño los centroides tardan en separarse; si es muy grande se pierden configuraciones óptimas) o intentar usar tamaños de codebook no restringidos a potencias de dos.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c7-isodata" open><summary><span class="stitle">Algoritmo ISODATA (Self-Organizing Data Analysis Technique)</span></summary>
@@ -144,6 +184,13 @@
 </ul>
 <p><strong>Fronteras no lineales (“medias lunas”).</strong> El profesor mostró una comparativa de los tres algoritmos sobre un dataset sintético con dos “medias lunas” entrelazadas. Como K-Means e ISODATA construyen celdas basadas en distancias radiales (superficies esféricas o circulares), <strong>ninguno es capaz de separar fronteras de decisión no lineales</strong>. En el caso de ISODATA, al darle libertad de adaptar los grupos, terminó fragmentando las dos medias lunas en 7 pequeños clusters circulares, vacíos en el centro.</p>
 <p>Un alumno preguntó por qué preferir ISODATA sobre K-Means si en datos sencillos gráficamente dan un resultado similar. El profesor explicó que el resultado “bonito” de K-Means requirió múltiples corridas previas probando inicializaciones manuales específicas para no caer en mínimos locales malos, mientras que ISODATA logró la estructura de forma autónoma con una inicialización puramente aleatoria, gracias a sus reglas adaptativas.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un gerente de restaurante que ajusta mesas dinámicamente: junta dos mesas pequeñas si están muy pegadas, divide una mesa grande si la gente está muy dispersa, o elimina mesas desiertas.<span class="rompe">Dónde falla la analogía: Falla cuando los clientes están dispuestos en filas serpenteantes o curvas no convexas, ya que las reglas heurísticas de división y fusión siguen asumiendo clústeres esféricos.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Otorga flexibilidad estructural al ajustar autónomamente el número de clústeres K durante la ejecución mediante parámetros heurísticos de división (Smax), fusión (Dmin) y eliminación (Nmin).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Calibrar los hiperparámetros a ciegas sin considerar la dispersión y escala global del conjunto de datos, provocando divisiones o fusiones descontroladas de clústeres.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c7-comparativo" open><summary><span class="stitle">Aplicaciones reales y cuadro comparativo</span></summary>
@@ -163,6 +210,25 @@
 <tr><td><strong>Geometría de fronteras</strong></td><td>Únicamente esféricas/circulares (falla en fronteras no lineales).</td><td>Regiones de Voronoi basadas en distancias esféricas.</td><td>Únicamente esféricas (falla en fronteras no lineales).</td></tr>
 <tr><td><strong>Criterios de parada</strong></td><td>Centroides fijos, inercia o iteraciones máximas.</td><td>Umbral de tolerancia en distorsión.</td><td>Convergencia de centroides o iteraciones máximas.</td></tr>
 </table>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como comparar tres herramientas de carpintería: una caja con K compartimentos fijos, un mueble que duplica sus repisas en cada nivel y una estantería inteligente que ajusta sus tablas según la carga.<span class="rompe">Dónde falla la analogía: La comparación pierde sentido cuando los datos carecen de propiedades métricas continuas o de un espacio de características donde calcular distancias geométricas.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite seleccionar el algoritmo de agrupamiento adecuado guiándose por la complejidad del problema, la estabilidad de la inicialización y el conocimiento previo del parámetro K.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Asumir erróneamente que K-Means puede adaptar el número de grupos por sí solo o emplear LBG cuando se requieren agrupaciones heterogéneas no binarias.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c7-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuál es la regla de decisión matemática para asignar un patrón desconocido x a la clase wk mediante la regla de distancia mínima?</summary><p>Se asigna el patrón x a la clase wk si la distancia d(x, mk) es menor que la distancia d(x, mj) para todo centroide mj diferente de mk.</p></details>
+<details class="qa"><summary>2. Explica con tus palabras por qué es indispensable normalizar o estandarizar las características antes de aplicar algoritmos basados en distancia Euclidiana.</summary><p>Porque si las características están en escalas distintas, las variables con valores numéricos muy grandes dominarán de forma desproporcionada el cálculo de la distancia, anulando el impacto de las variables con valores pequeños.</p></details>
+<details class="qa"><summary>3. Si tenemos dos centroides m1 = (0, 1) y m2 = (3, 5), ¿a qué clúster se asigna el patrón x = (1, 2) usando distancia Euclidiana y cuál es la nueva posición de m1 si recibe los puntos (1, 2) y (-1, 0)?</summary><p>La distancia de x a m1 es la raíz de (1-0)^2 + (2-1)^2 = raíz de 2 (aprox. 1.41). La distancia a m2 es la raíz de (1-3)^2 + (2-5)^2 = raíz de 13 (aprox. 3.61). Se asigna al clúster 1 por menor distancia. El nuevo centroide m1 actualizado es el promedio ((1-1)/2, (2+0)/2) = (0, 1).</p></details>
+<details class="qa"><summary>4. Compara la forma en que K-Means, LBG e ISODATA definen o ajustan el número de clústeres K durante su ejecución.</summary><p>En K-Means el parámetro K es fijo y lo define el usuario a priori; en LBG el tamaño del codebook inicia en 1 y se duplica sucesivamente (2^L); en ISODATA el parámetro K inicial varía dinámicamente mediante división, fusión y eliminación de clústeres.</p></details>
+<details class="qa"><summary>5. ¿Qué es la Inercia en el algoritmo K-Means y cuál es su fórmula matemática?</summary><p>La Inercia J es la suma de las distancias cuadradas entre cada punto del dataset y el centroide de su clúster asignado, calculada como la suma desde j=1 hasta K de la suma de ||xi - muj||^2 para todo xi en Cj.</p></details>
+<details class="qa"><summary>6. ¿Cómo funciona el proceso de división (splitting) en el algoritmo LBG para duplicar el tamaño del libro de códigos?</summary><p>Cada centroide existente ci se divide en dos nuevos vectores ci+ y ci- aplicando una pequeña perturbación epsilon, donde ci+ = ci*(1 + epsilon) y ci- = ci*(1 - epsilon).</p></details>
+<details class="qa"><summary>7. ¿Cuáles son las tres condiciones de ajuste dinámico que realiza ISODATA y qué hiperparámetro controla cada una?</summary><p>La eliminación de clústeres (se activa si un grupo tiene menos de Nmin puntos), la división de clústeres (se activa si la desviación estándar del grupo supera Smax) y la fusión de clústeres (se activa si la distancia entre centroides es menor que Dmin).</p></details>
+<details class="qa"><summary>8. ¿Por qué ni K-Means ni ISODATA logran separar adecuadamente un conjunto de datos con estructura de dos medias lunas entrelazadas?</summary><p>Porque ambos algoritmos están diseñados sobre métricas de distancia que asumen y generan clústeres esféricos o convexos, lo que les impide trazar fronteras de decisión no lineales complejas.</p></details>
 </details>
 
 <details class="section-block sec" id="c7-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
