@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 06 — Organización y Arquitectura de Computadoras</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -15,11 +16,30 @@
   <p class="prof">M.I. José Antonio de Jesús Arredondo Garza · 21 sep 2026 · Tema 3 (continuación) — Mapa de memoria de datos y direccionamiento de periféricos, identificación del hardware (Pico ID) con <code>mem32</code> y con ensamblador inline ARM Thumb, y rutinas aritméticas (multiplicación y suma).</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c6-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>La fórmula de dirección efectiva de periféricos (Dirección Base + Offset Específico) y la lectura del Chip ID en la dirección 0x40000004</strong><span class="evid">Evidencia: Lo resolvió en vivo conectando físicamente una Pico 1 y una Pico 2 para demostrar cómo identificar la placa y ramificar el programa.</span></li>
+<li><strong>El truco de desplazamiento de bits lsl en ensamblador inline ARM Thumb (@micropython.asm_thumb) para construir la dirección base de 32 bits (0x40000000) usando mov(R1, 0x40) y lsl(R1, R1, 24)</strong><span class="evid">Evidencia: Lo resolvió en vivo en el código demostrando que el compilador marca error si se intenta cargar una constante directa de 32 bits.</span></li>
+<li><strong>Las reglas de sintaxis obligatorias para subrutinas en ensamblador inline: los parámetros deben ser registros consecutivos iniciando en R0 y el valor retornado a MicroPython siempre es el contenido de R0</strong><span class="evid">Evidencia: Lo dijo explícitamente y lo corrigió en vivo durante el desarrollo del ejercicio de multiplicación.</span></li>
+<li><strong>La restricción de la instrucción de multiplicación mul a solo dos operandos y el límite de 8 bits para valores inmediatos directos</strong><span class="evid">Evidencia: Lo resolvió en vivo corrigiendo la sintaxis de mul(R1, R2) para lograr el cálculo de 10 por 50 igual a 500.</span></li>
+<li><strong>La implementación del algoritmo de raíz cuadrada entera mediante restas sucesivas de números impares consecutivos</strong><span class="evid">Evidencia: Lo ligó explícitamente a una tarea obligatoria para la clase, detallando los ejemplos numéricos completos de 25 y 27 con su residuo.</span></li>
+</ol>
+</details>
+
 <details class="section-block sec" id="c6-memoria" open><summary><span class="stitle">Mapa de memoria de datos y dirección efectiva de periféricos</span></summary>
 <p>El estudio de la arquitectura de microcontroladores exige diferenciar entre la memoria de programa y la memoria de datos, relacionando el código en ensamblador con el mapa de memoria físico del procesador. En la familia Raspberry Pi Pico, cada periférico interno tiene asignada una dirección fija dentro del espacio de direcciones de datos. En el mapa de datos, la RAM interna se localiza aproximadamente a partir de la dirección <code>0x20000000</code>. La capacidad física depende del modelo: la Pico 1 dispone de 2 MB de flash y la Pico 2 de 4 MB.</p>
 <p>La región destinada al control de periféricos internos comienza a partir de <code>0x40000000</code>. Para acceder a cualquier registro de entrada o salida sin recurrir a librerías de abstracción, el procesador debe calcular la dirección efectiva del periférico:</p>
 <p style="text-align:center"><em>Dirección efectiva = Dirección base del periférico + Offset específico del periférico</em></p>
 <p>Una excepción a esta regla de desplazamiento es el identificador único del chip (<em>Pico ID</em> o <em>Chip ID</em>), que se ubica en una dirección absoluta fija dentro del bloque <code>0x40000000</code> (la dirección base más un desplazamiento de 4 bytes, <code>0x40000004</code>). En esta localidad coinciden la Pico 1 y la Pico 2. Leer esa posición permite que un programa identifique dinámicamente el modelo de procesador sobre el que se ejecuta y tome decisiones de bifurcación (<code>if</code> / <code>branch</code>) para evitar errores de ejecución.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un gran edificio de oficinas donde la dirección de la calle es la base y el número de despacho es el offset; para encontrar a alguien necesitas sumar la dirección del edificio con el número de despacho.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque en un edificio físico no importa si entras por la puerta equivocada, pero en el mapa de memoria acceder a una dirección sin el offset correcto intenta leer un periférico inexistente o equivocado y traba el procesador.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque la memoria de datos ubica la RAM en 0x20000000 y los periféricos internos en 0x40000000; la dirección efectiva (Dirección Base + Offset Específico) permite leer el Chip ID en 0x40000004 para ramificar el programa y evitar ejecutar instrucciones incompatibles.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir la memoria de programa con la memoria de datos o intentar direccionar periféricos usando direcciones absolutas sin considerar la suma del offset base.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c6-mem32" open><summary><span class="stitle">Identificación de hardware en MicroPython con <code>machine.mem32</code></span></summary>
@@ -37,6 +57,12 @@
 <tr><td>Raspberry Pi Pico 2</td><td><code>0x10004927</code></td></tr>
 </table>
 <p>En clase se hizo una demostración práctica conectando primero una Pico 1 y luego una Pico 2; el programa desplegaba automáticamente en la terminal el modelo exacto de la placa conectada.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como usar unos binoculares especiales para leer la placa de identificación grabada directamente en el motor del coche sin tener que abrir el manual del fabricante.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque los binoculares solo observan pasivamente, mientras que machine.mem32 te da acceso directo de lectura y escritura a las palabras físicas de 32 bits en la memoria del procesador.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite leer la dirección 0x40000004 directamente desde MicroPython sin librerías auxiliares para identificar si la placa es Pico 1 (0x10002927), Pico W (0x20002927) o Pico 2 (0x10004927), información que el profesor destacó que costó mucho trabajo encontrar.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c6-asm-id" open><summary><span class="stitle">Identificación de hardware en ensamblador inline (<code>@micropython.asm_thumb</code>)</span></summary>
@@ -48,6 +74,13 @@
 <li><strong>Lectura indirecta (<code>LDR</code>):</strong> <code>ldr(R0, [R1, 0])</code> extrae el contenido de la dirección apuntada por <code>R1</code> (<code>0x40000000</code>, o con offset) y lo deposita en <code>R0</code>.</li>
 </ol>
 <p><strong>Regla de retorno:</strong> toda subrutina escrita en ensamblador incrustado devuelve a Python el valor que esté en el registro <code>R0</code> al terminar. Por eso, al invocar <code>val = id_func()</code> el sistema retorna el contenido de <code>R0</code>, que se imprime en hexadecimal con <code>print(hex(val))</code>.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como armar un número de teléfono largo escribiendo primero los dos primeros dígitos y luego empujándolos a la izquierda porque no te cabe teclear la cifra completa de un solo golpe.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque en la vida real puedes escribir cualquier cifra de golpe en un papel, pero la arquitectura del procesador limita físicamente el tamaño de los datos inmediatos en una sola instrucción.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra el funcionamiento a bajo nivel con @micropython.asm_thumb; enseña que para cargar 0x40000000 hay que cargar 0x40 en R1 y aplicar lsl(R1, R1, 24), y que el valor leído con ldr(R0, [R1, 0]) se retorna automáticamente en R0 al finalizar.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Intentar escribir una constante de 32 bits (o 16 bits como 0x4000) directa en un registro dentro de ensamblador inline, lo cual provoca que el compilador marque error.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c6-aritmetica" open><summary><span class="stitle">Operaciones aritméticas en ensamblador: multiplicación y suma multivariable</span></summary>
@@ -71,6 +104,25 @@ def multiplica(r0, r1):
 <li><code>add(R0, R0, R1)</code> → R0 = R0 + R1 (resultado final en <code>R0</code>)</li>
 </ul>
 <p><strong>Restricción de operandos inmediatos:</strong> el ensamblador incrustado de MicroPython limita los valores inmediatos dentro de las instrucciones a un máximo de 8 bits (0 a 255). Para operar con valores mayores en registros de 32 bits, los números deben declararse como variables de Python e importarse por los argumentos de la función.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como una calculadora que solo tiene espacio para dos operandos a la vez y donde el resultado de cada cálculo se guarda automáticamente en la primera casilla antes de poder usarlo en la siguiente operación.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque las calculadoras comunes te dejan teclear cualquier número directo, pero el ensamblador inline limita las constantes inmediatas a 8 bits y exige pasar números más grandes como variables desde Python.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Define las reglas de sintaxis de ARM Thumb: los parámetros de entrada deben ser registros consecutivos desde R0, la multiplicación mul solo acepta dos operandos (mul(R1, R2)), y fundamenta la tarea del algoritmo de raíz cuadrada por restas de impares.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Definir parámetros en la subrutina arrancando desde registros distintos a R0 (por ejemplo r1, r2, r3), o usar tres operandos en la instrucción mul, lo cual marca error en el compilador.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c6-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuál es la dirección base para los periféricos internos en el mapa de datos y en qué dirección específica se lee el Chip ID?</summary><p>La dirección base de periféricos es 0x40000000 y el Chip ID se lee en la dirección absoluta 0x40000004 (base + offset 4).</p></details>
+<details class="qa"><summary>2. Explica con tus palabras cómo se calcula la dirección efectiva para acceder a un periférico en memoria.</summary><p>Se calcula sumando la dirección base asignada al grupo de periféricos con el valor de offset específico correspondiente al periférico que se desea controlar.</p></details>
+<details class="qa"><summary>3. ¿Qué código hexadecimal devuelve machine.mem32 en 0x40000004 para una Pico 1 y para una Pico 2?</summary><p>Devuelve 0x10002927 para una Pico 1 normal y 0x10004927 para una Pico 2.</p></details>
+<details class="qa"><summary>4. En ensamblador inline ARM Thumb, ¿por qué no se puede cargar directamente la dirección 0x40000000 en un registro con mov y cuál es el truco para lograrlo?</summary><p>Porque el ensamblador inline no permite constantes inmediatas de 32 bits en una sola instrucción; el truco es hacer mov(R1, 0x40) y luego desplazarlo 24 posiciones a la izquierda con lsl(R1, R1, 24).</p></details>
+<details class="qa"><summary>5. ¿Cuál es la regla de retorno de valores en una subrutina decorada con @micropython.asm_thumb?</summary><p>La convención estricta es que al finalizar la ejecución, la función siempre retorna al entorno de MicroPython el valor que haya quedado almacenado en el registro R0.</p></details>
+<details class="qa"><summary>6. Aplica las reglas vistas en clase: si deseas multiplicar 10 y 50 en ensamblador inline, ¿por qué la instrucción mul(R0, R1, R2) falla y cómo debe escribirse correctamente?</summary><p>Falla porque mul solo acepta dos operandos en Thumb; se debe copiar los valores a R1 y R2, ejecutar mul(R1, R2) para guardar el producto en R1, y luego moverlo a R0.</p></details>
+<details class="qa"><summary>7. Compara las restricciones de constantes inmediatas entre las variables importadas desde Python y las instrucciones nativas de ensamblador inline.</summary><p>Las instrucciones nativas limitan los datos inmediatos directos a máximo 8 bits (hasta 255), mientras que pasar valores grandes desde variables de Python permite operarlos completos en registros de 32 bits.</p></details>
+<details class="qa"><summary>8. Aplica el algoritmo de restas sucesivas de números impares asignado como tarea para calcular la raíz cuadrada entera de 27 y determina el resultado y su residuo.</summary><p>Se resta sucesivamente 1, 3, 5, 7, 9 (27-1=26, 26-3=23, 23-5=18, 18-7=11, 11-9=2); al intentar restar 11 da resultado negativo (-9), por lo que se hicieron 5 restas válidas: la raíz entera es 5 y el residuo es 2.</p></details>
 </details>
 
 <details class="section-block sec" id="c6-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>

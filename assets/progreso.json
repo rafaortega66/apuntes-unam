@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T08:10:47+00:00",
+ "generatedAt": "2026-10-01T08:12:29+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -114,7 +114,7 @@
     "fecha": "2026-09-21",
     "resumen": "Tema 3 (continuación) — Mapa de memoria de datos y direccionamiento de periféricos, identificación del hardware (Pico ID) con mem32 y con ensamblador inline ARM Thumb, y rutinas aritméticas (multiplicación y suma).",
     "url": "materias/organizacion-y-arquitectura-de-computadoras/clase-06.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 7,
@@ -468,6 +468,11 @@
  },
  "gitlog": [
   {
+   "hash": "c05faef",
+   "fecha": "2026-10-01T02:10:48-06:00",
+   "mensaje": "FSE Clase 07: formato de estudio"
+  },
+  {
    "hash": "cd3780b",
    "fecha": "2026-10-01T02:09:06-06:00",
    "mensaje": "ASI Clase 07: formato de estudio"
@@ -761,11 +766,6 @@
    "hash": "30d2773",
    "fecha": "2026-09-22T00:59:31-06:00",
    "mensaje": "Carrusel de pendientes: scroll continuo tipo ticker de bolsa, conservando las flechas"
-  },
-  {
-   "hash": "e2c9c9f",
-   "fecha": "2026-09-22T00:35:21-06:00",
-   "mensaje": "Agregar cache-busting (?v=) a app.js y style.css en todas las páginas"
   }
  ]
 }
