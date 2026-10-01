@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 07 — Administración de Servicios de Internet</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -15,15 +16,39 @@
   <p class="prof">Mtro. Juan Ángel Calvillo Pérez · 21 sep 2026 · Sesión de trabajo en equipo (no hubo tema nuevo de teoría del temario): modelado de arquitectura con UML (diagramas de componentes y despliegue), importancia de la documentación, y ejercicio práctico de elaboración de diagramas del proyecto.</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #7C9CD6"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c7-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Definición de UML como Lenguaje Unificado de Modelado y uso prioritario de los diagramas de componentes y de despliegue</strong><span class="evid">Evidencia: Lo dijo explícitamente al iniciar la clase y definir los diagramas centrales del curso.</span></li>
+<li><strong>Exigencia de coincidencia estricta entre los diagramas UML entregados y la programación del proyecto</strong><span class="evid">Evidencia: Lo repitió explícitamente advirtiendo que si el código o infraestructura no coincide con los diagramas, la entrega estará mal.</span></li>
+<li><strong>Entrega individual en plataforma de los diagramas estructurales y de comportamiento trabajados en equipo</strong><span class="evid">Evidencia: Lo asignó en vivo fijando un tiempo de 20 a 40 minutos e indicando las reglas de subida.</span></li>
+</ol>
+</details>
+
 <div class="section-block nota" style="border-left:3px solid #7C9CD6"><p style="margin:0"><strong>📋 Nota:</strong> como la <a href="clase-06.html">Clase 06</a>, esta sesión fue una clase de trabajo aplicado al proyecto final, no una clase de teoría nueva del temario. El contenido de abajo son los conceptos de UML que se explicaron y los acuerdos/reglas que se fijaron ese día.</p></div>
 
 <details class="section-block sec" id="c7-uml" open><summary><span class="stitle">Modelado con UML y documentación de software</span></summary>
 <p>En la arquitectura y administración de servicios de internet, el modelado gráfico es indispensable para plasmar la infraestructura y la organización del sistema. El profesor destacó que los diagramas centrales para la materia son el <strong>diagrama de componentes</strong> y el <strong>diagrama de despliegue</strong>, y definió explícitamente <strong>UML</strong> como el <strong>Lenguaje Unificado de Modelado</strong> (<em>Unified Modeling Language</em>).</p>
 <p>Se enfatizó que toda empresa de desarrollo o profesional que trabaje con seriedad debe documentar sus sistemas, aunque muchos desarrolladores lo perciban como una tarea molesta o una pérdida de tiempo. La documentación con UML no es un trámite burocrático, sino una herramienta técnica cuyo propósito es <strong>facilitar el entendimiento del software</strong> entre los miembros del equipo y estandarizar la comunicación — algo especialmente importante en entornos laborales dinámicos donde distintos colaboradores interactúan con el mismo sistema o se incorpora personal nuevo.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como diseñar los planos de arquitectura e instalaciones eléctricas de un edificio antes de construirlo, para que cualquier obrero entienda dónde va cada muro y cada tubería.<span class="rompe">Dónde falla la analogía: La analogía deja de funcionar porque los edificios no ejecutan procesos digitales dinámicos ni cambian sus componentes de software en tiempo real como lo hace un sistema informático.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque UML (Lenguaje Unificado de Modelado) estandariza la comunicación técnica en el equipo y facilita el entendimiento del software, destacando los diagramas de componentes y de despliegue.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Pensar que documentar con UML es una pérdida de tiempo burocrática e innecesaria, cuando el profesor aclaró que sin diagramas claros la comunicación del proyecto colapsa.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c7-coincidencia" open><summary><span class="stitle">Coincidencia estricta entre los diagramas UML y el código</span></summary>
 <p>Un punto técnico crítico de la clase es la relación directa entre el diseño arquitectónico y la implementación en código. El profesor advirtió explícitamente que <strong>toda la programación del proyecto debe coincidir de forma exacta con los diagramas UML entregados</strong>. Si al evaluar o auditar el proyecto hay una discrepancia entre la arquitectura modelada en los diagramas (componentes, despliegue, estructuras) y el código fuente o la configuración del servidor implementado, el proyecto estará mal.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como entregarle al inspector de obras el plano de una casa de un solo piso y construir en la realidad un edificio de tres pisos con cuartos que no estaban dibujados.<span class="rompe">Dónde falla la analogía: Falla porque la construcción física se evalúa con inspecciones visuales de concreto, mientras que en el software se auditan los archivos de código fuente, los scripts de configuración del servidor y los esquemas de despliegue.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque el profesor estableció como criterio estricto de evaluación que toda la programación e infraestructura implementada debe coincidir exactamente con el diseño modelado en los diagramas UML.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Creer que los diagramas UML son un mero trámite decorativo que se puede entregar de forma independiente sin revisar que reflejen fielmente la programación real del proyecto.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c7-actividad" open><summary><span class="stitle">Actividad práctica: elaboración de los diagramas del proyecto</span></summary>
@@ -31,8 +56,27 @@
 <ul>
 <li><strong>Tiempo asignado:</strong> de 20 a 40 minutos dentro del horario de la sesión para hacer el modelado y subir el archivo.</li>
 <li><strong>Trabajo vs. entrega:</strong> el análisis y diseño de los diagramas se hace de forma colaborativa en equipo, pero <strong>la entrega en la plataforma es estrictamente individual</strong> por cada integrante.</li>
-<li><strong>Material de consulta:</strong> ante la duda de una alumna (Carla) sobre el material de apoyo, el profesor confirmó que las diapositivas de referencia con los tipos de diagramas se adjuntaron directamente en la publicación de la asignación.</li>
+<li><strong>Material de consulta:</strong> ante la duda de una alumna sobre el material de apoyo, el profesor confirmó que las diapositivas de referencia con los tipos de diagramas se adjuntaron directamente en la publicación de la asignación.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como reunirse en mesa redonda con tu equipo de trabajo para dibujar el mapa de la ruta, pero exigiendo que cada integrante entregue su propia copia firmada en la recepción.<span class="rompe">Dónde falla la analogía: La analogía se rompe porque en la recepción física entregas hojas de papel, mientras que en la plataforma escolar subes archivos digitales con los diagramas estructurales y de comportamiento adjuntando la evidencia.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa para avanzar en la documentación técnica del proyecto integrador en un lapso de 20 a 40 minutos en clase, utilizando las diapositivas de referencia proporcionadas en la asignación.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir la modalidad de trabajo en equipo con la modalidad de entrega.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c7-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Qué significan las siglas UML y cuáles son los dos diagramas principales de esta metodología destacados para la materia?</summary><p>UML significa Lenguaje Unificado de Modelado, y los dos diagramas principales destacados por el profesor para la materia son el diagrama de componentes y el diagrama de despliegue.</p></details>
+<details class="qa"><summary>2. Explica con tus palabras por qué el profesor afirma que la documentación con UML es indispensable en una empresa de desarrollo, utilizando el ejemplo de Carla y Kevin.</summary><p>Porque facilita el entendimiento del software entre los colaboradores. Si una Project Manager organizada como Carla deja el proyecto o debe coordinar a alguien desorganizado como Kevin, los diagramas permiten que Kevin entienda la arquitectura y sepa operar o dar instrucciones técnicas precisas sin arruinar el trabajo.</p></details>
+<details class="qa"><summary>3. Un equipo de desarrollo diseña un diagrama de despliegue con dos servidores y una base de datos relacional, pero al programar implementa tres servidores y una base de datos NoSQL. Según las reglas de la Clase 7, ¿cuál es el resultado de la evaluación y por qué?</summary><p>El proyecto estará mal y reprobado en ese rubro, porque el profesor estableció la regla estricta de que la programación e infraestructura real deben coincidir exactamente con los diagramas UML entregados.</p></details>
+<details class="qa"><summary>4. Compara la modalidad de trabajo durante la actividad práctica de la Clase 7 con la modalidad de entrega en la plataforma de Google Classroom.</summary><p>La elaboración y análisis de los diagramas estructurales y de comportamiento se realiza de forma colaborativa en equipo, pero la entrega en la plataforma es strictly individual por cada integrante.</p></details>
+<details class="qa"><summary>5. ¿Dónde pueden consultar los alumnos la guía o tipos de diagramas de referencia para realizar la actividad si tienen dudas sobre la estructura?</summary><p>Pueden consultarlos directamente en las diapositivas que el profesor adjuntó dentro de la publicación de la asignación en Google Classroom.</p></details>
+<details class="qa"><summary>6. ¿Qué solución técnica se mencionó en clase cuando se requiere probar el comportamiento o tráfico masivo de un sistema (por ejemplo, 200 conexiones de dispositivos) y resulta inviable probarlo manualmente puerta por puerta?</summary><p>Se mencionó el uso de scripts programados en Python para simular los eventos y las peticiones de conexión simultáneas de los dispositivos o celulares.</p></details>
+<details class="qa"><summary>7. Explica la regla de disciplina establecida para los alumnos que ingresan tarde al salón mientras se realiza una actividad o el pase de lista.</summary><p>Quien llegue tarde debe entrar en silencio y sentarse directamente en su lugar, sin andar saludando ni interrumpiendo la clase o al profesor.</p></details>
+<details class="qa"><summary>8. Compara el objetivo de un diagrama estructural con el de un diagrama de comportamiento en el contexto del modelado asignado en clase.</summary><p>El diagrama estructural modela la organización estática e infraestructura del sistema (como los componentes y el despliegue), mientras que el diagrama de comportamiento modela la dinámica, flujos de datos y cómo interactúan las partes durante la ejecución.</p></details>
 </details>
 
 <details class="section-block sec" id="c7-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>

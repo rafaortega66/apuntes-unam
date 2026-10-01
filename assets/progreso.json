@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T08:07:09+00:00",
+ "generatedAt": "2026-10-01T08:09:06+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -244,7 +244,7 @@
     "fecha": "2026-09-21",
     "resumen": "Sesión de trabajo en equipo (no hubo tema nuevo de teoría del temario): modelado de arquitectura con UML (diagramas de componentes y despliegue), importancia de la documentación, y ejercicio práctico de elaboración de di",
     "url": "materias/administracion-de-servicios-de-internet/clase-07.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 8,
@@ -467,6 +467,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "cbbee95",
+   "fecha": "2026-10-01T02:07:10-06:00",
+   "mensaje": "ACS Clase 08: formato de estudio"
+  },
   {
    "hash": "0827911",
    "fecha": "2026-10-01T02:05:28-06:00",
@@ -761,11 +766,6 @@
    "hash": "d4f0b9a",
    "fecha": "2026-09-22T00:28:46-06:00",
    "mensaje": "Home: agregar carrusel de pendientes arriba de las materias"
-  },
-  {
-   "hash": "4ada41c",
-   "fecha": "2026-09-22T00:23:11-06:00",
-   "mensaje": "Agregar barra superior fija (Inicio + Pendientes) y página de pendientes del semestre"
   }
  ]
 }
