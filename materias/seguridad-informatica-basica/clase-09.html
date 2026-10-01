@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 09 — Seguridad Informática Básica</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -14,6 +15,17 @@
 <div class="detail-head" style="border-color:#E8735C"><h2>Clase 09</h2>
   <p class="prof">Dra. Cintia Quezada Reyes · 29 sep 2026 · Tema 2 (2.2, continuación) — Recapitulación de la relación amenaza–vulnerabilidad–riesgo, ejercicio en equipo para identificar amenazas y vulnerabilidades de los personajes de un video, y dinámica individual del “Escudo de Vulnerabilidades”.</p>
 </div>
+
+<div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c9-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>La reducción o eliminación de vulnerabilidades junto con la mitigación de amenazas disminuye el riesgo de forma directa, existiendo una relación multifacética (muchos a muchos) entre ambas</strong><span class="evid">Evidencia: Lo repitió y validó explícitamente la profesora durante la recapitulación teórica al inicio de la clase.</span></li>
+<li><strong>Las aficiones extremas por franquicias o equipos deportivos, así como las fijaciones por marcas o colores, constituyen vulnerabilidades conductuales reales</strong><span class="evid">Evidencia: Lo explicó detalladamente la profesora al responder la duda directa de un alumno en vivo durante la explicación de la dinámica individual.</span></li>
+<li><strong>Los actores u objetos que participan únicamente como observadores pasivos dentro de un proceso no deben evaluarse bajo las mismas variables de amenaza que los actores interactivos</strong><span class="evid">Evidencia: Se discutió y resolvió en vivo entre los alumnos y la profesora durante el ejercicio en equipo con el personaje de Benjamin Button.</span></li>
+<li><strong>El reconocimiento e identificación explícita de las propias vulnerabilidades es la primera línea de defensa para no mantenerse como un blanco fácil para los atacantes</strong><span class="evid">Evidencia: Lo estableció explícitamente la profesora como el propósito de la práctica individual con calificación (el Escudo).</span></li>
+</ol>
+</details>
 
 <div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>⚠️ Por verificar:</strong> los apuntes dicen que la hora límite del escudo era las <strong>11:56 a.m.</strong>, pero el horario oficial de SIB termina a las 11:00. Conviene confirmarlo con el audio.</p></div>
 
@@ -26,11 +38,25 @@
 <li>Las vulnerabilidades son, en esencia, <strong>omisiones o fallas en los controles</strong>.</li>
 </ol>
 <p>La profesora validó estas aportaciones y confirmó que, en la medida en que se eliminan o mitigan las vulnerabilidades y se contrarrestan las amenazas, <strong>el riesgo disminuye directamente</strong>.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un colador usado bajo la lluvia: la lluvia representa las amenazas que caen del entorno y los orificios del colador son las vulnerabilidades por donde el agua puede filtrarse; si tapas los hoyos, la lluvia sigue cayendo afuera pero ya no te moja.<span class="rompe">Dónde falla la analogía: La analogía deja de funcionar porque las vulnerabilidades en seguridad no son orificios físicos estáticos ni sencillos de tapar con un dedo, sino que pueden ser dinámicas, de origen humano o conductual, y una sola amenaza puede aprovechar múltiples debilidades a la vez.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque comprender que las vulnerabilidades son omisiones o carencias y que su relación con las amenazas es de muchos a muchos evita la falsa sensación de seguridad al corregir un solo punto, demostrando que el riesgo baja al atacar ambos factores.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> El error más frecuente en los alumnos es asumir una relación de uno a uno entre cada amenaza y cada vulnerabilidad, o confundir la vulnerabilidad con el evento dañino mismo en lugar de identificarla como la carencia o falla en el control.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c9-video" open><summary><span class="stitle">Ejercicio en equipo: amenazas y vulnerabilidades de los personajes de un video</span></summary>
 <p>La primera actividad del día se hizo en equipos, con sus representantes, y con <strong>45 minutos</strong> de tiempo. Consistió en ver un video e investigar para identificar de forma estructurada las amenazas y vulnerabilidades asociadas a cada personaje de la secuencia.</p>
 <p>Durante el trabajo, los alumnos discutieron si incluir ciertos personajes, como “Benjamin Button”: señalaron que ese personaje no debía evaluarse con las mismas variables porque su papel se limitaba a observar toda la cadena del proceso sin intervenir en la acción. La profesora supervisó el avance y marcó los tiempos hasta que los equipos terminaron y acomodaron el salón para la segunda parte.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como analizar los riesgos en un partido de fútbol comparando a los jugadores que corren y chocan en la cancha contra el fotógrafo que está sentado en la banda únicamente registrando la escena.<span class="rompe">Dónde falla la analogía: Se rompe porque un observador en un sistema real o proceso informático, aunque no intervenga activamente en la acción, sí puede recopilar información sensible, ser víctima de amenazas ambientales o verse afectado si todo el sistema colapsa.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque enseña a mapear y diferenciar con precisión los roles dentro de un proceso de negocio o sistema, evitando aplicar controles innecesarios o diagnósticos erróneos a componentes que no interactúan en la cadena de eventos.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Los alumnos dudaron e intentaron evaluar al personaje de Benjamin Button exactamente igual que al resto de los personajes activos, hasta que se aclaró que por ser un mero observador de la cadena sus variables eran distintas.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c9-escudo" open><summary><span class="stitle">Dinámica individual: el “Escudo de Vulnerabilidades”</span></summary>
@@ -48,6 +74,25 @@
 <li><strong>Franquicias y equipos deportivos:</strong> la afición intensa por franquicias de entretenimiento (Star Wars, Harry Potter) o por equipos (Dodgers, América, Pumas) se vuelve vulnerabilidad porque se explota con apuestas, discusiones violentas o manipulación emocional que nubla el criterio cuando el equipo gana o pierde.</li>
 </ul>
 <p>El propósito del ejercicio fue la <strong>concientización personal</strong>: si una persona no es consciente de qué carece o por dónde es frágil, sigue siendo un blanco fácil para los atacantes.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un guerrero que dibuja su armadura y marca con un plumón rojo las zonas donde le falta metal o donde el cuero está roto, para saber exactamente en qué puntos debe tener cuidado antes de entrar a la batalla.<span class="rompe">Dónde falla la analogía: Deja de servir porque las vulnerabilidades del escudo personal no son agujeros en una coraza física, sino aspectos emocionales, vicios, hábitos, marcas, alimentos o aficiones que un atacante explota psicológicamente mediante ingeniería social.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque si una persona o una organización no concientiza y acepta de qué carece o por dónde es frágil, es imposible que implemente defensas y se mantiene como un blanco vulnerable sin protección.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Un alumno dudó al no entender cómo elementos cotidianos como un color o un equipo deportivo podían ser vulnerabilidades, a lo que la profesora aclaró que el daltonismo, la fijación extrema o la pasión ciega son explotadas mediante manipulación, apuestas o distracciones.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c9-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuál es la relación matemática o conceptual entre amenazas, vulnerabilidades y riesgo expuesta en la recapitulación de la clase?</summary><p>Las amenazas explotan las vulnerabilidades existentes; al eliminar o mitigar las vulnerabilidades y contrarrestar las amenazas, el riesgo disminuye de manera directa.</p></details>
+<details class="qa"><summary>2. ¿Qué formato y restricción de extensión exigió la profesora para escribir las vulnerabilidades dentro del Escudo de Vulnerabilidades?</summary><p>Exigió no redactar explicaciones extensas, sino utilizar únicamente de una a tres palabras clave por elemento (por ejemplo, escribir simplemente "chocolates" o "la puntualidad").</p></details>
+<details class="qa"><summary>3. Explica con tus palabras por qué la afición intensa por un equipo deportivo como los Dodgers, América o Pumas se considera una vulnerabilidad personal según lo dicho en clase.</summary><p>Porque la afición extrema nubla la objetividad de la persona y un atacante puede explotar esa debilidad emocional mediante apuestas, discusiones violentas o manipulaciones cuando el equipo gana o pierde.</p></details>
+<details class="qa"><summary>4. ¿Por qué la profesora enfatizó que no concientizar las propias vulnerabilidades es un peligro grave para la seguridad personal?</summary><p>Porque al no reconocer de qué se carece o por dónde se es frágil, la persona no implementa salvaguardas y se mantiene como un blanco fácil para los atacantes.</p></details>
+<details class="qa"><summary>5. Un estudiante es aficionado obsesivo a los videojuegos de computadora y suele dejar conectada su laptop en redes públicas para descargar contenido. Expresa sus vulnerabilidades en el formato sintético de la clase e indica cómo se explotarían.</summary><p>Vulnerabilidades sintéticas: "videojuegos", "laptop", "redes públicas". Un atacante las explotaría usando ingeniería social con promociones de juegos falsos o interceptando el tráfico de su laptop en la red abierta.</p></details>
+<details class="qa"><summary>6. En el análisis de los procesos de un restaurante, se evalúa al chef, a los meseros y a un crítico gastronómico sentado en una mesa observando. Con base en lo discutido sobre el personaje de Benjamin Button, ¿cómo debe evaluarse al crítico?</summary><p>Debe evaluarse de forma diferenciada como un observador pasivo del proceso, sin asignarle las vulnerabilidades operativas directas de la cocina (como quemaduras o fallas de gas), reconociendo que su rol es únicamente la recolección de información.</p></details>
+<details class="qa"><summary>7. Compara la naturaleza de la vulnerabilidad en el caso del daltonismo frente al caso de la fijación extrema por el color morado.</summary><p>El daltonismo es una vulnerabilidad de tipo fisiológico/técnico que dificulta la percepción correcta del entorno, mientras que la fijación por el morado es una vulnerabilidad conductual que genera distracciones, molestias o compras compulsivas al no encontrar dicho tono.</p></details>
+<details class="qa"><summary>8. Compara el ejercicio práctico en equipo del video frente a la dinámica individual del Escudo de Vulnerabilidades en cuanto a su enfoque analítico.</summary><p>El ejercicio del video analizó amenazas y vulnerabilidades externas y operativas en un entorno de personajes ficticios, mientras que el Escudo fue un ejercicio de análisis introspectivo para catalogar debilidades y carencias personales reales.</p></details>
 </details>
 
 <details class="section-block sec" id="c9-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>

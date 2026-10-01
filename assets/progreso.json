@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T07:38:37+00:00",
+ "generatedAt": "2026-10-01T07:40:32+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -402,7 +402,7 @@
     "fecha": "2026-09-29",
     "resumen": "Tema 2 (2.2, continuación) — Recapitulación de la relación amenaza–vulnerabilidad–riesgo, ejercicio en equipo para identificar amenazas y vulnerabilidades de los personajes de un video, y dinámica individual del “Escudo ",
     "url": "materias/seguridad-informatica-basica/clase-09.html",
-    "formato": "prosa"
+    "formato": "estudio"
    }
   ],
   "lab-de-fundamentos-de-sistemas-embebidos": [],
@@ -467,6 +467,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "51c4672",
+   "fecha": "2026-10-01T01:38:37-06:00",
+   "mensaje": "MD Clase 08: formato de estudio"
+  },
   {
    "hash": "cebd13b",
    "fecha": "2026-10-01T01:34:46-06:00",
@@ -761,11 +766,6 @@
    "hash": "8e33453",
    "fecha": "2026-09-17T08:12:08-06:00",
    "mensaje": "SIB: re-verificar Clases 01, 03, 04, 05 contra audio real (NotebookLM)"
-  },
-  {
-   "hash": "e62bfd6",
-   "fecha": "2026-09-17T07:29:15-06:00",
-   "mensaje": "ACS: evitar títulos huérfanos al final de página en Tarea 3"
   }
  ]
 }
