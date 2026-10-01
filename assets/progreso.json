@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T06:57:32+00:00",
+ "generatedAt": "2026-10-01T07:04:22+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -259,6 +259,13 @@
     "resumen": "Ciberseguridad ofensiva (fuera del temario) — Repaso de Metasploit, escaneo avanzado de puertos y redes con Nmap (opciones -sn, -sS, -sV, -O, -A), automatización con Bash y Python, y asignación de una herramienta individ",
     "url": "materias/administracion-de-servicios-de-internet/clase-09.html",
     "formato": "prosa"
+   },
+   {
+    "num": 10,
+    "fecha": "2026-09-30",
+    "resumen": "Arquitectura de datos (fuera del temario) — Puestos en bases de datos, cubos de información (OLAP) con medidas, dimensiones y pregunta, Data Warehouse, esquemas estrella / copo de nieve / constelación, tableros ejecutivo",
+    "url": "materias/administracion-de-servicios-de-internet/clase-10.html",
+    "formato": "estudio"
    }
   ],
   "arquitectura-cliente-servidor": [
@@ -460,6 +467,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "4b216a5",
+   "fecha": "2026-10-01T00:59:09-06:00",
+   "mensaje": "Página de Progreso + horario en datos; FSE Tarea 05 entregada; pendientes Pico (OAC) y DE10-Lite (Lab OAC)"
+  },
   {
    "hash": "fd3a3f8",
    "fecha": "2026-09-30T19:59:06-06:00",
@@ -754,11 +766,6 @@
    "hash": "2367814",
    "fecha": "2026-09-17T07:04:14-06:00",
    "mensaje": "ACS: revertir registro prematuro de la Tarea 3 en entregas.html"
-  },
-  {
-   "hash": "678873e",
-   "fecha": "2026-09-17T06:40:37-06:00",
-   "mensaje": "ACS: agregar link al sitio del profesor en homepage + entregar Tarea 3"
   }
  ]
 }

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="formato" content="estudio">
+<title>Clase 10 — Administración de Servicios de Internet</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261001">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js?v=20260930b" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Administración de Servicios de Internet</a>
+<div class="detail-head" style="border-color:#7C9CD6"><h2>Clase 10</h2>
+  <p class="prof">Mtro. Juan Ángel Calvillo Pérez · 30 sep 2026 · Arquitectura de datos (fuera del temario) — Puestos en bases de datos, cubos de información (OLAP) con medidas, dimensiones y pregunta, Data Warehouse, esquemas estrella / copo de nieve / constelación, tableros ejecutivos (EIS) y alertas de costo en Azure.</p>
+</div>
+
+<div class="section-block nota" style="border-left:3px solid #7C9CD6"><p style="margin:0"><strong>Formato de estudio.</strong> Primero va lo que probablemente viene en el examen y por qué. Después, cada concepto explicado en este orden: qué es, explicado en simple, cómo funciona, por qué importa y errores comunes. Al final hay preguntas para ponerte a prueba. Todo sale del audio de la clase (procesado en NotebookLM); las conexiones con otras clases van marcadas.</p></div>
+
+<details class="section-block sec" id="c10-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<p>El profesor lo dijo directamente al empezar este tema: «de ahí sí podemos sacar un buen [tema] para su examen». También comentó que el parcial todavía no está hecho y que lo va a aplicar «el día que menos asistencia haya». Conviene tener esto estudiado desde ya.</p>
+<ol class="examen-lista">
+<li><strong>Qué es un cubo de información (OLAP) y sus 3 componentes: medidas, dimensiones y pregunta/objetivo.</strong><span class="evid">Evidencia: lo dijo explícitamente como material de examen e insistió en que todo cubo se divide estrictamente en esos tres elementos.</span></li>
+<li><strong>Medidas aditivas, semiaditivas y no aditivas, con un ejemplo de cada una.</strong><span class="evid">Evidencia: las explicó una por una y se detuvo a preguntarle al grupo sobre campos calculados (precio con y sin IVA, sueldo bruto y neto, edad).</span></li>
+<li><strong>Esquemas estrella, copo de nieve y constelación, con su forma normal.</strong><span class="evid">Evidencia: repitió varias veces la relación estrella = 1FN, copo de nieve = 2FN, constelación = 3FN, y la estructura de la tabla de hechos con llave primaria compuesta.</span></li>
+<li><strong>Los 4 puestos de trabajo en bases de datos.</strong><span class="evid">Evidencia: fue una pregunta directa al grupo («¿cuántos puestos hay si te dedicas a la parte de base de datos?») y marcó la diferencia entre analista y científico de datos.</span></li>
+<li><strong>La regla de integridad: los datos no regresan del Data Warehouse a la base transaccional.</strong><span class="evid">Evidencia: la presentó como regla fundamental de arquitectura.</span></li>
+<li><strong>Alertas de presupuesto en Azure: costo previsto contra costo real.</strong><span class="evid">Evidencia moderada o débil para un examen teórico: lo mostró en pantalla, pero es más práctico. Se liga al levantamiento de requerimientos en la nube [Clase 03].</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c10-puestos" open><summary><span class="stitle">1 · Los 4 puestos de trabajo en bases de datos</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es como se reparte el trabajo con datos dentro de una organización. El profesor preguntó cuántos puestos hay; un alumno respondió «administrador de base de datos» y a partir de ahí guio al grupo hasta completar los cuatro:</p>
+<ul>
+<li><strong>Modelador / diseñador de datos.</strong> Hace el diseño lógico: tablas, cardinalidades, modalidades y <em>constraints</em> (restricciones), para que los datos se capturen bien desde el inicio.</li>
+<li><strong>Arquitecto de datos (<em>tuning</em> y <em>performance</em>).</strong> Optimiza conociendo software y hardware. Calcula con fórmulas y con el número de registros proyectados el tamaño inicial del almacenamiento.</li>
+<li><strong>Administrador de base de datos (DBA).</strong> Se encarga solo de la administración y la seguridad: usuarios, roles, permisos y privilegios, con <code>GRANT</code> y <code>REVOKE</code>.</li>
+<li><strong>Analista de datos.</strong> Define qué datos, cómo, cuándo y cómo se migran para fines de análisis.</li>
+</ul>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Piensa en un edificio. El <strong>modelador</strong> dibuja los planos para que las habitaciones tengan sentido. El <strong>arquitecto de datos</strong> calcula qué tan grande debe ser el terreno y qué tan fuertes los cimientos. El <strong>DBA</strong> es el cerrajero que decide quién tiene llave de cada puerta. El <strong>analista</strong> observa cómo se mueve la gente para proponer mejoras.<span class="rompe">Dónde falla la analogía: los muros de un edificio no cambian de tamaño en milisegundos, y el almacenamiento de una base de datos sí se ajusta con cálculos.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El profesor subrayó que, al crear una base de datos de producción en Oracle, el primer paso real no es <code>CREATE DATABASE</code> sino <code>CREATE TABLESPACE</code>. Ahí el arquitecto de datos calcula cuánto espacio va a ocupar la información. Después, el DBA controla la seguridad del servidor dando y quitando privilegios con <code>GRANT</code> y <code>REVOKE</code>.</p>
+<p>También distinguió al analista del <strong>científico de datos</strong>: el analista define el qué, el cómo y el cuándo de los datos; el científico aplica estadística inferencial, probabilidad, modelos matemáticos y PL/SQL.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la misma idea de permisos y roles que ya viste con <code>chmod</code> y <code>chown</code> en Linux [Clase 01], y se parece a cómo se reparten los roles en el proyecto final.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> confundir al analista con el científico de datos, o pensar que el DBA es quien diseña las tablas desde cero (eso lo hace el modelador).</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c10-cubo" open><summary><span class="stitle">2 · Cubo de información y ETL (OLAP)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un cubo de información es una <strong>estructura conceptual</strong>, no un archivo físico, que sirve para analizar datos desde varias dimensiones. Pertenece al mundo <strong>OLAP</strong> (<em>Online Analytical Processing</em>, procesamiento analítico en línea).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Imagina un cubo Rubik donde cada cara es un filtro: año, ciudad, producto. Al girarlo ves, por ejemplo, el total de ventas desde la perspectiva que elijas.<span class="rompe">Dónde falla la analogía: un Rubik tiene 3 dimensiones físicas, y un cubo OLAP puede tener decenas (es N-dimensional).</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El profesor empezó preguntando: «¿Qué es un cubo de información, chicos? ¿Cómo se come? ¿Para qué sirve?». Nadie contestó, así que aclaró que no existe un archivo «cubo.ext»: el cubo es un modelo de análisis.</p>
+<p>El cubo se alimenta con un proceso <strong>ETL</strong>: <strong>E</strong>xtracción, <strong>T</strong>ransformación y carga (<em>Load</em>). Se extrae información de cualquier origen (ERP, CRM, Excel, bloc de notas, PDF), se transforma y se junta en un solo repositorio.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la base para responder preguntas de negocio con datos, igual que el análisis de requerimientos del caso Avante Textil (Práctica 2 de nube).</p>
+<div class="errores"><p><strong>Error común:</strong> en las arquitecturas reales, el primer error es pedir que «hagan un cubo» como si fuera un archivo o algo tangible. Es un concepto.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c10-componentes" open><summary><span class="stitle">3 · Componentes del cubo: medidas, dimensiones y pregunta</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Todo cubo se divide estrictamente en tres elementos:</p>
+<ol>
+<li><strong>Medidas:</strong> los números que se quieren analizar. Por ejemplo: ventas, costos, utilidades, margen, impuestos y gastos fijos.</li>
+<li><strong>Dimensiones:</strong> los factores de contexto que filtran o afectan a las medidas. Por ejemplo: tiempo, sucursal, vendedor, cliente y producto.</li>
+<li><strong>Pregunta / objetivo:</strong> lo que el cliente quiere saber. Por ejemplo: «¿Cuánto vendimos por sucursal durante 2026?».</li>
+</ol>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>En una receta, las <strong>medidas</strong> son los gramos de cada ingrediente. Las <strong>dimensiones</strong> son la temperatura del horno, el molde y quién cocinó. La <strong>pregunta</strong> es «¿cómo quedó el pastel de hoy?».<span class="rompe">Dónde falla la analogía: un pastel ya horneado no se puede reacomodar desde otro ángulo, y una consulta sobre el cubo sí.</span></p></div>
+<span class="lbl">Cómo funciona — jerarquías de las dimensiones</span>
+<p>Las dimensiones van de lo general a lo particular:</p>
+<table><thead><tr><th>Dimensión</th><th>Jerarquía (general → detalle)</th></tr></thead><tbody>
+<tr><td>Tiempo</td><td>Año → Trimestre → Mes → Día</td></tr>
+<tr><td>Geografía</td><td>País → Estado → Ciudad / Municipio / Alcaldía</td></tr>
+<tr><td>Producto</td><td>Categoría → Subcategoría → Producto / presentación</td></tr>
+</tbody></table>
+<p>Ejemplo en vivo de por qué importa la jerarquía geográfica: si en Power Maps buscas «Monterrey» sin decir el país, el sistema encuentra tres lugares en el mundo, uno de ellos en Venezuela. Pasa lo mismo con «León» (México o España) y con «Jalisco», que también aparece en España. Para producto puso este ejemplo: cigarros → Marlboro → Marlboro blanco o rojo.</p>
+<span class="lbl">Cómo funciona — tipos de medidas</span>
+<table><thead><tr><th>Tipo</th><th>Regla</th><th>Ejemplos de clase</th></tr></thead><tbody>
+<tr><td>Aditiva</td><td>Se puede sumar en todas las dimensiones</td><td>Ventas, unidades, costos. Los nombres no se suman, pero contarlos sirve para sacar la frecuencia de ventas.</td></tr>
+<tr><td>Semiaditiva</td><td>Se suma en algunas dimensiones, pero no en todas; combina un valor numérico con una cadena o con el tiempo</td><td>Saldo bancario: sumarlo por cliente tiene sentido, sumarlo a lo largo del tiempo no.</td></tr>
+<tr><td>No aditiva</td><td>No se suma directamente: es un campo calculado o derivado con una fórmula</td><td>Porcentajes, promedios, sueldo bruto o neto, precio con o sin IVA, edad calculada a partir de la fecha de nacimiento.</td></tr>
+</tbody></table>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Si sabes separar medidas de dimensiones, puedes convertir cualquier pregunta de un gerente en una consulta. Es lo mismo que vas a hacer con datos reales en la siguiente clase (ver Pendiente).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> diseñar al revés, empezando por la pregunta del cliente, adivinando las dimensiones y buscando la medida al final; así puede faltar el dato que se necesita. También es error calcular la edad restando solo los años, sin considerar el día y el mes.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c10-dw" open><summary><span class="stitle">4 · Data Warehouse y la regla de integridad</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un <strong>Data Warehouse</strong> (almacén de datos) es un <strong>repositorio de datos</strong>, no una simple base transaccional. Está preparado para consultas, análisis e información histórica, y se arma con un objetivo de análisis específico.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>La base de datos transaccional es la caja registradora de una tienda: registra cada cobro al segundo. El Data Warehouse es el archivo histórico de diez años de ventas, ordenado por tomos, para estudiar tendencias.<span class="rompe">Dónde falla la analogía: el Data Warehouse se consulta en milisegundos con consultas analíticas complejas, no hojeando tomos.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Junta datos de muchas fuentes (CSV, PDF, JSON, páginas web, ERP, CRM) y guarda la historia para analizar tendencias y comportamientos. Hoy en día también se conecta con modelos de <em>machine learning</em>.</p>
+<p><strong>Regla de integridad:</strong> los datos salen de la base transaccional y se procesan en el Data Warehouse, pero <strong>nunca deben regresar del Data Warehouse a la base transaccional de producción</strong>. Si regresan, se pierde la integridad de los datos de operación.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> guardar datos sin un objetivo de análisis claro, o mandar datos ya procesados del Data Warehouse de vuelta a producción.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c10-esquemas" open><summary><span class="stitle">5 · Esquemas estrella, copo de nieve y constelación</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Son las tres formas de organizar las tablas de hechos y de dimensiones dentro de un Data Warehouse. Según el profesor, se distinguen por su nivel de normalización:</p>
+<table><thead><tr><th>Esquema</th><th>Forma normal</th><th>Estructura</th></tr></thead><tbody>
+<tr><td>Estrella</td><td>1FN</td><td>Una sola tabla de hechos al centro y todas las dimensiones conectadas directamente a ella. 1FN quiere decir atomicidad: un dato por celda, sin grupos repetidos y con llave primaria.</td></tr>
+<tr><td>Copo de nieve</td><td>2FN</td><td>Una sola tabla de hechos, pero las dimensiones tienen subdimensiones (por ejemplo, Producto se conecta a Categoría y a Marca).</td></tr>
+<tr><td>Constelación</td><td>3FN</td><td><strong>Más de una tabla de hechos</strong>, que comparten dimensiones y subdimensiones.</td></tr>
+</tbody></table>
+<p class="ojo">Ojo (esto no viene de la clase): en la bibliografía clásica de Data Warehouse (Kimball) el esquema estrella se describe como desnormalizado y el copo de nieve como la versión normalizada de las dimensiones, sin asignarles 1FN, 2FN y 3FN. Para el examen de esta materia usa la clasificación del profesor; tenlo presente si lo ves en otra fuente.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p><strong>Estrella:</strong> un sol (la tabla de hechos) con planetas (las dimensiones) girando directo a su alrededor. <strong>Copo de nieve:</strong> el mismo sol, pero los planetas tienen sus propias lunas (subdimensiones). <strong>Constelación:</strong> varios soles que comparten sistemas planetarios en la misma galaxia.<span class="rompe">Dónde falla la analogía: lo que une las tablas no es la gravedad, son <code>JOIN</code> de SQL con llaves primarias compuestas y llaves foráneas.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>En el esquema estrella, la <strong>tabla de hechos</strong> funciona como tabla intermedia. Guarda las medidas y una <strong>llave primaria compuesta</strong> formada por las llaves foráneas de todas las dimensiones (<code>id_producto</code>, <code>id_date</code>, <code>id_customer</code>, <code>id_employee</code>).</p>
+<p>Como la tabla de hechos está al centro, puedes consultar cualquier dimensión desde cualquier punto, como las caras de un dado, con un solo <code>JOIN</code> sencillo. Eso reduce el tiempo y el costo de ejecución en el plan de consulta (<code>EXPLAIN PLAN</code>).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es el mismo tipo de modelado que los diagramas UML del proyecto [Clase 07] y el diseño de la base de datos del proyecto final.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> no respetar la atomicidad (1FN) en las celdas, o armar un «estrella» con varias tablas de hechos (eso ya es una constelación).</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c10-eis" open><summary><span class="stitle">6 · Tableros ejecutivos (EIS) y herramientas de análisis</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un <strong>EIS</strong> (<em>Executive Information System</em>), también llamado tablero de control o <em>dashboard</em>, presenta datos internos y externos de forma gráfica, resumida y visual para que la alta gerencia tome decisiones.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es el tablero de un coche. Quien maneja no necesita ver los pistones ni los cables (el SQL y los <code>JOIN</code>): le basta con ver la aguja para decidir si acelera o carga gasolina.<span class="rompe">Dónde falla la analogía: en un dashboard puedes interactuar, filtrar (<em>slice</em>/<em>dice</em>) y profundizar (<em>drill-down</em>) hasta el registro individual.</span></p></div>
+<span class="lbl">Cómo funciona — operaciones para navegar los datos</span>
+<table><thead><tr><th>Operación</th><th>Qué hace</th><th>Ejemplo</th></tr></thead><tbody>
+<tr><td><em>Slice</em> (rebanada)</td><td>Filtra con una condición</td><td>Ventas del año 2026</td></tr>
+<tr><td><em>Dice</em></td><td>Filtra con varias condiciones</td><td>Ventas de laptops en CDMX durante el Q2</td></tr>
+<tr><td><em>Drill-down</em></td><td>Baja en la jerarquía, de lo general al detalle</td><td>Año → Trimestre (Q1–Q4) → Mes → Semana → Día</td></tr>
+</tbody></table>
+<span class="lbl">Cómo funciona — evolución de las herramientas</span>
+<ul>
+<li><strong>Excel:</strong> se le cargan CSV exportados del CRM o del ERP. Desde 2013 trae Tablas Dinámicas Recomendadas, pionero en la automatización. Después llegó <strong>Power Query</strong>, que permite modelado relacional (1:1, 1:N) y consultas SQL dentro de Excel.</li>
+<li><strong>Power BI:</strong> Microsoft lo creó reutilizando el motor de Power Query, para manejar más volumen y hacer dashboards interactivos.</li>
+<li><strong>Python / Spark:</strong> se usan cuando el volumen de datos ya rebasa a Power BI.</li>
+<li><strong>SQL / Oracle:</strong> tiene funciones analíticas como <code>RANK()</code> y <code>OVER()</code> para rankings y agregaciones.</li>
+</ul>
+<div class="errores"><p><strong>Error común:</strong> presentarle a un gerente una tabla cruda con miles de filas en vez de un dashboard resumido e interactivo.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c10-azure" open><summary><span class="stitle">7 · Costos y alertas de presupuesto en Azure</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es la gestión del presupuesto en la nube (<em>Cost Management</em>) para no tener sobrecostos por el consumo de infraestructura.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un medidor de luz prepagado con una alarma que suena a la mitad del saldo, para que no te quedes a oscuras ni te pases del presupuesto.<span class="rompe">Dónde falla la analogía: en la nube puedes programar acciones automáticas, como apagar servidores, desasignar recursos o borrar instancias.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>En la nube se cobra por tres conceptos: <strong>consumo</strong>, <strong>almacenamiento</strong> (estándar o premium, de acceso frecuente o esporádico) y <strong>tiempo de ejecución</strong>. En las nubes comerciales (AWS, Google Cloud y Azure) los presupuestos se manejan en <strong>dólares (USD)</strong>.</p>
+<p>Al configurar las reglas de alerta de un presupuesto hay dos tipos. La alerta de <strong>costo previsto</strong> (proyectado) avisa antes de tiempo, cuando la tendencia indica que se va a llegar a cierto porcentaje (ejemplo de clase: 40 % del umbral). La alerta de <strong>costo real</strong> avisa cuando ya se gastó de verdad ese porcentaje (ejemplo: 50 % de 5,000 USD).</p>
+<p>El profesor mostró la gráfica de consumo mensual de una papelería que tuvo un pico de 45,000 USD en marzo por una mala configuración.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Se conecta con el aprovisionamiento en Azure y los presupuestos en USD [Clase 03] y con la propuesta de nube del caso Avante Textil.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> dejar máquinas virtuales encendidas sin alertas de presupuesto, o registrar una tarjeta personal sin ponerle límite al presupuesto.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c10-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuáles son los 4 puestos de bases de datos y qué hace cada uno?</summary><p>El <strong>modelador o diseñador</strong> hace tablas, cardinalidades, modalidades y <em>constraints</em>. El <strong>arquitecto de datos</strong> se encarga del <em>tuning</em> y el <em>performance</em> y calcula el almacenamiento inicial con <code>CREATE TABLESPACE</code>. El <strong>DBA</strong> administra la seguridad, los usuarios, los roles y los privilegios con <code>GRANT</code> y <code>REVOKE</code>. El <strong>analista de datos</strong> define qué datos, cómo, cuándo y cómo se migran para análisis.</p></details>
+<details class="qa"><summary>2. Explica con tus palabras qué es un cubo de información y por qué no es un archivo.</summary><p>Es un modelo conceptual de OLAP para consultar medidas desde muchas dimensiones (tiempo, lugar, producto). No existe un «cubo.ext»: es una forma de organizar y consultar datos que llegan por un proceso ETL.</p></details>
+<details class="qa"><summary>3. ¿En qué se diferencian las medidas aditivas, semiaditivas y no aditivas? Da un ejemplo de cada una.</summary><p><strong>Aditiva:</strong> se suma en todas las dimensiones (ventas, costos). <strong>Semiaditiva:</strong> solo en algunas (el saldo bancario se suma por cliente, pero no a lo largo del tiempo). <strong>No aditiva:</strong> es un campo calculado con fórmula y no se suma directamente (porcentajes, promedios, sueldo neto, edad).</p></details>
+<details class="qa"><summary>4. ¿Por qué hay que definir la jerarquía País → Estado → Ciudad en herramientas como Power Maps?</summary><p>Porque si no, el nombre es ambiguo: «Monterrey» aparece en tres lugares del mundo (uno en Venezuela) y «León» existe en México y en España. La jerarquía va de lo general a lo particular y elimina la ambigüedad.</p></details>
+<details class="qa"><summary>5. ¿Qué dice la regla de integridad entre la base transaccional y el Data Warehouse?</summary><p>Los datos van de la base transaccional (y de otras fuentes) hacia el Data Warehouse, pero nunca deben regresar del Data Warehouse a producción, porque se rompería la integridad de los datos de operación.</p></details>
+<details class="qa"><summary>6. Compara los esquemas estrella, copo de nieve y constelación (con su forma normal según el profesor).</summary><p><strong>Estrella (1FN):</strong> una tabla de hechos con las dimensiones conectadas directamente. <strong>Copo de nieve (2FN):</strong> una tabla de hechos, pero las dimensiones tienen subdimensiones. <strong>Constelación (3FN):</strong> varias tablas de hechos que comparten dimensiones.</p></details>
+<details class="qa"><summary>7. ¿Cómo se forma la llave primaria de la tabla de hechos en un esquema estrella?</summary><p>Es una llave primaria compuesta, formada por las llaves foráneas de todas las dimensiones conectadas (<code>id_producto</code>, <code>id_date</code>, <code>id_customer</code>, <code>id_employee</code>).</p></details>
+<details class="qa"><summary>8. En Azure, ¿qué diferencia hay entre una alerta de costo previsto y una de costo real?</summary><p>La de <strong>costo previsto</strong> avisa por proyección, cuando la tendencia indica que se va a llegar al porcentaje (por ejemplo, 40 %). La de <strong>costo real</strong> avisa cuando el gasto ya llegó al umbral (por ejemplo, 50 % de 5,000 USD).</p></details>
+<details class="qa"><summary>9. Aplica: un gerente pregunta «¿cuánto vendimos de laptops en CDMX en el segundo trimestre?». Identifica la medida, las dimensiones y la operación.</summary><p>La <strong>medida</strong> son las ventas (aditiva). Las <strong>dimensiones</strong> son producto (laptops), geografía (CDMX) y tiempo (Q2). La <strong>operación</strong> es un <em>dice</em>, porque filtra con varias condiciones a la vez; es justo el ejemplo que se dio en clase.</p></details>
+<details class="qa"><summary>10. ¿Por qué no conviene empezar el diseño del cubo por la pregunta del cliente?</summary><p>La pregunta es el objetivo, pero si diseñas empezando por ella terminas adivinando las dimensiones y buscando la medida al final, y te puede faltar el dato que necesitas. Primero identifica qué se puede medir y qué lo afecta, y después aterriza la pregunta.</p></details>
+</details>
+
+<details class="section-block sec" id="c10-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>El parcial sorpresa:</strong> el profesor bromeó con que todavía no aplica el examen porque espera el día con menos asistencia.</li>
+<li><strong>Liverpool y el consumo por zona:</strong> para explicar la dimensión geográfica habló de las diferencias de inventario entre las tiendas de Liverpool y Walmart en Neza, Chimalhuacán y Ecatepec frente a Santa Fe y Coyoacán.</li>
+<li><strong>«Excel va a desaparecer»:</strong> contó que desde que estudiaba en la facultad (generación 2013) escucha en conferencias que Excel va a desaparecer, y sigue siendo el estándar en las empresas.</li>
+<li><strong>Cuentas de la UNAM:</strong> antes se daba a los alumnos una cuenta de Microsoft y otra de Google; por costos se redujeron las licencias de Microsoft y las generaciones nuevas solo reciben la de Google.</li>
+<li>Se comentaron rumores de un paro estudiantil en la facultad.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c10-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<p>Para la siguiente clase (lunes 5 oct, según el horario) hay que llevar listo lo siguiente:</p>
+<ul>
+<li>Cuenta creada en <strong>Oracle Live SQL / FreeSQL</strong>.</li>
+<li><strong>SQL Developer</strong> instalado en tu equipo, para conectarte a Oracle Live SQL.</li>
+<li><strong>Power BI Desktop</strong> instalado (la versión gratuita).</li>
+<li><strong>Investigación previa (sin entregable escrito):</strong> para qué sirven dos encuestas del INEGI, la <strong>ENOE</strong> (Encuesta Nacional de Ocupación y Empleo) y la <strong>ENIGH</strong> (Encuesta Nacional de Ingresos y Gastos de los Hogares). En clase se usarán datos reales de años anteriores (por ejemplo, 2017/2018, porque por gobernanza de datos deben tener 5 años de antigüedad) para el ejercicio de arquitectura de datos.</li>
+</ul>
+<p>Sigue pendiente lo de la Clase 09: el reporte individual de la herramienta de Kali asignada (ver <a href="clase-09.html#c9-pendiente" style="color:var(--indigo)">Clase 09</a>).</p>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Cubo = medidas + dimensiones + pregunta. Es un concepto de OLAP, no un archivo, y se alimenta con ETL.</li>
+<li>Medidas aditivas (se suman en todo), semiaditivas (solo en algunas dimensiones) y no aditivas (calculadas).</li>
+<li>Estrella 1FN (una tabla de hechos), copo de nieve 2FN (subdimensiones), constelación 3FN (varias tablas de hechos).</li>
+<li>Los datos nunca regresan del Data Warehouse a producción.</li>
+<li>Para el lunes: Oracle Live SQL, SQL Developer, Power BI Desktop e investigar ENOE y ENIGH.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

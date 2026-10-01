@@ -91,6 +91,16 @@
       "link": "materias/lab-de-fundamentos-de-sistemas-embebidos/material.html"
     },
     {
+      "id": "asi-c11-prep",
+      "materia": "ASI",
+      "color": "#7C9CD6",
+      "titulo": "Para la clase: Oracle Live SQL, SQL Developer, Power BI Desktop + investigar ENOE y ENIGH",
+      "vence": "2026-10-05T17:00:00-06:00",
+      "hora_confirmada": false,
+      "detalle": "Pedido en la Clase 10 para la siguiente sesión (sin entregable escrito). Hora = inicio de la clase del lunes.",
+      "link": "materias/administracion-de-servicios-de-internet/clase-10.html#c10-pendiente"
+    },
+    {
       "id": "asi-kali",
       "materia": "ASI",
       "color": "#7C9CD6",

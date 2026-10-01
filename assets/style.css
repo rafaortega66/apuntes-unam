@@ -483,3 +483,20 @@ body.has-topbar { padding-top: 78px; }
 /* Notas "Por verificar": fondo oscuro translúcido, texto legible */
 .section-block.nota { background: rgba(232,115,92,0.10); color: var(--ink, #E8E6E3); padding: 12px 14px; border-radius: 8px; }
 .section-block.nota p, .section-block.nota strong { color: inherit; }
+
+/* ================= formato de estudio (desde 1 oct 2026) ================= */
+.concepto { margin: 14px 0 20px; }
+.concepto > h5 { font-family: 'Fraunces', serif; font-size: 15.5px; font-weight: 600; margin: 0 0 8px; }
+.lbl { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-soft); margin: 10px 0 4px; }
+.simple { background: rgba(169,139,209,0.09); border-left: 3px solid var(--plum); border-radius: 8px; padding: 10px 14px; margin: 4px 0 6px; }
+.simple .rompe { display: block; margin-top: 6px; font-size: 13px; color: var(--ink-soft); }
+.errores { background: rgba(232,115,92,0.08); border-left: 3px solid var(--coral); border-radius: 8px; padding: 10px 14px; margin: 6px 0 0; }
+.evid { display: block; font-size: 13px; color: var(--ink-soft); margin-top: 3px; }
+.examen-lista { padding-left: 20px; font-size: 14.5px; line-height: 1.65; }
+.examen-lista > li { margin: 0 0 12px; }
+details.qa { border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 10px 14px; margin: 0 0 8px; background: rgba(255,255,255,0.02); }
+details.qa > summary { cursor: pointer; font-size: 14.5px; font-weight: 500; line-height: 1.5; }
+details.qa > summary::marker { color: var(--teal); }
+details.qa[open] > summary { margin-bottom: 8px; }
+details.qa p { font-size: 14px; }
+.ojo { font-size: 13.5px; color: var(--ink-soft); border-left: 3px solid var(--ink-soft); padding: 6px 12px; margin: 10px 0; }
