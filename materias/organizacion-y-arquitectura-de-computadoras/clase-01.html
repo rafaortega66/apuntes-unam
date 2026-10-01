@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 01 — Organización y Arquitectura de Computadoras</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -15,11 +16,30 @@
   <p class="prof">M.I. José Antonio de Jesús Arredondo Garza · 31 ago 2026 · Temas 1, 2 y 4 — panorama histórico de la evolución del hardware (de la máquina de Pascal a las FPGA), y estructura básica de una computadora: Von Neumann vs. Harvard, CISC vs. RISC y el ciclo del procesador con pipeline.</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c1-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Las causas por las cuales Charles Babbage no concluyó la Máquina Analítica</strong><span class="evid">Evidencia: El profesor explicó explícitamente citando investigaciones que no se debió a limitaciones tecnológicas de la época, sino a la incapacidad de Babbage para dejar quieta su mente al modificar continuamente el proyecto.</span></li>
+<li><strong>La Nota G de Ada Lovelace y sus aportaciones a la arquitectura de software</strong><span class="evid">Evidencia: Lo explicó explícitamente al detallar que Ada tradujo el texto de Menabrea añadiendo notas que duplicaban su extensión e inventó el algoritmo para los números de Bernoulli con cálculo en paralelo, condicionales if-then y uso de tarjetas perforadas para álgebra.</span></li>
+<li><strong>La invención de la máquina Enigma por un matemático polaco en los años 20 y el aporte de los cálculos iterativos</strong><span class="evid">Evidencia: Lo explicó explícitamente al señalar la demanda histórica sobre la autoría atribuida a Alan Turing y resaltar la inclusión de los cálculos iterativos en la computación moderna.</span></li>
+<li><strong>El consumo de potencia y la transición de tecnología PMOS a CMOS en procesadores</strong><span class="evid">Evidencia: Lo explicó explícitamente comparando el consumo de 1 Amperio en vacío de los procesadores PMOS de 40 patitas con los 200 mA de la tecnología CMOS de Motorola y los 2 a 5 mA de la Raspberry Pi Pico 2.</span></li>
+<li><strong>La evolución de la lógica programable desde arreglos de fusibles quemables de un solo tiro hasta FPGAs y arreglos analógicos (FPAA)</strong><span class="evid">Evidencia: Lo explicó explícitamente al mostrar cómo se redujeron las placas madre de 50 cm x 50 cm y la existencia de FPAA con amplificadores operacionales y multiplicadores analógicos.</span></li>
+</ol>
+</details>
+
 <div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>📋 Nota de fuentes:</strong> el panorama histórico viene del audio grabado de la clase. La sección de Von Neumann/CISC-RISC/pipeline viene de fotos de apuntes a mano tomados ese mismo día (el audio de esa parte no se grabó) — donde la letra no se distingue con claridad se marca explícitamente con <code>[?]</code>.</p></div>
 
 <details class="section-block sec" id="c1-pascal-babbage" open><summary><span class="stitle">Evolución mecánica del cálculo: de la máquina de Pascal a la Máquina Analítica de Babbage</span></summary>
 <p>El profesor abrió el curso con el desarrollo de los primeros dispositivos mecánicos de cálculo, antecedente fundamental de la computadora moderna. La <strong>máquina de Pascal (Pascalina)</strong> era un dispositivo electromecánico basado en engranes con un número específico de dientes por rueda. Este tipo de sumadoras tuvo una longevidad notable: sobrevivieron en comercios de Estados Unidos hasta bien entrado el siglo XX. El mecanismo interno, que originalmente se activaba mediante una manivela manual para hacer girar los engranes y confirmar una operación, es el antecedente conceptual directo de la <strong>tecla Enter</strong> de los teclados modernos.</p>
 <p>Entre finales del siglo XVIII y principios del XIX, <strong>Charles Babbage</strong> introdujo dos conceptos clave. En 1822 propuso la <strong>Máquina Diferencial</strong>, cuyo propósito era calcular e imprimir tablas matemáticas complejas (trigonométricas y logarítmicas) — tablas que se recopilaban en libros de consulta usados en ingeniería antes de la existencia de calculadoras electrónicas (el profesor recordó cómo en la educación primaria todavía se usaban esos libros impresos con tablas trigonométricas y logarítmicas). Para 1830, Babbage concibió la <strong>Máquina Analítica</strong>, considerada el primer ordenador de propósito general verdaderamente programable: a diferencia de sus predecesoras, pretendía usar tarjetas perforadas para la entrada de programas. Sin embargo, el dispositivo nunca llegó a construirse en su totalidad en aquella época.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como usar una caja registradora antigua con engranes para sumar compras y pasar luego a diseñar una calculadora gigante de vapor que podía cambiar de canción según la tarjeta de cartón perforado que le metieras.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque la caja registradora solo hacía aritmética básica para cobrar, mientras que la Máquina Analítica de Babbage fue concebida como un ordenador de propósito general verdaderamente programable.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>La máquina de Pascal basaba sus operaciones en engranes con dientes específicos cuyo mecanismo de manivela derivó en la tecla Enter; la Máquina Diferencial (1822) calculaba tablas trigonométricas y logarítmicas impresas en libros, y la Máquina Analítica (1830) introdujo el concepto de procesador programable con tarjetas perforadas.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Creer que la Máquina Analítica no se construyó por falta de tecnología de la época, cuando en realidad se debió a la incapacidad de Babbage para concluir proyectos al modificar continuamente los diseños.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c1-ada-lovelace" open><summary><span class="stitle">Ada Lovelace y el primer algoritmo computacional</span></summary>
@@ -31,26 +51,59 @@
 <li><strong>Uso de tarjetas perforadas para álgebra:</strong> adaptó la tecnología de tarjetas perforadas de los telares industriales de Jacquard para que la máquina pudiera ejecutar operaciones algebraicas.</li>
 </ul>
 <p>En reconocimiento a su legado, el Departamento de Defensa de los Estados Unidos nombró <strong>ADA</strong> al lenguaje de programación estándar utilizado en sistemas críticos de aeronáutica y control de tráfico aéreo.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como ser la primera persona en escribir la receta de cocina paso a paso para que una máquina prepare pasteles sola, agregando reglas de si falta un ingrediente haz esto o aquello.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque las recetas de cocina procesan alimentos físicos, mientras que el programa de Ada Lovelace procesaba álgebra abstracta y matemáticas complejas por primera vez en la historia.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Al traducir el artículo de Menabrea sobre Babbage, Ada añadió notas que duplicaban el texto original y en la Nota G creó el primer algoritmo (para números de Bernoulli) introduciendo cálculo en paralelo, condicionales if-then y el uso de tarjetas perforadas para álgebra; en su honor se nombró el lenguaje ADA para aviación.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Asumir que Ada Lovelace solo tradujo el texto de Menabrea sin aportar conceptos originales de programación o arquitectura de software.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c1-enigma" open><summary><span class="stitle">Antecedentes del control programado y el descifrado de Enigma</span></summary>
 <p>El concepto de almacenamiento físico de instrucciones tiene antecedentes mecánicos previos a la computación electrónica: las <strong>cajitas de música de finales de la Edad Media</strong>, que empleaban cilindros con enclavamientos para secuenciar melodías, y los <strong>telares automatizados movidos por molinos de viento</strong> (el profesor comentó un documental del Canal 22 sobre los molinos en Holanda, que ha intentado localizar de nuevo e incluso acudió personalmente a las instalaciones de Canal 22 para buscarlo), que usaban tarjetas de cartón perforado para guiar la trama de los hilos y generar patrones.</p>
 <p>En el ámbito de la computación iterativa y la criptografía, destaca la máquina para descifrar el <strong>código Enigma</strong>. En la década de 1920, matemáticos polacos lograron avances teóricos y diseños parciales para romperlo. El equipo de inteligencia británico, encabezado por <strong>Alan Turing</strong>, construyó y modificó la máquina física, introduciendo el concepto de <strong>cálculos iterativos mecánicos</strong> que sentó las bases de los algoritmos de iteración de la computación moderna. El profesor cuestionó la atribución exclusiva a Turing como "padre de la computación", señalando el trabajo previo de los matemáticos polacos — aunque reconoció la genialidad de Turing y lo comparó con otras contribuciones matemáticas de la época.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como una caja de música antigua con un cilindro de púas que al girar toca una melodía fija, adaptada después como una cerradura secreta giratoria para descifrar mensajes.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque la caja de música reproduce una melodía pasiva, mientras que la máquina de descifrado requería procesos iterativos complejos de cálculo para romper combinaciones criptográficas.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra los antecedentes del control programado desde las cajitas de música medievales y los telares holandeses impulsados por molinos de viento; además explica que la máquina Enigma fue diseñada en los años 20 por un matemático polaco sin recursos económicos y modificada en la guerra por los ingleses, aportando el concepto de cálculos iterativos a la computación.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Atribuir la invención original de la máquina para descifrar Enigma exclusivamente a Alan Turing sin reconocer los avances teóricos y diseños del matemático polaco.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c1-relevadores-bulbos" open><summary><span class="stitle">Transición tecnológica: de relevadores a válvulas de vacío (bulbos)</span></summary>
 <p>En la década de 1920 se hicieron los primeros intentos de construir máquinas calculadoras basadas en <strong>relevadores electromecánicos</strong>. Un relevador consiste en una bobina de cobre arrollada a un núcleo de hierro; al circular corriente por la bobina, se genera un campo magnético que atrae una pieza metálica y cierra un contacto. Desde el punto de vista funcional, el relevador opera exactamente igual que un transistor operando como conmutador (switch), permitiendo representar estados lógicos de encendido y apagado (1 y 0).</p>
 <p>A partir de 1910, y con mayor auge en los años 30 y 40, aparecieron las <strong>válvulas de vacío o bulbos</strong>: cápsulas de vidrio al vacío con un filamento (cátodo), una rejilla y un ánodo. La rejilla modulaba o interrumpía el flujo de electrones entre cátodo y ánodo, funcionando como un switch electrónico sin partes móviles. Su desventaja técnica era severa: requerían entre 100 V y 1000 V, disipaban calor excesivo por el caldeo de los filamentos y tenían una vida útil reducida. Computadoras de los años 40 como la ENIAC requerían miles de bulbos para operar. El profesor recordó que los bulbos permanecieron en el mercado hasta los años 60 y 70, siendo el tubo de imagen de las televisiones analógicas uno de sus últimos reductos comerciales.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como cambiar un interruptor de luz mecánico que hace chasquido por una bombilla de cristal incandescente que controla el paso de la corriente mediante el calor de un filamento.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque una bombilla de luz común solo ilumina, mientras que la válvula de vacío o bulbo modula electrones mediante rejillas para actuar como un switch electrónico de alta velocidad.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Los relevadores electromecánicos usaban una bobina y armadura magnética para conmutar contactos como un transistor; los bulbos (años 30-40) eliminaron partes móviles pero requerían voltajes de 100 V a 1000 V, disipaban gran calor por filamentos y tenían vida útil corta; el cinescopio de TV fue el último bulbo utilizado.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c1-transistor-ci" open><summary><span class="stitle">La era del transistor, los circuitos integrados y los primeros microprocesadores</span></summary>
 <p>El nacimiento del <strong>primer transistor discreto</strong>, en 1947-1948 en los Laboratorios Bell, transformó la arquitectura de computadoras. El prototipo original consistía en un bloque semiconductor de germanio con contactos metálicos de extremo. Los transistores reemplazaron a los bulbos al operar a voltajes drásticamente menores y sin requerir el caldeo de un filamento. No obstante, las primeras computadoras basadas en transistores discretos trabajaban a frecuencias de kilohertz (kHz), no de gigahertz (GHz).</p>
 <p>Hacia 1962 surgieron los primeros <strong>circuitos integrados (CI)</strong> y amplificadores operacionales en chip monolítico, aunque todavía requerían componentes pasivos externos. En 1969 se lograron integrar compuertas lógicas básicas en un solo encapsulado. Esta evolución condujo a los primeros microprocesadores de silicio de Intel: el <strong>Intel 8008 (1972)</strong>, uno de los primeros procesadores de 8 bits, y el <strong>Intel 8080 (1974)</strong>, diseñado por el equipo de ingenieros que más tarde fundaría Zilog — este chip no integraba coprocesador matemático ni controladores periféricos; el acceso directo a memoria y periféricos se manejaba de forma externa.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como cambiar una bombilla de vidrio grande y caliente por un pequeño trozo de piedra de germanio con patas metálicas que hace el mismo trabajo sin calentarse ni romperse.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque la piedra no conduce por sí sola, sino que el semiconductor de germanio o silicio conmuta señales eléctricas a velocidades de kilohertz.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>El transistor discreto (1947/1948, Laboratorios Bell) reemplazó a los bulbos operando a baja tensión y frecuencias en kilohertz; en 1962 surgieron los primeros circuitos integrados (amplificadores operacionales) y en 1972-1974 los procesadores Intel 8008 y 8080 (cuyos creadores fundaron Zilog), los cuales requerían chips externos para DMA y puertos serie.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Creer que las primeras computadoras basadas en transistores discretos operaban a frecuencias de gigahertz como los procesadores modernos de escritorio.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c1-cmos-x86" open><summary><span class="stitle">Consumo de potencia, tecnología CMOS y el origen de la computación personal (x86)</span></summary>
 <p>Los primeros microprocesadores de mediados de los 70 (fabricados en tecnología PMOS, en encapsulados de 40 patitas) consumían aproximadamente <strong>1 amperio en vacío</strong> — esto imposibilitaba su uso en equipos portátiles sin baterías de gran volumen. En 1976, Motorola introdujo el microprocesador <strong>MC6800</strong>, migrando a la tecnología <strong>CMOS</strong>, que redujo el consumo de 1 A a aproximadamente <strong>200 mA</strong>. Como comparación de qué tan lejos ha llegado esta evolución, un microcontrolador moderno como la Raspberry Pi Pico 2 (chip RP2350) consume en vacío únicamente entre 2 y 5 mA.</p>
 <p>En 1978, Intel lanzó el <strong>procesador 8086</strong>, antecesor directo de la arquitectura <strong>x86</strong>, seguido de la versión 8088. En 1980 se presentó la primera <strong>computadora personal de IBM (IBM PC)</strong> basada en esta arquitectura, marcando el inicio de la computación personal masiva. En cuanto a almacenamiento secundario, la evolución pasó de los discos flexibles (floppy disks) de 8 y 5.25 pulgadas con capacidades de apenas 150 KB, propensos a rayarse y perder datos, hasta los dispositivos de estado sólido y memorias USB actuales (el profesor compartió, de paso, su experiencia comprando una memoria USB en línea que resultó ser una estafa con capacidad falsificada).</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como cambiar un motor de camión que gasta un tanque lleno de gasolina cada hora en ralentí por un motor ecológico que casi no consume combustible cuando está detenido.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque el motor de auto genera energía mecánica, mientras que el chip CMOS reduce el flujo de corriente eléctrica a miliamperios para evitar el agotamiento de baterías.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Los procesadores PMOS/I²L de mediados de los 70 (como el 180 original) consumían 1 Amperio en vacío; la tecnología CMOS de Motorola (MC6800, 1976) redujo el consumo a 200 mA (frente a 2-5 mA en la Pico 2); en 1978 nació el Intel 8086 dando origen a la arquitectura x86 y en 1980 a la IBM PC con disquetes de 150 KB.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c1-logica-programable" open><summary><span class="stitle">Dispositivos de lógica programable: de PROMs y PLDs a FPGAs y arquitecturas analógicas</span></summary>
@@ -61,6 +114,13 @@
 <li><strong>FPGA — Field Programmable Gate Arrays (circa 1990):</strong> matriz de bloques lógicos reconfigurables que permite sintetizar hardware y procesadores completos dentro del propio chip.</li>
 </ul>
 <p>Hoy existen FPGAs avanzadas fabricadas con geometrías de 2 nanómetros (alto costo, con severos desafíos de disipación térmica) frente a FPGAs comerciales más accesibles de 25 nanómetros. Un uso clave de las FPGAs es la <strong>emulación y clonación de procesadores</strong>: el profesor mencionó, a modo de ejemplo, que el Dr. Szabó (Savash) diseñó un clon funcional del microcontrolador Motorola MC6800 usando FPGA. Finalmente existen los <strong>Arreglos Analógicos Programables (FPAA)</strong>, con arreglos internos de amplificadores operacionales y logarítmicos — no han tenido el mismo éxito comercial que las FPGAs digitales.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como tener una libreta de circuitos con fusible en cada hoja que puedes quemar una sola vez con un impulso eléctrico para dejar grabada una función fija, o un tablero de bloques reconfigurables que puedes rediseñar las veces que quieras.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque el tablero de bloques físicos se arma con la mano, mientras que la FPGA sintetiza hardware digital y procesadores completos mediante programación lógica en silicio.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Surgió para reducir tarjetas madres que medían 50 cm x 50 cm; evolucionó de PROMs de un solo tiro con fusibles a PLDs/Gate Arrays y FPGAs (tecnologías de 2 nm a 25 nm) para diseñar procesadores propios (como el clon del MC68HC11 del Dr. Szabó/Savash); también existen FPAAs con arreglos analógicos de amplificadores operacionales.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Asumir que un procesador diseñado dentro de una FPGA alcanza la misma velocidad de reloj que un procesador físico original de fábrica.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c1-von-neumann" open><summary><span class="stitle">Von Neumann vs. Harvard <span style="font-weight:400;font-size:12px;color:var(--ink-soft)">(de apuntes a mano — letra parcialmente ilegible)</span></span></summary>
@@ -108,6 +168,18 @@ I3               F    D    E    WB
 I4                    F    D    E    WB
                       (desde aqui: 1 resultado por ciclo)</code></pre>
 <p class="empty">El profesor dibujó este diagrama espacio-tiempo en el pizarrón; la foto de los apuntes no se distingue bien.</p>
+</details>
+
+<details class="section-block sec" id="c1-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Qué antecedente mecánico dio origen a la tecla Enter de las computadoras modernas según lo explicado en clase?</summary><p>El mecanismo de manivela manual que hacía girar el tren de engranes en las máquinas sumadoras electromecánicas de Pascal.</p></details>
+<details class="qa"><summary>2. Explica con tus palabras por qué Charles Babbage no logró concluir la construcción de la Máquina Analítica.</summary><p>No se debió a limitaciones tecnológicas de la época, sino a la incapacidad de Babbage para concluir proyectos al modificar constantemente sus diseños e iniciar nuevas líneas de trabajo.</p></details>
+<details class="qa"><summary>3. ¿Qué aportaciones fundamentales a la programación realizó Ada Lovelace en la Nota G de su publicación?</summary><p>Diseñó un algoritmo para calcular los números de Bernoulli e introdujo el cálculo en paralelo, las estructuras lógicas condicionales (if-then) y el uso de tarjetas perforadas para operaciones algebraicas.</p></details>
+<details class="qa"><summary>4. ¿Cuál fue el antecedente histórico más antiguo del control programado por tarjetas perforadas mencionado por el profesor?</summary><p>Las cajitas de música de finales de la Edad Media con cilindros de púas y los telares automatizados movidos por molinos de viento en Holanda.</p></details>
+<details class="qa"><summary>5. Compara los requerimientos eléctricos y las desventajas técnicas de las válvulas de vacío (bulbos) frente a los transistores discretos.</summary><p>Los bulbos requerían tensiones de 100 V a 1000 V, disipaban mucho calor por caldeo de filamentos y tenían vida útil corta; los transistores sustituyeron los bulbos operando a voltajes drásticamente menores y sin filamentos.</p></details>
+<details class="qa"><summary>6. Aplica la comparación de consumo de potencia explicada en clase: ¿cuánta corriente consumía en vacío un procesador PMOS de 40 patitas de los años 70 frente a un procesador CMOS como el Motorola 6800 y una Raspberry Pi Pico 2?</summary><p>El procesador PMOS consumía 1 Amperio en vacío, el procesador CMOS Motorola 6800 redujo el consumo a 200 mA, y la Raspberry Pi Pico 2 consume entre 2 y 5 mA.</p></details>
+<details class="qa"><summary>7. ¿Qué procesador lanzado en 1978 se considera el padre directo del mundo x86 de 32 y 64 bits y qué computadora personal masiva impulsó en 1980?</summary><p>El procesador Intel 8086, el cual impulsó el desarrollo de la primera computadora personal de IBM (IBM PC) en 1980.</p></details>
+<details class="qa"><summary>8. Compara los dispositivos de lógica programable digitales (FPGAs) con los arreglos analógicos programables (FPAAs).</summary><p>Las FPGAs contienen matrices de bloques lógicos digitales reconfigurables para sintetizar procesadores en silicio, mientras que los FPAA contienen arreglos internos de amplificadores operacionales y multiplicadores analógicos interconectables.</p></details>
 </details>
 
 <details class="section-block sec" id="c1-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
