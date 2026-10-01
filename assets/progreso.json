@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T12:03:35+00:00",
+ "generatedAt": "2026-10-01T12:05:07+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -35,7 +35,7 @@
     "fecha": "2026-09-11",
     "resumen": "Tema 3 (continuación) — Presentación y evaluación de la Práctica 1: PCA, SVD, estandarización y reconstrucción en datasets sintéticos, Iris, Wine y Olivetti Faces.",
     "url": "materias/reconocimiento-de-patrones/clase-05.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 6,
@@ -468,6 +468,11 @@
  },
  "gitlog": [
   {
+   "hash": "e134e0f",
+   "fecha": "2026-10-01T06:03:35-06:00",
+   "mensaje": "RP Clase 06: formato de estudio"
+  },
+  {
    "hash": "897dde3",
    "fecha": "2026-10-01T06:01:49-06:00",
    "mensaje": "OAC Clase 05: formato de estudio"
@@ -761,11 +766,6 @@
    "hash": "ccfe811",
    "fecha": "2026-09-28T20:13:57Z",
    "mensaje": "MD: agregar Clase 07 (24 sep 2026) — cierre de exposiciones Proyecto 2 (Oracle, Cassandra, Azure, Snowflake), modelos predictivos y descriptivos"
-  },
-  {
-   "hash": "a2d5aac",
-   "fecha": "2026-09-28T19:43:06Z",
-   "mensaje": "ASI: agregar Clase 08 (23 sep 2026) — introducción a Kali Linux, tipos de hacker, práctica con Metasploit y Nmap"
   }
  ]
 }

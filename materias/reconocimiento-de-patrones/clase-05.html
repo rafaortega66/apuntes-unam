@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 05 — Reconocimiento de Patrones</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -16,6 +17,18 @@
   <p style="font-size:12px;color:var(--ink-soft);margin:2px 0 0">🔢 Numeración del profesor: sin diapositivas propias — sesión de presentación/evaluación de la práctica, no de teoría nueva.</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c5-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Diferencia entre centrar y estandarizar datos previa a la aplicación de PCA</strong><span class="evid">Evidencia: evidencia de la clase: el profesor lo preguntó explícitamente al inicio de la ronda de preguntas evaluando a los expositores.</span></li>
+<li><strong>Relación entre el número de características originales del dataset y la cantidad total de autovectores generados</strong><span class="evid">Evidencia: evidencia de la clase: el profesor lo repitió e hizo reflexionar a los equipos en la retroalimentación para confirmar que siempre es igual al número de características.</span></li>
+<li><strong>Impacto de la falta de estandarización en la distribución de varianza explicada</strong><span class="evid">Evidencia: evidencia de la clase: se expuso comparativamente en las gráficas de la práctica y el profesor enfatizó cómo una escala alta artificialmente absorbe toda la varianza.</span></li>
+<li><strong>Aplicación de la regla de Kaiser y umbrales de varianza para la selección de K componentes</strong><span class="evid">Evidencia: evidencia de la clase: el profesor preguntó directamente qué establece la regla de Kaiser para decidir la cantidad de componentes a tomar.</span></li>
+<li><strong>Interpretación geométrica y reconstrucción con Eigenfaces en imágenes de alta dimensión</strong><span class="evid">Evidencia: evidencia de la clase: se discutió en vivo por qué con pocos componentes la imagen reconstruida se aproxima al rostro promedio.</span></li>
+</ol>
+</details>
+
 <div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>📝 Nota personal:</strong> no grabé mi propia exposición. El profesor me hizo preguntas durante la evaluación y no supe responderlas — me costó trabajo. Me falta estudiar más a fondo estos temas.</p></div>
 
 <details class="section-block sec" id="c5-fundamentos" open><summary><span class="stitle">Fundamentos de PCA: centrado, estandarización y covarianza</span></summary>
@@ -26,6 +39,13 @@
 </ul>
 <p><strong>Ejemplo trabajado en clase (dataset sintético, 200 muestras, 2 características):</strong> tras centrar los datos, se calculó la matriz de covarianza 2×2, obteniendo en la diagonal principal las varianzas 1.04 y 5.9, y fuera de la diagonal las covarianzas cruzadas de 2.1 y 2.1 — valores idénticos que confirman una fuerte correlación positiva entre ambas variables (al crecer una, la otra crece en la misma tendencia). Al resolver la descomposición de esta matriz se obtuvieron los autovectores ordenados: el primero, [0.35, 0.93], captura la máxima dispersión a lo largo del eje principal PC1; el segundo, [0.93, −0.35], corresponde a PC2. Para comprobar formalmente la ortogonalidad entre ambos ejes se hicieron dos verificaciones: el producto punto entre ellos dio 0, y el producto matricial de la matriz de autovectores por su transpuesta dio la matriz identidad — confirmando un ángulo de 90° exacto entre ambos, sin traslape de información entre subespacios.</p>
 <p><strong>Matriz de covarianza:</strong> dimensión N×N; varianzas en la diagonal, covarianzas cruzadas fuera de ella. Identifica qué variables varían juntas y en qué direcciones se concentra la mayor dispersión.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como mover la mesa de centro exactamente al medio de la sala para medir el espacio disponible sin importar por qué puerta entras.<span class="rompe">Dónde falla la analogía: Si los muebles tienen dimensiones astronómicas en una dirección y milimétricas en otra, simplemente cambiar el centro no evita que los muebles gigantes dominen la vista.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>El centrado (restar la media) ubica el origen en cero para que la matriz de covarianza mida la dispersión real de las variables sin sesgos de posición.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir centrar (restar la media) con estandarizar (restar la media y dividir entre la desviación estándar), omisión aclarada por el profesor.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c5-criterios-k" open><summary><span class="stitle">Criterios para elegir K (datasets Iris y Wine)</span></summary>
@@ -36,6 +56,12 @@
 </ul>
 <p><strong>Iris (4 características):</strong> PC1 explica 92.46%, PC2 explica 5.3%. Con umbral 90% basta 1 componente; con 95% se requieren 2 componentes (reducción del 50% de la dimensión original reteniendo 97.7% de la varianza).</p>
 <p><strong>Wine (13 características, procesado con SVD sobre datos estandarizados):</strong> la regla del codo y el criterio de Kaiser coinciden en 3 componentes. Los tres primeros autovalores resultaron 4.7, 2.5 y 2.1 (todos mayores a 1), descendiendo el cuarto por debajo de 1.0 — de ahí que Kaiser seleccione exactamente 3. El hecho de que los distintos criterios den números distintos (3, 8 o 10 según cuál se use) es normal: cada uno responde a una pregunta distinta (dónde está el "codo", cuántos componentes aportan más que una variable individual, o cuánta varianza total se quiere garantizar). Con el umbral de varianza se necesitan 8 componentes para el 90% y 10 para el 95%.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como decidir cuántas páginas del resumen de un libro vas a guardar: conservas los capítulos principales y descartas los detalles secundarios.<span class="rompe">Dónde falla la analogía: Los diferentes criterios heurísticos pueden sugerir un número de páginas totalmente distinto para el mismo libro sin que ninguno esté matemáticamente mal.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite seleccionar el número óptimo K de componentes mediante la flexión de la gráfica (codo), umbrales acumulados (90%-95%) o autovalores significativos (Kaiser).</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c5-sensibilidad" open><summary><span class="stitle">Sensibilidad a la escala, reconstrucción y equivalencia de algoritmos</span></summary>
@@ -44,6 +70,13 @@
 <li><strong>Reconstrucción y MSE (Wine, 13 características):</strong> con 1 sola componente el MSE de reconstrucción fue de 0.6; al usar 2 componentes bajó a 0.4; y continuó disminuyendo progresivamente conforme se agregaban componentes hasta llegar exactamente a 0.0 al usar las 13 completas — cuantificando que a mayor varianza retenida, más fiel es la reconstrucción.</li>
 <li><strong>Equivalencia de implementaciones:</strong> covarianza manual (PCA_C), SVD (PCA_SVD) y scikit-learn dan autovalores estrictamente idénticos. Las magnitudes numéricas de los autovectores también son idénticas, pero pueden diferir en signo (×−1) — no es un error: algebraicamente definen exactamente la misma recta y el mismo eje de proyección en el espacio.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como comparar el peso de frutas en gramos y toneladas a la vez: la manzana parecerá insignificante si no ajustas todas las básculas a la misma unidad.<span class="rompe">Dónde falla la analogía: Si la magnitud mide una propiedad intrínsecamente dominante en el fenómeno físico, igualar las escalas artificialmente puede distorsionar la realidad.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra que omitir la estandarización causa que el primer componente absorba artificialmente casi toda la varianza y demuestra la equivalencia entre covarianza, SVD y Scikit-Learn.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Considerar como un error que los autovectores de Scikit-Learn tengan el signo invertido (multiplicados por -1), cuando matemáticamente representan la misma dirección ortogonal.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c5-eigenfaces" open><summary><span class="stitle">PCA en imágenes de alta dimensión: Olivetti Faces (Eigenfaces)</span></summary>
@@ -54,6 +87,13 @@
 <li><strong>Calidad de reconstrucción visual:</strong> con 10 componentes, forma facial borrosa e indistinguible; entre 50–100, se notan rasgos específicos del individuo; entre 200–300, reconstrucción prácticamente idéntica al original.</li>
 <li><strong>Mecanismo matemático del rostro promedio:</strong> reconstrucción X̂ = Z·Wᵀ + μ. Con K pequeño, el término de proyección Z·Wᵀ aporta poca variabilidad; al sumar obligatoriamente μ para revertir el centrado, la imagen resultante muestra predominantemente la cara promedio del conjunto.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como armar un retrato hablado combinando plantillas transparentes: las primeras aportan la forma de la cabeza y las últimas añaden pecas o cicatrices.<span class="rompe">Dónde falla la analogía: Deja de servir si la iluminación o la postura cambian drásticamente, haciendo que las plantillas generen sombras extrañas en lugar de una cara real.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite comprimir imágenes de alta dimensión (400 imágenes de 64x64 píxeles = 4096 características) calculando el rostro promedio y reconstruyendo imágenes con error decreciente.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Asumir que clasificar usando únicamente las primeras componentes garantiza separar clases, cuando PCA es no supervisado y no considera etiquetas.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c5-algebra" open><summary><span class="stitle">Álgebra matricial de PCA y proyecciones</span></summary>
@@ -62,6 +102,13 @@
 <li><strong>Matriz de transformación (W):</strong> columnas de los autovectores seleccionados, dimensión N×K (K = componentes a conservar).</li>
 <li><strong>Proyección:</strong> Z = X_C·W, con Z de dimensión M×K.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como multiplicar tus calificaciones por una tabla de pesos para obtener un promedio ponderado que resume tu rendimiento en un solo número.<span class="rompe">Dónde falla la analogía: Si el número de columnas de tus notas no coincide exactamente con el número de filas de la tabla de pesos, la operación se bloquea.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Define la proyección de la matriz centrada X_c de dimensión (m x n) mediante la matriz de autovectores W_k de dimensión (n x k) para obtener los datos Z de dimensión (m x k).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir la cantidad total de autovectores que genera la descomposición (igual al número de características n) con la cantidad K de componentes elegidos para la proyección.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c5-ronda-preguntas" open><summary><span class="stitle">Ronda de preguntas del profesor (vale la pena repasarlas)</span></summary>
@@ -74,6 +121,25 @@
 <li><strong>Si los datos centrados X_C tienen dimensión M×N, ¿qué dimensión debe tener la matriz de autovectores W para proyectar?</strong> — Para que la multiplicación matricial sea compatible, W debe ser N×K (N = número de características originales, K = componentes seleccionados), dando una proyección Z = X_C·W de dimensión M×K.</li>
 <li><strong>¿Por qué al usar pocas eigenfaces la imagen reconstruida se parece al rostro promedio?</strong> — Porque los datos se centraron restando el vector de medias μ antes de aplicar PCA. La reconstrucción es X̂ = Z·Wᵀ + μ; con K pequeño, el término Z·Wᵀ aporta muy poca variabilidad, así que al sumar obligatoriamente μ para revertir el centrado, ese término domina visualmente el resultado.</li>
 </ol>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como cuando el profesor revisa la receta y pregunta por qué elegiste guardar 10 ingredientes en lugar de usar los 50 originales.<span class="rompe">Dónde falla la analogía: La explicación no se resuelve con corazonadas, sino justificando la compatibilidad de dimensiones matriciales y el desplome del error cuadrático medio.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite evaluar la comprensión teórica sobre la dimensión de la matriz de autovectores W, el origen del rostro promedio y la validez de clasificar con espacios reducidos.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Dudar sobre por qué la reconstrucción con muy pocos componentes se aproxima al rostro promedio, que ocurre porque ante la falta de detalles predomina el término de la media.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c5-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuál es la diferencia conceptual y matemática entre centrar un conjunto de datos y estandarizarlo?</summary><p>Centrar consiste en restar la media a cada observación (Xc = X - mu) para ubicar el centro en el origen, mientras que estandarizar divide además entre la desviación estándar (Z = (X - mu) / sigma) para igualar la escala de todas las variables.</p></details>
+<details class="qa"><summary>2. ¿Por qué es necesario aplicar estandarización previa a PCA en datos con escalas heterogéneas como en el dataset Wine?</summary><p>Porque sin estandarización las variables con magnitudes numéricas grandes (como Proline) dominan artificialmente el cálculo de la varianza, provocando que el primer componente principal capture casi la totalidad de la información y opaque a las demás características.</p></details>
+<details class="qa"><summary>3. Si una matriz de datos original X tiene 200 observaciones y 13 características químicas, ¿cuál es la dimensión de la matriz completa de autovectores W que arroja PCA y cuál será la dimensión de la matriz Z proyectada si elegimos K = 3 componentes?</summary><p>La matriz completa de autovectores W tiene dimensión 13 x 13 (igual al número de características), y la matriz proyectada Z tendrá dimensión 200 x 3.</p></details>
+<details class="qa"><summary>4. ¿En qué difieren las implementaciones de PCA mediante matriz de covarianza, SVD (descomposición en valores singulares) y la biblioteca Scikit-Learn?</summary><p>Matemáticamente son equivalentes y obtienen exactamente los mismos autovalores; la única diferencia práctica es la estabilidad numérica y que algunas funciones pueden devolver autovectores con el signo invertido (multiplicados por -1), lo cual no altera la orientación de la proyección.</p></details>
+<details class="qa"><summary>5. En el contexto de reconstrucción de imágenes con Eigenfaces (dataset Olivetti Faces de 64x64 píxeles), ¿qué representan visualmente las primeras 10 componentes principales frente a las últimas 10?</summary><p>Las primeras 10 componentes representan la estructura geométrica general del rostro (forma del mentón, posición de ojos y boca), mientras que las últimas 10 representan detalles finos y ruido similar a la estática de televisión.</p></details>
+<details class="qa"><summary>6. ¿Por qué cuando se reconstruye una imagen facial con muy pocos componentes principales (por ejemplo K = 10) el resultado visual se parece al rostro promedio?</summary><p>Porque al usar pocos componentes la proyección contiene muy poca información específica del individuo, por lo que en la fórmula de reconstrucción X_hat = Z * W^T + mu predomina el término de la media global (el rostro promedio).</p></details>
+<details class="qa"><summary>7. Compara el Criterio de Kaiser y la Regla del Codo para determinar la cantidad de componentes K a conservar.</summary><p>La Regla del Codo busca visualmente el punto de flexión en la gráfica donde la varianza explicada se aplana, mientras que el Criterio de Kaiser es una regla fija que selecciona únicamente los autovectores cuyos autovalores asociados sean superiores a 1 (o que aporten más información que la unidad).</p></details>
+<details class="qa"><summary>8. Si al evaluar la reconstrucción de un conjunto de datos con PCA obtenemos un error cuadrático medio (MSE) de 0.6 con K = 1 componente y 0.04 con K = 5 componentes, ¿qué sucede con el error al utilizar la totalidad de los componentes (K = d)?</summary><p>Al utilizar la totalidad de los componentes (K = d), se recupera el 100% de la varianza explicada y el error cuadrático medio de reconstrucción se reduce exactamente a cero.</p></details>
 </details>
 
 <details class="section-block sec" id="c5-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
