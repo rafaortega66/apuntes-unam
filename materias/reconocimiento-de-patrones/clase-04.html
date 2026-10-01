@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 04 — Reconocimiento de Patrones</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -16,6 +17,18 @@
   <p style="font-size:12px;color:var(--ink-soft);margin:2px 0 0">🔢 Numeración del profesor: corresponde a sus diapositivas <a href="material.html" style="color:var(--indigo)">Clase 7</a> (Evaluación de modelos) — no coincide 1:1 con "Clase 04" de este sitio.</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c4-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>La insuficiencia de la exactitud (Accuracy) en problemas con clases desbalanceadas</strong><span class="evid">Evidencia: evidencia de la clase: el profesor lo explicó en detalle con el ejemplo de detección de cáncer donde un modelo con 95% de exactitud no detecta a ningún enfermo.</span></li>
+<li><strong>Matriz de confusión y caracterización de los errores Tipo I y Tipo II</strong><span class="evid">Evidencia: evidencia de la clase: el profesor usó la analogía de la alarma de incendio para definir explícitamente el falso positivo (Tipo I) y el falso negativo (Tipo II).</span></li>
+<li><strong>Diagnóstico de sesgo (Underfitting) frente a varianza (Overfitting) mediante los errores de entrenamiento y validación</strong><span class="evid">Evidencia: evidencia de la clase: el profesor lo repitió múltiples veces usando la analogía del estudiante de cálculo y la comparación de porcentajes de error entre conjuntos.</span></li>
+<li><strong>Interpretación de la curva ROC y el área bajo la curva (AUC) para clasificadores probabilísticos</strong><span class="evid">Evidencia: evidencia de la clase: el profesor detalló la variación del umbral de decisión, los ejes TPR y FPR, y la escala de evaluación del AUC donde menos de 0.5 exige invertir la predicción.</span></li>
+<li><strong>Importancia de Stratified K-Fold para evitar sesgos en la evaluación y prevención del Data Leakage</strong><span class="evid">Evidencia: evidencia de la clase: el profesor explicó cómo rotar los bloques manteniendo las proporciones de clase y advirtió sobre la contaminación de datos.</span></li>
+</ol>
+</details>
+
 <details class="section-block sec" id="c4-repaso-lda" open><summary><span class="stitle">Repaso de cierre — PCA vs. LDA y otros métodos de reducción</span></summary>
 <p>La sesión arrancó resolviendo dudas de logística de la Práctica 1 (el profesor dio libertad de exponer apoyándose en el código o en el reporte escrito, según lo que cada equipo prefiriera). Después, repasó la diferencia fundamental entre PCA y LDA con una pregunta directa: <em>"¿Se acuerdan cuál era la diferencia más importante entre lo que implica PCA y LDA?"</em> El alumno Sebastián respondió que LDA es un método <strong>supervisado</strong>. El profesor confirmó y precisó: LDA es supervisado porque requiere una <strong>etiqueta (label)</strong> que indica explícitamente a qué clase pertenece cada patrón; PCA, en cambio, es <strong>no supervisado</strong> — no necesita conocer de antemano la clase de los patrones.</p>
 <ul>
@@ -24,6 +37,13 @@
 <li><strong>QDA</strong> = LDA sin el supuesto de covarianza única: cada clase tiene su propia matriz de covarianza.</li>
 <li><strong>t-SNE</strong> (visualización en 2D/3D) y <strong>Kernel PCA</strong> (kernel trick → proyectar a mayor dimensión donde sea linealmente separable, luego PCA).</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como resumir un álbum de fotos familiares: un método organiza las fotos buscando la luz y el ángulo con mayor variación sin mirar las etiquetas, mientras que otro busca resaltar al máximo las diferencias entre familiares para identificarlos rápido.<span class="rompe">Dónde falla la analogía: Deja de funcionar si los datos de las distintas categorías no siguen una distribución normal o si cada categoría tiene una dispersión completamente diferente a las demás.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Conecta la reducción de dimensionalidad no supervisada (PCA, enfocado en maximizar varianza) con la supervisada (LDA, enfocado en maximizar la separabilidad entre clases usando etiquetas), estableciendo el punto de partida antes de pasar a la evaluación de clasificadores.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Dudar sobre la diferencia fundamental entre métodos supervisados y no supervisados, donde se aclaró que lo supervisado requiere necesariamente etiquetas previas de clase para cada patrón.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-matriz-confusion" open><summary><span class="stitle">Matriz de confusión y tipos de error</span></summary>
@@ -34,6 +54,12 @@
 <li><strong>FP</strong> (falso positivo): era negativo y se predijo positivo — <strong>Error Tipo I</strong> (p. ej. activar la alarma sin fuego).</li>
 <li><strong>VN</strong> (verdadero negativo): era negativo y se predijo negativo.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un sistema de alarma contra incendios que puede sonar cuando hay fuego (verdadero positivo), estar en silencio sin fuego (verdadero negativo), sonar cuando no hay fuego (falso positivo o falsa alarma, Error Tipo I) o no sonar habiendo fuego (falso negativo, Error Tipo II catastrófico).<span class="rompe">Dónde falla la analogía: Se rompe cuando el sistema no clasifica eventos en categorías discretas sino que predice valores numéricos continuos, donde las fallas no se pueden resumir en aciertos y falsas alarmas.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la herramienta fundamental que resume las predicciones de un clasificador mediante una matriz de doble entrada comparando lo que el modelo predijo contra la realidad.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-metricas" open><summary><span class="stitle">Métricas de evaluación</span></summary>
@@ -46,6 +72,13 @@ Exactitud balanceada     = (Sensibilidad + Especificidad) / 2
 </code></pre>
 <p>El <strong>F₁</strong> penaliza fuerte los desequilibrios extremos entre precisión y recall. La <strong>exactitud balanceada</strong> es útil en conjuntos desbalanceados.</p>
 <p><strong>Ejemplo — Spam vs. No Spam</strong> (modelo equilibrado): Accuracy 90 % · Precisión 85.7 % · Recall 85.7 % · F₁ 85.7 %.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>La exactitud mide el porcentaje total de aciertos; la precisión mide qué tan seguro es el modelo cuando dice que algo es positivo; el recall mide cuántos de todos los casos reales logró atrapar; y el F1-score es el promedio equilibrado entre ambos.<span class="rompe">Dónde falla la analogía: La exactitud (Accuracy) deja de servir por completo en problemas desbalanceados, como decir siempre que nadie tiene cáncer y obtener 95% de exactitud sin haber detectado a un solo enfermo.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite evaluar cuantitativamente la calidad de las predicciones según el costo de los errores del problema mediante fórmulas exactas: Accuracy = (TP + TN) / (TP + TN + FP + FN), Precision = TP / (TP + FP), Recall = TP / (TP + FN), Specificity = TN / (TN + FP), F1-Score = 2 <em> (Precision </em> Recall) / (Precision + Recall) y Balanced Accuracy = (Sensitivity + Specificity) / 2.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir la precisión con el recall al momento de explicarlos, aclarado por el profesor especificando que la precisión se calcula sobre lo predicho como positivo y el recall sobre el total real de positivos.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-roc-auc" open><summary><span class="stitle">Curva ROC y AUC</span></summary>
@@ -60,6 +93,13 @@ Eje Y  = TPR (tasa de verdaderos positivos) = VP / (VP + FN) = Recall = Sensibil
 <li><code>AUC &lt; 0.5</code> — peor que el azar: la predicción está <strong>invertida</strong> (el modelo distingue muy bien la clase contraria → invertir la predicción).</li>
 </ul>
 <p>El profesor lanzó una pregunta sobre este último caso: <em>"Si la curva ROC de un clasificador, en lugar de pegarse a la esquina superior izquierda, se desplaza hacia abajo de la diagonal, ¿qué significa?"</em> Un alumno respondió: <em>"Se equivocan todos"</em> / <em>"Detecta mejor la clase contraria"</em>. El profesor confirmó que la respuesta es correcta en el sentido práctico: si la curva está por debajo de la diagonal, el modelo es pésimo detectando la clase positiva pero sumamente efectivo detectando la clase negativa — en ese escenario el clasificador sigue siendo útil, basta con invertir la regla de predicción para transformarlo inmediatamente en un clasificador excelente. La única zona donde el modelo es completamente inservible es cuando se aproxima a la diagonal misma (AUC ≈ 0.5).</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como ajustar la sensibilidad del detector de metales de un aeropuerto desde muy estricto hasta muy relajado, graficando en cada nivel cuántos objetos prohibidos detectas frente a cuántas falsas alarmas generas.<span class="rompe">Dónde falla la analogía: No se puede utilizar cuando el clasificador entrega directamente una etiqueta categórica rígida en lugar de un valor de probabilidad continuo entre 0 y 1.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Evalúa el rendimiento de un modelo probabilístico a través de todos los umbrales de decisión posibles trazando la tasa de verdaderos positivos (TPR = Recall) frente a la de falsos positivos (FPR = 1 - Especificidad), obteniendo el área bajo la curva (AUC) donde 1.0 es perfecto, 0.5 es aleatorio y menos de 0.5 exige invertir la predicción.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Creer que un modelo con un área bajo la curva menor a 0.5 no sirve para nada, cuando en realidad es muy bueno prediciendo la clase opuesta y basta con invertir sus predicciones.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-sesgo-varianza" open><summary><span class="stitle">Sesgo, varianza, underfitting y overfitting</span></summary>
@@ -73,12 +113,26 @@ Eje Y  = TPR (tasa de verdaderos positivos) = VP / (VP + FN) = Recall = Sensibil
 <p><strong>Degradación normal (no patológica):</strong> Accuracy Train 95 % → Val 91 % → Test 87 %.</p>
 <p><strong>Analogía de estudio:</strong> underfitting = un alumno decide memorizar únicamente una fórmula (por ejemplo, cómo calcular el determinante) para resolver absolutamente todo el examen — reprueba porque esa simplificación tan severa no sirve para la diversidad de preguntas reales. Overfitting = un alumno consigue los exámenes de los últimos 5 años y se memoriza las respuestas exactas con puntos y comas — reprueba igual porque el profesor cambia los números y variables en el examen real.</p>
 <p>Un alumno preguntó si, cuando un modelo cae en overfitting o underfitting, se puede arreglar o es mejor rehacerlo desde cero. El profesor respondió que sí se puede arreglar ajustando el proceso de entrenamiento: en underfitting, la causa habitual es haber detenido el entrenamiento antes de tiempo o usar un modelo demasiado simple; en overfitting, la solución es aplicar regularización, aumentación de datos, o <em>early stopping</em> (parada temprana) — una técnica que monitorea la métrica de validación y detiene el entrenamiento automáticamente en el momento óptimo, antes de que el modelo empiece a memorizar ruido.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>El sesgo (Underfitting) es como un estudiante que solo se aprende una fórmula simple y reprueba porque no abarca la materia; la varianza (Overfitting) es como un estudiante que se aprende de memoria los exámenes pasados con puntos y comas, y colapsa cuando en el examen real le cambian un número.<span class="rompe">Dónde falla la analogía: La analogía se rompe si el conjunto de datos de entrenamiento fuera infinito y libre de ruido, en cuyo caso memorizar el entrenamiento no causaría errores en la prueba.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite diagnosticar si el modelo es demasiado simple (alto sesgo: error alto tanto en entrenamiento como en validación) o si memorizó el ruido (alta varianza: error muy bajo en entrenamiento y muy alto en validación), buscando siempre un balance óptimo.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir una ligera degradación natural del desempeño al pasar de entrenamiento a validación con un caso de sobreentrenamiento severo, lo cual fue aclarado por el profesor.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-desbalanceados"><summary><span class="stitle">Datos desbalanceados</span></summary>
 <p><strong>Ejemplo — detección de cáncer:</strong> 1 000 pacientes (950 sanos = 95 %, 50 enfermos = 5 %). Un modelo que predice "todos sanos" → Accuracy = 950/1000 = <strong>95 %</strong>, pero detecta <strong>0 de 50</strong> casos de cáncer (50 falsos negativos). La exactitud alta esconde un modelo inútil.</p>
 <p>El profesor dio ejemplos reales de qué tan severo puede ser el desbalance en la práctica: en <strong>detección de fraude financiero</strong>, solo cerca del 0.1% de las transacciones son realmente fraudulentas; en <strong>diagnóstico de cáncer</strong>, entre el 1% y el 5% de los pacientes analizados presentan la enfermedad; en <strong>detección de intrusos en redes</strong>, alrededor del 0.5% del tráfico web es verdaderamente malicioso.</p>
 <p><strong>Estrategias</strong> para evitar sesgos hacia la clase minoritaria: usar métricas adecuadas (F₁, balanced accuracy, ROC) · pesos de clase (<em>class weights</em>) · re-muestreo (<em>resampling</em>, incluyendo <em>oversampling</em> sintético de la clase minoritaria) · volver más exigente el umbral de decisión.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como buscar una aguja en un pajar donde el 99.9% es paja (transacciones normales) y solo el 0.1% es la aguja (fraude), por lo que decir siempre "paja" parece dar casi un 100% de aciertos pero no resuelve el problema.<span class="rompe">Dónde falla la analogía: Falla si se aplican ajustes de umbrales o re-muestreos sin conocer el contexto del dominio, ya que se puede generar un volumen intolerable de falsos positivos.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite abordar problemas reales desbalanceados como detección de fraude (0.1%), cáncer (1-5%) e intrusiones de red (0.5%), mediante el uso de métricas adecuadas, ajuste de pesos de clase (class_weight), técnicas de re-muestreo (resampling) y modificación del umbral de decisión.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Intentar evaluar un modelo con datos desbalanceados usando únicamente la exactitud (Accuracy), ignorando que el modelo jamás detecta la clase minoritaria de interés.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-validacion"><summary><span class="stitle">Esquemas de validación</span></summary>
@@ -93,6 +147,13 @@ Eje Y  = TPR (tasa de verdaderos positivos) = VP / (VP + FN) = Recall = Sensibil
 <li><em>"¿La validación cruzada solo se aplica dentro del conjunto de entrenamiento?"</em> — el profesor confirmó que sí, exactamente: el conjunto de prueba se separa desde el principio y no se toca; la validación cruzada se ejecuta solo dentro de entrenamiento/validación, para encontrar la mejor combinación de hiperparámetros. Una vez identificados los mejores hiperparámetros, se reentrena el modelo con todo el conjunto de entrenamiento/validación y se hace la única evaluación definitiva sobre el conjunto de prueba reservado.</li>
 <li><em>"¿Cómo se determina el número de folds?"</em> — por convención se eligen números impares. En datasets reducidos (por ejemplo, 200 imágenes) se recomiendan menos folds; en datasets masivos con miles o millones de muestras se pueden usar 9 o más. Usar valores excesivamente altos (15 o 20) en modelos simples no aporta beneficio real y solo añade costo computacional.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Hold-out es dividir tus datos una sola vez en entrenamiento, validación y prueba; K-Fold es dividirlos en K partes y realizar K evaluaciones rotando el bloque de prueba; y Stratified K-Fold asegura que cada parte tenga exactamente la misma proporción de cada clase.<span class="rompe">Dónde falla la analogía: K-Fold tradicional falla en datos desbalanceados porque al dividir al azar algunos bloques pueden quedar completamente vacíos de la clase minoritaria.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Garantiza la capacidad de generalización del modelo evitando evaluarlo con los mismos datos con los que entrenó, lo cual sería como darle a un estudiante el mismo examen que resolvió en clase.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Proponer entrenar el modelo únicamente con los datos más complejos y evaluarlo con los más sencillos, lo cual el profesor señaló como inadecuado por poder degradar o distorsionar el desempeño.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-leakage-drift"><summary><span class="stitle">Fuga de datos y data drift</span></summary>
@@ -105,6 +166,25 @@ Eje Y  = TPR (tasa de verdaderos positivos) = VP / (VP + FN) = Recall = Sensibil
 </ul>
 <p><strong>Data drift:</strong> cambio en las propiedades estadísticas de los datos en producción respecto a la distribución de entrenamiento. El profesor advirtió que el data drift no provoca un fallo repentino en el sistema, sino una <strong>degradación silenciosa y progresiva</strong> del desempeño a lo largo del tiempo — por eso hay que monitorear constantemente los estadísticos del entorno de producción y compararlos contra los de entrenamiento.</p>
 <p>Un alumno preguntó: al encontrar un drift, ¿es mejor reentrenar un modelo nuevo desde cero o se puede rescatar el anterior? El profesor respondió que se reentrena desde cero, pero utilizando una <strong>ventana móvil de datos recientes</strong> — no tiene sentido incluir datos históricos obsoletos si las condiciones actuales ya cambiaron.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>La fuga de datos (Data Leakage) es como hacer trampa en un examen porque la hoja de preguntas incluye pistas de las respuestas; el Data Drift es cuando el examen cambia gradualmente con los años mientras tú sigues estudiando con la guía de hace una década.<span class="rompe">Dónde falla la analogía: El Data Drift no aplica si las condiciones estadísticas del entorno real son absolutamente estáticas e inmutables en el tiempo.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Evita métricas engañosamente optimistas causadas por contaminación entre entrenamiento y prueba (fuga temporal, de preprocesamiento o del target) y monitorea la degradación silenciosa del modelo en producción para reentrenarlo desde cero.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Calcular la normalización o el PCA utilizando las estadísticas de todo el dataset antes de separar el conjunto de prueba, provocando una fuga de datos de preprocesamiento.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c4-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Qué es la matriz de confusión y qué representan los errores Tipo I y Tipo II según la analogía de la alarma de incendio explicada en clase?</summary><p>La matriz de confusión es una tabla que resume las predicciones de un clasificador frente a la realidad. En la analogía de la alarma de incendio, el Error Tipo I es un Falso Positivo (no hay fuego pero la alarma suena, es decir, una falsa alarma) y el Error Tipo II es un Falso Negativo (hay fuego pero la alarma no suena, lo cual es un error catastrófico).</p></details>
+<details class="qa"><summary>2. En un dataset de 100 correos electrónicos, un modelo predice 35 como spam. De ellos, 30 eran realmente spam (TP = 30, FP = 5). Además, se le escaparon 5 correos de spam que clasificó como no spam (FN = 5) y clasificó correctamente 60 correos normales (TN = 60). Calcula la Exactitud (Accuracy), la Precisión y el Recall.</summary><p>La Exactitud es (TP + TN) / Total = (30 + 60) / 100 = 0.90 o 90%. La Precisión es TP / (TP + FP) = 30 / (30 + 5) = 30 / 35 = 0.857 u 85.7%. El Recall es TP / (TP + FN) = 30 / (30 + 5) = 30 / 35 = 0.857 u 85.7%.</p></details>
+<details class="qa"><summary>3. ¿Cómo se diferencian el sesgo (underfitting) y la varianza (overfitting) en términos de los errores observados en los conjuntos de entrenamiento y validación?</summary><p>En el sesgo alto (underfitting) el modelo es demasiado simple y presenta un error alto tanto en entrenamiento como en validación. En la varianza alta (overfitting) el modelo memoriza el entrenamiento, presentando un error muy bajo en entrenamiento pero un error muy alto en validación.</p></details>
+<details class="qa"><summary>4. ¿Qué representa la curva ROC, qué métricas van en sus ejes X e Y, y cómo se interpreta un área bajo la curva (AUC) de 0.5 frente a una menor a 0.5?</summary><p>La curva ROC evalúa el desempeño de un clasificador probabilístico a distintos umbrales de decisión. En el eje X va la tasa de falsos positivos (FPR = FP / (FP + TN) = 1 - Especificidad) y en el eje Y va la tasa de verdaderos positivos (TPR = TP / (TP + FN) = Recall). Un AUC de 0.5 equivale a un clasificador aleatorio, mientras que un AUC menor a 0.5 indica que el modelo es peor que el azar pero es excelente prediciendo la clase opuesta, por lo que basta con invertir las predicciones.</p></details>
+<details class="qa"><summary>5. ¿En qué se diferencian los esquemas de validación K-Fold Cross Validation y Stratified K-Fold?</summary><p>K-Fold divide el conjunto de datos de entrenamiento en K partes iguales al azar para iterar K veces rotando el bloque de validación. Stratified K-Fold realiza esa misma partición pero asegurando que cada uno de los K bloques mantenga exactamente la misma proporción de clases que el conjunto de datos original, lo cual es crucial para datos desbalanceados.</p></details>
+<details class="qa"><summary>6. Si al entrenar un clasificador observas un 99% de exactitud en el conjunto de entrenamiento pero solo un 61% en el conjunto de validación, ¿qué problema presenta el modelo y cuáles son dos soluciones sugeridas en clase?</summary><p>El modelo presenta sobreentrenamiento (overfitting o alta varianza). Dos soluciones explicadas en clase son agregar más datos de entrenamiento y aplicar técnicas de regularización (o dropout / parada temprana).</p></details>
+<details class="qa"><summary>7. ¿Qué es la fuga de datos (Data Leakage) por preprocesamiento y por qué produce métricas engañosas?</summary><p>Ocurre cuando se aplican transformaciones como estandarización, normalización o PCA utilizando las estadísticas (media o desviación) de todo el conjunto de datos antes de separar el conjunto de prueba. Esto contamina el entrenamiento porque el modelo adquiere información del conjunto de prueba que no debería conocer, generando métricas artificialmente optimistas que colapsan en producción.</p></details>
+<details class="qa"><summary>8. ¿Qué es el Data Drift, por qué el profesor afirmó que el modelo degrada silenciosamente y cuál es la solución cuando ocurre?</summary><p>El Data Drift es el cambio de las características estadísticas de los datos en producción respecto a la distribución con la que el modelo fue entrenado. Se degrada silenciosamente porque el modelo no falla de golpe sino que sus predicciones pierden precisión gradualmente conforme el mundo cambia; la solución es detectar la desviación contra la distribución de referencia y reentrenar el modelo desde cero.</p></details>
 </details>
 
 <details class="section-block sec" id="c4-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>

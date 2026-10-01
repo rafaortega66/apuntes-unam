@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T12:25:34+00:00",
+ "generatedAt": "2026-10-01T12:29:17+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -28,7 +28,7 @@
     "fecha": "2026-09-07",
     "resumen": "Tema 4 — Evaluación de modelos. Matriz de confusión y métricas, curva ROC / AUC, sesgo–varianza, datos desbalanceados, esquemas de validación, fuga de datos y data drift. Repaso de cierre de LDA al inicio.",
     "url": "materias/reconocimiento-de-patrones/clase-04.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 5,
@@ -468,6 +468,11 @@
  },
  "gitlog": [
   {
+   "hash": "4fc4de9",
+   "fecha": "2026-10-01T06:25:34-06:00",
+   "mensaje": "OAC Clase 03: formato de estudio"
+  },
+  {
    "hash": "28fbbcf",
    "fecha": "2026-10-01T06:23:52-06:00",
    "mensaje": "FSE Clase 04: limpiar LaTeX en Ponte a prueba; script: limpieza de LaTeX de NotebookLM"
@@ -761,11 +766,6 @@
    "hash": "738e9ab",
    "fecha": "2026-09-30T14:19:42-06:00",
    "mensaje": "Lab FSE: guiones y archivos de las Prácticas 6, 7 y 8"
-  },
-  {
-   "hash": "9326792",
-   "fecha": "2026-09-30T14:17:50-06:00",
-   "mensaje": "Pendientes: limpiar texto de detalle"
   }
  ]
 }
