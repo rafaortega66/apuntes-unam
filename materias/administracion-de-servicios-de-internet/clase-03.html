@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 03 — Administración de Servicios de Internet</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -15,14 +16,40 @@
   <p class="prof">Mtro. Juan Ángel Calvillo Pérez · 2 sep 2026 · Tema 1 — Qué es un servidor (vs. repositorio), Pirámide DIC, tríada de seguridad CIA/SIT, tipos de servidor y puertos, levantamiento de requerimientos, y demostración práctica de aprovisionamiento y costos en Microsoft Azure.</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #7C9CD6"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c3-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Clasificación de requerimientos de software (Funcionales, No Funcionales y De Sistema) y su identificación en casos prácticos</strong><span class="evid">Evidencia: Lo explicó detalladamente con ejemplos participativos, corregidos en vivo, y lo ligó a la tarea obligatoria de Avante Textil.</span></li>
+<li><strong>La Pirámide DIC (Datos, Información y Conocimiento) y la diferencia técnica entre un repositorio y un servidor</strong><span class="evid">Evidencia: Lo repitió y desglosó al cuestionar la definición de servidor y base de datos, explicando el rol del contexto y las matemáticas/estadística.</span></li>
+<li><strong>La tríada de seguridad CIA/SIT (Confidencialidad, Integridad, Disponibilidad) aplicada a servidores y transmisión de tramas</strong><span class="evid">Evidencia: Lo explicó explícitamente diferenciando el enfoque de bases de datos del de seguridad y comunicaciones (tramas, fragmentación de paquetes).</span></li>
+<li><strong>Configuración de reglas de alertas de presupuesto en Azure (Costo Real vs. Costo Previsto) y tipos de cobro en la nube</strong><span class="evid">Evidencia: Lo demostró en vivo proyectando pantallas de Azure y mostrando la gráfica real con un pico de $45,000 USD de una papelería.</span></li>
+<li><strong>Regla inamovible de selección de metodología del proyecto final (Scrum vs. PMBOK/Cascada)</strong><span class="evid">Evidencia: Lo advirtió explícitamente al inicio de la clase marcando que cambiar de metodología a mitad de semestre implica reprobar automáticamente.</span></li>
+</ol>
+</details>
+
 <details class="section-block sec" id="c3-metodologias" open><summary><span class="stitle">Confirmación de metodologías por equipo y regla inamovible de evaluación</span></summary>
 <p>Al inicio de la sesión, el profesor recopiló la decisión final de cada equipo respecto a la metodología del proyecto. Los equipos 2, 5 y 6 confirmaron que trabajarán bajo la metodología tradicional (PMBOK/Cascada), mientras que los equipos 1, 3, 4, 7, 8, 9 y 10 seleccionaron el marco ágil (Scrum). A partir de esta elección se reiteró la dinámica de seguimiento para cada caso: los equipos bajo Scrum deberán someter reportes semanales de sus sprints y llevar una bitácora detallada de sus dailies de 15 minutos; los equipos en PMBOK no entregarán reportes semanales, sino que su control se basará en otro mecanismo. El profesor advirtió que subirá las asignaciones correspondientes a Google Classroom, y estableció una regla estricta e inamovible: <strong>el equipo que intente cambiar de metodología a mitad del semestre quedará reprobado automáticamente</strong> — comparó esto con la imprudencia de cambiar de estrategia a medio partido.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como elegir al inicio del torneo si vas a jugar fútbol rápido o fútbol soccer; debes seguir sus reglas durante toda la competencia.<span class="rompe">Dónde falla la analogía: La analogía falla porque las reglas deportivas no involucran entregables semanales de sprints, bitácoras diarias de 15 minutos ni diagramas de fase.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Define la forma de trabajo del proyecto final (Scrum exige reportes semanales con bitácora y reuniones diarias; PMBOK/Cascada exige diagramas de fases y tiempos).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir los formatos de reporte entre Scrum y PMBOK o intentar cambiar de metodología a mitad del semestre, lo cual sanciona el profesor con reprobación automática.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-servidor" open><summary><span class="stitle">Qué es un servidor: de la definición circular a la definición correcta</span></summary>
 <p>Tras el pase de lista, el profesor introdujo el núcleo teórico de la materia con una pregunta directa: <strong>¿Qué es un servidor y para qué sirve?</strong> Señaló que en el ámbito profesional es habitual escuchar frases como "el servidor se cayó" sin que quien las dice realmente entienda el concepto.</p>
 <p>Un primer alumno intentó definirlo como un "dispositivo dentro de un modelo cliente-servidor que genera la infraestructura para comunicar datos". El profesor corrigió de inmediato: es una <strong>definición circular</strong>, porque usa la palabra "servidor" (o su modelo) dentro de la misma premisa que intenta definir. Un segundo alumno lo conceptualizó como "una computadora que ofrece servicios e información a otras computadoras y que está configurada de cierta forma especial" — el profesor validó esta idea, precisando que un servidor es, en esencia, una computadora con <strong>características especiales de hardware y alta potencia</strong> que le permiten compartir recursos de software, hardware y dispositivos.</p>
 <p>Con esa base, criticó la práctica empírica (frecuente en oficinas e instituciones de Latinoamérica) de llamar "servidor" a cualquier computadora que simplemente comparte una carpeta. Aclaró que hay una diferencia sustancial entre configurar un simple <strong>repositorio de archivos</strong> y desplegar un auténtico <strong>servidor</strong>.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como intentar definir la palabra «corredor» diciendo que es una persona que corre en un corredor; no puedes usar la misma palabra para explicarla.<span class="rompe">Dónde falla la analogía: Deja de funcionar porque en computación un servidor no es solo una persona o equipo físico, sino cualquier proceso computacional que comparte recursos con otros clientes.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite evitar definiciones circulares o imprecisas y entender que un servidor es una computadora con características especiales para compartir software, hardware y servicios a clientes.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Caer en definiciones circulares como «un servidor es un dispositivo dentro del modelo cliente-servidor» o pensar que cualquier laptop con un terabyte de disco y 16 GB de RAM ya es formalmente un servidor.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-dic" open><summary><span class="stitle">Repositorio vs. servidor y la Pirámide DIC (Datos, Información, Conocimiento)</span></summary>
@@ -34,10 +61,24 @@
 </ul>
 <p>Como ejemplo didáctico se analizó el rastreo de datos en redes sociales: si un sistema almacena la búsqueda recurrente de cierto tipo de contenido en un horario fijo (por ejemplo, entre la 1 y las 3 AM), eso son <em>datos</em>; convertirlos en el patrón "consumo nocturno" es <em>información</em>; y usar ese patrón para programar publicidad dirigida exactamente en esa ventana de tiempo es <em>conocimiento</em> aplicado.</p>
 <p>La diferencia operativa entre un repositorio y un servidor radica en la <strong>capacidad de ejecución de cómputo</strong>: en un repositorio (como GitHub) se pueden almacenar archivos de Python, scripts SQL o imágenes, pero <strong>no es posible ejecutarlos ahí mismo</strong>. Un servidor, en cambio, no solo almacena datos: comparte recursos de procesamiento y actúa como simulador, permitiendo ejecutar scripts, redes neuronales y algoritmos de IA directamente. Para consolidar esto se analizó la arquitectura de un Sistema Gestor de Bases de Datos (SQL Plus): la base de datos reside y ejecuta sus consultas pesadas dentro del <strong>servidor</strong>, mientras que la máquina local del usuario opera únicamente como un <strong>cliente</strong> — un puente de conexión que requiere IP y credenciales.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Un repositorio es como un almacén donde guardas cajas cerradas con números escritos; el servidor es la fábrica donde abres esas cajas, usas las herramientas y procesas el material.<span class="rompe">Dónde falla la analogía: Se rompe porque en informática el repositorio guarda datos crudos (estructurados o no) y el servidor no solo los guarda, sino que comparte recursos de cómputo y ejecuta código (como Python, algoritmos de IA o SQL).</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Explica la Pirámide DIC (Datos que se transforman en Información mediante contexto para el cliente, y en Conocimiento mediante algoritmos y estadística para tomar decisiones).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir un repositorio (que solo almacena datos estructurados o no) con un servidor (que comparte recursos de procesamiento y ejecuta código localmente).</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-intranet" open><summary><span class="stitle">Independencia de red: servidor en Intranet vs. Internet</span></summary>
 <p>El profesor preguntó al grupo: <strong>¿Se requiere obligatoriamente una conexión a Internet para que exista un servidor?</strong> Un alumno respondió correctamente que no es necesario, porque se puede estructurar una <strong>red local (Intranet)</strong> mediante la cual un equipo suministre servicios a los demás. El profesor confirmó la respuesta y desmintió la creencia popular de que todo servidor depende de Internet: explicó que en una Intranet local es perfectamente viable conectar un cliente y un servidor usando cables cruzados, el comando <code>ping</code>, o protocolos de administración remota como <strong>SSH</strong>, manteniendo el tráfico de datos en un entorno privado y seguro.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como la red de telefonía interna de un edificio de oficinas que permite hablar de una extensión a otra sin necesidad de hacer una llamada a la red telefónica pública.<span class="rompe">Dónde falla la analogía: La analogía falla porque las extensiones analógicas solo transmiten voz, mientras que una Intranet transmite paquetes de datos mediante protocolos como SSH, comandos ping o cables cruzados.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Demuestra que un servidor no requiere obligatoriamente acceso a Internet para funcionar, ya que puede operar eficientemente dentro de una red local o Intranet (LAN, MAN, CAN).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Afirmar erróneamente que un servidor requiere de forma obligatoria conexión a Internet para poder prestar servicios a los clientes.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-cia" open><summary><span class="stitle">Definición formal de servidor y la tríada de seguridad (CIA/SIT)</span></summary>
@@ -49,10 +90,24 @@
 <tr><td>Confidencialidad (Confidentiality)</td><td>Garantizar que la información solo sea accesible por usuarios o procesos expresamente autorizados.</td><td>Control de privilegios, cifrado en almacenamiento y transmisión segura.</td></tr>
 </tbody></table>
 <p>El profesor conectó confidencialidad e integridad con la transmisión de paquetes en red: a diferencia de los antiguos SMS que llegaban seccionados en tramas, los sistemas modernos usan pilas y colas para reensamblar el mensaje completo antes de mostrarlo en pantalla, garantizando así la integridad de la trama.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como enviar una carta en tres sobres sellados: aseguras que nadie la lea en el camino (confidencialidad), que las páginas lleguen completas y sin alteraciones (integridad) y que el destinatario la reciba a tiempo cuando la necesite (disponibilidad).<span class="rompe">Dónde falla la analogía: La analogía se rompe porque las cartas de papel no se dividen en tramas y paquetes de red encriptados que se reensamblan en milisegundos en la computadora de destino.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Establece la definición formal de servidor y su alineación con la tríada de seguridad CIA (Confidencialidad, Integridad y Disponibilidad) para proteger el acceso, la transmisión de paquetes y la continuidad del servicio.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir la integridad con la confidencialidad, o ignorar que en la transmisión por red los mensajes se fraccionan en tramas que deben llegar completas y ordenadas para no perder el sentido.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-tipos-servidor" open><summary><span class="stitle">Tipos de servidores, protocolos y puertos</span></summary>
 <p>Se catalogaron los tipos de servidor según el servicio de red que proporcionan: <strong>servidor web</strong> (entrega páginas y aplicaciones web), <strong>servidor de archivos</strong> (almacena, organiza y comparte documentos, ej. servidores FTP), <strong>servidor de correo</strong> (gestiona envío y recepción de emails), <strong>servidor de base de datos</strong> (ejecuta y almacena motores de bases de datos) y <strong>servidor de autenticación</strong> (controla identidades y accesos). Cada protocolo de servicio opera a través de puertas de comunicación lógicas llamadas <strong>puertos (gateways)</strong>: el puerto 80 (HTTP), el 443 (HTTPS) y el 22 (SSH) fueron los que se analizaron con más detalle.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un edificio de departamentos con diferentes puertas numeradas en la entrada; la puerta 80 es la entrada principal de visitas y la 443 es la puerta de alta seguridad.<span class="rompe">Dónde falla la analogía: Falla porque las puertas físicas no procesan protocolos específicos de comunicación (como HTTP, HTTPS, FTP o SMTP) ni enrutan conexiones digitales simultáneas.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite clasificar los servidores por el servicio que ofrecen (web, correo, archivos, base de datos, autenticación) y reconocer sus puertos y protocolos estandarizados (como el puerto 80/8080 y 443 para web).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> No distinguir entre el tipo de servidor (base de datos vs. archivos FTP) según las necesidades de la organización, o confundir los números de puerto de los protocolos.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-requerimientos" open><summary><span class="stitle">Levantamiento de requerimientos: Funcionales, No Funcionales y de Sistema</span></summary>
@@ -71,6 +126,13 @@
 <li><strong>Caso 5</strong> — "Se debe enviar un email con un informe al final de la semana o del mes": <strong>Funcional</strong> (le ordena al sistema realizar una función concreta: generar y enviar el correo).</li>
 <li><strong>Caso 6</strong> — "La interfaz debe ser sencilla y fácil de usar": <strong>No Funcional</strong> (evalúa usabilidad y experiencia de usuario).</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Requerimiento funcional es decir «el coche debe frenar»; no funcional es exigir «debe frenar en menos de 3 metros»; y de sistema es especificar «debe tener frenos de disco ABS».<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque en software los requerimientos determinan entradas, salidas, interacciones con el usuario, infraestructura de servidores y métricas de calidad de código.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es el paso inicial obligatorio antes de diseñar o contratar cualquier infraestructura o servidor, clasificándolos en Funcionales (qué hace), No Funcionales (métricas de calidad y rendimiento) y De Sistema (hardware/servidores).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir un requerimiento no funcional con uno funcional cuando incluye métricas de rendimiento (como «el tiempo de respuesta debe ser muy corto») o intentar recomendar una solución tecnológica sin hacer el análisis de requerimientos previo.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-azure" open><summary><span class="stitle">Demostración práctica en Microsoft Azure: infraestructura, servicios y presupuesto</span></summary>
@@ -83,6 +145,25 @@
 <p><strong>Modelo de facturación en la nube:</strong> el profesor explicó que en plataformas como Azure, AWS o GCP <strong>no existen tarifas fijas estáticas</strong> — la factura mensual depende de: el <em>consumo de recursos</em> (cómputo y procesamiento usado), el <em>almacenamiento</em> (comparó guardar datos con rentar una bodega — barato — frente a rentar un departamento — caro), la <em>frecuencia de acceso a la data</em> (el almacenamiento de acceso esporádico/"frío" cobra menos por guardar pero penaliza las lecturas; el de acceso frecuente cobra una tarifa continua más alta), y el <em>enrutamiento y seguridad</em> (si el cliente delega la seguridad del enrutamiento a Microsoft, el costo aumenta).</p>
 <p><strong>Alertas de presupuesto:</strong> se mostró la ventana "Administración de Costos y Presupuestos" de Azure, enfatizando que todos los presupuestos en la nube se cotizan en <strong>dólares (USD)</strong>. Existen dos tipos de alerta: la <strong>Alerta Prevista (Forecasted)</strong>, que se activa preventivamente cuando la proyección de consumo indica que se alcanzará cierto porcentaje del presupuesto, y la <strong>Alerta de Costo Real (Actual Cost)</strong>, que se activa en el momento exacto en que el consumo real registrado toca el umbral establecido.</p>
 <p><strong>Caso real — desastre financiero en una papelería:</strong> el profesor proyectó una gráfica real donde, en el mes de marzo, los costos de un cliente se dispararon descontroladamente hasta <strong>$45,000 dólares</strong>. El problema ocurrió porque el hijo del dueño (estudiante de sistemas) comenzó a migrar servicios a la nube sin control de presupuesto ni alertas configuradas.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como rentar un departamento amueblado donde puedes elegir el tamaño de las habitaciones y los servicios extra, pero si dejas la luz encendida todo el mes sin poner un límite, la cuenta llegará altísima.<span class="rompe">Dónde falla la analogía: Falla porque la renta de un departamento suele ser una cuota fija mensual, mientras que en Azure los costos dependen dinámicamente del almacenamiento, consumo, tiempo de ejecución y transferencias en dólares.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite comprender el funcionamiento de la nube comercial, la creación de máquinas virtuales, la selección de sistemas operativos (Ubuntu, Windows Server, Oracle Linux) y la configuración de alertas de presupuesto (Costo Real vs. Costo Previsto).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Dejar servicios ejecutándose en la nube sin configurar alertas de presupuesto, asumir que las licencias educativas tienen los mismos permisos que las empresariales, o creer que existe una tarifa fija mensual sin considerar el uso real.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c3-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuáles fueron las dos metodologías de desarrollo elegidas por los equipos de la materia y qué exigencia de entrega tiene la metodología Scrum según la Clase 3?</summary><p>Las metodologías elegidas fueron Scrum y PMBOK/Cascada. Scrum exige enviar reportes semanales de avances (sprints) acompañados de evidencias y mantener una bitácora diaria de reuniones de 15 minutos (dailies).</p></details>
+<details class="qa"><summary>2. Explica con tus palabras por qué la definición «un servidor es un dispositivo dentro de una arquitectura cliente-servidor» es considerada incorrecta por el profesor.</summary><p>Porque es una definición circular que utiliza la misma palabra que se intenta definir («servidor»), omitiendo que un servidor es una computadora o proceso computacional configurado para compartir recursos de software, hardware o servicios a otros equipos.</p></details>
+<details class="qa"><summary>3. ¿Cuál es la diferencia fundamental entre el nivel de Datos y el nivel de Información en la Pirámide DIC presentada en clase?</summary><p>Los Datos son el nivel más bajo (hechos crudos estructurados o no estructurados almacenados en el repositorio); la Información surge cuando un analista o usuario le otorga contexto y significado a esos datos para que sean relevantes para el cliente.</p></details>
+<details class="qa"><summary>4. Si una empresa no cuenta con conexión a Internet en una planta remota, ¿puede implementar un servidor funcional para sus empleados? Justifica con lo visto en clase.</summary><p>Sí, porque un servidor no requiere Internet obligatoriamente; puede operar dentro de una red local o Intranet (usando protocolos como SSH, cables cruzados o configuraciones LAN) para compartir recursos entre clientes locales.</p></details>
+<details class="qa"><summary>5. Describe los tres componentes de la tríada de seguridad CIA/SIT aplicados a los servidores y la transmisión de red.</summary><p>Confidencialidad (garantiza que solo personas autorizadas accedan a los datos y los reciban protegidos), Integridad (asegura que los datos se conserven tal como fueron guardados y que los paquetes/tramas lleguen completos) y Disponibilidad (garantiza que el servicio y los datos estén siempre accesibles cuando se requieran).</p></details>
+<details class="qa"><summary>6. Clasifica los siguientes requerimientos indicando si son Funcionales, No Funcionales o De Sistema: a) «El usuario debe loguearse antes de entrar al sistema», b) «El tiempo de respuesta debe ser muy corto», c) «Se necesitan múltiples servidores para garantizar la disponibilidad».</summary><p>a) Funcional (define qué debe hacer el sistema), b) No Funcional (mide la calidad/rendimiento de la respuesta) y c) De Sistema (especifica hardware e infraestructura de servidores).</p></details>
+<details class="qa"><summary>7. Un estudiante configura una regla de presupuesto en Azure para un proyecto y establece $5,000 USD de límite. Explica la diferencia entre configurar una alerta de Costo Previsto al 40% y una de Costo Real al 50%.</summary><p>La alerta de Costo Previsto al 40% ($2,000 USD) es una notificación proyectada que avisa que la tendencia indica que se alcanzará ese límite; la alerta de Costo Real al 50% ($2,500 USD) notifica cuando se ha consumido efectivamente ese monto del presupuesto.</p></details>
+<details class="qa"><summary>8. Compara un repositorio con un servidor de procesamiento según el uso de archivos ejecutables como Python o modelos de Inteligencia Artificial.</summary><p>Un repositorio se limita a almacenar los archivos (como un script de Python, SQL o fotos) sin ejecutarlos en el sitio; un servidor no solo almacena, sino que comparte recursos de cómputo para ejecutar el código, correr simulaciones o procesar algoritmos de IA y aprendizaje automático.</p></details>
 </details>
 
 <details class="section-block sec" id="c3-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>

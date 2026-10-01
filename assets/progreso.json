@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T16:18:39+00:00",
+ "generatedAt": "2026-10-01T16:45:20+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -223,7 +223,7 @@
     "fecha": "2026-09-02",
     "resumen": "Tema 1 — Qué es un servidor (vs. repositorio), Pirámide DIC, tríada de seguridad CIA/SIT, tipos de servidor y puertos, levantamiento de requerimientos, y demostración práctica de aprovisionamiento y costos en Microsoft A",
     "url": "materias/administracion-de-servicios-de-internet/clase-03.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 4,
@@ -481,6 +481,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "28b1e0d",
+   "fecha": "2026-10-01T10:18:39-06:00",
+   "mensaje": "OAC Clase 08 (30 sep) y ACS Clase 11 (1 oct): formato de estudio"
+  },
   {
    "hash": "10d3670",
    "fecha": "2026-10-01T06:38:29-06:00",
@@ -775,11 +780,6 @@
    "hash": "62cbd79",
    "fecha": "2026-09-30T16:08:06-06:00",
    "mensaje": "ACS: archivos del profesor de los Temas 2 y 3 (PDF, código C, imágenes) y material general"
-  },
-  {
-   "hash": "1058d85",
-   "fecha": "2026-09-30T16:06:46-06:00",
-   "mensaje": "SIB: material de la clase del 29 sep (Escudos.pdf)"
   }
  ]
 }
