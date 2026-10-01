@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T12:19:36+00:00",
+ "generatedAt": "2026-10-01T12:21:46+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -223,7 +223,7 @@
     "fecha": "2026-09-07",
     "resumen": "DHCP (Dynamic Host Configuration Protocol): fundamentos, seguridad, el proceso DORA, los 6 componentes de configuración, y transición de ISC DHCP a KEA DHCP. Práctica de laboratorio: instalación y configuración de ambos ",
     "url": "materias/administracion-de-servicios-de-internet/clase-04.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 5,
@@ -467,6 +467,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "ca299d4",
+   "fecha": "2026-10-01T06:19:36-06:00",
+   "mensaje": "SIB Clase 04: formato de estudio"
+  },
   {
    "hash": "bab6e0a",
    "fecha": "2026-10-01T06:17:47-06:00",
@@ -761,11 +766,6 @@
    "hash": "c5f490a",
    "fecha": "2026-09-30T10:42:55-06:00",
    "mensaje": "FSE: agregar entregas de Tareas 02, 03 y 04 y fuente .tex de la Práctica 4"
-  },
-  {
-   "hash": "a0ff414",
-   "fecha": "2026-09-30T10:35:04-06:00",
-   "mensaje": "Lab FSE: agregar guion y archivos de la Práctica 5"
   }
  ]
 }
