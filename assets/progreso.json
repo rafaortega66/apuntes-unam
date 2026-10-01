@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T16:49:10+00:00",
+ "generatedAt": "2026-10-01T16:53:23+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -86,7 +86,7 @@
     "fecha": "2026-09-02",
     "resumen": "Presentación del entorno y material del curso, y diferencias de hardware entre Raspberry Pi Pico 1 y Pico 2 (FPU, DMA, bootloader). Sesión corta: el profesor la terminó antes para entregar un informe de su candidatura de",
     "url": "materias/organizacion-y-arquitectura-de-computadoras/clase-02.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 3,
@@ -482,6 +482,11 @@
  },
  "gitlog": [
   {
+   "hash": "e7146cf",
+   "fecha": "2026-10-01T10:49:10-06:00",
+   "mensaje": "FSE Clase 03: formato de estudio"
+  },
+  {
    "hash": "3b8ff1c",
    "fecha": "2026-10-01T10:45:20-06:00",
    "mensaje": "ASI Clase 03: formato de estudio"
@@ -775,11 +780,6 @@
    "hash": "647f58b",
    "fecha": "2026-09-30T16:11:47-06:00",
    "mensaje": "SIB: quitar enlaces a documentos de equipo retirados"
-  },
-  {
-   "hash": "0c248f6",
-   "fecha": "2026-09-30T16:11:40-06:00",
-   "mensaje": "Quitar documentos de equipo que incluyen nombres de compañeros"
   }
  ]
 }

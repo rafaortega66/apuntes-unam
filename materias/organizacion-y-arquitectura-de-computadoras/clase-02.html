@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 02 — Organización y Arquitectura de Computadoras</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -15,19 +16,52 @@
   <p class="prof">M.I. José Antonio de Jesús Arredondo Garza · 2 sep 2026 · Presentación del entorno y material del curso, y diferencias de hardware entre Raspberry Pi Pico 1 y Pico 2 (FPU, DMA, bootloader). Sesión corta: el profesor la terminó antes para entregar un informe de su candidatura de doctorado.</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c2-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Incompatibilidad de programas de punto flotante compilados para Pico 2 al intentarse ejecutar en la Pico 1</strong><span class="evid">Evidencia: Lo dijo explícitamente al detallar la diferencia fundamental entre procesadores en ensamblador.</span></li>
+<li><strong>Disponibilidad de 32 registros de punto flotante en la FPU de la Pico 2 para implementar funciones complejas</strong><span class="evid">Evidencia: Lo dijo explícitamente al explicar el modelo de registros de la Pico 2.</span></li>
+<li><strong>Imposibilidad actual de accesar a la unidad de multiplicación acumulativa (MAC) de la Pico 2 desde ensamblador por falta de integración en software</strong><span class="evid">Evidencia: Lo dijo explícitamente señalando sus pruebas en laboratorio.</span></li>
+<li><strong>Uso del bootloader alternativo Pori Bimor para habilitar la librería matemática AP y realizar operaciones matriciales</strong><span class="evid">Evidencia: Lo dijo explícitamente al revisar las herramientas y carpetas del curso.</span></li>
+<li><strong>Aplicación de redes neuronales para resolver una compuerta XOR exclusiva y driver para la pantalla ILI9488 (320 x 480 píxeles)</strong><span class="evid">Evidencia: Lo dijo explícitamente al listar los programas de ejemplo distribuidos.</span></li>
+<li><strong>Recomendación del libro Numerical Recipes para algoritmos de C en ingeniería (integración y derivación) descargándolo en dominio público</strong><span class="evid">Evidencia: Lo dijo explícitamente al mostrar la bibliografía recomendada.</span></li>
+</ol>
+</details>
+
 <details class="section-block sec" id="c2-antecedentes" open><summary><span class="stitle">Antecedentes tecnológicos, lecturas y herramientas del curso</span></summary>
 <p>La sesión comenzó con una revisión de material de lectura e historia de componentes de hardware. Entre las referencias históricas, se comentó el impacto del procesador <strong>IBM 180</strong>, que representó un hito en su momento, y hitos del nacimiento de la electrónica y la programación como el origen del temporizador 555 y de <strong>Texas Instruments</strong> — que originalmente inició como compañía petrolera antes de convertirse en un gigante de la electrónica (hoy destaca por sensores y chips biomédicos).</p>
 <p>Como lecturas y recursos recomendados para enriquecer el aprendizaje se sugirió el artículo <em>"He creado una CPU de 8 bits, corre tu propio juego"</em>, así como artículos sobre la diferencia conceptual y estructural entre microcontroladores y microprocesadores. En cuanto a software y herramientas de laboratorio, se presentó el <strong>Osciloscopio Virtual v3</strong> (con correcciones de errores y mejoras respecto a versiones previas) y una <strong>terminal web</strong> ejecutable directamente sin instalación previa.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como revisar el baúl de herramientas e historias de un taller mecánico antes de empezar a armar un auto, para ver qué diseños antiguos funcionaron y cuáles no.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque las herramientas mecánicas viejas solo ocupan espacio, pero chips históricos como el 180 o el temporizador 555 sentaron las bases de la arquitectura moderna.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Presenta las lecturas y recursos del curso: el procesador 180 (que dio dolores de cabeza a IBM), el timer 555, el origen de BASIC, Texas Instruments (nació como petrolera y derivó en gigante electrónico de sensores y chips biomédicos), lecturas sobre CPU de 8 bits y la diferencia entre microcontroladores y microprocesadores, además del Osciloscopio virtual v3 y la terminal web directa.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c2-fpu" open><summary><span class="stitle">Diferencias de hardware entre Pico 1 y Pico 2: FPU y registros</span></summary>
 <p>Un bloque central de la clase fue el análisis comparativo entre la Raspberry Pi Pico 1 y la Pico 2. Aunque en lenguajes de alto nivel las diferencias en operaciones matemáticas no son tan evidentes, la Pico 2 incorpora una <strong>Unidad de Punto Flotante (FPU)</strong> que la Pico 1 no tiene físicamente. La Pico 2 dispone de <strong>32 registros de punto flotante</strong>, dando un espacio amplio para operaciones matemáticas complejas e implementar funciones que no existen por defecto.</p>
 <p>Esta diferencia arquitectónica impone una restricción estricta de portabilidad: un programa en ensamblador compilado con instrucciones de FPU para la Pico 2 <strong>no podrá ejecutarse en la Pico 1</strong>, ya que esta última carece por completo de la FPU a nivel físico — no es una limitación de software, es una ausencia real de hardware.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como comparar dos calculadoras de bolsillo donde una solo opera números enteros básicos y la otra integra un teclado científico especial con 32 casilleros para números con decimales.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque en lenguajes de alto nivel ambas calculadoras parecen funcionar igual, pero en ensamblador el procesador sin FPU falla al no reconocer las instrucciones físicas de punto flotante.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Detalla la diferencia técnica clave en ensamblador entre Pico 1 y Pico 2: la Pico 2 dispone de una FPU con 32 registros de punto flotante para operaciones complejas e implementación de funciones ausentes de origen, mientras que un código de FPU no puede ejecutarse en la Pico 1 al carecer de esa unidad física.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Asumir que un programa escrito en ensamblador utilizando la FPU para la Pico 2 se puede ejecutar sin cambios en una Pico 1.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c2-mac-dma" open><summary><span class="stitle">Unidad multiplicadora (MAC), bootloader y acceso directo a registros</span></summary>
 <p>Además de la FPU, la arquitectura de la Pico 2 incorpora teóricamente una <strong>unidad de multiplicación acumulativa (MAC)</strong>, similar a la que tienen los procesadores de señales digitales (DSP). Sin embargo, el profesor señaló que al intentar acceder a este módulo a través de los entornos de desarrollo disponibles, no fue posible utilizarla — todavía no está integrada al software de desarrollo. De forma paralela, el <strong>bootloader</strong> oficial del fabricante aún no distingue entre Pico 1 y Pico 2: es el mismo para ambas tarjetas.</p>
 <p>El profesor enfatizó la importancia de no depender únicamente del software de alto nivel: al requerir el direccionamiento directo de los registros internos de la tarjeta, surgen limitaciones reales de las librerías comerciales estándar. Un ejemplo concreto es el <strong>Acceso Directo a Memoria (DMA)</strong>: ante el rendimiento insatisfactorio de las librerías estándar de DMA, el profesor desarrolló su propia librería para manejar imágenes directamente.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como tener una palanca de supervelocidad instalada en el motor de un vehículo pero descubrir que el manubrio de fábrica no tiene el cable conectado para activarla.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque un auto no requiere programar controladores de software, mientras que en la Pico 2 se necesita direccionar registros internos desde ensamblador para controlar el hardware.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Expone que la unidad de multiplicación acumulativa (MAC) y el bootloader oficial de la Pico 2 aún no están integrados ni diferenciados en los ensambladores disponibles, y demuestra que ante las limitaciones de las librerías comerciales de DMA, el profesor creó su propia librería de DMA con FPU para transferir datos e imágenes directamente a memoria.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Asumir que las librerías comerciales estándar de DMA son suficientes para transferencias de alto rendimiento a nivel de registros.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c2-bootloader-alt" open><summary><span class="stitle">Bootloaders alternativos, librerías matemáticas y proyectos aplicados</span></summary>
@@ -39,11 +73,36 @@
 <li><strong>Redes neuronales en hardware:</strong> ejemplo desarrollado en MATLAB y adaptado para resolver una compuerta lógica XOR (OR exclusiva) mediante una librería de redes neuronales.</li>
 <li><strong>Proyectos de semestres anteriores:</strong> referencias a desarrollos prácticos de alumnos de trimestres pasados, como guía de lo que se puede lograr en la materia.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como instalar un software especial de arranque en una computadora para poder abrir programas de cálculo pesado que el sistema de fábrica no permite cargar.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque el software de una computadora modifica la interfaz visual, mientras que en el microcontrolador el bootloader altera cómo se cargan las librerías matemáticas en la memoria física.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Explica cómo el bootloader alternativo Pori Bimor permite ejecutar la librería matemática AP para operaciones matriciales y solución de ecuaciones, e incluye drivers para displays gráficos ILI9488 (320 x 480 píxeles), servomotores y la solución de una compuerta XOR mediante redes neuronales en hardware.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c2-fpu64" open><summary><span class="stitle">Arquitecturas especializadas (FPU64) y bibliografía de algoritmos</span></summary>
 <p>Se presentó información sobre el microcontrolador <strong>FPU64</strong>: una arquitectura de 64 bits que opera a una frecuencia relativamente baja de 40 MHz, cuya particularidad técnica radica en la potencia de su conjunto de instrucciones en ensamblador, al punto de no necesitar componentes adicionales para tareas que en otras arquitecturas requerirían periféricos extra. El profesor hizo referencia a sus propios trabajos de investigación de maestría relacionados con este tipo de arquitecturas.</p>
 <p>Como bibliografía clave para implementar algoritmos en ingeniería, se recomendó el libro <strong>Numerical Recipes (in C)</strong>, que da algoritmos listos para operaciones numéricas como integración y derivación — se sugirió consultar la versión de dominio público en formato digital en vez de comprarlo.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un camión de carga pesado que avanza a velocidad moderada pero cuyo motor es tan potente que no requiere ningún remolque adicional para mover cargas gigantes.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque la fuerza del motor es mecánica, mientras que en el procesador FPU64 la capacidad proviene de su ancho de palabra de 64 bits y del poder de su set de instrucciones en ensamblador.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Presenta la arquitectura especializada del microcontrolador canadiense FPU64 (64 bits a 40 MHz) cuyo set de instrucciones en ensamblador no requiere componentes externos adicionales, y recomienda el libro Numerical Recipes para aplicar algoritmos de integración y derivación en C.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Cargar con el libro físico gigante de Numerical Recipes de la biblioteca en lugar de consultar la versión digital de dominio público.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c2-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuál es la diferencia fundamental a nivel de lenguaje ensamblador entre la Raspberry Pi Pico 1 y la Pico 2 explicada en clase?</summary><p>La Pico 2 posee una Unidad de Punto Flotante (FPU) con 32 registros dedicados, lo que impide que un programa escrito con instrucciones de FPU se ejecute en la Pico 1.</p></details>
+<details class="qa"><summary>2. Explica por qué en lenguajes de alto nivel no se nota tanto la diferencia de procesamiento matemático entre la Pico 1 y la Pico 2, pero en ensamblador sí.</summary><p>Porque los lenguajes de alto nivel abstraen y emulan las operaciones matemáticas por software, mientras que en ensamblador se envían instrucciones físicas directas y la Pico 1 no tiene la FPU.</p></details>
+<details class="qa"><summary>3. ¿Qué problema identificó el profesor al intentar utilizar la unidad de multiplicación acumulativa (MAC) de la Pico 2 mediante ensamblador?</summary><p>Que los ensambladores disponibles actualmente no tienen integrada o habilitada esa parte de la arquitectura para accesarla directamente.</p></details>
+<details class="qa"><summary>4. ¿Qué solución técnica se presentó para ejecutar operaciones matriciales y resolución de ecuaciones que el bootloader oficial no permite?</summary><p>Utilizar el bootloader alternativo denominado Pori Bimor para poder ejecutar la librería matemática reducida llamada AP.</p></details>
+<details class="qa"><summary>5. Compara las características del microcontrolador canadiense FPU64 con las de microcontroladores convencionales.</summary><p>El FPU64 es una arquitectura de 64 bits a 40 MHz con un set de instrucciones en ensamblador tan potente que no requiere módulos ni componentes externos adicionales.</p></details>
+<details class="qa"><summary>6. ¿Qué resolución tiene el display gráfico soportado por el archivo de control para la Pico 2 distribuido en la carpeta del curso?</summary><p>El controlador ILI9488 maneja un display gráfico con una resolución de 320 por 480 píxeles.</p></details>
+<details class="qa"><summary>7. ¿Por qué el profesor diseñó su propia librería de Acceso Directo a Memoria (DMA) en lugar de usar la versión comercial estándar?</summary><p>Porque las librerías comerciales estándar de DMA no le convencieron en rendimiento, por lo que creó su propia librería direccionando registros directos para transferir imágenes y datos con la FPU.</p></details>
+<details class="qa"><summary>8. ¿Qué libro se recomendó para la implementación de algoritmos numéricos en C y qué sugerencia hizo el profesor para consultarlo?</summary><p>Se recomendó el libro Numerical Recipes para algoritmos de integración y derivación en C, sugiriendo descargar la versión de dominio público en lugar de usar el volumen físico de la biblioteca.</p></details>
 </details>
 
 <details class="section-block sec" id="c2-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
