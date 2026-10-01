@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T07:46:46+00:00",
+ "generatedAt": "2026-10-01T07:49:34+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -121,7 +121,7 @@
     "fecha": "2026-09-28",
     "resumen": "Tema 3 (continuación) — Tres formas de controlar un periférico en la Raspberry Pi Pico 1 y Pico 2: librerías machine , direccionamiento directo con mem32 y ensamblador inline ARM Thumb; estructuras de campos de bits con ",
     "url": "materias/organizacion-y-arquitectura-de-computadoras/clase-07.html",
-    "formato": "prosa"
+    "formato": "estudio"
    }
   ],
   "fundamentos-de-sistemas-embebidos": [
@@ -468,6 +468,11 @@
  },
  "gitlog": [
   {
+   "hash": "daf31d6",
+   "fecha": "2026-10-01T01:46:47-06:00",
+   "mensaje": "FSE Clase 09: formato de estudio; RP Clase 10 (día de examen) marcada como no-aplica"
+  },
+  {
    "hash": "a22ff5a",
    "fecha": "2026-10-01T01:44:40-06:00",
    "mensaje": "ASI Clase 09: formato de estudio"
@@ -761,11 +766,6 @@
    "hash": "9d63ec7",
    "fecha": "2026-09-17T17:14:23-06:00",
    "mensaje": "MD: registrar el Primer Examen Parcial en Entregas"
-  },
-  {
-   "hash": "54a66cb",
-   "fecha": "2026-09-17T08:55:46-06:00",
-   "mensaje": "ACS: agregar Clase 07 (17 sep 2026) — cierre de procesos + inicio Tema 3"
   }
  ]
 }

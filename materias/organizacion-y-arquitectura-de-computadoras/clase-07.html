@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 07 — Organización y Arquitectura de Computadoras</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -14,6 +15,18 @@
 <div class="detail-head" style="border-color:#45B8A8"><h2>Clase 07</h2>
   <p class="prof">M.I. José Antonio de Jesús Arredondo Garza · 28 sep 2026 · Tema 3 (continuación) — Tres formas de controlar un periférico en la Raspberry Pi Pico 1 y Pico 2: librerías <code>machine</code>, direccionamiento directo con <code>mem32</code> y ensamblador inline ARM Thumb; estructuras de campos de bits con <code>uctypes</code> y una reflexión sobre el Plan de Estudios 2026.</p>
 </div>
+
+<div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c7-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>La diferencia en el consumo de ciclos de reloj entre configurar GPIO con librerías estándar (machine.Pin) y hacerlo directamente con machine.mem32</strong><span class="evid">Evidencia: Lo resolvió en vivo demostrando que las librerías agregan al menos 4 ciclos extra por iteración al reejecutar la configuración dentro del bucle while True, mientras que la configuración por registros toma 5 ciclos fijos al inicio.</span></li>
+<li><strong>El cambio en la dirección base del bloque IO_BANK0 entre la Raspberry Pi Pico 1 (0x40014000) y la Pico 2 (0x40000000)</strong><span class="evid">Evidencia: Lo explicó con un diagrama de flujo de programa, lo resolvió en vivo y lo ligó explícitamente a los ejercicios prácticos de clase.</span></li>
+<li><strong>La construcción de direcciones físicas de 32 bits en ensamblador inline ARM Thumb (@micropython.asm_thumb) combinando cargas inmediatas de 8 bits y desplazamientos lógicos a la izquierda (lsl)</strong><span class="evid">Evidencia: Lo resolvió en vivo en el código de ensamblador explicando que el ensamblador inline rechaza cargas inmediatas directas de 32 bits.</span></li>
+<li><strong>La adición del registro PAD Control en la Pico 2 para limitar el consumo de corriente a 12 mA y proteger los pines</strong><span class="evid">Evidencia: Lo explicó explícitamente como una diferencia de hardware crítica de la Pico 2 respecto a la Pico 1 al mostrar la rutina en ensamblador.</span></li>
+<li><strong>El mapeo de registros de hardware mediante estructuras de campos de bits usando la librería uctypes (struct, BF_POS, BF_LEN, UINT32)</strong><span class="evid">Evidencia: Lo explicó detalladamente con el registro de control del ADC, lo relacionó con su investigación previa sobre el DMA y lo ligó a tareas y prácticas futuras del curso.</span></li>
+</ol>
+</details>
 
 <div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>⚠️ Por verificar:</strong> los apuntes generados por NotebookLM dan como base de <code>IO_BANK0</code> en la Pico 2 la dirección <code>0x40000000</code>, y la rutina de ensamblador de la Pico 2 llega a <code>0x40000000</code> con <code>mov(R0, 0x40)</code> + <code>lsl(R0, R0, 24)</code>. Conviene contrastar ese valor con el datasheet del RP2350 y con el código que el profesor publique, antes de usarlo en una práctica. El fragmento de ensamblador del apunte también quedó incompleto (“…”) en la parte del PAD y del SIO.</p></div>
 
@@ -27,6 +40,13 @@ while True:
     pin25.toggle()
     sleep(0.125)</code></pre>
 <p>El profesor enfatizó que el problema de fondo de las librerías de abstracción es la <strong>opacidad en el consumo de recursos</strong>: con este código no se puede saber cuántos ciclos de reloj consume exactamente la CPU ni cuándo se liberan las tareas. Al inspeccionar el código compilado a bajo nivel se observa que la rutina de configuración del puerto se reejecuta en cada iteración del <code>while True</code>, agregando al menos <strong>4 ciclos de reloj</strong> por vuelta. Por eso el control con librerías no sirve cuando se requiere sincronización determinista o temporización precisa a nivel de ciclos máquina.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como usar una aplicación que en cada vuelta de un proceso vuelve a revisar y reconfigurar todo desde cero antes de encender una luz, en lugar de presionar el interruptor directamente.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque en la vida cotidiana perder un instante no afecta nada, pero en un microcontrolador las reconfiguraciones innecesarias consumen ciclos de reloj reales que destruyen el determinismo temporal.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque al usar Pin.toggle() o librerías dentro de un bucle while True, el compilador reejecuta la declaración del puerto agregando al menos 4 ciclos de máquina innecesarios por cada recorrido.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Asumir que las librerías de alto nivel son eficientes en ciclos de máquina y que no agregan tiempo muerto dentro del bucle de ejecución.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c7-mem32" open><summary><span class="stitle">Configuración de GPIO sin librerías: direccionamiento directo con machine.mem32</span></summary>
@@ -67,6 +87,13 @@ GPIO_OUT_XOR = SIO_BASE + 0x01c
 while True:
     mem32[GPIO_OUT_XOR] = (1 &lt;&lt; 25)   # invierte el estado del pin 25
     time.sleep_ms(125)</code></pre>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como usar coordenadas exactas para presionar directamente un botón en la pared de una central eléctrica, en lugar de llamar por teléfono a la recepción para pedir que enciendan la luz.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque las coordenadas físicas de un edificio no cambian, pero si cambias de modelo de microcontrolador (de Pico 1 a Pico 2) el mapa de memoria cambia y usar la dirección antigua causa un error total.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite configurar el puerto en exactamente 5 ciclos de máquina al inicio usando la dirección base (0x40014000 en Pico 1, 0x40000000 en Pico 2), el offset del pin (0x060), la interfaz rápida SIO (0xd0000000) y registros atómicos XOR (0x01c) y Set (0x024).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Usar la dirección base de la Pico 1 en una Pico 2, o no considerar que en la Pico W el LED verde no está conectado al GPIO 25 de la CPU sino al chip Wi-Fi CYW43439.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c7-asm" open><summary><span class="stitle">Ensamblador inline ARM Thumb (@micropython.asm_thumb)</span></summary>
@@ -87,6 +114,13 @@ def blink_asm():
     # y se establece la función SIO (modo 5)
     ...
     # Construcción de SIO_BASE (0xd0000000) en R1 y conmutación</code></pre>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como darle instrucciones directamente en su idioma nativo a un trabajador, construyendo las palabras letra por letra en lugar de usar un traductor.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque el procesador tiene reglas físicas estrictas y no puede procesar un número grande de 32 bits en una sola orden inmediata.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Proporciona la máxima precisión de ciclos de reloj a bajo nivel; muestra que en ARM Thumb las direcciones de 32 bits deben construirse con desplazamientos (lsl) sobre valores de 8 bits (como 0x40 desplazado 24 bits), e introduce la configuración de PAD Control en la Pico 2 a 12 mA.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Intentar cargar directamente una constante de 32 bits mediante una sola instrucción de carga inmediata (mov), lo cual provoca un error de compilación.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c7-uctypes" open><summary><span class="stitle">Registros como estructuras de campos de bits con uctypes</span></summary>
@@ -111,6 +145,13 @@ adc_cs = struct(ADC_BASE + 0x00, ADC_CTRL_STRUCT)
 
 adc_cs.EN = 1   # modifica solo el bit 0 en memoria, sin alterar los demás</code></pre>
 <p>El profesor destacó que esta técnica exige estudiar con cuidado las hojas de datos (<em>datasheets</em>) del fabricante. Contó que él mismo dedicó semanas a construir estas estructuras en MicroPython para controlar directamente la unidad de DMA antes de que la plataforma tuviera soporte oficial, y que logró transferencias con la mitad de los ciclos de reloj de las soluciones convencionales. Añadió que la misma metodología con <code>uctypes</code> puede usarse desde Python para acceder a direcciones de memoria físicas en una PC.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como tener un panel de control con palancas etiquetadas por su nombre y tamaño, en lugar de memorizar y calcular códigos binarios cada vez que mueves una palanca.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque físicamente sigues escribiendo en una misma palabra de memoria de 32 bits, por lo que una mala definición de posición o longitud de bits alterará otros controles adyacentes.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite definir y manipular campos de bits individuales (BF_POS, BF_LEN, UINT32) dentro de un registro de hardware (como el control del ADC o DMA) como propiedades directas de un objeto en Python sin usar operaciones lógicas manuales de enmascaramiento.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> No consultar detenidamente el manual técnico (datasheet) para obtener la posición y longitud exacta de cada campo de bits.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c7-plan" open><summary><span class="stitle">Reflexión: Plan de Estudios 2026 e inteligencia artificial en ingeniería</span></summary>
@@ -122,6 +163,24 @@ adc_cs.EN = 1   # modifica solo el bit 0 en memoria, sin alterar los demás</cod
 <li><strong>Reconocimiento de patrones y redes neuronales:</strong> clasificación vectorial y procesamiento matricial intensivo (mencionó sus propios trabajos con vectores de estado y redes neuronales).</li>
 <li><strong>Hardware dedicado:</strong> arquitectura de procesadores, unidades vectoriales y FPU para ejecutar estos algoritmos en tiempo real de forma eficiente.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como querer ser piloto y mecánico de autos de carreras aprendiendo únicamente a pulsar botones en una pantalla táctil, sin saber cómo funciona el motor ni la combustión.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque el software parece funcionar de manera abstracta y mágica, pero en el fondo depende totalmente de principios de física, análisis espectral y ciclos de procesadores físicos.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>El profesor advierte que la Inteligencia Artificial no debe enseñarse como mero consumo de librerías o APIs, sino comprendiendo la cadena rigurosa en hardware: análisis de señales/frecuencias, procesamiento digital (DSP), espectrogramas matriciales y ejecución en procesadores dedicados con FPU.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Creer que la Inteligencia Artificial consiste solo en llamar librerías de alto nivel sin entender el modelado matemático, la transformada de Fourier y la arquitectura de hardware que la procesa.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c7-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuáles son las direcciones base del bloque de puertos IO_BANK0 para la Raspberry Pi Pico 1 y la Pico 2 explicadas en clase?</summary><p>Para la Pico 1 la dirección base es 0x40014000, mientras que para la Pico 2 cambió a 0x40000000 debido a la reestructuración del mapa de memoria.</p></details>
+<details class="qa"><summary>2. ¿Por qué el uso de librerías de alto nivel como machine.Pin agrega ciclos de reloj innecesarios dentro de un bucle while True?</summary><p>Porque el compilador reejecuta la rutina de configuración del puerto en cada iteración del bucle, añadiendo al menos 4 ciclos de máquina adicionales por recorrido.</p></details>
+<details class="qa"><summary>3. Si se desea configurar el registro de control del Pin 16 en una Raspberry Pi Pico 1 usando machine.mem32 con un offset de 0x03C sobre IO_BANK0, ¿cuál es la dirección resultante y cómo se establece en modo SIO?</summary><p>La dirección es 0x4001403C (0x40014000 + 0x03C) y se establece en modo SIO (Modo 5) asignando mem32[0x4001403C] = 5.</p></details>
+<details class="qa"><summary>4. ¿Qué función cumple el registro PAD Control en la Raspberry Pi Pico 2 y a cuántos miliamperios se configuró en el ensamblador de clase?</summary><p>Cumple la función de protección eléctrica del pin frente a sobrecorrientes en interfaces externas, y en el código de clase se configuró a un consumo máximo de 12 mA.</p></details>
+<details class="qa"><summary>5. ¿Cómo se resuelve la restricción del ensamblador inline ARM Thumb que impide cargar directamente constantes de 32 bits en un registro?</summary><p>Se resuelve cargando primero un valor inmediato de 8 bits en un registro (por ejemplo 0x40) y aplicando después un desplazamiento lógico a la izquierda de 24 bits (lsl) para formar 0x40000000.</p></details>
+<details class="qa"><summary>6. Con la librería uctypes, si el campo de selección de canal en un registro de control está en el bit 4 con una longitud de 3 bits para un registro de 32 bits, ¿cómo se define ese campo en el descriptor?</summary><p>Se define como "CANAL": 0 | BF_POS(4) | BF_LEN(3) | UINT32.</p></details>
+<details class="qa"><summary>7. ¿Cómo contrasta el enfoque de consumo superficial de APIs en Inteligencia Artificial con la cadena completa descrita por el profesor?</summary><p>El consumo superficial usa librerías como cajas negras, mientras que la cadena completa abarca el modelado matemático de señales, procesamiento DSP, conversión a espectrogramas matriciales y ejecución en hardware dedicado.</p></details>
 </details>
 
 <details class="section-block sec" id="c7-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>

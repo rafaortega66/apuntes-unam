@@ -294,6 +294,17 @@
       "hora_confirmada": true,
       "detalle": "Martes 24 nov, 13:00, en el salón. Diseñar una práctica-tutorial sobre sistemas embebidos; anexar video-evidencia y código según el PDF de especificaciones.",
       "link": "materias/lab-de-fundamentos-de-sistemas-embebidos/material.html"
+    },
+    {
+      "id": "oac-c8-audio",
+      "materia": "OAC",
+      "color": "#45B8A8",
+      "titulo": "Volver a subir el audio OAC-Clase8.m4a a NotebookLM (falló la carga)",
+      "vence": null,
+      "hora_confirmada": false,
+      "detalle": "En el cuaderno de OAC aparece en rojo (error al procesar). Sin ese audio no se puede armar la clase del 30 sep. Tampoco hay audio de la clase del 23 sep — ¿hubo clase ese día?",
+      "link": "progreso.html",
+      "fecha_texto": "Cuando puedas"
     }
   ]
 }
