@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T12:21:46+00:00",
+ "generatedAt": "2026-10-01T12:23:21+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -151,7 +151,7 @@
     "fecha": "2026-09-07",
     "resumen": "Tema 2 (continuación) — tras un breve recordatorio de la historia x86 vista en la Clase 03, la clase continúa con el Pentium P5, herramientas de compilación GCC, alineación de memoria, MMX/SSE, Pentium Pro (P6), la segun",
     "url": "materias/fundamentos-de-sistemas-embebidos/clase-04.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 5,
@@ -468,6 +468,11 @@
  },
  "gitlog": [
   {
+   "hash": "5ec36e3",
+   "fecha": "2026-10-01T06:21:46-06:00",
+   "mensaje": "ASI Clase 04: formato de estudio"
+  },
+  {
    "hash": "ca299d4",
    "fecha": "2026-10-01T06:19:36-06:00",
    "mensaje": "SIB Clase 04: formato de estudio"
@@ -761,11 +766,6 @@
    "hash": "9791dcc",
    "fecha": "2026-09-30T14:06:50-06:00",
    "mensaje": "Lab FSE: especificaciones del proyecto final y su fecha de entrega (24 nov 13:00) en Pendientes"
-  },
-  {
-   "hash": "c5f490a",
-   "fecha": "2026-09-30T10:42:55-06:00",
-   "mensaje": "FSE: agregar entregas de Tareas 02, 03 y 04 y fuente .tex de la Práctica 4"
   }
  ]
 }

@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 04 — Fundamentos de Sistemas Embebidos</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -15,9 +16,27 @@
   <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 7 sep 2026 · Tema 2 (continuación) — tras un breve recordatorio de la historia x86 vista en la Clase 03, la clase continúa con el Pentium P5, herramientas de compilación GCC, alineación de memoria, MMX/SSE, Pentium Pro (P6), la segunda guerra de los 64 bits (IA-64 vs. AMD64/Opteron).</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c4-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Doble pipeline superescalar U/V en Pentium y distribución estadística de instrucciones</strong><span class="evid">Evidencia: Lo dijo explícitamente y lo desglosó en el pizarrón mostrando que del 60% al 75% son operaciones simples de memoria.</span></li>
+<li><strong>Opciones del toolchain GCC (-c, -S, ld) para inspeccionar el ensamblador y acelerar compilaciones</strong><span class="evid">Evidencia: Lo explicó en el pizarrón detallando cómo checar fechas evita recompilaciones costosas.</span></li>
+<li><strong>Alineación de memoria de 64 bits y empaquetado de estructuras (__attribute__((packed)))</strong><span class="evid">Evidencia: Lo resolvió en vivo escribiendo un ejemplo de struct en C y sumando sus bytes con y sin relleno.</span></li>
+<li><strong>Mecanismos del núcleo P6 en Pentium Pro (ejecución fuera de orden, especulativa y renombrado de registros)</strong><span class="evid">Evidencia: Lo dijo explícitamente y remarcó la ejecución especulativa como pregunta obligatoria de examen.</span></li>
+<li><strong>La segunda guerra de los 64 bits entre Intel Itanium (IA-64) y AMD Opteron (AMD64)</strong><span class="evid">Evidencia: Lo explicó detalladamente comparando la ruptura de retrocompatibilidad de Intel frente al controlador IMC e HyperTransport de AMD.</span></li>
+</ol>
+</details>
+
 <details class="section-block sec" id="c4-pentium-p5" open><summary><span class="stitle">Microarquitectura del Pentium (P5): pipeline superescalar U/V y distribución estadística de instrucciones</span></summary>
 <p>Tras el litigio con AMD, Intel abandonó la nomenclatura numérica y desarrolló la arquitectura <strong>P5</strong>, dando origen al procesador <strong>Pentium</strong> en 1993 a <strong>200 MHz</strong>. El Pentium introdujo una microarquitectura superescalar con <strong>doble pipeline de ejecución</strong>: el <strong>pipeline U</strong> (principal) es capaz de ejecutar cualquier instrucción del catálogo x86, incluyendo cómputo pesado en la FPU; el <strong>pipeline V</strong> (secundario) está optimizado exclusivamente para instrucciones simples de carga, almacenamiento y manipulación de índices en memoria.</p>
 <p>Esta separación se apoya en un dato estadístico que el profesor marcó como examinable: en cualquier programa compilado, entre el <strong>60 % y el 75 %</strong> de las instrucciones son operaciones simples de carga y almacenamiento (<em>load/store</em>) para mover datos entre registros y memoria; solo entre el <strong>25 % y el 40 %</strong> corresponde a cómputo matemático pesado (FPU, derivadas, integrales, funciones trigonométricas, multiplicación de matrices o evaluación de funciones sigmoides para IA). Esta distribución fundamenta el uso de pipelines dobles: mientras el pipeline U procesa una instrucción pesada de FPU (que puede tomar varios ciclos), el pipeline V ejecuta en paralelo múltiples instrucciones simples de lectura/escritura, maximizando el uso de los transistores disponibles.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como una cocina de restaurante con dos chefs: uno para platillos complejos que requieren tiempo y otro chef rápido dedicado solo a picar ingredientes y acomodar platos.<span class="rompe">Dónde falla la analogía: Los chefs preparan comida física, mientras que los pipelines U y V ejecutan instrucciones digitales en paralelo dentro del silicio del procesador.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Aprovecha que del 60% al 75% del código compilado son operaciones simples de lectura/escritura en memoria, ejecutándolas en paralelo con el cómputo pesado de la FPU.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-compilacion-gcc" open><summary><span class="stitle">Herramientas de compilación — el toolchain GCC en sistemas embebidos</span></summary>
@@ -28,10 +47,22 @@
 <li><strong>Generación de ensamblador (<code>-S</code>)</strong>: <code>gcc -S programa.c</code> produce <code>programa.s</code> en ensamblador legible, para que el ingeniero inspeccione la generación de código a nivel de registros, evalúe la eficiencia de las instrucciones que dictó el compilador y verifique la ocupación real del procesador.</li>
 <li><strong>El enlazador (<code>ld</code>)</strong>: toma todos los archivos objeto (<code>.o</code>) y librerías para construir el ejecutable final.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como hacer un pastel siguiendo una receta: puedes preparar la mezcla por partes en tazones separados y solo hornear lo que cambió si no modificaste los demás ingredientes.<span class="rompe">Dónde falla la analogía: Preparar tazas de mezcla usa ingredientes comestibles, mientras que GCC genera archivos objeto (.o) y código ensamblador (.s) enlazados por la herramienta ld.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite al ingeniero de embebidos revisar las tripas del código en ensamblador con -S e implementar compilaciones incrementales eficientes con -c.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-cierre-convexo"><summary><span class="stitle">Ejemplo de reducción algorítmica: el Cierre Convexo (Convex Hull)</span></summary>
 <p>Para ilustrar la importancia de la manipulación eficiente de memoria, el profesor usa el problema del <strong>Cierre Convexo</strong> en geometría computacional: dado un conjunto de puntos en un plano, encontrar el contorno que los delimita. La evaluación por fuerza bruta de una nube de puntos tiene complejidad O(Nᴺ) u O(N²); el algoritmo se puede reducir a su cota inferior <strong>O(N log N)</strong> si los puntos se ordenan previamente en el plano. Dado que los algoritmos de ordenamiento (Heapsort, Mergesort, Bubble sort) consisten en casi un <strong>95 %</strong> de operaciones de comparación, carga, almacenamiento e incremento de índices, esta reducción de complejidad algorítmica se resuelve mediante gestión eficiente de memoria, sin saturar la ALU ni la FPU — es decir, se apoya en el mismo pipeline de instrucciones simples (U/V) descrito arriba.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como poner una liga elástica alrededor de un grupo de clavos en una tabla; la liga solo toca los clavos externos y define la frontera exterior.<span class="rompe">Dónde falla la analogía: La liga es un objeto de hule físico, mientras que el cierre convexo es un algoritmo geométrico sobre coordenadas de puntos en el plano.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra cómo ordenar los puntos previamente aplasta la complejidad de O(N^2) al ínfimo O(N log N), demostrando que la eficiencia algorítmica descansa en mover datos en memoria.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-alineacion-memory" open><summary><span class="stitle">Alineación de memoria y empaquetado de estructuras (struct packing)</span></summary>
@@ -47,12 +78,24 @@
     int b;
     double c;
 } __attribute__((packed));  // Ahora ocupa exactamente 16 bytes</code></pre>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como guardar cajas cuadradas en un camión con divisiones fijas de ocho metros; si pones una caja pequeña, el espacio sobrante se queda vacío para no descuadrar la fila.<span class="rompe">Dónde falla la analogía: Las cajas ocupan espacio físico tridimensional, mientras que el relleno (padding) ocupa bytes vacíos en la memoria RAM de 64 bits.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Explica por qué una estructura en C de 16 bytes nominales pesa 24 bytes en RAM y cómo la directiva packed elimina los bytes vacíos para transmitir datos contiguos por red.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-mmx-sse" open><summary><span class="stitle">MMX, memorias DDR, y la llegada de SSE</span></summary>
 <p>En <strong>1997</strong> se introdujo <strong>MMX</strong> (<em>Multimedia Extensions</em>) en los procesadores Pentium: una extensión SIMD (<em>Single Instruction Multiple Data</em>) que añade un registro vectorial de <strong>64 bits</strong>, compartido físicamente con la FPU, manipulable dinámicamente como 8 variables <code>char</code>, 4 <code>short</code>, 2 <code>int</code> o 1 <code>long</code>. La arquitectura MMX incorporó un pipeline de <strong>5 etapas</strong>, <strong>32 KB de caché L1</strong> y <strong>57 nuevos mnemónicos</strong> (llegando a un catálogo de unas <strong>43,000 instrucciones</strong>), pensados para acelerar la interfaz gráfica de Windows 95 y el renderizado 2D.</p>
 <p>En este mismo periodo surgieron las memorias <strong>DDR</strong> (<em>Double Data Rate</em>), que duplican el ancho de banda efectivo transfiriendo datos tanto en el flanco de subida como en el de bajada de la señal de reloj, sin ensanchar el bus físico.</p>
 <p>El <strong>Pentium II</strong> (1997, 450 MHz, núcleo P6) refinó la ejecución de código de 16 bits. En <strong>1999</strong> se lanzó el <strong>Pentium III</strong> (1 GHz+), que introdujo <strong>SSE</strong> (<em>Streaming SIMD Extensions</em>) para reemplazar a MMX: SSE añadió <strong>8 registros independientes de 128 bits</strong> (registros XMM), desvinculados de la FPU, con <strong>70 nuevas instrucciones vectoriales</strong> pensadas para procesamiento 3D.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como pasar de pintar una pared con un pincel delgado trazo por trazo, a usar un rodillo ancho que pinta ocho franjas de un solo movimiento.<span class="rompe">Dónde falla la analogía: El rodillo aplica pintura líquida, mientras que MMX y SSE aplican operaciones SIMD sobre registros vectoriales de 64 y 128 bits (XMM).</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Introdujo el procesamiento vectorial SIMD para gráficos 2D y video en Windows 95 (MMX) y renderizado 3D en videojuegos (SSE), desvinculando el cálculo gráfico de la FPU.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-pentium-pro" open><summary><span class="stitle">Pentium Pro (P6) — el salto a ejecución fuera de orden</span></summary>
@@ -65,10 +108,22 @@
 <li><strong>Ejecución especulativa</strong>: evaluación anticipada de ramas de código antes de confirmar si serán necesarias.</li>
 <li><strong>Renombrado de registros</strong> (<em>Register Renaming</em>): el hardware mapea los registros nominales (AX, BX…) hacia un banco de registros físicos mucho más grande en el silicio, permitiendo ejecutar varios hilos o programas de 16/32 bits de forma concurrente sin conflictos de dependencia.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como un despacho donde el gerente recibe las cartas de los clientes, las descompone en tareas sencillas y se las reparte a los empleados conforme se van desocupando, sin importar el orden de llegada.<span class="rompe">Dónde falla la analogía: Las cartas contienen texto impreso en papel, mientras que el núcleo P6 descompone instrucciones CISC en microoperaciones RISC ejecutadas fuera de orden.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Introdujo PAE para direccionar 64 GB de RAM en 32 bits y la ejecución fuera de orden/especulativa con renombrado de registros para acelerar servidores e hilos paralelos.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-netburst"><summary><span class="stitle">Pentium 4 y NetBurst — cuando más frecuencia no significa más rendimiento</span></summary>
 <p>En el año <strong>2000</strong>, Intel lanzó el <strong>Pentium 4</strong> basado en la arquitectura <strong>NetBurst</strong>. NetBurst implementó un pipeline de <strong>más de 20 etapas</strong>, diseñado para alcanzar frecuencias teóricas de hasta <strong>10 GHz</strong>. Sin embargo, la arquitectura sufrió severos problemas de disipación térmica — procesadores de <strong>400 W</strong> que, dada la baja eficiencia (~60 %) de los transformadores de la época, requerían fuentes de poder de hasta <strong>1.4 kW</strong> — y ofrecía un rendimiento por ciclo inferior al del propio Pentium III o a los procesadores AMD Athlon de la competencia.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como construir un motor de auto que gira a muchísimas revoluciones por minuto pero consume tanta gasolina y se calienta tanto que corre más lento que un auto convencional.<span class="rompe">Dónde falla la analogía: El motor quema gasolina y mueve pistones metálicos, mientras que NetBurst aumentó las etapas del pipeline a más de 20 elevando el consumo térmico a 400 W sin ganar rendimiento.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Demostró que aumentar la frecuencia de reloj no garantiza mayor rendimiento si el pipeline es ineficiente y genera un consumo térmico insostenible.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-guerra-64bits" open><summary><span class="stitle">La segunda guerra de los 64 bits: Intel Itanium (IA-64) vs. AMD Opteron (AMD64)</span></summary>
@@ -82,6 +137,24 @@
 <tr><td>Interconexión</td><td>Bus frontal tradicional (FSB)</td><td>3 enlaces <strong>HyperTransport</strong> de alta velocidad + conmutador <em>crossbar</em> coherente</td></tr>
 </tbody></table>
 <p>El éxito comercial de AMD64 obligó a Intel a licenciar la arquitectura de 64 bits de AMD e integrarla en sus propios procesadores bajo la denominación <strong>Intel 64 / x86-64</strong>.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como dos marcas de autos de 64 bits: una te exige cambiar todas las carreteras y garajes de la ciudad, mientras que la otra funciona en las calles actuales sin modificar nada.<span class="rompe">Dónde falla la analogía: Los autos circulan por calles de asfalto, mientras que AMD64 (x86-64) e Itanium (IA-64) son arquitecturas de conjunto de instrucciones para microprocesadores.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Explica el triunfo comercial de AMD64 al ofrecer 64 bits con retrocompatibilidad nativa x86, controlador de memoria integrado e HyperTransport, obligando a Intel a licenciarla.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c4-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuál es la función del pipeline V en la microarquitectura del procesador Pentium (P5)?</summary><p>El pipeline V es un pipeline secundario optimizado exclusivamente para ejecutar en paralelo instrucciones simples de carga, almacenamiento y manipulación de índices en memoria.</p></details>
+<details class="qa"><summary>2. ¿Por qué la bandera -c del compilador GCC es fundamental al trabajar con proyectos grandes en sistemas embebidos?</summary><p>Porque genera únicamente el archivo objeto (.o) sin enlazar, permitiendo comparar las fechas del archivo fuente y del objeto para recompilar solo los módulos modificados y ahorrar tiempo.</p></details>
+<details class="qa"><summary>3. Si una nube contiene 1,000 puntos en el plano, calcula el número aproximado de operaciones requeridas para hallar el cierre convexo por fuerza bruta (\O(N^2)\) y compáralo con el método optimizado mediante ordenamiento (\O(N \log_2 N)\).</summary><p>Por fuerza bruta se requieren \1,000^2 = 1,000,000\ de operaciones; mediante ordenamiento optimizado se requieren aproximadamente \1,000 \times \log_2(1,000) \approx 1,000 \times 10 = 10,000\ operaciones, reduciendo el cálculo en dos órdenes de magnitud.</p></details>
+<details class="qa"><summary>4. Compara la memoria que ocupa en RAM de 64 bits una estructura en C con dos enteros de 4 bytes y un double de 8 bytes, cuando se compila normalmente frente a cuando se aplica la directiva de empaquetado (__attribute__((packed))).</summary><p>En compilación normal ocupa 24 bytes debido a la alineación a palabras de 8 bytes y relleno de padding (\8 + 8 + 8\); con empaquetado ocupa strictly sus 16 bytes nominales contiguos (\4 + 4 + 8\).</p></details>
+<details class="qa"><summary>5. ¿Qué diferencia principal existe entre las extensiones MMX y SSE respecto al uso de registros en el procesador?</summary><p>MMX utiliza registros de 64 bits compartidos físicamente con la FPU, mientras que SSE utiliza 8 registros independientes de 128 bits (registros XMM) totalmente desvinculados de la FPU.</p></details>
+<details class="qa"><summary>6. ¿En qué consiste el mecanismo de ejecución fuera de orden (Out-of-Order Execution) introducido en la arquitectura P6 del Pentium Pro?</summary><p>Consiste en reordenar dinámicamente las instrucciones entrantes para ejecutar primero aquellas cuyos datos ya están disponibles en caché, aprovechando ciclos de reloj que de otro modo quedarían inactivos.</p></details>
+<details class="qa"><summary>7. ¿Por qué la arquitectura NetBurst del Pentium 4 resultó un fracaso comercial y térmico a pesar de alcanzar frecuencias elevadas?</summary><p>Porque implementó un pipeline demasiado largo de más de 20 etapas que generó un consumo de hasta 400 W y una disipación térmica insostenible, ofreciendo un rendimiento real por ciclo inferior al Pentium III o Athlon.</p></details>
+<details class="qa"><summary>8. Compara la arquitectura Intel Itanium (IA-64) y la arquitectura AMD Opteron (AMD64) respecto a la retrocompatibilidad con el código x86 de 32 bits.</summary><p>Intel Itanium rompió por completo la retrocompatibilidad binaria exigiendo recompilar todo el software; AMD Opteron ofreció retrocompatibilidad nativa total con programas de Modo Real, Modo Protegido de 32 bits y Modo Largo de 64 bits.</p></details>
 </details>
 
 <details class="section-block sec" id="c4-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
