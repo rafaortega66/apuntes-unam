@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 09 — Arquitectura Cliente-Servidor</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -14,6 +15,17 @@
 <div class="detail-head" style="border-color:#E8735C"><h2>Clase 09</h2>
   <p class="prof">Mtro. Carlos Alberto Román Zamitiz · 24 sep 2026 · Tema 2 — <code>struct hostent</code> y <code>gethostbyname()</code>, conversión de IP con <code>inet_ntoa</code>/<code>inet_aton</code>, pruebas con Google y la UNAM (alta disponibilidad y clústers), puertos lógicos e IANA, y el ciclo de vida de un socket en C (socket, bind, listen, accept, connect, send/recv, close).</p>
 </div>
+
+<div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c9-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Conversión de direcciones IP entre formato binario de red y texto decimal punteado mediante inet_ntoa e inet_aton</strong><span class="evid">Evidencia: Lo explicó detalladamente desglosando la nemotecnia de cada letra (n = network/binario, a = ASCII/texto) y lo resolvió en vivo dentro del programa 1.</span></li>
+<li><strong>Uso de gethostbyname() y la estructura struct hostent para resolución DNS, incluyendo la necesidad de cast explícito a (struct in_addr **)</strong><span class="evid">Evidencia: Lo resolvió en vivo en la consola mostrando la iteración sobre h_addr_list hasta encontrar el puntero NULL.</span></li>
+<li><strong>Clasificación de puertos lógicos por la IANA (reservados 0-1023, usuario 1024-49151, dinámicos 49152-65535) y restricción de privilegios root</strong><span class="evid">Evidencia: Lo mostró en vivo navegando la página oficial de la IANA y lo ligó al examen parcial y prácticas futuras.</span></li>
+<li><strong>Diagrama del ciclo de vida de sockets cliente-servidor y la regla de emparejamiento estricto entre send/recv y write/read</strong><span class="evid">Evidencia: Lo enfatizó explícitamente en el pizarrón señalando que este mapa es la base de todo el semestre y que nunca se deben mezclar las parejas de funciones.</span></li>
+</ol>
+</details>
 
 <div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>ℹ️ Sobre esta página:</strong> se construyó con el audio <code>ACS-Clase9</code>, que continúa exactamente donde terminó la <a href="clase-08.html">Clase 08</a> (<code>sockaddr_in</code> y <code>hostent</code>) y termina hablando de “el martes”. Las IP y el número de direcciones que devuelven Google y la UNAM son las que salieron en esa demo; pueden cambiar en otro momento.</p></div>
 
@@ -36,6 +48,13 @@ addr_list = (struct in_addr **) he-&gt;h_addr_list;</code></pre>
     /* Procesamiento de cada IP */
 }</code></pre>
 <p>Para que la salida en consola se vea natural, dentro del bucle se imprime <code>i + 1</code>, de modo que aparezca “IP 1”, “IP 2”… y no “IP 0” ante el usuario.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como buscar el nombre de una persona en la guía telefónica para obtener su nombre oficial y todas las líneas telefónicas asociadas a ella.<span class="rompe">Dónde falla la analogía: En la guía telefónica los números son texto legible, pero en C la estructura h_addr_list guarda las direcciones como estructuras binarias (struct in_addr) que requieren conversión explícita.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite a un programa resolver nombres de dominio (como www.google.com) en las estructuras de direcciones IP binarias que requiere el sistema operativo para conectar sockets.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Olvidar realizar el cast explícito de h_addr_list a (struct in_addr **) o no validar si gethostbyname() devolvió NULL al no encontrar el dominio.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c9-inet" open><summary><span class="stitle">Conversión de IP entre binario y decimal punteado: inet_ntoa e inet_aton</span></summary>
@@ -48,6 +67,13 @@ addr_list = (struct in_addr **) he-&gt;h_addr_list;</code></pre>
 </ul>
 <p><code>inet_ntoa()</code> (<em>Network to ASCII</em>) recibe una <code>struct in_addr</code> con la IP en binario de red y devuelve una cadena (<code>char *</code>) en decimal punteado. <code>inet_aton()</code> (<em>ASCII to Network</em>) hace lo inverso: toma la cadena que escribió el usuario y la convierte a la <code>struct in_addr</code> que entiende la máquina. En el código de clase, como <code>addr_list[i]</code> es un apuntador a <code>struct in_addr</code>, se desreferencia con un asterisco para pasárselo a <code>inet_ntoa()</code> e imprimirlo con <code>%s</code>:</p>
 <pre><code>printf("IP %d: %s\n", i + 1, inet_ntoa(*addr_list[i]));</code></pre>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un traductor bilingüe que convierte un mensaje en código Morse a texto en español y viceversa para que lo entiendan tanto la máquina como la persona.<span class="rompe">Dónde falla la analogía: El código Morse sigue siendo una cadena de caracteres, mientras que el formato de red es un entero binario de 32 bits en orden de red dentro de una estructura C.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Las funciones de red del kernel exigen la IP en binario (struct in_addr), mientras que los usuarios e interfaces leen la IP en formato ASCII decimal punteado (como 142.251.x.x).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir la letra n (network/binario) con la a (ASCII/texto decimal) o no desreferenciar con un asterisco (*addr_list[i]) al pasar la estructura a inet_ntoa().</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c9-demo" open><summary><span class="stitle">Demostración en vivo: dominios, alta disponibilidad y clústers</span></summary>
@@ -64,6 +90,13 @@ addr_list = (struct in_addr **) he-&gt;h_addr_list;</code></pre>
 <tr><td>Por capacidad / jerarquía (del más fuerte al más débil)</td><td>Todas las peticiones van al servidor principal (el de mayor poder de cómputo). Cuando está por llegar al 100 % de su capacidad, “pasa la estafeta” al segundo; si este también se satura, al tercero, y así sucesivamente.</td><td>Cuando los equipos del clúster tienen capacidades distintas.</td></tr>
 <tr><td>Round-robin (anillo / reparto equitativo)</td><td>Las peticiones se reparten cíclicamente: la 1 al servidor 1, la 2 al 2, …, la 8 al 8, y la 9 vuelve al servidor 1.</td><td>Cuando todos los servidores tienen hardware similar.</td></tr>
 </table>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como una sucursal bancaria con múltiples ventanillas de atención donde, si una se llena o falla, las demás atienden a los clientes entrantes.<span class="rompe">Dónde falla la analogía: Las ventanillas físicas están en un mismo edificio, pero los clústers de servidores distribuyen peticiones entre centros de datos en diferentes partes del mundo usando balanceo round-robin.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Demuestra cómo las grandes plataformas de internet logran alta disponibilidad y tolerancia a fallos asociando múltiples direcciones IP a un mismo nombre de dominio.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Los alumnos notaron que obtenían las mismas 8 direcciones IP de Google pero en diferente orden; el profesor aclaró que se debe al balanceo de carga cíclico (round-robin) y que www.google.com no devuelve lo mismo que google.com.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c9-programa3" open><summary><span class="stitle">Formas de extraer la IP y el Programa 3</span></summary>
@@ -75,6 +108,12 @@ addr_list = (struct in_addr **) he-&gt;h_addr_list;</code></pre>
 <li><strong>Método D — valor crudo de 32 bits:</strong> se trata el valor como un único entero sin signo.</li>
 </ol>
 <p>El programa también recorre el campo <code>h_aliases</code> para mostrar todos los nombres alternativos del host en el DNS.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como leer la dirección de una casa de cuatro formas distintas: la etiqueta postal completa, el código postal, los componentes individuales (calle, número e interior) o las coordenadas geográficas puras.<span class="rompe">Dónde falla la analogía: Las coordenadas o etiquetas siguen siendo texto escrito, mientras que los valores de 32 bits en memoria son enteros binarios crudos en orden de red.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra las distintas alternativas en C para manipular y descomponer una IP (inet_ntoa, inet_ntop, acceso directo a los 4 bytes de h_addr o valor entero crudo de 32 bits) e iterar sobre alias DNS.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c9-puertos" open><summary><span class="stitle">Puertos lógicos y clasificación de la IANA</span></summary>
@@ -95,6 +134,13 @@ addr_list = (struct in_addr **) he-&gt;h_addr_list;</code></pre>
 <li><strong>443</strong> — HTTPS (versión cifrada y segura de HTTP).</li>
 <li><strong>666</strong> — el videojuego Doom, que tiene ese puerto asignado para sus servidores multijugador en el registro oficial (y, curiosamente, aparece en la página 13 del documento).</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como los números de departamento en un edificio de oficinas, donde cada número indica exactamente a qué empresa o servicio debes dirigirte.<span class="rompe">Dónde falla la analogía: Las oficinas físicas tienen muros y puertas reales, mientras que los puertos lógicos son estructuras numéricas de software de 16 bits gestionadas por el kernel.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es indispensable para direccionar el tráfico de red en la Capa 4, permitiendo que un mismo host distinga qué proceso debe atender la petición entre sus 65,536 puertos lógicos.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Creer que un usuario sin privilegios de administrador (root) puede levantar un servicio en puertos menores a 1024.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c9-ciclo" open><summary><span class="stitle">Ciclo de vida de un socket: funciones de servidor y cliente</span></summary>
@@ -142,6 +188,25 @@ addr_list = (struct in_addr **) he-&gt;h_addr_list;</code></pre>
 <li><strong>Comunicación asíncrona:</strong> permite enviar <em>n</em> mensajes seguidos sin esperar una recepción intermedia.</li>
 <li><strong>Cierre:</strong> ambos procesos llaman a <code>close()</code>. El cliente termina su ejecución, mientras que el servidor cierra el socket de ese cliente pero <strong>regresa a <code>accept()</code></strong> para seguir escuchando y atender al siguiente en la cola.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como la centralita de un restaurante donde un operador recibe la llamada entrante, la transfiere a una extensión privada con un mesero y regresa a esperar la siguiente llamada.<span class="rompe">Dónde falla la analogía: Las extensiones telefónicas usan conmutadores físicos, mientras que los sockets usan descriptores de archivo de software en la tabla de procesos de Linux.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Define el flujo obligatorio de funciones en C para cliente y servidor, estableciendo que el servidor maneja dos sockets (conexión fd_s y comunicación fd_c) y la regla de no mezclar send/recv con write/read.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Mezclar send() con read() o write() con recv(), o no comprender por qué el servidor ejecuta dos close() y regresa en recursividad a la función accept().</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c9-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Qué valor devuelve la función gethostbyname() si el nombre de dominio consultado no existe en el DNS y cómo debe validarse en C?</summary><p>Devuelve un puntero nulo (NULL); en el código debe validarse inmediatamente con un condicional if (he == NULL) para imprimir un mensaje de error y terminar el programa.</p></details>
+<details class="qa"><summary>2. Explica con tus palabras la diferencia funcional entre inet_ntoa() e inet_aton().</summary><p>inet_ntoa() convierte una dirección IP desde su formato binario de red (struct in_addr) a una cadena de texto en decimal punteado, mientras que inet_aton() realiza la conversión inversa de texto decimal punteado a binario de red.</p></details>
+<details class="qa"><summary>3. Si se desea desarrollar un servidor web en el puerto 80 dentro de Linux, ¿qué condición de privilegios se requiere para ejecutar la función bind()?</summary><p>Se requieren privilegios de usuario administrador (root o sudo), ya que el puerto 80 pertenece al rango de puertos del sistema (0 a 1023) regulado por la IANA.</p></details>
+<details class="qa"><summary>4. Compara la estrategia de balanceo de carga en clústers de alta disponibilidad basada en jerarquía frente a la estrategia Round-Robin.</summary><p>La estrategia por jerarquía envía todo el tráfico al servidor más potente hasta saturarlo antes de pasar al segundo, mientras que Round-Robin distribuye las peticiones equitativamente en forma de anillo entre servidores con capacidades similares.</p></details>
+<details class="qa"><summary>5. ¿Por qué en la función inet_ntoa(*addr_list[i]) se coloca un asterisco antes del elemento del arreglo?</summary><p>Porque addr_list[i] es un puntero a struct in_addr, y se debe desreferenciar con el asterisco para pasar la estructura completa por valor a la función.</p></details>
+<details class="qa"><summary>6. ¿Cuál es la regla de buena práctica establecida por el profesor referente al uso de send(), recv(), write() y read()?</summary><p>Deben usarse siempre en parejas asociadas: si un extremo usa send() el otro usa recv(), y si usa write() el otro usa read(); nunca deben mezclarse entre sí.</p></details>
+<details class="qa"><summary>7. Un dominio devuelve un arreglo de IPs en h_addr_list. ¿Cómo sabe el bucle for en C cuándo ha llegado al final del arreglo si no hay una variable de longitud?</summary><p>El bucle evalúa la condición addr_list[i] != NULL, aprovechando que el último elemento del arreglo de punteros está configurado con un valor NULL.</p></details>
+<details class="qa"><summary>8. Compara el rol del socket servidor (fd_s) con el del socket cliente aceptado (fd_c) en el lado del servidor.</summary><p>El socket servidor (fd_s) es el socket de conexión que escucha en la IP y puerto del servidor, mientras que fd_c es el socket de comunicación devuelto por accept() para intercambiar datos con el cliente específico.</p></details>
 </details>
 
 <details class="section-block sec" id="c9-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>

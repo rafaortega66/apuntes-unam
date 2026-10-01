@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T07:56:07+00:00",
+ "generatedAt": "2026-10-01T07:58:03+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -330,7 +330,7 @@
     "fecha": "2026-09-24",
     "resumen": "Tema 2 — struct hostent y gethostbyname() , conversión de IP con inet_ntoa / inet_aton , pruebas con Google y la UNAM (alta disponibilidad y clústers), puertos lógicos e IANA, y el ciclo de vida de un socket en C (socket",
     "url": "materias/arquitectura-cliente-servidor/clase-09.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 10,
@@ -467,6 +467,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "d2519c5",
+   "fecha": "2026-10-01T01:56:07-06:00",
+   "mensaje": "SIB Clase 08: formato de estudio"
+  },
   {
    "hash": "8ddeaac",
    "fecha": "2026-10-01T01:54:04-06:00",
@@ -761,11 +766,6 @@
    "hash": "47710a1",
    "fecha": "2026-09-21T16:03:27-06:00",
    "mensaje": "RP: agregar Clase 07 (18 sep 2026) — clasificación no supervisada, K-Means, LBG e ISODATA"
-  },
-  {
-   "hash": "e818acf",
-   "fecha": "2026-09-21T15:11:45-06:00",
-   "mensaje": "MD: agregar Clase 05 — Examen (17 sep 2026) con las respuestas del Primer Examen Parcial"
   }
  ]
 }
