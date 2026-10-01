@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 04 — Seguridad Informática Básica</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -14,6 +15,18 @@
 <div class="detail-head" style="border-color:#E8735C"><h2>Clase 04</h2>
   <p class="prof">Dra. Cintia Quezada Reyes · 8 sep 2026 · Tema 1 (1.3 Perfiles de protección) · esquema de seguridad y metodología para construirlo mediante Perfiles de Protección (PP) — las 11 partes; introducción a los 6 servicios de seguridad.</p>
 </div>
+
+<div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c4-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Los objetivos de seguridad deben redactarse siempre con acciones expresadas en verbos en infinitivo, ser muy específicos y tener una extensión máxima de dos renglones</strong><span class="evid">Evidencia: Lo explicó explícitamente la profesora en el pizarrón al desglosar la estructura del esquema de seguridad y corrigió que no deben ponerse oraciones de 50 renglones con verbos amontonados.</span></li>
+<li><strong>La metodología de Perfiles de Protección consta de 11 pasos o secciones estructuradas para desarrollar la documentación de seguridad de un bien u objeto de evaluación (TOE)</strong><span class="evid">Evidencia: Lo anotó y explicó paso a paso en el pizarrón durante la clase, detallando desde la introducción hasta las declaraciones de conformidad.</span></li>
+<li><strong>Al diseñar un esquema de seguridad o sugerir controles, nunca se deben especificar herramientas comerciales o cerraduras concretas, sino describir la necesidad de control de acceso en lenguaje claro</strong><span class="evid">Evidencia: Lo advirtió explícitamente la profesora al explicar los pasos de la metodología, señalando que comprometerse con una herramienta específica traslada la responsabilidad legal y financiera al consultor si esta falla.</span></li>
+<li><strong>Los estándares de seguridad informática consideran seis servicios esenciales, a diferencia del modelo OSI 7498 que solo considera cinco al dar por sentada la disponibilidad</strong><span class="evid">Evidencia: Lo recalcó la profesora al final de la clase al presentar la clasificación de los seis servicios (confidencialidad, integridad, disponibilidad, control de acceso, autenticación y no repudio).</span></li>
+<li><strong>Si un profesional desarrolla una solución o prototipo tecnológico con su propio dinero, tiempo y recursos fuera de la empresa, debe patentarlo a su nombre antes de mostrárselo a la organización</strong><span class="evid">Evidencia: Lo ligó directamente a una recomendación profesional al relatar el caso real del exalumno de la Facultad de Ingeniería que regaló su invento a una empresa a cambio de unas vacaciones.</span></li>
+</ol>
+</details>
 
 <details class="section-block sec" id="c4-esquema-seguridad" open><summary><span class="stitle">El esquema de seguridad — componentes centrales</span></summary>
 <p>La Dra. Quezada dedicó la mayor parte de la clase a este desglose conceptual. El diagrama de abajo reproduce el esquema que trazó en el pizarrón: del <strong>entorno</strong> a la <strong>implementación</strong>. Los componentes, en orden de construcción:</p>
@@ -100,6 +113,13 @@
 <li><strong>Requerimientos:</strong> qué debe cubrir el objeto de evaluación o su entorno para alcanzar los objetivos.</li>
 <li><strong>Implementación:</strong> instalación y configuración de las herramientas; se hace por partes y con apoyo de la dirección.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como planear la protección completa de una casa: no basta con mirar la puerta, sino evaluar el terreno, el techo, los vecinos, fijar reglas de uso y definir metas claras de cuidado sin intentar construir todo en un solo día.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque en un esquema de seguridad informático existen activos lógicos, flujos de software y redes interconectadas que sufren desconfiguraciones intangibles que no se ven a simple vista como una pared agrietada.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque demuestra que un esquema de seguridad no se improvisa ni abarca a toda una organización de golpe, requiriendo el apoyo indispensable de la alta dirección y la definición formal de hipótesis y políticas.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Un error común señalado por la profesora es redactar objetivos de seguridad larguísimos y llenos de verbos amontonados o intentar abarcar toda la institución en un solo proyecto, lo que conduce al fracaso y a la pérdida de prestigio.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-metodologia-pp" open><summary><span class="stitle">Metodología mediante perfiles de protección — las 11 partes</span></summary>
@@ -141,6 +161,13 @@
 
 <p><strong>11. Implementación.</strong> Se lleva a cabo la instalación de las herramientas de seguridad siguiendo las indicaciones del fabricante (manuales) y configurándolas de acuerdo con las políticas de seguridad.</p>
 <p><em>En clase:</em> un esquema de seguridad <strong>no se hace en un día</strong> ni debe abarcar a toda la institución de golpe; debe hacerse <strong>por partes</strong> y contar <strong>indispensablemente con el apoyo de la alta dirección</strong>.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como escribir un instructivo de 11 capítulos para construir una caja fuerte: explica qué problema hay, qué objeto vas a proteger, qué peligros existen, qué metas vas a cumplir y cómo demuestras técnicamente que cumple con las reglas.<span class="rompe">Dónde falla la analogía: Falla porque un Perfil de Protección (PP) no es un manual físico estático, sino una especificación internacional estandarizada de Criterios Comunes que evalúa software, hardware o sistemas lógicos bajo niveles de garantía (EAL).</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque permite a desarrolladores, evaluadores y usuarios contar con un marco estructurado de 11 partes para documentar, auditar y certificar la seguridad funcional y de confianza de cualquier objeto de evaluación (TOE).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> La profesora enfatizó el error de redactar la metodología usando jerga técnica incomprensible (como "pruebas de penetración") para los dueños del negocio o recomendar marcas/herramientas específicas que culpen al diseñador si fallan.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-amenaza-estructura" open><summary><span class="stitle">Amenazas — agente + ataque + bien</span></summary>
@@ -150,6 +177,13 @@
 <li><strong>Mitigación vs. eliminación:</strong> las amenazas y riesgos sobre un bien <strong>jamás se eliminan por completo (100%)</strong>; el objetivo de la metodología es <strong>reducir su presencia</strong>.</li>
 </ul>
 <p class="empty">Pendiente de reforzar con la siguiente clase / lectura: clasificación formal de <strong>tipos de agente</strong> y <strong>tipos de ataque</strong>, y ejemplos de la fórmula completa.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un robo en una tienda: el ladrón es el agente, la forma en que rompe el candado es el ataque y la caja registradora con el dinero es el bien que se quiere proteger.<span class="rompe">Dónde falla la analogía: Se rompe porque un agente amenazante no siempre es un delincuente externo que realiza un ataque físico deliberado, sino que puede ser un fallo de hardware, una tormenta natural o un empleado distraído que comete un descuido.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque permite estructurar analíticamente el origen del riesgo, recordando que todos los seres humanos somos agentes amenazantes potenciales para los activos físicos, lógicos e informacionales de una organización.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> El error habitual es evaluar las amenazas de forma aislada sin considerar el entorno completo alrededor del bien, olvidando el software, el hardware, la edificación y la falta de capacitación de las personas.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-servicios-seguridad" open><summary><span class="stitle">Servicios de seguridad — ¿cómo vamos a proteger al bien?</span></summary>
@@ -164,6 +198,13 @@
 <li><strong>No repudio</strong></li>
 </ol>
 <p class="empty">La profesora <strong>solo los enumeró</strong> al final de la sesión. La explicación detallada de herramientas, mecanismos y su relación con la tríada CIA queda para la <strong>siguiente clase</strong>, junto con un ejercicio práctico de concientización.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como las necesidades básicas para habitar una casa: necesitas privacidad (confidencialidad), que no te cambien los muebles (integridad), tener luz y agua siempre (disponibilidad), llaves (control de acceso), credencial (autenticación) y firma de recibo (no repudio).<span class="rompe">Dónde falla la analogía: La analogía rompe porque los servicios de seguridad en informática aplican tanto a personas como a procesos del sistema operativo, servicios de red, firmas digitales criptográficas y archivos con nodos únicos.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque fundamenta la diferencia entre el modelo OSI 7498 (que ignora la planeación de la disponibilidad) y los estándares de seguridad que exigen seis servicios satisfechos mediante mecanismos lógicos y físicos.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir los servicios de seguridad (las necesidades) con los mecanismos de seguridad (las herramientas que satisfacen la necesidad), o dar por sentado que la disponibilidad se obtiene en automático sin diseñarla.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-ejemplos"><summary><span class="stitle">Ejemplos y casos mencionados en clase</span></summary>
@@ -173,6 +214,25 @@
 <li><strong>Reglamentos no ejercidos:</strong> comparó las políticas de seguridad obsoletas con los reglamentos de tránsito o de protección animal en México — existen en papel pero carecen de autoridades que supervisen su cumplimiento.</li>
 <li><strong>Mantenimiento vs. reemplazo:</strong> evaluación de costo al decidir entre dar mantenimiento preventivo o comprar equipos/focos nuevos cuando no se cuidaron los activos.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como el caso de una escuela que hace un examen sin cuidar que los alumnos lleven audífonos ocultos, o el exalumno que inventó un aparato en su casa y la empresa se lo quedó por no patentarlo a tiempo.<span class="rompe">Dónde falla la analogía: Deja de servir cuando los escenarios analizados pasan de anécdotas de aula o fraudes en exámenes escolares a entornos corporativos complejos donde una falla de diseño provoca demandas millonarias y la pérdida de licencias.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque conecta la teoría con la realidad operativa, como el mantenimiento preventivo del cañón del salón o el diseño de necesidades de seguridad en el ejercicio en parejas para la Facultad y el hogar.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> En el ejercicio en vivo, los alumnos tendían a nombrar directamente conceptos abstractos (como "necesitamos integridad") en lugar de redactar la necesidad práctica en lenguaje cotidiano (como "registrar accesos" o "poner respaldos").</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c4-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cómo deben redactarse los objetivos de seguridad dentro de un esquema de seguridad según lo explicado por la profesora?</summary><p>Deben redactarse siempre como acciones expresadas con verbos en infinitivo, ser muy específicos y tener una extensión máxima de dos renglones.</p></details>
+<details class="qa"><summary>2. Explica con tus palabras la diferencia entre el modelo OSI 7498 y los estándares de seguridad informática respecto a los servicios de seguridad.</summary><p>El modelo OSI 7498 considera solo cinco servicios porque asume que la disponibilidad es automática, mientras que los estándares de seguridad consideran seis servicios y exigen planear la disponibilidad de forma intencionada.</p></details>
+<details class="qa"><summary>3. Un equipo de consultoría propone instalar una cerradura digital de marca X para proteger la entrada de un laboratorio. Con base en las advertencias de la clase, evalúa esta propuesta.</summary><p>La propuesta es incorrecta metodológicamente; no se deben recomendar herramientas o marcas específicas, sino definir la necesidad de controlar el acceso para evitar que la empresa responsabilice al consultor si la marca falla.</p></details>
+<details class="qa"><summary>4. Compara la función del Perfil de Protección (PP) frente al Objeto de Evaluación (TOE) en la metodología de Criterios Comunes.</summary><p>El PP es el documento que define los requisitos de seguridad para una clase de productos, mientras que la TOE es el producto o bien específico (hardware, software o sistema) que se somete a evaluación.</p></details>
+<details class="qa"><summary>5. ¿Qué le ocurrió al exalumno de la Facultad de Ingeniería mencionado en clase que desarrolló un circuito electrónico en su casa?</summary><p>Presentó su prototipo a la empresa donde trabajaba, la empresa lo patentó a su nombre obteniendo un gran retorno de inversión y solo le regaló unas vacaciones a Europa.</p></details>
+<details class="qa"><summary>6. En el análisis de un servidor de base de datos escolar, un estudiante propone implementar "disponibilidad e integridad". Reformula esta propuesta aplicando las reglas del ejercicio en parejas de la clase.</summary><p>Se debe redactar como la necesidad práctica: "Instalar una batería de respaldo UPS para evitar apagones y guardar un registro automático de cada comando de alto riesgo ejecutado por los administradores".</p></details>
+<details class="qa"><summary>7. ¿Por qué falló el esquema de seguridad del examen presencial de admisión a la UNAM analizado como ejemplo en clase?</summary><p>Porque no consideró el entorno completo ni los dispositivos tecnológicos externos que utilizaron los postulantes fuera del aula, limitándose únicamente a evaluar computadoras y software.</p></details>
+<details class="qa"><summary>8. Compara el concepto de servicio de seguridad frente al de mecanismo de seguridad según la clasificación explicada al final de la sesión.</summary><p>El servicio de seguridad representa la necesidad de protección que se requiere satisfacer, mientras que el mecanismo de seguridad es la herramienta física o lógica utilizada para satisfacer esa necesidad.</p></details>
 </details>
 
 <details class="section-block sec" id="c4-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
