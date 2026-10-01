@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T07:51:44+00:00",
+ "generatedAt": "2026-10-01T07:54:03+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -454,7 +454,7 @@
     "fecha": "2026-09-24",
     "resumen": "Cierre de exposiciones del Proyecto 2 (Oracle, Cassandra, Azure, Snowflake), repaso de modelos descriptivos y arranque de modelos predictivos (clasificación, regresión, series de tiempo, redes neuronales), asignación de ",
     "url": "materias/mineria-de-datos/clase-07.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 8,
@@ -467,6 +467,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "7cf8c20",
+   "fecha": "2026-10-01T01:51:45-06:00",
+   "mensaje": "RP Clase 09: formato de estudio"
+  },
   {
    "hash": "901bdd0",
    "fecha": "2026-10-01T01:49:34-06:00",
@@ -761,11 +766,6 @@
    "hash": "f63d9dc",
    "fecha": "2026-09-17T20:10:58-06:00",
    "mensaje": "SIB: registrar Tarea 1 y Tarea 2 del Equipo 4 en Entregas"
-  },
-  {
-   "hash": "4d28d26",
-   "fecha": "2026-09-17T17:30:42-06:00",
-   "mensaje": "SIB: agregar Clase 06 (17 sep 2026) — Tema 2, amenazas y vulnerabilidades"
   }
  ]
 }
