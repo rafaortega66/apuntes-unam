@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T07:40:32+00:00",
+ "generatedAt": "2026-10-01T07:42:21+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -337,7 +337,7 @@
     "fecha": "2026-09-29",
     "resumen": "Tema 2 — El socket servidor en C, paso a paso: socket() , inicialización de struct sockaddr_in ( INADDR_ANY , htons() ), bind() , listen() y accept() , y por qué todo servidor maneja dos sockets.",
     "url": "materias/arquitectura-cliente-servidor/clase-10.html",
-    "formato": "prosa"
+    "formato": "estudio"
    }
   ],
   "seguridad-informatica-basica": [
@@ -467,6 +467,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "da08eb2",
+   "fecha": "2026-10-01T01:40:33-06:00",
+   "mensaje": "SIB Clase 09: formato de estudio"
+  },
   {
    "hash": "51c4672",
    "fecha": "2026-10-01T01:38:37-06:00",
@@ -761,11 +766,6 @@
    "hash": "24a5173",
    "fecha": "2026-09-17T08:37:41-06:00",
    "mensaje": "MD: re-verificar las 4 clases contra audio real (NotebookLM)"
-  },
-  {
-   "hash": "8e33453",
-   "fecha": "2026-09-17T08:12:08-06:00",
-   "mensaje": "SIB: re-verificar Clases 01, 03, 04, 05 contra audio real (NotebookLM)"
   }
  ]
 }

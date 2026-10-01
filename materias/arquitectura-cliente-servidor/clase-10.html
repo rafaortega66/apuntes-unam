@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 10 — Arquitectura Cliente-Servidor</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -14,6 +15,17 @@
 <div class="detail-head" style="border-color:#E8735C"><h2>Clase 10</h2>
   <p class="prof">Mtro. Carlos Alberto Román Zamitiz · 29 sep 2026 · Tema 2 — El socket servidor en C, paso a paso: <code>socket()</code>, inicialización de <code>struct sockaddr_in</code> (<code>INADDR_ANY</code>, <code>htons()</code>), <code>bind()</code>, <code>listen()</code> y <code>accept()</code>, y por qué todo servidor maneja dos sockets.</p>
 </div>
+
+<div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c10-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Creación de un programa completo cliente-servidor mediante sockets TCP en lenguaje C</strong><span class="evid">Evidencia: Lo dijo explícitamente el profesor en la clase ("más o menos en dos semanas vamos a tener la evaluación parcial... va a tratar de esto, tienen que crear un cliente servidor").</span></li>
+<li><strong>Diferenciación clara y uso de los dos file descriptors en el servidor (fd_s de conexión devuelto por socket() y fd_c de comunicación devuelto por accept())</strong><span class="evid">Evidencia: Lo enfatizó explícitamente durante la explicación diciendo que entender la diferencia entre ambos sockets es la clave para aprobar la materia y la base de todo el semestre.</span></li>
+<li><strong>Inicialización completa de la estructura struct sockaddr_in empleando memset(), INADDR_ANY y la conversión de puerto con htons()</strong><span class="evid">Evidencia: Lo resolvió y explicó paso a paso en vivo usando el programa 004_servidor.c, señalando que si esta inicialización no está bien hecha, todas las funciones posteriores fallan.</span></li>
+<li><strong>Secuencia correcta de llamadas del servidor: socket() -&gt; bind() -&gt; listen() -&gt; accept()</strong><span class="evid">Evidencia: Lo repitió varias veces en la clase y lo mostró tanto en diagrama como en código C como la arquitectura fundamental del servidor.</span></li>
+</ol>
+</details>
 
 <details class="section-block sec" id="c10-socket" open><summary><span class="stitle">Documentación de The Open Group y la función socket()</span></summary>
 <p>La sesión empezó revisando la documentación oficial en el sitio de The Open Group (opengroup.org). El profesor recomendó una buena práctica: buscar directamente el nombre de la función en el navegador para llegar a la especificación estándar POSIX, en inglés técnico. Se retomó la <a href="clase-09.html">Clase 09</a> (<code>struct hostent</code>, <code>gethostbyname()</code>, conversiones de IP, puertos de la IANA y la introducción teórica al ciclo de vida de los sockets) para ahora implementar el lado del servidor.</p>
@@ -26,6 +38,13 @@
 <tr><td><code>protocol</code></td><td>Protocolo particular de la familia. Con <code>0</code> el sistema elige el protocolo por defecto para esa combinación (para <code>AF_INET</code> + <code>SOCK_STREAM</code>, TCP/IP). También puede ponerse <code>IPPROTO_TCP</code>.</td></tr>
 </table>
 <p><strong>Valor de retorno.</strong> Si tiene éxito, devuelve un entero no negativo: el <strong>descriptor de archivo</strong> (<em>fd</em>) del socket. Como 0, 1 y 2 están reservados para stdin, stdout y stderr, el primer socket de un programa suele recibir el <strong>3</strong>. Si falla, devuelve <code>-1</code> y deja el código de error en la variable global <code>errno</code>. Ese descriptor se pasa como primer argumento a todas las funciones siguientes (<code>bind</code>, <code>listen</code>, <code>accept</code>).</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como solicitar una línea telefónica nueva a la compañía; obtienes un aparato telefónico sin número asignado que te sirve como punto de acceso para hacer y recibir llamadas.<span class="rompe">Dónde falla la analogía: En la telefonía real el teléfono ya tiene una clavija física, mientras que en C el socket es puramente un número entero de software (file descriptor) dentro del sistema operativo.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la primera función para crear un extremo de comunicación; recibe el dominio (AF_INET), el tipo (SOCK_STREAM para TCP) y el protocolo (0), devolviendo un descriptor entero (habitualmente 3) indispensable para las funciones siguientes.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir las macros de dominio y tipo o no validar que el valor de retorno sea distinto de -1 para detectar errores en la creación del socket.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c10-sockaddr" open><summary><span class="stitle">Inicialización de struct sockaddr_in (paso intermedio)</span></summary>
@@ -44,6 +63,13 @@ La nemotecnia: <strong>H</strong> = Host, <strong>N</strong> = Network, <strong>
 <pre><code>memset(servidor.sin_zero, '\0', 8);</code></pre></li>
 </ol>
 <p><strong>¿Por qué el servidor especifica una IP y qué significa <code>INADDR_ANY</code>?</strong> El profesor lo planteó como pregunta: si el cliente es quien busca al servidor, ¿por qué el servidor define una IP? Porque un equipo puede tener varias interfaces de red (Ethernet, Wi-Fi, loopback 127.0.0.1, adaptadores virtuales). Con <code>INADDR_ANY</code> el servidor le indica al sistema operativo que escuchará las peticiones que lleguen por <strong>todas las direcciones IP de todas las interfaces</strong>. Así un cliente local puede conectarse por 127.0.0.1 y uno externo por la IP pública o privada de la tarjeta de red.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como llenar una ficha con tu dirección de casa y tu número de departamento antes de poner un letrero en la puerta, para que el correo sepa exactamente dónde entregarte los paquetes.<span class="rompe">Dónde falla la analogía: En una casa física solo hay una puerta, mientras que en un servidor de software hay múltiples tarjetas de red físicas y virtuales, y la ficha debe abarcar todas mediante INADDR_ANY.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es el paso intermedio imprescindible entre socket() y bind(); se limpia con memset(), se asigna AF_INET, se usa el doble punto servidor.sin_addr.s_addr = INADDR_ANY para escuchar en todas las interfaces de red, y htons() para convertir el puerto a binario de red.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Olvidar el doble operador punto al acceder a s_addr dentro de sin_addr, no usar htons() en el puerto, o dudar de por qué el servidor necesita una IP si es el cliente quien lo busca.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c10-bind" open><summary><span class="stitle">La función bind()</span></summary>
@@ -60,6 +86,13 @@ La nemotecnia: <strong>H</strong> = Host, <strong>N</strong> = Network, <strong>
     exit(EXIT_FAILURE);
 }</code></pre>
 <p><strong>Permisos de puerto.</strong> Los puertos menores a 1024 están reservados para el administrador (root / sudo). Un usuario sin privilegios solo puede hacer <code>bind()</code> en el rango 1024 a 65535 y solo si el puerto no lo ocupa otro proceso.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como clavar un letrero con el nombre de tu negocio y tu número de local en la puerta de entrada para que la gente sepa qué servicio atiende ahí.<span class="rompe">Dónde falla la analogía: Un letrero físico lo puede poner cualquiera, pero en sistemas los puertos menores a 1024 requieren permisos de administrador (root/sudo) para poder ligarlos.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Asocia o "liga" el descriptor del socket (fd_s) devuelto por socket() con la IP y el puerto de la estructura sockaddr_in; recibe el fd, el apuntador casteado a (struct sockaddr *) y su tamaño.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Intentar hacer bind() en puertos reservados (0-1023) sin privilegios de root o no realizar el cast explícito de tipo de estructura.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c10-listen" open><summary><span class="stitle">listen(), la cola de conexiones (backlog) y el saludo de tres vías</span></summary>
@@ -67,6 +100,13 @@ La nemotecnia: <strong>H</strong> = Host, <strong>N</strong> = Network, <strong>
 <pre><code>int listen(int socket, int backlog);</code></pre>
 <p><code>socket</code> es el descriptor del socket servidor (<code>fd_s</code>) y <code>backlog</code> es el número máximo de conexiones entrantes pendientes que el sistema mantiene en la cola de espera.</p>
 <p><strong>Cómo funciona la cola.</strong> Al arrancar, la cola está vacía. La primera petición de un cliente entra a la cola y el servidor la atiende de inmediato. Si llegan más peticiones mientras el servidor está ocupado con la primera, esos clientes quedan encolados esperando; <code>backlog</code> define el límite de esa cola. Detrás del encolamiento está el establecimiento de conexión TCP conocido como <strong>saludo de tres vías</strong> (<em>three-way handshake</em>: paquetes SYN, SYN-ACK y ACK).</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como abrir la puerta del negocio, encender la luz de "abierto" y colocar un cordón de fila para organizar a los clientes que vayan llegando.<span class="rompe">Dónde falla la analogía: En una fila física la gente se ve parada, pero en TCP el backlog gestiona en silencio la cola de conexiones pendientes mediante el saludo de tres vías (three-way handshake).</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Coloca el socket servidor en modo de escucha activa y define el tamaño máximo de la cola de conexiones pendientes (backlog) antes de pasarlas a accept().</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir el parámetro backlog con el número total de clientes atendidos en la vida útil del servidor en lugar de la cola en espera.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c10-accept" open><summary><span class="stitle">accept() y los dos sockets del servidor</span></summary>
@@ -86,6 +126,12 @@ La nemotecnia: <strong>H</strong> = Host, <strong>N</strong> = Network, <strong>
 <tr><td>Función</td><td>Guarda la IP y el puerto de escucha del propio servidor; recibe y encola solicitudes.</td><td>Guarda la IP y el puerto del cliente aceptado; se usa para el flujo de datos (<code>read</code>/<code>write</code> o <code>send</code>/<code>recv</code>).</td></tr>
 </table>
 <p><strong>Pregunta de una alumna:</strong> <em>¿Un mismo cliente puede conectarse a varios servidores al mismo tiempo?</em> <strong>Respuesta del profesor:</strong> sí, es una observación perfectamente válida. Ejemplos: un sistema de bases de datos distribuidas o una aplicación empresarial que consume datos de tres servidores de base de datos en hosts distintos; o un cliente conectado a la vez a un servidor web (puerto 443), a uno de base de datos MySQL (3306) y a uno de correo SMTP (25). En ese caso el proceso cliente debe crear tres estructuras <code>struct sockaddr_in</code> independientes y tres sockets distintos, uno por servicio.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como el recepcionista que toma al primer cliente de la fila de espera y lo asigna a un cubículo privado con un ejecutivo dedicado para que hablen sin bloquear la puerta principal.<span class="rompe">Dónde falla la analogía: En el cubículo físico la persona camina a otra habitación, pero en software el servidor crea un nuevo entero de socket (fd_c) en la misma memoria para el flujo de datos.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es una función bloqueante que acepta la conexión entrante y devuelve un nuevo descriptor de socket (fd_c), dividiendo la arquitectura en socket de conexión (fd_s) y socket de comunicación (fd_c).</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c10-close" open><summary><span class="stitle">Por qué el servidor hace dos close() y el ciclo secuencial</span></summary>
@@ -94,6 +140,25 @@ La nemotecnia: <strong>H</strong> = Host, <strong>N</strong> = Network, <strong>
 <li><strong>Cliente:</strong> <code>close(fd)</code> cierra su único socket.</li>
 <li><strong>Servidor secuencial (no concurrente):</strong> atiende a un cliente a la vez. Intercambia datos con <code>fd_c</code> y, cuando el cliente termina, cierra ese socket con el primer <code>close(fd_c)</code>. Luego, con un bucle, regresa a <code>accept()</code> a esperar al siguiente cliente de la cola. Solo cuando el servidor se apaga por completo se ejecuta el segundo <code>close(fd_s)</code>, que libera el socket servidor y termina el proceso.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como colgar el teléfono de la extensión del cliente cuando termina de hacer su pedido, mientras la centralita telefónica principal sigue encendida esperando la llamada del siguiente cliente.<span class="rompe">Dónde falla la analogía: Colgar un teléfono desconecta el cable, pero en software close() destruye el descriptor de archivo en la tabla de procesos de Linux.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Explica por qué el servidor ejecuta dos close(): primero cierra el socket cliente (fd_c) al terminar la sesión y regresa cíclicamente a accept(), y solo cierra el socket servidor (fd_s) al apagar el servicio.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Creer que con un solo close() se cierran ambos sockets en el servidor, o no entender el ciclo de recursividad de un servidor secuencial.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c10-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Qué valor de descriptor de archivo entero devuelve habitualmente la función socket() si es el primer socket creado en el programa y por qué?</summary><p>Devuelve el entero 3, porque los descriptores 0, 1 y 2 están previamente reservados por el sistema operativo para la entrada estándar (stdin), salida estándar (stdout) y salida de error (stderr).</p></details>
+<details class="qa"><summary>2. Explica con tus palabras por qué el servidor utiliza la macro INADDR_ANY al inicializar la estructura struct sockaddr_in.</summary><p>Porque un host puede tener múltiples interfaces de red (Wi-Fi, Ethernet, loopback o virtuales) e INADDR_ANY le indica al sistema que acepte conexiones dirigidas a cualquiera de sus direcciones IP disponibles.</p></details>
+<details class="qa"><summary>3. Si deseas configurar un servidor para que escuche en el puerto 5000, ¿cómo debes asignar dicho puerto al atributo sin_port en C?</summary><p>Se debe asignar utilizando la función de conversión de orden de bytes htons(5000), escribiendo servidor.sin_port = htons(5000).</p></details>
+<details class="qa"><summary>4. Compara la función del socket servidor (fd_s) con la del socket cliente devuelto por accept() (fd_c) dentro del servidor.</summary><p>El socket servidor (fd_s) es el socket de conexión que escucha y encola peticiones en la IP/puerto del servidor, mientras que fd_c es el socket de comunicación dedicado exclusivamente a intercambiar datos con el cliente aceptado.</p></details>
+<details class="qa"><summary>5. ¿Qué ocurre si un usuario normal sin privilegios de root intenta ejecutar un programa servidor que hace bind() en el puerto 80?</summary><p>La llamada a bind() fallará y devolverá -1, ya que todos los puertos del 0 al 1023 están reservados exclusivamente para el usuario administrador (root / sudo).</p></details>
+<details class="qa"><summary>6. Explica el papel que desempeña el parámetro backlog en la función listen().</summary><p>Define la cantidad máxima de solicitudes de conexión entrantes pendientes que el sistema operativo mantendrá en la cola de espera mientras son procesadas por accept().</p></details>
+<details class="qa"><summary>7. ¿Por qué el proceso servidor ejecuta dos llamadas a la función close() mientras que el cliente solo ejecuta una?</summary><p>Porque el cliente solo tiene su socket de comunicación, mientras que el servidor debe cerrar primero el socket del cliente aceptado (fd_c) para atender al siguiente y, finalmente, el socket servidor (fd_s) al apagar el servicio.</p></details>
+<details class="qa"><summary>8. Un programa servidor ejecuta socket() y obtiene fd_s = 3. Luego acepta un cliente con accept(). ¿Qué valor entero tendrá el descriptor devuelto por accept() y para qué se usará?</summary><p>Será el siguiente descriptor libre (normalmente 4, porque 0, 1, 2 y 3 ya están ocupados); es fd_c y se utilizará como parámetro en las funciones de lectura/escritura (read/write o send/recv) para el intercambio de datos con ese cliente.</p></details>
 </details>
 
 <details class="section-block sec" id="c10-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
