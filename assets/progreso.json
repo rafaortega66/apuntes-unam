@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T08:09:06+00:00",
+ "generatedAt": "2026-10-01T08:10:47+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -172,7 +172,7 @@
     "fecha": "2026-09-21",
     "resumen": "Tema 2 (subtemas 2.3 y 2.4) — Unidades controladoras de interrupción (enmascarables y no enmascarables, monivel/multinivel, resolución por tabla o por vector), disparo por valor y por flanco, controlador DMA, chipset (Pu",
     "url": "materias/fundamentos-de-sistemas-embebidos/clase-07.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 8,
@@ -468,6 +468,11 @@
  },
  "gitlog": [
   {
+   "hash": "cd3780b",
+   "fecha": "2026-10-01T02:09:06-06:00",
+   "mensaje": "ASI Clase 07: formato de estudio"
+  },
+  {
    "hash": "cbbee95",
    "fecha": "2026-10-01T02:07:10-06:00",
    "mensaje": "ACS Clase 08: formato de estudio"
@@ -761,11 +766,6 @@
    "hash": "e2c9c9f",
    "fecha": "2026-09-22T00:35:21-06:00",
    "mensaje": "Agregar cache-busting (?v=) a app.js y style.css en todas las páginas"
-  },
-  {
-   "hash": "d4f0b9a",
-   "fecha": "2026-09-22T00:28:46-06:00",
-   "mensaje": "Home: agregar carrusel de pendientes arriba de las materias"
   }
  ]
 }

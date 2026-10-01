@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 07 — Fundamentos de Sistemas Embebidos</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -14,6 +15,18 @@
 <div class="detail-head" style="border-color:#A98BD1"><h2>Clase 07</h2>
   <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 21 sep 2026 · Tema 2 (subtemas 2.3 y 2.4) — Unidades controladoras de interrupción (enmascarables y no enmascarables, monivel/multinivel, resolución por tabla o por vector), disparo por valor y por flanco, controlador DMA, chipset (Puente Norte/Sur) y temporizadores (timers).</p>
 </div>
+
+<div class="section-block nota" style="border-left:3px solid #A98BD1"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c7-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Definición formal de temporizador (timer) en hardware y sus 4 parámetros</strong><span class="evid">Evidencia: Lo dijo explícitamente en la clase, dictó la definición y remarcó las 4 características como preguntas de examen.</span></li>
+<li><strong>Diferencia entre resolución de interrupciones por tabla (ARM) y por vector (Intel)</strong><span class="evid">Evidencia: Lo dijo explícitamente en la clase y comparó la búsqueda en software O(N) frente a la precarga instantánea en hardware.</span></li>
+<li><strong>Desencadenamiento por flanco vs. por valor y el sobrecalentamiento</strong><span class="evid">Evidencia: Lo dijo explícitamente, lo ejemplificó con el bug de la actualización de Windows 11 y justificó la eficiencia del flanco.</span></li>
+<li><strong>Función del controlador DMA (Direct Memory Access) para liberar a la CPU</strong><span class="evid">Evidencia: Lo dijo explícitamente al explicar la discrepancia de velocidad entre procesadores en GHz y periféricos en MHz, citando los 2 DMA del RP2040.</span></li>
+<li><strong>Arquitectura del chipset (Puente Norte vs. Puente Sur) y la carga de datos</strong><span class="evid">Evidencia: Lo explicó detalladamente en el pizarrón con diagrama de bloques y velocidades exactas de buses.</span></li>
+</ol>
+</details>
 
 <div class="section-block nota" style="border-left:3px solid #A98BD1"><p style="margin:0"><strong>📋 Nota sobre el temario:</strong> en la <a href="clase-06.html">Clase 06</a> el subtema 2.3 (Controlador de interrupciones) había quedado marcado como “omitido intencionalmente”. En esta clase sí se vio, junto con 2.4 (Temporizadores); el índice ya refleja el cambio.</p></div>
 
@@ -29,6 +42,12 @@
 <li><strong>Máscara en ‘0’ (habilitada):</strong> el ‘0’ del vector se niega externamente y se convierte en ‘1’, que entra a una compuerta AND junto con la señal del periférico. Si la interrupción emite un ‘1’, la salida de la AND es ‘1’ y se genera la señal física para que el procesador detenga su ejecución.</li>
 <li><strong>Máscara en ‘1’ (bloqueada/enmascarada):</strong> el ‘1’ se niega y se convierte en ‘0’. Al entrar a la AND, la salida es ‘0’ sin importar lo que envíe el periférico, así que la interrupción se ignora.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como filtrar llamadas en tu celular; a tus amigos los puedes silenciar o ignorar (enmascarables), pero una alarma sísmica suena sin importar la configuración (no enmascarable).<span class="rompe">Dónde falla la analogía: En un celular silencias notificaciones por software, mientras que en la ICU el enmascaramiento se realiza físicamente con compuertas lógicas AND y bits de máscara negados en hardware.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite al procesador priorizar eventos críticos del sistema y bloquear o diferir temporalmente las peticiones de periféricos no urgentes.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c7-prioridad" open><summary><span class="stitle">Niveles de prioridad (monivel vs. multinivel) y resolución (por tabla vs. por vector)</span></summary>
@@ -43,6 +62,12 @@
 <li><strong>Por tabla (software; microcontroladores y arquitecturas ARM):</strong> el sistema mantiene en memoria una tabla con todas las interrupciones y las direcciones de sus rutinas de servicio. En microcontroladores simples la estructura es física y cableada; en procesadores de alto rendimiento (como ARM Cortex-A e Intel) el procesador pierde su configuración al apagarse (“sufre de amnesia”) y requiere que el sistema operativo explore la tabla por software. Ese software ejecuta un algoritmo de búsqueda que revisa la tabla registro por registro para saber qué interrupción se activó y dónde está su rutina. <strong>Desventaja:</strong> es lento, con complejidad de búsqueda O(N) y varios ciclos de reloj; su ventaja es que es muy económico en hardware. Es el esquema estándar de las arquitecturas ARM.</li>
 <li><strong>Por vector (hardware; arquitectura Intel x86):</strong> la ICU/APIC es un módulo de hardware inteligente. Ella misma revisa la tabla por hardware, localiza la rutina de atención y la precarga directamente en la RAM; después entrega al procesador la señal junto con todos los datos y direcciones ya listos. <strong>Ventaja:</strong> el proceso es instantáneo y no le cuesta ciclos de búsqueda en software al procesador.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como la fila de un parque de diversiones; monivel es una sola fila donde atienden por llegada, multinivel tiene pase VIP para saltarse la fila, por tabla es buscar el nombre en una lista de papel y por vector es tener la puerta con el nombre listo en hardware.<span class="rompe">Dónde falla la analogía: La fila del parque maneja personas físicas, mientras que el procesador gestiona señales eléctricas y direcciones de memoria RAM para ejecutar rutinas de servicio.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Distingue la arquitectura de interrupciones de ARM (por tabla, económica en hardware pero lenta con complejidad de búsqueda O(N)) frente a Intel x86 (por vector/APIC, instantánea por hardware).</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c7-disparo" open><summary><span class="stitle">Desencadenamiento: por valor (nivel) vs. por flanco</span></summary>
@@ -54,6 +79,13 @@
 </ul>
 <p><strong>Por flanco (<em>edge-triggered</em>).</strong> El procesador no evalúa el nivel de voltaje sostenido sino la transición o salto lógico: de bajo a alto (flanco de subida) o de alto a bajo (flanco de bajada). La detección ocurre en la duración de <strong>un solo pulso o ciclo de reloj</strong>.</p>
 <p><strong>Por qué se prefiere el flanco.</strong> En una transmisión serie lenta a 9,600 baudios (~960 Hz, ~1 ms por byte), si la interrupción se gestionara por valor, el pin permanecería en alto todo el tiempo que tarda en llegar el byte. Para un procesador básico de 8 MHz, 1 ms equivale a 8,000 ciclos de reloj retenidos y desperdiciados. Por flanco, la transición inicial genera un pulso de un ciclo de reloj, el procesador registra la llegada del dato y el periférico deja de interrumpir de inmediato.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como un timbre de puerta; por valor suena todo el tiempo que mantengas el botón presionado, mientras que por flanco solo suena una vez justo en el instante en que haces el clic.<span class="rompe">Dónde falla la analogía: El timbre mecánico usa la fuerza del dedo, mientras que el procesador evalúa cambios de nivel de voltaje de bajo a alto o de alto a bajo en un solo ciclo de reloj.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Evita que periféricos lentos mantengan congelado al procesador durante miles de ciclos de reloj y previene sobrecalentamiento crítico por niveles sostenidos de señal.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> El profesor señaló que en la diapositiva venía mal escrito "cambio al" y "cambio abajo", aclarando que debe decir cambio a alto y cambio a bajo.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c7-dma" open><summary><span class="stitle">IRQ, bus PCI y controlador DMA</span></summary>
@@ -68,6 +100,12 @@
 <li><strong>Cómo funciona:</strong> es un módulo de hardware externo ubicado en el <em>chipset</em> que gestiona las interrupciones de los periféricos y transfiere los bloques de datos directamente a la RAM sin intervención de la CPU.</li>
 <li><strong>Ejemplo, RP2040:</strong> el microcontrolador RP2040 (32 bits a 150 MHz, según dijo el profesor) integra 2 núcleos y 2 controladores DMA independientes, de modo que los DMA mueven internamente altas tasas de datos entre periferias (por ejemplo USB a SPI) mientras los núcleos ejecutan algoritmos en paralelo.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como contratar a un asistente para que mueva las cajas del almacén a la tienda, liberando al gerente para que se enfoque solo en tomar decisiones importantes.<span class="rompe">Dónde falla la analogía: El asistente mueve cajas físicas, mientras que el controlador DMA transfiere bloques de bytes directamente entre los periféricos y la memoria RAM sin pasar por la CPU.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Elimina el desperdicio de ciclos del procesador al mover datos de periféricos lentos a la RAM, permitiendo altas tasas de transferencia en paralelo.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c7-chipset" open><summary><span class="stitle">Arquitectura de chipset: Puente Norte y Puente Sur</span></summary>
@@ -80,6 +118,12 @@
 <p><strong>Carga de datos en videojuegos:</strong> durante la pantalla de carga de un juego, el controlador DMA del chipset transfiere texturas y matrices directamente del SSD a la RAM de la GPU sin despertar a la CPU. Una vez cargados los datos, la CPU delega el procesamiento gráfico a la GPU y queda en estado de bajo consumo.</p>
 <p>✔️ <em>Cifras verificadas contra la transcripción del audio (21 sep 2026):</em> CPU 3 GHz, RAM 2.66 GHz, SATA “60 MB por segundo”, PCI de 32 bits a 150 MHz y 2 GB/s (en otra mención la transcripción trae “150 Hz”, que es ambigua), Gigabit Ethernet ≈ 125 MB/s, USB 3.1 a 5 Gbps. Coinciden con lo que dijo el profesor.</p>
 <p>ℹ️ <em>Referencia externa, no dicha en clase:</em> según las especificaciones publicadas, SATA III llega a 600 MB/s (no 60) y el PCI convencional de 32 bits corre a 33 o 66 MHz (133 o 266 MB/s), no a 150 MHz / 2 GB/s. Puede que el profesor haya dado cifras aproximadas o que la transcripción haya comido un dígito. <strong>Para el examen conviene usar las cifras del profesor</strong>, y confirmar con él si alguna se pregunta con número.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como una ciudad con una autopista de alta velocidad para autos deportivos (Puente Norte: CPU, RAM, GPU, SSD) y una avenida secundaria para camiones de carga lentos (Puente Sur: SATA, USB, PCI).<span class="rompe">Dónde falla la analogía: La autopista transporta vehículos, mientras que el chipset gestiona transmisiones de datos a diferentes frecuencias de gigahertz y megahertz entre los componentes del sistema.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Organiza los buses según la velocidad de los periféricos, permitiendo que la GPU y la RAM se comuniquen con el procesador a GHz sin ser frenados por periféricos lentos.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c7-timers" open><summary><span class="stitle">Temporizadores (timers): definición, papel en el SO y las 4 características</span></summary>
@@ -100,6 +144,24 @@
 <li><strong>Fuente de reloj (<em>clock source</em>):</strong> <em>oscilador interno</em>, sincronizado con la señal de reloj del propio procesador, o <em>señal externa</em>, proveniente de un evento físico exterior (por ejemplo un <em>encoder</em> en cuadratura de un motor para medir vueltas y sentido de giro, un decodificador de audio o un miógrafo para frecuencia cardíaca).</li>
 </ol>
 <p><strong>Aplicación de bajo consumo (NTP + timer).</strong> En sistemas embebidos remotos (collares de rastreo GPS, estaciones meteorológicas), el timer de bajo consumo mantiene apagado al procesador principal. El timer despierta al chip cada cierto intervalo (por ejemplo cada 3 segundos); este se conecta por <strong>NTP</strong> (<em>Network Time Protocol</em>) para actualizar fecha y hora, transmite los datos de la bitácora y vuelve a apagar el sistema para preservar la batería.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como el metrónomo de un músico o el cronómetro del árbitro que pita cada cierto tiempo para avisar que se acabó el turno de un jugador.<span class="rompe">Dónde falla la analogía: El cronómetro de un árbitro pita hacia afuera, mientras que un timer es un contador interno en hardware que dispara una interrupción al llegar a cero para que el Scheduler del SO cambie de tarea.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es el componente indispensable para el Scheduler en un sistema operativo multitarea y se define por sus 4 parámetros: modo (Free Running/One Shot), dirección (Up/Down), rango de bits y fuente de reloj (interna/externa).</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c7-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuál es la definición formal de temporizador (timer) en hardware que dio el profesor para el examen?</summary><p>Un temporizador en hardware es un contador que activa una interrupción al llegar a cero y reinicia el conteo automáticamente o se reconfigura por software.</p></details>
+<details class="qa"><summary>2. ¿Cómo funciona el mecanismo de enmascaramiento de interrupciones a nivel de compuertas lógicas?</summary><p>El bit del vector de máscara se niega con un inversor y entra a una compuerta AND junto con la señal del periférico; si la máscara es 1, la salida es siempre 0 (bloqueada), y si la máscara es 0, la salida depende de la señal del periférico.</p></details>
+<details class="qa"><summary>3. Compara la resolución de interrupciones por tabla frente a la resolución por vector en términos de velocidad e implementación.</summary><p>La resolución por tabla (usada en ARM) requiere que el software ejecute un algoritmo de búsqueda O(N) para encontrar la rutina, siendo más lenta pero económica; la resolución por vector (usada en Intel APIC) localiza y precarga la rutina en memoria por hardware de forma instantánea.</p></details>
+<details class="qa"><summary>4. Explica por qué el desencadenamiento de interrupciones por flanco es más eficiente que el desencadenamiento por valor en un puerto serie.</summary><p>Porque la interrupción por valor mantiene la señal activa durante todo el tiempo que dura la transmisión del byte reteniendo a la CPU, mientras que por flanco solo genera un pulso de un ciclo de reloj al detectar la transición de voltaje, liberando a la CPU.</p></details>
+<details class="qa"><summary>5. ¿Qué función cumple el controlador DMA en la arquitectura de un microcontrolador o tarjeta madre?</summary><p>Mueve bloques de datos directamente entre los periféricos y la memoria RAM sin intervención de la CPU, liberando al procesador de la carga de transferir byte por byte a bajas velocidades.</p></details>
+<details class="qa"><summary>6. Compara el Puente Norte (Northbridge) y el Puente Sur (Southbridge) en la arquitectura de un chipset según los componentes que administra cada uno.</summary><p>El Puente Norte conecta los componentes de ultra alta velocidad en el orden de Gigahertz (CPU, RAM, GPU en PCIe x16 y SSD); el Puente Sur administra los periféricos de menor velocidad en el orden de Megahertz (discos SATA, ranuras PCI, USB y red Ethernet).</p></details>
+<details class="qa"><summary>7. Si un microcontrolador dispone de un timer de 16 bits operando a una frecuencia de reloj externa de 50 kHz, calcula si su capacidad de conteo es suficiente para gestionar un muestreo de audio a 44.1 kHz.</summary><p>Un timer de 16 bits cuenta hasta 2^16 = 65,536 valores. Como 65,536 cuentas por segundo (65.536 kHz) es mayor que la frecuencia de muestreo de 44.1 kHz (44,100 cuentas/s), el timer de 16 bits es plenamente suficiente.</p></details>
+<details class="qa"><summary>8. ¿Cuáles son las cuatro características o parámetros fundamentales que definen a todo temporizador por hardware?</summary><p>1) Modo de ejecución (Free Running o One Shot), 2) Dirección del conteo (Up o Down), 3) Rango o ancho de bits (típicamente 8 o 16 bits), y 4) Fuente de reloj (oscilador interno o señal externa).</p></details>
 </details>
 
 <details class="section-block sec" id="c7-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
