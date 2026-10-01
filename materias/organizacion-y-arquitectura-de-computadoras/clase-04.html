@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 04 — Organización y Arquitectura de Computadoras</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -15,9 +16,27 @@
   <p class="prof">M.I. José Antonio de Jesús Arredondo Garza · 9 sep 2026 · Tema 2 (continuación) — ISA vs. Microarquitectura, CISC vs. RISC, RISC-V vs. ARM vs. x86. Raspberry Pi Pico 1 vs. Pico 2 (RP2350): FPU, benchmarks, PIO, mecanismo de selección de arquitectura en arranque. Videos técnicos: RISC-V vs ARM vs x86, Pico 2 architecture review.</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c4-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>La diferencia entre ISA (definición del conjunto de instrucciones y organización funcional) y microarquitectura (implementación física concreta en silicio que cambia en cada generación)</strong><span class="evid">Evidencia: Lo explicó explícitamente y lo reforzó mediante la proyección del video técnico de 13 minutos.</span></li>
+<li><strong>La comparativa de tiempos en algoritmos de punto flotante entre la emulación por software en MicroPython de la Pico 1 (de 125 µs a 220 ms) y la ejecución por hardware FPU de la Pico 2 (102 µs)</strong><span class="evid">Evidencia: Lo explicó explícitamente con mediciones de laboratorio de un algoritmo de muestreo.</span></li>
+<li><strong>La arquitectura interna de 4 núcleos del chip RP2350 (2x ARM Cortex-M33 y 2x RISC-V Hazard3) y el mecanismo de selección por registro de CPU en el bootloader</strong><span class="evid">Evidencia: Lo explicó explícitamente en la lección y se detalló en el video de reseña técnica.</span></li>
+<li><strong>Desglose de la nomenclatura RP2350 (RP=Raspberry Pi, 2=serie/doble núcleo, 3=ARM Cortex-M33, 5=520 KB SRAM por fórmula 2^5 * 16 KB, 0=0 KB Flash interna)</strong><span class="evid">Evidencia: Lo explicó explícitamente analizando el diagrama y el video del RP2350.</span></li>
+<li><strong>Las características del periférico PIO (3 interfaces y 12 máquinas de estado en Pico 2 frente a 4 en Pico 1) y su capacidad para crear periféricos como SPI de 20 a 30 MHz</strong><span class="evid">Evidencia: Lo explicó explícitamente comparando la velocidad nativa de 7.5 MHz con la velocidad sintetizada en PIO.</span></li>
+</ol>
+</details>
+
 <details class="section-block sec" id="c4-fpu-benchmark-apertura" open><summary><span class="stitle">Apertura: rendimiento en punto flotante, Pico 1 vs. Pico 2</span></summary>
 <p>El profesor abrió la sesión con una pregunta directa a la clase para verificar sus antecedentes sobre el tema; tras recibir una respuesta afirmativa unánime, justificó por qué vale la pena medir en números concretos la diferencia de tener o no una FPU dedicada. Compartió mediciones reales de laboratorio: un algoritmo de muestreo que originalmente tardaba <strong>125 µs</strong> en ejecutarse, al incorporar operaciones de punto flotante procesadas por software en la Pico 1 (sin FPU), elevó su tiempo hasta <strong>220 ms</strong>. En contraste, al ejecutar el mismo algoritmo en la Pico 2 aprovechando la FPU dedicada por hardware, el tiempo bajó a apenas <strong>102 µs</strong> — una diferencia de varios órdenes de magnitud, no un ajuste marginal.</p>
 <p>Sobre el mecanismo dual ARM/RISC-V de la Pico 2: la selección del modo de operación al encender la placa se gestiona a través de un registro leído por el bootloader, que determina si la ejecución arranca en modo ARM o en modo RISC-V. El profesor aclaró que para lograr un funcionamiento <strong>simultáneo</strong> en ambos modos (no solo uno u otro al arrancar) sería necesario desarrollar un bootloader personalizado escrito íntegramente en ensamblador puro — no es algo que el bootloader oficial ofrezca de fábrica.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como comparar hacer cálculos matemáticos largos a mano en una libreta contra usar una calculadora científica integrada en el escritorio.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque hacer cálculos a mano solo te cansa a ti, pero en un microcontrolador la emulación por software retrasa el tiempo real de muestreo y altera todo el sistema.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Al abrir la clase, el profesor demostró que en la Pico 1 un muestreo de 125 µs aumentaba a 220 ms por software, mientras que con la FPU de la Pico 2 se reduce a 102 µs.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-isa-microarq" open><summary><span class="stitle">ISA vs. Microarquitectura</span></summary>
@@ -36,6 +55,13 @@
 <li>Ejemplo: Intel Pentium, Pentium Pro, Core i3/i5/i7 comparten ISA x86 pero difieren radicalmente en microarquitectura.</li>
 </ul>
 <p><strong>Implicación para el programador:</strong> código ensamblador escrito para ISA x86 ejecuta en procesadores Pentium de 1993 y en i9 moderno (compatibilidad), pero la microarquitectura determina velocidad y eficiencia.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>La ISA es como el idioma o diccionario de un lenguaje que todos aceptan hablar, y la microarquitectura es la forma física de las cuerdas vocales o el cerebro de cada persona que pronuncia las palabras.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque en las personas la pronunciación cambia el acento, mientras que en un procesador la microarquitectura cambia la velocidad física, los transistores y los ciclos de reloj exactos.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>La ISA define el conjunto de instrucciones, registros y buses visibles para el programador de software, mientras que la microarquitectura es la implementación física en silicio que evoluciona generación tras generación.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir la ISA con la microarquitectura o pensar que cambiar de microarquitectura exige volver a escribir todo el código ejecutable si se mantiene la misma ISA.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-cisc-risc" open><summary><span class="stitle">CISC vs. RISC — Filosofías de Diseño</span></summary>
@@ -65,6 +91,13 @@
 <li>CISC = navaja multiusos (compleja pero versátil).</li>
 <li>RISC = herramientas especializadas (simples pero coordinadas).</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>CISC es como una navaja suiza que tiene herramientas muy complejas para hacer de todo en un solo movimiento, mientras que RISC es un kit de herramientas simples que combinadas logran la misma tarea paso a paso.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque la navaja suiza ocupa poco espacio en la mano, pero en los procesadores CISC las instrucciones complejas ocupan circuitos heterogéneos y consumen mucha más energía y calor.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>CISC (x86) ahorraba memoria con instrucciones complejas de 1 a 15 bytes en 1978; RISC (ARM, RISC-V) usa instrucciones uniformes de longitud fija que se ejecutan en un ciclo, reduciendo consumo y simplificando el hardware.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Creer que RISC es inferior a CISC porque requiere más líneas de código ensamblador para realizar la misma tarea.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-arquitecturas-comerciales" open><summary><span class="stitle">Arquitecturas Comerciales: x86, ARM, RISC-V</span></summary>
@@ -95,6 +128,13 @@
 <li><strong>Licencia:</strong> open-source, estándar Berkeley (BSD-like), cualquiera puede fabricar chips RISC-V sin pedir permiso.</li>
 <li><strong>Proyección:</strong> esperado como alternativa a ARM en IoT/Edge dentro de 5–10 años.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como tener tres marcas de autos: una potente pero gastalona de gasolina para camiones (x86), una ligera y eficiente bajo licencia pagada para ciudad (ARM), y un modelo cuyos planos son libres y gratuitos para que cualquiera lo construya (RISC-V).<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque un programa compilado para una arquitectura no corre directamente en otra.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>x86 domina en PC pero fracasó en móviles (Intel Atom) por calor y consumo; ARM domina en móviles y laptops (Apple M1-M4) cobrando licencias y regalías; RISC-V es un estándar abierto sin regalías adoptado por Google, Nvidia y Alibaba.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Pensar que ARM fabrica chips físicamente, cuando en realidad solo diseña las arquitecturas y comercializa licencias y cobro de regalías por volumen.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-pico-especificaciones" open><summary><span class="stitle">Raspberry Pi Pico: Pico 1 (RP2040) vs. Pico 2 (RP2350)</span></summary>
@@ -119,11 +159,25 @@
 <li>Costo: ~$8–10 USD.</li>
 </ul>
 <p><strong>Mecanismo de Selección de Arquitectura en Arranque (Pico 2):</strong> proceso controlado por software en el bootloader que determina si la placa arrancará en modo ARM Cortex-M33 o en modo RISC-V Hazard3. Implementado mediante un registro de la CPU leído en el inicio (warm boot detection).</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como comparar un coche de dos cilindros básico sin turbo (Pico 1) con un vehículo deportivo que incluye motor de cuatro cilindros, frenos de precisión y doble de cajuela (Pico 2).<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque los vehículos no pueden cambiar de tipo de motor sobre la marcha, mientras que la Pico 2 selecciona en el bootloader si opera en modo ARM Cortex-M33 o RISC-V Hazard3.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>La Pico 1 (RP2040) cuenta con 2 núcleos Cortex-M0+ a 133 MHz, 264 KB de RAM y 4 máquinas PIO; la Pico 2 (RP2350) integra 4 núcleos (2x M33 + 2x RISC-V) a 150 MHz, FPU dedicada, 520 KB SRAM, 4 MB Flash y 12 máquinas PIO.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Asumir que la Pico 2 puede ejecutar simultáneamente los 4 núcleos en entornos de desarrollo convencionales sin crear un bootloader personalizado escrito en ensamblador puro.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-inline-assembly" open><summary><span class="stitle">Entornos de programación: C vs. Inline Assembly en MicroPython</span></summary>
 <p>Se discutieron las alternativas entre compilar en lenguaje C o trabajar directamente con MicroPython. El profesor manifestó su inconformidad ante la marcada preferencia de la plataforma Raspberry Pi por MicroPython, ya que oculta la arquitectura subyacente al programador. Como alternativa más accesible para trabajar a bajo nivel sin abandonar MicroPython, presentó el uso de <strong>ensamblador nativo incrustado (Inline Assembly)</strong> dentro de scripts de MicroPython: se declaran subrutinas especiales que contienen exclusivamente instrucciones de ensamblador, operando directamente sobre los registros de punto flotante de la FPU. El conjunto de instrucciones disponible en ese esquema está acotado a operaciones aritméticas elementales.</p>
 <p>El profesor enfatizó que el código máquina compilado para una arquitectura ARM específica no es automáticamente portable a cualquier otro chip ARM. Como caso comparativo citó la plataforma china <strong>Orange Pi</strong>: aunque usa procesadores ARM, su ISA no es 100% compatible con el de la Raspberry Pi, así que el código ensamblador optimizado para una placa no necesariamente corre en la otra sin adaptación.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como escribir una carta en español pero incluir un párrafo en código clave directo para el mensajero cuando necesitas que entregue algo de forma urgente.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque la carta en papel la lee un humano a su ritmo, pero el ensamblador incrustado en MicroPython se traduce a instrucciones nativas que la FPU ejecuta en ciclos de reloj exactos.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite declarar subrutinas nativas mediante decoradores en MicroPython para operar directamente sobre los registros de la FPU (S0-S31) sin depender de librerías lentas de alto nivel.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Intentar usar funciones trascendentales (como seno o coseno) directamente en las instrucciones de la FPU, ya que la FPU solo soporta operaciones aritméticas básicas y raíz cuadrada por hardware.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-fpu-benchmarks" open><summary><span class="stitle">FPU (Unidad de Punto Flotante) — Benchmarks Pico 1 vs Pico 2</span></summary>
@@ -135,6 +189,13 @@
 </ul>
 <p><strong>Registros de FPU:</strong> banco de 32 registros de punto flotante denominados s0 a s31 (single precision, 32 bits cada uno). Permiten operaciones FADD (suma), FMUL (multiplicación), FDIV (división), FSQRT (raíz cuadrada) en un solo ciclo de reloj.</p>
 <p><strong>Implicación:</strong> para cálculos de IA, DSP (procesamiento de señal), simulaciones físicas, la FPU integrada es crítica para rendimiento aceptable en microcontroladores.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como medir cuánto tarda un camión de carga en cruzar la ciudad cuando tiene que pasar por brechas de tierra comparado a cuando toma una autopista de cuota directa.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque la autopista tiene cuota económica, mientras que la FPU por hardware no solo es más rápida sino que reduce drásticamente el consumo y evita distorsiones de tiempo en el muestreo.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra que la emulación por software en MicroPython eleva el tiempo de un algoritmo de 125 µs a 220 ms en la Pico 1, mientras que la FPU de la Pico 2 reduce la ejecución a solo 102 µs.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Suponer que un tiempo de ejecución más largo por software en punto flotante no afecta la precisión temporal del muestreo de señales en tiempo real.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-pio-perifericos" open><summary><span class="stitle">PIO (Programmable I/O) — Mini-FPGA del Microcontrolador</span></summary>
@@ -149,10 +210,22 @@
 <p><strong>Ventaja arquitectónica:</strong> en lugar de usar interrupciones de software (costosas) o polling (consume CPU), PIO ejecuta de forma asincrónica periodos de comunicación complejos. Ejemplo: protocolo WS2812 (LED RGB addressable) se implementa en 10–15 líneas de código PIO, sin cargar a la CPU.</p>
 <p><strong>Ejemplo de eficiencia — interfaz SPI:</strong> mientras que una interfaz SPI implementada por hardware dedicado nativo alcanza cierta velocidad límite fija, el mismo protocolo implementado sobre el bloque PIO puede alcanzar entre <strong>20 y 30 MHz</strong>, aprovechando que corre sincronizado con el reloj del sistema (150 MHz en la Pico 2) en vez de depender de un controlador SPI de propósito fijo.</p>
 <p><strong>Comparativa:</strong> PIO ≈ FPGA ultraminimalista integrada en el microcontrolador.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como tener pequeños asistentes configurables dentro del chip a los que puedes enseñarles a manejar el semáforo de entrada sin tener que llamar al jefe principal para cada parpadeo.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque un asistente humano se cansa, mientras que las máquinas de estado del PIO ejecutan secuencias lógicas a velocidades de decenas de megahertz de forma continua e independiente.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>El bloque PIO funciona como una mini-FPGA integrada; la Pico 2 amplía de 4 a 12 máquinas de estado (3 interfaces), permitiendo sintetizar periféricos como un puerto SPI de 20 a 30 MHz frente a los 7.5 MHz del SPI nativo.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-seguridad-rp2350" open><summary><span class="stitle">Módulos de seguridad del RP2350: TrustZone, cripto y OTP</span></summary>
 <p>El chip RP2350 incorpora módulos de seguridad nuevos respecto a la generación anterior: <strong>ARM TrustZone</strong>, que permite aislar código sensible y proteger claves o credenciales (por ejemplo, credenciales de Wi-Fi) en una zona de memoria separada e inaccesible desde el código normal de la aplicación; <strong>aceleración criptográfica por hardware</strong>, que agiliza operaciones de cifrado sin cargar al procesador principal; y memoria <strong>OTP (One-Time Programmable)</strong>, para grabar de forma permanente e inalterable ciertos datos críticos (como claves de fábrica) que no deben poder modificarse después.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como tener una caja fuerte blindada dentro de una casa donde guardas la llave de la puerta y las claves bancarias para que las visitas no las puedan ver ni copiar.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque la caja fuerte guarda objetos físicos, pero ARM TrustZone aísla regiones de memoria de datos y ejecuciones de código contra ataques de ingeniería inversa o extracción de firmware.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Incorpora ARM TrustZone para aislar credenciales de Wi-Fi y claves criptográficas, otros módulos de seguridad y 8 KB de memoria programable una sola vez (OTP).</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-nomenclatura-rp2350"><summary><span class="stitle">Desglose de la nomenclatura RP2350</span></summary>
@@ -163,6 +236,13 @@
 <li><strong>0:</strong> memoria Flash interna del die: 0 = 0 KB de Flash interna (utiliza 4 MB QSPI externa en la placa, conectada vía bus SPI a 30 MHz).</li>
 </ul>
 <p><strong>Implicación:</strong> la nomenclatura codifica las especificaciones de hardware de forma compacta, facilitando identificación rápida de capacidades.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como la placa de especificaciones de un automóvil que te dice con letras y números exactos qué tipo de motor lleva, cuántos cilindros tiene y cuánta carga puede llevar en la cajuela.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque los códigos de autos son comerciales, mientras que en el RP2350 el número '5' proviene de una fórmula matemática exacta (2^5 * 16 KB) para indicar la SRAM volátil.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Explica que RP = Raspberry Pi, 2 = serie/núcleo doble estándar, 3 = procesador ARM Cortex-M33, 5 = 520 KB SRAM (2^5 * 16 KB) y 0 = 0 KB Flash interna integrada en el chip (usa 4 MB Flash externa QSPI).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Creer que el número '0' final significa que la tarjeta Raspberry Pi Pico 2 no tiene memoria Flash para guardar programas, cuando en realidad la Flash de 4 MB está externa al chip sobre la placa.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-overclocking-ciclo-fetch" open><summary><span class="stitle">Overclocking e Impacto en el Ciclo Fetch</span></summary>
@@ -175,6 +255,12 @@
 </ul>
 <p><strong>Consecuencia:</strong> el fetch ocurre más frecuentemente, lo que acelera la ejecución global de programas. Sin embargo, overclocking aumenta consumo de energía y temperatura (requiere disipación térmica).</p>
 <p><strong>Limitación en Pico 2:</strong> la memoria Flash QSPI externa tiene latencia intrínseca (~30 ns), por lo que fetch desde Flash remoto es más lento que desde caché o SRAM. El overclocking mejora fetch desde SRAM pero no tanto desde Flash.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como acelerar el ritmo de un metrónomo para que un músico lea y toque las notas de la partitura a una velocidad mucho más rápida por segundo.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque si aceleras demasiado a un músico se equivoca de nota, mientras que en el microcontrolador el overclocking altera el ciclo máquina y exige tolerancia del silicio y control térmico.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>La frecuencia base de la Pico 2 sube a 150 MHz (frente a 133 MHz de la Pico 1) y permite overclocking de hasta 350 MHz, aumentando la velocidad a la que el procesador realiza la búsqueda (fetch) de instrucciones en memoria.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-ensamblador-inline" open><summary><span class="stitle">Ensamblador Inline en MicroPython — Acceso Directo a Registros</span></summary>
@@ -188,6 +274,13 @@ def add_floats(r0, r1):
     # retorna s2 en r0
 </code></pre>
 <p><strong>Beneficio:</strong> combina flexibilidad de Python para lógica de control + velocidad de ensamblador nativo para operaciones críticas (DSP, cálculos flotantes).</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como hablarle al procesador directamente en sus órdenes de bajo nivel desde adentro de un script de Python, para manipular los registros de control sin pedir permiso a las librerías.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque en Python común las variables son dinámicas, pero en ensamblador incrustado debes respetar strictly el mapa de memoria y la asignación fija de registros físicos.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite programar a bajo nivel utilizando la herramienta machine.mem32 y ensamblador incrustado para leer identificadores de hardware (Chip ID) y conmutar caminos de ejecución según el procesador detectado.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Tratar de escribir código idéntico sin verificar el modelo de microcontrolador, ignorando que los mapas de memoria cambian entre la Pico 1 y la Pico 2.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-videos-proyectados"><summary><span class="stitle">Videos Técnicos Proyectados en Clase</span></summary>
@@ -206,6 +299,24 @@ def add_floats(r0, r1):
 <li>Comparativa de rendimiento vs. Pico 1 en benchmarks de punto flotante.</li>
 <li>Seguridad TrustZone y aislamiento de código de confianza.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como ver un documental de dos episodios que primero te explica la guerra global entre las tecnologías de procesadores y luego te muestra la anatomía detallada del nuevo microchip que tienes en la mesa.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque un documental es entretenimiento pasivo, mientras que los videos mostrados en clase analizan la ISA, los modelos de licencias de ARM, la disrupción de RISC-V y la arquitectura del RP2350 para aplicarlos en programación.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>El primer video (13 min) abordó la diferencia entre ISA y microarquitectura, CISC vs RISC, historia de x86, licencias/regalías de ARM, el éxito de Apple M1 y RISC-V; el segundo video analizó la nomenclatura, los 4 núcleos, la memoria y la seguridad del RP2350.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c4-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuál es la diferencia conceptual entre la ISA (Instruction Set Architecture) y la microarquitectura de un procesador?</summary><p>La ISA es la especificación del conjunto de instrucciones, registros y organización funcional visible para el software (el "idioma"), mientras que la microarquitectura es la implementación física concreta en silicio que cambia en cada generación.</p></details>
+<details class="qa"><summary>2. Explica con tus palabras por qué la FPU dedicada por hardware en la Pico 2 representa una ventaja crítica frente a la Pico 1 en algoritmos de punto flotante.</summary><p>Porque en la Pico 1 las operaciones de punto flotante se emulaban por software en MicroPython elevando el tiempo de ejecución de 125 µs hasta 220 ms, mientras que la FPU por hardware de la Pico 2 reduce el tiempo a 102 µs sin distorsionar el muestreo.</p></details>
+<details class="qa"><summary>3. Según el desglose de la nomenclatura del chip RP2350 presentado en clase, ¿qué representan los dígitos 3, 5 y 0?</summary><p>El 3 indica el procesador principal ARM Cortex-M33, el 5 representa la memoria SRAM de 520 KB obtenida con la fórmula 2^5 * 16 KB, y el 0 indica 0 KB de Flash interna en el chip (usa 4 MB de Flash QSPI externa).</p></details>
+<details class="qa"><summary>4. ¿Cómo se comparan las filosofías CISC y RISC respecto a la longitud de las instrucciones, la complejidad del hardware y el consumo de energía?</summary><p>CISC utiliza instrucciones complejas de longitud variable (1 a 15 bytes en x86) que requieren más ciclos y energía; RISC utiliza instrucciones sencillas de longitud fija ejecutadas en un ciclo, reduciendo el consumo energético y simplificando el silicio.</p></details>
+<details class="qa"><summary>5. Aplica la fórmula de rendimiento observada en la Pico 2: si una rutina de procesamiento en el bloque PIO opera con 12 máquinas de estado distribuidas en 3 interfaces, ¿cuál es la diferencia de velocidad al sintetizar una interfaz SPI en PIO frente al SPI nativo de la Pico 1?</summary><p>El SPI nativo de la Pico 1 alcanza como máximo 7.5 MHz, mientras que sintetizado mediante las máquinas de estado de PIO en la Pico 2 puede alcanzar velocidades de entre 20 y 30 MHz.</p></details>
+<details class="qa"><summary>6. ¿Qué ventaja ofrece la tecnología ARM TrustZone en el microcontrolador RP2350 para desarrolladores de sistemas embebidos e IoT?</summary><p>Permite aislar físicamente en memoria el código y los datos sensibles (como credenciales de Wi-Fi, claves de cifrado y firmware) del resto de la aplicación para evitar ataques de ingeniería inversa o robo de propiedad intelectual.</p></details>
+<details class="qa"><summary>7. Compara el modelo de licencias y costos de producción entre la arquitectura ARM y la arquitectura abierta RISC-V.</summary><p>ARM exige comprar licencias de diseño por millones de dólares más el pago de regalías por cada chip vendido o por usar su ensamblador; RISC-V es un estándar de código abierto libre de licencias y regalías.</p></details>
+<details class="qa"><summary>8. Explica el impacto del overclocking hasta 350 MHz en la Raspberry Pi Pico 2 sobre el ciclo de máquina y el procesamiento de instrucciones.</summary><p>El overclocking incrementa la frecuencia de reloj del sistema alterando directamente la velocidad del ciclo de búsqueda (fetch), lo que permite ejecutar más instrucciones por segundo a nivel de silicio.</p></details>
 </details>
 
 <details class="section-block sec" id="c4-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>

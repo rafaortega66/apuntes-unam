@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T12:13:24+00:00",
+ "generatedAt": "2026-10-01T12:15:24+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -100,7 +100,7 @@
     "fecha": "2026-09-09",
     "resumen": "Tema 2 (continuación) — ISA vs. Microarquitectura, CISC vs. RISC, RISC-V vs. ARM vs. x86. Raspberry Pi Pico 1 vs. Pico 2 (RP2350): FPU, benchmarks, PIO, mecanismo de selección de arquitectura en arranque. Videos técnicos",
     "url": "materias/organizacion-y-arquitectura-de-computadoras/clase-04.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 5,
@@ -468,6 +468,11 @@
  },
  "gitlog": [
   {
+   "hash": "babdff6",
+   "fecha": "2026-10-01T06:13:25-06:00",
+   "mensaje": "FSE Clase 05: formato de estudio"
+  },
+  {
    "hash": "d2841d0",
    "fecha": "2026-10-01T06:11:43-06:00",
    "mensaje": "ASI Clase 05 (logística del proyecto) marcada como no-aplica"
@@ -761,11 +766,6 @@
    "hash": "3665d0f",
    "fecha": "2026-09-30T07:30:34-06:00",
    "mensaje": "RP: agregar Clase 10 (28 sep, examen) y documentar que los labs van en la página de teoría"
-  },
-  {
-   "hash": "34fc62b",
-   "fecha": "2026-09-30T07:28:31-06:00",
-   "mensaje": "ACS: agregar Clase 10 (29 sep) — socket servidor en C: socket, sockaddr_in, bind, listen, accept"
   }
  ]
 }
