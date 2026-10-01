@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 08 — Arquitectura Cliente-Servidor</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -14,6 +15,17 @@
 <div class="detail-head" style="border-color:#E8735C"><h2>Clase 08</h2>
   <p class="prof">Mtro. Carlos Alberto Román Zamitiz · 22 sep 2026 · Tema 2 — Sockets: modelo cliente-servidor a nivel software, comunicación síncrona/asíncrona, familias de direcciones (AF_INET, AF_UNIX…), descriptores de archivo en Unix/Linux, y las estructuras <code>sockaddr_in</code> y <code>hostent</code> en C.</p>
 </div>
+
+<div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c8-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Definición de socket como punto final de software para comunicar procesos y asignación consecutiva de file descriptors comenzando en 3</strong><span class="evid">Evidencia: Lo repitió extensamente durante la clase y lo ligó a la manipulación de recursos en Unix/Linux.</span></li>
+<li><strong>Diferenciación de los tres descriptores de archivo reservados (0 stdin, 1 stdout, 2 stderr) y su redirección con 1&gt; y 2&gt;</strong><span class="evid">Evidencia: Lo resolvió en vivo en la terminal mostrando cómo la salida de error (2) tiene prioridad sobre la de éxito (1).</span></li>
+<li><strong>Atributos e inicialización de la estructura struct sockaddr_in en C (sin_family, sin_port, sin_addr, sin_zero)</strong><span class="evid">Evidencia: Lo explicó paso a paso en el pizarrón desglosando la abreviación sin_ (socket internet) y la conversión de IP a binario.</span></li>
+<li><strong>Clasificación de las familias de sockets AF_INET para IPv4 y AF_UNIX para comunicación local mediante el sistema de archivos</strong><span class="evid">Evidencia: Lo explicó en clase dando el ejemplo práctico de cómo bases de datos como MySQL y PostgreSQL usan AF_UNIX por defecto.</span></li>
+</ol>
+</details>
 
 <details class="section-block sec" id="c8-modelo" open><summary><span class="stitle">Sockets y el modelo cliente-servidor a nivel de software</span></summary>
 <p>Se retoma la definición de la <a href="clase-07.html">Clase 07</a>: un <strong>socket</strong> es cada uno de los extremos finales de un canal de comunicación. El profesor insiste en que no debe concebirse como un canal de hardware físico, sino como un canal lógico de software para interconectar procesos.</p>
@@ -31,6 +43,12 @@
 <li><strong>Intercambio de datos:</strong> el cliente envía peticiones por su socket y el servidor procesa y responde por el suyo.</li>
 <li><strong>Cierre de sockets:</strong> al terminar la tarea o cuando el cliente se desconecta, ambas partes deben cerrar explícitamente sus sockets. El profesor subraya que no cerrar un socket deja el canal bloqueado para otros procesos, de forma análoga a un archivo que se queda abierto en el sistema de archivos.</li>
 </ol>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como tener dos teléfonos conectados por una línea; el cliente es quien marca el número y el servidor es quien contesta al otro lado para atender la llamada.<span class="rompe">Dónde falla la analogía: Un teléfono real es un aparato físico de hardware, mientras que en C el socket es únicamente una estructura lógica de software manejada como un entero por el sistema operativo.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Define la base del modelo cliente-servidor en software donde dos procesos (en la misma máquina o en red) se comunican usando la IP/dominio y el puerto del servidor.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c8-sincrona" open><summary><span class="stitle">Comunicación síncrona vs. asíncrona</span></summary>
@@ -38,6 +56,12 @@
 <li><strong>Síncrona:</strong> sigue un orden estricto de envío y recepción en secuencia lineal — el cliente envía una petición y no puede enviar otra hasta recibir y leer la respuesta del servidor (cliente envía → servidor recibe → servidor envía → cliente recibe → cliente vuelve a enviar). Una alumna propuso como ejemplo la radio o la televisión; el profesor lo confirmó y añadió el correo postal tradicional (redactar la carta, pegar la estampilla y esperar la respuesta por correo) como ejemplo analógico de comunicación síncrona.</li>
 <li><strong>Asíncrona:</strong> no exige un orden secuencial estricto ni espera inmediata. El cliente puede enviar varios mensajes consecutivos mientras el servidor los lee y responde en paralelo. Ejemplos cotidianos: WhatsApp o Telegram. Se reflexionó sobre cómo la sociedad digital actual vive con más prisa y usa predominantemente comunicaciones asíncronas.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>La comunicación síncrona es como hablar por un radiotransmisor estilo "cambio y fuera", donde debes esperar a que la otra persona te responda antes de poder enviar tu siguiente mensaje.<span class="rompe">Dónde falla la analogía: En el radiotransmisor la voz viaja por ondas analógicas en tiempo real, mientras que en sistemas los datos son paquetes digitales que el socket procesa en orden secuencial estricto.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite entender los flujos de comunicación; la síncrona exige un orden lineal estricto de envío y recepción, mientras que la asíncrona (como WhatsApp) permite enviar múltiples mensajes seguidos.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c8-af" open><summary><span class="stitle">Familias o dominios de sockets (Address Family — AF)</span></summary>
@@ -48,6 +72,12 @@
 <li><strong><code>AF_UNIX</code> (o <code>AF_LOCAL</code>):</strong> sockets de dominio Unix para comunicación entre procesos de la <strong>misma máquina física</strong>. En vez de IP y puerto, se asocian a un archivo del sistema de archivos. Ejemplo: bases de datos como MySQL o PostgreSQL vienen configuradas por defecto con sockets Unix locales, para permitir conexiones únicamente por <code>localhost</code> por seguridad.</li>
 <li><strong>Otras familias mencionadas:</strong> <code>AF_NETLINK</code> (comunicación directa entre el kernel de Linux y procesos de usuario), <code>AF_BLUETOOTH</code> (enlaces Bluetooth) y <code>AF_PACKET</code> (sockets a nivel de paquetes/tramas de red en capa baja, usados para herramientas de monitoreo o <em>sniffers</em>).</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como elegir el tipo de red postal que vas a usar: si vas a enviar una carta dentro del mismo edificio o si la vas a mandar por correo internacional.<span class="rompe">Dónde falla la analogía: El correo internacional usa estampillas y sobres físicos, mientras que las familias de sockets definen rangos de direcciones lógicas (IPv4 en AF_INET o archivos locales en AF_UNIX).</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Determina el dominio de direcciones que usará el socket; AF_INET utiliza direcciones IPv4 de 4 octetos (0 a 255), mientras que AF_UNIX utiliza archivos del sistema para procesos en la misma máquina.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c8-descriptores" open><summary><span class="stitle">Descriptores de archivo en Unix/Linux y redirección de entradas/salidas</span></summary>
@@ -69,6 +99,13 @@
 </ol>
 <p>Un alumno preguntó si es posible mandar la salida de éxito y la de error al mismo archivo de bitácora. El profesor confirmó que sí, y que hay librerías como <em>Log4j</em> (muy usada en Java) que lo gestionan; por línea de comandos se puede lograr con el símbolo <em>ampersand</em> (<code>&amp;</code>), pero advirtió que no hay que poner el mismo nombre de archivo en <code>1&gt;</code> y <code>2&gt;</code> directamente, porque uno de los descriptores bloquearía el archivo para el otro.</p>
 <p><strong>Asignación de descriptores para sockets:</strong> como los enteros <code>0</code>, <code>1</code> y <code>2</code> están reservados, cuando se crea el primer socket en un programa en C, el descriptor que devuelve el sistema operativo es el <strong><code>3</code></strong>. El segundo socket recibe el <code>4</code>, el tercero el <code>5</code>, y así sucesivamente.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como las ventanillas numeradas de un banco: la ventanilla 0 recibe documentos, la 1 entrega comprobantes de éxito, la 2 entrega avisos de error y a partir de la 3 atienden trámites nuevos.<span class="rompe">Dónde falla la analogía: Las ventanillas bancarias son físicas, mientras que los descriptores de archivo son números enteros de software que el sistema operativo asigna a cualquier recurso abierto.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>En Unix/Linux todo es un archivo; los descriptores 0 (stdin), 1 (stdout) y 2 (stderr) están reservados, por lo que el primer socket creado recibe automáticamente el descriptor 3.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Creer que al redirigir salida con el mismo nombre de archivo en 1&gt; y 2&gt; ambos escribirán sin problema, pues el profesor aclaró que un descriptor bloquearía el archivo para el otro.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c8-sockaddr" open><summary><span class="stitle">Estructuras en C para sockets de red: <code>sockaddr_in</code> y <code>hostent</code></span></summary>
@@ -87,6 +124,25 @@
 <li><strong><code>sin_zero</code>:</strong> arreglo de 8 ceros <code>char</code> (representados entre comillas simples <code>'0'</code>, no como ceros numéricos) usado históricamente para rellenar la estructura al tamaño de <code>struct sockaddr</code>. Se aclaró que en distribuciones modernas de Linux este relleno es opcional y la estructura funciona aun sin incluirlo.</li>
 </ul>
 <p>También se introdujo <code>struct hostent</code>, que facilita la resolución de nombres de dominio y la obtención de información sobre los extremos de la conexión (por ejemplo, resolver <code>www.google.com</code>). Devuelve el nombre oficial del host, su lista de alias, el tipo de dirección (<code>AF_INET</code>), la longitud en bytes (4 bytes para IPv4) y un arreglo con la lista de direcciones IP asociadas a ese dominio. Un mismo dominio puede tener varias direcciones IP asociadas, para dar alta disponibilidad y balanceo entre distintos centros de datos en el mundo.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como llenar un formulario de envío con el nombre del país (familia), el código postal (puerto) y la dirección exacta (IP) formateada para que el sistema la procese.<span class="rompe">Dónde falla la analogía: Un formulario de papel usa letras escritas, pero struct sockaddr_in requiere que la dirección IP se convierta a formato binario de red y el puerto a orden de bytes de red.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la estructura en C necesaria para configurar sockets de Internet IPv4 en Capa 4 TCP; contiene sin_family (AF_INET), sin_port, sin_addr y el relleno opcional sin_zero.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Escribir la dirección IP como una simple cadena de texto dentro de sin_addr en lugar de convertirla al formato binario exigido por la máquina.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c8-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Por qué en la arquitectura cliente-servidor explicada por el profesor se afirma que un mismo hardware puede ser cliente y servidor al mismo tiempo?</summary><p>Porque el modelo cliente-servidor se maneja a nivel de software como dos procesos independientes, los cuales pueden ejecutarse en la misma máquina física o en máquinas distintas en red.</p></details>
+<details class="qa"><summary>2. Explica con tus palabras la diferencia entre comunicación síncrona y asíncrona en el contexto de sockets.</summary><p>La comunicación síncrona sigue un orden secuencial estricto donde no se envía otro mensaje hasta leer la respuesta previa, mientras que la asíncrona permite enviar múltiples mensajes consecutivos sin esperar respuesta inmediata.</p></details>
+<details class="qa"><summary>3. Si se ejecuta el comando ls -l /tmp /otro en la terminal de Linux, ¿qué salida se imprime primero en pantalla y por qué?</summary><p>Se imprime primero el mensaje de error de /otro, porque en la terminal de Linux la salida estándar de error (descriptor 2) tiene prioridad visual sobre la salida estándar de éxito (descriptor 1).</p></details>
+<details class="qa"><summary>4. Compara la familia de sockets AF_INET con la familia AF_UNIX.</summary><p>AF_INET utiliza direcciones IP y puertos para comunicación sobre la red IPv4, mientras que AF_UNIX se asocia a un archivo del sistema para comunicación local entre procesos en la misma máquina.</p></details>
+<details class="qa"><summary>5. ¿Qué entero recibe como descriptor de archivo el primer socket creado en un programa en C y por qué no recibe un número menor?</summary><p>Recibe el entero 3, porque los números 0, 1 y 2 ya están previamente reservados por el sistema operativo para la entrada estándar (0), salida estándar de éxito (1) y salida de error (2).</p></details>
+<details class="qa"><summary>6. Un programa intenta guardar la salida de éxito en exito.txt y la de error en error.txt usando descriptores. ¿Cómo se escribe el comando de redirección en la terminal?</summary><p>Se escribe especificando los descriptores explícitamente: comando 1&gt; exito.txt 2&gt; error.txt.</p></details>
+<details class="qa"><summary>7. ¿Cuál es el rango numérico decimal de cada uno de los 4 octetos que forman una dirección IP en la familia AF_INET y por qué?</summary><p>El rango va de 0 a 255, porque cada octeto representa un byte de 8 bits (2 a la 8 = 256 valores posibles, del 0 al 255).</p></details>
+<details class="qa"><summary>8. ¿Qué significan el prefijo sin_ y el campo sin_zero dentro de la estructura struct sockaddr_in en lenguaje C?</summary><p>El prefijo sin_ proviene de "socket internet" y sin_zero es un arreglo de 8 ceros tipo char usado históricamente para rellenar el tamaño de la estructura e igualarlo a struct sockaddr.</p></details>
 </details>
 
 <details class="section-block sec" id="c8-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
