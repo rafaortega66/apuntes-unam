@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 08 — Reconocimiento de Patrones</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -14,6 +15,16 @@
 <div class="detail-head" style="border-color:#45B8A8"><h2>Clase 08</h2>
   <p class="prof">Ing. Rubén Omar Azuara Domínguez · 21 sep 2026 · Tema 6 (cierre) y Tema 7 — Evaluación de agrupamientos con métricas internas (Dunn, Davies-Bouldin, Silueta) e inicio de la clasificación probabilística: regla de Bayes, riesgo condicional, QDA/LDA y Naive Bayes.</p>
 </div>
+
+<div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c8-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Cálculo de riesgo condicional minimizado dada una matriz de pérdidas y probabilidades a posteriori</strong><span class="evid">Evidencia: evidencia de la clase: el profesor resolvió un ejercicio completo en vivo en el pizarrón con números reales (0.7 vs 0.3) y explícitamente indicó que vendrá un ejercicio práctico en el examen.</span></li>
+<li><strong>Diferencias en la matriz de covarianza entre QDA, LDA y Naive Bayes</strong><span class="evid">Evidencia: evidencia de la clase: el profesor lo repitió múltiples veces, lo explicó gráficamente y lo ligó a la práctica de evaluación en código con el dataset Iris.</span></li>
+<li><strong>Aplicación de Naive Bayes discreto y suavizado de Laplace para evitar probabilidades cero</strong><span class="evid">Evidencia: evidencia de la clase: el profesor resolvió en vivo el ejemplo completo del filtro de spam con palabras y respondió dudas de alumnos sobre el ajuste del denominador.</span></li>
+</ol>
+</details>
 
 <div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>⚠️ Por verificar contra el audio:</strong> en esta clase, los apuntes generados por NotebookLM traen <strong>números que no cuadran</strong> en los ejemplos resueltos de Dunn, Davies-Bouldin, Silueta y Spam, y una <strong>fecha de práctica que contradice la Clase 07</strong>. Están marcados con ⚠️ dentro de cada sección; las fórmulas y los conceptos sí son consistentes.</p></div>
 
@@ -54,6 +65,12 @@
 <tr><td>0.51 – 0.70</td><td>Estructura de agrupamiento razonable.</td></tr>
 <tr><td>0.71 – 1.00</td><td>Excelente estructuración de los clusters.</td></tr>
 </table>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como organizar juguetes en cajas sin etiquetas previas, usando reglas para juntar los que se parecen y luego medir qué tan bien organizados quedaron sin que nadie te diga los nombres correctos.<span class="rompe">Dónde falla la analogía: Si los juguetes tienen formas complejas como dos medias lunas entrelazadas, medir distancias simples falla porque las fronteras de decisión no son esféricas ni lineales.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Sirve para evaluar la calidad y compacidad de los clústeres descubiertos de forma autónoma mediante métricas internas que no requieren etiquetas reales.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c8-similitud" open><summary><span class="stitle">Clasificación por funciones de similitud y repaso de probabilidad</span></summary>
@@ -70,6 +87,12 @@
 <li><strong>Vector de medias (μ) y matriz de covarianza (Σ):</strong> en espacios multidimensionales, el vector de medias contiene la media de cada característica y la matriz de covarianza describe cómo varían las variables de forma conjunta. Para N patrones: Σ = (1/(N−1)) · Σ<sub>i=1..N</sub> (X<sub>i</sub> − μ)(X<sub>i</sub> − μ)<sup>T</sup>. La diagonal principal contiene las varianzas de cada característica (σ<sub>i</sub>²) y los términos fuera de la diagonal son las covarianzas cruzadas entre pares de características.</li>
 <li><strong>Matriz de correlación:</strong> versión normalizada de la covarianza, dividiendo cada término entre σ<sub>i</sub>σ<sub>j</sub>. Da valores positivos si hay relación directa, negativos si es inversa y 0 si no hay correlación. El profesor enfatizó de forma categórica que <strong>correlación cero NO implica independencia</strong>.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como decidir a qué grupo pertenece un nuevo alumno comparando la coincidencia de sus gustos con las probabilidades que tiene cada grupo de tener esos mismos gustos.<span class="rompe">Dónde falla la analogía: Falla si se asume que dos eventos son completamente independientes cuando en la realidad la presencia de un gusto influye directamente en la probabilidad de tener otro.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Establece la regla de decisión de asignar el patrón a la clase que maximiza la función discriminante o de similitud a partir de la probabilidad condicional.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c8-bayes" open><summary><span class="stitle">Teoría de decisión de Bayes, función de costo y riesgo condicional</span></summary>
@@ -98,6 +121,13 @@
 <li>P(X) es la <strong>evidencia</strong>: probabilidad total de observar X. Como es constante para todas las clases al evaluar un mismo patrón, se elimina del cálculo sin alterar el orden de decisión.</li>
 </ul>
 <p>Aplicando el logaritmo natural (función monótonamente creciente), la función discriminante queda: <em>g<sub>i</sub>(X) = ln P(X | ω<sub>i</sub>) + ln P(ω<sub>i</sub>)</em>.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como evaluar si llevar sombrilla al salir de casa midiendo cuánto te costaría mojarte frente a la probabilidad real de que llueva, escogiendo la opción con menor riesgo de arruinarte el día.<span class="rompe">Dónde falla la analogía: No funciona si asignas costos arbitrarios a equivocarte sin considerar si un falso positivo es mucho más grave que un falso negativo en el problema real.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite tomar decisiones óptimas que minimizan el riesgo condicional combinando la matriz de pérdidas con las probabilidades a posteriori mediante la regla de Bayes.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir los valores de la matriz de costo al multiplicar la pérdida por la probabilidad posterior de la clase equivocada al calcular el riesgo de cada decisión.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c8-gaussianos" open><summary><span class="stitle">Clasificadores gaussianos de Bayes: QDA, LDA y Bayes ingenuo</span></summary>
@@ -110,6 +140,13 @@
 <tr><td><strong>LDA</strong> (Análisis Discriminante Lineal)</td><td>Todas las clases comparten una única matriz de covarianza común (Σ<sub>i</sub> = Σ).</td><td>Un vector de medias μ<sub>i</sub> por clase y una Σ compartida.</td><td>Hiperplanos lineales.</td></tr>
 <tr><td><strong>Bayes ingenuo gaussiano</strong> (Gaussian Naive Bayes)</td><td>Matriz de covarianza estrictamente diagonal: no hay covarianza entre características (son independientes).</td><td>Un vector de medias μ<sub>i</sub> y un vector de varianzas σ<sub>i</sub>² por clase (la diagonal).</td><td>—</td></tr>
 </table>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como clasificar frutas asumiendo que sus características siguen una campana centrada en su promedio, ajustando si cada fruta tiene su propia dispersión, una dispersión compartida o dispersiones independientes.<span class="rompe">Dónde falla la analogía: Deja de servir si la distribución de los datos reales no es gaussiana o presenta múltiples picos y formas no convexas.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Simplifica el cálculo de la verosimilitud usando la distancia de Mahalanobis y permite derivar tres clasificadores fundamentales: QDA, LDA y Naive Bayes.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir las suposiciones de la matriz de covarianza creyendo que LDA permite fronteras cuadráticas cuando en realidad impone una matriz única compartida entre clases.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c8-naive" open><summary><span class="stitle">Naive Bayes: caso continuo, discreto (filtro de spam) y suavizado de Laplace</span></summary>
@@ -131,6 +168,13 @@
 <h4>Frecuencia cero y suavizado de Laplace</h4>
 <p>Si llega un mensaje con una palabra que nunca apareció en el entrenamiento para cierta clase (por ejemplo “evento” en Spam u “oferta” en No Spam), la probabilidad P(X<sub>j</sub> | ω<sub>i</sub>) es 0. Al multiplicarse en la verosimilitud, <strong>anula toda la ecuación y la probabilidad posterior queda en cero</strong>, imposibilitando la clasificación.</p>
 <p>Se resuelve con el <strong>suavizado de Laplace</strong>: sumar una pequeña constante positiva a los conteos (típicamente 1/V, con V el tamaño del vocabulario, por ejemplo 1/12), tanto en las frecuencias dentro de la clase como fuera de ella. Así las palabras no vistas reciben una probabilidad muy pequeña pero distinta de cero. Ante la pregunta de un estudiante sobre si el valor del suavizado puede ser arbitrario, el profesor aclaró que debe mantener la suma total de la densidad de probabilidad en 1; de lo contrario se altera la función de densidad.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como clasificar un correo como spam contando cuántas veces aparecen palabras clave como "secreto" o "gratis", multiplicando sus probabilidades individuales como si ninguna palabra tuviera relación con las demás.<span class="rompe">Dónde falla la analogía: Falla si una palabra nueva nunca vista en el entrenamiento aparece en un correo, provocando que su probabilidad cero anule por completo todo el cálculo del producto.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite clasificar patrones continuos o discretos con alta dimensionalidad asumiendo independencia condicional, usando el suavizado de Laplace para evitar productos nulos por palabras no observadas.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Agregar una constante incorrecta en el suavizado de Laplace que altere el denominador, provocando que la suma de probabilidades ya no sea igual a uno y deje de ser una función de densidad válida.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c8-codigo" open><summary><span class="stitle">Implementación en código, evaluación en Iris y ventajas/desventajas</span></summary>
@@ -147,6 +191,25 @@
 <tr><td><strong>Alta dimensionalidad:</strong> se adapta eficientemente a espacios con muchas características.</td><td><strong>Sensible a características irrelevantes:</strong> variables sin información pueden perjudicar el producto de verosimilitudes.</td></tr>
 <tr><td><strong>Actualización en línea:</strong> permite incorporar nuevos datos o palabras sin reentrenar desde cero.</td><td><strong>Sensible a frecuencias cero:</strong> requiere suavizado obligatorio en datos discretos.</td></tr>
 </table>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como probar dos clasificadores en un jardín de flores Iris con 120 ejemplos para ver si uno comete algún error o si el más complejo logra acertar absolutamente todas las flores de prueba.<span class="rompe">Dónde falla la analogía: Falla cuando se le presentan datos del mundo real donde las variables están fuertemente correlacionadas, haciendo que la asunción de independencia degrade el desempeño del modelo.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Demuestra la efectividad práctica de Naive Bayes y QDA en conjuntos como Iris, requiriendo muy pocos datos de entrenamiento y permitiendo actualizaciones en línea.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Asumir que Naive Bayes capturará interacciones complejas entre características, cuando el profesor enfatizó que ignora las correlaciones reales entre variables.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c8-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. Si se tienen dos clases con probabilidades posteriores P(w1|x) = 0.8 y P(w2|x) = 0.2, y una matriz de pérdidas simétrica 0-1 (lambda11=0, lambda12=1, lambda21=1, lambda22=0), ¿cuál es el riesgo de decidir la clase 1 y cuál acción minimiza el riesgo?</summary><p>El riesgo R(alpha1|x) es 0*(0.8) + 1*(0.2) = 0.2, mientras que R(alpha2|x) es 1*(0.8) + 0*(0.2) = 0.8. La acción óptima que minimiza el riesgo es alpha1 (decidir clase 1) con un riesgo de 0.2.</p></details>
+<details class="qa"><summary>2. ¿Cómo difieren las suposiciones sobre la matriz de covarianza entre QDA, LDA y Naive Bayes?</summary><p>QDA asume una matriz de covarianza distinta para cada clase; LDA asume una única matriz de covarianza compartida por todas las clases; y Naive Bayes asume una matriz diagonal donde solo existen las varianzas individuales por asumir independencia entre características.</p></details>
+<details class="qa"><summary>3. En un filtro de spam con P(spam) = 0.4 y P(no_spam) = 0.6, si para la palabra "oferta" P("oferta"|spam) = 0.5 y P("oferta"|no_spam) = 0.1, ¿a qué clase se asigna un correo que contiene la palabra "oferta"?</summary><p>Para spam el producto es P("oferta"|spam)<em>P(spam) = 0.5 </em> 0.4 = 0.20. Para no spam es P("oferta"|no_spam)<em>P(no_spam) = 0.1 </em> 0.6 = 0.06. Como 0.20 &gt; 0.06, se asigna a la clase SPAM.</p></details>
+<details class="qa"><summary>4. ¿Por qué ocurre el problema de probabilidad cero en Naive Bayes discreto y cómo lo resuelve el suavizado de Laplace?</summary><p>Ocurre cuando un patrón contiene una característica o palabra que jamás apareció en los datos de entrenamiento para una clase, lo que asigna probabilidad cero y anula la multiplicación completa. El suavizado de Laplace lo resuelve sumando una constante al contador y ajustando el denominador para asignar una probabilidad pequeña no nula sin alterar la validez de la distribución.</p></details>
+<details class="qa"><summary>5. ¿Qué distancia matemática aparece de forma natural al aplicar el logaritmo natural a la distribución gaussiana multivariada en la función de decisión bayesiana?</summary><p>Aparece la distancia de Mahalanobis entre el patrón x y el vector de medias mu_i de la clase.</p></details>
+<details class="qa"><summary>6. ¿Cuáles son las principales ventajas y desventajas de Naive Bayes mencionadas en clase?</summary><p>Sus ventajas son que requiere pocos parámetros, funciona bien con pocas muestras, escala bien a muchas dimensiones y permite actualización en línea; su desventaja principal es que asume independencia condicional entre características, ignorando correlaciones e interacciones reales.</p></details>
+<details class="qa"><summary>7. En la evaluación práctica en código del dataset Iris presentada en clase, ¿cuántos errores cometió el clasificador Gaussian Naive Bayes en el conjunto de prueba de 30 muestras y cuál fue el resultado de QDA?</summary><p>Gaussian Naive Bayes cometió solo 1 error (clasificó un versicolor como virginica), mientras que QDA logró un 100% de exactitud sin cometer ningún error.</p></details>
+<details class="qa"><summary>8. ¿Por qué se puede eliminar el término de la evidencia P(x) de la regla de Bayes al construir la función de decisión?</summary><p>Porque la evidencia P(x) es una constante idéntica para todas las clases al evaluar un mismo patrón x, por lo que no altera el orden ni la relación de comparación entre las probabilidades a posteriori de las distintas clases.</p></details>
 </details>
 
 <details class="section-block sec" id="c8-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>

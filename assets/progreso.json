@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T08:12:29+00:00",
+ "generatedAt": "2026-10-01T11:52:11+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -56,7 +56,7 @@
     "fecha": "2026-09-21",
     "resumen": "Tema 6 (cierre) y Tema 7 — Evaluación de agrupamientos con métricas internas (Dunn, Davies-Bouldin, Silueta) e inicio de la clasificación probabilística: regla de Bayes, riesgo condicional, QDA/LDA y Naive Bayes.",
     "url": "materias/reconocimiento-de-patrones/clase-08.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 9,
@@ -468,6 +468,11 @@
  },
  "gitlog": [
   {
+   "hash": "f85d19d",
+   "fecha": "2026-10-01T02:12:29-06:00",
+   "mensaje": "OAC Clase 06: formato de estudio"
+  },
+  {
    "hash": "c05faef",
    "fecha": "2026-10-01T02:10:48-06:00",
    "mensaje": "FSE Clase 07: formato de estudio"
@@ -761,11 +766,6 @@
    "hash": "660839d",
    "fecha": "2026-09-22T16:31:04-06:00",
    "mensaje": "ACS: agregar Clase 08 (22 sep 2026) — sockets, AF, descriptores de archivo, sockaddr_in SIB: agregar Clase 07 (22 sep 2026) — actividad de amenazas y concepto de vulnerabilidad"
-  },
-  {
-   "hash": "30d2773",
-   "fecha": "2026-09-22T00:59:31-06:00",
-   "mensaje": "Carrusel de pendientes: scroll continuo tipo ticker de bolsa, conservando las flechas"
   }
  ]
 }
