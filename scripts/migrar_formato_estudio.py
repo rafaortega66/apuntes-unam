@@ -168,7 +168,12 @@ def main():
               "<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>\n"
               f"{qas}\n</details>\n\n")
     m = re.search(r'<details class="section-block sec" id="[^"]*(contexto|pendiente)"', src)
-    k = m.start() if m else src.index('<div class="puntos-clave"')
+    if m:
+        k = m.start()
+    elif '<div class="puntos-clave"' in src:
+        k = src.index('<div class="puntos-clave"')
+    else:                                   # páginas sin contexto/pendiente/puntos clave: antes de cerrar .wrap
+        k = src.rindex("</div>\n</body>")
     src = src[:k] + prueba + src[k:]
 
     open(path, "w", encoding="utf-8").write(src)

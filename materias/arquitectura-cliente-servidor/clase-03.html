@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 03 — Arquitectura Cliente-Servidor</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -14,6 +15,17 @@
 <div class="detail-head" style="border-color:#E8735C"><h2>Clase 03</h2>
   <p class="prof">Mtro. Carlos Alberto Román Zamitiz · 1 sep 2026 · Tema 1 — Demo del bit SetUID paso a paso en Codespaces, bits especiales (SetGID / sticky), /etc/shadow, errno y códigos de error, y la red de la Facultad de Ingeniería (subredes e IPs de la UNAM).</p>
 </div>
+
+<div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c3-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Diferenciación entre usuario real (getuid()) y usuario efectivo (geteuid()) mediante la activación del bit SetUID con chmod 4511 y cambio de dueño a root con chown</strong><span class="evid">Evidencia: Lo resolvió y demostró paso a paso en vivo en GitHub Codespaces y lo asignó como la entrega obligatoria de la Tarea 2.</span></li>
+<li><strong>Uso de la variable del sistema errno y la función strerror() para recorrer los códigos de error estándar en Linux (donde 0 es éxito)</strong><span class="evid">Evidencia: Lo resolvió en vivo compilando y ejecutando el programa 03_codigos_sistema.c en la terminal de Codespaces.</span></li>
+<li><strong>Los valores numéricos octales para bits especiales en chmod: 4 para SetUID, 2 para SetGID y 1 para el sticky bit (letra t)</strong><span class="evid">Evidencia: Un alumno lo preguntó explícitamente en clase y el profesor hizo la prueba en vivo modificando los permisos a 1511 y 2511.</span></li>
+<li><strong>Identificación de rangos de direcciones IP públicas de la UNAM (132.248.x.x y 132.247.x.x) y las cuatro subredes históricas de la Facultad de Ingeniería (FI-A, FI-B, FI-C y FI-P)</strong><span class="evid">Evidencia: Lo explicó el profesor al mostrar el acceso por SSH al servidor de profesores.</span></li>
+</ol>
+</details>
 
 <details class="section-block sec" id="clase-3-codespaces-y-tarea-2"><summary><span class="stitle">Clase 3 — Codespaces y ajuste de la Tarea 2</span></summary>
 <p><strong>Contenedores en Codespaces:</strong> si sales del navegador sin destruir el contenedor, queda <strong>pausado pero vivo</strong> y sigue consumiendo la cuota gratis. Puedes tener varios (uno por materia); se pausan al salir y se retoman.</p>
@@ -29,6 +41,13 @@
 <li><strong>Actividad 2</strong> (obligatoria para todos): compilar y analizar <a href="files/prof-tema1/programa02_ids.c" download style="color:var(--indigo)">programa02_ids.c</a> con <code>getuid</code> / <code>geteuid</code> bajo el bit SetUID.</li>
 </ul>
 <p><em>get</em> = leer / obtener; <em>set</em> = escribir / establecer. C y Python no son estrictos con el nombre del archivo (a diferencia de Java): en C todo se estructura desde <code>main</code>.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como usar una computadora prestada en la nube que ya tiene todas tus herramientas instaladas y que se queda pausada cuando la apagas para que sigas trabajando después.<span class="rompe">Dónde falla la analogía: En una computadora física puedes usar todos los comandos del sistema, pero el contenedor de Codespaces no tiene algunos comandos instalados por defecto como fdisk.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite realizar las prácticas de la materia sin importar el sistema operativo del alumno; debido a la falta de fdisk en el contenedor, se ajustó la Tarea 2 para entregar únicamente la actividad del programa 02 mediante un PDF enviado por correo.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Intentar ejecutar la actividad 1 con el comando fdisk en Codespaces; el profesor aclaró que en el contenedor ese comando no existe y por eso se realiza únicamente la actividad 2.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="clase-3-demo-setuid-paso-a-paso"><summary><span class="stitle">Clase 3 — Demo del bit SetUID en Codespaces, paso a paso</span></summary>
@@ -63,6 +82,13 @@ ls -l programa02_ids               # la 'x' del usuario se vuelve 's'/'S'; nombr
                                    #   Real     = 1000  (codespace, quien lo lanzó)
                                    #   Efectivo = 0     (root, dueño del archivo)</code></pre>
 <p><strong>Ciclo de vida:</strong> el cambio de identidad es <strong>temporal</strong> — solo mientras el proceso vive en memoria. Antes de ejecutar y una vez que termina, el usuario sigue siendo el 1000.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como tener un carnet de visitante que te permite entrar a un edificio, pero cuando ejecutas una llave especial que te prestó el dueño, adquieres temporalmente sus permisos de administrador mientras usas esa herramienta.<span class="rompe">Dónde falla la analogía: El carnet físico se cambia con las manos, pero en Linux el sistema cambia el usuario efectivo a nivel de kernel solo mientras el proceso está vivo en memoria.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Demuestra cómo el bit SetUID (activado con chmod 4511 y dueño root) hace que un usuario normal (codespace con UID 1000) obtenga un usuario efectivo 0 (root) únicamente durante la ejecución del programa, volviendo a su UID real al terminar.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Dejar el nombre con extensión .c al especificar el archivo de salida en gcc con -o, lo que provocaría sobreescribir el código fuente.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="clase-3-bits-especiales-qa"><summary><span class="stitle">Clase 3 — Bits especiales (Q&amp;A): SetUID / SetGID / sticky</span></summary>
@@ -73,6 +99,13 @@ ls -l programa02_ids               # la 'x' del usuario se vuelve 's'/'S'; nombr
 1 = sticky bit   ej. chmod 1511 -> sin error; en la terna de "otros" aparece una 'T';
                  el archivo se ve en verde/dorado</code></pre>
 <p>No hay funciones "get others ID" en C. Solo existen las 4 estándar: <code>getuid()</code> / <code>geteuid()</code> (usuario) y <code>getgid()</code> / <code>getegid()</code> (grupo). Por eso <strong>no</strong> se puede demostrar dinámicamente el efecto del <code>1</code> (otros). Tarea de investigación que dejó el profe para sí mismo: el comportamiento exacto de la <code>T</code> (sticky) en los SO modernos.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como agregar un dígito extra al candado de una puerta para activar funciones especiales: cambiar de usuario, cambiar de grupo o poner un seguro adicional.<span class="rompe">Dónde falla la analogía: El candado físico muestra números en sus rodillos, pero en el listado de Linux los bits especiales reemplazan la letra x de ejecución por una s en usuario/grupo o una t en otros.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Resuelve las dudas sobre los valores octales de bits especiales: 4 activa SetUID (s en usuario), 2 activa SetGID (s en grupo) y 1 activa el sticky bit (t en otros); explica que para otros no existe una función get-others-id en C.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundirse con la letra t que aparece al usar el dígito 1 en chmod; el profesor probó chmod 1511 y explicó que aunque Linux lo acepta, no existe función en C para apreciar cambios en otros.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="clase-3-errno"><summary><span class="stitle">Clase 3 — Gestión de errores en Linux: errno</span></summary>
@@ -87,6 +120,13 @@ ls -l programa02_ids               # la 'x' del usuario se vuelve 's'/'S'; nombr
 <li><strong><code>0</code> = éxito</strong> (success), estandarizado. Cualquier entero ≠ 0 se interpreta como error. Por eso <code>int main</code> termina con <code>return 0;</code> — le devuelve 0 al proceso padre.</li>
 </ul>
 <p><strong><a href="files/prof-tema1/programa03_codigos_sistema.c" download style="color:var(--indigo)">programa03_codigos_sistema.c</a>:</strong> bucle <code>for</code> de <code>i = 0</code> (éxito) a <code>150</code>. Aunque el estándar dice 131, se puede iterar más sin riesgo; los índices sobrantes imprimen <code>Unknown error</code>. En la distro del contenedor la tabla real llega hasta el <strong>código 133</strong>. Salida: índice <code>0</code> → <code>Success</code>; índice <code>2</code> → <code>No such file or directory</code>.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como la luz del motor de un auto que se enciende cuando hay un fallo y te da un código numérico para que el mecánico consulte el manual y sepa qué pieza falló.<span class="rompe">Dónde falla la analogía: La luz del auto se queda encendida, pero en Linux la variable errno cambia de valor automáticamente tras cada llamada al sistema.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>En Linux los errores asignan un entero a errno donde 0 significa éxito (Success) y los enteros del 1 en adelante son fallas (como el 2 para ENOENT / archivo no encontrado); con strerror(i) se traduce ese entero a texto.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Pensar que el número 0 representa un error en Linux; el profesor enfatizó que el 0 representa éxito y que por eso los programas en C terminan con return 0.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="clase-3-red-fi-unam"><summary><span class="stitle">Clase 3 — Red de la Facultad de Ingeniería e IPs de la UNAM</span></summary>
@@ -102,9 +142,27 @@ ls -l programa02_ids               # la 'x' del usuario se vuelve 's'/'S'; nombr
 </ul></li>
 <li>El servidor de profesores está físicamente en la red <strong>FP (Posgrado)</strong> → de ahí <code>profesores.fi.unam.mx</code> (subdominio <code>.fp.</code>).</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como el conmutador telefónico de un campus universitario donde los primeros dígitos identifican a la universidad y las extensiones a cada facultad y edificio.<span class="rompe">Dónde falla la analogía: La extensión telefónica transmite voz, mientras que la dirección IP de la UNAM enruta paquetes de datos a través de subredes de red local y servidores web.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Identifica las direcciones IP públicas de la UNAM (prefijos 132.248.x.x y 132.247.x.x) y la división histórica en los años 90 de la red de la Facultad de Ingeniería en cuatro subredes: FI-A, FI-B, FI-C y FI-P.</p>
+</div>
 </details>
 
 <p class="empty" style="margin-top:28px">Teoría general de procesos, ejemplos en C y los <a href="programas.html" style="color:var(--indigo)">programas del profesor</a> están en el <a href="index.html#tema-1" style="color:var(--indigo)">Tema 1</a>.</p>
+
+<details class="section-block sec" id="c3-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Por qué en el entorno de GitHub Codespaces el profesor indicó que no se realizaría la actividad 1 de la Tarea 2?</summary><p>Porque el contenedor de Codespaces no tiene instalado por defecto el comando fdisk que se requería en la actividad 1, por lo que se ajustó para entregar únicamente la actividad 2.</p></details>
+<details class="qa"><summary>2. Explica con tus palabras qué diferencia existe entre el usuario real y el usuario efectivo durante la ejecución de un programa en C.</summary><p>El usuario real (obtenido con getuid()) es el usuario que inició la sesión y lanzó el programa, mientras que el usuario efectivo (obtenido con geteuid()) determina los privilegios reales que tiene el proceso en memoria durante su ejecución.</p></details>
+<details class="qa"><summary>3. Un estudiante compila programa02_ids.c, cambia el dueño a root con chown root:root y asigna permisos chmod 4511. ¿Qué valor devolverán getuid() y geteuid() cuando el usuario codespace (UID 1000) ejecute el programa?</summary><p>getuid() devolverá 1000 (el usuario real codespace) y geteuid() devolverá 0 (el usuario efectivo root), porque el bit SetUID estuvo activado durante la ejecución.</p></details>
+<details class="qa"><summary>4. Compara la función de la macro de permiso octal 4 frente a la macro 2 cuando se coloca en el primer dígito de un comando chmod de cuatro dígitos.</summary><p>El dígito 4 activa el bit SetUID en la terna del usuario (reemplazando la x por una s en el dueño), mientras que el dígito 2 activa el bit SetGID en la terna del grupo (reemplazando la x por una s en el grupo).</p></details>
+<details class="qa"><summary>5. ¿Qué entero almacena el sistema operativo Linux en la variable errno cuando una operación o llamada al sistema se ejecuta de manera totalmente exitosa?</summary><p>Almacena el valor entero 0, el cual representa éxito (Success) en Linux.</p></details>
+<details class="qa"><summary>6. En el programa 03_codigos_sistema.c, ¿qué función de C se utiliza para convertir un código entero de error en su cadena de texto descriptiva equivalente?</summary><p>Se utiliza la función strerror(), la cual recibe el entero de error y devuelve un puntero a la cadena descriptiva del sistema.</p></details>
+<details class="qa"><summary>7. ¿A qué subred histórica de la Facultad de Ingeniería pertenece la dirección IP 132.248.59.6 del servidor de profesores de la UNAM?</summary><p>Según lo dicho en clase, pertenece a la subred FI-P, a la que apunta la dirección del servidor de profesores que se mostró por SSH.</p></details>
+<details class="qa"><summary>8. Compara la salida impresa en pantalla al ejecutar un archivo ejecutable con permisos chmod 700 frente a chmod 4511 cuando lo intenta correr un usuario que no es el dueño.</summary><p>Con permisos 700 el sistema imprime un mensaje de permiso denegado (Permission denied), mientras que con permisos 4511 el programa se ejecuta correctamente concediendo temporalmente privilegios del dueño al usuario.</p></details>
+</details>
 
 </div>
 </body>
