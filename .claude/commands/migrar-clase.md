@@ -36,7 +36,7 @@ Cuadernos (id en `notebook.google.com/notebook/<id>`):
 Ids de sección para el prompt:
 `python3 scripts/migrar_formato_estudio.py --secciones materias/<slug>/clase-NN.html`
 
-Prompt (una sola línea, sin acentos):
+Prompt (una sola línea; pide ortografía con acentos en la respuesta):
 pedir `=== EXAMEN` (líneas `- punto || evidencia`), un `=== SECCION <id>` por
 sección con `SIMPLE:`, `ROMPE:`, `IMPORTA:`, `ERRORES:` (o NINGUNO), y
 `=== PRUEBA` con 8 pares `P:`/`R:`. Exigir "usa SOLO la fuente <audio>" y
