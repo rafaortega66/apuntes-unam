@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Presentación Clase 9 — Reconocimiento de Patrones</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js?v=20260930b" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Reconocimiento de Patrones</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Presentación «Clase 9»: clasificación por funciones de distancia</h2>
+  <p class="prof">Resumen de la presentación del profesor Rubén Omar Azuara Domínguez (PDF «Clase 9 Clasificación por funciones de distancia», la más reciente del notebook de la materia). Cubre distancia mínima, clustering, K-means, LBG e ISODATA.</p>
+</div>
+
+<div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Ojo con la numeración.</strong> El número «Clase 9» es el de las diapositivas del profesor, no el de las clases del sitio. Este tema se vio en la <a href="clase-07.html" style="color:var(--indigo)">Clase 07</a> (18 sep 2026). Este resumen sale del texto de la presentación, no del audio.</p></div>
+
+<details class="section-block sec" id="p9-distancia" open><summary><span class="stitle">1 · Clasificación por distancia mínima</span></summary>
+<p><strong>Clasificación de patrones:</strong> asignar un objeto o vector de características a una de varias categorías predefinidas, según su semejanza o diferencia con prototipos representativos de cada clase. Un <em>patrón</em> es el vector de características de un objeto; una <em>clase</em> es un conjunto de patrones con propiedades similares; una <em>función de distancia</em> mide qué tan lejos está un punto de otro en el espacio de características.</p>
+<p><strong>Principio:</strong> un patrón desconocido x se asigna a la clase cuyo prototipo (centroide) está más cerca. Regla: asignar x a ω<sub>k</sub> si d(x, m<sub>k</sub>) &lt; d(x, m<sub>j</sub>) para todo j ≠ k.</p>
+<table>
+<thead><tr><th>Distancia</th><th>Fórmula</th><th>Idea</th></tr></thead>
+<tbody>
+<tr><td>Euclidiana</td><td>d = √[Σ (x<sub>i</sub> − m<sub>ki</sub>)²]</td><td>La más común: distancia geométrica directa.</td></tr>
+<tr><td>Manhattan</td><td>d = Σ |x<sub>i</sub> − m<sub>ki</sub>|</td><td>Suma de diferencias absolutas; útil con dimensiones independientes.</td></tr>
+<tr><td>Mahalanobis</td><td>d² = (x−m<sub>k</sub>)ᵀ Σ⁻¹ (x−m<sub>k</sub>)</td><td>Considera la correlación entre variables con la matriz de covarianza Σ.</td></tr>
+</tbody></table>
+<p><strong>Un prototipo por clase:</strong> D<sub>i</sub> = d(x, m<sub>i</sub>) para las M clases; x va a la de menor distancia. <strong>Varios prototipos por clase:</strong> si la clase ω<sub>i</sub> tiene N<sub>i</sub> prototipos z<sub>i</sub><sup>λ</sup>, D<sub>i</sub> = min<sub>λ</sub> ‖x − z<sub>i</sub><sup>λ</sup>‖.</p>
+<p><strong>Ventajas:</strong> simple y eficiente; funciona bien con clases compactas y bien separadas. <strong>Limitaciones:</strong> sensible a la escala de las variables (hay que normalizar) y no considera la distribución interna de la clase.</p>
+</details>
+
+<details class="section-block sec" id="p9-clustering" open><summary><span class="stitle">2 · Agrupamiento (clustering) y medidas de similitud</span></summary>
+<p><strong>Clustering:</strong> técnica de aprendizaje <em>no supervisado</em> que organiza los datos en grupos de modo que los objetos de un mismo grupo se parezcan más entre sí que a los de otros. No hay etiquetas previas, el algoritmo descubre la estructura y el número de grupos puede ser desconocido. Se evalúa la cohesión dentro de cada cluster y la separación entre clusters.</p>
+<p><strong>Aplicaciones:</strong> compresión de datos (cuantización vectorial), segmentación de imágenes y señales, clasificación de documentos y textos, detección de anomalías.</p>
+<table>
+<thead><tr><th>Medida</th><th>Fórmula</th><th>Rango y uso</th></tr></thead>
+<tbody>
+<tr><td>Similitud coseno</td><td>s(x,y) = (x·y) / (‖x‖‖y‖)</td><td>[−1, 1]. Mide el ángulo entre vectores, sin importar la magnitud; muy usada en texto.</td></tr>
+<tr><td>Correlación de Pearson</td><td>r = Σ(x<sub>i</sub>−x̄)(y<sub>i</sub>−ȳ) / (σ<sub>x</sub>σ<sub>y</sub>n)</td><td>[−1, 1]. Relación lineal; r = 1 es correlación positiva perfecta.</td></tr>
+<tr><td>Jaccard</td><td>J(A,B) = |A ∩ B| / |A ∪ B|</td><td>[0, 1]. Conjuntos binarios, datos categóricos o documentos.</td></tr>
+<tr><td>Minkowski</td><td>d<sub>p</sub> = [Σ |x<sub>i</sub>−y<sub>i</sub>|<sup>p</sup>]<sup>1/p</sup></td><td>[0, ∞). Generaliza: p = 1 Manhattan, p = 2 Euclidiana, p → ∞ Chebyshev.</td></tr>
+</tbody></table>
+</details>
+
+<details class="section-block sec" id="p9-kmeans" open><summary><span class="stitle">3 · K-means</span></summary>
+<p>Divide los datos en k grupos con elementos lo más parecidos posible dentro de cada grupo y lo más distintos entre grupos. Minimiza la <strong>inercia</strong>: la suma de las distancias al cuadrado entre cada punto y el centroide de su cluster, J = Σ<sub>j=1..k</sub> Σ<sub>x∈C<sub>j</sub></sub> ‖x − μ<sub>j</sub>‖².</p>
+<ol>
+<li><strong>Elegir k</strong> (el número de clusters): es la única entrada que requiere criterio humano.</li>
+<li><strong>Inicializar los centroides:</strong> aleatorio o con métodos más inteligentes como K-means++.</li>
+<li><strong>Asignación:</strong> cada punto va al cluster del centroide más cercano.</li>
+<li><strong>Actualizar los centroides</strong> como el promedio de los puntos asignados.</li>
+<li><strong>Repetir 3 y 4</strong> hasta que los centroides o las asignaciones no cambien, o se alcance el máximo de iteraciones.</li>
+</ol>
+<p><strong>Consideraciones:</strong> complejidad O(n·k·i·d) (n puntos, k clusters, i iteraciones, d dimensiones). Distintas inicializaciones pueden dar resultados distintos. Asume clusters esféricos, es sensible a outliers y a la escala, y hay que elegir k de antemano. Es simple y escalable a datasets grandes.</p>
+</details>
+
+<details class="section-block sec" id="p9-lbg" open><summary><span class="stitle">4 · LBG (Linde-Buzo-Gray)</span></summary>
+<p>Método de clustering para diseñar <em>codebooks</em> en cuantización vectorial. Un codebook es un conjunto óptimo de centroides (<em>codewords</em>) que representa un conjunto de datos; cada vector se aproxima por su codeword más cercano. Minimiza la distorsión D = (1/N) Σ ‖x<sub>i</sub> − c(x<sub>i</sub>)‖².</p>
+<ol>
+<li><strong>Centroide global:</strong> se parte de un solo centroide, la media de todo el conjunto de entrenamiento (el primer codeword).</li>
+<li><strong>División (<em>splitting</em>):</strong> cada centroide se divide en dos sumando una pequeña perturbación ε.</li>
+<li><strong>Asignación</strong> de cada vector al centroide más cercano.</li>
+<li><strong>Actualización:</strong> cada centroide es la media de los vectores de su región.</li>
+<li><strong>Cálculo de la distorsión</strong> promedio.</li>
+<li><strong>Convergencia:</strong> si la mejora en la distorsión es pequeña, converge para ese tamaño de codebook; si no, se repiten los pasos 3 a 5.</li>
+<li><strong>Verificación del tamaño:</strong> si el codebook es menor que el deseado, se vuelve al paso 2; si no, termina.</li>
+</ol>
+<p><strong>Uso en reconocimiento de patrones.</strong> Fase 1, entrenamiento: se construye un codebook por cada clase (C<sub>1</sub>, C<sub>2</sub>, … C<sub>C</sub>). Fase 2, clasificación: dado un patrón nuevo x, se calcula la distancia al codeword más cercano de cada clase y se asigna a la clase de menor distancia.</p>
+<p><strong>Consideraciones:</strong> codebook muy pequeño da <em>underfitting</em> y muy grande <em>overfitting</em>; un ε demasiado pequeño hace que los centroides tarden en separarse y uno muy grande puede saltarse buenas configuraciones; la euclidiana es la métrica más común pero no siempre la mejor; si el entrenamiento no cubre la distribución real, quedan puntos ciegos. <strong>Limitaciones:</strong> sensible a outliers, se atrapa en mínimos locales y el tamaño N se restringe a potencias de 2. <strong>Ventajas:</strong> representación compacta, clasificación rápida, método simple e inicialización más estable que K-means.</p>
+</details>
+
+<details class="section-block sec" id="p9-isodata" open><summary><span class="stitle">5 · ISODATA</span></summary>
+<p><strong>Iterative Self-Organizing Data Analysis Technique Algorithm.</strong> Clustering no supervisado parecido a K-means pero más flexible: ajusta automáticamente el número de clusters durante la ejecución. Agrega tres operaciones:</p>
+<ul>
+<li><strong>División:</strong> si la desviación estándar σ<sub>k</sub> de un cluster supera el umbral σ<sub>max</sub>, se divide en dos.</li>
+<li><strong>Fusión:</strong> si la distancia entre dos centroides es menor que d<sub>min</sub>, los clusters se fusionan.</li>
+<li><strong>Eliminación:</strong> si un cluster tiene menos de N<sub>min</sub> puntos, se elimina y sus puntos se redistribuyen.</li>
+</ul>
+<p><strong>Parámetros:</strong> K<sub>0</sub> (clusters iniciales), d<sub>min</sub>, N<sub>min</sub>, σ<sub>max</sub>, θ<sub>c</sub> (máximo de fusiones por iteración), Max_iters y k<sub>max</sub> (límite de clusters).</p>
+<ol>
+<li><strong>Inicialización:</strong> elegir k<sub>0</sub> centroides iniciales (aleatorio o heurístico).</li>
+<li><strong>Asignación</strong> de cada punto al centroide más cercano (distancia euclidiana).</li>
+<li><strong>Actualización:</strong> recalcular el centroide de cada cluster como el promedio de sus puntos.</li>
+<li><strong>Eliminación</strong> de clusters con menos de θ<sub>N</sub> puntos.</li>
+<li><strong>División:</strong> si σ &gt; σ<sub>max</sub> y el cluster es grande, dividir en dos.</li>
+<li><strong>Fusión:</strong> si d(μ<sub>i</sub>, μ<sub>j</sub>) &lt; d<sub>min</sub>, fusionar con μ<sub>new</sub> = (n<sub>i</sub>μ<sub>i</sub> + n<sub>j</sub>μ<sub>j</sub>) / (n<sub>i</sub> + n<sub>j</sub>). Las fusiones se aplican en orden creciente de distancia y, al llegar a θ<sub>c</sub>, ya no se hacen más en esa iteración.</li>
+<li><strong>¿Converge?</strong> Termina si se alcanza el máximo de iteraciones, ningún punto cambió de cluster o Δ &lt; ε (Δ = Σ ‖m<sub>k</sub><sup>new</sup> − m<sub>k</sub><sup>prev</sup>‖²). Si no, volver al paso 2.</li>
+</ol>
+<p><strong>Cómo elegir los parámetros (reglas de la presentación):</strong> D<sub>min</sub> ≈ 0.5 × la distancia promedio entre centroides (o α·σ<sub>global</sub>); S<sub>max</sub> ≈ 1.5–2 × σ<sub>global</sub>; N<sub>min</sub> ≈ 1–5 % del dataset (N / 10K).</p>
+<p><strong>Ventajas:</strong> número de clusters adaptable, maneja clusters de distinto tamaño, detecta clusters con alta varianza. <strong>Desventajas:</strong> muchos parámetros, heurístico, sensible al ruido y no garantiza solución óptima. Los centroides iniciales influyen en el número final de clusters y en la estabilidad; asume clusters aproximadamente esféricos.</p>
+</details>
+
+<details class="section-block sec" id="p9-aplicaciones"><summary><span class="stitle">6 · Aplicaciones del mundo real</span></summary>
+<ul>
+<li><strong>Teledetección:</strong> clasificar suelo y vegetación en imágenes satelitales (Landsat, Sentinel).</li>
+<li><strong>Medicina:</strong> segmentar tumores y tejidos en tomografías y resonancias.</li>
+<li><strong>Compresión de datos:</strong> reducir los colores de una imagen (<em>color quantization</em>).</li>
+<li><strong>Minería de datos:</strong> descubrir patrones en grandes bases sin etiquetas.</li>
+<li><strong>SIG y cartografía:</strong> agrupar regiones por similitud ambiental.</li>
+<li><strong>Visión por computadora:</strong> segmentar escenas y detectar objetos en imagen y video.</li>
+</ul>
+<p>La presentación cierra con un cuadro comparativo de K-means, LBG e ISODATA («cuándo usarlo»): K-means cuando se conoce k y los datos son simples; LBG cuando se necesita un codebook de tamaño potencia de 2 con inicialización robusta; ISODATA cuando el número de clusters no se conoce. La parte final del cuadro no se alcanzó a leer completa en esta extracción.</p>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Distancia mínima: x va a la clase del centroide más cercano; normaliza antes de usar Euclidiana.</li>
+<li>K-means minimiza la inercia, necesita k de antemano y asume clusters esféricos.</li>
+<li>LBG parte de un centroide y lo divide con ε hasta llegar a un codebook de tamaño potencia de 2.</li>
+<li>ISODATA agrega dividir, fusionar y eliminar para ajustar el número de clusters, a costa de más parámetros.</li>
+</ul></div>
+
+</div>
+</body>
+</html>
