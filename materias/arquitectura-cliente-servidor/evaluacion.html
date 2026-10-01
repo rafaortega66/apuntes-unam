@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Evaluación — Arquitectura Cliente-Servidor</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001b">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -41,6 +41,42 @@ Enviar a carlos.roman@ingenieria.unam.edu antes de la próxima clase.</p></div>
 <p><strong>Entrega:</strong> antes de la próxima clase (jueves). Capturas de pantalla de la secuencia completa dentro de un <strong>PDF</strong>, enviado al correo institucional. Explicación libre (solo capturas o con texto).</p>
 <div class="files"><a class="btn" href="files/prof-tema1/Tarea-02.pdf" target="_blank">📄 Tarea-02.pdf</a></div></div>
 <div class="section-block"><h4>Tarea #3 — ejercicio con fork-exec</h4><p>Enunciado del profesor (Tema 1).</p><div class="files"><a class="btn" href="files/prof-tema1/Tarea-03.pdf" target="_blank">📄 Tarea-03.pdf</a></div></div>
+<div class="section-block" id="tarea-4"><h4>Tarea #4 — peticiones concurrentes con netcat (publicada en el sitio, sin anunciar en clase)</h4><p>Texto del profesor (Tema 3): «Ejecutar peticiones concurrentes con netcat y monitorear los sockets con <code>watch -n 1 "ss -atn 'sport = :4898'"</code>. Toma captura de pantalla de todas tus terminales.»</p>
+<p>Va con <code>ejemplo_listen.c</code> (<code>listen()</code> con backlog = 1 para ver cómo se encolan varias peticiones <code>nc</code>) y con la lectura sobre el desbordamiento de las colas TCP SYN y Accept (ver <a href="material.html" style="color:var(--indigo)">Material</a>).</p>
+<p class="empty">⚠️ Revisado el 1 oct 2026: está en el sitio del profesor, pero en ninguna de las clases grabadas (hasta la del 29 sep) la mencionó; en la <a href="clase-10.html" style="color:var(--indigo)">Clase 10</a> dijo «no hay tarea todavía para entregar». Fecha y forma de entrega: no se han dicho. Lo más probable es que la anuncie en la próxima clase de sockets. Por la regla general de la materia sería PDF con capturas al correo.</p>
+<div class="files"><a class="btn" href="files/prof-tema3/ejemplo_listen.c" target="_blank">💻 ejemplo_listen.c</a></div></div>
+
+<div class="section-block" id="tareas-morales"><h4>Tareas morales (no se entregan) — todas, en orden</h4>
+<p>Práctica que el profesor pide para repasar, aunque no se entrega. Lista armada con NotebookLM a partir de todos los audios de clase (1 oct 2026).</p>
+<table class="izq"><thead><tr><th>Clase</th><th>Qué hacer</th></tr></thead><tbody>
+<tr><td><a href="clase-01.html" style="color:var(--indigo)">Clase 01</a></td><td>Ejecutar el programa de memoria de un proceso y analizarlo con <code>size</code> (estático) y <code>pmap</code> (mapa dinámico).</td></tr>
+<tr><td><a href="clase-03.html" style="color:var(--indigo)">Clase 03</a></td><td>Probar <code>programa03_codigos_sistema.c</code>: recorrer los códigos de error de Linux con <code>strerror()</code>.</td></tr>
+<tr><td><a href="clase-04.html" style="color:var(--indigo)">Clase 04</a></td><td>Repasar teoría y sintaxis de las 6 funciones <code>exec</code> (<code>execl</code>, <code>execv</code>, <code>execle</code>, <code>execve</code>, <code>execlp</code>, <code>execvp</code>).</td></tr>
+<tr><td><a href="clase-06.html" style="color:var(--indigo)">Clase 06</a></td><td>Leer <code>man 7 signal</code> e identificar las señales principales: <code>SIGINT</code> = 2, <code>SIGKILL</code> = 9, <code>SIGTERM</code> = 15, <code>SIGCHLD</code> = 17 (x86/ARM).</td></tr>
+<tr><td><a href="clase-07.html" style="color:var(--indigo)">Clase 07</a></td><td>Probar y analizar <code>programa09_nozombie_v1.c</code> y <code>_v2.c</code> (evitar zombies con <code>SIG_IGN</code> o con un manejador de <code>SIGCHLD</code> + <code>wait</code>/<code>waitpid</code>).</td></tr>
+<tr><td><a href="clase-07.html" style="color:var(--indigo)">Clase 07</a></td><td>Leer los 8 PDFs cortos del Tema 3: red, dispositivos, paquete de datos, TCP/IP y puertos, capas TCP/IP, OSI (están en <a href="material.html" style="color:var(--indigo)">Material</a>).</td></tr>
+<tr><td><a href="clase-08.html" style="color:var(--indigo)">Clase 08</a></td><td>Repasar <code>struct sockaddr_in</code>, los descriptores reservados 0/1/2 (el primer socket es el 3) y la redirección de E/S.</td></tr>
+<tr><td><a href="clase-09.html" style="color:var(--indigo)">Clase 09</a></td><td>Compilar, probar y analizar el <code>programa3.c</code> del Tema 3 (en Material: <code>programa03_ipaddr.c</code>; dominio por <code>argv</code>, IPs y alias con <code>gethostbyname()</code> e <code>inet_ntoa</code>).</td></tr>
+<tr><td><a href="clase-10.html" style="color:var(--indigo)">Clase 10</a></td><td>Repasar el flujo del servidor (<code>socket</code> → <code>bind</code> → <code>listen</code> → <code>accept</code>), <code>INADDR_ANY</code>, <code>htons()</code> y la diferencia entre <code>fd_s</code> (conexión) y <code>fd_c</code> (comunicación).</td></tr>
+</tbody></table></div>
+
+<div class="section-block" id="examen-parcial"><h4>Examen parcial (20 %)</h4>
+<ul>
+<li><strong>Qué es:</strong> programar en C, desde cero, un esquema cliente-servidor TCP que funcione: <code>socket()</code>, <code>bind()</code>, <code>listen()</code>, <code>accept()</code>, <code>connect()</code>, <code>send()</code>/<code>recv()</code> o <code>read()</code>/<code>write()</code>, <code>struct sockaddr_in</code>, <code>htons()</code>, y la IP y el puerto por <code>argc</code>/<code>argv</code> (según <a href="clase-09.html" style="color:var(--indigo)">Clase 09</a> y <a href="clase-10.html" style="color:var(--indigo)">Clase 10</a>).</li>
+<li><strong>Cuándo:</strong> «más o menos en dos semanas» a partir del 29 sep, o sea a mediados de octubre. Día y hora: no se han dicho.</li>
+<li><strong>Reglas (apuntes, tiempo, entrega):</strong> no se han dicho; el profesor dijo que daría detalles después.</li>
+<li><strong>Especificaciones:</strong> el profesor ya preparó un <code>EXAMEN_PARCIAL.pdf</code> en su sitio (Tema 3), pero el enlace está oculto y el archivo todavía no se publica (revisado el 1 oct 2026).</li>
+<li><strong>Para practicar:</strong> <code>programa04</code> (primer par cliente-servidor, puerto 4898), <code>programa05</code> (conversación sincronizada) y <code>programa06</code> (servidor concurrente con <code>fork()</code>), todos en <a href="material.html" style="color:var(--indigo)">Material</a>.</li>
+</ul></div>
+
+<div class="section-block" id="proyecto-final"><h4>Proyecto final (50 %)</h4>
+<p>La especificación se da 2 semanas antes de acabar el semestre. En la <a href="clase-06.html" style="color:var(--indigo)">Clase 06</a> el profesor adelantó que va a integrar la arquitectura cliente-servidor con el manejo de señales (por ejemplo, capturar <code>Ctrl+C</code>/<code>SIGINT</code>). Fecha y forma de entrega: no se han dicho.</p></div>
+
+<div class="section-block"><h4>Reglas generales de entrega</h4>
+<ul><li>Cada tarea tiene una fecha recomendada (por lo general, antes de la siguiente clase o el jueves de la semana siguiente) para aspirar a 10.</li>
+<li>Se aceptan entregas extemporáneas durante todo el semestre, pero con menor calificación.</li>
+<li>Avisos de fechas por el canal de Telegram del profesor (QR mostrado en la <a href="clase-06.html" style="color:var(--indigo)">Clase 06</a>).</li></ul></div>
+
 </div>
 </body>
 </html>

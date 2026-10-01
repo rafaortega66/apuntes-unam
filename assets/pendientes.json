@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-10-01 (Classroom + audios de NotebookLM + lo que reporta el usuario)",
+  "actualizado": "2026-10-01 (Classroom + audios de NotebookLM + sitio del prof. de ACS)",
   "zona": "America/Mexico_City",
   "nota": "Solo tareas obligatorias. Cuando Classroom no muestra hora, se asume fin del día (23:59). Classroom manda sobre lo dicho en clase. Los ítems sin fecha exacta no se ocultan solos.",
   "items": [
@@ -231,14 +231,25 @@
       "fecha_texto": "Sin fecha — antes de hacer la tarea de la raíz"
     },
     {
+      "id": "acs-t4",
+      "materia": "ACS",
+      "color": "#E8735C",
+      "titulo": "Tarea 4: peticiones concurrentes con netcat + monitoreo con ss (capturas)",
+      "vence": null,
+      "hora_confirmada": false,
+      "detalle": "Publicada en el sitio del profesor (Tema 3), todavía no anunciada en clase. Fecha y forma de entrega por confirmar. Usa ejemplo_listen.c (backlog = 1).",
+      "link": "materias/arquitectura-cliente-servidor/evaluacion.html#tarea-4",
+      "fecha_texto": "Sin fecha — por anunciar en clase"
+    },
+    {
       "id": "acs-parcial",
       "materia": "ACS",
       "color": "#E8735C",
       "titulo": "Examen parcial (código C: esquema cliente-servidor con sockets)",
       "vence": null,
       "hora_confirmada": false,
-      "detalle": "Anunciado el 29 sep \"más o menos en dos semanas\". Las Tareas 1–3 están entregadas.",
-      "link": "materias/arquitectura-cliente-servidor/evaluacion.html",
+      "detalle": "Anunciado el 24 y el 29 sep: «más o menos en dos semanas». Programar en C un cliente-servidor TCP (socket/bind/listen/accept/connect, sockaddr_in, htons, IP y puerto por argv). Reglas aún no dichas; el PDF de especificaciones existe en el sitio del profesor pero aún no lo publica.",
+      "link": "materias/arquitectura-cliente-servidor/evaluacion.html#examen-parcial",
       "fecha_texto": "≈ mediados de octubre (por confirmar)"
     },
     {

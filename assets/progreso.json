@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T07:04:22+00:00",
+ "generatedAt": "2026-10-01T07:25:32+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -468,6 +468,11 @@
  },
  "gitlog": [
   {
+   "hash": "4bcad55",
+   "fecha": "2026-10-01T01:04:50-06:00",
+   "mensaje": "ASI: agregar Clase 10 (30 sep 2026) — primera clase en formato de estudio: cubos OLAP, medidas, esquemas estrella/copo/constelación, EIS y alertas de costo en Azure"
+  },
+  {
    "hash": "4b216a5",
    "fecha": "2026-10-01T00:59:09-06:00",
    "mensaje": "Página de Progreso + horario en datos; FSE Tarea 05 entregada; pendientes Pico (OAC) y DE10-Lite (Lab OAC)"
@@ -761,11 +766,6 @@
    "hash": "0f497e2",
    "fecha": "2026-09-17T07:10:55-06:00",
    "mensaje": "ACS: registrar entrega de la Tarea 3"
-  },
-  {
-   "hash": "2367814",
-   "fecha": "2026-09-17T07:04:14-06:00",
-   "mensaje": "ACS: revertir registro prematuro de la Tarea 3 en entregas.html"
   }
  ]
 }

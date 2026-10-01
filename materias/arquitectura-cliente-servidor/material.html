@@ -42,21 +42,21 @@
 <table><thead><tr><th>Archivo</th><th>Qué es</th></tr></thead><tbody>
 <tr><td><a href="files/prof-tema2/01_Estados_de_procesos.pdf" target="_blank" style="color:var(--indigo)">01_Estados_de_procesos.pdf</a></td><td>Notas del Tema 2: estados de los procesos</td></tr>
 <tr><td><a href="files/prof-tema2/fork-exec.png" target="_blank" style="color:var(--indigo)">fork-exec.png</a></td><td>Gráfico fork(), exec() y wait()</td></tr>
-<tr><td><a href="files/prof-tema2/programa01_wait1.c" target="_blank" style="color:var(--indigo)">programa01_wait1.c</a></td><td>Programa en C del profesor (Tema 2).</td></tr>
-<tr><td><a href="files/prof-tema2/programa02_wait2.c" target="_blank" style="color:var(--indigo)">programa02_wait2.c</a></td><td>Programa en C del profesor (Tema 2).</td></tr>
-<tr><td><a href="files/prof-tema2/programa03_fork-exec-wait.c" target="_blank" style="color:var(--indigo)">programa03_fork-exec-wait.c</a></td><td>Programa en C del profesor (Tema 2).</td></tr>
-<tr><td><a href="files/prof-tema2/programa04_signal_caso1.c" target="_blank" style="color:var(--indigo)">programa04_signal_caso1.c</a></td><td>Programa en C del profesor (Tema 2).</td></tr>
-<tr><td><a href="files/prof-tema2/programa05_signal_caso2_v1.c" target="_blank" style="color:var(--indigo)">programa05_signal_caso2_v1.c</a></td><td>Programa en C del profesor (Tema 2).</td></tr>
-<tr><td><a href="files/prof-tema2/programa05_signal_caso2_v2.c" target="_blank" style="color:var(--indigo)">programa05_signal_caso2_v2.c</a></td><td>Programa en C del profesor (Tema 2).</td></tr>
-<tr><td><a href="files/prof-tema2/programa06_signal_caso3.c" target="_blank" style="color:var(--indigo)">programa06_signal_caso3.c</a></td><td>Programa en C del profesor (Tema 2).</td></tr>
-<tr><td><a href="files/prof-tema2/programa07_background.c" target="_blank" style="color:var(--indigo)">programa07_background.c</a></td><td>Programa en C del profesor (Tema 2).</td></tr>
-<tr><td><a href="files/prof-tema2/programa08_zombie.c" target="_blank" style="color:var(--indigo)">programa08_zombie.c</a></td><td>Programa en C del profesor (Tema 2).</td></tr>
-<tr><td><a href="files/prof-tema2/programa09_nozombie_v1.c" target="_blank" style="color:var(--indigo)">programa09_nozombie_v1.c</a></td><td>Programa en C del profesor (Tema 2).</td></tr>
-<tr><td><a href="files/prof-tema2/programa09_nozombie_v2.c" target="_blank" style="color:var(--indigo)">programa09_nozombie_v2.c</a></td><td>Programa en C del profesor (Tema 2).</td></tr>
-<tr><td><a href="files/prof-tema2/programa10_SIGKILL.c" target="_blank" style="color:var(--indigo)">programa10_SIGKILL.c</a></td><td>Programa en C del profesor (Tema 2).</td></tr>
-<tr><td><a href="files/prof-tema2/programa11_kill1.c" target="_blank" style="color:var(--indigo)">programa11_kill1.c</a></td><td>Programa en C del profesor (Tema 2).</td></tr>
-<tr><td><a href="files/prof-tema2/programa12_kill2.c" target="_blank" style="color:var(--indigo)">programa12_kill2.c</a></td><td>Programa en C del profesor (Tema 2).</td></tr>
-<tr><td><a href="files/prof-tema2/programa13_abort.c" target="_blank" style="color:var(--indigo)">programa13_abort.c</a></td><td>Programa en C del profesor (Tema 2).</td></tr>
+<tr><td><a href="files/prof-tema2/programa01_wait1.c" target="_blank" style="color:var(--indigo)">programa01_wait1.c</a></td><td>El proceso padre espera al hijo (dormido 10s) con wait(&estatus) utilizando macros WIFEXITED y WEXITSTATUS.</td></tr>
+<tr><td><a href="files/prof-tema2/programa02_wait2.c" target="_blank" style="color:var(--indigo)">programa02_wait2.c</a></td><td>Similar a wait1, pero el proceso padre crea 2 hijos.</td></tr>
+<tr><td><a href="files/prof-tema2/programa03_fork-exec-wait.c" target="_blank" style="color:var(--indigo)">programa03_fork-exec-wait.c</a></td><td>El padre espera a que el hijo termine la ejecución de "ls -l /".</td></tr>
+<tr><td><a href="files/prof-tema2/programa04_signal_caso1.c" target="_blank" style="color:var(--indigo)">programa04_signal_caso1.c</a></td><td>Caso 1: ignorar la señal con <code>signal(SIGINT, SIG_IGN)</code>.</td></tr>
+<tr><td><a href="files/prof-tema2/programa05_signal_caso2_v1.c" target="_blank" style="color:var(--indigo)">programa05_signal_caso2_v1.c</a></td><td>Caso 2 (v1): Manejar la señal con tratamiento propio; el proceso continúa.</td></tr>
+<tr><td><a href="files/prof-tema2/programa05_signal_caso2_v2.c" target="_blank" style="color:var(--indigo)">programa05_signal_caso2_v2.c</a></td><td>Caso 2 (v2): Manejar la señal con tratamiento propio y terminar el proceso.</td></tr>
+<tr><td><a href="files/prof-tema2/programa06_signal_caso3.c" target="_blank" style="color:var(--indigo)">programa06_signal_caso3.c</a></td><td>Caso 3: Señales que no se pueden ignorar ni manejar (ej. SIGKILL).</td></tr>
+<tr><td><a href="files/prof-tema2/programa07_background.c" target="_blank" style="color:var(--indigo)">programa07_background.c</a></td><td>Simula procesamiento para probar el envío a background con Ctrl+Z, el comando bg o utilizando &.</td></tr>
+<tr><td><a href="files/prof-tema2/programa08_zombie.c" target="_blank" style="color:var(--indigo)">programa08_zombie.c</a></td><td>Genera un proceso zombie durante 60 segundos debido a la encolación de SIGCHLD.</td></tr>
+<tr><td><a href="files/prof-tema2/programa09_nozombie_v1.c" target="_blank" style="color:var(--indigo)">programa09_nozombie_v1.c</a></td><td>Solución 1 a procesos zombie: Ignorar la señal SIGCHLD o SIGCLD.</td></tr>
+<tr><td><a href="files/prof-tema2/programa09_nozombie_v2.c" target="_blank" style="color:var(--indigo)">programa09_nozombie_v2.c</a></td><td>Solución 2 a procesos zombie: Implementar una función manejadora de señales para SIGCHLD.</td></tr>
+<tr><td><a href="files/prof-tema2/programa10_SIGKILL.c" target="_blank" style="color:var(--indigo)">programa10_SIGKILL.c</a></td><td>Ejercicio para probar el envío de señales desde terminal con kill -SIGXXX PID.</td></tr>
+<tr><td><a href="files/prof-tema2/programa11_kill1.c" target="_blank" style="color:var(--indigo)">programa11_kill1.c</a></td><td>El padre termina fulminantemente al hijo utilizando kill(pid, SIGKILL).</td></tr>
+<tr><td><a href="files/prof-tema2/programa12_kill2.c" target="_blank" style="color:var(--indigo)">programa12_kill2.c</a></td><td>Se crean 2 hijos; el padre elimina al hijo 2 y luego llama a exit(0).</td></tr>
+<tr><td><a href="files/prof-tema2/programa13_abort.c" target="_blank" style="color:var(--indigo)">programa13_abort.c</a></td><td>Uso de la función abort() para enviar la señal SIGABRT al propio proceso.</td></tr>
 <tr><td><a href="files/prof-tema2/senales.png" target="_blank" style="color:var(--indigo)">senales.png</a></td><td>Gráfico: 3 casos de señales</td></tr>
 </tbody></table>
 </div>
@@ -78,24 +78,24 @@
 <tr><td><a href="files/prof-tema3/Factores_que_limitan_la_cantidad_de_datos_leidos.pdf" target="_blank" style="color:var(--indigo)">Factores_que_limitan_la_cantidad_de_datos_leidos.pdf</a></td><td>Factores que limitan la cantidad de datos leídos</td></tr>
 <tr><td><a href="files/prof-tema3/analisis_programa07.pdf" target="_blank" style="color:var(--indigo)">analisis_programa07.pdf</a></td><td>Análisis del programa07_servidor_grupal.c</td></tr>
 <tr><td><a href="files/prof-tema3/analisis_servidor_PDF.pdf" target="_blank" style="color:var(--indigo)">analisis_servidor_PDF.pdf</a></td><td>Análisis del servidor de archivos PDF</td></tr>
-<tr><td><a href="files/prof-tema3/cliente_google.c" target="_blank" style="color:var(--indigo)">cliente_google.c</a></td><td>Programa en C del profesor (Tema 3).</td></tr>
-<tr><td><a href="files/prof-tema3/compara_tiempos_buffers.c" target="_blank" style="color:var(--indigo)">compara_tiempos_buffers.c</a></td><td>Programa en C del profesor (Tema 3).</td></tr>
-<tr><td><a href="files/prof-tema3/ejemplo_listen.c" target="_blank" style="color:var(--indigo)">ejemplo_listen.c</a></td><td>Programa en C del profesor (Tema 3).</td></tr>
+<tr><td><a href="files/prof-tema3/cliente_google.c" target="_blank" style="color:var(--indigo)">cliente_google.c</a></td><td>Cliente HTTP hacia www.google.com por el puerto 80 (implementa htons).</td></tr>
+<tr><td><a href="files/prof-tema3/compara_tiempos_buffers.c" target="_blank" style="color:var(--indigo)">compara_tiempos_buffers.c</a></td><td>Compara tiempos de ejecución modificando tamaños de buffers.</td></tr>
+<tr><td><a href="files/prof-tema3/ejemplo_listen.c" target="_blank" style="color:var(--indigo)">ejemplo_listen.c</a></td><td>Configura listen() con backlog=1 para analizar el encolamiento de múltiples peticiones "nc".</td></tr>
 <tr><td><a href="files/prof-tema3/holamundo.pdf" target="_blank" style="color:var(--indigo)">holamundo.pdf</a></td><td>Archivo de prueba para programa08_servidor_PDF</td></tr>
 <tr><td><a href="files/prof-tema3/img_procesos_cliente_servidor_INTERNET.png" target="_blank" style="color:var(--indigo)">img_procesos_cliente_servidor_INTERNET.png</a></td><td>Diagrama de procesos cliente-servidor en Internet</td></tr>
 <tr><td><a href="files/prof-tema3/inet_ntoa.pdf" target="_blank" style="color:var(--indigo)">inet_ntoa.pdf</a></td><td>Explicación de la función inet_ntoa()</td></tr>
-<tr><td><a href="files/prof-tema3/programa01_gethostbyname.c" target="_blank" style="color:var(--indigo)">programa01_gethostbyname.c</a></td><td>Programa en C del profesor (Tema 3).</td></tr>
-<tr><td><a href="files/prof-tema3/programa02_gethostbyaddr.c" target="_blank" style="color:var(--indigo)">programa02_gethostbyaddr.c</a></td><td>Programa en C del profesor (Tema 3).</td></tr>
-<tr><td><a href="files/prof-tema3/programa03_ipaddr.c" target="_blank" style="color:var(--indigo)">programa03_ipaddr.c</a></td><td>Programa en C del profesor (Tema 3).</td></tr>
-<tr><td><a href="files/prof-tema3/programa04_cliente_internet.c" target="_blank" style="color:var(--indigo)">programa04_cliente_internet.c</a></td><td>Programa en C del profesor (Tema 3).</td></tr>
-<tr><td><a href="files/prof-tema3/programa04_servidor_internet.c" target="_blank" style="color:var(--indigo)">programa04_servidor_internet.c</a></td><td>Programa en C del profesor (Tema 3).</td></tr>
-<tr><td><a href="files/prof-tema3/programa05_cliente_internet.c" target="_blank" style="color:var(--indigo)">programa05_cliente_internet.c</a></td><td>Programa en C del profesor (Tema 3).</td></tr>
-<tr><td><a href="files/prof-tema3/programa05_servidor_internet.c" target="_blank" style="color:var(--indigo)">programa05_servidor_internet.c</a></td><td>Programa en C del profesor (Tema 3).</td></tr>
-<tr><td><a href="files/prof-tema3/programa06_cliente_internet.c" target="_blank" style="color:var(--indigo)">programa06_cliente_internet.c</a></td><td>Programa en C del profesor (Tema 3).</td></tr>
-<tr><td><a href="files/prof-tema3/programa06_servidor_internet.c" target="_blank" style="color:var(--indigo)">programa06_servidor_internet.c</a></td><td>Programa en C del profesor (Tema 3).</td></tr>
-<tr><td><a href="files/prof-tema3/programa07_servidor_grupal.c" target="_blank" style="color:var(--indigo)">programa07_servidor_grupal.c</a></td><td>Programa en C del profesor (Tema 3).</td></tr>
-<tr><td><a href="files/prof-tema3/programa08_servidor_PDF.c" target="_blank" style="color:var(--indigo)">programa08_servidor_PDF.c</a></td><td>Programa en C del profesor (Tema 3).</td></tr>
-<tr><td><a href="files/prof-tema3/sniffer.c" target="_blank" style="color:var(--indigo)">sniffer.c</a></td><td>Programa en C del profesor (Tema 3).</td></tr>
+<tr><td><a href="files/prof-tema3/programa01_gethostbyname.c" target="_blank" style="color:var(--indigo)">programa01_gethostbyname.c</a></td><td>Uso de <code>gethostbyname()</code> para obtener apuntador a la estructura <code>hostent</code>.</td></tr>
+<tr><td><a href="files/prof-tema3/programa02_gethostbyaddr.c" target="_blank" style="color:var(--indigo)">programa02_gethostbyaddr.c</a></td><td>Uso de gethostbyaddr() para obtener apuntador a la estructura hostent.</td></tr>
+<tr><td><a href="files/prof-tema3/programa03_ipaddr.c" target="_blank" style="color:var(--indigo)">programa03_ipaddr.c</a></td><td>Otra implementación utilizando gethostbyname().</td></tr>
+<tr><td><a href="files/prof-tema3/programa04_cliente_internet.c" target="_blank" style="color:var(--indigo)">programa04_cliente_internet.c</a></td><td>Cliente AF_INET. Recibe la IP del servidor desde argumentos para realizar la conexión.</td></tr>
+<tr><td><a href="files/prof-tema3/programa04_servidor_internet.c" target="_blank" style="color:var(--indigo)">programa04_servidor_internet.c</a></td><td>Servidor AF_INET (Puerto 4898). Al aceptar conexión, envía "Conexion exitosa!".</td></tr>
+<tr><td><a href="files/prof-tema3/programa05_cliente_internet.c" target="_blank" style="color:var(--indigo)">programa05_cliente_internet.c</a></td><td>Cliente que inicia la conversación sincronizada hacia el programa05_servidor.</td></tr>
+<tr><td><a href="files/prof-tema3/programa05_servidor_internet.c" target="_blank" style="color:var(--indigo)">programa05_servidor_internet.c</a></td><td>Servidor iterativo con conversación que finaliza al recibir "adios".</td></tr>
+<tr><td><a href="files/prof-tema3/programa06_cliente_internet.c" target="_blank" style="color:var(--indigo)">programa06_cliente_internet.c</a></td><td>Cliente idéntico al 05, utilizado para interactuar con el servidor concurrente.</td></tr>
+<tr><td><a href="files/prof-tema3/programa06_servidor_internet.c" target="_blank" style="color:var(--indigo)">programa06_servidor_internet.c</a></td><td>Servidor concurrente. Utiliza fork() para delegar la atención del cliente a un proceso hijo.</td></tr>
+<tr><td><a href="files/prof-tema3/programa07_servidor_grupal.c" target="_blank" style="color:var(--indigo)">programa07_servidor_grupal.c</a></td><td>Implementación de un servidor de sala de chat iterando sobre arreglos de FDs mediante select().</td></tr>
+<tr><td><a href="files/prof-tema3/programa08_servidor_PDF.c" target="_blank" style="color:var(--indigo)">programa08_servidor_PDF.c</a></td><td>Servidor Web primitivo (Puerto 4898) que despacha un PDF para ser visualizado en el navegador.</td></tr>
+<tr><td><a href="files/prof-tema3/sniffer.c" target="_blank" style="color:var(--indigo)">sniffer.c</a></td><td>Herramienta extra: programa de análisis y captura de paquetes de red.</td></tr>
 </tbody></table>
 </div>
 
@@ -103,6 +103,44 @@
 <table><thead><tr><th>Archivo</th><th>Qué es</th></tr></thead><tbody>
 <tr><td><a href="files/prof-general/Plan_de_Estudio_2016.pdf" target="_blank" style="color:var(--indigo)">Plan_de_Estudio_2016.pdf</a></td><td>Plan de estudios 2016</td></tr>
 <tr><td><a href="files/prof-general/dia_01.pdf" target="_blank" style="color:var(--indigo)">dia_01.pdf</a></td><td>Día 1: objetivo de la asignatura y elementos de evaluación</td></tr>
+</tbody></table>
+</div>
+
+
+<div class="section-block"><h4>Lecturas y referencias externas (sitio del profesor)</h4>
+<table><thead><tr><th>Enlace</th><th>Tema / para qué</th></tr></thead><tbody>
+<tr><td><a href="https://www.hpca.ual.es/~vruiz/docencia/cursos/linux/html/node43.html" target="_blank" rel="noopener" style="color:var(--indigo)">¿Qué es la imagen de un proceso?</a></td><td>Tema 1 — referencia para la Tarea 1</td></tr>
+<tr><td><a href="https://www.thegeekstuff.com/2010/10/linux-error-codes/" target="_blank" rel="noopener" style="color:var(--indigo)">Los 131 códigos de error de Linux</a></td><td>Tema 1 — complemento de <code>programa03_codigos_sistema.c</code></td></tr>
+<tr><td><a href="https://manpages.ubuntu.com/manpages/bionic/es/man3/execl.3.html" target="_blank" rel="noopener" style="color:var(--indigo)">Página de manual (español): execl, execle, execv…</a></td><td>Tema 1 — familia <code>exec</code></td></tr>
+<tr><td><a href="https://aws.amazon.com/es/about-aws/global-infrastructure/" target="_blank" rel="noopener" style="color:var(--indigo)">Infraestructura global de AWS</a></td><td>Tema 3 — contexto industrial</td></tr>
+<tr><td><a href="https://www.oracle.com/mx/cloud/public-cloud-regions/" target="_blank" rel="noopener" style="color:var(--indigo)">Regiones de nube pública de Oracle</a></td><td>Tema 3 — contexto industrial</td></tr>
+<tr><td><a href="https://submarine-cable-map-2024.telegeography.com/" target="_blank" rel="noopener" style="color:var(--indigo)">Mapa de cables submarinos (2024)</a></td><td>Tema 3 — contexto industrial</td></tr>
+<tr><td><a href="https://es.wired.com/articulos/umoja-ruta-de-primera-red-de-fibra-optica-de-google-entre-africa-y-australia" target="_blank" rel="noopener" style="color:var(--indigo)">Umoja: red de fibra óptica de Google</a></td><td>Tema 3 — contexto industrial</td></tr>
+<tr><td><a href="https://www.xataka.com/streaming/la-compleja-infraestructura-detras-de-netflix-que-pasa-cuando-le-das-al-play" target="_blank" rel="noopener" style="color:var(--indigo)">La infraestructura detrás de Netflix</a></td><td>Tema 3 — contexto industrial</td></tr>
+<tr><td><a href="https://www.alibabacloud.com/blog/tcp-syn-queue-and-accept-queue-overflow-explained_599203" target="_blank" rel="noopener" style="color:var(--indigo)">Desbordamiento de las colas TCP SYN y Accept</a></td><td>Tema 3 — <code>listen()</code> y backlog; base de la Tarea 4</td></tr>
+<tr><td><a href="https://ipcisco.com/lesson/tcp-handshake/" target="_blank" rel="noopener" style="color:var(--indigo)">Three/Four-way handshake (TCP)</a></td><td>Tema 3 — análisis del servidor grupal</td></tr>
+</tbody></table>
+</div>
+
+<div class="section-block"><h4>Bibliografía del profesor (libros en PDF)</h4>
+<p>Son PDFs pesados (1.7 MB y 4.6 MB). Se enlazan directo al sitio del profesor en lugar de copiarlos al repo.</p>
+<table><thead><tr><th>Libro</th><th>Para qué</th></tr></thead><tbody>
+<tr><td><a href="https://cromanzamitiz.github.io/arquitectura-cliente-servidor/Richard_Stevens-Advanced_Unix_Programming.pdf" target="_blank" rel="noopener" style="color:var(--indigo)">Advanced Unix Programming — Richard Stevens</a></td><td>Procesos, señales y sockets en UNIX/C (Temas 1–3)</td></tr>
+<tr><td><a href="https://cromanzamitiz.github.io/arquitectura-cliente-servidor/Tanenbaum_Andrew-Sistemas_Operativos_Modernos.pdf" target="_blank" rel="noopener" style="color:var(--indigo)">Sistemas Operativos Modernos — Andrew S. Tanenbaum</a></td><td>Teoría de procesos (Tema 1, Tarea 1)</td></tr>
+</tbody></table>
+</div>
+
+<div class="section-block" id="tema4"><h4>Tema 4 — Sockets en lenguaje Java (anunciado, sin publicar)</h4>
+<p class="empty">⚠️ Revisado el 1 oct 2026: el profesor ya tiene la página del Tema 4 en su sitio con 2 PDFs y 16 programas en Java, pero <strong>todos los enlaces dan error 404</strong> (todavía no sube los archivos). Tampoco están en su GitHub. En cuanto los publique se copian aquí. Mientras, esto es lo que anuncia (descripciones del profesor):</p>
+<table><thead><tr><th>Archivo</th><th>Qué es</th></tr></thead><tbody>
+<tr><td>Tema_04.pdf</td><td>Notas de sockets en Java (clases <code>ServerSocket</code> y <code>Socket</code>)</td></tr>
+<tr><td>flujos.pdf</td><td>Funciones para el manejo de flujos de socket</td></tr>
+<tr><td>Servidor01.java · Cliente01.java</td><td>Comunicación básica: <code>ServerSocket</code>/<code>Socket</code> con cadenas vía <code>readUTF()</code>/<code>writeUTF()</code></td></tr>
+<tr><td>Servidor02.java · Cliente02.java</td><td>Lectura del teclado con <code>BufferedReader</code>; el cliente envía y espera respuesta</td></tr>
+<tr><td>Servidor03.java · Cliente03.java</td><td>Conversación cíclica hasta que el cliente escribe «salir»</td></tr>
+<tr><td>ServidorMultiThread.java · ClienteMultiThread.java</td><td>Servidor concurrente: un hilo por cliente (la clase hereda de <code>Thread</code>, el hilo se crea después de <code>accept()</code>, <code>ServerSocket</code> estático y <code>Socket</code> de instancia)</td></tr>
+<tr><td>ServidorMultiThread2.java · ServerThread.java · ClienteMultiThread2.java · ClientThread.java</td><td>Multithreading avanzado con clases auxiliares para los hilos</td></tr>
+<tr><td>ServidorFTP.java · ClienteFTP.java</td><td>Transferencia de archivos (texto y binarios): el servidor envía, el cliente recibe y guarda</td></tr>
 </tbody></table>
 </div>
 
