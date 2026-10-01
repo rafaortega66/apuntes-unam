@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 05 — Fundamentos de Sistemas Embebidos</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -15,9 +16,28 @@
   <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 9 sep 2026 · Tema 2 (continuación) — mapas de memoria de AVR/Arduino, ESP32, RP2040 y ARM Cortex-M (v6M); la secuencia de arranque (bootloader) en Raspberry Pi; espacio virtual vs. físico y sistemas de archivos virtuales de Linux; clasificación física de memorias volátiles SRAM vs. DRAM.</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c5-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Clasificación física de memorias volátiles (SRAM de 6 MOSFETs vs. DRAM de 1 transistor y capacitor)</strong><span class="evid">Evidencia: Lo dijo explícitamente en la clase y explicó en detalle la fuga de carga a los 60 ms.</span></li>
+<li><strong>La secuencia de arranque del bootloader en Raspberry Pi a partir de la dirección cero</strong><span class="evid">Evidencia: Lo dijo explícitamente y detalló los pasos desde la lectura en ROM hasta el salto a la RAM.</span></li>
+<li><strong>La falla de segmentación (segmentation fault) al intentar escribir en punteros nulos en C</strong><span class="evid">Evidencia: Lo resolvió en vivo escribiendo el código en el pizarrón y explicando la protección de memoria del Kernel.</span></li>
+<li><strong>La naturaleza de los sistemas de archivos virtuales (/sys, /proc, /dev) generados en RAM</strong><span class="evid">Evidencia: Lo dijo explícitamente al detallar que son carpetas vacías en disco creadas dinámicamente por el Kernel.</span></li>
+<li><strong>La razón técnica del intercalado de bloques de memoria en el mapa del RP2040</strong><span class="evid">Evidencia: Lo explicó al responder una pregunta y desmentir que fuera por tiempos de propagación en la RAM.</span></li>
+</ol>
+</details>
+
 <details class="section-block sec" id="c5-registros-avr" open><summary><span class="stitle">Arquitectura de registros de AVR/Arduino</span></summary>
 <p>La revisión inicia con la distribución interna de registros de la arquitectura de 8 bits de AVR (la que usan las tarjetas Arduino). A nivel de hardware, la ALU opera de forma exclusiva sobre sus <strong>32 registros de trabajo de propósito general</strong>, lo que obliga a mover primero cualquier variable a esos registros antes de poder calcular con ella. Justo debajo de los registros de trabajo hay <strong>64 registros de propósito general</strong> dedicados al control directo de los periféricos internos (puertos de entrada/salida, temporizadores, comparadores analógicos y convertidores analógico-digitales). Adicionalmente, la arquitectura tiene <strong>416 registros de entrada/salida externa</strong>, mapeados en el rango hexadecimal de <code>0x60</code> a <code>0xFF</code>.</p>
 <p>La RAM integrada de la tarjeta es de <strong>8 KB</strong> de 8 bits; sin embargo, la arquitectura permite renunciar a los registros externos, usando una línea de desplazamiento (<em>shift</em>), para conectar RAM externa y expandir la capacidad de direccionamiento hasta <strong>64 KB</strong>. El profesor contrapuso esta estructura de bajo nivel con la práctica común de programar con bibliotecas o funciones de alto nivel del IDE de Arduino, insistiendo en que la verdadera ingeniería exige entender la manipulación directa de registros.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como un escritorio de oficina con 32 cajones de rápido acceso a la mano del trabajador para hacer cuentas, más cajones secundarios abajo para controlar herramientas de la oficina.<span class="rompe">Dónde falla la analogía: Los cajones contienen documentos de papel, mientras que los registros AVR son celdas de memoria de 8 bits conectadas directamente a la ALU mediante buses eléctricos.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra que la ALU opera únicamente sobre sus 32 registros de trabajo y que debajo tiene 64 registros de control de periféricos y 416 registros externos de E/S de 0x60 a 0xFF.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> El profesor señaló la costumbre de programar en Arduino mediante funciones de alto nivel del IDE en lugar de manipular directamente los registros a nivel de ingeniería.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c5-mapa-esp32" open><summary><span class="stitle">Mapa de memoria del ESP32 y algoritmos de búsqueda en ROM</span></summary>
@@ -29,11 +49,25 @@
 <tr><td>Tabla hash (dispersión)</td><td>Función de dispersión i = g(dato)</td><td>O(1)</td><td>Invocación directa del índice mediante una función de dispersión entera.</td></tr>
 </tbody></table>
 <p>En el ESP32, la función de dispersión para localizar un valor trigonométrico en la tabla de la ROM requiere apenas unas tres multiplicaciones enteras rápidas en la ALU, ejecutándose en tiempo constante O(1).</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como un libro de recetas con un índice que te manda directo a la página que buscas sin tener que hojear todo el libro.<span class="rompe">Dónde falla la analogía: El libro se hojea con las manos, mientras que el ESP32 ejecuta una función de dispersión matemática en tiempo constante O(1) sobre tablas precalculadas en ROM.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite optimizar la RAM guardando programas y tablas trigonométricas fijas en ROM0 (256 KB) y ROM1 (128 KB), comparando búsquedas lineal O(N), binaria O(log2 N) y hash O(1).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir los tipos de búsqueda en tablas o desperdiciar memoria RAM almacenando constantes que deberían estar alojadas en la ROM.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c5-mapa-rp2040" open><summary><span class="stitle">Mapa de memoria del RP2040 y el intercalado por retrocompatibilidad</span></summary>
 <p>El RP2040 de Raspberry Pi organiza su mapa de memoria mediante tablas de rangos específicos de direcciones. Dentro del mapa existen direcciones estrictamente prohibidas o reservadas para periféricos que nunca pasan por la caché — la caché funciona como una "memoria proxy" que acelera la lectura de instrucciones y datos repetitivos, pero los datos que vienen de periféricos externos (como un puerto serie) cambian dinámicamente en el mundo real, así que leerlos desde caché entregaría datos desactualizados.</p>
 <p>Un fenómeno característico del mapa del RP2040 es el <strong>intercalado o traslape</strong> de bloques de memoria y periféricos. Esto no responde a retardos de propagación o tiempos de acceso (el acceso aleatorio a RAM toma tiempo constante), sino a la necesidad de mantener <strong>retrocompatibilidad entre revisiones de silicio</strong>: cuando el fabricante lanza una versión posterior del microcontrolador con más RAM, para no alterar las direcciones de los programas ya compilados ni mover los bloques de periféricos existentes, coloca los nuevos bloques de RAM <em>debajo</em> de los periféricos ya asignados — generando mapas de memoria alternados. El profesor citó como ejemplo al sucesor del RP2040, el <strong>RP2350</strong>, que dispone de <strong>512 KB de SRAM y 16 MB de memoria Flash</strong>. La disposición física de las pistas en la tarjeta madre también busca alinear directamente los pines de la RAM, los periféricos y el chipset, para facilitar el ruteado electrónico.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como una casa a la que le construyes recámaras nuevas en los huecos que quedaron del patio para no cambiar de lugar la cocina ni la puerta principal.<span class="rompe">Dónde falla la analogía: Las recámaras son cuartos físicos de ladrillo, mientras que en el RP2040 son bloques de direcciones de memoria SRAM colocados entre periféricos para mantener la retrocompatibilidad.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Explica por qué el mapa de memoria alterna bloques de RAM y periféricos, garantizando que el código compilado para revisiones anteriores no pierda sus direcciones físicas.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> La sugerencia de que el intercalado se debía a tiempos de acceso o retardo de propagación; el profesor aclaró que el tiempo en RAM es aleatorio e idéntico y que se debe a retrocompatibilidad.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c5-mapa-cortex-m" open><summary><span class="stitle">Mapa de la arquitectura ARM Cortex-M (v6M)</span></summary>
@@ -45,6 +79,12 @@
 <li><strong>0.5 GB (512 MB)</strong> asignado para memoria Flash de programa.</li>
 </ul>
 <p>A pesar de que la especificación Cortex-M v6M permite direccionar hasta 512 MB de RAM integrada, los chips comerciales reales (como los de la familia RP2040/RP2350) usan apenas una fracción mínima de ese espacio teórico — la especificación deja margen para crecer sin romper el mapa.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como la maqueta de un centro comercial que reserva zonas gigantes para tiendas, estacionamiento y restaurantes, aunque por el momento solo se construya un local pequeño.<span class="rompe">Dónde falla la analogía: La maqueta mide metros de terreno, mientras que el mapa Cortex-M v6M reserva gigabytes de direcciones virtuales de 32 bits en el silicio.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Establece el mapa estándar del núcleo ARM v6M (1 GB periféricos externos, 0.5 GB periféricos internos, 0.5 GB RAM y 0.5 GB Flash), distinguiendo el mapa del núcleo del mapa propio de la tarjeta madre.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c5-bootloader" open><summary><span class="stitle">Secuencia de arranque (bootloader) en Raspberry Pi</span></summary>
@@ -58,6 +98,12 @@
 <li>Transfiere el apuntador de ejecución a la RAM para arrancar el Kernel.</li>
 </ol>
 <p>Si la Raspberry Pi se enciende sin MicroSD ni USB insertado, la ROM del bootloader inicializa el chip de video, despliega la pantalla de calibración de colores RGB (la conocida "pantalla de arcoíris") y muestra un mensaje con la imagen de la frambuesa indicando que no se encontró un sistema operativo válido — el equivalente al mensaje del BIOS de una PC cuando no detecta disco duro.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como despertarse con amnesia y leer una nota pegada en el buró que te dice dónde está la llave de la casa y qué tienes que hacer primero.<span class="rompe">Dónde falla la analogía: La nota es papel leído con los ojos, mientras que el bootloader es un programa en ROM ejecutado al energizar la CPU para inicializar el bus SPI y copiar el Kernel de la MicroSD a la RAM.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Explica la secuencia de arranque de la Raspberry Pi y muestra cómo, si falta la tarjeta MicroSD, la ROM despliega la pantalla de calibración RGB (arcoíris) y la imagen de la frambuesa.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c5-espacio-virtual" open><summary><span class="stitle">Espacio virtual vs. físico, controladores y sistemas de archivos virtuales</span></summary>
@@ -67,12 +113,38 @@
 s = 1;</code></pre>
 <p>El puntero <code>s</code> se inicializa en <code>NULL</code> (dirección física <code>0x00000000</code>). La instrucción <code>s = 1</code> le ordena al procesador escribir el valor 1 en la dirección cero de la memoria física. Como esa dirección aloja el código inicial del Kernel cargado durante el arranque, la operación equivale a intentar sobrescribir el propio Kernel del sistema operativo. El sistema de protección de memoria de la CPU detecta la violación, genera una <strong>falla de segmentación</strong> (<em>segmentation fault</em>) y destruye de inmediato el proceso para proteger la integridad del sistema.</p>
 <p>En Linux, los controladores (<em>drivers</em>) que carga el Kernel al arrancar hacen una inspección del bus del sistema para identificar el hardware presente y cargar únicamente los módulos compatibles. Existen directorios especiales — <strong><code>/sys</code></strong>, <strong><code>/proc</code></strong> y <strong><code>/dev</code></strong> — que son <strong>sistemas de archivos virtuales</strong>: no ocupan espacio en el disco duro (si se desmonta la unidad y se inspecciona la partición, esas carpetas aparecen completamente vacías); son estructuras que el Kernel genera dinámicamente en RAM durante la fase de inspección de hardware al arrancar, y exponen el estado de procesos, buses y dispositivos en tiempo real para que las aplicaciones puedan consultarlo.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como un departamento rentado donde el inquilino solo puede usar los cuartos asignados y si intenta abrir la puerta cerrada del dueño el guardia lo saca del edificio de inmediato.<span class="rompe">Dónde falla la analogía: La puerta es de madera, mientras que en la CPU la Unidad de Protección de Memoria detiene el proceso y dispara una falla de segmentación al intentar escribir en la dirección física 0x00000000.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Ilustra la separación entre Kernel Space y User Space, explicando cómo los controladores residen en /lib/modules y cómo /sys, /proc y /dev son sistemas de archivos virtuales dinámicos en RAM.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir carpetas reales de disco con los sistemas de archivos virtuales en RAM o intentar escribir directamente sobre punteros nulos en C.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c5-sram-dram" open><summary><span class="stitle">Clasificación de memorias: SRAM vs. DRAM</span></summary>
 <p>Atendiendo a la retención de datos, las memorias se clasifican en <strong>volátiles</strong> (pierden la información al interrumpirse la energía) y <strong>no volátiles</strong> (la conservan de forma permanente). Las volátiles se subdividen en estáticas (SRAM) y dinámicas (DRAM).</p>
 <p><strong>SRAM (memoria estática)</strong>: requiere <strong>6 transistores MOSFET por bit</strong> — alta complejidad de silicio, lo que la hace muy cara y de baja densidad por área. Cada vez que se escribe un estado lógico '0', la energía del '1' almacenado se drena hacia tierra y, por conservación de la energía, se transforma íntegramente en calor; por eso los bloques de caché SRAM en procesadores de alto rendimiento (como 4 MB de caché en un Intel) disipan temperaturas elevadas. Es extremadamente rápida — su límite de conmutación depende solo de la frecuencia de respuesta física del MOSFET, del orden de femtosegundos — y se usa principalmente para memorias caché.</p>
 <p><strong>DRAM (memoria dinámica / SDRAM)</strong>: requiere únicamente <strong>1 transistor y 1 capacitancia parásita por bit</strong>, inventada en <strong>1967 por Robert Dennard en IBM</strong>. Es mucho más económica y permite integrar <strong>6 veces más información</strong> en la misma área de silicio que una SRAM. Un pulso de activación breve en la base del transistor carga la capacitancia parásita, que retiene la carga representando un '1' lógico; esa carga se fuga con el tiempo, y el intervalo máximo en que el voltaje se mantiene dentro del margen de un '1' lógico es de apenas <strong>~60 milisegundos</strong> — pasado ese tiempo la señal cae en una zona de voltaje analógico indeterminado que corrompe la lectura. Para evitarlo, el sistema debe inyectar periódicamente un <strong>pulso de refresco cada 60 ms</strong> a todas las celdas. Como los capacitores no disipan esa energía a tierra en forma de calor, la DRAM opera a temperaturas bajas — por eso se usa como memoria RAM principal de los sistemas.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como comparar un tanque de agua de piedra que no gotea nada con un bote de plástico con agujeritos que tienes que rellenar con una manguera antes de que se vacíe.<span class="rompe">Dónde falla la analogía: El tanque almacena líquido, mientras que la SRAM usa 6 MOSFETs por bit (rápida, cara, disipa calor a tierra) y la DRAM usa 1 transistor y 1 capacitor parásito que requiere refresco cada 60 ms.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Fundamenta la clasificación de memorias volátiles, explicando la física de la capacitancia parásita (Robert Dennard, IBM 1967) y el motivo por el cual la memoria caché SRAM calienta el procesador.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Asumir que los capacitores de la DRAM disipan calor a tierra como la SRAM; no lo hacen, por eso la DRAM opera más fría.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c5-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuántos transistores por bit utiliza la memoria RAM estática (SRAM) y cuántos utiliza la memoria RAM dinámica (DRAM)?</summary><p>La SRAM utiliza 6 transistores MOSFET por bit, mientras que la DRAM utiliza únicamente 1 transistor y 1 capacitancia parásita por bit.</p></details>
+<details class="qa"><summary>2. Explica por qué la memoria caché de tipo SRAM disipa significativamente más calor que la memoria DRAM.</summary><p>Porque en la SRAM, cada vez que se escribe un cero lógico, la energía almacenada del uno previo se drena directamente hacia la línea de tierra, transformándose en calor al conmutar a altas frecuencias.</p></details>
+<details class="qa"><summary>3. Si una celda de memoria DRAM retiene su carga eléctrica durante un tiempo límite de 60 milisegundos antes de corromperse, calcula cuántas veces por segundo como mínimo debe activarse el pulso de refresco para conservar la información intacta.</summary><p>Dividiendo 1 segundo (1000 ms) entre el tiempo límite de 60 ms: 1000 / 60 ≈ 16.67, por lo que el sistema debe ejecutar al menos 17 impulsos de refresco por segundo (aproximadamente uno cada 60 ms).</p></details>
+<details class="qa"><summary>4. Compara la búsqueda lineal, la búsqueda binaria y la tabla hash en la ROM del ESP32 en cuanto a su complejidad temporal de ejecución.</summary><p>La búsqueda lineal opera en tiempo O(N) recorriendo el arreglo desordenado, la búsqueda binaria opera en tiempo O(log2 N) mediante saltos en datos preordenados, y la tabla hash opera en tiempo constante O(1) evaluando la función de dispersión.</p></details>
+<details class="qa"><summary>5. ¿Qué ocurre a nivel de hardware cuando un programa en C intenta escribir en un puntero nulo inicializado en la dirección cero (int *s = NULL; s = 1;)?</summary><p>La Unidad de Protección de Memoria de la CPU detecta un intento de sobrescribir el Kernel en la dirección física 0x00000000, dispara una falla de segmentación (segmentation fault) y destruye de inmediato el proceso.</p></details>
+<details class="qa"><summary>6. Explica por qué los directorios /sys, /proc y /dev en Linux se consideran sistemas de archivos virtuales.</summary><p>Porque no ocupan espacio en el disco duro físico; el Kernel los crea dinámicamente en la memoria RAM durante la inspección de hardware al arrancar para exponer el estado en tiempo real de los procesos y periféricos.</p></details>
+<details class="qa"><summary>7. En el mapa de memoria de la arquitectura ARM Cortex-M v6M, si el espacio reservado para periféricos externos es de 1 GB y el espacio para periféricos internos es de 512 MB, ¿cuántos megabytes en total suman ambos rangos combinados?</summary><p>Convertimos 1 GB a megabytes (1024 MB) y le sumamos 512 MB: 1024 + 512 = 1536 MB de direccionamiento total reservado para periféricos.</p></details>
+<details class="qa"><summary>8. Compara el propósito y función de la memoria de trabajo de 32 registros en la arquitectura AVR/Arduino frente a sus 64 registros de control de periféricos.</summary><p>Los 32 registros de trabajo son celdas de propósito general donde la ALU realiza directamente todas sus operaciones aritméticas y lógicas, mientras que los 64 registros de control están mapeados para manipular y configurar directamente los periféricos internos como timers, puertos y convertidores analógicos.</p></details>
 </details>
 
 <details class="section-block sec" id="c5-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>

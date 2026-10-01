@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T12:11:18+00:00",
+ "generatedAt": "2026-10-01T12:13:24+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -158,7 +158,7 @@
     "fecha": "2026-09-09",
     "resumen": "Tema 2 (continuación) — mapas de memoria de AVR/Arduino, ESP32, RP2040 y ARM Cortex-M (v6M); la secuencia de arranque (bootloader) en Raspberry Pi; espacio virtual vs. físico y sistemas de archivos virtuales de Linux; cl",
     "url": "materias/fundamentos-de-sistemas-embebidos/clase-05.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 6,
@@ -230,7 +230,7 @@
     "fecha": "2026-09-09",
     "resumen": "Formatos documentales por metodología (Scrum vs. Cascada/PMBOK), requisitos técnicos base de infraestructura, catálogo completo de las 10 propuestas de proyecto con equipo asignado, entregables finales y mecánica de eval",
     "url": "materias/administracion-de-servicios-de-internet/clase-05.html",
-    "formato": "prosa"
+    "formato": "no-aplica"
    },
    {
     "num": 6,
@@ -467,6 +467,16 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "d2841d0",
+   "fecha": "2026-10-01T06:11:43-06:00",
+   "mensaje": "ASI Clase 05 (logística del proyecto) marcada como no-aplica"
+  },
+  {
+   "hash": "dcea98f",
+   "fecha": "2026-10-01T06:11:18-06:00",
+   "mensaje": "ACS Clase 06: formato de estudio; script: títulos de sección con <code>"
+  },
   {
    "hash": "696d7d0",
    "fecha": "2026-10-01T06:09:23-06:00",
@@ -756,16 +766,6 @@
    "hash": "34fc62b",
    "fecha": "2026-09-30T07:28:31-06:00",
    "mensaje": "ACS: agregar Clase 10 (29 sep) — socket servidor en C: socket, sockaddr_in, bind, listen, accept"
-  },
-  {
-   "hash": "5f71409",
-   "fecha": "2026-09-29T19:28:12-06:00",
-   "mensaje": "Agregar 7 clases nuevas y ocultar la sección global de Pendientes"
-  },
-  {
-   "hash": "d2ed597",
-   "fecha": "2026-09-28T21:19:21Z",
-   "mensaje": "SIB Clase 08: corregir ejercicio de 20 reactivos con el material oficial de la profesora"
   }
  ]
 }
