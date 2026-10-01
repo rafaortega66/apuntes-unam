@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 02 — Fundamentos de Sistemas Embebidos</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -15,6 +16,18 @@
   <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 31 ago 2026 · Tema 2 — Organización, arquitectura y plataformas · arquitecturas RISC vs. CISC recorriendo PIC, AVR, ESP32, RP2040/Cortex-M e Intel x86; memoria caché y el cuello de botella CPU–RAM.</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #A98BD1"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c2-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Promesa de retrocompatibilidad binaria de Intel (8086 a Core i9) y arquitectura CISC por fuera / RISC por dentro</strong><span class="evid">Evidencia: Lo dijo explícitamente en la clase y explicó en detalle la decodificación de instrucciones CISC a microoperaciones RISC.</span></li>
+<li><strong>Diferencia de ejecución de operaciones de punto flotante entre la familia ARM Cortex-M (M0, M3, M4, M7)</strong><span class="evid">Evidencia: Lo explicó en el pizarrón resolviendo la división flotante y comparando la inyección de microinstrucciones.</span></li>
+<li><strong>Capacidad y limitaciones de la pila (stack) del microcontrolador PIC16F84 (8 niveles de pila)</strong><span class="evid">Evidencia: Lo dijo explícitamente en la clase e ilustró por qué no se pueden resolver algoritmos recursivos.</span></li>
+<li><strong>Cuello de botella entre la frecuencia del procesador y la memoria RAM, y el papel de la memoria caché</strong><span class="evid">Evidencia: Lo explicó resolviendo el cálculo de frecuencia entre CPU a 4.2 GHz y RAM DDR a 2.6 GHz.</span></li>
+<li><strong>Requisito de hardware para la práctica de Windows en Raspberry Pi (usar Raspberry Pi 3 obligatoriamente)</strong><span class="evid">Evidencia: Lo dijo explícitamente al final de la clase al asignar la opción de la práctica de laboratorio.</span></li>
+</ol>
+</details>
+
 <details class="section-block sec" id="c2-risc-cisc" open><summary><span class="stitle">RISC vs. CISC — el eje de la clase</span></summary>
 <table><thead><tr><th></th><th>RISC (ARM, PIC, AVR…)</th><th>CISC (Intel x86)</th></tr></thead><tbody>
 <tr><td>Memoria</td><td>Programa y datos separados (Harvard)</td><td>Unificada; instrucciones operan directo sobre memoria</td></tr>
@@ -24,7 +37,14 @@
 <tr><td></td><td>…pero el <em>pipeline</em> vuelve ese costo irrelevante en rendimiento</td><td>…a cambio de un decodificador mucho más caro</td></tr>
 </tbody></table>
 <p>"La pata donde cojean" las RISC: todo trabajo aritmético pasa por un registro, lo que obliga a accesos constantes a memoria. El <em>pipeline</em> es lo que las hace competitivas.</p>
-<p>Todos los Intel de escritorio están basados, por herencia, en la arquitectura del <strong>8086</strong> (80x86 / IA-32).</p></details>
+<p>Todos los Intel de escritorio están basados, por herencia, en la arquitectura del <strong>8086</strong> (80x86 / IA-32).</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como elegir entre un vocabulario simple de pocas palabras clave con las que construyes oraciones largas combinándolas, o un diccionario gigante con palabras complejas que resumen oraciones enteras en una sola palabra.<span class="rompe">Dónde falla la analogía: Las palabras expresan ideas humanas, mientras que RISC y CISC son filosofías de diseño de conjuntos de instrucciones binarias para microprocesadores que determinan cómo se decodifican y ejecutan las señales eléctricas.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es el concepto central de la clase que clasifica a los microcontroladores (PIC, AVR, ARM) como RISC y explica cómo procesadores modernos como Intel combinan ambos mundos (CISC externo, RISC interno).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> La confusión de un alumno que sugirió que el Intel 8080 era un procesador RISC; el profesor aclaró que los procesadores x86 son de arquitectura CISC.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="c2-pic"><summary><span class="stitle">PIC — arquitectura RISC de 8 bits</span></summary>
 <ul>
@@ -39,6 +59,13 @@
 <li><strong>ALU</strong>: dos entradas. La izquierda viene de un multiplexor (dato de la instrucción, de la memoria o de un periférico); la derecha está cableada al <strong>registro acumulador W</strong> (<em>working register</em>). Sumar <code>A + B</code> cuesta <strong>tres accesos</strong>: (1) cargar A en W, (2) W = W + B, (3) escribir W en el destino.</li>
 <li><strong>Expansión externa</strong>: usando 2 puertos como bus de direcciones + 1 puerto como bus de datos se direcciona RAM externa de 2¹⁶ = <strong>64 KB</strong>. Sumando el puerto A (5 bits) → 21 bits → más de 2²¹ = <strong>1 MB</strong>. La RAM interna pasa a funcionar como <em>caché / scratchpad</em> de esa memoria externa.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como un taller mecánico muy básico con una sola mesa de trabajo central donde tienes que poner cada pieza una por una antes de poder armarla con otra.<span class="rompe">Dónde falla la analogía: La mesa de trabajo sostiene objetos físicos, mientras que el registro acumulador W de 8 bits realiza operaciones aritméticas recibiendo datos desde la memoria RAM o las instrucciones.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Ejemplifica una arquitectura RISC de 8 bits (Harvard) pura con bus de 8 bits (256 bytes de RAM) y una pila independiente de solo 8 niveles que impide ejecutar algoritmos recursivos como el factorial o recorridos de árboles.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> La idea errónea de que se pueden resolver algoritmos recursivos complejos en un PIC16F84; el profesor demostró que la pila de 8 niveles se desborda inmediatamente al intentar calcular factoriales altos.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c2-avr"><summary><span class="stitle">AVR — el microcontrolador de Arduino</span></summary>
@@ -49,6 +76,12 @@
 <li>Corre hasta <strong>50 MHz</strong>, muy por encima de un PIC típico.</li>
 </ul>
 <p>Broma recurrente del profesor: cuando alguien confunde la sigla SRAM, la traduce en broma como "Status RAM" en vez de <em>Static RAM</em> — la insistencia es que la S es de "estática" (no se refresca periódicamente como la DRAM).</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como un taller más equipado que en lugar de una sola mesa tiene treinta y dos cajones de trabajo directo frente al operario para preparar las piezas antes de usarlas.<span class="rompe">Dónde falla la analogía: Los cajones guardan herramientas de mano, mientras que los 32 registros de propósito general de la arquitectura AVR se alimentan desde la SRAM de datos para entregar variables directamente a la ALU.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Representa la arquitectura RISC de 8 bits de las tarjetas Arduino (ATmega), mostrando que la ALU trabaja directamente sobre sus 32 registros de trabajo y no sobre la memoria RAM general.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c2-esp32"><summary><span class="stitle">ESP32 — sistema integrado con red</span></summary>
@@ -59,6 +92,13 @@
 <li>El decodificador <strong>SHA por hardware</strong> encripta el flujo de la RAM sin cargar la CPU → permite guardar llaves complejas (p. ej. claves de AWS de 256 bits) en memoria externa de forma segura.</li>
 <li>ISA: Xtensa / RISC-V.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como una navaja suiza que además de sus herramientas básicas trae integrados módulos de comunicación por radio y un decodificador de mensajes secretos.<span class="rompe">Dónde falla la analogía: La navaja abre latas o corta cuerdas físicamente, mientras que el ESP32 integra radios Wi-Fi/Bluetooth, aceleradores criptográficos por hardware (SHA) y co-procesadores sobre un núcleo Xtensa.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra un sistema integrado moderno que combina periféricos de red con co-procesadores de cifrado en hardware para comunicarse directamente con servicios en la nube como Amazon Web Services sin saturar la CPU.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Creer que la ROM del ESP32 almacena el programa del usuario; el profesor aclaró que la ROM aloja funciones del sistema y tablas fijas, mientras que los datos e instrucciones se leen desde la PSRAM/SRAM pasando por la caché.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c2-cache"><summary><span class="stitle">Memoria caché y latencia de acceso</span></summary>
@@ -68,7 +108,14 @@
 <li><strong>Caché "inteligente"</strong>: reconoce el sistema operativo y los programas activos; mantiene una tabla reservada de los archivos y librerías más usados y los precarga a RAM al arrancar. En Linux: el kernel y los binarios básicos de <code>bash</code> quedan en caché.</li>
 <li><strong>Cuello de botella CPU–RAM</strong>: CPU a 4.2 GHz (overclock) con DDR4 a 2.6 GHz. Si cada instrucción tuviera que ir a la RAM, la CPU nunca correría a 4.2. Solución: caché interna a la velocidad del núcleo; se toca la RAM lenta <strong>una sola vez</strong> para traer un bloque grande (p. ej. 8 MB). Como un programa típico pesa ~500 KB, cabe entero en caché y el núcleo ejecuta a máxima velocidad.</li>
 <li><strong>Multinúcleo</strong>: obligatorio un mínimo de <strong>dos niveles</strong> — L1 y L2 por núcleo, L3 global. La L1 se parte en <strong>L1-D</strong> (datos) y <strong>L1-I</strong> (instrucciones). Sin esto, los núcleos colisionan al acceder a la misma memoria.</li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como tener en el escritorio de tu mesa los libros que usas todos los días para no tener que caminar hasta la biblioteca del edificio cada vez que necesitas consultar una página.<span class="rompe">Dónde falla la analogía: Los libros son tomos impresos de papel, mientras que la memoria caché almacena páginas de código binario y variables a la misma frecuencia de reloj del procesador.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Explica cómo se resuelve el cuello de botella entre un procesador de 4.2 GHz y una memoria RAM de 2.6 GHz, cargando bloques de programa a la caché para ejecutarlos a máxima velocidad.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> La creencia de que un procesador de 4.2 GHz ejecuta instrucciones a esa velocidad leyendo directamente de la RAM; el profesor demostró que sin memoria caché el sistema queda limitado a la velocidad de la RAM.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="c2-rp2040"><summary><span class="stitle">RP2040 — Raspberry Pi Pico</span></summary>
 <ul>
@@ -80,6 +127,12 @@
 <li>La <strong>"M"</strong> de Cortex = pensada para <strong>sistemas embebidos</strong> (microcontrolador). La familia <strong>Cortex-A</strong> son procesadores de aplicación de alto rendimiento, con conjuntos de instrucciones multimedia y un compilador distinto.</li>
 </ul>
 <p>Broma del profesor sobre la nomenclatura: dijo en tono sarcástico que la "M" bien podría ser de "mamacito" en vez de <em>microcontroller/embedded</em>, como forma de que se quedara grabado el significado real.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como una oficina con dos empleados trabajando al mismo tiempo que necesitan estantes separados para no chocar cuando ambos van a buscar expedientes.<span class="rompe">Dónde falla la analogía: Los estantes guardan carpetas de cartón, mientras que los bloques de SRAM del RP2040 se dividen para evitar colisiones de bus cuando los dos núcleos ARM Cortex-M0+ acceden a la memoria simultáneamente.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Presenta la microarquitectura de la Raspberry Pi Pico (doble núcleo ARM Cortex-M0+ con varios bloques de SRAM) como un ejemplo de sistema embebido moderno, minimalista y de bajo costo.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c2-cortex-m-familia"><summary><span class="stitle">Familia Cortex-M — cómo elegir (criterio de ingeniería)</span></summary>
@@ -89,10 +142,23 @@
 <tr><td><strong>Cortex-M4</strong></td><td>FPU nativa: multiplica y divide flotante por hardware en un paso.</td><td>Óptimo cuando la aplicación usa mucho punto flotante.</td></tr>
 <tr><td><strong>Cortex-M7</strong></td><td>FPU + unidad vectorial (DSP).</td><td><em>Overkill</em> salvo que se necesiten algoritmos avanzados de procesamiento de señales.</td></tr>
 </tbody></table>
-<p>Si el sistema necesita <strong>red</strong>, el ESP32 es buena opción por su cripto SHA por hardware. El desafío que lanzó el profesor: programar en C un cociente de flotantes usando solo variables enteras, con corrimientos de bits y manipulación de la mantisa.</p></details>
+<p>Si el sistema necesita <strong>red</strong>, el ESP32 es buena opción por su cripto SHA por hardware. El desafío que lanzó el profesor: programar en C un cociente de flotantes usando solo variables enteras, con corrimientos de bits y manipulación de la mantisa.</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como elegir un vehículo según la carga: un auto compacto para viajes sencillos por la ciudad, un camión ligero para transportar cajas o un tráiler pesado si necesitas llevar maquinaria pesada.<span class="rompe">Dónde falla la analogía: Los vehículos transportan carga sobre ruedas, mientras que la familia Cortex-M (M0, M3, M4, M7) ejecuta el mismo conjunto de instrucciones pero varía en sus módulos internos de cómputo matemático (FPU/DSP).</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Establece el criterio de ingeniería para elegir microcontroladores comparando costo contra necesidad de cómputo: M0 aproxima punto flotante inyectando microinstrucciones por software, M3 multiplica por hardware, y M4/M7 integran FPU/DSP.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir las unidades FPU y BPU en la serie Cortex-M con procesadores gráficos; el profesor aclaró que ningún modelo de la serie Cortex-M maneja gráficos.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="c2-compilacion"><summary><span class="stitle">Compilación y micro-instrucciones</span></summary>
-<p>El compilador traduce el código de alto nivel a ensamblador de la arquitectura (<strong>ARMv6-M</strong> para Cortex-M0/M0+). Después, el <strong>decodificador de hardware</strong> descompone cada instrucción de ensamblador en <strong>micro-operaciones</strong> internas del núcleo (cargas, almacenamientos, operaciones de acumulador). Un <code>int</code> de C en RISC se traduce en varias instrucciones básicas de <em>load</em> y <em>store</em>.</p></details>
+<p>El compilador traduce el código de alto nivel a ensamblador de la arquitectura (<strong>ARMv6-M</strong> para Cortex-M0/M0+). Después, el <strong>decodificador de hardware</strong> descompone cada instrucción de ensamblador en <strong>micro-operaciones</strong> internas del núcleo (cargas, almacenamientos, operaciones de acumulador). Un <code>int</code> de C en RISC se traduce en varias instrucciones básicas de <em>load</em> y <em>store</em>.</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como traducir un libro de instrucciones de un idioma general a pasos tan detallados como "mueve la mano derecha hacia adelante dos centímetros y cierra los dedos".<span class="rompe">Dónde falla la analogía: Los movimientos humanos son gestos físicos, mientras que el compilador convierte el código C en instrucciones ensamblador y luego en microoperaciones/señales de control para la microarquitectura.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Conecta el lenguaje de alto nivel con la microarquitectura del silicio, explicando cómo las instrucciones en ensamblador se descomponen internamente en microoperaciones ejecutadas por los bloques de hardware.</p>
+</div>
+</details>
 
 <details class="section-block sec" id="c2-intel"><summary><span class="stitle">Intel: CISC por fuera, RISC por dentro</span></summary>
 <ul>
@@ -113,6 +179,25 @@
 <p><strong>Puertos de ejecución</strong>: <em>Coffee Lake</em> (2017) tenía 8 puertos (0–7) → un Intel de 4 núcleos paraleliza hasta 32 µops por ciclo. <em>Golden Cove</em> (2021) sube a 12 puertos (P0–P11), con cola de reordenamiento de 512 entradas: 2 puertos de <em>store</em>, 2 de <em>load</em> y 5 de cómputo pesado (3 de ellos vectoriales).</p>
 <p><strong>Caché multinivel en multinúcleo</strong>: regla obligatoria de ≥ 2 niveles — L1 y L2 a nivel núcleo, L3 global —, con la L1 dividida en datos (D) e instrucciones (I).</p>
 <p>El profesor comparó el renombrado de registros y la ejecución fuera de orden con una <strong>empresa de 20 pisos</strong>: no hace falta que el mensajero suba piso por piso en orden — el sistema reparte el trabajo a quien esté libre y reordena el resultado al final, igual que el planificador de hardware reordena µops sin que el programador lo note.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como un traductor multilingüe en la entrada de un edificio que recibe documentos complejos en idioma antiguo y los convierte internamente en notas cortas y simples para que sus asistentes las resuelvan en paralelo.<span class="rompe">Dónde falla la analogía: Las notas son mensajes en papel, mientras que el decodificador de Intel descompone instrucciones CISC x86 en microoperaciones RISC ejecutadas fuera de orden sobre múltiples puertos de hardware.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Explica la promesa de retrocompatibilidad binaria de Intel (desde el 8086 hasta el i9) y la microarquitectura moderna que es CISC hacia el programador pero RISC internamente mediante renombrado de registros y paralelismo por hardware.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Asumir que la arquitectura ARM y la arquitectura Intel x86 de 64 bits son compatibles entre sí sin emulación; el profesor aclaró que cambiar el conjunto de instrucciones exige recompilar el código o usar emuladores.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c2-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Por qué el procesador del microcontrolador PIC16F84 no puede resolver algoritmos recursivos como el cálculo del factorial de N o el recorrido de árboles complejos?</summary><p>Porque dispone de una pila (stack) de hardware independiente de la memoria RAM que cuenta con únicamente 8 niveles de profundidad, por lo que cualquier llamada recursiva que supere los 8 niveles desborda la pila e interrumpe el programa.</p></details>
+<details class="qa"><summary>2. Explica el mecanismo de ejecución de una operación de suma (A + B) en el microcontrolador PIC16F84 en términos de sus accesos a la memoria y registros.</summary><p>Dado que la ALU solo tiene una entrada conectada al registro acumulador W, la suma requiere tres pasos: primero cargar A en W (A + 0), segundo sumar B al contenido de W (W + B), y tercero escribir el resultado almacenado en W de regreso en la variable A.</p></details>
+<details class="qa"><summary>3. Si un procesador opera a una frecuencia de reloj de 4.2 GHz y se conecta a una memoria RAM DDR que trabaja a 2.6 GHz, calcula el porcentaje de velocidad que se perdería al ejecutar instrucciones sin memoria caché y explica cómo se resuelve este cuello de botella.</summary><p>La pérdida de velocidad es de aproximadamente 38% ((4.2 - 2.6) / 4.2 ≈ 0.38). Se resuelve integrando memoria caché que opera a 4.2 GHz, jalando bloques del programa desde la RAM hacia la caché para que la CPU los ejecute internamente a máxima frecuencia.</p></details>
+<details class="qa"><summary>4. Compara la arquitectura de registros del microcontrolador PIC16F84 frente a la del microcontrolador AVR de Arduino (ATmega) en cuanto a cantidad de registros de propósito general y su acceso a la ALU.</summary><p>El PIC16F84 tiene únicamente un registro acumulador de propósito general (registro W) para alimentar a la ALU, mientras que el AVR dispone de 32 registros de trabajo de propósito general conectados directamente para alimentar a la ALU.</p></details>
+<details class="qa"><summary>5. ¿Cómo procesan la división de dos números en punto flotante (3.1416 / 2.71828) un núcleo ARM Cortex-M0 frente a un núcleo ARM Cortex-M4?</summary><p>El Cortex-M0 carece de FPU y unidad de división por hardware, por lo que su decodificador inyecta cerca de 30 microinstrucciones para aproximar el cálculo con enteros en la ALU; el Cortex-M4 cuenta con FPU y división por hardware, ejecutando la operación directamente en pocos ciclos.</p></details>
+<details class="qa"><summary>6. ¿Qué función cumplen los co-procesadores de criptografía (como el módulo SHA) integrados en el microcontrolador ESP32?</summary><p>Reciben el flujo de datos desde la memoria RAM y realizan la encriptación o desencriptación por hardware en tiempo real sin consumir ciclos de procesamiento de la CPU principal, facilitando la conexión segura a servicios en la nube como Amazon Web Services.</p></details>
+<details class="qa"><summary>7. Explica por qué se dice que los procesadores Intel modernos son "CISC por fuera y RISC por dentro".</summary><p>Porque hacia el exterior reciben instrucciones del catálogo CISC x86/IA-32 para preservar la retrocompatibilidad binaria total, pero internamente un pre-decodificador descompone esas instrucciones complejas en microoperaciones (µ-ops) de tipo RISC que se ejecutan en paralelo sobre múltiples puertos.</p></details>
+<details class="qa"><summary>8. ¿Cuál es el requisito estricto de hardware indicado por el profesor para la práctica de laboratorio si los alumnos eligen desarrollar el ejercicio sobre la arquitectura Windows?</summary><p>Es requisito obligatorio utilizar una tarjeta Raspberry Pi 3, ya que el profesor enfatizó explícitamente que la versión para Windows no funciona en la Raspberry Pi 4.</p></details>
 </details>
 
 <details class="section-block sec" id="c2-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>

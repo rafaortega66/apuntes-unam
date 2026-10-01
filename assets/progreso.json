@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T17:05:41+00:00",
+ "generatedAt": "2026-10-01T17:08:14+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -144,7 +144,7 @@
     "fecha": "2026-08-31",
     "resumen": "Tema 2 — Organización, arquitectura y plataformas · arquitecturas RISC vs. CISC recorriendo PIC, AVR, ESP32, RP2040/Cortex-M e Intel x86; memoria caché y el cuello de botella CPU–RAM.",
     "url": "materias/fundamentos-de-sistemas-embebidos/clase-02.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 3,
@@ -489,6 +489,11 @@
  },
  "gitlog": [
   {
+   "hash": "9b28419",
+   "fecha": "2026-10-01T11:05:41-06:00",
+   "mensaje": "ASI Clase 02: formato de estudio"
+  },
+  {
    "hash": "ef309b6",
    "fecha": "2026-10-01T11:03:38-06:00",
    "mensaje": "ACS Clase 03: formato de estudio"
@@ -782,11 +787,6 @@
    "hash": "fd3a3f8",
    "fecha": "2026-09-30T19:59:06-06:00",
    "mensaje": "Entregas: fechas y adjuntos confirmados en Classroom (ASI SCRUM 1/Formato 1, MD Proyecto 2)"
-  },
-  {
-   "hash": "ea45b8f",
-   "fecha": "2026-09-30T17:51:27-06:00",
-   "mensaje": "Pasada final de entregas: MD Proyecto 2, ASI SCRUM 1 y Formato 1; quitar pendiente ASI Formato"
   }
  ]
 }
