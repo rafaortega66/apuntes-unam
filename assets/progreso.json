@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T12:35:50+00:00",
+ "generatedAt": "2026-10-01T12:37:44+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -295,7 +295,7 @@
     "fecha": "2026-09-03",
     "resumen": "Tema 1 — strerror() y perror() , control de flujo de fork() , procesos huérfanos y reapers , y la familia de funciones exec .",
     "url": "materias/arquitectura-cliente-servidor/clase-04.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 5,
@@ -467,6 +467,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "475b1b4",
+   "fecha": "2026-10-01T06:35:51-06:00",
+   "mensaje": "SIB Clase 03: formato de estudio"
+  },
   {
    "hash": "76302d8",
    "fecha": "2026-10-01T06:33:29-06:00",
@@ -761,11 +766,6 @@
    "hash": "dd237d6",
    "fecha": "2026-09-30T16:02:36-06:00",
    "mensaje": "Lab OAC: guiones de Prácticas 2 y 3, formato de reporte y presentación del día 1"
-  },
-  {
-   "hash": "08f2e45",
-   "fecha": "2026-09-30T16:00:38-06:00",
-   "mensaje": "MD: enunciado Proyecto 1, equipos, dataset de la práctica 3.1 y entregas de Proyecto 1 y 2"
   }
  ]
 }
