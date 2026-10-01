@@ -47,7 +47,8 @@ def inline(s):
 
 
 def secciones(src):
-    return re.findall(r'<details class="section-block sec" id="([^"]+)"[^>]*><summary><span class="stitle">([^<]*)', src)
+    return [(i, re.sub(r"<[^>]+>", "", t)) for i, t in
+            re.findall(r'<details class="section-block sec" id="([^"]+)"[^>]*><summary><span class="stitle">(.*?)</span>', src)]
 
 
 def parse(txt):

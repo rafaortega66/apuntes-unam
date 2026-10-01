@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T12:09:22+00:00",
+ "generatedAt": "2026-10-01T12:11:18+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -309,7 +309,7 @@
     "fecha": "2026-09-10",
     "resumen": "Manejo de señales con signal() , escenarios de tratamiento de interrupciones y control de procesos en primer/segundo plano ( fg / bg ).",
     "url": "materias/arquitectura-cliente-servidor/clase-06.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 7,
@@ -467,6 +467,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "696d7d0",
+   "fecha": "2026-10-01T06:09:23-06:00",
+   "mensaje": "SIB Clase 05: formato de estudio + nota sobre el ISO 7498-2"
+  },
   {
    "hash": "31a9de3",
    "fecha": "2026-10-01T06:07:17-06:00",
@@ -761,11 +766,6 @@
    "hash": "d2ed597",
    "fecha": "2026-09-28T21:19:21Z",
    "mensaje": "SIB Clase 08: corregir ejercicio de 20 reactivos con el material oficial de la profesora"
-  },
-  {
-   "hash": "ffdefee",
-   "fecha": "2026-09-28T21:17:57Z",
-   "mensaje": "SIB: agregar Clase 08 (24 sep 2026) — vulnerabilidades humanas, ejercicio de 20 reactivos y casos reales (Línea 12 del Metro)"
   }
  ]
 }
