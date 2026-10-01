@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 03 — Organización y Arquitectura de Computadoras</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -15,14 +16,40 @@
   <p class="prof">M.I. José Antonio de Jesús Arredondo Garza · 7 sep 2026 · Tema 2 (continuación) — Diferencias físicas Pico 1 vs. Pico 2, filosofía y modularidad de RISC-V, CISC vs. RISC (Intel/ARM/RISC-V), independencia funcional de periféricos (ADC+DMA), mecanismo de selección de arquitectura por bootloader, y FPU con registros S0–S31.</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #7C9CD6"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c3-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>La reestructuración del mapa de memoria entre la Pico 1 y la Pico 2 y el fallo al direccionar registros si no se considera el nuevo mapa</strong><span class="evid">Evidencia: Lo dijo explícitamente advirtiendo que al manipular registros directamente las instrucciones tipo 32 fallarán si no se usa el nuevo mapa de memoria, y lo ligó a ejercicios prácticos de la materia.</span></li>
+<li><strong>La ampliación de las máquinas de estado de la interfaz PIO de 4 a 8 y el cambio físico del chip RP2350 en versiones de 30 y 48 pines</strong><span class="evid">Evidencia: Lo explicó explícitamente comparando el hardware de la Pico 1 y la Pico 2 y detallando los pines accesorios de reloj u organización.</span></li>
+<li><strong>El origen y filosofía modular de la arquitectura abierta RISC-V creada en la Universidad de California en Berkeley para evitar el pago de licencias y regalías en producción masiva</strong><span class="evid">Evidencia: Lo explicó explícitamente en la lección mostrando la tabla comparativa con Intel y ARM, y recomendó lecturas y manuales en línea.</span></li>
+<li><strong>El principio de independencia funcional de periféricos, ejemplificado con la conversión del ADC con DMA en memoria RAM sin consumir ciclos de la CPU</strong><span class="evid">Evidencia: Lo explicó explícitamente como criterio de diseño en microcontroladores y mostró cómo opera en segundo plano.</span></li>
+<li><strong>El mecanismo de selección de arquitectura en la Pico 2 mediante el bootloader al detectar un bit habilitado por software para conmutar a modo ARM o modo RISC-V</strong><span class="evid">Evidencia: Lo dijo explícitamente advirtiendo que en modo normal de ARM no se puede acceder a RISC-V si el bootloader no toma ese camino.</span></li>
+<li><strong>La Unidad de Punto Flotante (FPU) de la Pico 2 con sus 32 registros de punto flotante (S0 a S31) y las operaciones básicas soportadas (suma, resta, multiplicación, división y raíz cuadrada)</strong><span class="evid">Evidencia: Lo dijo explícitamente resaltando que un programa compilado con FPU no corre en la Pico 1 y señalando la ausencia de funciones trascendentales.</span></li>
+</ol>
+</details>
+
 <details class="section-block sec" id="c3-pico1-pico2" open><summary><span class="stitle">Diferencias de hardware entre Pico 1 y Pico 2: overclocking, máquinas de estado y mapa de memoria</span></summary>
 <p>El análisis comparativo inicia evaluando el comportamiento de ejecución de programas con operaciones de punto flotante: en la Pico 1, sin una unidad de FPU, esas operaciones se resuelven por software. Mediante <strong>overclocking</strong>, la Pico 2 permite incrementar sustancialmente la velocidad del ciclo máquina. A nivel de periferia, aunque la distribución general de bloques parece similar a simple vista, hay una diferencia técnica crítica: la <strong>reestructuración completa de los mapas de memoria</strong> entre ambas versiones. Si un programador intenta direccionar memoria manipulando directamente los registros sin tomar en cuenta este nuevo mapa, el programa falla o accede a direcciones equivocadas.</p>
 <p>A nivel físico, el chip RP2350 se fabrica en variantes de <strong>30 y 48 pines</strong>, siendo la versión de más pines la que tiene mayor cantidad de E/S disponibles. El incremento en el tamaño físico del chip no solo responde a la réplica de pines de entrada/salida, sino también a la ampliación de recursos internos: las <strong>máquinas de estado PIO pasan de 4 a 8</strong>. Estas modificaciones de hardware también alteran la forma en que se gestiona el paralelismo interno del chip.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como cambiar el motor de un coche por uno que gira más rápido y reorganizar el tablero de botones, donde si presionas un botón buscando la función antigua terminas activando algo completamente diferente.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque en un tablero de auto solo presionarías el botón equivocado, pero en el microcontrolador intentar acceder a una dirección antigua con el mapa anterior hace que las instrucciones fallen por completo y el procesador no responda.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque la Pico 2 permite incrementar la velocidad del ciclo máquina con overclocking, amplía las máquinas de estado de la interfaz PIO de 4 a 8, cambia el mapa de memoria para direccionamiento directo de registros y modifica el tamaño del chip RP2350 (versión de 30 pines en el módulo de evaluación frente a la de 48 pines con pines accesorios de reloj u organización).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Intentar usar el mapa de memoria de la Pico 1 en la Pico 2 o asumir que la generación de onda cuadrada por paralelismo funciona exactamente igual que en la Pico 1 sin reestructurar el método.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-risc-v" open><summary><span class="stitle">Origen, filosofía y ecosistema de la arquitectura abierta RISC-V</span></summary>
 <p>El desarrollo de RISC-V responde a una necesidad económica y tecnológica de la industria: cuando un fabricante diseña un circuito integrado para líneas de producción masivas (miles o millones de unidades), pagar regalías de licencia por cada chip fabricado (como exige ARM) representa un costo enorme acumulado. Del mismo modo en que surgió Linux como alternativa libre en el software, <strong>RISC-V fue concebido como una arquitectura de hardware abierta y libre de regalías</strong>.</p>
 <p>La característica definitoria de RISC-V es su diseño <strong>modular</strong>: posee un conjunto básico de instrucciones (base) y permite añadir extensiones especializadas según las necesidades del diseño (por ejemplo, extensiones para punto flotante o multiplicación). La arquitectura se desarrolló originalmente en la <strong>Universidad de California en Berkeley</strong> alrededor de 2014-2015 como proyecto de investigación. Actualmente su adopción es una tendencia global entre fabricantes diversos; el consorcio internacional de RISC-V cuenta entre sus miembros a corporaciones líderes de la industria (Google, Intel, Huawei, Ali Cloud, entre otras). Para el estudio y desarrollo en esta arquitectura existen recursos de acceso libre, como libros traducidos y páginas de referencia rápida de instrucciones en línea.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como usar un idioma universal de código abierto donde las reglas básicas son gratuitas para todos y cada quien puede añadirle vocabulario según sus necesidades sin pagarle a una empresa por hablarlo.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque un idioma hablado se adapta de forma informal, mientras que en RISC-V la modularidad requiere que las instrucciones base y las extensiones sigan un estándar de codificación rígido a nivel de transistores y memoria.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque surgió en la Universidad de California en Berkeley entre 2014 y 2015 como un estándar libre de regalías para evitar costos de licencias en líneas de producción masivas; cuenta con un consorcio de miembros como Google, Intel, Huawei y Ali Cloud, y se está integrando en procesadores tradicionales como el ESP32.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-cisc-risc-estructura" open><summary><span class="stitle">Estructura de instrucciones, registros, ABI y modos de direccionamiento</span></summary>
@@ -34,10 +61,23 @@
 <tr><td>Estructura del set de instrucciones</td><td>Instrucciones complejas</td><td>Conjunto reducido</td><td>Base mínima + extensiones modulares</td></tr>
 </tbody></table>
 <p>El análisis de la codificación de las instrucciones en memoria permite entender cómo el procesador realiza el ciclo de búsqueda (fetch) y ejecución, revelando las ventajas y limitaciones físicas del diseño. RISC-V define un banco de <strong>32 registros generales</strong> (identificados numéricamente). Para garantizar la interoperabilidad del software se aplica la <strong>Interfaz Binaria de Aplicación (ABI)</strong>, que establece convenciones normativas sobre el uso de cada registro. Entre los conceptos fundamentales de bajo nivel están el control de <strong>desbordamiento (overflow)</strong>, el <strong>acarreo (carry)</strong> y los modos de direccionamiento básico, destacando el modo inmediato y el modo indirecto. A nivel de rendimiento, un punto crítico en las arquitecturas RISC es que las instrucciones de salto (branches) consumen más de un ciclo máquina para completarse — un costo estructural inherente al diseño segmentado.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como tener un kit de herramientas donde en lugar de llaves complejas ajustables usas un conjunto de llaves fijas estandarizadas con reglas strictly fijas de qué cajón usar para cada trabajo.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque las llaves físicas las eliges a mano, pero en la arquitectura RISC la codificación de las instrucciones en memoria define automáticamente la búsqueda, la ejecución en los registros del 0 al 31 y la latencia del ciclo máquina.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Compara las filosofías CISC (Intel con instrucciones complejas) y RISC (ARM y RISC-V con instrucciones reducidas), los anchos de palabra (32, 64 y 128 bits en RISC-V), los 32 registros generales con su convención ABI, conceptos como desbordamiento, acarreo, modo inmediato e indirecto, y la latencia de las instrucciones de salto que consumen más de un ciclo máquina.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir los nombres o números de registros sin aplicar la convención de la interfaz binaria de aplicación (ABI) para el paso de parámetros en llamadas a funciones.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-independencia" open><summary><span class="stitle">Independencia funcional de periféricos: caso ADC y DMA</span></summary>
 <p>El principio de independencia funcional de periféricos establece que, una vez que un bloque periférico ha sido configurado, no requiere refrescarse ni intervenirse constantemente desde la CPU para seguir operando. Este principio se implementa desde las primeras generaciones de microcontroladores. Un ejemplo representativo es la integración del <strong>Convertidor Analógico-Digital (ADC)</strong> con el periférico <strong>DMA (Acceso Directo a Memoria)</strong>: al programar el DMA y reservar una región de memoria RAM específica, el ADC realiza continuamente sus conversiones y las almacena en esa región en ráfaga, de forma totalmente autónoma. Esta operación corre en segundo plano sin consumir ciclos de CPU, dejando a ambos núcleos libres para atender otras tareas mientras el periférico trabaja.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como contratar a un asistente que se encarga de recibir la correspondencia y guardarla directamente en el archivador sin tener que interrumpirte a ti cada vez que llega una carta.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque el asistente humano requiere espacio físico y descanso, mientras que el periférico y el DMA son circuitos digitales que transfieren datos en ráfaga a la memoria RAM de manera continua e ininterrumpida.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Principio donde una vez programado e inicializado el periférico este funciona de forma autónoma sin requerir atención o refresco continuo por parte de la CPU; se ejemplifica con el convertidor analógico digital (ADC) y la memoria de acceso directo (DMA) llenando una región reservada de la RAM sin consumir ciclos de ninguno de los núcleos.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-bootloader" open><summary><span class="stitle">Mecanismo de selección de arquitectura en la Pico 2 mediante el bootloader</span></summary>
@@ -47,15 +87,48 @@
 <li><strong>Modo RISC-V:</strong> el procesador conmuta hacia el núcleo RISC-V para ejecutar el código compilado para esa arquitectura.</li>
 </ul>
 <p>Si el sistema inicia en modo normal de ARM, no existe mecanismo dentro de esa sesión de ejecución para cambiar a RISC-V — la decisión se toma una sola vez, al arranque.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como una vía de tren con un cambio de aguja al inicio que decide si la locomotora va por la vía clásica de ARM o por la vía nueva de RISC-V.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque un tren puede retroceder y cambiar de vía en cualquier momento, mientras que en el microcontrolador si arrancas en modo ARM normal no puedes conmutar a RISC-V sin pasar por el proceso de inicio del bootloader.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Explica cómo el procesador RP2350 de la Pico 2 evalúa un bit específico habilitado por software al inicio a través del bootloader para tomar el camino de ejecución ARM normal o el camino de RISC-V.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Intentar acceder a la arquitectura RISC-V mientras se está trabajando en el modo de operación normal de ARM.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-fpu" open><summary><span class="stitle">Unidad de Punto Flotante (FPU), registros S0–S31 y filtros digitales</span></summary>
 <p>A diferencia de la Pico 1, la Pico 2 incorpora una FPU por hardware. Debido a esta diferencia física, cualquier programa compilado en ensamblador que use instrucciones de FPU simplemente no puede ejecutarse en la Pico 1. La FPU de la Pico 2 dispone de un banco dedicado de <strong>32 registros de punto flotante</strong> (S0 a S31). El hardware soporta directamente las operaciones aritméticas fundamentales: suma, resta, multiplicación, división y raíz cuadrada (VSQRT). Sin embargo, la unidad <strong>no incluye soporte nativo por hardware para funciones trascendentales complejas</strong> (seno, coseno, etc.).</p>
 <p>Estos 32 registros permiten implementar algoritmos de procesamiento digital de señales de alto rendimiento. Un ejemplo práctico desarrollado en esta arquitectura es la traducción e implementación de un <strong>filtro digital</strong> programado íntegramente mediante rutinas en ensamblador con instrucciones de punto flotante. No obstante, existe una limitación actual en las herramientas de software: los compiladores de MicroPython todavía tienen soporte limitado para ciertas instrucciones especializadas de la FPU.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como tener una calculadora científica especial guardada en el escritorio con 32 memorias exclusivas para hacer operaciones con decimales a gran velocidad.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque la calculadora científica de escritorio puede calcular funciones avanzadas como seno o coseno, mientras que la FPU por hardware solo ejecuta operaciones aritméticas elementales y raíz cuadrada.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Detalla los 32 registros de punto flotante de la Pico 2 denominados de S0 a S31 para operaciones de suma, resta, multiplicación, división y raíz cuadrada, su aplicación en filtros digitales en ensamblador y la incompatibilidad de este código en la Pico 1; señala que herramientas como MicroPython o Visual Studio Code aún marcan error de instrucción no contenida al intentar acceder a la sección de DSP.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Intentar ejecutar código escrito con instrucciones de la FPU en una Raspberry Pi Pico 1, o buscar funciones trascendentales como seno y coseno en la FPU cuando no están implementadas por hardware.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-entornos" open><summary><span class="stitle">Entornos de desarrollo, emulación en Visual Studio Code y expansión de memoria</span></summary>
 <p>Para la programación y pruebas en ensamblador, el entorno de trabajo recomendado usa <strong>Visual Studio Code</strong> integrado con herramientas de compilación tipo Make y un emulador integrado, evitando el uso de máquinas virtuales pesadas como QEMU. El desarrollo de código en ensamblador puede hacerse desde C o mediante <em>inline assembly</em> (ensamblador cruzado) dentro de MicroPython, usando declaraciones directas. Para comprender a fondo el funcionamiento de los periféricos, la metodología del curso exige realizar ejercicios de <strong>direccionamiento directo a registros</strong>, manipulando la memoria sin el uso de librerías intermedias. Por último, para proyectos que requieran mayor capacidad de almacenamiento de datos, es posible usar módulos externos comerciales para expandir la memoria de la Pico vía interfaz serial.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como practicar en un simulador de vuelo ligero integrado directamente en tu pantalla sin tener que instalar una cabina virtual pesada que alente tu computadora.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque el simulador de vuelo es visual y recreativo, mientras que la emulación en Visual Studio Code con Make prueba las instrucciones de ensamblador una a una directamente sobre los registros del procesador.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Presenta el entorno de desarrollo usando Visual Studio Code integrado con Make para disponer de un emulador sin recurrir a máquinas virtuales pesadas como QEMU, la programación de ensamblador cruzado desde MicroPython o C, la metodología de direccionamiento directo a registros sin librerías intermedias y la posibilidad de conectar un módulo externo para expandir la memoria de la Pico.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Depender únicamente de librerías de alto nivel sin aprender el direccionamiento directo a registros, lo que limita la comprensión de la arquitectura física.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c3-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuáles son las diferencias de hardware principales entre la Pico 1 y la Pico 2 explicadas en clase respecto a las máquinas de estado de PIO y los mapas de memoria?</summary><p>Las máquinas de estado de la interfaz PIO se ampliaron de 4 a 8 y el mapa de memoria fue reestructurado por completo, por lo que intentar direccionar memoria con el mapa antiguo provoca que las instrucciones de tipo 32 fallen.</p></details>
+<details class="qa"><summary>2. Explica con tus palabras por qué surgió la arquitectura RISC-V y qué ventaja ofrece a los fabricantes en producción masiva.</summary><p>Surgió en la Universidad de California en Berkeley como una arquitectura abierta y modular de código libre para evitar que los fabricantes paguen licencias y regalías obligatorias por cada chip o uso del lenguaje ensamblador en líneas de producción masiva.</p></details>
+<details class="qa"><summary>3. Compara la clasificación de arquitecturas de procesador entre Intel, ARM y RISC-V en cuanto a filosofía de instrucciones y modelos de licenciamiento.</summary><p>Intel emplea la arquitectura CISC con instrucciones complejas y licenciamiento cerrado; ARM emplea RISC de instrucciones reducidas bajo licencias y regalías pagadas; y RISC-V emplea RISC modular de código abierto libre de regalías.</p></details>
+<details class="qa"><summary>4. Explica con tus palabras el principio de independencia funcional de periféricos utilizando el caso del ADC con DMA.</summary><p>Significa que una vez configurado el periférico por software, este trabaja de forma autónoma sin requerir la atención constante de la CPU; por ejemplo, el ADC llena una región reservada de la memoria RAM mediante DMA en ráfaga continua sin consumir ciclos de procesamiento de ningún núcleo.</p></details>
+<details class="qa"><summary>5. ¿Cómo determina la Raspberry Pi Pico 2 si arrancará en modo ARM normal o en modo RISC-V mediante el bootloader?</summary><p>Al iniciar el programa, el procesador evalúa un bit específico habilitado por software en la CPU a través del bootloader y toma el camino de ejecución hacia ARM normal o hacia RISC-V.</p></details>
+<details class="qa"><summary>6. ¿Cuáles son los 32 registros de punto flotante de la Pico 2, qué operaciones ejecuta la FPU por hardware y qué limita su uso en la Pico 1?</summary><p>Se denominan de S0 a S31, ejecutan suma, resta, multiplicación, división y raíz cuadrada; no pueden correr en la Pico 1 porque esta última carece físicamente de la Unidad de Punto Flotante (FPU).</p></details>
+<details class="qa"><summary>7. Aplica el concepto de direccionamiento directo a registros: si un programador desarrolla una rutina en ensamblador para un filtro digital usando los registros de punto flotante de S0 a S31 en la Pico 2, ¿qué sucede si intenta compilar la sección DSP en MicroPython o Visual Studio Code según lo visto en clase?</summary><p>El compilador marca un error indicando instrucción no contenida o no válida porque los entornos de desarrollo aún no han integrado ni habilitado esas extensiones de software para la sección de multiplicación acumulativa tipo DSP.</p></details>
+<details class="qa"><summary>8. ¿Qué combinación de herramientas se utiliza para emular las instrucciones de ensamblador en clase evitando el uso de máquinas virtuales pesadas como QEMU?</summary><p>Se utiliza Visual Studio Code integrado con Make para disponer de un emulador integrado directamente en el entorno de desarrollo.</p></details>
 </details>
 
 <details class="section-block sec" id="c3-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>

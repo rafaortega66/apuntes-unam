@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T12:23:21+00:00",
+ "generatedAt": "2026-10-01T12:25:34+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -93,7 +93,7 @@
     "fecha": "2026-09-07",
     "resumen": "Tema 2 (continuación) — Diferencias físicas Pico 1 vs. Pico 2, filosofía y modularidad de RISC-V, CISC vs. RISC (Intel/ARM/RISC-V), independencia funcional de periféricos (ADC+DMA), mecanismo de selección de arquitectura",
     "url": "materias/organizacion-y-arquitectura-de-computadoras/clase-03.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 4,
@@ -468,6 +468,16 @@
  },
  "gitlog": [
   {
+   "hash": "28fbbcf",
+   "fecha": "2026-10-01T06:23:52-06:00",
+   "mensaje": "FSE Clase 04: limpiar LaTeX en Ponte a prueba; script: limpieza de LaTeX de NotebookLM"
+  },
+  {
+   "hash": "8963649",
+   "fecha": "2026-10-01T06:23:22-06:00",
+   "mensaje": "FSE Clase 04: formato de estudio"
+  },
+  {
    "hash": "5ec36e3",
    "fecha": "2026-10-01T06:21:46-06:00",
    "mensaje": "ASI Clase 04: formato de estudio"
@@ -756,16 +766,6 @@
    "hash": "9326792",
    "fecha": "2026-09-30T14:17:50-06:00",
    "mensaje": "Pendientes: limpiar texto de detalle"
-  },
-  {
-   "hash": "3d3f15d",
-   "fecha": "2026-09-30T14:17:42-06:00",
-   "mensaje": "FSE: enunciados de Tareas 02-09 y enlaces desde Pendientes"
-  },
-  {
-   "hash": "9791dcc",
-   "fecha": "2026-09-30T14:06:50-06:00",
-   "mensaje": "Lab FSE: especificaciones del proyecto final y su fecha de entrega (24 nov 13:00) en Pendientes"
   }
  ]
 }
