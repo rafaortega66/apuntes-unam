@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T17:13:00+00:00",
+ "generatedAt": "2026-10-01T17:15:16+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -7,7 +7,7 @@
     "fecha": "2026-08-28",
     "resumen": "Tema 2 — Extracción de características · características estadísticas, histograma, momentos geométricos (Hu), textura GLCM, HOG, SIFT/SURF y descriptores de audio (temporales, espectrales, MFCC + Δ/ΔΔ).",
     "url": "materias/reconocimiento-de-patrones/clase-01.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 2,
@@ -489,6 +489,11 @@
  },
  "gitlog": [
   {
+   "hash": "c3a750d",
+   "fecha": "2026-10-01T11:13:00-06:00",
+   "mensaje": "RP Clase 02: formato de estudio"
+  },
+  {
    "hash": "1f7f16c",
    "fecha": "2026-10-01T11:10:27-06:00",
    "mensaje": "OAC Clase 01: formato de estudio"
@@ -782,11 +787,6 @@
    "hash": "e27e2c6",
    "fecha": "2026-10-01T01:25:33-06:00",
    "mensaje": "ACS: cotejo completo contra el sitio del profesor y los audios (NotebookLM)"
-  },
-  {
-   "hash": "4bcad55",
-   "fecha": "2026-10-01T01:04:50-06:00",
-   "mensaje": "ASI: agregar Clase 10 (30 sep 2026) — primera clase en formato de estudio: cubos OLAP, medidas, esquemas estrella/copo/constelación, EIS y alertas de costo en Azure"
   }
  ]
 }

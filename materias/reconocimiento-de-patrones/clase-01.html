@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 01 — Reconocimiento de Patrones</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -16,6 +17,18 @@
   <p style="font-size:12px;color:var(--ink-soft);margin:2px 0 0">🔢 Numeración del profesor: cubre el contenido de sus diapositivas <a href="material.html" style="color:var(--indigo)">Clase 2, 3 y 4</a> (Extracción de características I, II, III) — no coincide 1:1 con "Clase 01" de este sitio.</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c1-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Tarea de momentos de Hu (Hu1 y Hu2) e inspección de textura con GLCM entregada hecha a mano</strong><span class="evid">Evidencia: evidencia de la clase: el profesor asignó la tarea explícitamente al final de la clase detallando los ejercicios de la figura C y las direcciones Oeste-Este y Norte-Sur.</span></li>
+<li><strong>Procedimiento paso a paso para el cálculo del descriptor HOG y dimensión exacta del vector final (3780)</strong><span class="evid">Evidencia: evidencia de la clase: el profesor explicó en detalle cada etapa desde los filtros de gradiente 1x3 y 3x1 hasta el desplazamiento de bloques de 16x16 píxeles.</span></li>
+<li><strong>Imposibilidad de reconstruir la señal de audio original a partir de los coeficientes MFCC</strong><span class="evid">Evidencia: evidencia de la clase: un alumno preguntó en vivo si se podía recuperar el audio y el profesor respondió explícitamente que no es posible porque la DCT no tiene inversa.</span></li>
+<li><strong>Uso de la ventana de Hamming para atenuar los extremos antes de la FFT</strong><span class="evid">Evidencia: evidencia de la clase: el profesor enfatizó que la FFT asume estacionalidad y que la ventana de Hamming evita artefactos y ruido en los bordes.</span></li>
+<li><strong>Construcción del vector de características de audio de 80 dimensiones mediante estadísticos</strong><span class="evid">Evidencia: evidencia de la clase: lo explicó explícitamente en el pizarrón al cierre de la sesión sumando los 52 valores de MFCC, 8 temporales y 20 espectrales.</span></li>
+</ol>
+</details>
+
 
 <div class="files">
     <a class="btn" href="files/Clase-02-Extraccion-de-caracteristicas-I.pdf" target="_blank">📄 Extracción de características I (prof.)</a>
@@ -24,7 +37,13 @@
   </div>
 <details class="section-block sec" id="que-es-la-extraccion-de-caracteristicas" open><summary><span class="stitle">¿Qué es la extracción de características?</span></summary><p>Es el proceso que transforma un conjunto de <strong>datos crudos</strong> (imágenes, audio, series de tiempo…) en un <strong>vector de valores numéricos</strong> que describe de forma compacta la información relevante del patrón.</p>
 <pre><code>y ∈ ℝᴺ  →  x ∈ ℝᵈ ,   d ≪ N</code></pre>
-<p>En lugar de trabajar con los datos originales (alta dimensionalidad, ruidosos, redundantes), se representa cada muestra con un conjunto reducido de atributos que conserven la <strong>información discriminante</strong> necesaria para separar clases.</p></details>
+<p>En lugar de trabajar con los datos originales (alta dimensionalidad, ruidosos, redundantes), se representa cada muestra con un conjunto reducido de atributos que conserven la <strong>información discriminante</strong> necesaria para separar clases.</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como tomar una foto de un auto y en lugar de guardar todos los píxeles, guardar solo la marca, el color y el número de puertas en una lista corta.<span class="rompe">Dónde falla la analogía: Falla si la lista corta omite detalles críticos que distinguen dos objetos casi idénticos.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite que las máquinas procesen datos complejos convirtiéndolos en vectores numéricos estructurados que pueden alimentar a un clasificador.</p>
+</div>
+</details>
 
 <details class="section-block sec" id="por-que-tener-menos-caracteristicas"><summary><span class="stitle">¿Por qué tener menos características?</span></summary><ul>
 <li>Un número finito <em>N</em> de muestras limita la dimensionalidad <em>n</em> para la que las estimaciones estadísticas son confiables.</li>
@@ -32,7 +51,14 @@
 <li>La complejidad del clasificador aumenta con el número <em>n</em> de características.</li>
 </ul>
 <p><strong>En qué consiste:</strong> analizar la naturaleza del dato → identificar propiedades relevantes del patrón → calcular medidas cuantitativas que las describan → construir un vector de características comparable entre muestras.</p>
-<p><strong>Se busca:</strong> discriminabilidad (separar clases), compacidad (reducir dimensión), robustez (ruido, variación intra-clase) y bajo costo computacional.</p></details>
+<p><strong>Se busca:</strong> discriminabilidad (separar clases), compacidad (reducir dimensión), robustez (ruido, variación intra-clase) y bajo costo computacional.</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como resumir un libro entero en sus puntos principales para estudiarlo más rápido antes de un examen.<span class="rompe">Dónde falla la analogía: Si recortas o reduces demasiado, puedes eliminar información del contexto que el problema requería analizar.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Disminuye la complejidad computacional y evita procesar datos innecesarios, adecuando el tamaño de los datos al rendimiento óptimo probado experimentalmente.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Pensar que 3780 características son pocas o muchas sin considerar el tamaño estandarizado de la imagen de 64x128 y el equilibrio entre información interna y externa.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="caracteristicas-estadisticas"><summary><span class="stitle">Características estadísticas</span></summary><p>Describen la distribución de los datos sin considerar explícitamente su estructura espacial o temporal.</p>
 <p><strong>Primer y segundo orden:</strong></p>
@@ -46,7 +72,13 @@ excess kurtosis = (1/(N·σ⁴)) Σ (xᵢ − μ)⁴ − 3</code></pre>
 <tr><td>= 0</td><td>simétrica</td><td>como la normal</td></tr>
 <tr><td>&lt; 0</td><td>cola alargada a la izquierda</td><td>datos más dispersos, colas más ligeras</td></tr>
 </tbody></table>
-<p>Dos señales con la <strong>misma media</strong> pueden tener varianzas muy distintas; dos señales con <strong>misma media y varianza</strong> pueden separarse por skewness / curtosis.</p></details>
+<p>Dos señales con la <strong>misma media</strong> pueden tener varianzas muy distintas; dos señales con <strong>misma media y varianza</strong> pueden separarse por skewness / curtosis.</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como calcular la calificación promedio y la nota más alta de un alumno durante el semestre en lugar de leer examen por examen.<span class="rompe">Dónde falla la analogía: Se pierde el orden temporal exacto de cuándo ocurrió cada valor específico.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Comprime matrices que varían en el tiempo en un vector final de dimensión fija apto para clasificadores.</p>
+</div>
+</details>
 
 <details class="section-block sec" id="caracteristicas-locales-ventanas"><summary><span class="stitle">Características locales: ventanas</span></summary><p>Lo anterior se aplica de forma <strong>global</strong> (tendencia general), pero también <strong>local</strong> (estructura espacial o temporal): la señal de tamaño <em>N</em> se divide en <em>L</em> ventanas.</p>
 <ul>
@@ -64,7 +96,13 @@ excess kurtosis = (1/(N·σ⁴)) Σ (xᵢ − μ)⁴ − 3</code></pre>
 <tr><td>Local</td><td>Cambios y estructura</td></tr>
 <tr><td>Local + pooling</td><td>Estructura y robustez</td></tr>
 </tbody></table>
-<p><strong>Cuándo NO vale la pena usar ventanas locales:</strong> señales estacionarias, datos muy ruidosos, ventanas demasiado pequeñas, problemas donde la estructura local no es relevante.</p></details>
+<p><strong>Cuándo NO vale la pena usar ventanas locales:</strong> señales estacionarias, datos muy ruidosos, ventanas demasiado pequeñas, problemas donde la estructura local no es relevante.</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como mirar una pintura dividiéndola en una cuadrícula y analizando cada cuadro por separado.<span class="rompe">Dónde falla la analogía: Si la ventana es demasiado pequeña o está desalineada, se pierde la perspectiva global del objeto o sonido.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Captura variaciones locales de luminosidad, bordes o tonos en secciones acotadas manteniendo la organización geográfica o temporal.</p>
+</div>
+</details>
 
 <details class="section-block sec" id="histograma"><summary><span class="stitle">Histograma</span></summary><p>Describe cómo se distribuyen los valores de una señal o dato, <strong>sin importar su posición exacta</strong>. No se usa como gráfica sino <strong>como vector de características</strong>. Aplica a imágenes, audio y otras señales.</p>
 <pre><code>h = [146, 870, 1159, 1394, 1348, 1334, 1289, …]</code></pre>
@@ -72,7 +110,13 @@ excess kurtosis = (1/(N·σ⁴)) Σ (xᵢ − μ)⁴ − 3</code></pre>
 <tr><td>Simple; robusto al ruido</td><td>Pierde información espacial/temporal</td></tr>
 <tr><td>Invariante a permutaciones / traslaciones</td><td>Sensible al número de bins</td></tr>
 <tr><td>Dimensión controlable; funciona con pocos datos</td><td>No captura relaciones entre valores vecinos</td></tr>
-</tbody></table></details>
+</tbody></table><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como separar monedas en frascos según su valor y contar cuánto dinero acumulaste en cada frasco.<span class="rompe">Dónde falla la analogía: No indica en qué posición exacta de la celda ocurrió cada medición de orientación o intensidad.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Sirve como representación compacta y acumulativa de la distribución de gradientes o frecuencias en una región.</p>
+</div>
+</details>
 
 <details class="section-block sec" id="momentos-geometricos-formas"><summary><span class="stitle">Momentos geométricos (formas)</span></summary><p>Las medidas geométricas simples son insuficientes para formas complejas o para garantizar invariancia a traslación, escala o rotación. Los <strong>momentos geométricos</strong> describen cómo se distribuyen espacialmente los píxeles de un objeto.</p>
 <p><strong>Momentos espaciales</strong> — para una imagen <code>f(x,y)</code> (binaria o en escala de grises):</p>
@@ -87,7 +131,13 @@ Centroide (x̄, ȳ) = ( M(1,0)/M(0,0) ,  M(0,1)/M(0,0) )</code></pre>
 <p><strong>Momentos normalizados</strong> — a partir de los centrales, dividiendo por una potencia del momento de orden cero:</p>
 <pre><code>η_ij = μ_ij / μ₀₀^((i+j)/2 + 1)        con i + j ≥ 2</code></pre>
 <p>Invariantes a <strong>traslación y escala</strong>; aún variantes a rotación.</p>
-<p><strong>Momentos de Hu</strong> — 7 momentos invariantes a <strong>rotación, escala y traslación</strong>, calculados a partir de los normalizados. Es común aplicarles una escala logarítmica (los valores crudos son minúsculos, del orden de 1e-3 a 1e-15).</p></details>
+<p><strong>Momentos de Hu</strong> — 7 momentos invariantes a <strong>rotación, escala y traslación</strong>, calculados a partir de los normalizados. Es común aplicarles una escala logarítmica (los valores crudos son minúsculos, del orden de 1e-3 a 1e-15).</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como tomar la silueta de una llave de modo que sin importar si la llave está lejos, cerca, volteada o corrida, la firma numérica sea la misma.<span class="rompe">Dónde falla la analogía: Si la forma del objeto se deforma o se ocluye parcialmente, las ecuaciones de Hu ya no devuelven los mismos valores.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Proporciona una descripción de la forma del objeto altamente robusta que no cambia aunque el objeto se mueva, escale o rote en la imagen.</p>
+</div>
+</details>
 
 <details class="section-block sec" id="textura-glcm-gray-level-co-occurrence-ma"><summary><span class="stitle">Textura: GLCM (Gray Level Co-occurrence Matrix)</span></summary><p>Si la forma describe la <em>silueta</em> del objeto, la <strong>textura</strong> describe la <em>organización interna</em> de los niveles de gris. La GLCM modela qué tan frecuentemente ciertos niveles de gris aparecen juntos.</p>
 <p>Para una imagen cuantizada con <em>N</em> niveles de gris, la GLCM es una matriz <em>N×N</em> donde cada elemento</p>
@@ -112,7 +162,14 @@ Centroide (x̄, ȳ) = ( M(1,0)/M(0,0) ,  M(0,1)/M(0,0) )</code></pre>
 <li><strong>Grupo de contraste:</strong> Contraste, Dissimilarity, Homogeneity.</li>
 <li><strong>Relacionados al orden:</strong> Angular Second Moment (ASM) / Energía, Entropía.</li>
 <li><strong>Estadística descriptiva:</strong> Media, Varianza, Correlación.</li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como contar cuántas veces un azulejo claro está al lado de uno oscuro para medir qué tan rugoso o parejo es un piso.<span class="rompe">Dónde falla la analogía: Si se cambia la orientación o la distancia sin considerar su matriz transpuesta o simétrica, la descripción de la textura queda sesgada a una sola dirección.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Describe la textura y variaciones de luminosidad locales; se hace simétrica sumando su transpuesta y se normaliza dividiendo entre la suma total para obtener probabilidades.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Olvidar normalizar la matriz simétrica dividiendo entre la suma total de sus elementos para trabajar en términos de probabilidades.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="ejercicios-hu-glcm-clase" open><summary><span class="stitle">Ejercicios resueltos en clase (Hu y GLCM)</span></summary>
 <p>Guardados en <a href="files/Ejercicios-Hu-y-GLCM-clase.pdf" target="_blank">Ejercicios de Hu y GLCM (PDF)</a>. Resumen de los que se pueden transcribir:</p>
@@ -142,15 +199,35 @@ Relaci&oacute;n:  &mu;11 = M11 &minus; x&#772;&middot;M01 = M11 &minus; y&#772;&
  i=1    0    2    0    0
  i=2    0    0    3    1
  i=3    0    0    0    1</code></pre>
-<p>La versi&oacute;n sim&eacute;trica y la direcci&oacute;n <strong>&theta; = 90&deg;</strong> (arriba&rarr;abajo) est&aacute;n resueltas celda por celda en el PDF.</p></details>
+<p>La versi&oacute;n sim&eacute;trica y la direcci&oacute;n <strong>&theta; = 90&deg;</strong> (arriba&rarr;abajo) est&aacute;n resueltas celda por celda en el PDF.</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como resolver a mano en el cuaderno los pasos de calcular el centroide de una figura en forma de C y llenar la tabla de vecinos para medir su textura.<span class="rompe">Dónde falla la analogía: Un error aritmético al contar parejas de píxeles altera toda la matriz de probabilidades y las tres métricas resultantes.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Afianza la ejecución práctica a mano de la construcción de matrices GLCM, normalización y cálculo de Hu1 y Hu2 para la evaluación del curso.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Entregar la tarea con letra muy pequeña en tablet o hacer cálculos sin reflejar la matriz transpuesta para la simetría.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="hog-histogram-of-oriented-gradients"><summary><span class="stitle">HOG — Histogram of Oriented Gradients</span></summary>
-<p>Descriptor de <strong>forma</strong>: codifica los gradientes de intensidad y sus orientaciones dentro de regiones localizadas de la imagen. Captura estructuras locales de bordes. Aplicación estrella: <strong>detección de personas y objetos</strong>; fue lo más sólido del estado del arte antes de las redes convolucionales.</p></details>
+<p>Descriptor de <strong>forma</strong>: codifica los gradientes de intensidad y sus orientaciones dentro de regiones localizadas de la imagen. Captura estructuras locales de bordes. Aplicación estrella: <strong>detección de personas y objetos</strong>; fue lo más sólido del estado del arte antes de las redes convolucionales.</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como dibujar un boceto a lápiz marcando solo la dirección e intensidad de los trazos de los bordes de una persona.<span class="rompe">Dónde falla la analogía: Si la imagen tiene ruido extremo o si el objeto cambia drásticamente de postura tridimensional no contemplada, los gradientes se desordenan.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Captura contornos externos e internos de manera altamente descriptiva y estructurada.</p>
+</div>
+</details>
 
 <details class="section-block sec" id="hog-a-preprocesamiento"><summary><span class="stitle">HOG · A) Preprocesamiento</span></summary><ul>
 <li>Normalizar las intensidades de los píxeles (escalar los canales a rango 0–1).</li>
 <li>Recortar la región del objeto y <strong>redimensionar obligatoriamente a 64 × 128 px</strong> (estándar validado experimentalmente: mejor balance costo / información). Ejemplo de clase: persona de 1090×612 → recorte 196×438 → escalar a 64×128.</li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como recortar la foto de credencial de una persona y ajustarla al tamaño exacto del marco antes de pegarla.<span class="rompe">Dónde falla la analogía: Si no se redimensiona a 64x128, la cantidad de celdas cambia y el vector final no tendrá la dimensión esperada de 3780.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Garantiza un formato estandarizado para que la cantidad de celdas de 8x8 y bloques sea siempre constante.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Intentar aplicar HOG directamente en imágenes de alta resolución sin recortar ni redimensionar a 64x128.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="hog-b-calculo-de-gradientes"><summary><span class="stitle">HOG · B) Cálculo de gradientes</span></summary>
 <p>El gradiente indica la <strong>dirección de mayor cambio</strong> de luminosidad → un borde. Se calcula en X e Y por <strong>convolución</strong> con filtros detectores de bordes:</p>
@@ -161,7 +238,14 @@ Convolución (A * B): se refleja B sobre sí misma y se va
 multiplicando y deslizando sobre A. Aplica en 2D, 3D, etc.
 
 Magnitud:    M = √(Gx² + Gy²)        (nueva imagen de intensidades de cambio)
-Orientación: θ = arctan(Gy / Gx)     (dirección del borde en cada píxel)</code></pre></details>
+Orientación: θ = arctan(Gy / Gx)     (dirección del borde en cada píxel)</code></pre><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como pasar una linterna horizontal y otra vertical sobre un relieve para ver dónde se forman las sombras más marcadas.<span class="rompe">Dónde falla la analogía: Si el filtro se aplica al revés, confunde los bordes horizontales con los verticales.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Identifica los cambios de intensidad luminosa y su ángulo de dirección en cada píxel de la imagen usando convolución.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir la dirección del filtro: el filtro 1x3 detecta bordes en X que son líneas verticales y el filtro 3x1 detecta bordes en Y que son líneas horizontales.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="hog-c-histograma-por-celda"><summary><span class="stitle">HOG · C) Histograma por celda</span></summary><ul>
 <li>Dividir la imagen 64×128 en <strong>celdas de 8 × 8 px</strong>.</li>
@@ -169,20 +253,46 @@ Orientación: θ = arctan(Gy / Gx)     (dirección del borde en cada píxel)</co
 <li>Cada píxel de la celda aporta su <strong>magnitud</strong> al bin de su <strong>orientación</strong>. Ej.: píxel con θ=90°, M=74 → suma 74 al bin 80–99; otro con θ=90°, M=75 → bin queda en 149; otro con θ=0°, M=5 → suma 5 al bin 0–19.</li>
 <li>Si θ &gt; 180° → restarle 180° (histograma sin signo).</li>
 <li>Resultado por celda: histograma de 9 valores.</li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como dividir la foto en cuadritos de 8x8 píxeles y en cada cuadrito votar a qué dirección apuntan las flechas de los bordes.<span class="rompe">Dónde falla la analogía: Si la orientación está en un rango de 0 a 360 grados, no cabe en los 9 contenedores sin restar 180 grados para ignorar el signo de la dirección.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Acumula las magnitudes de borde en direcciones específicas dentro de cada celda de 8x8.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> No restar 180 grados a ángulos superiores a 180 grados para ajustarlos al rango de 0 a 180 grados.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="hog-d-normalizacion-entre-bloques"><summary><span class="stitle">HOG · D) Normalización entre bloques</span></summary><ul>
 <li>Agrupar <strong>4 celdas de 8×8</strong> en un <strong>bloque de 2 × 2 celdas</strong>.</li>
 <li>Concatenar sus 4 histogramas → vector de <strong>36 valores</strong> (9 bins × 4 celdas).</li>
 <li>Normalizar el vector de 36 (divide entre el total, o con norma <strong>L2</strong>, <strong>L1</strong> o <strong>L1-sqrt</strong>) → robustez ante sombras / iluminación.</li>
 <li>El bloque se <strong>desplaza solapado</strong>, celda por celda, por toda la imagen 64×128.</li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como tomar cuatro cuadritos adyacentes, juntar sus resultados en una sola lista de 36 datos y dividirlos entre el total para que la luz no afecte la medición.<span class="rompe">Dónde falla la analogía: Si no se solapan los bloques al deslizarse, se pierde la continuidad espacial entre celdas vecinas.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Otorga robustez al descriptor frente a cambios en la iluminación global y contraste de la imagen.</p>
+</div>
+</details>
 
-<details class="section-block sec" id="hog-e-vector-de-caracteristicas-final"><summary><span class="stitle">HOG · E) Vector de características final</span></summary><p>Se concatenan todos los vectores de bloque normalizados → <strong>vector de 3 780 valores</strong> para la imagen estándar 64×128. Captura contornos externos y detalles internos del objeto. Es la entrada directa al clasificador; 3 780 es la dimensionalidad óptima validada experimentalmente para este tipo de subimágenes.</p></details>
+<details class="section-block sec" id="hog-e-vector-de-caracteristicas-final"><summary><span class="stitle">HOG · E) Vector de características final</span></summary><p>Se concatenan todos los vectores de bloque normalizados → <strong>vector de 3 780 valores</strong> para la imagen estándar 64×128. Captura contornos externos y detalles internos del objeto. Es la entrada directa al clasificador; 3 780 es la dimensionalidad óptima validada experimentalmente para este tipo de subimágenes.</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como deslizar una lupa de 4 cuadros por toda la cuadrícula y anotar los 36 números en una sola tira larga de 3780 casillas.<span class="rompe">Dónde falla la analogía: Si la imagen cambia de tamaño, el número total de 3780 valores se altera y no coincide con la entrada esperada por el clasificador.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Genera la representación vectorial completa que engloba contornos externos e internos para hacer reconocimiento de objetos.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Creer que 3780 es un número arbitrario y no el resultado exacto de concatenar 105 bloques normalizados de 36 valores.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="sift-y-surf-puntos-clave"><summary><span class="stitle">SIFT y SURF (puntos clave)</span></summary>
 <p><strong>SIFT</strong> (<em>Scale-Invariant Feature Transform</em>) — describe características locales invariantes a escala, rotación, luminosidad y cambios moderados de perspectiva. Flujo: aplicar filtros <strong>gaussianos</strong> sucesivos (suavizar / emborronar) → <strong>Diferencia de Gaussianas (DoG)</strong> = restar imágenes suavizadas consecutivas para localizar <strong>puntos clave</strong> robustos → por cada punto clave, histograma de gradientes local → <strong>vector descriptor de 128 características</strong> por punto.</p>
-<p><strong>SURF</strong> (<em>Speeded-Up Robust Features</em>, ~2004) — evolución rápida de SIFT: robustez similar con mucho menos cómputo. Además del punto característico, identifica un <strong>radio / rango</strong> sobre el que ese punto aporta información. Usos de ambos: reconocimiento de objetos, seguimiento en video, reconocimiento facial, realidad aumentada.</p></details>
+<p><strong>SURF</strong> (<em>Speeded-Up Robust Features</em>, ~2004) — evolución rápida de SIFT: robustez similar con mucho menos cómputo. Además del punto característico, identifica un <strong>radio / rango</strong> sobre el que ese punto aporta información. Usos de ambos: reconocimiento de objetos, seguimiento en video, reconocimiento facial, realidad aumentada.</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como poner marcas indelebles en las esquinas más distintivas de un edificio para reconocerlo aunque la foto esté tomada desde arriba o de lado.<span class="rompe">Dónde falla la analogía: Si el objeto sufre deformaciones severas o no rígidas, los puntos clave no se corresponden.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>SIFT aplica filtros gaussianos y diferencia de gaussianas generando vectores de 128 características por punto clave; SURF acelera el proceso para seguimiento y realidad aumentada.</p>
+</div>
+</details>
 
 <details class="section-block sec" id="audio-en-corto-sin-formulas"><summary><span class="stitle">Audio — en corto (sin fórmulas)</span></summary>
 <p>Un audio es un solo número (la amplitud) que cambia con el tiempo. Para clasificarlo no le pasamos la onda cruda al modelo, sino <strong>medidas que la resumen</strong>. Hay tres familias:</p>
@@ -197,16 +307,34 @@ Orientación: θ = arctan(Gy / Gx)     (dirección del borde en cada píxel)</co
 <li>El <strong>Δ</strong> es la <strong>velocidad</strong>: qué tan rápido está cambiando ese timbre de una ventana a la siguiente (simplemente la resta ventana actual − ventana anterior).</li>
 <li>El <strong>ΔΔ</strong> es la <strong>aceleración</strong>: si ese cambio se está acelerando o frenando (la resta de los Δ consecutivos).</li>
 </ul>
-<p>¿Para qué? El timbre por sí solo no distingue bien dos sonidos parecidos; <em>cómo evoluciona</em> en el tiempo sí. Por eso al vector se le añaden Δ y ΔΔ.</p></details>
+<p>¿Para qué? El timbre por sí solo no distingue bien dos sonidos parecidos; <em>cómo evoluciona</em> en el tiempo sí. Por eso al vector se le añaden Δ y ΔΔ.</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como escuchar una canción y describir si la música es fuerte o suave, si el tono es agudo o grave y si hay ruidos repentinos.<span class="rompe">Dónde falla la analogía: Sin las ecuaciones precisas no se pueden programar los algoritmos ni obtener coeficientes numéricos ejecutables.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Brinda una intuición física de cómo las fluctuaciones de presión del aire se convierten en descriptores de energía, tono y timbre.</p>
+</div>
+</details>
 
-<details class="section-block sec" id="descriptores-de-audio-categorias"><summary><span class="stitle">Descriptores de audio — categorías</span></summary><p>En audio se analizan datos en <strong>una dimensión</strong>: amplitud vs. tiempo. Tres categorías: <strong>temporales</strong>, <strong>espectrales</strong> (frecuencia) y <strong>tiempo–frecuencia</strong>.</p></details>
+<details class="section-block sec" id="descriptores-de-audio-categorias"><summary><span class="stitle">Descriptores de audio — categorías</span></summary><p>En audio se analizan datos en <strong>una dimensión</strong>: amplitud vs. tiempo. Tres categorías: <strong>temporales</strong>, <strong>espectrales</strong> (frecuencia) y <strong>tiempo–frecuencia</strong>.</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como analizar un platillo por su peso al servirlo, por sus ingredientes individuales o por cómo cambian los sabores bocado a bocado.<span class="rompe">Dónde falla la analogía: Falla si se intenta aplicar un descriptor espectral directamente sobre la señal de onda en el tiempo sin aplicar antes la transformada de Fourier.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Estructura la extracción de información acústica en tres familias: temporales, espectrales y tiempo-frecuencia.</p>
+</div>
+</details>
 
 <details class="section-block sec" id="audio-descriptores-temporales"><summary><span class="stitle">Audio · descriptores temporales</span></summary>
 <p>Se calculan directamente sobre la señal en el tiempo <code>X[n]</code>:</p>
 <pre><code>Energía   E   = Σ X[n]²                    (intensidad / potencia en la ventana)
 RMS           = √( Σ X[n]² / N )           (raíz del promedio de amplitudes²)</code></pre>
 <p><strong>ZCR (Zero Crossing Rate)</strong> — cuántas veces la señal cambia de signo. Con la función signo (1 si la muestra es positiva, 0 si es negativa) se evalúa <code>|signo(x[i]) − signo(x[i-1])|</code> entre muestras contiguas y se promedia. Ej.: <code>|signo(0.5) − signo(0.3)| = 0</code> (sin cruce); <code>|signo(-0.2) − signo(0.3)| = 2</code> (cruce). ZCR <strong>alto → sonido ruidoso</strong>; <strong>bajo → sonido armónico</strong>. Sirve para distinguir voz de ruido o de sonidos percusivos.</p>
-<p><strong>Autocorrelación</strong> — se toma la <em>misma</em> señal, se desplaza sobre sí misma (lag) y se multiplica y suma → mide periodicidad / similitud en el tiempo.</p></details>
+<p><strong>Autocorrelación</strong> — se toma la <em>misma</em> señal, se desplaza sobre sí misma (lag) y se multiplica y suma → mide periodicidad / similitud en el tiempo.</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como medir qué tan fuerte grita alguien, qué tan áspera suena su voz y si su voz tiene un ritmo repetitivo.<span class="rompe">Dónde falla la analogía: No pueden identificar qué notas musicales o frecuencias específicas componen el sonido.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>La tasa de cruces por cero permite distinguir entre sonido ruidoso y sonido armónico; la energía mide la potencia del audio en una ventana temporal.</p>
+</div>
+</details>
 
 <details class="section-block sec" id="audio-descriptores-espectrales"><summary><span class="stitle">Audio · descriptores espectrales</span></summary>
 <p>Se calculan tras pasar al dominio de la frecuencia con la <strong>FFT</strong>:</p>
@@ -224,7 +352,14 @@ Spectral flatness     media geométrica / media aritmética del espectro  (≈1 
 <li>Roll-off con bins [0.2, 0.3, 0.4, 0.2, 0.1] (total 1.2; 85 % = 1.02): acumulado llega a 1.1 en el <strong>bin 3</strong> → roll-off en el bin 3 (150 Hz).</li>
 <li>Flux: ventana t-1 [0.2, 0.5, 0.3], t [0.3, 0.4, 0.8] → 0.01 + 0.01 + 0.25 = <strong>0.27</strong>.</li>
 <li>Flatness con [0.1, 0.2, 0.15]: geométrica ∛(0.003) ≈ 0.144, aritmética 0.15 → <strong>0.96</strong> (espectro plano).</li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como analizar un acorde de guitarra midiendo cuál es la nota central, qué tan dispersas están las notas y si el sonido cambia bruscamente.<span class="rompe">Dónde falla la analogía: La transformada de Fourier asume estacionalidad en la ventana; si el sonido cambia muy rápido, se generan artefactos y promedios falsos.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Caracterizan el timbre, brillo y distribución de energía en el espectro de frecuencias de la señal.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Olvidar que la transformada de Fourier asume estacionalidad en la señal dentro de la ventana analizada.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="audio-mfcc-tiempo-frecuencia"><summary><span class="stitle">Audio · MFCC (tiempo–frecuencia)</span></summary>
 <p>Coeficientes que representan la <strong>envolvente espectral</strong> con base en una escala perceptual adaptada al oído humano (≈15 Hz a 24–25 kHz).</p>
@@ -242,7 +377,14 @@ Spectral flatness     media geométrica / media aritmética del espectro  (≈1 
 <li><strong>Truncamiento</strong> — quedarse solo con los <strong>primeros 12 o 13</strong> coeficientes. ⚠️ <strong>Se descarta obligatoriamente el coeficiente 0</strong> (solo representa la energía promedio total, no la envolvente). Se usan del 1 al 12 (o al 13).</li>
 </ol>
 <p><strong>Representación:</strong> matriz [coeficientes × ventanas de tiempo], se visualiza como mapa de calor. ⚠️ <strong>Irreversible</strong>: no se puede reconstruir el audio original — la DCT trunca coeficientes y se descarta la fase de la FFT; funciona solo como extractor de características.</p>
-<p><strong>Delta (Δ)</strong> = velocidad: diferencia entre el vector de la ventana actual y la anterior. <strong>Delta-Delta (ΔΔ)</strong> = aceleración: diferencia de los deltas consecutivos. Cada uno aporta 13 coeficientes por ventana.</p></details>
+<p><strong>Delta (Δ)</strong> = velocidad: diferencia entre el vector de la ventana actual y la anterior. <strong>Delta-Delta (ΔΔ)</strong> = aceleración: diferencia de los deltas consecutivos. Cada uno aporta 13 coeficientes por ventana.</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como traducir la música a un lenguaje que escucha el oído humano: con mucho detalle en los tonos graves y agrupando los tonos muy agudos.<span class="rompe">Dónde falla la analogía: No se puede reconstruir el audio original a partir de los coeficientes porque la transformada de coseno discreta no tiene inversa en este proceso.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Modela la percepción auditiva no lineal mediante la escala Mel y extrae la envolvente espectral mediante 7 pasos de preprocesamiento, ventaneo y filtros.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Intentar reconstruir la señal de audio original a partir de las matrices de coeficientes MFCC, lo cual es imposible porque la transformada de coseno discreta no tiene inversa.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="vector-de-caracteristicas-de-audio-final"><summary><span class="stitle">Vector de características de audio final</span></summary>
 <p>Para meter un audio completo a un clasificador se resume la matriz de coeficientes con estadísticos a lo largo de las ventanas: <strong>media, desviación estándar, máximo y mínimo</strong>.</p>
@@ -250,7 +392,13 @@ Spectral flatness     media geométrica / media aritmética del espectro  (≈1 
 (2 temporales × 4 estadísticos)   =  8      (Energía, ZCR)
 (5 espectrales × 4 estadísticos)  = 20      (Centroide, BW, Roll-off, Flux, Flatness)
                                    ----
-Dimensión total del vector        = 80</code></pre></details>
+Dimensión total del vector        = 80</code></pre><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como resumir una canción completa en una tarjeta de 80 números que contienen promedios de su potencia, brillo y timbre.<span class="rompe">Dónde falla la analogía: Si solo usas las matrices sin calcular sus estadísticos a lo largo del tiempo, tienes una estructura variable en lugar de un vector de dimensión fija.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Convierte matrices bidimensionales de tiempo-frecuencia en un único vector de características de dimensión fija listo para clasificadores.</p>
+</div>
+</details>
 
 <details class="section-block sec" id="clase4-formulas-ejemplos"><summary><span class="stitle">Fórmulas y ejemplos numéricos (diapositivas Clase 4)</span></summary>
 <p><strong>Temporales:</strong></p>
@@ -268,7 +416,14 @@ Flux     = Σ ( |Xₜ[k]| − |Xₜ₋₁[k]| )²                    Ej. → 0.2
 Flatness = media geométrica / media aritmética           Ej. → ≈ 0.96 (espectro casi plano)</code></pre>
 <p><strong>Escala Mel</strong> (bajas frecuencias ≈ lineal, altas ≈ logarítmica):</p>
 <pre><code>Mel(f) = 2595 · log₁₀(1 + f/700)          f = 700 · (10^(m/2595) − 1)</code></pre>
-<p><strong>Etapas MFCC:</strong> 1) pre-énfasis <code>y[n] = x[n] − α x[n−1]</code>, α ≈ 0.95 · 2) framing 20–40 ms, 50 % de solape · 3) ventana de Hamming <code>w[n] = 0.54 − 0.46 cos(2πn/(N−1))</code> · 4) FFT y espectro de potencia · 5) banco de 20–40 filtros triangulares Mel, <code>energíaᵢ = Σ P(k) Hᵢ[k]</code> · 6) logaritmo · 7) DCT-II, quedarse con los primeros 12–13 → MFCC. Con Δ y ΔΔ: matriz <code>#ventanas × 39</code>.</p></details>
+<p><strong>Etapas MFCC:</strong> 1) pre-énfasis <code>y[n] = x[n] − α x[n−1]</code>, α ≈ 0.95 · 2) framing 20–40 ms, 50 % de solape · 3) ventana de Hamming <code>w[n] = 0.54 − 0.46 cos(2πn/(N−1))</code> · 4) FFT y espectro de potencia · 5) banco de 20–40 filtros triangulares Mel, <code>energíaᵢ = Σ P(k) Hᵢ[k]</code> · 6) logaritmo · 7) DCT-II, quedarse con los primeros 12–13 → MFCC. Con Δ y ΔΔ: matriz <code>#ventanas × 39</code>.</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como resolver en el pizarrón la tabla con los números reales de frecuencias e intensidades para encontrar el centro de gravedad de un sonido.<span class="rompe">Dónde falla la analogía: Si se comete un error en la suma de amplitudes del denominador, se distorsiona por completo el valor del centroide espectral.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra la aplicación numérica exacta de las fórmulas en casos discretos pequeños para verificar la comprensión práctica del cálculo de descriptores.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Errores de redondeo o confusión al evaluar la función signo en el cálculo de la tasa de cruces por cero.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="para-investigar-siguiente" open><summary><span class="stitle">Pendiente / próxima clase — Tarea 1</span></summary>
 <ul>
@@ -278,6 +433,18 @@ Flatness = media geométrica / media aritmética           Ej. → ≈ 0.96 (esp
 <li><strong>Investigación:</strong> redactar un párrafo corto explicando el concepto y funcionamiento de los <strong>Patrones Binarios Locales (LBP — Local Binary Patterns)</strong> como método alternativo de análisis de textura.</li>
 <li>Siguiente sesión: <strong>selección de características</strong> (Tema 3) — técnicas de filtrado y reducción de dimensionalidad para identificar las variables más relevantes.</li>
 </ul>
+</details>
+
+<details class="section-block sec" id="c1-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Qué es el vector de características y cuál es la finalidad de la extracción de características en el reconocimiento de patrones?</summary><p>Es una representación numérica compacta que resume la información estructural y relevante de un patrón eliminando datos redundantes o ruidosos para alimentar a un clasificador.</p></details>
+<details class="qa"><summary>2. ¿Cuáles son las tres condiciones de invariancia que cumplen los 7 momentos de Hu para la descripción de formas?</summary><p>Son invariantes a la escala, a la traslación y a la rotación del objeto dentro de la imagen.</p></details>
+<details class="qa"><summary>3. En el algoritmo HOG para una imagen de 64x128 píxeles, ¿por qué el vector de características final tiene exactamente 3780 valores?</summary><p>Porque la imagen se divide en celdas de 8x8 píxeles y se agrupan en bloques deslizantes de 2x2 celdas que generan 36 valores normalizados por bloque a lo largo de 105 posiciones.</p></details>
+<details class="qa"><summary>4. Si en la prueba de tasa de cruces por cero de un audio tenemos 5 muestras con valores [0.3, 0.5, -0.2, -0.4, 0.1], ¿cuántos cambios de signo ocurren y cuál es la tasa resultante?</summary><p>Ocurren 2 cambios de signo (de 0.5 a -0.2 y de -0.4 a 0.1), lo que da una tasa de cruces por cero de 0.4.</p></details>
+<details class="qa"><summary>5. Explica por qué se utiliza la ventana de Hamming antes de aplicar la Transformada Rápida de Fourier en el cálculo de los MFCC.</summary><p>Porque la transformada de Fourier asume estacionalidad y periodicidad, por lo que la ventana de Hamming atenúa las amplitudes en los extremos para evitar que se generen artefactos indeseados en el espectro.</p></details>
+<details class="qa"><summary>6. ¿Por qué no es posible reconstruir la señal de audio original a partir de una matriz de coeficientes MFCC?</summary><p>Porque el paso final de la Transformada de Coseno Discreta aplicada en el proceso no tiene función inversa.</p></details>
+<details class="qa"><summary>7. Compara los descriptores SIFT y HOG en cuanto a cómo representan la información de una imagen.</summary><p>HOG divide toda la imagen recortada de 64x128 en una cuadrícula densa de celdas y bloques para capturar contornos globales y locales, mientras que SIFT identifica un conjunto de puntos clave dispersos e invariantes a escala y rotación, generando un vector de 128 características por cada punto clave.</p></details>
+<details class="qa"><summary>8. ¿Cómo se obtiene el valor de 80 dimensiones en el vector de características final de audio explicado en clase?</summary><p>Se aplican 4 estadísticos (media, desviación estándar, máximo y mínimo) a 13 coeficientes MFCC (52 valores), a 2 descriptores temporales (8 valores) y a 5 descriptores espectrales (20 valores), sumando un total de 80 características por audio.</p></details>
 </details>
 
 <div class="puntos-clave"><h4>Puntos clave</h4><ul>
