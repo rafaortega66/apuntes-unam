@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T07:59:55+00:00",
+ "generatedAt": "2026-10-01T08:01:36+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -179,7 +179,7 @@
     "fecha": "2026-09-23",
     "resumen": "Tema 2 (subtemas 2.6 y 2.7) — Fisiología de la interacción hombre-máquina, límites de las interfaces legadas (Serie, Paralelo, SCSI), FireWire vs. USB 1.0/1.1, especificación USB 2.0 (modos de velocidad, topología de 7 n",
     "url": "materias/fundamentos-de-sistemas-embebidos/clase-08.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 9,
@@ -467,6 +467,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "8534634",
+   "fecha": "2026-10-01T01:59:56-06:00",
+   "mensaje": "ASI Clase 08: formato de estudio"
+  },
   {
    "hash": "efadaa5",
    "fecha": "2026-10-01T01:58:03-06:00",
@@ -761,11 +766,6 @@
    "hash": "848c4fd",
    "fecha": "2026-09-21T16:45:45-06:00",
    "mensaje": "OAC: agregar Clase 06 (21 sep 2026) — mem32, Pico ID y ensamblador inline FSE: agregar Clase 07 (21 sep 2026) — interrupciones, DMA, chipset y timers"
-  },
-  {
-   "hash": "778032d",
-   "fecha": "2026-09-21T16:35:07-06:00",
-   "mensaje": "RP: agregar Clase 08 (21 sep 2026) — métricas internas de clustering y Bayes/Naive Bayes"
   }
  ]
 }
