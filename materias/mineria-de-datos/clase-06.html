@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 06 — Minería de Datos</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -15,6 +16,16 @@
   <p class="prof">M.C. José Concepción Roberto Olvera López · Fecha: 22 sep 2026 · Cierre de exposiciones del Proyecto 2 (Databricks, Pinecone, MongoDB, Milvus) y arranque del Tema 3: aprendizaje supervisado vs. no supervisado.</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #A98BD1"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c6-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Diferencia fundamental entre el aprendizaje supervisado y el no supervisado (presencia de una variable objetivo etiquetada frente a la búsqueda de patrones ocultos sin etiqueta)</strong><span class="evid">Evidencia: El profesor Roberto Olvera lo explicó detalladamente al introducir el Tema 3 en la segunda mitad de la clase.</span></li>
+<li><strong>El concepto y los beneficios de la arquitectura Lakehouse en Databricks</strong><span class="evid">Evidencia: Fue el tema central expuesto por el Equipo 1 para unificar Data Lake y Data Warehouse, y el profesor resaltó su integración unificada sin necesidad de plataformas separadas.</span></li>
+<li><strong>La diferencia entre la búsqueda vectorial por similitud semántica y las consultas tradicionales rígidas en SQL</strong><span class="evid">Evidencia: Se enfatizó extensamente en las exposiciones de Pinecone y Milvus, y el profesor recalcó que permite consultar por contexto e intencionalidad.</span></li>
+</ol>
+</details>
+
 <details class="section-block sec" id="c6-databricks" open><summary><span class="stitle">Exposición del equipo 1: Databricks (arquitectura Lakehouse)</span></summary>
 <p>El equipo asignado a Databricks abrió preguntando al grupo si conocían el término <strong>arquitectura Lakehouse</strong>. La definieron como una arquitectura de datos moderna que une lo mejor de un <strong>Data Lake</strong> (almacenamiento económico y flexible) y un <strong>Data Warehouse</strong> (datos estructurados y alto rendimiento).</p>
 <p>Databricks es una plataforma colaborativa basada en <strong>Apache Spark</strong>, pensada para trabajo en equipo, procesamiento en tiempo real, análisis y transformación de datos, y para construir modelos de aprendizaje automático complejos. Su ventaja principal es que integra en un solo servicio tecnologías que normalmente estarían separadas en una empresa (data lake, data warehouse, streaming y machine learning), y está disponible en AWS, Microsoft Azure, Google Cloud o combinaciones de ellas.</p>
@@ -24,6 +35,12 @@
 <p>El <strong>Delta Lake</strong> es la capa de almacenamiento confiable: código abierto, con los datos guardados en formato <strong>Parquet</strong>. Esto permite hacer transacciones <strong>ACID</strong> (atomicidad, consistencia, aislamiento y durabilidad), que dan integridad a los datos sin tener que moverse a un motor de base de datos tradicional.</p>
 <p>Cerraron con cuatro beneficios: (1) <strong>reducción del costo total de propiedad</strong>, porque no hay que mantener un data lake y un data warehouse por separado — el presupuesto se va solo a lo que realmente se ocupa; (2) <strong>rompimiento de silos organizacionales</strong>, ya que analistas de datos, ingenieros y gestores de negocio trabajan en la misma plataforma con el mismo modelo de seguridad, acelerando el paso de datos crudos a decisiones de negocio; (3) <strong>se evita el vendor lock-in</strong>: a diferencia de otros almacenes donde los datos quedan cifrados y aislados dentro del proveedor, en Databricks se guardan en su forma cruda directamente en la nube del cliente, así que si deja de usar la plataforma conserva acceso a sus datos tal cual; (4) <strong>preparación para la era de IA</strong>, porque tener los datos unificados permite entrenar tanto modelos de IA generativa como modelos predictivos.</p>
 <p>A la pregunta de qué les pareció más interesante, un compañero respondió que ya no hay que "campechanear" entre distintas herramientas para tener un flujo de datos, porque queda todo integrado, y que además los datos no se quedan atados a los estándares de un proveedor en particular si el cliente decide migrar.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un taller mecánico integral que junta en un solo espacio el almacén económico de piezas de segunda mano con la zona de montaje de alta precisión, evitando que los mecánicos tengan que trasladarse de un edificio a otro.<span class="rompe">Dónde falla la analogía: La analogía se rompe porque un taller maneja piezas físicas estáticas, mientras que Databricks procesa terabytes de datos en tiempo real en memoria RAM mediante Apache Spark con transacciones ACID sobre Delta Lake.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Unifica en una sola plataforma el almacenamiento flexible de un Data Lake y el rendimiento estructurado de un Data Warehouse, reduciendo el costo total de propiedad y eliminando los silos entre ingenieros, analistas y científicos de datos.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c6-pinecone" open><summary><span class="stitle">Exposición del equipo 6: Pinecone (base de datos vectorial)</span></summary>
@@ -35,6 +52,12 @@
 <p>Sobre garantías: el nivel estándar ofrece un SLA del 99.9%, y en el nivel empresarial existe compensación si no se cumple.</p>
 <p>Dieron cinco razones para usar Pinecone: (1) abstrae la carga y el indexado de los datos, evitando que el equipo técnico tenga que tocar directamente esa parte (y el riesgo que eso implicaría); (2) las búsquedas ya no son por coincidencia rígida de palabras, sino basadas en el contexto de los datos, lo que sirve para sistemas tipo RAG, chatbots y sistemas de recomendación; (3) se integra fácilmente con otras plataformas (por ejemplo con Databricks) y con procesos de limpieza y generación de embeddings; (4) ofrece varias formas de uso: interfaz web, APIs y SDK, así que basta importar la biblioteca para tener acceso a sus funciones; (5) permite separar la información en espacios lógicos (namespaces) para que un usuario no vea lo que hace otro, y cuenta con herramientas de administración para monitorear actividad, rendimiento y fallos en tiempo real.</p>
 <p>En la discusión posterior se insistió en que la ventaja central es que las consultas "ya no son tan rígidas": al tener millones de vectores indexados, se crea una estructura de búsqueda simplificada que permite encontrar rápidamente los vectores que cumplen ciertas condiciones, comparándolos de forma mucho más ágil que con esquemas binarios tradicionales.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un bibliotecario experto que no busca un libro revisando exactamente el código de barras, sino comprendiendo el tema general de lo que quieres aprender y entregándote las obras más parecidas en contenido.<span class="rompe">Dónde falla la analogía: Falla porque el bibliotecario analiza palabras humanas en un índice impreso, mientras que Pinecone convierte texto, imágenes y audio en vectores numéricos de miles de dimensiones para medir distancias matemáticas de similitud.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite realizar búsquedas semánticas por contexto e intencionalidad para alimentar sistemas de inteligencia artificial generativa, RAG y chatbots mediante una arquitectura gestionada y seguridad en cuatro capas.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c6-mongodb" open><summary><span class="stitle">Exposición del equipo 4: MongoDB</span></summary>
@@ -48,6 +71,13 @@
 <p>Entre las herramientas de consulta y monitoreo: <strong>Mongosh</strong> (la línea de comandos clásica), <strong>MongoDB Compass</strong> (inspección de documentos y consultas de forma más visual), <strong>Atlas Charts</strong> (estadísticas en gráficas y tablas), <strong>Atlas Monitoring</strong> (uso de CPU y procesos del sistema), <strong>Performance Advisor</strong> (sugiere qué índices conviene crear) y el <strong>Real Time Performance Panel</strong>.</p>
 <p>En soporte, seguridad y garantías: la edición Community se apoya en foros y comunidad, mientras que Atlas y Enterprise tienen soporte técnico 24/7. La seguridad se organiza por capas: autenticación, autorización, cifrado (incluyendo la posibilidad de consultar datos aun estando cifrados), auditoría y cumplimiento. Atlas publica un SLA del 99.995%. En respaldos, ofrece copias programadas en un punto específico del tiempo, con la posibilidad de configurar hasta un segundo de retardo entre respaldos, lo que permite un rollback ante errores muy recientes.</p>
 <p>Como conclusión, listaron cuatro beneficios: <strong>flexibilidad</strong> (bajo costo si se migra un sistema existente a MongoDB); <strong>escalabilidad horizontal</strong> vía sharding, con réplicas en distintos servidores; <strong>alta disponibilidad</strong> (99.995%); y <strong>analítica unificada</strong>, que permite analizar datos históricos sin duplicarlos, con respuesta en tiempo real gracias a los Change Streams.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un archivero digital que guarda expedientes en carpetas flexibles tipo JSON sin obligarte a que todas las hojas tengan exactamente los mismos renglones o columnas.<span class="rompe">Dónde falla la analogía: Se rompe porque MongoDB distribuye masivamente sus documentos en formato BSON a través de servidores mediante fragmentación (sharding), réplicas sincronizadas y procesamiento en tiempo real con Change Streams.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Ofrece un modelo de documentos NoSQL altamente escalable y versátil que integra procesamiento en tiempo real, búsquedas vectoriales y archivado automático de datos fríos hacia la nube mediante Atlas Data Federation.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Intentar usar MongoDB directamente como un Data Warehouse analítico tradicional, cuando el equipo aclaró que se debe recurrir al servicio complementario Atlas Data Federation para ejecutar consultas complejas multidimensionales.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c6-milvus" open><summary><span class="stitle">Exposición del equipo 11: Milvus</span></summary>
@@ -60,6 +90,13 @@
 <p>En una gráfica comparativa contra otras bases de datos del mercado (incluyendo las presentadas por los otros equipos), afirmaron que Zilliz Cloud logra hasta <strong>1.89 veces más consultas por segundo</strong> mientras se insertan grandes cantidades de datos, hasta <strong>3.24 veces menos latencia</strong> en streaming, y hasta <strong>1.8 veces más throughput por hora</strong> con una inserción sostenida de 500 filas por segundo — un rendimiento que dijeron es especialmente relevante en aplicaciones que necesitan respuesta casi instantánea mientras se sigue insertando información.</p>
 <p>Como casos de uso reales mencionaron: Roblox (búsqueda vectorial de avatares para ofrecer opciones más personalizadas), Cisco (respuestas más eficientes sobre su base de conocimiento técnico), Walmart (optimizar la búsqueda de productos en su catálogo y la recuperación de documentos), Reddit (mejorar la obtención de contenido por temática), gestión de calidad mediante búsqueda de imperfecciones en imágenes (nombre de la empresa no se distingue con claridad en el audio), IBM (búsqueda de código por contexto), y una plataforma de freelancers (relacionar las búsquedas de los compradores con lo que ofrecen los freelancers).</p>
 <p>En la comparación abierta entre Pinecone y Milvus que siguió, se señaló que Pinecone es más cerrado —a cambio de una experiencia de uso más sencilla no permite configurar tantas partes internas— mientras que Milvus, al ser código abierto, permite mover y ajustar más cosas pero exige más configuración por parte del usuario; en cuanto a rapidez, se comentó que los esquemas de búsqueda de Pinecone resultan muy rápidos "de la manera como los tienen configurados".</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un motor de búsqueda ultra veloz para un almacén de fotografías gigantesco, donde las imágenes están agrupadas por formas y tonos para encontrar duplicados en milisegundos.<span class="rompe">Dónde falla la analogía: La analogía se queda corta porque Milvus es una infraestructura de código abierto desacoplada en cuatro capas independientes (proxies, coordinadores, nodos trabajadores y almacenamiento) que procesa miles de consultas vectoriales por segundo.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la base de datos vectorial de código abierto con mayor rendimiento y menor latencia en pruebas de volumen, permitiendo despliegues locales o gestionados en la nube para empresas como Roblox, Cisco y Walmart.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir la naturaleza de código abierto de Milvus con plataformas cerradas y exclusivamente propietarias, debate en el cual los alumnos aclararon la diferencia de control sobre la infraestructura y la versión gestionada Zilliz Cloud.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c6-tema3-supervisado" open><summary><span class="stitle">Tema 3: aprendizaje supervisado y no supervisado</span></summary>
@@ -85,6 +122,25 @@
 <p>Mostró ejemplos visuales de resultados descriptivos: un diagrama de asociación con flechas, donde el grosor o color de la flecha indica qué tan fuerte es la asociación entre dos productos (entre más gruesa la línea, más veces se vendieron juntos); y el <strong>análisis de redes</strong>, usado mucho para llamadas telefónicas o para detectar comunidades, agrupando elementos según la frecuencia o cantidad de interacción entre ellos — a diferencia del clustering tradicional, que agrupa según una variable como gasto o ingreso.</p>
 <p>Cerró la parte de clustering anunciando que en las próximas sesiones van a revisar cinco algoritmos principales: <strong>K-means</strong>, <strong>K-medoids</strong>, clustering <strong>jerárquico</strong>, y otros dos que nombró de forma poco clara en el audio (sonó a "media desplazada" o <em>mean shift</em> y otro más basado en densidad) — pendiente de confirmar el nombre exacto en la siguiente clase.</p>
 <p>Usó una analogía médica para explicar cómo decidir qué tipo de algoritmo usar frente a un problema real: así como un médico general, al escuchar los síntomas de un paciente, va deduciendo hacia qué especialidad enfocarse, quien hace minería de datos escucha la necesidad de un cliente y, con la experiencia, va identificando si el problema apunta a clasificación, agrupación, asociación, reducción de variables o detección de anomalías, antes de elegir el algoritmo concreto.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>El aprendizaje no supervisado es como darle a un niño una caja de juguetes revueltos para que los separe solo por colores o formas; el supervisado es enseñarle con un catálogo que tiene fotos y nombres exactos para que aprenda a identificar cada juguete nuevo.<span class="rompe">Dónde falla la analogía: Falla porque los algoritmos reales procesan datos multidimensionales complejos calculando matrices de confusión, ajuste de parámetros e iteraciones de entrenamiento numérico en lugar de una simple inspección visual.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Constituye la división teórica fundamental de la minería de datos: el no supervisado busca descubrir patrones o clústers ocultos sin datos etiquetados, mientras que el supervisado entrena modelos predictivos de clasificación o regresión con una variable objetivo.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Creer que el principal valor del científico de datos consiste únicamente en ejecutar el código del algoritmo en Python, cuando el profesor enfatizó que lo realmente crítico es la limpieza de datos, la selección de variables y la interpretación con sentido de negocio.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c6-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Qué es la arquitectura Lakehouse expuesta en la presentación de Databricks?</summary><p>Es una arquitectura de datos moderna que combina la flexibilidad y el almacenamiento económico de un Data Lake con la estructura, rendimiento y soporte de transacciones ACID de un Data Warehouse.</p></details>
+<details class="qa"><summary>2. Explica con tus palabras la diferencia conceptual entre una consulta en una base de datos tradicional SQL y una consulta en una base de datos vectorial como Pinecone o Milvus.</summary><p>La consulta tradicional SQL exige una coincidencia exacta de datos (como encontrar la edad exactamente igual a 48), mientras que la consulta vectorial busca elementos por similitud semántica y significado contextual en un espacio numérico multidimensional.</p></details>
+<details class="qa"><summary>3. ¿En qué consiste el mecanismo de Change Streams en MongoDB y para qué se utiliza?</summary><p>Es un mecanismo interno que escucha eventos de inserción, actualización y borrado en tiempo real las 24 horas del día, permitiendo programar flujos de trabajo reactivos sin saturar la base de datos.</p></details>
+<details class="qa"><summary>4. Si una empresa de transporte necesita procesar 500,000 registros históricos de viajes para predecir si un paquete llegará a tiempo (sí/no), ¿debe usar un modelo de clasificación o de regresión, y por qué?</summary><p>Debe usar un modelo de clasificación, porque la variable objetivo es categórica binaria (llegará a tiempo: sí o no), lo cual corresponde a una tarea supervisada de clasificación.</p></details>
+<details class="qa"><summary>5. Compara las plataformas Pinecone y Milvus según lo expuesto y debatido en clase.</summary><p>Pinecone es una solución totalmente administrada (SaaS) y de código cerrado que prioriza la simplicidad de uso, mientras que Milvus es una plataforma de código abierto con arquitectura desacoplada en cuatro capas que permite despliegues locales o en la nube (Zilliz Cloud) ofreciendo menor latencia y mayor control técnico.</p></details>
+<details class="qa"><summary>6. ¿Cuáles son las tres versiones o modelos de despliegue en que se distribuye MongoDB?</summary><p>Se distribuye en versión Community (gratuita local), Enterprise Advanced (de pago empresarial) y Atlas (servicio totalmente gestionado en la nube multi-nube).</p></details>
+<details class="qa"><summary>7. Si un conjunto de datos transaccionales contiene información de clientes pero no incluye una variable objetivo etiquetada para predecir comportamiento, ¿qué enfoque de aprendizaje debe aplicarse para encontrar grupos de clientes parecidos?</summary><p>Debe aplicarse aprendizaje no supervisado mediante algoritmos de agrupación (clustering) como K-Means o DBSCAN, ya que no existen etiquetas previas.</p></details>
+<details class="qa"><summary>8. ¿Por qué afirma el profesor Roberto Olvera que la Clasificación es el "algoritmo estrella" en minería de datos?</summary><p>Porque es el enfoque supervisado más robusto y utilizado en la industria para tomar decisiones operativas y de negocio basadas en variables categóricas o binarias.</p></details>
 </details>
 
 <details class="section-block sec" id="c6-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
