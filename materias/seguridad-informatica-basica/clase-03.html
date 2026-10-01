@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 03 — Seguridad Informática Básica</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -15,6 +16,17 @@
   <p class="prof">Dra. Cintia Quezada Reyes · 3 sep 2026 · Tema 1 (1.2 Normatividad y 1.3 Perfiles de protección) · normas vs. estándares, TCSEC / ITSEC / CTCPEC, Common Criteria (TOE/PP/ST), BS 7799 → ISO 17799 → serie ISO 27000, ISO 27002:2022, HIPAA, NIST, COBIT.</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c3-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Las normas son de cumplimiento obligatorio por ley mientras que los estándares son recomendaciones voluntarias; en México las NOM son obligatorias y las NMX voluntarias</strong><span class="evid">Evidencia: Lo explicó explícitamente la profesora al inicio de la clase e hizo hincapié en el cuestionario de diez preguntas resuelto posteriormente.</span></li>
+<li><strong>El TCSEC o Libro Naranja evalúa confidencialidad militar en divisiones A a D, e ITSEC evalúa por separado funcionalidad y garantía en siete niveles del E0 al E6</strong><span class="evid">Evidencia: Lo explicó detalladamente en la revisión histórica de estándares y fue evaluado en vivo.</span></li>
+<li><strong>La versión ISO/IEC 27002 de febrero de 2022 reestructuró sus 14 dominios anteriores en 4 secciones y 2 anexos, añadiendo términos de ciberseguridad y privacidad</strong><span class="evid">Evidencia: Lo enfatizó explícitamente como la actualización más reciente que causa complejidad a las organizaciones al migrar sus manuales.</span></li>
+<li><strong>Si un profesional desarrolla un prototipo o invención con su propio dinero y tiempo libre fuera de la empresa, debe patentarlo a su nombre antes de mostrárselo a la organización</strong><span class="evid">Evidencia: Lo ligó directamente como recomendación profesional tras relatar el caso real del exalumno que regaló su circuito electrónico a cambio de unas vacaciones a Europa.</span></li>
+</ol>
+</details>
+
 <details class="section-block sec" id="c3-normas-estandares" open><summary><span class="stitle">Normas, estándares y normatividad</span></summary>
 <ul>
 <li><strong>Normas</strong> (textual): «algo que es obligatorio».</li>
@@ -22,7 +34,14 @@
 <li><strong>Normatividad</strong> (textual): «leyes o reglamentaciones o algunos procedimientos o recomendaciones o ciertos criterios, que lo que nos va a ayudar es que yo lo siga para poder implementar algo». Es una guía de conducta técnica.</li>
 <li>La obligatoriedad depende del <strong>país de origen</strong>. Reino Unido: obliga por ley a toda empresa nueva a basarse en la normatividad de seguridad (BS 7799). México: <strong>NOM</strong> (obligatoria por ley) vs. <strong>NMX</strong> (recomendación técnica no obligatoria), aunque ambas se llamen «normas».</li>
 <li>Ejemplo de aplicación: el modelo <strong>OSI (ISO 7498)</strong> — para fabricar y comercializar un <em>switch</em> de Capa 2, el diseño de hardware debe cumplir los criterios de la Capa de Enlace de Datos del estándar para garantizar compatibilidad global.</li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como las reglas de tránsito de tu ciudad: las leyes como usar cinturón de seguridad son obligatorias para todos, mientras que los consejos de manejo defensivo son recomendaciones voluntarias que tú decides si adoptas o no.<span class="rompe">Dónde falla la analogía: La analogía se rompe porque un país o contrato gubernamental puede emitir leyes que obliguen a una empresa a adoptar un estándar voluntario específico para poder operar o vender en ese territorio.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque fundamenta la diferencia metodológica en México entre las Normas Oficiales Mexicanas (NOM, obligatorias) y las Normas Mexicanas (NMX, voluntarias), orientando cómo las organizaciones adoptan marcos de seguridad informática.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Los alumnos suelen usar los términos norma y estándar como sinónimos indistintos sin distinguir el grado de obligatoriedad legal.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="c3-tcsec"><summary><span class="stitle">TCSEC — Trusted Computer System Evaluation Criteria</span></summary>
 <ul>
@@ -35,7 +54,13 @@
 <li><strong>A</strong> — protección verificada.</li>
 </ul></li>
 <li><em>(contexto — no examen)</em> Anécdotas sobre la rigidez militar en la Secretaría de Marina (ver «Ejemplos y casos»).</li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como el reglamento estricto de un cuartel militar para guardar documentos secretos en cajas fuertes con niveles de llave que van desde la D básica hasta la A máxima.<span class="rompe">Dónde falla la analogía: Deja de servir porque fue diseñado únicamente para la confidencialidad en entornos militares rígidos y sistemas cerrados, descuidando la integridad, la disponibilidad y la flexibilidad comercial moderna.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque fue el primer estándar de evaluación histórica (creado en 1983 por el Departamento de Defensa de Estados Unidos, conocido como Libro Naranja) que sentó las bases de la clasificación jerárquica de seguridad en sistemas computacionales.</p>
+</div>
+</details>
 
 <details class="section-block sec" id="c3-itsec"><summary><span class="stitle">ITSEC — Information Technology Security Evaluation Criteria</span></summary>
 <ul>
@@ -45,13 +70,25 @@
 <li><strong>Evaluación / Garantía</strong>: escala <strong>E0 a E6</strong> (siete niveles de confianza).</li>
 </ol></li>
 <li><em>(contexto — no examen)</em> Su creación fue difícil por la falta de herramientas de comunicación de la época (vuelos, llamadas, módems de 56 kbps, ICQ recién apareciendo) y por diferencias de infraestructura (enchufes, voltajes) y de percepción de «seguridad» entre regiones.</li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como evaluar un automóvil juzgando por un lado qué funciones tiene (si incluye frenos ABS o bolsas de aire) y por otro lado qué tan seguro es el laboratorio que probó que esos frenos realmente funcionan (niveles de confianza de E0 a E6).<span class="rompe">Dónde falla la analogía: Falla porque la evaluación europea de tecnologías de información requirió acuerdos entre múltiples países con culturas e idiomas distintos, complicando la homologación práctica frente a un mercado global.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque introdujo la separación conceptual entre la funcionalidad de seguridad y la garantía o confianza de evaluación (siete niveles de E0 a E6), ampliando el alcance para evaluar productos, servicios y sistemas completos.</p>
+</div>
+</details>
 
 <details class="section-block sec" id="c3-ctcpec"><summary><span class="stitle">CTCPEC — Canadian Trusted Computer Product Evaluation Criteria</span></summary>
 <ul>
 <li>Criterios <strong>canadienses</strong> de <strong>1988</strong>, enfocados <strong>exclusivamente en productos</strong> informáticos de confianza.</li>
 <li><strong>Ocho niveles</strong> de confianza: <strong>T0 a T7</strong>.</li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un filtro de aduana canadiense que revisa tanto los productos terminados como las herramientas con las que fueron construidos para darles una calificación de confianza entre T0 y T7.<span class="rompe">Dónde falla la analogía: Se rompe porque al ser una iniciativa nacional canadiense de principios de los noventa, quedó obsoleta al no poder competir de manera aislada contra la globalización de los mercados tecnológicos.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque sirvió de puente híbrido entre el enfoque militar estadounidense (TCSEC) y el modelo europeo (ITSEC), siendo uno de los tres pilares fundacionales que dieron origen a los Criterios Comunes internacionales.</p>
+</div>
+</details>
 
 <details class="section-block sec" id="c3-common-criteria" open><summary><span class="stitle">Common Criteria / ISO-IEC 15408</span></summary>
 <p>Unificación internacional de agencias gubernamentales para homogeneizar la seguridad de productos, servicios y sistemas a nivel global. Escala de <strong>siete niveles de garantía de evaluación: EAL1 a EAL7</strong>.</p>
@@ -73,6 +110,13 @@
 <li><strong>Parte 2 — Requerimientos de seguridad funcional:</strong> reglas técnicas para que la seguridad funcione. Las familias de control se identifican con la letra <strong>«F»</strong> (auditoría, comunicación, soporte criptográfico, privacidad).</li>
 <li><strong>Parte 3 — Requerimientos de garantía / seguridad confiable:</strong> directrices para garantizar que el servicio implementado funcione de forma segura en la organización; audita la <strong>entrega, la operación y la documentación</strong>.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como el pasaporte internacional de seguridad para un producto tecnológico: define qué es el objeto a evaluar (TOE), qué reglas debe cumplir (PP), cuál es su meta de seguridad (ST) y le otorga un sello de confianza reconocido mundialmente (EAL1 a EAL7).<span class="rompe">Dónde falla la analogía: La analogía rompe porque documentar un Perfil de Protección o una Meta de Seguridad requiere manuales de cientos de páginas con requerimientos funcionales y de garantía sumamente complejos de mantener.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque representa el estándar internacional unificado (ISO/IEC 15408) que permite a desarrolladores, evaluadores y usuarios certificar productos y sistemas de TI bajo criterios globales homogéneos.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir los componentes metodológicos (TOE, PP, ST, EAL) o considerar que evaluar la seguridad de un producto es lo mismo que evaluar los procesos administrativos de toda la empresa.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-bs7799" open><summary><span class="stitle">BS 7799 → ISO/IEC 17799 → serie ISO/IEC 27000</span></summary>
@@ -89,7 +133,13 @@
 <li><strong>ISO/IEC 27002</strong> — guía detallada de buenas prácticas con ejemplos («cómo hacerlo»). Equivale a la <strong>Parte 1</strong> (Código de Prácticas) de BS 7799. Nombrada formalmente ISO 27002 en 2007 (Suiza).</li>
 </ul></li>
 <li>Evolución de dominios: <strong>10 (2000) → 11 (2005) → 14 (2013)</strong>; en 2013 se integró la <strong>criptografía</strong> como dominio propio y se actualizaron las telecomunicaciones (de audio-conferencias analógicas a Skype y herramientas de pandemia).</li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como una guía de administración para una empresa completa que no solo protege las computadoras, sino que fija reglas para los empleados, los contratos, las puertas de entrada y los respaldos.<span class="rompe">Dónde falla la analogía: Deja de servir como norma británica independiente porque fue adaptada por organismos internacionales para crear las normas universales certificables de gestión.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque cambió radicalmente la perspectiva técnica de la seguridad al introducir el concepto de Sistema de Gestión de Seguridad de la Información (SGSI) para toda la organización, dando origen a las normas ISO/IEC 17799, 27001 y 27002.</p>
+</div>
+</details>
 
 <details class="section-block sec" id="c3-27002-2022"><summary><span class="stitle">ISO/IEC 27002:2022 (febrero de 2022)</span></summary>
 <ul>
@@ -98,7 +148,14 @@
 <li>Cláusulas <strong>1 a 4</strong> = clasificaciones e introducción; las recomendaciones de buenas prácticas empiezan en la <strong>Cláusula 5</strong>.</li>
 <li>Los <strong>2 anexos</strong> detallan el uso de <strong>atributos</strong> y la <strong>correspondencia / equivalencia</strong> con los controles de la edición 2013.</li>
 <li>Justificación del cambio: nuevas amenazas (ciberterrorismo, ciberguerras) y teletrabajo por pandemia. Impacto administrativo real en los manuales de laboratorios certificados (nomenclaturas y formatos reescritos).</li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como reorganizar el botiquín de primeros auxilios de la empresa cambiando 14 cajones pequeños por 4 grandes contenedores etiquetados como organización, personas, físico y tecnología, añadiendo defensas contra ataques de ciberseguridad.<span class="rompe">Dónde falla la analogía: La analogía rompe porque reestructurar los controles requiere que las organizaciones auditadas reescriban todos sus manuales, nomenclaturas y mapas de procesos previamente certificados.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque representa la actualización más reciente (febrero de 2022) del código de buenas prácticas de seguridad de la información, incorporando la ciberseguridad y la protección de la privacidad tras los cambios tecnológicos de la pandemia.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir las 4 secciones actuales (organizacionales, personas, físicas y tecnológicas) con los 14 dominios de la versión de 2013 o los 11 dominios de la versión anterior.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="c3-hipaa-nist-cobit"><summary><span class="stitle">HIPAA · NIST · COBIT</span></summary>
 <ul>
@@ -111,7 +168,13 @@
 <li>🟡 <strong>Amarillo</strong> — impacto medio.</li>
 <li>🟢 <strong>Verde</strong> — impacto bajo / seguro.</li>
 </ul></li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un conjunto de manuales especializados: uno protege tus expedientes en el hospital (HIPAA), otro te da reglas científicas y matrices de riesgo (NIST) y otro organiza el gobierno general de los recursos de la empresa (COBIT).<span class="rompe">Dónde falla la analogía: Falla porque HIPAA es una ley federal estadounidense con sanciones legales de salud, mientras que NIST y COBIT son marcos y mejores prácticas internacionales adaptables a cualquier sector.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque demuestra cómo la normatividad se especializa por sectores (salud, gobernanza corporativa, metrología de riesgos) para complementar los estándares de seguridad de la información.</p>
+</div>
+</details>
 
 <details class="section-block sec" id="c3-ejemplos"><summary><span class="stitle">Ejemplos y casos de la clase</span></summary>
 <ul>
@@ -125,7 +188,26 @@
 <li><strong>UNAM — Dejesca (hoy DGTIC), 2001–2005:</strong> tras la transición presidencial del año 2000 hubo intrusiones desde China; auditados contra las 11 áreas de la ISO 17799, los niveles de cumplimiento iban de 0–1–5–10 % hasta un máximo de 25 %. Motivó la planificación del <strong>CERT de la UNAM</strong>.</li>
 <li><em>(contexto — no examen)</em> <strong>Marina:</strong> un tesista militar llegó 5 min tarde y preguntó dónde reportarse para ser arrestado; otro tesista fue arrestado porque una empresa de EE. UU. lo invitó a un curso sin gestionar la invitación por el conducto institucional.</li>
 <li><em>(contexto — no examen)</em> <strong>Propiedad intelectual:</strong> un alumno de la FI-UNAM armó un dispositivo con su dinero y tiempo; la empresa lo patentó a su nombre corporativo y solo le dio 30 días de vacaciones en Europa. Recomendación: patentar de forma individual antes de ofrecerlo al patrón.</li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como aprender a manejar escuchando las anécdotas de choferes reales que chocaron por no revisar los frenos o que perdieron su coche por prestárselo a un desconocido.<span class="rompe">Dónde falla la analogía: Se rompe porque las anécdotas reales involucran disputas legales de patentes, arrestos militares y fallas institucionales graves que no se corrigen con una simple disculpa.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque conecta los conceptos teóricos de normatividad con la realidad profesional, como la necesidad de patentar invenciones personales antes de mostrarlas a una empresa o los riesgos del exceso de confianza.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> No haber protegido legalmente una invención antes de mostrarla a una organización, creyendo erróneamente que la empresa recompensará adecuadamente el esfuerzo sin un contrato previo.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c3-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuál es la diferencia entre una norma y un estándar expuesta por la profesora al inicio de la clase?</summary><p>Una norma es una regla o ley de cumplimiento obligatorio dictada por un país, mientras que un estándar es un conjunto de recomendaciones internacionales que una organización decide adoptar de manera voluntaria.</p></details>
+<details class="qa"><summary>2. Explica con tus palabras en qué consisten los conceptos de TOE, PP y ST dentro del estándar Criterios Comunes (ISO/IEC 15408).</summary><p>La TOE es el producto o sistema específico que se va a evaluar; el PP es el perfil que define los requisitos de seguridad que debe cumplir esa clase de productos; y la ST es la meta o especificación de seguridad concreta que el fabricante busca alcanzar.</p></details>
+<details class="qa"><summary>3. Un ingeniero desarrolla en su tiempo libre y con dinero propio un nuevo algoritmo criptográfico en su casa. Con base en la recomendación explicada en el caso del exalumno de la clase, ¿qué debe hacer antes de presentárselo a su empresa?</summary><p>Debe patentar primero la invención a su nombre ante las autoridades correspondientes y posteriormente venderla u ofrecerla a la empresa bajo un contrato formal.</p></details>
+<details class="qa"><summary>4. Compara la clasificación de seguridad del estándar TCSEC (Libro Naranja) frente a la estructura del estándar ITSEC (Libro Blanco).</summary><p>El TCSEC clasifica la seguridad de forma monolítica en cuatro divisiones jerárquicas (A, B, C y D) enfocadas en confidencialidad militar, mientras que ITSEC separa la funcionalidad (F1 a F10) del nivel de garantía o confianza (E0 a E6 en siete niveles).</p></details>
+<details class="qa"><summary>5. ¿Por qué la profesora señala que las pruebas de polígrafo en juicios no son totalmente confiables para verificar la veracidad de una persona?</summary><p>Porque personas mentirosas y frías pueden controlar sus reacciones fisiológicas haciendo pasar mentiras como verdades, mientras que personas inocentes y muy nerviosas pueden reaccionar de forma alterada pareciendo culpables.</p></details>
+<details class="qa"><summary>6. Una empresa de tecnología estaba certificada bajo la versión ISO/IEC 27002:2013 con 14 dominios y busca migrar a la versión ISO/IEC 27002:2022. Explica qué cambio estructural debe realizar en sus manuales de proceso.</summary><p>Debe reestructurar y reacomodar sus controles de los 14 dominios anteriores hacia las 4 nuevas secciones (organizacionales, personas, físicas y tecnológicas) y verificar la correspondencia con los anexos de la norma.</p></details>
+<details class="qa"><summary>7. Compara el enfoque de protección del estándar canadiense CTCPEC frente al estándar británico BS 7799.</summary><p>El CTCPEC se enfoca en evaluar la seguridad de productos de cómputo dividiendo funcionalidad y garantía en ocho niveles (T0 a T7), mientras que BS 7799 se enfoca en la gestión de la seguridad de la información en toda la organización empresarial (SGSI).</p></details>
+<details class="qa"><summary>8. Un hospital en México desea proteger la privacidad de los datos médicos de sus pacientes extranjeros y organizar la gobernanza de su infraestructura de TI. Identifica qué marcos especializados de los vistos en clase aplicaría para cada necesidad.</summary><p>Para la protección de datos médicos utilizaría los principios de la ley HIPAA, y para organizar la gobernanza y gestión general de la tecnología utilizaría el marco COBIT.</p></details>
+</details>
 
 <details class="section-block sec" id="c3-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
 <ul>
