@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 01 — Minería de Datos</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -15,19 +16,43 @@
   <p class="prof">M.C. José Concepción Roberto Olvera López · 1 sep 2026 · Temas 1 y 2 — introducción a la minería de datos y al proceso KDD (con 5 casos de estudio de los equipos) y arranque de la arquitectura de minería de datos.</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #A98BD1"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c1-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Aplicación de las tres tareas de minería (regresión, clustering y clasificación) en el proceso KDD</strong><span class="evid">Evidencia: El profesor lo revisó y validó explícitamente durante las exposiciones de proyectos de los equipos.</span></li>
+<li><strong>Diferenciación entre datos internos y externos en el modelado de negocio</strong><span class="evid">Evidencia: Se explicó en vivo con el ejemplo práctico de los pastes de Pachuca relacionando el clima y eventos con la venta.</span></li>
+<li><strong>Fases de preparación de datos (limpieza por unicidad y tratamiento de outliers, transformación con normalización y generalización)</strong><span class="evid">Evidencia: Se detalló en las presentaciones y fue retroalimentado por el profesor como requisito antes del modelado.</span></li>
+<li><strong>Concepto de repositorio de datos frente a base de datos tradicional y reglas de gobernanza de acceso</strong><span class="evid">Evidencia: El profesor lo expuso al iniciar el Tema 2, destacando restricciones por horario, campo y perfil de usuario.</span></li>
+</ol>
+</details>
+
 <details class="section-block sec" id="md1-tareas" open><summary><span class="stitle">Las tres tareas y el flujo del proceso</span></summary>
 <ul>
 <li><strong>Regresión</strong> — modela cómo las variables independientes afectan a una variable numérica (p. ej. relación entre ventas y demanda). Explica el efecto de cada variable sobre el producto.</li>
 <li><strong>Agrupamiento / clustering</strong> — identifica grupos de productos o sucursales con comportamiento semejante; analiza tendencias por sucursal.</li>
 <li><strong>Clasificación</strong> — asigna categorías (p. ej. clasificar la demanda de una sucursal en alta, baja o media). Los <strong>árboles de decisión</strong> ayudan a prever si un día tendrá alta demanda para preparar la producción.</li>
 </ul>
-<p>Cadena de valor: <strong>datos crudos → modelos → patrones → predicciones → mejores decisiones</strong>.</p></details>
+<p>Cadena de valor: <strong>datos crudos → modelos → patrones → predicciones → mejores decisiones</strong>.</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como organizar el menú de un restaurante usando tres herramientas: una báscula para calcular cuánta comida preparar, etiquetas de colores para juntar platillos parecidos y casilleros marcados para separar pedidos altos, medios y bajos.<span class="rompe">Dónde falla la analogía: La analogía se rompe porque en minería de datos estas tareas se ejecutan mediante ecuaciones matemáticas y algoritmos sobre datos numéricos, no con objetos físicos en casilleros.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Define el flujo KDD para transformar datos crudos en patrones y predicciones que apoyen la toma de decisiones ejecutivas en las empresas.</p>
+</div>
+</details>
 
 <details class="section-block sec" id="md1-datos-int-ext"><summary><span class="stitle">Datos internos y externos (ejemplo: los pastes de Pachuca)</span></summary>
 <ul>
 <li><strong>Internos</strong> (dependen de la empresa): fecha, producto, cantidad vendida, precio, sucursal, inventario, promociones.</li>
 <li><strong>Externos</strong> (factores ajenos): calendario de días festivos, clima (el antojo de pastes calientes sube con el frío de Pachuca), eventos especiales.</li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como administrar un puesto de bebidas donde los precios y recetas dependen de ti, pero si hace mucho calor en la calle la gente te compra el doble de limonada sin que tú lo controles.<span class="rompe">Dónde falla la analogía: Se rompe porque los datos externos del entorno requieren integrarse a bases de datos mediante APIs, registros históricos de clima o calendarios oficiales, no solo por observación del tiempo.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite incorporar variables contextuales externas (como eventos deportivos o clima en Pachuca) junto con variables internas para evitar errores en los pronósticos de demanda.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Intentar predecir la demanda considerando únicamente el historial interno de ventas sin medir factores externos no controlables.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="md1-preparacion"><summary><span class="stitle">Fases de preparación de datos</span></summary>
 <ul>
@@ -39,7 +64,14 @@
 <li><strong>Suavizado</strong>: reducir picos agudos para analizar la distribución.</li>
 <li><strong>Normalización</strong>: escalar los valores numéricos a un rango fijo, típicamente [0, 1].</li>
 </ul></li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como lavar, pelar y picar las verduras en trozos del mismo tamaño antes de echarlas a la olla para que toda la sopa se cocine de forma pareja y sin basura.<span class="rompe">Dónde falla la analogía: Falla porque la limpieza de datos incluye imputación estadística, desduplicación por regla de unicidad y escalamiento entre cero y uno, no solo quitar suciedad.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Adecuación indispensable de los datos para garantizar que los algoritmos funcionen con eficiencia, eliminando duplicados y manejando valores faltantes sin descartar eventos atípicos reales.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir un evento atípico o pico de ventas con un error de captura y eliminarlo por equivocación del conjunto de datos.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="md1-validacion"><summary><span class="stitle">Validación (según el tipo de modelo)</span></summary>
 <ul>
@@ -47,7 +79,14 @@
 <li><strong>Clustering</strong>: que las agrupaciones por sucursal sean consistentes con el comportamiento típico de esa sucursal.</li>
 <li><strong>Modelo de operación</strong>: que cubra correctamente la demanda alta, media y baja.</li>
 </ul>
-<p class="empty">En el audio quedó un término sin identificar ("GS", para "ver tendencias por sucursal") y frases fragmentadas de los expositores; el resto del contenido se pudo reconstruir del contexto.</p></details>
+<p class="empty">En el audio quedó un término sin identificar ("GS", para "ver tendencias por sucursal") y frases fragmentadas de los expositores; el resto del contenido se pudo reconstruir del contexto.</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como probar la sopa antes de servírsela a los clientes para asegurarte de que no quedó demasiado salada ni desabrida.<span class="rompe">Dónde falla la analogía: La analogía se rompe porque la validación exige medir métricas numéricas precisas como márgenes de error porcentuales, consistencia entre sucursales y matrices de decisión.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Asegura que el esfuerzo del modelado sea confiable y comprensible para la gerencia, manteniendo las interfaces amigables y ajustando continuamente el modelo.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Presentar métricas demasiado complejas a la gerencia en lugar de ofrecer una interfaz amigable e intuitiva para la toma de decisiones.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="md1-casos-kdd"><summary><span class="stitle">Casos de estudio KDD de los equipos</span></summary>
 <p>Cada equipo aplicó el proceso KDD (entender el negocio → datos → limpieza → transformación → algoritmos → validación) a una empresa real:</p>
@@ -57,7 +96,14 @@
 <tr><td><strong>Jugos Boing — expansión internacional</strong> (Cooperativa Pascual)</td><td>No saber a qué países expandirse; riesgo de invertir a ciegas (EE. UU. concentra el 41 % de las exportaciones)</td><td><strong>K-Means</strong> (agrupar países por nivel comercial, valor de mercado, costo logístico); <strong>Apriori</strong> (patrones de sabor: zonas con migrantes mexicanos aceptan guayaba); <strong>árboles de decisión / regresión logística</strong> (score de viabilidad); <strong>series de tiempo</strong> (demanda mensual por país); modelo <strong>prescriptivo</strong> (sabor óptimo bajo presupuesto y NOM-051)</td><td><strong>Recall</strong> y matriz de confusión; <strong>Lift</strong> en reglas de asociación; <strong>MAE</strong> en regresión (error &lt; 20 %); <strong>validación cruzada</strong> contra <em>overfitting</em>; explicabilidad <strong>SHAP / LIME</strong>; comparación con <strong>baseline</strong> (promedio móvil) para justificar el modelo complejo</td></tr>
 <tr><td><strong>Mercado Libre — última milla</strong> (Equipo PMA)</td><td>Costos altos y entregas fallidas en zonas rurales, serranas e insulares de difícil acceso</td><td><strong>Muestreo estratificado</strong> (solo zonas inaccesibles); <strong>Expectation-Maximization (EM)</strong> para estimar coordenadas cuando se pierde GPS; <strong>PCA</strong> (sintetizar clima, INEGI y demografía en componentes); <strong>clustering jerárquico</strong> (microzonas logísticas); priorización de reintentos (el fallido pasa a primer punto de la siguiente ruta); <strong>SARIMA</strong> (demanda estacional, p. ej. Navidad); <strong>VRP</strong> (moto / auto / camión según terreno)</td><td><strong>MAE</strong> y <strong>RMSE</strong> (costos); precisión y <em>recall</em> (intentos de entrega); <strong>índice de silueta</strong> (consistencia de microzonas); <strong>backtesting</strong> con histórico; explicabilidad <strong>SHAP</strong></td></tr>
 <tr><td><strong>Zara — inventario global</strong> (Equipo 8, Inditex)</td><td>Punto de equilibrio del stock: sobrestock inmoviliza capital; <em>stockout</em> genera ventas perdidas</td><td><strong>Series de tiempo</strong> (demanda futura, estacionalidad, tendencias de color/print por región y clima); <strong>regresión lineal</strong> (sensibilidad de la demanda a precio y descuento); <strong>árboles de decisión</strong> (tendencia por color/tipo de prenda). Atributo derivado: <em>indicador de rotación</em></td><td>Métricas estándar de precisión de la regresión + validación empresarial de la rentabilidad de las compras</td></tr>
-</tbody></table></details>
+</tbody></table><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como cuando varios equipos presentan proyectos para resolver problemas de distintos negocios, desde recomendar películas hasta evitar que los paquetes se pierdan en la sierra.<span class="rompe">Dónde falla la analogía: Falla porque cada caso requiere una arquitectura de datos específica, algoritmos distintos y la validación de métricas de negocio reales.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra la aplicación práctica del proceso KDD en empresas reales como Netflix, Mercado Libre y Boing para reducir la cancelación de usuarios, optimizar envíos y planear expansiones.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Usar colores inadecuados como tonos rojos agresivos en las láminas ejecutivas, o no dominar todos los integrantes la totalidad de la presentación.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="md1-arquitectura-arranque"><summary><span class="stitle">Tema 2 — Arquitectura de minería de datos (arranque)</span></summary>
 <p><strong>Minería de datos (definición formal del profesor):</strong> "proceso de análisis de grandes conjuntos de datos". Los datos son "la carnita, la esencia, el argumento" de cualquier análisis o decisión industrial.</p>
@@ -72,7 +118,13 @@
 <li><strong>Series de tiempo</strong>.</li>
 <li><strong>Vectoriales</strong> — textos, archivos e imágenes representados como vectores; búsquedas de similitud muy veloces (a qué imágenes se parece una imagen de entrada); base de la IA moderna.</li>
 <li><strong>En memoria (in-memory)</strong> — toda la base reside en RAM en vez de disco → velocidad muy superior.</li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como planear la red de almacenes de una empresa decidiendo si vas a guardar cajas de cartón tradicionales, contenedores gigantes o estantes de acceso ultrarrápido.<span class="rompe">Dónde falla la analogía: Se rompe porque las tecnologías de bases de datos procesan consultas digitales complejas en columnas, memoria RAM o vectores en lugar de mover cajas físicas.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Introduce la evolución de los repositorios y bases de datos especializadas (columnares, vectoriales, en memoria) para que la minería de datos consulte información eficientemente.</p>
+</div>
+</details>
 
 <details class="section-block sec" id="md1-arquitectura-seguridad"><summary><span class="stitle">Arquitectura de datos, seguridad y repositorios</span></summary>
 <ul>
@@ -84,7 +136,26 @@
 <li><strong>Base de datos relacional</strong> (Access, SQL Server local): esquema de tablas y relaciones, normalmente hasta gigabytes, enfoque transaccional inmediato.</li>
 <li><strong>Repositorio</strong>: concepto más macro (servidores de archivos, data lakes, contenedores); estructurado y no estructurado; terabytes o petabytes; acceso concurrente de miles de usuarios; registro histórico masivo.</li>
 </ul></li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un banco que guarda el dinero en bóvedas especiales con guardias en la entrada que solo dejan pasar a ciertas personas a revisar cuentas específicas y a horas fijas.<span class="rompe">Dónde falla la analogía: Falla porque la seguridad digital aplica firewalls, encriptación, reglas de gobernanza a nivel de campos de tabla y monitoreo en tiempo real de miles de usuarios simultáneos.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Garantiza la protección de la información en repositorios masivos, regulando el acceso por roles, campos y horarios para evitar fugas y modificaciones no autorizadas.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Creer que una base de datos local pequeña cuenta con la misma seguridad, escalabilidad y control de acceso que un repositorio empresarial centralizado o en la nube.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c1-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuáles son las tres tareas de minería de datos explicadas en la clase?</summary><p>La regresión para predecir ventas contra demanda, el clustering para encontrar grupos de productos o sucursales parecidas, y la clasificación para categorizar la demanda en niveles como alta, media o baja.</p></details>
+<details class="qa"><summary>2. Explica con tus palabras la diferencia entre datos internos y datos externos en un proyecto de minería de datos.</summary><p>Los datos internos son aquellos que la empresa genera y controla directamente (como precios, sucursales e inventarios), mientras que los datos externos son factores del entorno que la empresa no controla pero que afectan el negocio (como el clima, días festivos o eventos deportivos).</p></details>
+<details class="qa"><summary>3. En el caso de una cadena de panaderías en una ciudad fría, ¿cómo influye el clima y los eventos locales en la preparación de datos?</summary><p>Representan variables externas y eventos atípicos que deben registrarse para justificar picos de venta en días de bajas temperaturas o festivales, evitando eliminarlos como si fueran errores de captura.</p></details>
+<details class="qa"><summary>4. Compara la limpieza de datos por desduplicación frente a la transformación por normalización.</summary><p>La desduplicación elimina registros repetidos usando reglas de unicidad para evitar datos falsos, mientras que la normalización ajusta los valores numéricos a una escala homogénea (como de cero a uno) para facilitar el procesamiento del algoritmo.</p></details>
+<details class="qa"><summary>5. ¿Por qué es fundamental definir una regla de unicidad al eliminar datos duplicados?</summary><p>Porque permite identificar unívocamente una transacción combinando campos clave (como fecha, lugar y tipo de compra), asegurando que solo se borren repeticiones reales provocadas por fallas del sistema.</p></details>
+<details class="qa"><summary>6. Compara la estructura y función de una base de datos tradicional frente a un repositorio de datos empresarial.</summary><p>La base de datos tradicional gestiona volúmenes pequeños o tablas estructuradas locales, mientras que el repositorio integra grandes volúmenes de datos estructurados y no estructurados con metadatos, seguridad y capacidad para miles de usuarios simultáneos.</p></details>
+<details class="qa"><summary>7. ¿Qué porcentaje de la información empresarial se encuentra alojada en la nube según lo mencionado por el profesor?</summary><p>El profesor mencionó que aproximadamente el 70% de la información de las organizaciones ya se encuentra alojada en la nube.</p></details>
+<details class="qa"><summary>8. ¿Cómo se aplican las reglas de gobernanza de seguridad en el acceso a datos personales en un repositorio?</summary><p>Se restringe el acceso mediante roles especificando qué campos exactos se pueden consultar (por ejemplo, ver datos del empleado pero no su salario) y limitando los horarios permitidos para la consulta.</p></details>
+</details>
 
 <details class="section-block sec" id="md1-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
 <ul>

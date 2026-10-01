@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T16:53:23+00:00",
+ "generatedAt": "2026-10-01T16:55:09+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -426,7 +426,7 @@
     "fecha": "2026-09-01",
     "resumen": "Temas 1 y 2 — introducción a la minería de datos y al proceso KDD (con 5 casos de estudio de los equipos) y arranque de la arquitectura de minería de datos.",
     "url": "materias/mineria-de-datos/clase-01.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 2,
@@ -481,6 +481,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "2d16300",
+   "fecha": "2026-10-01T10:53:23-06:00",
+   "mensaje": "OAC Clase 02: formato de estudio"
+  },
   {
    "hash": "e7146cf",
    "fecha": "2026-10-01T10:49:10-06:00",
@@ -775,11 +780,6 @@
    "hash": "92737b8",
    "fecha": "2026-09-30T17:22:55-06:00",
    "mensaje": "FSE: Clase 10 (30 sep) — I²C, SMBus, SPI, I²S, UART"
-  },
-  {
-   "hash": "647f58b",
-   "fecha": "2026-09-30T16:11:47-06:00",
-   "mensaje": "SIB: quitar enlaces a documentos de equipo retirados"
   }
  ]
 }
