@@ -15,7 +15,7 @@
   <p class="prof">Resumen de la presentación del profesor Rubén Omar Azuara Domínguez (PDF «Clase 9 Clasificación por funciones de distancia», la más reciente del notebook de la materia). Cubre distancia mínima, clustering, K-means, LBG e ISODATA.</p>
 </div>
 
-<div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Ojo con la numeración.</strong> El número «Clase 9» es el de las diapositivas del profesor, no el de las clases del sitio. Este tema se vio en la <a href="clase-07.html" style="color:var(--indigo)">Clase 07</a> (18 sep 2026). Este resumen sale del texto de la presentación, no del audio.</p></div>
+<div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Ojo con la numeración.</strong> El número «Clase 9» es el de las diapositivas del profesor, no el de las clases del sitio. Este tema se vio en la <a href="clase-07.html" style="color:var(--indigo)">Clase 07</a> (18 sep 2026). Este resumen sale del texto de la presentación (no del audio), y la sección de imágenes sale de la lectura multimodal de NotebookLM.</p></div>
 
 <details class="section-block sec" id="p9-distancia" open><summary><span class="stitle">1 · Clasificación por distancia mínima</span></summary>
 <p><strong>Clasificación de patrones:</strong> asignar un objeto o vector de características a una de varias categorías predefinidas, según su semejanza o diferencia con prototipos representativos de cada clase. Un <em>patrón</em> es el vector de características de un objeto; una <em>clase</em> es un conjunto de patrones con propiedades similares; una <em>función de distancia</em> mide qué tan lejos está un punto de otro en el espacio de características.</p>
@@ -90,6 +90,19 @@
 </ol>
 <p><strong>Cómo elegir los parámetros (reglas de la presentación):</strong> D<sub>min</sub> ≈ 0.5 × la distancia promedio entre centroides (o α·σ<sub>global</sub>); S<sub>max</sub> ≈ 1.5–2 × σ<sub>global</sub>; N<sub>min</sub> ≈ 1–5 % del dataset (N / 10K).</p>
 <p><strong>Ventajas:</strong> número de clusters adaptable, maneja clusters de distinto tamaño, detecta clusters con alta varianza. <strong>Desventajas:</strong> muchos parámetros, heurístico, sensible al ruido y no garantiza solución óptima. Los centroides iniciales influyen en el número final de clusters y en la estabilidad; asume clusters aproximadamente esféricos.</p>
+</details>
+
+<details class="section-block sec" id="p9-imagenes" open><summary><span class="stitle">🖼️ Lo que muestran las imágenes de las diapositivas</span></summary>
+<p>NotebookLM procesa el PDF de forma multimodal: además del texto, interpreta las imágenes, diagramas y gráficas. Esto es lo que describió de las primeras diapositivas con elementos visuales (descripción de NotebookLM; conviene contrastarla con el PDF).</p>
+<ol>
+<li><strong>Portada.</strong> Fotografía de un brazo robótico industrial naranja que dibuja con un marcador azul la silueta de un cerebro hecho de líneas de circuito. Ilustra la automatización, la inteligencia artificial y el reconocimiento de patrones.</li>
+<li><strong>«Antes de empezar».</strong> Fotografía de un aula universitaria vacía con pupitres, pantalla de proyección y un pizarrón con ecuaciones. Es una diapositiva de transición para resolver dudas de la clase anterior.</li>
+<li><strong>«Hasta ahora»: pipeline de reconocimiento de patrones.</strong> Diagrama de bloques horizontal: <em>Pattern → Sensing → Feature Extraction → Classification → Performance Assessment</em>. Flechas en forma de rayo rojo marcan las salidas intermedias (<em>Measurements</em>, <em>Features</em> y <em>Class</em>) y tres corchetes verdes indican el contexto del problema, la tarea de reconocimiento a resolver y los criterios del problema. Sirve para ubicar la clase actual (clasificación) dentro del flujo completo.</li>
+<li><strong>K-means (concepto).</strong> Dos gráficas 2D, «Before K-Means» y «After K-Means», unidas por una flecha azul. Antes: puntos verdes en tres grupos naturales, sin clasificar. Después: los mismos datos encerrados en tres elipses de colores distintos. Muestra el objetivo del algoritmo: organizar datos sin etiquetas en K grupos por proximidad.</li>
+<li><strong>Algoritmo K-means, secuencia (a)–(f).</strong> Seis cuadros: (a) puntos dispersos; (b) se colocan dos centroides iniciales «X» (roja y azul); (c) cada punto toma el color del centroide más cercano; (d) los centroides se mueven al centro de sus puntos; (e) se reasignan los puntos de frontera; (f) convergencia: los centroides se estabilizan y las asignaciones ya no cambian. Es el bucle asignar–actualizar.</li>
+<li><strong>Consideraciones de K-means: fronteras y regiones de Voronoi.</strong> Cinco paneles en los ejes x<sub>1</sub>, x<sub>2</sub> con puntos azules y dos centroides; al moverse los centroides, una línea roja (frontera lineal de decisión) divide el plano en dos regiones sombreadas (verde y azul). Muestra que K-means genera particiones lineales y convexas (celdas de Voronoi).</li>
+</ol>
+<p><em>Pendiente:</em> a partir de la diapositiva de LBG (gráficas de dispersión sobre fondo oscuro, con el proceso de <em>splitting</em> y la distorsión) NotebookLM no devolvió el resto de la descripción: la respuesta se cortó. Las diapositivas de ISODATA y la comparativa quedan por describir.</p>
 </details>
 
 <details class="section-block sec" id="p9-aplicaciones"><summary><span class="stitle">6 · Aplicaciones del mundo real</span></summary>

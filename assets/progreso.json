@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T18:07:30+00:00",
+ "generatedAt": "2026-10-01T18:23:25+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -489,6 +489,11 @@
  },
  "gitlog": [
   {
+   "hash": "ccbc995",
+   "fecha": "2026-10-01T12:07:30-06:00",
+   "mensaje": "RP: resumen de la presentación «Clase 9» del profesor (distancia mínima, K-means, LBG, ISODATA)"
+  },
+  {
    "hash": "604e8c2",
    "fecha": "2026-10-01T11:17:55-06:00",
    "mensaje": "SIB Clase 01: formato de estudio"
@@ -782,11 +787,6 @@
    "hash": "da08eb2",
    "fecha": "2026-10-01T01:40:33-06:00",
    "mensaje": "SIB Clase 09: formato de estudio"
-  },
-  {
-   "hash": "51c4672",
-   "fecha": "2026-10-01T01:38:37-06:00",
-   "mensaje": "MD Clase 08: formato de estudio"
   }
  ]
 }
