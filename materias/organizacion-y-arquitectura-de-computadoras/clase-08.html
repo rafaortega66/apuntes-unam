@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="formato" content="estudio">
+<title>Clase 08 — Organización y Arquitectura de Computadoras</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js?v=20260930b" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Organización y Arquitectura de Computadoras</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Clase 08</h2>
+  <p class="prof">M.I. José Antonio de Jesús Arredondo Garza · 30 sep 2026 · Tema 3 (continuación) — Unidad de Punto Flotante (FPU) de la Raspberry Pi Pico 2: registros s0–s31, instrucciones v…, ejemplos en ensamblador inline (raíz cuadrada y sumatoria de productos) y fundamentos de filtros digitales FIR/IIR.</p>
+</div>
+
+<div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Formato de estudio.</strong> Primero va lo que probablemente viene en el examen y por qué. Después, cada concepto explicado en este orden: qué es, explicado en simple, cómo funciona, por qué importa y errores comunes. Al final hay preguntas para ponerte a prueba. Todo sale del audio de la clase (procesado en NotebookLM).</p></div>
+
+<details class="section-block sec" id="c8-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Instrucciones principales de la FPU (vadd, vsub, vmul, vdiv, vsqrt, vldr, vstr) y su sintaxis con prefijo v.</strong><span class="evid">Evidencia: las clasificó explícitamente en el pizarrón por función, detalló sus operandos y explicó la sintaxis de cada una.</span></li>
+<li><strong>Las instrucciones de multiplicación acumulativa (MAC) no son accesibles desde ensamblador inline.</strong><span class="evid">Evidencia: lo enfatizó: los manuales mencionan 5 variantes que convertirían a la Pico 2 en un DSP, pero los compiladores y ensambladores actuales no permiten acceder a ellas.</span></li>
+<li><strong>El offset de 4 bytes para recorrer arreglos de punto flotante de 32 bits.</strong><span class="evid">Evidencia: lo resolvió en vivo en la rutina de sumatoria de productos y subrayó que la memoria es lineal en bytes.</span></li>
+<li><strong>vdiv es la instrucción de mayor latencia.</strong><span class="evid">Evidencia: lo dijo explícitamente; aclaró que el manual no da el número exacto de ciclos, pero que la división es la que más tarda.</span></li>
+<li><strong>Filtros digitales IIR/FIR: ecuación de diferencia con dos sumatorias de productos.</strong><span class="evid">Evidencia: lo ligó como base de la siguiente clase y de un trabajo práctico asignado.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c8-registros" open><summary><span class="stitle">1 · Banco de registros y límites de la FPU en la Pico 2</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es la organización interna de la Unidad de Punto Flotante del procesador RP2350: un mapa de <strong>32 registros dedicados de 32 bits</strong>, de <code>s0</code> a <code>s31</code>.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es una caja con 32 casilleros numerados del s0 al s31, hechos solo para guardar y operar números con punto decimal. La analogía deja de servir porque en una caja común guardas cualquier objeto, pero estos registros están cableados en el silicio para la representación binaria de punto flotante de 32 bits y alimentan directo a los módulos aritméticos de la FPU.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Aunque tiene FPU, el procesador mantiene su filosofía RISC, así que el número de instrucciones es acotado. El profesor intentó usar las instrucciones de multiplicación acumulativa (MAC), de las que los manuales listan 5 variantes y que convertirían a la Pico 2 en un procesador digital de señales (DSP), pero explicó que hoy los compiladores y ensambladores tienen limitaciones que impiden acceder a ellas desde ensamblador incrustado.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite hacer cálculos matemáticos en hardware sin cargar a la CPU. Se conecta con la librería <code>math</code> de MicroPython: en la Pico 1 las funciones de <code>math</code> se emulan por software con un alto costo en ciclos, mientras que la Pico 2 aprovecha la FPU por hardware.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> esperar funciones trascendentales (seno, coseno, logaritmo) en la FPU. No existen físicamente en el chip y se emulan por software con librerías como <code>math</code>.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c8-instrucciones" open><summary><span class="stitle">2 · Repertorio de instrucciones de la FPU y su sintaxis</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es el conjunto de instrucciones de máquina de la FPU, que empiezan obligatoriamente con el prefijo <code>v</code> (<code>vadd</code>, <code>vsub</code>, <code>vmul</code>, <code>vdiv</code>, <code>vsqrt</code>, <code>vcvt</code>, <code>vldr</code>, <code>vstr</code>).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un catálogo de verbos que siempre empiezan con «v» para decirle al procesador que la orden va al módulo de punto flotante y no a la unidad entera. La analogía deja de servir porque un verbo humano acepta cualquier complemento, y estas instrucciones exigen una sintaxis estricta de 2 o 3 registros s concretos.</p></div>
+<span class="lbl">Cómo funciona</span>
+<table>
+<thead><tr><th>Instrucción</th><th>Operación</th></tr></thead>
+<tbody>
+<tr><td><code>vadd.f32 sd, sn, sm</code></td><td>SD = SN + SM</td></tr>
+<tr><td><code>vsub.f32 sd, sn, sm</code></td><td>SD = SN − SM</td></tr>
+<tr><td><code>vmul.f32 sd, sn, sm</code></td><td>SD = SN × SM</td></tr>
+<tr><td><code>vdiv.f32 sd, sn, sm</code></td><td>SD = SN / SM (la de mayor latencia)</td></tr>
+<tr><td><code>vsqrt.f32 sd, sm</code></td><td>SD = √SM (solo 2 operandos)</td></tr>
+<tr><td><code>vldr sd, [rn, offset]</code></td><td>Carga en sd el valor de la dirección rn + offset</td></tr>
+<tr><td><code>vstr sd, [rn, offset]</code></td><td>Guarda sd en la dirección rn + offset</td></tr>
+</tbody></table>
+<p>También hay accesorias: valor absoluto (<code>vabs</code>), cambio de signo y conversiones entre enteros y flotantes (<code>vcvt</code>).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Conecta las variables declaradas en Python, fuera de la rutina en ensamblador, con las operaciones físicas de la FPU: las direcciones de memoria se pasan por los registros ARM (r0, r1, etc.).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> pasar valores numéricos inmediatos directos a las instrucciones de la FPU sin cargarlos antes desde memoria o desde registros s.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c8-raiz" open><summary><span class="stitle">3 · Ejercicio 1: raíz cuadrada en ensamblador inline</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un programa en MicroPython con ensamblador incrustado (<code>@micropython.asm_thumb</code>) que calcula la raíz cuadrada de un flotante, resuelto en clase con el valor 80.0.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como mandar a un mensajero con la dirección de una nota que dice 80.0, hacer que la FPU calcule su raíz en una mesa de trabajo y guardar el resultado en otra dirección para leerlo después en Python. La analogía deja de servir porque el mensajero puede leer cualquier nota, pero aquí un número negativo produce un error de ejecución: no hay números imaginarios.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>En Python se declaran la entrada y la salida: <code>input = float(80.0)</code> y <code>output = float(0.0)</code>. La rutina recibe en <code>r0</code> la dirección de la entrada y en <code>r1</code> la de la salida:</p>
+<pre><code>@micropython.asm_thumb
+def raiz_cuadrada(r0, r1):   # r0 = dirección de input, r1 = dirección de output
+    vldr(s0, [r0, 0])        # s0 = 80.0
+    vldr(s1, [r1, 0])        # s1 = 0.0
+    vsqrt(s2, s0)            # s2 = sqrt(s0)
+    vstr(s2, [r1, 0])        # guarda s2 en output</code></pre>
+<p>Después se invoca <code>raiz_cuadrada(input, output)</code> y se despliega con <code>print(output)</code>.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra la integración directa entre MicroPython y la FPU mediante el paso de punteros en <code>r0</code> y <code>r1</code>.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> pasar un valor negativo a la rutina, que marca error.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c8-producto" open><summary><span class="stitle">4 · Ejercicio 2: sumatoria de productos y offset de 4 bytes</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un algoritmo en ensamblador que calcula el producto punto (∑ data1[i] × data2[i]) entre dos arreglos de flotantes del mismo tamaño.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es multiplicar, uno a uno, los elementos de dos listas (precios y cantidades) e ir sumando los parciales en una alcancía para obtener el total. La analogía deja de servir porque las listas en papel no tienen tamaño en bytes, y en la memoria del microcontrolador hay que moverse exactamente de 4 en 4 bytes para no leer datos corruptos.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Asignación de registros: <code>r0</code> apunta a data1 (por ejemplo, de 0.1 a 0.9), <code>r1</code> a data2, <code>r2</code> a la dirección del resultado y <code>r3</code> es el contador de elementos (ambas secuencias deben tener el mismo tamaño).</p>
+<p><strong>Regla del offset de 4 bytes:</strong> la RAM organiza cada flotante de 32 bits en 4 bytes lineales, así que para pasar al siguiente dato hay que hacer <code>add(r0, r0, 4)</code> y <code>add(r1, r1, 4)</code>.</p>
+<p>El acumulador <code>s4</code> se pone en 0.0 y el bucle es:</p>
+<pre><code>label(BUCLE)
+vldr(s0, [r0, 0])      # elemento de data1
+vldr(s1, [r1, 0])      # elemento de data2
+vmul(s2, s0, s1)       # s2 = s0 * s1
+vadd(s4, s4, s2)       # s4 = s4 + s2
+add(r0, r0, 4)         # siguiente dato (4 bytes)
+add(r1, r1, 4)
+sub(r3, r3, 1)         # contador - 1
+bne(BUCLE)             # si no es cero, repite
+vstr(s4, [r2, 0])      # guarda el acumulador en el resultado</code></pre>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la base del procesamiento de vectores en 2D, de los gráficos de pequeños videojuegos en la Pico y el motor matemático de los filtros digitales.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> incrementar los apuntadores 1 byte en vez de 4, o usar secuencias de tamaños distintos.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c8-filtros" open><summary><span class="stitle">5 · Fundamentos de filtros digitales (FIR e IIR)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es el modelo matemático para procesar señales discretas en el tiempo con la sumatoria de productos de coeficientes y muestras.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un ecualizador de audio que toma el sonido del presente y los ecos del pasado, los multiplica por ciertos volúmenes y los suma para quitar ruido. La analogía deja de servir porque el ecualizador analógico ajusta perillas físicas, mientras que el filtro digital calcula la ecuación exacta con operaciones de punto flotante en la FPU.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>La ecuación de diferencia de un filtro con polos y ceros (IIR) es:</p>
+<p><em>y[k] = Σ<sub>n=0..N</sub> a<sub>n</sub> · x[k−n] + Σ<sub>m=1..M</sub> b<sub>m</sub> · y[k−m]</em></p>
+<p>Requiere dos sumatorias de productos: la primera pondera las entradas presentes y pasadas (x[k−n], con coeficientes a<sub>n</sub>); la segunda pondera las salidas anteriores (y[k−m], con coeficientes b<sub>m</sub>).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Conecta con el procesamiento digital de señales (DSP) y con temas que los alumnos vieron el semestre pasado, y supera mucho en eficiencia a las implementaciones solo por software.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> implementar un IIR con una sola sumatoria, omitiendo la retroalimentación de las salidas pasadas y[k−m].</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c8-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuántos registros tiene la FPU de la Pico 2 y cómo se identifican?</summary><p>32 registros dedicados de 32 bits, de <code>s0</code> a <code>s31</code>.</p></details>
+<details class="qa"><summary>2. ¿Por qué no se pueden usar las instrucciones MAC desde ensamblador inline?</summary><p>El manual menciona 5 opciones que convertirían a la Pico en un DSP, pero los compiladores y ensambladores actuales tienen limitaciones de software que impiden acceder a ellas directamente.</p></details>
+<details class="qa"><summary>3. Compara <code>math</code> en la Pico 1 y en la Pico 2.</summary><p>En la Pico 1 se emula por software con alto costo de ciclos, porque no hay FPU física. En la Pico 2 las operaciones básicas usan la FPU; las trascendentales (seno, coseno, logaritmo) siguen emulándose por software.</p></details>
+<details class="qa"><summary>4. Escribe la instrucción que calcula la raíz de s0 y la guarda en s2.</summary><p><code>vsqrt(s2, s0)</code></p></details>
+<details class="qa"><summary>5. ¿Por qué se distingue <code>vdiv</code> de las demás operaciones de la FPU?</summary><p>Porque es la que más tiempo (ciclos) tarda de todo el repertorio.</p></details>
+<details class="qa"><summary>6. Un arreglo tiene 10 flotantes de 32 bits. ¿Cuántos bytes avanza el apuntador de principio a fin?</summary><p>40 bytes: cada dato ocupa 4 bytes de memoria lineal organizada en bytes.</p></details>
+<details class="qa"><summary>7. ¿Qué hacen <code>vldr</code> y <code>vstr</code> en la sumatoria de productos?</summary><p><code>vldr</code> carga en un registro s el valor de la dirección apuntada por un registro r, y <code>vstr</code> guarda el resultado del registro s de vuelta en la dirección apuntada por un registro r.</p></details>
+<details class="qa"><summary>8. Compara un filtro IIR con la sumatoria de productos de la clase.</summary><p>La sumatoria de productos calcula una sola combinación lineal (∑ a<sub>n</sub>·x[k−n]); el IIR completo necesita dos sumatorias combinadas, una para las entradas y otra para las salidas pasadas.</p></details>
+</details>
+
+<details class="section-block sec" id="c8-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> El profesor comentó que no tuvo tiempo de preparar algunos diagramas de flujo detallados por exceso de trabajo y compromisos con evaluaciones de sus estudiantes de posgrado.</li>
+<li><em>(Contexto)</em> Comentó que el ensamblador de FPU es ideal para quien quiera programar un pequeño videojuego en la Pico, porque el manejo de vectores e imágenes en alto nivel consume demasiados ciclos y el procesador sufriría con los gráficos.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c8-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Próxima clase:</strong> se dedicará completa a implementar varios tipos de filtros digitales (IIR/FIR) en la Pico 2.</li>
+<li><strong>Trabajos:</strong> se derivará un trabajo práctico sobre filtros digitales y se asignarán aproximadamente 3 trabajos prácticos de programación en ensamblador, con programas clásicos ya vistos adaptados al uso de la FPU.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>La FPU de la Pico 2 tiene 32 registros de 32 bits (s0–s31) y sus instrucciones empiezan con v.</li>
+<li>vsqrt usa 2 operandos; vdiv es la más lenta; las MAC no son accesibles desde ensamblador inline.</li>
+<li>Los flotantes de 32 bits ocupan 4 bytes: los apuntadores avanzan de 4 en 4.</li>
+<li>La sumatoria de productos es el bloque base de los filtros; un IIR necesita dos sumatorias (entradas y salidas pasadas).</li>
+</ul></div>
+
+</div>
+</body>
+</html>

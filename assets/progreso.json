@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T12:38:21+00:00",
+ "generatedAt": "2026-10-01T16:18:39+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -121,6 +121,13 @@
     "fecha": "2026-09-28",
     "resumen": "Tema 3 (continuación) — Tres formas de controlar un periférico en la Raspberry Pi Pico 1 y Pico 2: librerías machine , direccionamiento directo con mem32 y ensamblador inline ARM Thumb; estructuras de campos de bits con ",
     "url": "materias/organizacion-y-arquitectura-de-computadoras/clase-07.html",
+    "formato": "estudio"
+   },
+   {
+    "num": 8,
+    "fecha": "2026-09-30",
+    "resumen": "Tema 3 (continuación) — Unidad de Punto Flotante (FPU) de la Raspberry Pi Pico 2: registros s0–s31, instrucciones v…, ejemplos en ensamblador inline (raíz cuadrada y sumatoria de productos) y fundamentos de filtros digit",
+    "url": "materias/organizacion-y-arquitectura-de-computadoras/clase-08.html",
     "formato": "estudio"
    }
   ],
@@ -338,6 +345,13 @@
     "resumen": "Tema 2 — El socket servidor en C, paso a paso: socket() , inicialización de struct sockaddr_in ( INADDR_ANY , htons() ), bind() , listen() y accept() , y por qué todo servidor maneja dos sockets.",
     "url": "materias/arquitectura-cliente-servidor/clase-10.html",
     "formato": "estudio"
+   },
+   {
+    "num": 11,
+    "fecha": "2026-10-01",
+    "resumen": "Tema 2 — El par de programas 04 (servidor y cliente de Internet): ciclo de vida de los sockets TCP, send() y recv(), relación char = byte y tabla ASCII, write(1, buffer, N) e inspección del cliente con gethostbyaddr() y ",
+    "url": "materias/arquitectura-cliente-servidor/clase-11.html",
+    "formato": "estudio"
    }
   ],
   "seguridad-informatica-basica": [
@@ -467,6 +481,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "10d3670",
+   "fecha": "2026-10-01T06:38:29-06:00",
+   "mensaje": "Progreso: actualizar estado de la migración al formato de estudio"
+  },
   {
    "hash": "5cc8025",
    "fecha": "2026-10-01T06:37:44-06:00",
@@ -761,11 +780,6 @@
    "hash": "1058d85",
    "fecha": "2026-09-30T16:06:46-06:00",
    "mensaje": "SIB: material de la clase del 29 sep (Escudos.pdf)"
-  },
-  {
-   "hash": "1aaa64a",
-   "fecha": "2026-09-30T16:05:15-06:00",
-   "mensaje": "RP: enunciado Práctica 2, Clase 10 y entrega de la Práctica 2"
   }
  ]
 }

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="formato" content="estudio">
+<title>Clase 11 — Arquitectura Cliente-Servidor</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js?v=20260930b" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Arquitectura Cliente-Servidor</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 11</h2>
+  <p class="prof">Mtro. Carlos Alberto Román Zamitiz · 1 oct 2026 · Tema 2 — El par de programas 04 (servidor y cliente de Internet): ciclo de vida de los sockets TCP, send() y recv(), relación char = byte y tabla ASCII, write(1, buffer, N) e inspección del cliente con gethostbyaddr() y struct hostent.</p>
+</div>
+
+<div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Formato de estudio.</strong> Primero va lo que probablemente viene en el examen y por qué. Después, cada concepto explicado en este orden: qué es, explicado en simple, cómo funciona, por qué importa y errores comunes. Al final hay preguntas para ponerte a prueba. Todo sale del audio de la clase (procesado en NotebookLM).</p></div>
+
+<details class="section-block sec" id="c11-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Diferencia entre <code>bind()</code> y <code>accept()</code> en el servidor.</strong><span class="evid">Evidencia: las comparó en vivo con el código proyectado. <code>bind()</code> recibe la estructura <code>servidor</code> que el programador inicializa y su tamaño; <code>accept()</code> recibe la estructura <code>cliente</code> (que se inicializa sola) y un apuntador a la longitud.</span></li>
+<li><strong>Sintaxis de <code>send()</code> y <code>recv()</code> y su uso en pareja.</strong><span class="evid">Evidencia: abrió la documentación de The Open Group, mostró la misma firma de 4 argumentos (socket, buffer, length, flags) y enfatizó que si un extremo usa <code>send()</code>, el otro debe usar <code>recv()</code>; el flag por defecto es 0.</span></li>
+<li><strong>Por qué <code>write(1, buffer, N)</code> usa N y no el tamaño del buffer.</strong><span class="evid">Evidencia: explicó con detalle que así se imprimen solo los N bytes recibidos y no la basura del buffer.</span></li>
+<li><strong>Fallo de segmentación con <code>gethostbyaddr()</code> si el DNS no resuelve.</strong><span class="evid">Evidencia: señaló él mismo ese punto de mejora del código: si devuelve NULL y se accede a <code>info_cliente->h_name</code>, el programa se cae; hay que validar con <code>if (info_cliente != NULL)</code>.</span></li>
+<li><strong>Papel de <code>fds</code> contra <code>fdc</code>.</strong><span class="evid">Evidencia: lo repitió varias veces: <code>fds</code> solo sirve para aceptar conexiones; todo el flujo de datos va por el nuevo descriptor <code>fdc</code> que devuelve <code>accept()</code>.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c11-programa04" open><summary><span class="stitle">1 · El par de programas 04 y su configuración inicial</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es el primer par de programas en C con comunicación cliente-servidor real por sockets TCP en el puerto <strong>4898</strong>: el cliente solicita la conexión y el servidor le responde con un mensaje de texto.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es una llamada entre dos oficinas. La oficina A (servidor) instala la línea, enciende el teléfono y espera. La oficina B (cliente) marca la clave lada (IP) y la extensión (puerto 4898). Al contestar, A dice «conexión exitosa». La analogía deja de servir porque la línea telefónica transmite ondas continuas, mientras que los sockets intercambian arreglos de bytes discretos a través del kernel de Linux.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Se abren dos terminales independientes: pueden ser la misma máquina (con la IP de loopback <code>127.0.0.1</code>) o máquinas distintas o virtuales. En esta versión el puerto está fijo en 4898 en ambos programas; el cliente necesita conocer la IP o dominio y el puerto del servidor, y si el puerto difiere la conexión jamás se establece.</p>
+<p>Cabeceras de C que se incluyen:</p>
+<ul>
+<li><code>&lt;string.h&gt;</code>: manipulación de cadenas y memoria (<code>memset</code>, <code>memcpy</code>).</li>
+<li><code>&lt;sys/types.h&gt;</code> y <code>&lt;sys/socket.h&gt;</code>: funciones genéricas de sockets.</li>
+<li><code>&lt;netinet/in.h&gt;</code>: estructuras de sockets IPv4 (<code>struct sockaddr_in</code>).</li>
+<li><code>&lt;netdb.h&gt;</code>: resolución DNS y <code>struct hostent</code>.</li>
+<li><code>&lt;unistd.h&gt;</code>: funciones del sistema (<code>getpid</code>, <code>write</code>, <code>close</code>).</li>
+</ul>
+<p>El servidor declara dos estructuras <code>struct sockaddr_in</code>: <code>servidor</code> (la propia) y <code>cliente</code> (para la sesión entrante), y un apuntador <code>struct hostent *info_cliente</code> para guardar lo que devuelva <code>gethostbyaddr()</code>. <code>struct hostent</code> da la información del <em>otro</em> extremo: en el servidor entrega los datos del cliente que se conecta; en el cliente, los del servidor destino.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Liga la teoría de la pila TCP/IP y las estructuras de C con la práctica ejecutable en Linux; es la plantilla base de cualquier sistema cliente-servidor.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> ejecutar el cliente con un puerto distinto al del servidor (no conecta) o no incluir las cabeceras de red.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c11-ascii" open><summary><span class="stitle">2 · char, byte y la tabla ASCII (LF y CR)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Para texto plano, <strong>1 char = 1 byte</strong>, así que los caracteres ASCII de 8 bits se transmiten sin pérdida.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como Scrabble: cada casilla mide un centímetro y cada letra ocupa una sola casilla. La analogía deja de servir porque en la computadora un byte es un entero sin signo de 8 bits entre 0 y 255, no una ficha visual.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>1 byte son 8 bits, por tanto hay 2<sup>8</sup> = 256 valores (0 a 255).</p>
+<ul>
+<li><strong>ASCII básico (0 a 127):</strong> American Standard Code for Information Interchange, desarrollado en EE. UU. Los primeros 33 caracteres (0 a 32) no se ven, son de control: 0 = NUL, 9 = tabulador, 10 = Line Feed (LF), 13 = Carriage Return (CR).</li>
+<li><strong>Origen de LF y CR:</strong> vienen de las máquinas de escribir mecánicas: al llegar al final de la página, la palanca bajaba el papel (LF, 10) y movía el carro a la izquierda (CR, 13).</li>
+<li><strong>Visibles:</strong> empiezan en el decimal 33 (<code>!</code>), 34 (<code>"</code>), 35 (<code>#</code>), 36 (<code>$</code>), siguiendo el orden de las teclas numéricas, luego números, mayúsculas y minúsculas hasta el 127.</li>
+<li><strong>ASCII extendido (128 a 255):</strong> agrega vocales acentuadas y caracteres como ñ y Ñ.</li>
+</ul>
+<p>Los mensajes se guardan en un arreglo <code>char buffer</code> de 128 bytes.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Sirve para calcular tamaños de buffer y contar cuántos bytes viajan en cada <code>send()</code> o <code>recv()</code>.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> olvidar que al presionar Enter se envía un carácter de salto de línea extra, que suma 1 o 2 bytes al mensaje.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c11-servidor" open><summary><span class="stitle">3 · El socket servidor paso a paso (socket, bind, listen, accept) e inspección con gethostbyaddr</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La secuencia estricta de funciones en C que configuran el socket del servidor, lo ligan a una IP y puerto, lo ponen en escucha y aceptan clientes.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es abrir un restaurante: comprar la concesión (<code>socket</code>), registrar la dirección (<code>bind</code>), abrir las puertas a la fila (<code>listen</code>) y pasar al primero de la fila a una mesa privada (<code>accept</code>). La analogía deja de servir porque <code>accept()</code> no atiende personas, sino que genera un entero de software (<code>fdc</code>) que representa el socket de comunicación.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El código incluye <code>printf</code> de depuración que muestran la traza paso a paso:</p>
+<ol>
+<li><strong><code>socket()</code></strong>: crea el socket y devuelve el descriptor <code>fds</code> (normalmente el 3).</li>
+<li><strong>Inicializar <code>struct sockaddr_in servidor</code></strong>, a mano: <code>memset(&amp;servidor, 0, sizeof(servidor));</code>, <code>servidor.sin_family = AF_INET;</code>, <code>servidor.sin_addr.s_addr = INADDR_ANY;</code> (escucha por todas las IPs de todas las interfaces) y <code>servidor.sin_port = htons(4898);</code> (puerto en binario de red).</li>
+<li><strong><code>bind(fds, (struct sockaddr *)&amp;servidor, sizeof(servidor));</code></strong>: liga el descriptor con la estructura.</li>
+<li><strong><code>listen(fds, 1);</code></strong>: activa la escucha con cola de espera (<em>backlog</em>) de 1. La primera conexión pasa directo a atenderse, la segunda se encola y, en teoría, una tercera consecutiva con la cola llena se rechaza.</li>
+<li><strong><code>fdc = accept(fds, (struct sockaddr *)&amp;cliente, &amp;longitud_cliente);</code></strong>: llamada bloqueante que detiene al servidor hasta que llega un cliente. A diferencia de <code>bind()</code>, la estructura <code>cliente</code> <em>no</em> se inicializa a mano: <code>accept()</code> la llena. Y el tercer parámetro es un apuntador a la longitud (<code>&amp;longitud_cliente</code>).</li>
+<li><strong>Pasos 6 y 7 (opcionales): <code>gethostbyaddr()</code></strong> para obtener la información del cliente recién conectado e imprimir su IP o dominio.</li>
+</ol>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra la arquitectura interna de un servidor TCP y la diferencia clave entre el socket de conexión (<code>fds</code>) y el de comunicación (<code>fdc</code>).</p>
+<div class="errores"><p><strong>Errores comunes / punto de mejora:</strong> si <code>gethostbyaddr()</code> no resuelve la IP del cliente en el DNS devuelve NULL, y acceder enseguida a <code>info_cliente->h_name</code> hace que el programa «truene» (fallo de segmentación). El profesor indicó que debe corregirse con <code>if (info_cliente != NULL)</code> antes de usar sus atributos.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c11-cliente" open><summary><span class="stitle">4 · El socket cliente paso a paso (socket, gethostbyname, memcpy, connect)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El flujo simplificado del cliente: resolver el nombre o IP del servidor, configurar su estructura y pedir la conexión con <code>connect()</code>.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es buscar el teléfono de una empresa en Google, marcar los dígitos y presionar llamar. La analogía deja de servir porque la llamada depende de centrales públicas, mientras que <code>connect()</code> hace directamente el saludo de tres vías de TCP contra el socket del servidor.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p><code>programa04_cliente_internet.c</code> recibe dos parámetros por línea de comandos: <code>argv[1]</code> (IP o dominio del servidor, por ejemplo <code>127.0.0.1</code> o <code>132.248.59.6</code>) y <code>argv[2]</code> (puerto, por ejemplo 4898).</p>
+<ol>
+<li><code>socket()</code> crea el socket y devuelve el descriptor <code>fd</code>.</li>
+<li>Se inicializa la estructura: <code>memset(&amp;cliente, 0, sizeof(cliente));</code>, <code>cliente.sin_family = AF_INET;</code> y <code>cliente.sin_port = htons(atoi(argv[2]));</code>.</li>
+<li><code>struct hostent *he = gethostbyname(argv[1]);</code> da la IP en binario sin conversiones manuales, y <code>memcpy(&amp;cliente.sin_addr, he->h_addr, he->h_length);</code> copia los 4 bytes de la dirección IP hacia <code>sin_addr</code>.</li>
+<li><code>connect(fd, (struct sockaddr *)&amp;servidor, sizeof(servidor));</code> envía la solicitud. Usa exactamente los mismos 3 tipos de argumentos que <code>bind()</code> y está en el mismo nivel jerárquico que <code>accept()</code> en el servidor.</li>
+</ol>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra un cliente flexible que recibe IP y puerto por línea de comandos (<code>argc</code>/<code>argv</code>), mejora que también puede aplicarse al servidor.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> pasar una IP en un formato que <code>gethostbyname()</code> no resuelva, o no convertir el puerto con <code>htons(atoi(argv[2]))</code>.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c11-sendrecv" open><summary><span class="stitle">5 · send(), recv() y write() sobre el descriptor 1</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El mecanismo de transferencia de bytes entre cliente y servidor con las funciones emparejadas <code>send()</code> y <code>recv()</code>, seguido de escribir el mensaje recibido en el monitor del cliente.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es mandar una carta certificada (<code>send</code>) que el destinatario recibe en su buzón (<code>recv</code>) y luego lee en voz alta (<code>write</code> en pantalla). La analogía deja de servir porque leer en voz alta produce sonido, mientras que <code>write(1, buffer, N)</code> escribe caracteres ASCII directamente en el descriptor del monitor.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El servidor prepara en su buffer el texto «El mensaje del servidor es : conexión exitosa!». En la prueba real se reportaron <strong>46 bytes</strong>.</p>
+<ul>
+<li><strong><code>send(fdc, buffer, strlen(buffer), 0);</code></strong>: 4 argumentos: socket (<code>fdc</code>), buffer con el mensaje, longitud en bytes y flags (0 por defecto).</li>
+<li><strong><code>int N = recv(fd, buffer, sizeof(buffer), 0);</code></strong>: misma estructura de 4 argumentos. Devuelve <code>N</code>, el número real de bytes recibidos (en clase, N = 46).</li>
+<li><strong><code>write(1, buffer, N);</code></strong>: el 1 es el descriptor reservado de la salida estándar (stdout, el monitor). Se pasa <code>N</code> para imprimir solo los bytes reales y evitar basura en pantalla.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Relaciona los descriptores del sistema (0 teclado, 1 monitor, 2 error) con la recepción de datos de red y garantiza una salida limpia en consola.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> mezclar <code>send()</code> con <code>read()</code> o <code>write()</code> con <code>recv()</code> (deben ir en pareja) o usar <code>sizeof(buffer)</code> en vez de <code>N</code> dentro de <code>write()</code>, lo que imprime basura del buffer.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c11-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Qué datos necesita obligatoriamente un cliente para conectarse a un servidor?</summary><p>La dirección IP (o nombre de dominio) del servidor y el número de puerto por el que escucha.</p></details>
+<details class="qa"><summary>2. Explica la diferencia entre <code>fds</code> y <code>fdc</code> en el servidor.</summary><p><code>fds</code> es el socket de conexión: sirve para <code>bind</code>, <code>listen</code> y <code>accept</code>. <code>fdc</code> es el descriptor nuevo que devuelve <code>accept()</code> y se usa solo para el flujo de datos (<code>send</code>/<code>recv</code>) con el cliente aceptado.</p></details>
+<details class="qa"><summary>3. ¿Qué valor se recomienda para el cuarto argumento (flags) de <code>send()</code> y <code>recv()</code>?</summary><p>El entero 0.</p></details>
+<details class="qa"><summary>4. Si <code>recv()</code> devuelve N = 46, ¿qué indica y cómo se usa en <code>write()</code>?</summary><p>Se recibieron exactamente 46 bytes reales. Se pasa como tercer argumento de <code>write(1, buffer, N)</code> para escribir al monitor solo esos 46 bytes.</p></details>
+<details class="qa"><summary>5. ¿Quién inicializa las estructuras <code>servidor</code> y <code>cliente</code> en el servidor, y cómo?</summary><p><code>servidor</code> la inicializa el programador con <code>memset</code>, <code>AF_INET</code>, <code>INADDR_ANY</code> y <code>htons()</code>. <code>cliente</code> la inicializa automáticamente <code>accept()</code>.</p></details>
+<details class="qa"><summary>6. ¿Por qué el servidor tiene un posible fallo con <code>gethostbyaddr()</code>?</summary><p>Si no resuelve la IP del cliente en el DNS devuelve NULL, y acceder a <code>info_cliente->h_name</code> provoca un fallo de segmentación, a menos que se valide con <code>if (info_cliente != NULL)</code>.</p></details>
+<details class="qa"><summary>7. <code>recv(fd, buffer, 128, 0)</code> recibe «El mensaje del servidor es : conexión exitosa!». ¿Cuántos bytes reporta y por qué?</summary><p>46 bytes, porque cada carácter ASCII (incluidos espacios, dos puntos y el signo de exclamación) vale 1 byte.</p></details>
+<details class="qa"><summary>8. ¿Qué son los códigos ASCII 10 y 13 y de dónde vienen sus nombres?</summary><p>Line Feed (10, nueva línea) y Carriage Return (13, retorno de carro), heredados de las máquinas de escribir mecánicas.</p></details>
+<details class="qa"><summary>9. Compara los tres descriptores reservados de Linux.</summary><p>0 es la entrada estándar (stdin, teclado), 1 la salida estándar (stdout, monitor) y 2 la salida de error estándar (stderr, monitor).</p></details>
+<details class="qa"><summary>10. Con <code>listen(fds, 1)</code>, ¿qué pasa teóricamente si llegan tres conexiones seguidas mientras se procesa la primera?</summary><p>La primera se atiende, la segunda se guarda en la cola de espera de tamaño 1, y la tercera se rechaza por superar el backlog.</p></details>
+</details>
+
+<details class="section-block sec" id="c11-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> <strong>Aviso por clima:</strong> el profesor explicó que el miércoles avisó por el canal de Telegram que no habría clase presencial el jueves por pronóstico de lluvias intensas y tormenta en la madrugada. Aunque al final no llovió tanto, prefirió evitar que los alumnos se trasladaran. Por eso no se tomó lista.</li>
+<li><em>(Contexto)</em> <strong>Escaneo de IPs públicas:</strong> al mostrar la IP pública del servidor de profesores de la UNAM (132.248.59.6), comentó que es muy común que programas automatizados y atacantes escaneen constantemente IPs y puertos abiertos en todo el mundo para enviar cabeceras e intentar ataques como inyección SQL.</li>
+<li><em>(Contexto)</em> <strong>Tabla ASCII:</strong> navegó en asciitable.com para repasar el acrónimo y recordó anécdotas de cómo se usaba en las primeras materias de la carrera.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c11-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Tarea moral:</strong> probar el par de programas 04 (servidor y cliente de Internet) en dos terminales, en Linux nativo, máquina virtual o GitHub Codespaces. Se puede usar <code>127.0.0.1</code> en la misma máquina, o la IP de la máquina virtual donde corre el servidor, con el puerto 4898, y verificar la recepción de los 46 bytes del mensaje.</li>
+<li><strong>Revisiones:</strong> el profesor seguirá calificando las entregas de la Tarea 3 durante el fin de semana.</li>
+<li><strong>Próxima clase:</strong> se asignará formalmente una nueva tarea oficial entregable.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Servidor: <code>socket</code> → <code>bind</code> → <code>listen</code> → <code>accept</code>. Cliente: <code>socket</code> → <code>gethostbyname</code> → <code>connect</code>.</li>
+<li><code>fds</code> acepta conexiones; <code>fdc</code> (de <code>accept()</code>) lleva los datos.</li>
+<li><code>send()</code> y <code>recv()</code> van en pareja, con 4 argumentos y flags = 0.</li>
+<li>1 char = 1 byte; <code>write(1, buffer, N)</code> imprime solo los N bytes recibidos.</li>
+<li>Validar que <code>gethostbyaddr()</code> no devuelva NULL antes de usar <code>h_name</code>.</li>
+</ul></div>
+
+</div>
+</body>
+</html>
