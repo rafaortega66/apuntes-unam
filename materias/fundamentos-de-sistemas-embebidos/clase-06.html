@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 06 — Fundamentos de Sistemas Embebidos</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -15,6 +16,18 @@
   <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 14 sep 2026 · Tema 2 (cierre) — Memorias no volátiles, magnéticas y ópticas (funcionamiento en ráfaga, disipación térmica, Flash/SSD y wear leveling, medios magnéticos/ópticos), y arranque del bloque de Modos de Direccionamiento de microprocesadores (modelo Motorola 6800).</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c6-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Diferencia en disipación térmica entre la SRAM de los procesadores y la de un microcontrolador debido a la frecuencia y tamaño de caché</strong><span class="evid">Evidencia: Lo dijo explícitamente al comparar los 8 MB de caché a 1.5 GHz de Intel con los 264 KB a 150 MHz del RP2040.</span></li>
+<li><strong>La invención de la memoria Flash mediante clústeres/matrices en paralelo para acelerar la escritura</strong><span class="evid">Evidencia: Lo explicó detalladamente resolviendo los cálculos de tiempo en el pizarrón.</span></li>
+<li><strong>Degradación de rendimiento del SSD por el algoritmo de balanceador de carga (wear leveling) cuando la capacidad supera el 50%</strong><span class="evid">Evidencia: Lo dijo explícitamente e ilustró las caídas de rendimiento a 70% y menos del 60%.</span></li>
+<li><strong>Tipos de celdas en memorias de estado sólido (SLC, MLC, TLC, QLC) y su relación costo/durabilidad</strong><span class="evid">Evidencia: Lo explicó en el pizarrón relacionando la cantidad de bits por celda con los ciclos de escritura.</span></li>
+<li><strong>Los 6 modos de direccionamiento del modelo Motorola 6800 (inherente, inmediato, directo, extendido, indexado y relativo)</strong><span class="evid">Evidencia: Lo dijo explícitamente al cerrar la clase y definió cada modo con sus fórmulas y ejemplos.</span></li>
+</ol>
+</details>
+
 <details class="section-block sec" id="c6-burst-disipacion" open><summary><span class="stitle">Funcionamiento en ráfaga (burst mode) y disipación térmica: SRAM vs. microcontrolador</span></summary>
 <p>La clase cerró formalmente el bloque de memorias retomando el <strong>funcionamiento en ráfaga (burst mode)</strong> de las memorias dinámicas modernas: en vez de leer y reescribir capacitor por capacitor, la memoria abre una fila completa y la reescribe en cada ciclo, usando señales de control que van de simples a más complejas según el protocolo. Esta es la razón física de que la RAM moderna pueda transferir bloques de datos mucho más rápido que si tuviera que direccionar cada bit por separado.</p>
 <p>De ahí, el profesor conectó con una comparación muy concreta de <strong>disipación térmica</strong> entre una caché SRAM pequeña y una grande, usando dos ejemplos reales:</p>
@@ -23,6 +36,12 @@
 <li><strong>Procesadores Intel (Core i7 / Xeón):</strong> tienen entre 8 MB y más de caché SRAM, corren de 1.5 GHz a 4.2 GHz, y disipan hasta <strong>100 veces más energía térmica</strong> que el RP2040.</li>
 </ul>
 <p>El punto que el profesor remarcó es que esta disipación <strong>no escala de forma lineal</strong>: depende a la vez de la frecuencia de reloj, del tipo de memoria y de su tamaño — no basta con comparar solo capacidad o solo frecuencia por separado.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como pedir tacos en taquería; en lugar de pedir uno, esperar a que lo preparen y pedir el siguiente, pides una orden completa de diez tacos (ráfaga) y el taquero te los entrega uno tras otro sin parar.<span class="rompe">Dónde falla la analogía: Los tacos son comida física, mientras que en la ráfaga de datos la memoria RAM recibe una dirección inicial y entrega un dato por cada ciclo de reloj usando un tren de pulsos modulados.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Explica por qué la memoria caché de tipo SRAM disipa un calor enorme al conmutar transistores a alta frecuencia para entregar bloques continuos de datos a la CPU.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c6-no-volatiles-historia" open><summary><span class="stitle">Memorias no volátiles de estado sólido: de los bulbos a la EEPROM</span></summary>
@@ -33,6 +52,13 @@
 <li><strong>EEPROM:</strong> ya se borran y escriben de forma eléctrica, aplicando pulsos de <strong>25 V</strong>, con una durabilidad típica de <strong>1 millón de ciclos de escritura</strong>.</li>
 </ul>
 <p>Esta cadena histórica es la que explica por qué después nace la memoria Flash: la EEPROM, aunque ya no necesitaba luz ultravioleta, seguía teniendo un problema de velocidad que se resuelve en el siguiente bloque.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como pasar de usar focos grandes que se calientan y atraen mosquitos para alumbrar una casa, a usar focos LED pequeñitos que consumen casi nada y no queman.<span class="rompe">Dónde falla la analogía: Los focos alumbran habitaciones, mientras que los bulbos y transistores en memorias almacenan estados lógicos de unos y ceros mediante presencia o ausencia de corriente.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra la evolución desde los bulbos hasta las memorias EEPROM, donde la lectura cuesta microvoltios en nanosegundos pero la escritura toma milisegundos y degrada la celda.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Creer que la tecnología de estado sólido es un invento reciente; el profesor aclaró que estado sólido solo significa usar transistores en lugar de bulbos o tubos de vacío.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c6-flash-ssd" open><summary><span class="stitle">La invención de la memoria Flash y la arquitectura interna del SSD</span></summary>
@@ -51,6 +77,13 @@
 <li><strong>Sensibilidad electromagnética:</strong> colocar memorias USB o SSD cerca de fuentes de radiación continua (un microondas, un router WiFi) puede afectarlas.</li>
 <li><strong>Caída de rendimiento por espacio ocupado:</strong> al superar el 30%–50% de capacidad ocupada, el balanceador tiene que reorganizar datos constantemente y la velocidad nominal del SSD cae a cerca del 70%; si la ocupación supera el 70%, el desempeño cae por debajo del 60%. Por esto el archivo de intercambio (swap/pagefile) de Windows, que escribe constantemente (~10 escrituras por segundo, ≈3.15 millones de ciclos al año), es especialmente agresivo para el desgaste de un SSD. Las optimizaciones recomendadas: en Windows, asignar el pagefile a un disco mecánico secundario; en Linux, usar <code>zram</code> (un demonio que comprime el espacio de intercambio directamente en RAM, sin tocar el disco).</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como llenar un formulario de sesenta y cuatro páginas; si escribes letra por letra tardas horas, pero si usas un sello gigante que imprime la página entera de un golpe, terminas al instante.<span class="rompe">Dónde falla la analogía: El sello usa tinta sobre papel, mientras que la memoria Flash usa un arreglo matricial en paralelo que aplica pulsos de voltaje sobre celdas con barreras de flotación de óxido.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Fundamenta la arquitectura de los SSD y explica por qué el balanceador de carga (wear leveling) degrada la velocidad cuando el disco se llena a más del 50% de su capacidad.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Pensar que las celdas QLC son las más duraderas; el profesor precisó que a mayor número de bits por celda (QLC), menor es la resistencia a ciclos de escritura y menor el costo.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c6-magneticos-opticos" open><summary><span class="stitle">Medios magnéticos y ópticos</span></summary>
@@ -62,6 +95,14 @@
 <li><strong>Blu-ray:</strong> láser azul-ultravioleta de apenas 0.04 µm (40 nm) — la longitud de onda mucho más corta es lo que permite las densidades necesarias para video Full HD y 4K.</li>
 </ul>
 <p><em>(Cultura general, mencionado de paso)</em> El profesor comentó también el almacenamiento holográfico o cristalino: tecnología basada en láseres de clase 10 (1 kW) que alteran el estado molecular del medio en tres dimensiones, produciendo un almacenamiento prácticamente inalterable — no es algo que vaya a examen, pero da contexto de hacia dónde apunta el almacenamiento óptico a futuro.</p>
+<p class="ojo">Ojo con las longitudes de onda: los apuntes registran 7 µm, 4 µm y 0.04 µm, pero los valores reales son CD ≈ 780 nm, DVD ≈ 650 nm y Blu-ray ≈ 405 nm (al volver a consultar el audio en NotebookLM salieron estos últimos). Antes del examen confirma qué cifras dio el profesor.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como escuchar música; puedes rebobinar una cinta de casete pasando por todas las canciones, o usar un reproductor de CD con un rayo de luz que salta directamente a la pista que quieres.<span class="rompe">Dónde falla la analogía: El reproductor de música emite sonido a los oídos, mientras que los discos magnéticos y ópticos leen patrones reflectantes o campos magnéticos convertidos en bits digitales.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Explica por qué cada generación de disco óptico guarda más información: la longitud de onda del láser determina cuánta información cabe en el disco.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir los diámetros y capacidades de los disquetes; el profesor aclaró que el disquete de 3.5 pulgadas almacenaba 1.44 MB gracias a su cubierta rígida y motor a pasos aislados.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c6-modos-direccionamiento" open><summary><span class="stitle">Modos de direccionamiento de microprocesadores (modelo Motorola 6800)</span></summary>
@@ -80,6 +121,24 @@
 <li><strong>AVR (ATmega / Arduino):</strong> instrucciones de 1 o 2 operandos, ejecutadas habitualmente en un solo ciclo de reloj.</li>
 <li><strong>ARM (Cortex-M):</strong> arquitectura Load/Store pura — manipula constantes por valor inmediato o transfiere datos entre registros y memoria explícitamente, sin los modos "extendido/directo" clásicos del 6800.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como darle indicaciones a alguien: decirle "camina" sin más datos (inherente), "avanza 5 pasos" (inmediato), "ve a la casa 20" (directo), o "avanza 3 casas desde donde estás" (relativo).<span class="rompe">Dónde falla la analogía: Las indicaciones urbanas mueven personas en la calle, mientras que los modos de direccionamiento le dicen al procesador cómo calcular la dirección de memoria de un dato o instrucción.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite entender cómo los procesadores tradicionales (modelo Motorola 6800) estructuran sus instrucciones para manipular variables, arreglos y saltos en ensamblador.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir el modo indexado con el modo relativo; el profesor remarcó que el indexado calcula datos con un registro de índice [X + offset], mientras que el relativo calcula la dirección de la siguiente instrucción sobre el Contador de Programa [PC + offset].</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c6-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Por qué la memoria SRAM (caché) disipa significativamente más calor que la memoria DRAM según lo explicado en clase?</summary><p>Porque la SRAM utiliza 6 transistores MOSFET por bit y en cada escritura de un cero lógico drena la energía del uno previo a tierra, transformándola íntegramente en calor a altas frecuencias.</p></details>
+<details class="qa"><summary>2. Explica la diferencia entre el tiempo de lectura y el tiempo de escritura en una memoria EEPROM tradicional.</summary><p>La lectura es casi instantánea en un nanosegundo consumiendo microvoltios, mientras que la escritura es tres órdenes de magnitud más lenta al tomar un milisegundo y exigir decenas de milivoltios.</p></details>
+<details class="qa"><summary>3. Si una memoria EEPROM tarda 40 milisegundos en realizar una escritura individual por byte, calcula el tiempo promedio de escritura por byte si la memoria se organiza en una arquitectura Flash con clústeres en paralelo de 128 KB.</summary><p>Convertimos 128 KB a bytes: 128 x 1024 = 131,072 bytes. Dividimos el tiempo de clúster entre el número de bytes: 40 ms / 131,072 bytes ≈ 0.000305 ms, lo que equivale a aproximadamente 0.305 microsegundos por byte.</p></details>
+<details class="qa"><summary>4. ¿Por qué el rendimiento de un disco de estado sólido (SSD) disminuye cuando su almacenamiento ocupado supera el 50% de su capacidad total?</summary><p>Porque el algoritmo balanceador de carga (wear leveling) tiene que reubicar continuamente datos entre celdas desigualmente desgastadas para equilibrar los ciclos de escritura, consumiendo tiempo adicional de procesamiento.</p></details>
+<details class="qa"><summary>5. ¿En qué consiste el modo de direccionamiento inherente en el modelo Motorola 6800 y da dos ejemplos de instrucciones que lo utilizan?</summary><p>Es aquel modo donde la operación no requiere operandos externos porque está completamente implícita en el código de la instrucción; ejemplos son NOP (no operación) y RTS (retorno de subrutina).</p></details>
+<details class="qa"><summary>6. Un procesador Motorola 6800 ejecuta una instrucción de salto en modo de direccionamiento relativo. Si el Contador de Programa (PC) apunta a la dirección de memoria $0200 y el desplazamiento (offset) indicado en el código es +$0F, ¿cuál será la dirección de la siguiente instrucción a ejecutar?</summary><p>La nueva dirección se calcula sumando el offset al PC: $0200 + $000F = $020F.</p></details>
+<details class="qa"><summary>7. Compara el modo de direccionamiento directo y el modo de direccionamiento extendido en el modelo Motorola 6800.</summary><p>El modo directo usa una dirección corta de 8 bits para acceder a la parte baja de la memoria (\00 a \FF) en menos ciclos; el modo extendido utiliza una dirección completa de 16 bits (2 bytes) para acceder a cualquier ubicación de la memoria.</p></details>
 </details>
 
 <details class="section-block sec" id="c6-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>

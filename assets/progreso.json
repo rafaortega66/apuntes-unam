@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T11:57:32+00:00",
+ "generatedAt": "2026-10-01T11:59:59+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -165,7 +165,7 @@
     "fecha": "2026-09-14",
     "resumen": "Tema 2 (cierre) — Memorias no volátiles, magnéticas y ópticas (funcionamiento en ráfaga, disipación térmica, Flash/SSD y wear leveling, medios magnéticos/ópticos), y arranque del bloque de Modos de Direccionamiento de mi",
     "url": "materias/fundamentos-de-sistemas-embebidos/clase-06.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 7,
@@ -237,7 +237,7 @@
     "fecha": "2026-09-14",
     "resumen": "Sesión de trabajo en equipo (no hubo tema nuevo de teoría): requisitos de evidencia técnica por metodología, negociación del calendario definitivo de entregas, mecánica de evaluación presencial por ruleta y entregables f",
     "url": "materias/administracion-de-servicios-de-internet/clase-06.html",
-    "formato": "prosa"
+    "formato": "no-aplica"
    },
    {
     "num": 7,
@@ -467,6 +467,16 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "f564625",
+   "fecha": "2026-10-01T05:57:48-06:00",
+   "mensaje": "ASI Clase 06 (sesión de logística del proyecto) marcada como no-aplica para el formato de estudio"
+  },
+  {
+   "hash": "d61f0e3",
+   "fecha": "2026-10-01T05:57:32-06:00",
+   "mensaje": "ACS Clase 07: formato de estudio"
+  },
   {
    "hash": "f5ea5bc",
    "fecha": "2026-10-01T05:55:44-06:00",
@@ -756,16 +766,6 @@
    "hash": "7ef8c92",
    "fecha": "2026-09-28T15:56:48Z",
    "mensaje": "Limpiar más pendientes vencidos: ASI diagramas y RP examen parcial"
-  },
-  {
-   "hash": "01a739b",
-   "fecha": "2026-09-28T15:53:18Z",
-   "mensaje": "Limpiar carrusel de pendientes: quitar tareas ya vencidas"
-  },
-  {
-   "hash": "fa78e13",
-   "fecha": "2026-09-23T16:48:08-06:00",
-   "mensaje": "FSE: agregar Clase 08 (23 sep 2026) — USB, FireWire vs USB, topología y detección eléctrica"
   }
  ]
 }
