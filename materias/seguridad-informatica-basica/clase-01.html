@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 01 — Seguridad Informática Básica</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -15,6 +16,18 @@
   <p class="prof">Dra. Cintia Quezada Reyes · 27 ago 2026 · Tema 1 — Fundamentos teóricos · esquema de seguridad, ciclo PTCA/PDCA, auditorías, hallazgos, modelo de contexto y principios.</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c1-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>El ser humano es considerado el eslabón más débil de la cadena de seguridad debido a la falta de concientización, exceso de confianza y desatención de sus propios activos</strong><span class="evid">Evidencia: La profesora lo declaró explícitamente y lo repitió como principio fundamental de la seguridad al cierre de la clase.</span></li>
+<li><strong>El ciclo de vida de la seguridad se basa en la filosofía de mejora continua (Deming) y se denomina ciclo PTCA (Planear, Hacer, Verificar, Actuar)</strong><span class="evid">Evidencia: Lo explicó paso a paso en el pizarrón detallando las cuatro fases del ciclo.</span></li>
+<li><strong>Las auditorías deben realizarse como mínimo dos veces al año para verificar el cumplimiento del esquema de seguridad y la efectividad del ciclo PTCA</strong><span class="evid">Evidencia: Lo enfatizó explícitamente al abordar la fase de verificación e interrogar a los alumnos sobre la frecuencia anual de revisiones.</span></li>
+<li><strong>Si un solo proceso dentro del alcance evaluado resulta en una no conformidad no resuelta, toda la organización pierde la certificación completa</strong><span class="evid">Evidencia: Lo advirtió explícitamente la profesora al explicar la diferencia entre hallazgos de auditoría (oportunidades de mejora, observaciones y no conformidades).</span></li>
+<li><strong>Una auditoría interna (primer nivel) puede ser realizada por personal de otra entidad o facultad de la misma institución siempre que compartan la misma legislación y reglamentos</strong><span class="evid">Evidencia: Lo resolvió y ejemplificó en vivo citando el caso de las distintas entidades de la UNAM como Aragón o Geofísica.</span></li>
+</ol>
+</details>
+
 <details class="section-block sec" id="repaso-perdidas-riesgo-esquema" open><summary><span class="stitle">Repaso: pérdidas, riesgo y esquema de seguridad</span></summary>
 <ul>
 <li><strong>Tipos de pérdida:</strong> <em>parcial</em> <em>[inaudible: no se profundiza]</em>; <strong>nula</strong> = sí hay pérdida pero es insignificante para la empresa ("sí me dolió, pero no me va a impactar tanto").</li>
@@ -24,7 +37,14 @@
 Si no se responden conscientemente, las acciones de seguridad no sirven.</li>
 <li><strong>Amenaza vs. ataque:</strong> la amenaza es algo que <em>puede</em> pasar; el ataque es cuando ya <strong>se materializa</strong>.</li>
 <li><strong>Bienes tangibles vs. intangibles:</strong> intangible = no se toca (ej. "la vista"); tangible = concreto (ej. "el ojo", "la córnea"). Si no sé qué quiero proteger, tampoco sé qué le puede suceder.</li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como cuidar la salud de tu cuerpo: no esperas a enfermarte de gravedad para ir al médico, sino que identificas tus órganos valiosos, evalúas las enfermedades a las que estás expuesto y aplicas medidas preventivas sabiendo que el propio cuerpo es su mayor amenaza por malos hábitos.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque en los esquemas de seguridad de una organización existen activos abstractos e intangibles (como la información o la privacidad) y componentes lógicos interconectados que sufren daños sin dolor físico ni advertencia previa.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque fundamenta las tres preguntas clave de la seguridad (qué proteger, de qué protegerlo y cómo protegerlo) y demuestra que la seguridad debe gestionarse como una inversión continua y no como un gasto aislado.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> El error más frecuente de los propietarios y responsables es asumir que la tecnología por sí sola garantiza protección total o ver la seguridad como un gasto innecesario, omitiendo que el ser humano es el eslabón más débil de la cadena.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="ciclo-ptca-pdca"><summary><span class="stitle">Ciclo de vida de la seguridad — PTCA / PDCA</span></summary>
 <p>Viene de la gestión de calidad ("el padre de la calidad" <em>[inaudible: Deming]</em>): toda calidad tiene oportunidades de mejora → la seguridad no es estática, es un <strong>proceso dinámico</strong>. En español se enuncia como <strong>ciclo PTCA</strong>.</p>
@@ -33,7 +53,14 @@ Si no se responden conscientemente, las acciones de seguridad no sirven.</li>
 <tr><td><strong>T / D — Hacer</strong> (implementar)</td><td>Llevar el plan a la práctica para reforzar la protección. Para que no se quede en papel se hacen <strong>simulaciones</strong> que enseñan a todos cómo actuar. <em>(Ej.: simulacro del 19 de septiembre; la cultura de prevención en 2017.)</em></td></tr>
 <tr><td><strong>C — Verificar</strong> (monitorear y reportar / detectar)</td><td>Comprobar si el esquema funciona. Si hay fallas → actualizar, cambiar, modificar o retirar una medida. <em>(Ej.: escenarios simulados por computadora o físicos —fuga de agua, caída de un servidor— al mes, a la semana o al día.)</em></td></tr>
 <tr><td><strong>A — Actuar</strong> (reacción)</td><td>"Tomar decisiones con base en las conclusiones de lo que estoy observando": qué se mantiene y qué se cambia. Ajustar el plan (calendarios, responsables, métodos de aviso) y <strong>reiniciar el ciclo</strong>.</td></tr>
-</tbody></table></details>
+</tbody></table><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como aprender a conducir un auto: primero planeas la ruta en un mapa (Planear), luego manejas por la carretera (Hacer), miras constantemente los espejos y velocímetro para ver si vas bien (Verificar) y corriges el volante o cambias de carril si encuentras un bache (Actuar).<span class="rompe">Dónde falla la analogía: Se rompe porque en la gestión de seguridad el ciclo PTCA no termina cuando llegas a un destino físico, sino que es un bucle perpetuo de mejora continua donde las amenazas y las normativas cambian constantemente.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque estructura metodológicamente la administración de la seguridad en cuatro fases dinámicas y utiliza auditorías (mínimo dos al año) para clasificar hallazgos en oportunidades de mejora, observaciones y no conformidades.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Las organizaciones suelen cometer el error de dejar la seguridad únicamente en la fase de planeación sin ejecutar simulacros, o querer certificar todos sus procesos juntos en lugar de avanzar gradualmente por alcances controlados.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="auditorias"><summary><span class="chip chip-examen">examen</span><span class="stitle">Auditorías</span></summary>
 <p>Herramienta para verificar que los ciclos y esquemas se ejecutan según los estándares. <strong>Frecuencia:</strong> mínimo 2 al año (ideal cada 6 meses; en la práctica 4–5).</p>
@@ -56,6 +83,18 @@ Si no se responden conscientemente, las acciones de seguridad no sirven.</li>
 </ol>
 <p><strong>Enfoque:</strong> las certificadoras revisan <strong>procesos específicos</strong> (detección de intrusos, validación de contraseñas…), no la organización global. Se recomienda certificar "poco a poquito".</p>
 <p><strong>Vigencia:</strong> ligada a la versión del estándar (como las certificaciones de Java u Oracle). Si el estándar cambia de versión, hay fecha límite para adaptar todo el sistema o se pierde la certificación. <em>(Ej.: ISO 9001:2015 introdujo evaluar impactos ambientales, lo que obligó a los laboratorios de la FI a diseñar metodologías para analizar su impacto ambiental.)</em></p>
+</details>
+
+<details class="section-block sec" id="c1-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuáles son las tres preguntas fundamentales de la seguridad repasadas al inicio de la clase?</summary><p>Las tres preguntas son: ¿qué quiero proteger?, ¿de qué lo quiero proteger? y ¿cómo lo voy a proteger?</p></details>
+<details class="qa"><summary>2. ¿Quién fue Edwards Deming y qué concepto aportó a la gestión de la seguridad según lo explicado en clase?</summary><p>Fue el padre de la calidad y aportó el concepto de que la calidad y la seguridad no son estáticas sino dinámicas, basándose en la mejora continua mediante el ciclo de vida (oportunidades de mejora).</p></details>
+<details class="qa"><summary>3. Explica con tus palabras por qué la profesora afirma que la seguridad debe verse como una inversión y no como un gasto.</summary><p>Porque destinar recursos financieros, tiempo y personal a la prevención mediante esquemas de seguridad evita pérdidas catastróficas y costos de recuperación infinitamente mayores ante un desastre.</p></details>
+<details class="qa"><summary>4. Explica en qué consiste el eslabón más débil de la cadena de seguridad según la postura de la profesora.</summary><p>El eslabón más débil es el factor humano (propietarios, usuarios y responsables), debido a su falta de concientización, imprudencia, descuido y exceso de confianza en la gestión de sus activos.</p></details>
+<details class="qa"><summary>5. Un laboratorio de investigación biológica programa una revisión de sus protocolos por parte de investigadores de otra sede universitaria de la misma entidad. Clasifica el tipo de auditoría y justifica tu respuesta.</summary><p>Es una auditoría interna (primer nivel), porque es realizada por personal perteneciente a la misma institución que se rige bajo la misma legislación, reglamentos y políticas generales.</p></details>
+<details class="qa"><summary>6. Durante una auditoría a un centro de cómputo, el auditor nota que no hay registros de mantenimiento del aire acondicionado desde hace seis meses. El responsable argumenta que el equipo funciona bien. ¿Qué tipo de hallazgo es y qué consecuencia tiene?</summary><p>Es una observación o no conformidad por falta de evidencia de un procedimiento requerido, lo cual exige generar un plan de acción correctivo para no poner en riesgo la certificación del centro.</p></details>
+<details class="qa"><summary>7. Compara una auditoría de segundo nivel frente a una auditoría de tercer nivel según la clasificación explicada en clase.</summary><p>La auditoría de segundo nivel la realiza una empresa externa que evalúa el estándar como ensayo o segunda opinión pero no emite certificado, mientras que la de tercer nivel la realiza un organismo certificador acreditado que otorga o valida la certificación oficial.</p></details>
+<details class="qa"><summary>8. Compara un hallazgo clasificado como "oportunidad de mejora" frente a una "no conformidad" en el reporte de una auditoría.</summary><p>Una oportunidad de mejora es una sugerencia técnica opcional que la empresa decide si implementa o no sin afectar su estatus, mientras que una no conformidad es un incumplimiento estricto de la norma que obliga a presentar un plan correctivo para no perder el certificado.</p></details>
 </details>
 
 <details class="section-block sec" id="modelo-de-contexto"><summary><span class="stitle">Modelo de contexto de la seguridad y sus relaciones</span></summary>
