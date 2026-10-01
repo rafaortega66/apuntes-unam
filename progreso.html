@@ -134,7 +134,8 @@
       });
       chips.sort(function (a, b) { return a.fecha.localeCompare(b.fecha); });
       filas.push({ m: m, n: clases.length, nFalta: nFalta, chips: chips,
-        nEstudio: clases.filter(function (c) { return c.formato === 'estudio'; }).length });
+        nEstudio: clases.filter(function (c) { return c.formato === 'estudio'; }).length,
+        nNA: clases.filter(function (c) { return c.formato === 'no-aplica'; }).length });
     });
 
     faltantes.sort(function (a, b) { return (a.fecha + a.ses.inicio).localeCompare(b.fecha + b.ses.inicio); });
@@ -174,7 +175,7 @@
     filas.forEach(function (r) {
       var cuenta = r.n + ' clase' + (r.n === 1 ? '' : 's') +
         (r.nFalta ? ' · <span style="color:var(--coral)">faltan ' + r.nFalta + '</span>' : ' · al día') +
-        ' · ' + r.nEstudio + '/' + r.n + ' en formato de estudio';
+        ' · ' + r.nEstudio + '/' + (r.n - r.nNA) + ' en formato de estudio';
       out += '<div class="pg-row" style="--c:' + r.m.color + '"><div class="pg-top"><span class="pg-name"><span class="pg-sig">' + esc(r.m.sigla) +
         '</span><a href="materias/' + r.m.slug + '/index.html">' + esc(r.m.nombre) + '</a></span><span class="pg-count">' + cuenta + '</span></div>' +
         '<div class="pg-chips">' + r.chips.map(function (c) { return c.html; }).join('') + '</div></div>';

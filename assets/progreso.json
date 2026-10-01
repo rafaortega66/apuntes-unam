@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T07:44:39+00:00",
+ "generatedAt": "2026-10-01T07:46:46+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -70,7 +70,7 @@
     "fecha": "2026-09-28",
     "resumen": "Primer Examen Parcial.",
     "url": "materias/reconocimiento-de-patrones/clase-10.html",
-    "formato": "viejo"
+    "formato": "no-aplica"
    }
   ],
   "organizacion-y-arquitectura-de-computadoras": [
@@ -186,7 +186,7 @@
     "fecha": "2026-09-28",
     "resumen": "Tema 2 (subtemas 2.6 y 2.7) — Administración de potencia en USB, la clase HID y sus cartas de descriptores, los cuatro modos de transferencia (Control, Bulk, Interrupt e Isócrono) e inicio de las interfaces de baja veloc",
     "url": "materias/fundamentos-de-sistemas-embebidos/clase-09.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 10,
@@ -467,6 +467,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "a22ff5a",
+   "fecha": "2026-10-01T01:44:40-06:00",
+   "mensaje": "ASI Clase 09: formato de estudio"
+  },
   {
    "hash": "4672db4",
    "fecha": "2026-10-01T01:42:22-06:00",
@@ -761,11 +766,6 @@
    "hash": "54a66cb",
    "fecha": "2026-09-17T08:55:46-06:00",
    "mensaje": "ACS: agregar Clase 07 (17 sep 2026) — cierre de procesos + inicio Tema 3"
-  },
-  {
-   "hash": "98ec821",
-   "fecha": "2026-09-17T08:43:51-06:00",
-   "mensaje": "ACS: mover el link al sitio del profesor a los datos de la asignatura"
   }
  ]
 }

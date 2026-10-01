@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 09 — Fundamentos de Sistemas Embebidos</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -14,6 +15,18 @@
 <div class="detail-head" style="border-color:#A98BD1"><h2>Clase 09</h2>
   <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 28 sep 2026 · Tema 2 (subtemas 2.6 y 2.7) — Administración de potencia en USB, la clase HID y sus cartas de descriptores, los cuatro modos de transferencia (Control, Bulk, Interrupt e Isócrono) e inicio de las interfaces de baja velocidad: redes de sensores/actuadores y el bus I²C.</p>
 </div>
+
+<div class="section-block nota" style="border-left:3px solid #A98BD1"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c9-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Los cuatro modos de transferencia de USB 2.0 y 3.0 (Control, Bulk, Interrupt e Isócrono)</strong><span class="evid">Evidencia: Lo dijo explícitamente en la clase indicando que son tema obligatorio de examen.</span></li>
+<li><strong>La garantía de potencia por defecto en USB (100 mA a 5 V) y el límite máximo de USB 2.0 (500 mA / 2.5 W)</strong><span class="evid">Evidencia: Lo dijo explícitamente, lo explicó detalladamente y lo comparó con la corriente de LEDs y motores.</span></li>
+<li><strong>La arquitectura y especificaciones del bus I²C (2 hilos SCL y SDA, direcciones de 7 bits, colector abierto con pull-up)</strong><span class="evid">Evidencia: Lo dijo explícitamente al introducir el tema y detalló las velocidades de 100 kHz a 3.4 MHz.</span></li>
+<li><strong>La diferencia entre topologías Maestro-Esclavo y Entre Pares (Peer-to-Peer) en redes de sensores</strong><span class="evid">Evidencia: Lo explicó detalladamente en el pizarrón comparando costos y complejidad de algoritmos de consenso.</span></li>
+<li><strong>La abstracción de la clase HID y las cartas de descriptores en USB</strong><span class="evid">Evidencia: Lo dijo explícitamente al explicar cómo Windows y Linux cargan controladores genéricos al vuelo sin discos del fabricante.</span></li>
+</ol>
+</details>
 
 <div class="section-block nota" style="border-left:3px solid #A98BD1"><p style="margin:0"><strong>⚠️ Por verificar:</strong> tres datos de los apuntes de NotebookLM conviene contrastarlos con el audio o con la especificación antes de citarlos: (1) que USB 3.0 entrega <strong>800 mA</strong> (la especificación suele hablar de 900 mA); (2) que I²C lo <strong>inventó Philips en 1980</strong> (suele citarse 1982); (3) que el límite práctico de <strong>112 dispositivos</strong> viene de la capacitancia parásita (112 es 128 direcciones menos las 16 reservadas; la capacitancia del bus es otro límite aparte).</p></div>
 
@@ -27,6 +40,13 @@
 <li><strong>Cargas inductivas y motores:</strong> motores, bobinas y solenoides demandan picos altos para vencer la inercia de arranque. Una impresora láser necesita al menos 40 W para arrancar el motor de arrastre y fundir el tóner, muy por encima de lo que da un puerto USB. Conclusión: USB se diseñó para transferir datos, no potencia.</li>
 </ul>
 <p>Los discos duros mecánicos externos USB 2.0 necesitaban al menos 1 A (1000 mA) por el motor y el movimiento del cabezal; con solo los 500 mA del bus el disco “se moría de hambre” y bajaba mucho su velocidad. Los fabricantes lo resolvían con <strong>cables en “Y”</strong> (sumaban la corriente de dos puertos) o con eliminadores externos dedicados de 3 W. Con USB 3.0 la corriente nativa subió a 800 mA (según los apuntes; ver aviso arriba), y hasta 5 A con las revisiones modernas de USB Power Delivery.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como una beca básica universal que te dan solo por registrarte sin pedir requisitos, pero si necesitas más dinero tienes que hacer un trámite y pedir un aumento.<span class="rompe">Dónde falla la analogía: Las becas son dinero para personas, mientras que en USB es corriente eléctrica de 100 mA a 5 V entregada por el puerto que se negocia por software hasta 500 mA.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Explica por qué dispositivos simples como teclados o ratones funcionan sin fuente externa, mientras que motores o impresoras requieren alimentación propia o cables en Y.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Creer que el puerto USB 2.0 fue diseñado para mover potencia pesada; el profesor aclaró que USB es estrictamente para mover datos y no soporta cargas inductivas.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c9-hid" open><summary><span class="stitle">La pila de software USB y la clase HID (Human Interface Device)</span></summary>
@@ -45,6 +65,13 @@
 <tr><td>Mouse de alta resolución con rueda</td><td>2 valores de 32 bits en punto flotante para X e Y, 1 valor flotante más para la rueda central y 1 byte para hasta 8 botones.</td></tr>
 <tr><td>Gamepad de alto desempeño</td><td>ADC de 16 bits (65,536 valores por eje), 1 byte para hasta 8 botones digitales y señales PWM para los motores de vibración háptica.</td></tr>
 </table>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como llegar a un hotel internacional con un formulario estándar impreso en varios idiomas donde solo pones tus datos y la recepción te atiende sin importar de dónde vengas.<span class="rompe">Dónde falla la analogía: El formulario de hotel es de papel y para humanos, mientras que la carta de descriptores HID es una estructura de datos binaria que el sistema operativo lee para cargar controladores genéricos al vuelo.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Eliminó la necesidad de instalar discos de controladores propietarios para cada ratón, teclado o mando de juego, permitiendo la compatibilidad inmediata Plug and Play.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Asumir que un control de videojuegos es un solo dispositivo simple; el profesor mostró que en la pila de software se abstrae como múltiples dispositivos lógicos con distintas funciones.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c9-modos" open><summary><span class="stitle">Los cuatro modos de transferencia de USB 2.0 y 3.0 (tema de examen)</span></summary>
@@ -67,6 +94,13 @@
 <tr><td>Interrupt</td><td>Paquetes menores a 1 KB, periódicos, latencia fija.</td><td>Teclados, ratones.</td></tr>
 <tr><td>Isócrono</td><td>Tiempo real, ancho de banda reservado, sin retransmisión.</td><td>Robótica industrial, equipo médico, audio/video.</td></tr>
 </table>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como cuatro canales de correspondencia: uno para avisos oficiales breves, otro para camiones de paquetería pesada, otro para cartas urgentes del buzón y otro para llamadas telefónicas continuas sin interrupciones.<span class="rompe">Dónde falla la analogía: Las cartas y camiones transportan objetos físicos, mientras que los modos USB (Control, Bulk, Interrupt e Isócrono) gestionan paquetes de datos digitales negociando tiempo de bus y ancho de banda.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Determina la calidad de servicio, la latencia y la reserva de ancho de banda para cada periférico, desde memorias USB y teclados hasta robots industriales y equipos médicos.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Pensar que el modo Isócrono retransmite paquetes cuando hay errores de lectura; el profesor aclaró que renuncia a la retransmisión para mantener la sincronía en tiempo real.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c9-baja-velocidad" open><summary><span class="stitle">Interfaces de baja velocidad y redes de sensores y actuadores</span></summary>
@@ -80,6 +114,12 @@
 <tr><td>Maestro-esclavo</td><td>Un único microcontrolador (maestro) coordina el reloj, pasa lista y autoriza las transmisiones de los periféricos (esclavos). Es muy económica, fácil de programar y evita colisiones en el bus.</td></tr>
 <tr><td>Entre pares (peer-to-peer)</td><td>Todos los nodos compiten por el canal “de forma democrática”. Requiere algoritmos de consenso complejos (como los relojes de Lamport) y microcontroladores más caros en cada sensor.</td></tr>
 </table>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como un capataz en una obra que le va pasando lista a cada trabajador uno por uno para decirles exactamente qué hacer y evitar que todos hablen al mismo tiempo.<span class="rompe">Dónde falla la analogía: La lista de la obra se pasa con voz humana, mientras que la topología maestro-esclavo en buses de baja velocidad usa señales eléctricas y líneas de reloj para coordinar sensores y actuadores.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite conectar decenas de sensores y actuadores a un microcontrolador mediante pocos pines y bajo costo, evitando algoritmos complejos de consenso entre pares.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c9-i2c" open><summary><span class="stitle">El bus I²C (Inter-Integrated Circuit)</span></summary>
@@ -98,6 +138,25 @@
 <tr><td>Alta velocidad</td><td>de 1.7 MHz a 3.4 MHz</td></tr>
 </table>
 <p><strong>Electrónica: colector abierto y pull-up.</strong> Las salidas de SCL y SDA en los circuitos integrados son de <strong>colector/drenador abierto</strong> (<em>open-collector / open-drain</em>), y ambas líneas necesitan <strong>resistencias de pull-up</strong> a V<sub>CC</sub>. Los dispositivos solo pueden escribir ceros activos (“0”) derivando la corriente de la línea a tierra; si nadie escribe un “0”, las resistencias de pull-up suben la línea a nivel alto (“1”). Ventaja: permite conectar en el mismo bus dispositivos con distintos niveles de voltaje (por ejemplo, chips de 3.3 V y de 5 V) sin cortocircuitos ni daño en las etapas de salida.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como una línea telefónica compartida donde nadie habla impulsando voltaje, sino que todos jalan la línea hacia abajo para marcar un cero, y si nadie la jala, un resorte arriba la mantiene en alto.<span class="rompe">Dónde falla la analogía: El resorte mecánico es una analogía, mientras que en I²C la línea es elevada por resistencias de pull-up a VCC y los chips usan transistores de colector abierto para derivar a tierra.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite la comunicación síncrona en Half Duplex entre un maestro y varios esclavos usando solo 2 hilos (SCL y SDA) y mezclando chips de 3.3 V y 5 V de forma segura.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir los 7 bits de dirección con la cantidad de dispositivos idénticos; el profesor aclaró que solo los últimos 3 bits son configurables por hardware, permitiendo 8 chips idénticos del mismo fabricante.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c9-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuál es el límite máximo de corriente y potencia que entrega la especificación de USB 2.0 bajo negociación por software?</summary><p>El límite máximo en USB 2.0 es de 500 mA a 5 V, lo que equivale a una potencia nominal de 2.5 W.</p></details>
+<details class="qa"><summary>2. Explica la diferencia de comportamiento entre Windows y Linux al ejecutar el comando de extracción segura de una unidad de almacenamiento USB.</summary><p>Windows envía un paquete de control que desconecta lógicamente el dispositivo de la pila del sistema operativo pero mantiene encendido el LED de alimentación; Linux envía un paquete de control que apaga el controlador del puerto, cortando el suministro eléctrico y deteniendo físicamente el motor del disco.</p></details>
+<details class="qa"><summary>3. Si un periférico de audio digital transmite un flujo de audio estéreo sin compresión muestreado a 96 kHz con una resolución de 24 bits por canal, calcula el ancho de banda necesario en kilobits por segundo (kbit/s) para transmitir este audio.</summary><p>El cálculo es 96,000 Hz <em> 24 bits </em> 2 canales = 4,608,000 bits por segundo, lo que equivale a 4,608 kbit/s (o 4.608 Mbit/s).</p></details>
+<details class="qa"><summary>4. Compara los modos de transferencia Bulk (Masivo) e Isócrono en USB 2.0 respecto a la retransmisión de errores y el tipo de aplicación al que están destinados.</summary><p>El modo Bulk busca la máxima tasa de transferencia sin garantía de tiempo fijo y exige retransmisión de paquetes ante errores (usado en discos duros y escáneres); el modo Isócrono garantiza reserva estricta de ancho de banda en tiempo real y renuncia a la retransmisión de errores para evitar retardos (usado en audio/video y robótica).</p></details>
+<details class="qa"><summary>5. ¿Cuáles son las dos líneas físicas de comunicación que utiliza el bus I²C y qué función cumple cada una?</summary><p>La línea SCL (Serial Clock), que transporta la señal de reloj generada por el maestro, y la línea SDA (Serial Data), que transporta los datos de forma bidireccional entre el maestro y los esclavos.</p></details>
+<details class="qa"><summary>6. ¿Por qué la arquitectura de colector abierto con resistencias de pull-up en el bus I²C permite conectar en el mismo canal dispositivos que operan a 3.3 V y dispositivos que operan a 5 V?</summary><p>Porque ningún dispositivo impulsa un nivel alto activo de voltaje; todos los dispositivos únicamente escriben ceros derivados a tierra. Al dejar libre la línea, la resistencia de pull-up fija el nivel alto del bus, evitando cortocircuitos por diferencias de voltaje entre las salidas de los circuitos integrados.</p></details>
+<details class="qa"><summary>7. Un chip I²C posee una dirección base de fabricante de 4 bits con valor binario 1010. Si sus pines externos A2, A1 y A0 se conectan respectivamente a VCC, Tierra y VCC, ¿cuál es la dirección de 7 bits resultante en formato binario y hexadecimal?</summary><p>Los 3 bits configurables por los pines A2, A1 y A0 son 101. La dirección binaria completa de 7 bits es 1010101, que en hexadecimal corresponde al valor 0x55.</p></details>
+<details class="qa"><summary>8. Compara la topología de red Maestro-Esclavo frente a la topología Entre Pares (Peer-to-Peer) en redes de sensores de baja velocidad en términos de costo del hardware y complejidad del programa.</summary><p>La topología Maestro-Esclavo utiliza un único microcontrolador inteligente que coordina el bus, haciendo a los sensores muy baratos y el código simple; la topología Entre Pares exige que cada nodo tenga la capacidad de competir por el canal y ejecutar algoritmos complejos de consenso, elevando el costo de cada sensor y la complejidad del sistema.</p></details>
 </details>
 
 <details class="section-block sec" id="c9-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>

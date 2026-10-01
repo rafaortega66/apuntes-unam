@@ -39,6 +39,8 @@ def formato(src):
     viejo = resumen "En corto"/"Para el examen"."""
     if re.search(r'<meta name="formato" content="estudio', src):
         return "estudio"
+    if re.search(r'<meta name="formato" content="no-aplica', src):
+        return "no-aplica"   # p. ej. día de examen: no hay contenido que migrar
     if 'class="section-block sec"' in src:
         return "prosa"
     return "viejo"
