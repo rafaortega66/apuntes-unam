@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T12:17:29+00:00",
+ "generatedAt": "2026-10-01T12:17:47+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -468,6 +468,11 @@
  },
  "gitlog": [
   {
+   "hash": "991646a",
+   "fecha": "2026-10-01T06:17:30-06:00",
+   "mensaje": "MD Clase 03: formato de estudio"
+  },
+  {
    "hash": "8d9a248",
    "fecha": "2026-10-01T06:15:35-06:00",
    "mensaje": "ACS Clase 05 (no asistida, sin audio) marcada como no-aplica"
@@ -761,11 +766,6 @@
    "hash": "ece624a",
    "fecha": "2026-09-30T10:23:34-06:00",
    "mensaje": "Pendientes: corregir etiqueta de hora en la evaluación de ASI"
-  },
-  {
-   "hash": "18bf9c7",
-   "fecha": "2026-09-30T10:02:53-06:00",
-   "mensaje": "Pendientes con reloj: tareas obligatorias de las 9 materias, ocultas automáticamente al vencer"
   }
  ]
 }
