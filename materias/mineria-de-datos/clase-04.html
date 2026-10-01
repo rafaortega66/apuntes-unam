@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 04 — Minería de Datos</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -15,6 +16,17 @@
   <p class="prof">M.C. José Concepción Roberto Olvera López · Fecha: 10 sep 2026 · Tema 2 (continuación) — Bases de datos vectoriales y embeddings, vectorización de imagen/audio/video, bases de datos de conocimiento, arquitectura de datos para IA/minería. Exposición KDD: Nu Bank (evaluación crediticia en tiempo real).</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #A98BD1"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c4-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Diseño de una arquitectura de datos con sus 6 pasos</strong><span class="evid">Evidencia: El profesor lo enumeró explícitamente en clase como la secuencia obligatoria que vendrán en el examen para construir una arquitectura de datos.</span></li>
+<li><strong>Búsqueda por similitud semántica en bases de datos vectoriales vs. consultas exactas en SQL</strong><span class="evid">Evidencia: Lo explicó detenidamente contrastando la coincidencia exacta de SQL con la búsqueda aproximada mediante embeddings multidimensionales.</span></li>
+<li><strong>Proceso de vectorización de imágenes usando convolución, ReLU y Softmax</strong><span class="evid">Evidencia: Lo detalló paso a paso en el diagrama de redes neuronales convolucionales para clasificación de imágenes.</span></li>
+<li><strong>Evaluación de modelos de crédito con coeficiente Gini, estadístico KS, SHAP y WoE</strong><span class="evid">Evidencia: Se presentó de forma detallada durante la exposición del caso de estudio Nu como el estándar para separar buenos y malos pagadores.</span></li>
+</ol>
+</details>
+
 <details class="section-block sec" id="c4-vectoriales" open><summary><span class="stitle">Bases de datos vectoriales y embeddings</span></summary>
 <ul>
 <li><strong>Embedding:</strong> tomar datos no estructurados (PDFs, texto libre, imágenes, voz, video) y transformarlos en vectores numéricos de miles de dimensiones. Cada vector captura el contexto semántico o las características esenciales del objeto.</li>
@@ -22,11 +34,25 @@
 <li><strong>Índices y eficiencia de búsqueda:</strong> a diferencia de los métodos relacionales exactos, el índice vectorial genera clusters mediante algoritmos de agrupamiento. La consulta no revisa millones de registros uno a uno, sino que entra directamente al cluster correspondiente, permitiendo búsquedas por similitud ultrarrápidas.</li>
 <li><strong>Búsqueda tradicional (SQL) vs. vectorial</strong> (pregunta de examen): la tradicional busca coincidencia exacta/estructurada (ej. <code>edad &gt; 48</code>) apoyada en índices B-Tree/Hash; la vectorial busca similitud semántica aproximada, apoyada en clustering para crear índices por zonas y evitar recorrer toda la base.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como buscar una película en un catálogo no por el título exacto, sino describiendo la trama o el ambiente para que el sistema te entregue las películas más parecidas en significado.<span class="rompe">Dónde falla la analogía: La analogía falla porque las personas usan palabras descriptivas simples, mientras que las bases vectoriales convierten la información en vectores de miles de dimensiones matemáticamente coordinadas.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite realizar búsquedas por contexto e intencionalidad sobre datos no estructurados como texto, imágenes y audio con baja latencia y alta precisión.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir la búsqueda exacta de SQL, donde si no coincide el dato exacto no devuelve nada, con la búsqueda vectorial que siempre busca aproximación semántica por distancia entre vectores.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-diseno-arquitectura"><summary><span class="stitle">Pasos para diseñar una arquitectura de minería de datos</span></summary>
 <p>Pregunta explícita de examen — la secuencia obligatoria: 1) definir requerimientos funcionales y no funcionales (rendimiento, seguridad, escalabilidad, tolerancia a fallos); 2) seleccionar el tipo de base de datos (relacional, no relacional, vectorial, especializada); 3) diseñar el esquema y sus relaciones; 4) decidir la infraestructura (nube vs. local) y su escalabilidad; 5) definir seguridad y control de accesos por roles; 6) planear pruebas de volumen, rendimiento y optimización.</p>
 <p><strong>Componentes de red en estas arquitecturas:</strong> el <strong>API</strong> es el protocolo/conjunto de reglas para acceder a funciones o datos de forma segura, típicamente vía conectores propietarios (Oracle, IBM, Python); el <strong>Gateway</strong> es el elemento de red/IP que enruta el tráfico entrante y saliente hacia los servicios autorizados; el <strong>ETL Batch</strong> hace la extracción, transformación (estandarización de formatos, fórmulas) y carga masiva.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como diseñar los planos de una casa definiendo las entradas de servicios, las habitaciones de trabajo, las bodegas y los sistemas de seguridad antes de poner los cimientos.<span class="rompe">Dónde falla la analogía: Se rompe porque una casa tiene una estructura física fija, mientras que una arquitectura de datos debe ser elástica y autoescalable en la nube según el volumen de transacciones.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Estructura de forma metódica las 7 etapas fundamentales necesarias para integrar fuentes, almacenamiento, procesamiento analítico y gobernanza en un proyecto empresarial.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Omitir la definición de requerimientos no funcionales como rendimiento, escalabilidad y tolerancia a fallos, o no especificar la infraestructura de soporte.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-vectorizacion" open><summary><span class="stitle">Vectorización de imagen, audio y video</span></summary>
@@ -47,6 +73,12 @@
 <li>Divide la secuencia en marcos individuales (frames).</li>
 <li>Aplicaciones: vigilancia de seguridad (alertas automáticas si un vector indica que se cruzó una línea delimitada) y analítica deportiva (ej. el Bayern Múnich registrando posiciones y recorridos para ajustar tácticas).</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como traducir una pintura, una canción o una escena de video a una receta de cocina expresada exclusivamente con números para que una computadora pueda compararlas.<span class="rompe">Dónde falla la analogía: Falla porque la receta de cocina sigue pasos ordenados en texto, mientras que la vectorización genera matrices matemáticas multidimensionales complejas.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite que los algoritmos de aprendizaje automático procesen contenido multimedia para inspección de calidad en manufactura, reconocimiento de voz o análisis táctico en video deportivo.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-knowledge-base" open><summary><span class="stitle">Bases de datos de conocimiento (Knowledge Bases)</span></summary>
@@ -56,6 +88,12 @@
 <li><strong>Estructuración mediante cuestionarios y plantillas:</strong> la carga se hace con plantillas (templates) preconfiguradas por área (RRHH, Finanzas, Ventas) que guían la captura de documentos, imágenes, enciclopedias/glosarios internos (ej. definición de ROI) y reglamentos.</li>
 <li><strong>Casos de uso empresariales:</strong> <em>Onboarding</em> — evaluación de nuevos empleados sobre reglamentos internos y confidencialidad mediante exámenes interactivos basados en los documentos cargados. <em>Normatividad y cumplimiento</em> — capacitaciones obligatorias periódicas (cada 6 meses) en empresas grandes (ej. 3,000 empleados) sobre políticas de seguridad y divulgación de información.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como entregarle a un nuevo empleado una enciclopedia interactiva de la empresa con todas las políticas y respuestas a preguntas frecuentes, lista para responderle desde su primer día.<span class="rompe">Dónde falla la analogía: La analogía se queda corta porque una enciclopedia de papel es estática, mientras que una Knowledge Base se conecta con modelos de IA para realizar búsquedas dinámicas y evaluaciones en tiempo real.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Estandariza el conocimiento corporativo, reduce tiempos y costos en la capacitación de personal y garantiza que las respuestas operativas sigan las políticas internas.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-arquitectura-datos" open><summary><span class="stitle">Arquitectura de datos para minería e IA</span></summary>
@@ -63,6 +101,13 @@
 <li><strong>Estructura multicapa:</strong> desde sistemas de origen (Excel, servicios nube AWS/Google, sensores IoT), pasando por tuberías ETL, almacenamiento en Data Lakes/Data Warehouses, hasta las capas de servicio y visualización.</li>
 <li><strong>Caso práctico — monitoreo IoT en tiempo real:</strong> 500 sensores de electricidad, temperatura, gas y agua transmitiendo datos cada 20 segundos. Los datos llegan vía Internet a un Data Warehouse donde modelos analíticos predictivos detectan variaciones de temperatura y disparan alertas operacionales (color amarillo) al supervisor antes de una falla crítica.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como la red de tuberías y filtros de una ciudad que capta agua de lluvia, la purifica en distintas cisternas y la distribuye a los hogares según su uso final.<span class="rompe">Dónde falla la analogía: Se rompe porque el agua es un líquido físico homogéneo, mientras que los datos fluyen en diversos formatos como estructurados, semiestructurados y no estructurados a velocidades masivas.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Organiza las capas de ingesta por lotes y streaming, almacenamiento en Data Lakes y Data Warehouses, para alimentar directamente los motores analíticos de minería e IA.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Intentar conectar directamente las herramientas de analítica a las bases de datos transaccionales operacionales sin pasar por una capa de ingesta y almacenamiento intermedio.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c4-caso-nu" open><summary><span class="stitle">Caso de estudio: modelo crediticio en Nu (exposición propia)</span></summary>
@@ -75,6 +120,22 @@
 <li><strong>Explicabilidad y métricas:</strong> coeficiente Gini, estadístico KS, valores SHAP y Weight of Evidence (WoE) para justificar la puntuación ante el usuario y el regulador.</li>
 <li><strong>Arquitectura de solución:</strong> ingesta continua con Kafka → procesamiento en flujo con Spark → Data Lake/Data Warehouse → API de scoring en la nube con disponibilidad del 99.5%.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como prestarle dinero a alguien que no tiene historial bancario evaluando si paga puntual su teléfono, cómo administra su cuenta de ahorro y cómo usa la aplicación en su celular.<span class="rompe">Dónde falla la analogía: Falla porque una persona evalúa la confianza de forma intuitiva, mientras que el modelo usa algoritmos como XGBoost con métricas de separación matemática como el estadístico KS.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Demuestra cómo aplicar minería de datos supervisada y no supervisada para incluir financieramente a sectores sin historial crediticio manteniendo bajo el riesgo de morosidad.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c4-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuáles son las 7 etapas obligatorias para diseñar una arquitectura de datos según lo explicado en clase?</summary><p>Definir requerimientos funcionales y no funcionales, seleccionar el tipo de base de datos, diseñar el esquema y sus relaciones, definir infraestructura, establecer la integración de datos, configurar seguridad/gobernanza y planear rendimiento/monitoreo.</p></details>
+<details class="qa"><summary>2. Explica con tus palabras la diferencia entre la búsqueda en una base de datos SQL tradicional y una base de datos vectorial.</summary><p>La búsqueda SQL requiere una coincidencia exacta de parámetros (por ejemplo, edad igual a 48), mientras que la base vectorial busca elementos por similitud semántica y significado aproximado usando vectores multidimensionales.</p></details>
+<details class="qa"><summary>3. ¿Qué función cumple la capa convolucional y la función Softmax en la vectorización de una imagen?</summary><p>La convolución reduce los píxeles de la imagen extrayendo características clave en un vector, y Softmax convierte el resultado en probabilidades porcentuales para clasificar el objeto en la imagen.</p></details>
+<details class="qa"><summary>4. Si un neobanco analiza el comportamiento de un solicitante sin historial crediticio que paga puntualmente sus servicios y mantiene saldo constante en ahorro, ¿cómo clasifica su nivel de riesgo el modelo?</summary><p>Lo clasifica con baja probabilidad de incumplimiento, ya que el flujo de caja en ahorro y la puntualidad operan como variables alternativas indicadoras de responsabilidad financiera.</p></details>
+<details class="qa"><summary>5. ¿Qué es el proceso de chunking o fragmentación en el flujo de una base de datos vectorial?</summary><p>Es la división de documentos extensos o textos largos en fragmentos más pequeños y manejables antes de convertirlos en vectores embeddings para facilitar su almacenamiento y búsqueda.</p></details>
+<details class="qa"><summary>6. ¿Cómo beneficia una Knowledge Base o Base de Datos de Conocimiento al proceso de entrenamiento de un nuevo empleado?</summary><p>Permite centralizar reglamentos y políticas en plantillas interactivas, evaluando el nivel de comprensión del empleado mediante casos prácticos y consultas inmediatas.</p></details>
 </details>
 
 <details class="section-block sec" id="c4-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
