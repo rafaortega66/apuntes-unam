@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T07:54:03+00:00",
+ "generatedAt": "2026-10-01T07:56:07+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -395,7 +395,7 @@
     "fecha": "2026-09-24",
     "resumen": "Tema 2 (2.2, continuación) — corrección del método para no confundir amenaza con vulnerabilidad, vulnerabilidades humanas (contraseñas, fotos con IA, imágenes de menores), ejercicio de 20 reactivos amenaza/vulnerabilidad",
     "url": "materias/seguridad-informatica-basica/clase-08.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 9,
@@ -467,6 +467,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "8ddeaac",
+   "fecha": "2026-10-01T01:54:04-06:00",
+   "mensaje": "MD Clase 07: formato de estudio; quitar nombres de compañeros de la lista de equipos"
+  },
   {
    "hash": "7cf8c20",
    "fecha": "2026-10-01T01:51:45-06:00",
@@ -761,11 +766,6 @@
    "hash": "e818acf",
    "fecha": "2026-09-21T15:11:45-06:00",
    "mensaje": "MD: agregar Clase 05 — Examen (17 sep 2026) con las respuestas del Primer Examen Parcial"
-  },
-  {
-   "hash": "f63d9dc",
-   "fecha": "2026-09-17T20:10:58-06:00",
-   "mensaje": "SIB: registrar Tarea 1 y Tarea 2 del Equipo 4 en Entregas"
   }
  ]
 }

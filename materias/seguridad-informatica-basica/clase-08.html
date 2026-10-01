@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 08 — Seguridad Informática Básica</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -14,6 +15,17 @@
 <div class="detail-head" style="border-color:#E8735C"><h2>Clase 08</h2>
   <p class="prof">Dra. Cintia Quezada Reyes · 24 sep 2026 · Tema 2 (2.2, continuación) — corrección del método para no confundir amenaza con vulnerabilidad, vulnerabilidades humanas (contraseñas, fotos con IA, imágenes de menores), ejercicio de 20 reactivos amenaza/vulnerabilidad, y casos reales de mala gestión de vulnerabilidades (Línea 12 del Metro).</p>
 </div>
+
+<div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c8-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Las vulnerabilidades no son acciones ni eventos dañinos, sino que se definen estrictamente como faltas, omisiones o carencias que responden a la pregunta "¿qué me falta?" o "de qué carezco"</strong><span class="evid">Evidencia: Lo repitió insistentemente la profesora al corregir la tarea devuelta al inicio de la clase, al analizar el celular y durante los 20 reactivos.</span></li>
+<li><strong>El ser humano es considerado el eslabón más débil de la cadena de seguridad debido al exceso de confianza, la flojera, la ingenuidad y la falta de desconfianza</strong><span class="evid">Evidencia: Lo declaró explícitamente la profesora como premisa fundamental y lo ejemplificó con el uso de contraseñas débiles, fotos regaladas a la IA y publicaciones de menores.</span></li>
+<li><strong>La relación entre amenazas y vulnerabilidades no es de uno a uno (1:1), sino de uno a muchos o muchos a muchos</strong><span class="evid">Evidencia: Lo explicó directamente en el pizarrón al desglose del activo celular, demostrando que una amenaza puede aprovechar decenas de vulnerabilidades.</span></li>
+<li><strong>En las evaluaciones se exigirá distinguir entre amenaza y vulnerabilidad y reformular un enunciado de acción a una carencia estricta</strong><span class="evid">Evidencia: Lo ligó directamente al anuncio del examen parcial y resolvió un ejercicio de 20 reactivos como entrenamiento explícito en vivo.</span></li>
+</ol>
+</details>
 
 <div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>📋 Nota:</strong> la profesora regresó calificaciones de la actividad de la <a href="clase-07.html">Clase 07</a> y aprovechó los errores comunes para reforzar la distinción entre amenaza y vulnerabilidad antes de seguir con el tema.</p></div>
 
@@ -29,6 +41,13 @@
 <li>Una vulnerabilidad puede ser explotada por <strong>1 amenaza o varias</strong> amenazas.</li>
 <li>Las vulnerabilidades son <strong>omisiones</strong>: algo que no se ha tomado en cuenta, algo que falta, algo de lo que se carece.</li>
 </ol>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como una gotera en el techo: la gotera o la grieta es la vulnerabilidad (lo que le falta al techo para estar sellado), mientras que la lluvia que entra y arruina tus muebles es la amenaza.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque una carencia de seguridad en un sistema no siempre es un agujero físico visible; puede ser una omisión de procedimiento, una actitud de exceso de confianza o una mala configuración de software.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque confundir una carencia con una amenaza impide diseñar el control adecuado: no se puede eliminar la amenaza externa (como la lluvia o los delincuentes), pero sí se debe reparar la vulnerabilidad interna (sellar el techo o poner respaldos).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> En las tareas entregadas al inicio de la clase, los alumnos confundieron enunciados de carencia (como "falta de personal" o "falta de orden") con amenazas, o redactaron vulnerabilidades como eventos dañinos en lugar de reformularlos como omisiones.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c8-ejercicio-celular" open><summary><span class="stitle">Ejercicio dirigido: reformular vulnerabilidades como "carencia de..."</span></summary>
@@ -42,6 +61,13 @@
 </ul>
 <p>Con este mismo patrón, comparó otros ejemplos humanos: decir que alguien "es bien confiado" no es una vulnerabilidad tal cual — hay que voltearlo y decir que <strong>carece de desconfianza</strong>. Decir que alguien "se enferma seguido" se reformula como que <strong>carece de buena salud</strong>. La regla general: si no se puede plantear como "me falta..." o "carezco de...", entonces no es una vulnerabilidad, sino una amenaza o una acción distinta.</p>
 <p>También explicó el paso siguiente, una vez identificada la vulnerabilidad correctamente: decidir qué acciones tomar para reducirla. Con el ejemplo del celular: si la vulnerabilidad es la falta de materiales resistentes, la solución implica investigar marcas y hacer pruebas de resistencia (comparó esto con las pruebas que hace Profeco); si es falta de funda, elegir el tipo de funda adecuado (piel con bordes acolchados, plástico con esquinas reforzadas, etc.); si es falta de cuidado, tomar medidas como sujetar el celular con correas o amarres; y si es falta de mica protectora, considerar el tipo de cristal (templado, con cierto nivel de resistencia a impactos).</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como llevar un vaso de cristal fino en la mano al caminar: el vaso fino carece de un empaque acolchado para amortiguar golpes si tropiezas.<span class="rompe">Dónde falla la analogía: La analogía rompe porque un celular no solo sufre daños físicos por caídas, sino que tiene vulnerabilidades lógicas (NFC, falta de antivirus, sesiones abiertas) y de procedimiento que un vaso de vidrio no posee.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque enseña la metodología práctica para auditorías y esquemas de seguridad: primero se lista el activo y sus amenazas, y luego se identifican minuciosamente todas las carencias específicas para colocar salvaguardas.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Al principio del ejercicio los alumnos respondían con causas o acciones ("se cayó porque no me fije"), y la profesora tuvo que corregirlos para que expresaran la vulnerabilidad estrictamente en términos de "me falta...", "carece de..." o "no tiene...".</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c8-vulnerabilidades-humanas" open><summary><span class="stitle">Vulnerabilidades humanas: contraseñas, modas de IA y fotos de menores</span></summary>
@@ -52,6 +78,13 @@
 <p><strong>Suplantación de identidad con fotos robadas.</strong> Explicó que personas de otros países (dio ejemplos hipotéticos como China, Ucrania o Italia) que buscan hacerse pasar por alguien de determinada nacionalidad toman fotos de perfiles públicos de esa región para dar credibilidad a un perfil falso — de forma que si alguien busca a esa "persona", encuentra una imagen real, aunque no corresponda a quien está detrás del perfil.</p>
 <p><strong>Daño al prestigio como bien irrecuperable.</strong> Insistió en que, una vez que algo se sube a internet, prácticamente ya no se puede controlar ni retirar por completo, sin importar acciones legales internacionales. Puso como ejemplo un caso mediático real (un canal familiar, mencionado en el audio como algo similar a "Siete pasajeros") donde una madre grababa y ridiculizaba a sus hijos desde pequeños; al crecer, los hijos demandaron y el canal tuvo que bajar el contenido, pero ya con consecuencias psicológicas previas. Comparó el manejo de la privacidad infantil en otros países (mencionó a Costa Rica como un país con regulaciones civiles mucho más estrictas en este tema) frente a México.</p>
 <p><strong>Vulnerabilidad ante la presión y el miedo.</strong> Otro ejemplo de vulnerabilidad humana: entregar contraseñas o información por teléfono solo porque alguien dice hablar "de parte del jefe", sin verificarlo, por miedo a la reacción de una figura de autoridad — la gente vulnerable ante los gritos o el tono autoritario cede información sin cuestionar.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como dejar la puerta de tu casa abierta de par en par porque confiaste en que los vecinos son amables, regalando además copias de tus llaves a desconocidos en la calle.<span class="rompe">Dónde falla la analogía: Se rompe porque al regalar tu imagen o datos digitales en internet, la pérdida no es solo física; la información digital se duplica infinitamente y no se puede borrar ni recuperar el prestigio destruido.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque demuestra que el factor humano es el eslabón más débil del sistema de seguridad; de nada sirve tener cifrado o servidores seguros si el usuario regala su biometría a la IA o usa contraseñas débiles por flojera.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> La gente minimiza los riesgos creyendo que las fotos subidas a redes o filtros de IA no tienen consecuencias o que "ya las borró", ignorando que pertenecen a la plataforma y pueden ser usadas por ciberdelincuentes o pedófilos.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c8-ejercicio20" open><summary><span class="stitle">Ejercicio de 20 reactivos: completar amenaza o vulnerabilidad</span></summary>
@@ -80,6 +113,12 @@
 <li><strong>Omitir las protecciones contra filtraciones en el techo</strong> (vulnerabilidad) → amenaza: que se dañen equipos o documentos por filtraciones de agua.</li>
 </ol>
 <p>Como conclusión del ejercicio, la profesora dictó dos ideas centrales: una vulnerabilidad se identifica fácilmente si se analiza "¿qué es lo que NO se ha hecho?"; y en la medida en que se eliminen vulnerabilidades, se correrán menos riesgos, se contrarrestarán amenazas y, en consecuencia, disminuirán los ataques.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un juego de parejas donde cada pieza de "falla personal" encaja únicamente con su correspondiente "evento de desastre".<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque en la realidad una misma carencia puede desencadenar múltiples desastres distintos simultáneamente, no uno solo.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque sirvió de entrenamiento metodológico directo para el examen parcial, enseñando a formular la relación entre causas de omisión y sus consecuencias catastróficas.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c8-casos-reales" open><summary><span class="stitle">Casos reales: consecuencias de no gestionar vulnerabilidades</span></summary>
@@ -87,6 +126,25 @@
 <p><strong>Línea 12 del Metro (CDMX).</strong> Explicó que, al planear el proyecto, existían varias opciones de ruta y tiempos de construcción; se descartó la opción técnicamente más viable (aunque tomara más tiempo) por razones políticas —para que la obra pudiera inaugurarse dentro de la administración vigente— y se optó por una ruta distinta y más rápida. Esa decisión implicó no considerar correctamente la cantidad de material necesaria para la nueva ruta (más larga de lo planeado), lo que llevó a rellenar columnas con materiales inadecuados. El resultado, según explicó, fueron fallas estructurales derivadas directamente de vulnerabilidades no gestionadas desde la planeación.</p>
 <p><strong>Recorte de gastos en seguros médicos.</strong> Mencionó el caso de organizaciones que, para reducir costos, recortan el seguro de gastos médicos de su personal sin considerar que en algún momento sí se necesitará — con consecuencias graves cuando alguien clave para la organización fallece o se enferma sin esa cobertura.</p>
 <p><strong>Dispositivos para hacer trampa en exámenes.</strong> Como ejemplo más reciente y cercano, mencionó un caso (sin dar más detalles específicos en el audio) donde no se consideró que el alumnado pudiera usar cierta tecnología o método para aprobar un examen de manera indebida — una vulnerabilidad de proceso por exceso de confianza en la honestidad de los evaluados, que terminó generando un gasto o problema adicional no previsto.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como construir una casa apresuradamente con cimientos delgados solo para acabar antes de que llegue la fiesta, provocando que la casa se caiga cuando se llene de gente.<span class="rompe">Dónde falla la analogía: Deja de funcionar porque en grandes obras de infraestructura o sistemas institucionales los daños no se limitan a la pérdida de una casa, sino a pérdidas humanas masivas, colapsos financieros y crisis políticas.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque demuestra que las vulnerabilidades procesales y de planificación, motivadas por prisas o ahorro mal entendido, terminan generando costos y pérdidas infinitamente mayores que la inversión inicial de seguridad.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> El error común en las organizaciones es minimizar las pequeñas omisiones procesales (como ignorar tiempos de secado de concreto o no considerar mañas de usuarios) pensando que "no pasará nada", hasta que ocurre el colapso catastrófico.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c8-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuáles son las preguntas clave planteadas en clase para identificar si un elemento es una vulnerabilidad?</summary><p>Se identifica preguntando "¿qué me falta?", "¿de qué carezco?", "¿qué no he implementado?" o "¿qué he omitido?".</p></details>
+<details class="qa"><summary>2. Explica con tus palabras por qué la profesora afirma que subir fotografías a filtros de inteligencia artificial constituye una vulnerabilidad humana.</summary><p>Porque la persona regala su imagen e identidad digital a la plataforma, perdiendo el control sobre ella y exponiéndose a que sea utilizada en videos falsos, suplantaciones o páginas maliciosas sin su consentimiento.</p></details>
+<details class="qa"><summary>3. Un estudiante no coloca contraseña a su computadora portátil y se la prestó a un desconocido en la biblioteca. Reformula la vulnerabilidad y determina una amenaza posible según la metodología de clase.</summary><p>Vulnerabilidad: carece de contraseña de acceso y de desconfianza al prestar su equipo. Amenaza: extracción de archivos personales o instalación de software malicioso.</p></details>
+<details class="qa"><summary>4. Compara el concepto de amenaza frente al de vulnerabilidad tomando como base los ejemplos del teléfono celular analizados en clase.</summary><p>La amenaza es el evento dañino latente (que el celular se rompa o sea robado), mientras que la vulnerabilidad es la condición de carencia interna (carecer de funda protectora o de precaución).</p></details>
+<details class="qa"><summary>5. ¿Por qué la profesora señala que el prestigio personal es un activo crítico altamente vulnerable en redes sociales?</summary><p>Porque es un bien que toma años construir y no se puede comprar ni recuperar fácilmente en el mercado si se destruye por la viralización de fotos o videos digitales.</p></details>
+<details class="qa"><summary>6. En una empresa de mensajería, un repartidor deja la camioneta encendida mientras entrega un paquete en una casa. Determina la vulnerabilidad y la amenaza correspondiente.</summary><p>Vulnerabilidad: falta de precaución y omisión del protocolo de apagado del vehículo. Amenaza: el robo de la camioneta con todos los paquetes.</p></details>
+<details class="qa"><summary>7. Explica qué fallas de gestión de vulnerabilidades ocurrieron en el caso real de la Línea 12 del Metro mencionado en clase.</summary><p>Ocurrió una omisión de tiempos adecuados de construcción por urgencia política, cambio imprevisto de ruta y distribución deficiente de materiales en las columnas.</p></details>
+<details class="qa"><summary>8. Compara el impacto de una vulnerabilidad de hardware frente a una vulnerabilidad humana dentro de una organización.</summary><p>Una vulnerabilidad de hardware afecta un componente físico reemplazable, mientras que una vulnerabilidad humana (como el exceso de confianza) puede comprometer toda la red o regalar credenciales de acceso.</p></details>
 </details>
 
 <details class="section-block sec" id="c8-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
