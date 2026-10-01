@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T07:34:46+00:00",
+ "generatedAt": "2026-10-01T07:38:37+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -461,12 +461,17 @@
     "fecha": "2026-09-29",
     "resumen": "Tema 3 — Cierre del Proyecto 2 con AWS y SAP HANA (procesamiento en RAM), formación definitiva de equipos, y algoritmos de agrupación: K-Means, PCA/t-SNE, método del codo y silueta, DBSCAN, clustering jerárquico (caso Co",
     "url": "materias/mineria-de-datos/clase-08.html",
-    "formato": "prosa"
+    "formato": "estudio"
    }
   ],
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "cebd13b",
+   "fecha": "2026-10-01T01:34:46-06:00",
+   "mensaje": "FSE Clase 10: formato de estudio (examen, explicado en simple, errores comunes, ponte a prueba)"
+  },
   {
    "hash": "e27e2c6",
    "fecha": "2026-10-01T01:25:33-06:00",
@@ -761,11 +766,6 @@
    "hash": "e62bfd6",
    "fecha": "2026-09-17T07:29:15-06:00",
    "mensaje": "ACS: evitar títulos huérfanos al final de página en Tarea 3"
-  },
-  {
-   "hash": "8855d66",
-   "fecha": "2026-09-17T07:23:42-06:00",
-   "mensaje": "ACS: corregir Tarea 3 (capturas como imagen real, no texto)"
   }
  ]
 }

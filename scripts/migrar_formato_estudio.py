@@ -37,7 +37,8 @@ SALTAR = ("-contexto", "-pendiente", "-examen", "-prueba")
 
 def inline(s):
     """Markdown mínimo de NotebookLM → HTML (escapa primero)."""
-    s = html.escape(s.strip(), quote=False)
+    s = s.strip().replace("\\$", "$").replace("\\(", "").replace("\\)", "").replace("\\rightarrow", "→")
+    s = html.escape(s, quote=False)
     s = re.sub(r"\s*\[\d+(?:[,\-–]\s*\d+)*\]", "", s)          # citas [3], [3, 4]
     s = re.sub(r"`([^`]+)`", r"<code>\1</code>", s)
     s = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", s)

@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 08 — Minería de Datos</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -14,6 +15,17 @@
 <div class="detail-head" style="border-color:#A98BD1"><h2>Clase 08</h2>
   <p class="prof">M.C. José Concepción Roberto Olvera López · 29 sep 2026 · Tema 3 — Cierre del Proyecto 2 con AWS y SAP HANA (procesamiento en RAM), formación definitiva de equipos, y algoritmos de agrupación: K-Means, PCA/t-SNE, método del codo y silueta, DBSCAN, clustering jerárquico (caso Coca-Cola FEMSA), GMM, Mean-Shift y segmentación de imágenes.</p>
 </div>
+
+<div class="section-block nota" style="border-left:3px solid #A98BD1"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c8-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Implementación de un pipeline completo de clustering (preprocesamiento con StandardScaler, PCA/t-SNE, 3 algoritmos y evaluación con WSS/Silueta)</strong><span class="evid">Evidencia: Lo asignó explícitamente como la Práctica 1 obligatoria por equipos sobre un dataset de 50,000 registros al cierre de la sesión.</span></li>
+<li><strong>Comparación metodológica entre K-Means y DBSCAN (formas esféricas vs. densidad y manejo de ruido)</strong><span class="evid">Evidencia: Lo explicó extensamente en la clase contrastando ambos algoritmos y sus aplicaciones reales.</span></li>
+<li><strong>Estandarización de datos con StandardScaler antes de calcular distancias euclidianas</strong><span class="evid">Evidencia: Lo repitió como requisito indispensable previo a la agrupación para evitar sesgos por diferencias de escalas numéricas.</span></li>
+<li><strong>Interpretación del valor de negocio y nombramiento de los clusters resultantes</strong><span class="evid">Evidencia: Lo enfatizó explícitamente como el criterio principal de evaluación, señalando que la ejecución del código es rápida pero lo relevante es extraer conocimiento práctico.</span></li>
+</ol>
+</details>
 
 <details class="section-block sec" id="c8-hana" open><summary><span class="stitle">Cierre de exposiciones: AWS y SAP HANA</span></summary>
 <p>La sesión empezó cerrando la exposición sobre <strong>Amazon Web Services (AWS)</strong>: un compañero destacó cómo Amazon pasó de ser un gigante del comercio electrónico a dominar la infraestructura en la nube con un catálogo enorme de servicios. El profesor complementó que las decisiones tecnológicas en una empresa suelen evaluar a tres o cuatro proveedores (AWS, IBM, SAP…) con matrices de capacidad técnica e integración; las capacidades técnicas y la escalabilidad <strong>no se regatean</strong>, el regateo comercial se hace solo con la opción que gana la evaluación técnica.</p>
@@ -27,11 +39,24 @@
 <li><strong>SAP Analytics Cloud (SAC) y Cockpit:</strong> SAC permite explorar datos y hacer analítica predictiva con dashboards, alertas de tendencia e índices predictivos; el Cockpit administra el rendimiento, el uso de memoria y el particionamiento de datos.</li>
 <li><strong>Aislamiento de memoria para consultoría externa:</strong> asigna a un consultor o investigador externo un espacio dedicado de RAM para que analice sin acceso al núcleo de la base de datos principal ni comprometer la operación.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como tener los ingredientes de un restaurante en una barra abierta justo al lado del cocinero en lugar de ir a buscar la caja congelada al almacén al fondo de la calle cada vez que un cliente pide un platillo.<span class="rompe">Dónde falla la analogía: La analogía se rompe porque la memoria RAM es volátil y cuesta mucho más por gigabyte que el almacenamiento masivo en disco, requiriendo mecanismos de respaldo y persistencia continua.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite procesar analítica de Big Data miles de veces más rápido al ejecutar consultas sobre RAM y tablas orientadas a columnas con diccionarios de compresión.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c8-equipos" open><summary><span class="stitle">Equipos de trabajo y herramientas: RapidMiner y libro guía</span></summary>
 <p>El profesor dedicó un bloque a reorganizar y confirmar de forma definitiva los <strong>12 equipos</strong> de la materia, incluyendo a los alumnos que estaban pendientes por correo. Enfatizó que serán equipos de tres integrantes, definitivos para la parte programática y metodológica más exigente, donde se implementarán y evaluarán varios algoritmos de minería de datos.</p>
 <p>Preguntó quiénes ya habían instalado <strong>RapidMiner</strong>, que debían tener listo para la primera práctica. Explicó la diferencia entre herramientas: <strong>Python</strong> da control total de cada parámetro y del volumen de datos; <strong>RapidMiner</strong> ofrece un entorno visual con muchos algoritmos ya construidos, ideal para explorar rápido el comportamiento inicial de los datos. Recomendó que uno de los tres integrantes de cada equipo asuma el rol de explorar a fondo RapidMiner y capacitar al resto. Mencionó además un libro guía especializado que explica paso a paso todos los algoritmos de agrupación y segmentación con RapidMiner, y ofreció llevarlo físicamente a la siguiente clase.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como formar un equipo de trabajo donde cada quien se especializa en una herramienta distinta pero comparten un manual maestro para que todos aprendan a usar la misma maquinaria.<span class="rompe">Dónde falla la analogía: Se rompe porque en el desarrollo real un software visual como RapidMiner no reemplaza por completo la flexibilidad de código que exige un entorno como Python.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Organiza la dinámica de trabajo de la materia en 12 equipos definitivos de 3 integrantes para desarrollar las prácticas algorítmicas con apoyo de RapidMiner y Python.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Pensar que RapidMiner sustituye totalmente a Python, cuando el profesor aclaró que Python da control total sobre datos y parámetros mientras RapidMiner ayuda a explorar de forma visual.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c8-clustering" open><summary><span class="stitle">Fundamentos de los algoritmos de agrupación (clustering)</span></summary>
@@ -45,6 +70,13 @@
 <li><strong>Estabilidad y manejabilidad:</strong> el agrupamiento debe mantenerse estable en el tiempo y permitir manipular los segmentos para tomar decisiones operativas o comerciales.</li>
 <li><strong>Reconocimiento y sentido de negocio (criterio principal de evaluación):</strong> ejecutar el código toma pocos minutos y genera los diagramas automáticamente; lo realmente valioso es que el alumno <strong>interprete los segmentos, les ponga un nombre reconocible y extraiga conocimiento de valor para el negocio</strong> (por ejemplo, identificar clientes propensos a comprar ciertos productos o distinguir pacientes con marcadores de leucemia).</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como organizar una fiesta reuniendo en distintas mesas a las personas que tienen gustos musicales parecidos, sin que nadie les haya dicho previamente cómo deben juntarse.<span class="rompe">Dónde falla la analogía: Falla porque los datos reales tienen múltiples dimensiones y los grupos no siempre están tan claramente divididos o aislados como la gente en mesas separadas.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite encontrar patrones ocultos y segmentos homogéneos dentro de datos no etiquetados para tomar decisiones estratégicas de negocio.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> La alumna Elizabeth respondió que era "separar toda la información e ir haciendo grupos con los valores más cercanos", lo cual el profesor validó aclarando que lo vital no es solo juntarlos, sino darles sentido de negocio.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c8-kmeans" open><summary><span class="stitle">K-Means, reducción de dimensionalidad (PCA / t-SNE) y métricas de evaluación</span></summary>
@@ -78,6 +110,13 @@
 <li><strong>Coeficiente de silueta:</strong> mide a la vez la compacidad de un punto dentro de su clúster y su separación de los demás.</li>
 <li><strong>Otras métricas mencionadas:</strong> índice de Davies-Bouldin, índice de Dunn y validación estructural visual.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como colocar tres imanes en una mesa llena de limadura de hierro y mover los imanes poco a poco hasta que cada uno atraiga a su grupo más cercano de virutas.<span class="rompe">Dónde falla la analogía: Se rompe porque K-Means fuerza a que todos los puntos pertenezcan a alguna esfera, sin importar si un punto está extremadamente alejado o es un dato atípico.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es el algoritmo de agrupación más directo para estudios comerciales, evaluando la cantidad óptima de grupos con el Método del Codo y el Coeficiente de Silueta.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Probar un solo valor de K sin comparar con sus vecinos (K-1 y K+1), o intentar ejecutar K-Means directo sobre 100,000 datos sin hacer un muestreo o filtrado previo.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c8-dbscan" open><summary><span class="stitle">DBSCAN y detección de ruido</span></summary>
@@ -88,6 +127,13 @@
 </ul>
 <p>Una gran ventaja es que identifica automáticamente los puntos aislados que no pertenecen a ningún grupo y los marca como <strong>ruido (<em>outliers</em>)</strong>, lo que permite investigar casos anómalos sin deformar los clústeres principales.</p>
 <p><strong>Usos:</strong> en medicina y salud se usa para detectar tumores en resonancias magnéticas y estudiar irregularidades en la córnea por variaciones de color y tono. <strong>Criterio de selección del profesor:</strong> K-Means para estudios comerciales o de mercadotecnia convencionales (ágil y directo), y DBSCAN para agrupamientos de formas complejas e irregulares o imágenes médicas.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como identificar vecindarios populares en una ciudad contando dónde hay grupos apretados de casas, dejando fuera a las cabañas aisladas en medio del bosque.<span class="rompe">Dónde falla la analogía: La analogía falla cuando la densidad de la población varía drásticamente a lo largo de toda la ciudad, dificultando definir un único radio constante para todos los grupos.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite agrupar datos de formas complejas e irregulares identificando automáticamente los puntos aislados como ruido o anomalías.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Intentar usar K-Means para detectar anomalías o formas irregulares como imágenes médicas, cuando el profesor aclaró que DBSCAN es el indicado para ese tipo de estructuras.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c8-jerarquico" open><summary><span class="stitle">Clustering jerárquico y el caso Coca-Cola FEMSA</span></summary>
@@ -98,6 +144,12 @@
 </ul>
 <p>Se visualiza con un <strong>dendrograma</strong>, que permite observar las jerarquías y decidir la altura del corte.</p>
 <p><strong>Caso real (Coca-Cola FEMSA).</strong> El profesor contó un proyecto en el que trabajó casi tres meses con Coca-Cola FEMSA: un universo de <strong>31,600 tiendas de abarrotes</strong> (misceláneas) en Monterrey, con una muestra inicial de 12,000, usando el lenguaje R. Con clustering jerárquico detectaron un segmento de tiendas que vendía un volumen extraordinariamente alto de bebidas energéticas (los apuntes mencionan “Grit”), mientras que la gran mayoría casi no las vendía. Al analizar ese clúster, encontraron patrones de situación: las tiendas de altas ventas estaban cerca de escuelas o campos deportivos, o tenían refrigeradores en lugares muy visibles. Con ese conocimiento, Coca-Cola aplicó estrategias enfocadas (dotación de refrigeradores y promociones con garantía de devolución) solo a las tienditas con esas características.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como armar un árbol genealógico familiar uniendo primero a los hermanos, luego a los primos y finalmente a todos los parientes en un solo gran tronco.<span class="rompe">Dónde falla la analogía: Se rompe porque en la vida real las relaciones familiares no se pueden cortar arbitrariamente a una altura fija como se hace al cortar un dendrograma.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra la jerarquía completa del agrupamiento y permitió a Coca-Cola FEMSA identificar el segmento específico de tienditas con altas ventas de bebidas energéticas.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c8-gmm" open><summary><span class="stitle">Modelo de mezcla gaussiana (GMM) y Mean-Shift</span></summary>
@@ -106,11 +158,36 @@
 <li><strong>Mean-Shift:</strong> desplaza una ventana o radio hacia la zona de mayor densidad de puntos. Se aplica al seguimiento de objetos en video.</li>
 </ul>
 <p><strong>Ejemplo comercial:</strong> en transmisiones deportivas (básquetbol, hockey) se analiza el rastro del movimiento; si las jugadas pasan más tiempo cerca de las canastas o porterías que en el centro de la cancha, las cadenas de televisión pueden cobrar más por los espacios publicitarios proyectados en esas zonas de mayor atención visual.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como clasificar la neblina en un mapa usando nubes ovaladas suaves que se pueden empalmar ligeramente entre sí, en lugar de trazar círculos de plástico rígidos.<span class="rompe">Dónde falla la analogía: Se rompe porque las distribuciones probabilísticas matemáticas asumen curvas normales perfectas que los datos reales desordenados no siempre cumplen.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Otorga flexibilidad para agrupar formas elípticas en reconocimiento de voz, segmentación de imágenes y análisis de densidad para cobro de publicidad en video deportivo.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c8-imagenes" open><summary><span class="stitle">Segmentación de imágenes por píxeles RGB y estandarización (StandardScaler)</span></summary>
 <p>Para aplicar agrupación a imágenes se toma cada píxel y se extraen sus valores en el espacio de color <strong>RGB</strong>. Con K-Means (K = 3) los píxeles se agrupan en regiones circulares o esféricas rígidas; con DBSCAN se detectan ramas, sombras y formas irregulares aisladas; con GMM se capturan gradientes y tonalidades con más suavidad.</p>
 <p>Por último, se recalcó el preprocesamiento con <strong>StandardScaler</strong>: los conjuntos de datos mezclan variables con escalas muy distintas (por ejemplo ingresos desde $3,500 hacia arriba frente a edades entre 18 y 60 años), así que es obligatorio estandarizar (normalmente a media 0 y desviación estándar 1) antes de calcular cualquier distancia euclidiana.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como pintar un cuadro por números agrupando los mosaicos que tienen tonos de color parecidos para resaltar las figuras principales del fondo.<span class="rompe">Dónde falla la analogía: La analogía se rompe porque los píxeles adyacentes representan matices numéricos continuos en RGB que cambian bruscamente por sombras o iluminación.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra la aplicación de clustering al procesamiento de imágenes y la necesidad obligatoria de estandarizar variables con StandardScaler para equilibrar escalas numéricas.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Olvidar estandarizar variables con escalas numéricas muy dispares antes de calcular distancias euclidianas, provocando que la variable con números mayores domine al algoritmo.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c8-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuál es la característica principal de la arquitectura de SAP HANA que acelera las consultas analíticas?</summary><p>Procesa los datos directamente en memoria RAM, almacena las tablas por columnas y utiliza un diccionario de compresión para evitar redundancias de texto.</p></details>
+<details class="qa"><summary>2. ¿Por qué el profesor sostiene que la ejecución técnica de un algoritmo de clustering no es la parte más valiosa del trabajo?</summary><p>Porque generar el código y los diagramas toma pocos minutos, pero el verdadero valor radica en interpretar los segmentos, nombrarlos y extraer conocimiento útil para la toma de decisiones del negocio.</p></details>
+<details class="qa"><summary>3. ¿En qué se diferencian K-Means y DBSCAN respecto a la forma de sus clústers y al tratamiento de los datos atípicos?</summary><p>K-Means genera grupos esféricos rígidos y fuerza a todos los puntos a entrar en un clúster, mientras que DBSCAN agrupa por densidad de puntos vecinos en formas irregulares y detecta automáticamente puntos aislados como ruido.</p></details>
+<details class="qa"><summary>4. Si ejecutas K-Means con K=3 sobre un dataset de compras con 50,000 registros y la inercia baja bruscamente hasta K=4 para luego estabilizarse en K=5, ¿qué valor de K deberías seleccionar según el Método del Codo?</summary><p>Deberías seleccionar K=4, ya que representa el punto de inflexión o codo donde la disminución de la inercia deja de ser significativa.</p></details>
+<details class="qa"><summary>5. ¿Qué hallazgo de negocio permitió descubrir el clustering jerárquico en el proyecto de Coca-Cola FEMSA?</summary><p>Identificó un clúster específico de tiendas de abarrotes ubicadas cerca de escuelas o campos deportivos que vendían volúmenes extraordinariamente altos de bebidas energéticas.</p></details>
+<details class="qa"><summary>6. ¿Cuándo es preferible utilizar t-SNE en lugar de PCA para la reducción de dimensionalidad previa al clustering?</summary><p>Se prefiere t-SNE cuando la estructura de los datos presenta relaciones no lineales complejas, ya que genera agrupaciones más compactas que el enfoque de varianza lineal de PCA.</p></details>
+<details class="qa"><summary>7. Un conjunto de datos de clientes incluye la variable edad (rango 18 a 65) e ingresos anuales (rango $20,000 a $1,500,000). ¿Qué ocurre si aplicas K-Means directamente sin usar StandardScaler?</summary><p>La variable de ingresos dominará por completo el cálculo de las distancias euclidianas debido a su magnitud numérica, haciendo que la edad no tenga impacto en la formación de los grupos.</p></details>
+<details class="qa"><summary>8. ¿Cómo se aplica el algoritmo Mean-Shift al cobro de espacios publicitarios en transmisiones deportivas de video?</summary><p>Mean-Shift rastrea el movimiento de los jugadores y detecta las zonas de mayor densidad de atención (como las canastas o porterías), permitiendo a las televisoras cobrar tarifas más altas por los anuncios colocados en esas áreas.</p></details>
 </details>
 
 <details class="section-block sec" id="c8-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>

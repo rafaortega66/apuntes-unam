@@ -36,18 +36,24 @@ Cuadernos (id en `notebook.google.com/notebook/<id>`):
 Ids de sección para el prompt:
 `python3 scripts/migrar_formato_estudio.py --secciones materias/<slug>/clase-NN.html`
 
-Prompt (una sola línea, **sin acentos** — el tecleo de acentos falla):
+Prompt (una sola línea, sin acentos):
 pedir `=== EXAMEN` (líneas `- punto || evidencia`), un `=== SECCION <id>` por
 sección con `SIMPLE:`, `ROMPE:`, `IMPORTA:`, `ERRORES:` (o NINGUNO), y
 `=== PRUEBA` con 8 pares `P:`/`R:`. Exigir "usa SOLO la fuente <audio>" y
-"no inventes nada". El texto exacto está en el commit de FSE Clase 10.
+"no inventes nada". Genéralo con `python3 scripts/prompt_migracion.py <clase-NN.html> <audio> "<materia con profesor>" "<día fecha>" <N>`.
 
 Trucos de la UI de NotebookLM que ya costaron tiempo:
-- Enfocar con JS `document.querySelector('textarea[aria-label="Query box"]').focus()`
-  antes de teclear (hay otro textarea de búsqueda web); verificar `.value`.
-- Para sacar la respuesta: el texto largo se trunca por JS. Marcar el botón
-  copiar del último `chat-message` (cambiarle `aria-label`), hacer clic real
-  con `find` + `left_click`, y leer con `pbpaste` (`LANG=en_US.UTF-8`).
+- **No uses la acción `type`**: si la ventana de Chrome no tiene el foco, el
+  texto se pierde o llega como basura. Mete el prompt con JS:
+  `ta=document.querySelector('textarea[aria-label="Query box"]'); ta.focus(); ta.select(); document.execCommand('insertText', false, PROMPT)`
+  (hay otro textarea de búsqueda web: usa siempre el aria-label).
+- Envía con un **clic de mouse** sobre el botón de flecha (screenshot para
+  ubicarlo); `btn.click()` por JS no funciona porque el botón sigue `disabled`
+  para el framework.
+- Para sacar la respuesta: el texto largo se trunca por JS. Cambia el
+  `aria-label` del botón copiar del último `chat-message` a `COPIAR ULTIMA`,
+  ubícalo con `find`, haz `scroll_to` + `left_click` y lee con
+  `LANG=en_US.UTF-8 pbpaste`.
 
 ## 3. Aplicar y revisar
 
