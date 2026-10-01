@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 05 — Seguridad Informática Básica</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -15,8 +16,28 @@
   <p class="prof">Dra. Cintia Quezada Reyes · 10 sep 2026 · Tema 1 (1.4, a fondo) — Servicios y mecanismos de seguridad informática, autenticación de entidades, el fenómeno del bolero y aplicación práctica en escenarios reales.</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c5-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>El estándar 7498 del modelo OSI considera solo 5 servicios de seguridad al asumir la disponibilidad como algo automático, mientras que los estándares de seguridad informática contemplan 6 servicios y exigen diseñar la disponibilidad de forma intencionada</strong><span class="evid">Evidencia: Lo dijo explícitamente la profesora en el pizarrón al inicio de la clase y lo contrastó con el modelo OSI.</span></li>
+<li><strong>La autenticación no aplica únicamente a seres humanos, sino a cualquier tipo de entidad o bien, incluyendo servicios informáticos, procesos del sistema operativo, hardware y animales</strong><span class="evid">Evidencia: Lo enfatizó explícitamente la profesora al detallar la verificación de identidades de procesos y servicios.</span></li>
+<li><strong>La biometría pertenece a la categoría de "algo que se es" y los sensores biométricos de mayor nivel de confianza deben verificar que el sujeto esté vivo detectando pulsaciones o riego sanguíneo</strong><span class="evid">Evidencia: Lo explicó detalladamente al analizar por qué la sangre no sirve como sensor biométrico continuo y cómo se evitan fraudes con huellas o dedos cortados.</span></li>
+<li><strong>El fenómeno o síndrome del bolero consiste en minimizar la peligrosidad del entorno al hablar o manejar información sensible en espacios públicos o ante personal externo como limpiadores o prestadores de servicios</strong><span class="evid">Evidencia: Lo desarrolló extensamente la profesora como el ejemplo principal de vulnerabilidad por descuido e imprudencia en confidencialidad.</span></li>
+<li><strong>La integridad no se limita a archivos o hardware, sino que abarca la integridad del factor humano, donde cambios conductuales, golpes o empleados descontentos representan la mayor fuente de sabotajes</strong><span class="evid">Evidencia: Lo explicó explícitamente la profesora ligándolo a casos reales de cambios psicológicos, traumas craneales y descontento laboral.</span></li>
+</ol>
+</details>
+
 <details class="section-block sec" id="c5-6-servicios" open><summary><span class="stitle">Los 6 servicios de seguridad vs. Estándar 74 (modelo OSI)</span></summary>
 <p>El estándar 74 (modelo OSI) contempla solo 5 servicios porque asume que la disponibilidad se obtiene automáticamente al implementar autenticación, integridad, confidencialidad y control de acceso. La Dra. Quezada enfatizó que en entornos reales la disponibilidad <strong>no</strong> se implementa sola: un equipo puede reiniciarse inesperadamente en pleno uso, y tener control de acceso o no repudio no evita que el sistema quede inoperable si no se diseñaron mecanismos específicos de disponibilidad.</p>
+<p class="ojo">Ojo con el número del estándar: los apuntes dicen "estándar 74", pero casi seguro se refiere al ISO 7498-2 (arquitectura de seguridad del modelo OSI). Al volver a consultar el audio en NotebookLM salió "7498".</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un restaurante que tiene mesas bonitas, meseros identificados y comida limpia, pero si se le va la luz y no puede cocinar, el servicio falla por completo porque dio por sentado que la energía eléctrica siempre estaría disponible.<span class="rompe">Dónde falla la analogía: La analogía rompe porque en las redes e infraestructura tecnológica la falta de disponibilidad no solo se debe a fallas de energía externas, sino a reinicios inesperados, saturación de peticiones o mala planificación en los horarios de acceso.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque aclara la diferencia fundamental entre el modelo OSI 7498 (que maneja 5 servicios y asume la disponibilidad automática) y los estándares de seguridad que exigen 6 servicios intencionadamente diseñados.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> El error común es pensar que por implementar control de acceso, autenticación o cifrado, la disponibilidad de un sistema o computadora queda garantizada automáticamente sin necesidad de planificarla.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c5-control-acceso" open><summary><span class="stitle">Control de acceso y autenticación de entidades</span></summary>
@@ -27,6 +48,13 @@
 <li>Un chihuahua puede parecerse a otros perros, pero se requieren señas específicas para autenticarlo con certeza.</li>
 <li>Hermanos gemelos o quintillizos pueden lucir idénticos a primera vista, pero se identifican de forma unívoca con detalles específicos (peinado diferenciado, cicatrices de la infancia).</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como la entrada a un club privado donde el guardia de la puerta revisa que traigas la membresía correspondiente para decidir si te deja pasar a las instalaciones o a ciertas áreas VIP.<span class="rompe">Dónde falla la analogía: Falla porque el control de acceso en informática no se limita a puertas físicas ni a personas humanas, sino que regula cómo los programas, procesos lógicos o servidores se conectan e interactúan entre sí.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque establece que el control de acceso siempre debe ir ligado a la autenticación para verificar la identidad real de cualquier entidad (persona, proceso o servicio) antes de conceder permisos.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Considerar erróneamente que la autenticación solo aplica a seres humanos, ignorando que los servicios, aplicaciones y procesos del sistema también deben autenticarse para verificar que son legítimos.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c5-mecanismos" open><summary><span class="stitle">Clasificación de mecanismos de autenticación y evaluación biométrica</span></summary>
@@ -41,6 +69,13 @@
 <li>La sangre está descartada como biométrico continuo: se seca al contacto con el ambiente, altera sus propiedades químicas, y su ADN se degrada rápido sin preservación de laboratorio.</li>
 <li>Los sensores básicos son vulnerables a huellas latentes recolectadas con silicona o gel. Los sensores de <strong>nivel de confianza 7</strong> incorporan lectura de constante vital (pulsaciones) para confirmar que la muestra proviene de tejido vivo.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como entrar a tu casa combinando una clave secreta de memoria, la llave metálica que traes en el bolsillo y la lectura de tu huella digital en la cerradura inteligente.<span class="rompe">Dónde falla la analogía: Se rompe porque un objeto físico como una credencial o tarjeta puede ser clonado por otra persona, mientras que los rasgos biológicos únicos e irrepetibles definen de forma absoluta lo que una persona o proceso es.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque clasifica los mecanismos en algo que se sabe (contraseña), algo que se tiene (tarjeta/token) y algo que se es (biometría), reubicando la biometría en esta última categoría e identificando requerimientos como detectar si el sujeto está vivo.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Creer que cualquier fluido biológico (como la sangre) sirve como biométrico continuo; se descarta porque se seca y se degrada rápido.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c5-bolero" open><summary><span class="stitle">Confidencialidad y el síndrome/fenómeno del bolero</span></summary>
@@ -54,6 +89,13 @@
 <li><strong>Rastreo en apps/redes sociales:</strong> personal militar que usa apps de ejercicio (Strava) publicando rutas y horarios exactos, permitiendo a adversarios planear emboscadas.</li>
 <li><strong>Egosurfing:</strong> buscar el propio nombre en buscadores para detectar información o fotos publicadas por terceros sin autorización — persisten en servidores (verificaciones gubernamentales, visas de EE.UU., reclutamiento laboral) aunque se borren del perfil.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como estar con un amigo en el parque hablando a gritos sobre tus ahorros secretos mientras un lustrador de calzado te limpia los zapatos, pensando que él no te escucha ni le interesa lo que dices.<span class="rompe">Dónde falla la analogía: La analogía deja de servir cuando la fuga de información no ocurre por hablar en la calle, sino cuando un atacante se desplaza disfrazado de personal de limpieza o mantenimiento dentro de una oficina para colocar micrófonos o escuchar proyectos.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque ilustra el fenómeno de minimizar la peligrosidad del entorno y del personal aparentemente inofensivo, lo cual provoca fugas masivas de confidencialidad en elevadores, pasillos, redes sociales o llamadas.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Minimizar el riesgo al asumir que las personas a nuestro alrededor (compañeros de transporte, meseros, personal de limpieza o contactos de redes sociales) no prestan atención o no tienen intenciones maliciosas con la información escuchada.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c5-integridad" open><summary><span class="stitle">Integridad de los bienes y del factor humano</span></summary>
@@ -63,12 +105,38 @@
 <li><strong>Empleados descontentos:</strong> personal frustrado o que percibe favoritismo hacia compañeros ineficientes — principal amenaza interna para borrar o modificar datos por venganza.</li>
 <li><strong>Alteraciones neurológicas/psicológicas:</strong> cambios conductuales drásticos por golpes severos en la cabeza en la infancia (caídas, pelotazos) o traumas acumulados en deportes de contacto (fútbol americano NFL, lucha libre WWE), que pueden desencadenar conductas agresivas o sociopáticas años después de retirarse.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un automóvil de carreras que tiene el motor y la carrocería impecables, pero el piloto tuvo un golpe en la cabeza o está furioso con el equipo y decide estrellar el coche a propósito.<span class="rompe">Dónde falla la analogía: La analogía rompe porque los cambios de conducta o alteraciones en el factor humano no siempre se deben a golpes físicos directos, sino a resentimientos laborales, falta de ética, depresión o manipulación psicológica.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque amplía el pilar de integridad más allá del código o los archivos digitales, incorporando la integridad del factor humano como la causa principal de sabotajes o daños por empleados descontentos o alterados.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Enfocarse únicamente en evitar la modificación de archivos o bases de datos en las computadoras, ignorando la salud mental, estabilidad conductual y estado emocional de las personas que manejan esa información.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c5-norepudio-disp" open><summary><span class="stitle">No repudio y disponibilidad</span></summary>
 <p><strong>No repudio:</strong> garantiza que un usuario o entidad no pueda negar la autoría de una acción ejecutada. Mecanismos: acuse de recibido en oficios físicos, peritaje caligráfico sobre firmas autógrafas, llaves de firma digital, registro (logging) de comandos de alto riesgo ejecutados por administradores.</p>
 <p><strong>Disponibilidad:</strong> garantiza que los activos estén accesibles en los días/horarios oficialmente estipulados. No definir con precisión las necesidades de disponibilidad deja al sistema descubierto y vulnerable.</p>
 <p><strong>Equilibrio operacional:</strong> los servicios se gradúan según las necesidades del negocio. Ej. Liverpool: el catálogo público está disponible 24/7 sin autenticar, mientras el módulo de pago y entrega (Click and Collect) exige autenticación y controles de no repudio.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como recibir un paquete de mensajería firmando de recibido con tu huella y un código QR, mientras que la disponibilidad asegura que la sucursal abra exactamente en el horario de 9 a 10 para entregártelo.<span class="rompe">Dónde falla la analogía: Se rompe porque el no repudio digital involucra cadenas criptográficas complejas y firmas de 256 caracteres o peritajes forenses, y la disponibilidad en línea requiere esquemas redundantes como UPS para operar sin interrupciones.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Importa porque el no repudio impide que un emisor o receptor niegue haber realizado una transacción o modificación, y la disponibilidad garantiza de forma intencionada el acceso a los bienes en los días y horarios requeridos (ej. Tienda e-commerce de Liverpool).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir la disponibilidad con un estado automático del sistema que no requiere inversión, o creer que un acuse simple en papel o una foto borrosa es suficiente para garantizar el no repudio legal y técnico.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c5-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuál es la diferencia entre la cantidad de servicios de seguridad que considera el estándar 7498 del modelo OSI y los estándares de seguridad informática?</summary><p>El estándar 7498 del modelo OSI considera 5 servicios porque asume que la disponibilidad ocurre automáticamente, mientras que los estándares de seguridad informática consideran 6 servicios y exigen diseñar la disponibilidad de forma intencionada.</p></details>
+<details class="qa"><summary>2. Explica con tus palabras en qué consiste el "síndrome o fenómeno del bolero" y cómo afecta la confidencialidad en una organización.</summary><p>Consiste en minimizar la peligrosidad del entorno al hablar de información sensible frente a personas aparentemente inofensivas (como un lustrador de calzado, un mesero o personal de limpieza), lo que genera fugas de información confidencial.</p></details>
+<details class="qa"><summary>3. Una empresa instala un servidor web para inscripciones escolares y configura firewalls y contraseñas complejas, pero el servidor se reinicia y se apaga a la hora pico de tráfico. ¿Qué servicio de seguridad falló y cómo debió abordarse según la clase?</summary><p>Falló la disponibilidad. Según la clase, la disponibilidad no se obtiene en automático por tener contraseñas o firewalls; debió diseñarse intencionadamente calculando la capacidad de peticiones y contando con sistemas de respaldo como UPS.</p></details>
+<details class="qa"><summary>4. Compara el mecanismo de autenticación de "algo que se tiene" frente a "algo que se es" considerando el caso de las tarjetas de acceso y las huellas digitales.</summary><p>"Algo que se tiene" se refiere a objetos físicos o lógicos duplicables como tarjetas de acceso o claves, mientras que "algo que se es" corresponde a rasgos biológicos únicos e irrepetibles como las huellas digitales o el iris.</p></details>
+<details class="qa"><summary>5. ¿Por qué la profesora señala que la sangre no puede utilizarse como un sensor biométrico continuo en los sistemas de acceso?</summary><p>Porque la sangre fuera del cuerpo se seca y sus propiedades químicas se degradan rápidamente, perdiendo la estabilidad requerida para un muestreo biométrico confiable.</p></details>
+<details class="qa"><summary>6. Explica por qué la profesora afirma que el pilar de integridad debe aplicarse al factor humano y no solo a los datos o hardware.</summary><p>Porque las personas que operan los sistemas pueden sufrir alteraciones emocionales, golpes o resentimientos laborales (empleados descontentos), lo que las lleva a modificar o destruir la información de la empresa.</p></details>
+<details class="qa"><summary>7. Un hospital necesita asegurar que los médicos no puedan negar haber modificado la dosis de un medicamento en el expediente de un paciente. ¿Qué servicio de seguridad debe implementarse y con qué mecanismo?</summary><p>Debe implementarse el servicio de no repudio mediante sellos digitales criptográficos, firmas digitales únicas o registros de auditoría vinculados a la identidad del médico.</p></details>
+<details class="qa"><summary>8. Compara el servicio de control de acceso frente al servicio de autenticación en términos de sus objetivos dentro del esquema de seguridad.</summary><p>El control de acceso regula y limita si una entidad puede ingresar o no a un recurso o área específica, mientras que la autenticación verifica y comprueba la identidad real de dicha entidad.</p></details>
 </details>
 
 <details class="section-block sec" id="c5-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>

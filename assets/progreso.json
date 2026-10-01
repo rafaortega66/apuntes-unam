@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T12:07:16+00:00",
+ "generatedAt": "2026-10-01T12:09:22+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -374,7 +374,7 @@
     "fecha": "2026-09-10",
     "resumen": "Tema 1 (1.4, a fondo) — Servicios y mecanismos de seguridad informática, autenticación de entidades, el fenómeno del bolero y aplicación práctica en escenarios reales.",
     "url": "materias/seguridad-informatica-basica/clase-05.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 6,
@@ -467,6 +467,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "31a9de3",
+   "fecha": "2026-10-01T06:07:17-06:00",
+   "mensaje": "MD Clase 04: formato de estudio"
+  },
   {
    "hash": "7b24d70",
    "fecha": "2026-10-01T06:05:08-06:00",
@@ -761,11 +766,6 @@
    "hash": "ffdefee",
    "fecha": "2026-09-28T21:17:57Z",
    "mensaje": "SIB: agregar Clase 08 (24 sep 2026) — vulnerabilidades humanas, ejercicio de 20 reactivos y casos reales (Línea 12 del Metro)"
-  },
-  {
-   "hash": "5d49afa",
-   "fecha": "2026-09-28T20:17:10Z",
-   "mensaje": "MD Clase 07: confirmar herramienta de la demo como RapidMiner"
   }
  ]
 }
