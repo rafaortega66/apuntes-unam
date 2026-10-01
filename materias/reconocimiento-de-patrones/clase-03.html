@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 03 — Reconocimiento de Patrones</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -16,6 +17,18 @@
   <p style="font-size:12px;color:var(--ink-soft);margin:2px 0 0">🔢 Numeración del profesor: corresponde a sus diapositivas <a href="material.html" style="color:var(--indigo)">Clase 6</a> — no coincide 1:1 con "Clase 03" de este sitio.</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c3-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Impacto de omitir la estandarización en PCA sobre datos con escalas heterogéneas</strong><span class="evid">Evidencia: evidencia de la clase: el profesor lo ligó explícitamente a la práctica explicando que sin estandarizar, la característica con mayor escala (Proline) captura artificialmente casi toda la varianza en el primer componente.</span></li>
+<li><strong>Comportamiento del error cuadrático medio (MSE) en la reconstrucción de datos con PCA conforme se incrementa el número de componentes</strong><span class="evid">Evidencia: evidencia de la clase: el profesor lo explicó en vivo y lo asignó en la práctica para graficar la disminución del error desde 1 hasta las 13 componentes en Wine.</span></li>
+<li><strong>Métodos para la selección del número K de componentes principales (regla del codo, umbral de varianza del 90-95% y criterio de Kaiser)</strong><span class="evid">Evidencia: evidencia de la clase: el profesor lo detalló explícitamente en el audio al describir los requisitos de análisis para la práctica.</span></li>
+<li><strong>Interpretación visual del rostro promedio y las eigenfaces (primeras 10 frente a últimas 10) en el dataset Olivetti Faces</strong><span class="evid">Evidencia: evidencia de la clase: el profesor lo explicó en vivo detallando que las primeras 10 capturan rasgos geométricos principales (ojos, boca) y las últimas 10 parecen estática de televisión.</span></li>
+<li><strong>Equivalencia entre PCA por matriz de covarianza, SVD y Scikit-Learn, y la razón del cambio de signo en autovectores</strong><span class="evid">Evidencia: evidencia de la clase: el profesor lo indicó explícitamente al pedir comparar los tres métodos en la práctica y aclarar que un signo invertido en vectores ortogonales no afecta los resultados.</span></li>
+</ol>
+</details>
+
 <details class="section-block sec" id="c3-reconstruccion" open><summary><span class="stitle">Reconstrucción con PCA</span></summary>
 <p>PCA es una transformación lineal; si se puede proyectar a un espacio reducido, también se puede aplicar el camino inverso. La reconstrucción <strong>no es perfecta</strong> a menos que se usen todos los componentes, y permite ver cuánta información se conservó tras reducir la dimensionalidad.</p>
 <pre><code>X ∈ ℝ^(m×n)      datos originales
@@ -25,6 +38,12 @@ Z = Xc·Wₖ ∈ ℝ^(m×k)     datos proyectados
 X̂c = Z·Wₖᵀ       (W ortonormal)        →     X̂ = Z·Wₖᵀ + μ</code></pre>
 <p><strong>Error de reconstrucción:</strong> <code>‖X − X̂‖²</code>. Es mínimo cuando se usan los k componentes que aportan mayor varianza; esa reconstrucción minimiza el MSE entre todos los subespacios de dimensión k → es la mejor aproximación posible de rango k.</p>
 <p><strong>Del audio (práctica, dataset Wine):</strong> 13 características originales. Reconstruyendo con 1, 2, 3, … 13 componentes y graficando el MSE, el error baja paulatinamente desde un valor alto (1 componente) hasta <strong>cero</strong> al usar las 13. Cada reconstrucción tiene un margen de error que depende directamente del número de componentes retenidos.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como comprimir una foto de alta resolución a un archivo muy ligero y luego volver a abrirla para ver qué tanto se borró la imagen.<span class="rompe">Dónde falla la analogía: Deja de servir cuando usas todas las piezas disponibles, ya que al usar la totalidad de componentes la reconstrucción recupera exactamente la imagen original sin pérdida.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite medir cuantitativamente la pérdida de información mediante el error cuadrático medio (MSE), observando cómo el error disminuye gradualmente conforme se añaden más componentes hasta llegar a cero con el total de características.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-eigenfaces" open><summary><span class="stitle">EigenFaces</span></summary>
@@ -36,6 +55,13 @@ X̂c = Z·Wₖᵀ       (W ortonormal)        →     X̂ = Z·Wₖᵀ + μ</cod
 <li><strong>Últimas ~10 eigenfaces:</strong> sin información estructural útil; visualmente son como la estática / ruido blanco de una TV sin señal.</li>
 <li><strong>Validación:</strong> reconstruir una imagen del dataset con subconjuntos progresivos de 10, 20, 50, 100 … hasta 300 eigenfaces, mostrar los resultados en una sola figura y analizar cómo decrece el MSE conforme aumenta el número de eigenfaces. El error disminuye porque se recupera más varianza; se relaciona inversamente con la varianza descartada.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como descomponer cientos de fotos de caras en sombras transparentes básicas donde las primeras dan la silueta del rostro y las últimas son como estática de televisión.<span class="rompe">Dónde falla la analogía: Se rompe si las fotos originales no están alineadas en una matriz organizada donde cada fila sea un rostro y cada columna un píxel específico.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite aplicar PCA a imágenes de alta dimensión (400 imágenes de 64x64 píxeles = 4096 características) para calcular el rostro promedio, extraer ejes principales de variación facial y reconstruir caras con diferente número de componentes.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Olvidar organizar las imágenes en una matriz de dimensiones n por p (número de imágenes por número total de píxeles) antes de aplicar PCA.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-elegir-k"><summary><span class="stitle">Cómo elegir K (criterios definidos en el audio)</span></summary>
@@ -44,6 +70,12 @@ X̂c = Z·Wₖᵀ       (W ortonormal)        →     X̂ = Z·Wₖᵀ + μ</cod
 <li><strong>Criterio de Kaiser:</strong> conservar solo los vectores propios cuyo valor propio sea estrictamente <code>λ &gt; 1</code>.</li>
 <li><strong>Umbral de varianza:</strong> conservar los componentes indispensables para explicar en conjunto un objetivo del <strong>90–95 %</strong> de la varianza total.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como decidir cuántos capítulos principales lees de un libro para entender la historia sin tener que leer cada una de las páginas secundarias.<span class="rompe">Dónde falla la analogía: Falla si los criterios dan recomendaciones contradictorias o si el problema exige conservar un detalle mínimo que se encuentra en un componente con poca varianza.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Establece reglas sistemáticas para reducir la dimensionalidad seleccionando K componentes según la regla del codo (cambio abrupto), el umbral de varianza acumulada (alcanzar 90% a 95%) o el criterio de Kaiser (autovalores mayores a 1).</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c3-lda"><summary><span class="stitle">LDA — Análisis Discriminante Lineal <em>(del deck «Clase 6», no confirmado en el audio)</em></span></summary>
@@ -74,6 +106,25 @@ X̂c = Z·Wₖᵀ       (W ortonormal)        →     X̂ = Z·Wₖᵀ + μ</cod
 <li><strong>Estandarización (definición):</strong> restar la media de cada característica y dividir entre su desviación estándar, para eliminar las diferencias de escala antes de aplicar PCA.</li>
 <li><strong>SVD en Python:</strong> no hay que programar la descomposición a mano; el módulo <code>numpy.linalg</code> tiene SVD nativa y también una función directa para la matriz de covarianza.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como recibir las instrucciones detalladas de un experimento de laboratorio donde te dicen exactamente qué entregar y qué trampas evitar en los datos.<span class="rompe">Dónde falla la analogía: Se rompe si no se entrega la primera hoja del reporte impresa para revisión o si se falta a la exposición oral.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>El profesor enfatizó la diferencia drástica de aplicar PCA con y sin estandarización (demostrando que datos sin estandarizar hacen que la variable de mayor escala capture casi toda la varianza) y estableció los tres entregables obligatorios de la Práctica 1 (código, reporte en formato IEEE con la primera página impresa traída a clase y presentación oral).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Pensar que un cambio de signo en los autovectores calculados por SVD o Scikit-Learn representa un error numérico, cuando en realidad vectores opuestos siguen siendo ortogonales y representan el mismo eje.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c3-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuáles son los tres criterios explicados en clase para seleccionar el número K de componentes principales?</summary><p>Los tres criterios son la regla del codo (identificar un cambio abrupto en la curva de varianza), el umbral de varianza acumulada (alcanzar entre el 90% y el 95% de varianza explicada) y el criterio de Kaiser (seleccionar autovectores con autovalores superiores a 1).</p></details>
+<details class="qa"><summary>2. ¿Qué sucede con la distribución de varianza explicada si se aplica PCA sobre el dataset Wine sin estandarizar las características?</summary><p>Al no quitar la escala a los datos crudos, la característica que posee la magnitud numéricamente más grande (como Proline) domina el cálculo y provoca que el primer componente principal capture artificialmente casi la totalidad de la varianza del conjunto.</p></details>
+<details class="qa"><summary>3. Si un dataset tiene 13 características y se calcula el error cuadrático medio (MSE) de reconstrucción utilizando 1 componente, 5 componentes y las 13 componentes, ¿cómo se comporta el MSE en cada caso?</summary><p>Con 1 componente el MSE es muy elevado porque se pierde mucha información; con 5 componentes el error disminuye significativamente al capturar mayor varianza; y al utilizar las 13 componentes el MSE se reduce exactamente a cero porque se reconstruye la totalidad de la información original.</p></details>
+<details class="qa"><summary>4. ¿Qué diferencia existe en los resultados de los autovectores al aplicar PCA mediante la matriz de covarianza, SVD y Scikit-Learn?</summary><p>Los autovalores resultan exactamente iguales en los tres métodos, mientras que algunos autovectores pueden aparecer con el signo invertido (multiplicados por -1); sin embargo, al ser ortogonales, representan la misma dirección en el espacio y producen la misma proyección.</p></details>
+<details class="qa"><summary>5. En la práctica de Eigenfaces con el dataset Olivetti Faces, ¿qué dimensiones tiene la matriz de imágenes y qué representa el rostro promedio?</summary><p>La matriz tiene dimensiones de 400 filas por 4096 columnas (correspondientes a 400 imágenes de 64x64 píxeles), y el rostro promedio representa una cara completamente lisa y sin facciones individuales que sirve como centro para medir diferencias entre rostros.</p></details>
+<details class="qa"><summary>6. Visualmente, ¿qué diferencia existe entre las primeras 10 eigenfaces y las últimas 10 eigenfaces?</summary><p>Las primeras 10 eigenfaces capturan la estructura geométrica principal y con mayor varianza del rostro (como boca, ojos y mandíbula), mientras que las últimas 10 capturan detalles mínimos con varianza casi nula que se aprecian como estática de televisión.</p></details>
+<details class="qa"><summary>7. Si se reconstruye una imagen facial del dataset Olivetti utilizando progresivamente 10, 50, 100 y 300 componentes principales, ¿qué cambio se observa en la imagen resultante conforme aumenta el número de componentes?</summary><p>Con 10 componentes solo se distingue una forma borrosa muy parecida al rostro promedio; con 50 y 100 componentes comienzan a definirse las facciones del individuo; y con 300 componentes la reconstrucción alcanza una alta nitidez recuperando casi todos los detalles del rostro original.</p></details>
+<details class="qa"><summary>8. ¿Cuáles son los tres entregables obligatorios requeridos por el profesor para la Práctica 1?</summary><p>Los tres entregables son: 1) el código en Python reproducible, 2) el reporte escrito en formato IEEE de dos columnas trayendo la primera página impresa a clase para anotaciones del profesor, y 3) la presentación oral en clase utilizando laptop.</p></details>
 </details>
 
 <details class="section-block sec" id="c3-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>

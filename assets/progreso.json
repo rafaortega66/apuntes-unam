@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T12:29:17+00:00",
+ "generatedAt": "2026-10-01T12:31:32+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -21,7 +21,7 @@
     "fecha": "2026-09-04",
     "resumen": "Tema 3 — Reducción de dimensionalidad II. Reconstrucción con PCA, EigenFaces, LDA y otros métodos (t-SNE, Kernel PCA, QDA). El audio de esta sesión es parcial (solo el tramo final, sobre la práctica); la teoría se comple",
     "url": "materias/reconocimiento-de-patrones/clase-03.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 4,
@@ -468,6 +468,11 @@
  },
  "gitlog": [
   {
+   "hash": "2ae116e",
+   "fecha": "2026-10-01T06:29:18-06:00",
+   "mensaje": "RP Clase 04: formato de estudio"
+  },
+  {
    "hash": "4fc4de9",
    "fecha": "2026-10-01T06:25:34-06:00",
    "mensaje": "OAC Clase 03: formato de estudio"
@@ -761,11 +766,6 @@
    "hash": "b659e50",
    "fecha": "2026-09-30T15:36:37-06:00",
    "mensaje": "ASI: enunciados P1 y P3, presentación Kali, láminas UML y Proyectito (pptx)"
-  },
-  {
-   "hash": "738e9ab",
-   "fecha": "2026-09-30T14:19:42-06:00",
-   "mensaje": "Lab FSE: guiones y archivos de las Prácticas 6, 7 y 8"
   }
  ]
 }
