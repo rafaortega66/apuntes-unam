@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T07:49:34+00:00",
+ "generatedAt": "2026-10-01T07:51:44+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -63,7 +63,7 @@
     "fecha": "2026-09-25",
     "resumen": "Tema 6 (cierre) — Sesión de presentaciones de los equipos: comparativa de K-Means, K-Means++ e ISODATA sobre un dataset sintético (K = 4) y sobre el dataset real Wine con estandarización y PCA, evaluados con Silueta, Dav",
     "url": "materias/reconocimiento-de-patrones/clase-09.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 10,
@@ -468,6 +468,11 @@
  },
  "gitlog": [
   {
+   "hash": "901bdd0",
+   "fecha": "2026-10-01T01:49:34-06:00",
+   "mensaje": "OAC Clase 07: formato de estudio; pendiente: re-subir audio OAC-Clase8 (falló en NotebookLM)"
+  },
+  {
    "hash": "daf31d6",
    "fecha": "2026-10-01T01:46:47-06:00",
    "mensaje": "FSE Clase 09: formato de estudio; RP Clase 10 (día de examen) marcada como no-aplica"
@@ -761,11 +766,6 @@
    "hash": "4d28d26",
    "fecha": "2026-09-17T17:30:42-06:00",
    "mensaje": "SIB: agregar Clase 06 (17 sep 2026) — Tema 2, amenazas y vulnerabilidades"
-  },
-  {
-   "hash": "9d63ec7",
-   "fecha": "2026-09-17T17:14:23-06:00",
-   "mensaje": "MD: registrar el Primer Examen Parcial en Entregas"
   }
  ]
 }

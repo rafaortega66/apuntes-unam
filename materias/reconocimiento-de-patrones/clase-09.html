@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 09 — Reconocimiento de Patrones</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20260930b">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
 <script src="../../assets/app.js?v=20260930b" defer></script>
 </head>
@@ -14,6 +15,17 @@
 <div class="detail-head" style="border-color:#45B8A8"><h2>Clase 09</h2>
   <p class="prof">Ing. Rubén Omar Azuara Domínguez · 25 sep 2026 · Tema 6 (cierre) — Sesión de presentaciones de los equipos: comparativa de K-Means, K-Means++ e ISODATA sobre un dataset sintético (K = 4) y sobre el dataset real Wine con estandarización y PCA, evaluados con Silueta, Davies-Bouldin e Índice de Rand Ajustado.</p>
 </div>
+
+<div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c9-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Cálculo a mano de distancias entre puntos (como la distancia Euclidiana)</strong><span class="evid">Evidencia: evidencia de la clase: el profesor lo dijo explícitamente al responder que los ejercicios prácticos a mano en el examen serían sencillos, midiendo diferencias al cuadrado.</span></li>
+<li><strong>Importancia de la estandarización frente a variables con escalas heterogéneas</strong><span class="evid">Evidencia: evidencia de la clase: el profesor lo repitió y preguntó explícitamente a ambos equipos sobre qué método de normalización convenía más y por qué magnitudes grandes como Proline dominan la distancia.</span></li>
+<li><strong>Ventajas de K-Means++ sobre la inicialización aleatoria y prevención de mínimos locales</strong><span class="evid">Evidencia: evidencia de la clase: el profesor intervino explícitamente para preguntar y enfatizar que K-Means++ evita que centroides queden atrapados en malas posiciones iniciales.</span></li>
+<li><strong>Interpretación de las variaciones de la Inercia en ISODATA al fusionar o dividir clústeres</strong><span class="evid">Evidencia: evidencia de la clase: lo discutieron los alumnos en la exposición y el profesor aclaró que al reducir centroides la inercia puede subir sin que signifique un error en el código.</span></li>
+</ol>
+</details>
 
 <div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>ℹ️ Sobre esta sesión:</strong> no fue una clase de teoría nueva, sino de <strong>exposición de los equipos</strong> con los resultados de sus experimentos. Los algoritmos y las métricas se explicaron en la <a href="clase-07.html">Clase 07</a> y la <a href="clase-08.html">Clase 08</a>; aquí se ven aplicados, con números reales de las corridas.</p></div>
 
@@ -31,6 +43,13 @@
 <tr><td>Similitud de Jaccard</td><td><em>J(A,B) = |A ∩ B| / |A ∪ B|</em></td><td>Orientada a conjuntos binarios o categóricos.</td></tr>
 </table>
 <p>A partir de estas funciones se pasa al aprendizaje no supervisado o <strong>clustering</strong>. A diferencia del paradigma supervisado, en el agrupamiento no se dispone de etiquetas de clase a priori, por lo que el objetivo es descubrir la estructura intrínseca de los datos organizándolos en conjuntos que maximicen la <strong>cohesión intra-clúster</strong> y la <strong>separación inter-clúster</strong>. Los centroides operan como centros de masa alrededor de los cuales se organizan las observaciones.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como agrupar frutas en un mercado comparando qué tan cerca están sus colores o tamaños de una fruta muestra de referencia.<span class="rompe">Dónde falla la analogía: Si una fruta tiene una propiedad con valores gigantescos, como el peso en gramos frente al número de semillas, esa sola propiedad domina la comparación sin que las frutas sean realmente parecidas.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite clasificar o agrupar patrones midiendo distancias o similitudes geométricas entre vectores de características sin requerir necesariamente etiquetas previas.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir las métricas de distancia al no escalar los datos previamente, provocando que variables con magnitudes muy grandes distorsionen la proximidad real.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c9-kmeans" open><summary><span class="stitle">K-Means, K-Means++ y LBG</span></summary>
@@ -54,6 +73,13 @@
 <li>Repite la división hasta llegar al tamaño objetivo N = 2<sup>L</sup>.</li>
 </ul>
 <p>Para clasificar una muestra nueva x se calcula su distancia al codeword más cercano del codebook de cada clase, <em>d(x, C<sub>j</sub>) = min<sub>k</sub> ‖x − c<sub>jk</sub>‖</em>, y se asigna a la clase con menor distancia.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como colocar K banderas en un campo, hacer que cada persona camine hacia la bandera más cercana y luego mover cada bandera al centro del grupo formado, repitiendo hasta que nadie cambie de grupo.<span class="rompe">Dónde falla la analogía: No funciona si las personas están agrupadas en formas de media luna o anillos concéntricos, ya que siempre genera fronteras rígidas y agrupaciones esféricas.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Busca minimizar la Inercia (suma de distancias cuadradas) para comprimir y organizar datos; K-Means++ mejora esto dispersando los centroides iniciales probabilísticamente mediante la distancia al cuadrado.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Usar inicialización aleatoria simple puede dejar el algoritmo atrapado en mínimos locales con inercias muy elevadas si la semilla inicial no es favorable.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c9-isodata" open><summary><span class="stitle">ISODATA y métricas de evaluación</span></summary>
@@ -83,6 +109,13 @@
 <li><strong>Índice de Davies-Bouldin (DBI):</strong> razón entre la dispersión intra-clúster y la separación inter-clúster. Cuanto <em>menor</em>, mejor separación y compacidad.</li>
 <li><strong>Índice de Rand Ajustado (ARI):</strong> mide la concordancia entre los grupos generados y las etiquetas reales de referencia (<em>ground truth</em>), en una escala de [−1, 1], donde 1 es coincidencia perfecta.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un organizador de fiesta dinámico que junta dos mesas si están muy pegadas, divide una mesa si tiene gente muy diversa o elimina mesas vacías.<span class="rompe">Dónde falla la analogía: Requiere calibrar muchos parámetros manuales, como la distancia mínima o la desviación máxima, por lo que si se eligen a ciegas se pueden crear o destruir grupos de forma descontrolada.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Resuelve la rigidez de K-Means al adaptar el número de clústeres autónomamente mediante operaciones heurísticas de división (Smax), fusión (Dmin) y eliminación (Nmin).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Creer que un aumento puntual en la inercia al fusionar clústeres es un error del código, cuando en realidad es una consecuencia matemática de reducir el número de centroides de referencia.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c9-exp1" open><summary><span class="stitle">Experimento 1 — Datos sintéticos bidimensionales</span></summary>
@@ -103,6 +136,13 @@
 <li><strong>K<sub>init</sub> = 3:</strong> detectó dispersión excesiva en un grupo (σ<sub>k</sub> &gt; σ<sub>max</sub>) y aplicó divisiones (3 → 4), llegando por sí solo al valor real K = 4.</li>
 </ul>
 <p>Ambos casos obtuvieron exactamente la misma inercia final que el mejor caso de K-Means (2086.7895). Se analizó también la curva de inercia en ISODATA: al iniciar con K<sub>init</sub> = 6 la inercia comenzó en 1902.79 y subió a 2086.7895 al fusionarse a 4 clústeres. Los alumnos y el profesor aclararon que ese aumento <strong>no es un error</strong>, sino una propiedad matemática: al reducir la cantidad de centroides de referencia, la suma de distancias cuadradas a los puntos asignados aumenta necesariamente.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como probar dos métodos para ordenar 400 fichas de colores en 4 cajas: uno tirando fichas al azar y otro midiendo distancias probabilísticas para ver cuál llega más rápido al orden correcto.<span class="rompe">Dónde falla la analogía: En un conjunto sintético bien separado de 2 dimensiones, casi cualquier algoritmo eventualmente encuentra las 4 cajas, enmascarando las fallas que ocurren en problemas reales de alta dimensión.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Demostró empíricamente que K-Means++ reduce el número de iteraciones necesarias a la mitad (de 7.3 a 4.3 en promedio) respecto a la inicialización aleatoria, obteniendo la misma inercia óptima de 2086.7895.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Caer en mínimos locales con inercias infladas (por ejemplo, inercia de 3550 en lugar de 2086) al usar inicializaciones aleatorias con semillas desfavorables.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c9-exp2" open><summary><span class="stitle">Experimento 2 — Dataset real Wine con estandarización y PCA</span></summary>
@@ -121,6 +161,13 @@
 <tr><td>3</td><td>1</td><td>59 muestras de la Clase 1 real (la totalidad) y 3 de la Clase 2.</td></tr>
 </table>
 <p>Las métricas globales de la partición final sobre Wine: <strong>Silueta = 0.2849</strong>, <strong>Davies-Bouldin = 1.3892</strong> e <strong>Índice de Rand Ajustado (ARI) = 0.895</strong>. El ARI, cercano a 1, confirma una concordancia casi perfecta con la estructura real del vino.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como catarse 178 botellas de vino midiendo 13 ingredientes químicos, pero comprimiendo primero esos datos con PCA para agrupar las botellas en 3 bodegas principales.<span class="rompe">Dónde falla la analogía: PCA y la estandarización asumen relaciones continuas y escalas comparables; si no se estandarizan las variables antes del análisis, los atributos con números altos dominan todo el proceso.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Mostró que tras estandarizar y aplicar PCA (10 componentes, 95% varianza explicada), K-Means e ISODATA convergieron exactamente a la misma inercia final (127.98) y alcanzaron un elevado índice ARI de 0.895 con las clases reales de vinos.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Olvidar estandarizar la variable Proline (que oscila entre 70 y 1620 unidades), lo que habría provocado que esa característica aplastara el peso de todas las demás en el cálculo de distancias.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c9-preguntas" open><summary><span class="stitle">Preguntas del profesor a los equipos</span></summary>
@@ -129,6 +176,25 @@
 <p><strong>2. Corrección de clústeres y parámetros de ISODATA.</strong> <em>Si en una gráfica hay dos centroides muy cercanos y uno solo capturando dos clases distintas, ¿cómo unirlos y separarlos con K-Means?, ¿y qué parámetros de ISODATA controlan esas operaciones?</em> Respuesta: en K-Means no se puede reestructurar así porque K permanece rígido durante todo el proceso. En ISODATA, separar un clúster alargado o disperso lo controla la desviación estándar máxima (σ<sub>max</sub>) y fusionar centroides cercanos lo regula la distancia mínima (d<sub>min</sub>).</p>
 <p><strong>3. Impacto de PCA.</strong> <em>¿Cómo habrían cambiado los resultados con solo 2 componentes (PC1 y PC2, que explican 57 % de la varianza acumulada) en lugar de 10 (95 %)?</em> Respuesta: el cálculo sería más rápido y se podría graficar directamente en dos dimensiones, pero al descartar 43 % de la información estructural el error de clasificación aumentaría de forma significativa y se distorsionaría la asignación respecto a las clases reales.</p>
 <p><strong>4. Estandarización vs. normalización en Wine.</strong> <em>Con atributos como Proline en miles y fenoles en unidades, ¿conviene estandarizar (Z-score) o normalizar al rango?</em> Respuesta: estandarizar (restar la media y dividir entre la desviación estándar), porque conserva la distribución de varianza de cada variable sin comprimir artificialmente los datos a un intervalo cerrado.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como cuando el profesor examina al equipo preguntándoles qué harían si las banderas de su mapa se quedan pegadas o si usan solo una parte de la información de los datos.<span class="rompe">Dónde falla la analogía: Las preguntas teóricas del profesor no se responden con corazonadas cotidianas, sino justificando el impacto matemático de la varianza explicada y la dispersión en los algoritmos.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permitió profundizar en la ventaja de K-Means++ contra mínimos locales, la función de los parámetros Smax y Dmin en ISODATA, y el peligro de reducir a solo 2 componentes principales perdiendo el 43% de varianza explicada.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Pensar que K-Means puede corregir por sí solo dos centroides encimados sin cambiar el valor rígido de K, lo cual fue corregido por el profesor señalando que para eso se requiere ISODATA.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c9-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Qué valor de inercia final obtuvieron tanto K-Means como ISODATA en el experimento con el dataset sintético de 4 clústeres?</summary><p>Ambos algoritmos convergieron exactamente a una inercia final de 2086.7895.</p></details>
+<details class="qa"><summary>2. ¿Por qué la inercia puede aumentar en ISODATA cuando el algoritmo realiza una operación de fusión de clústeres?</summary><p>Al fusionar dos clústeres se reduce la cantidad total de centroides disponibles, por lo que las distancias de las observaciones a su nuevo centroide único aumentan, elevando matemáticamente la suma de distancias cuadradas sin que esto signifique una falla.</p></details>
+<details class="qa"><summary>3. Si se tienen dos centroides en m1 = (1, 2) y m2 = (4, 6) en un espacio bidimensional, ¿a qué clúster se asigna el patrón x = (2, 3) usando distancia Euclidiana?</summary><p>La distancia a m1 es la raíz cuadrada de (2-1)^2 + (3-2)^2 = raíz de 2 (aprox. 1.41), mientras que a m2 es la raíz cuadrada de (2-4)^2 + (3-6)^2 = raíz de 13 (aprox. 3.61). Por lo tanto, el patrón se asigna al clúster 1 por mínima distancia.</p></details>
+<details class="qa"><summary>4. ¿En qué se diferencian K-Means e ISODATA respecto a la definición del parámetro K?</summary><p>K-Means exige fijar un número K de clústeres constante desde el inicio que no cambia, mientras que ISODATA recibe un K inicial y ajusta dinámicamente la cantidad de clústeres mediante división, fusión y eliminación.</p></details>
+<details class="qa"><summary>5. En el dataset real Wine con 13 características químicas, ¿a cuántos componentes principales se redujo el espacio al fijar un umbral del 95% de varianza explicada con PCA?</summary><p>El espacio se redujo de 13 características a 10 componentes principales significativos.</p></details>
+<details class="qa"><summary>6. ¿Por qué es indispensable estandarizar las características con Z-score antes de aplicar K-Means en datasets como Wine?</summary><p>Porque atributos con magnitudes numéricas muy altas (como Proline, de 70 a 1620 unidades) dominarían por completo el cálculo de la distancia Euclidiana frente a atributos con valores decimales pequeños, distorsionando el agrupamiento.</p></details>
+<details class="qa"><summary>7. En un algoritmo ISODATA con un umbral de eliminación Nmin = 5 puntos, si un clúster C3 resulta con solo 3 puntos tras la etapa de asignación, ¿qué acción ejecuta el algoritmo?</summary><p>Elimina el centroide del clúster C3 por tener menos puntos que Nmin y redistribuye sus 3 observaciones entre los centroides restantes más cercanos.</p></details>
+<details class="qa"><summary>8. ¿Cómo difieren K-Means aleatorio y K-Means++ en su proceso de inicialización de centroides?</summary><p>K-Means aleatorio selecciona K puntos al azar del dataset, mientras que K-Means++ elige solo el primer centroide al azar y los subsecuentes probabilísticamente en función del cuadrado de la distancia al centroide más cercano.</p></details>
 </details>
 
 <details class="section-block sec" id="c9-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
