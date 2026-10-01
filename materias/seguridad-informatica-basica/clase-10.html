@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="formato" content="estudio">
+<title>Clase 10 — Seguridad Informática Básica</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view')||'tema'}catch(e){document.documentElement.dataset.view='tema'}</script>
+<script src="../../assets/app.js?v=20260930b" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Seguridad Informática Básica</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 10</h2>
+  <p class="prof">Dra. Cintia Quezada Reyes · 1 oct 2026 · Tema 2 (2.2, cierre) e inicio del Tema 3 — Análisis y escaneo de vulnerabilidades (estático, dinámico, SCA, red y configuración; DAST/SAST/SCA), bases de datos CVE y NVD con la métrica CVSS, ciberterrorismo y definición formal de ataque, con prevención contra recuperación.</p>
+</div>
+
+<div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Formato de estudio.</strong> Primero va lo que probablemente viene en el examen y por qué. Después, cada concepto explicado en este orden: qué es, explicado en simple, cómo funciona, por qué importa y errores comunes. Al final hay preguntas para ponerte a prueba. Todo sale del audio de la clase (procesado en NotebookLM).</p></div>
+
+<details class="section-block sec" id="c10-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<p>La profesora declaró al cerrar CVSS: «hasta aquí vendría el examen». Con esta clase termina el temario evaluable del examen parcial, de preguntas cerradas sobre todo lo visto desde la Clase 1.</p>
+<ol class="examen-lista">
+<li><strong>Definición formal de ataque.</strong><span class="evid">Evidencia: la escribió y la integró formalmente en el pizarrón al empezar el Tema 3: un ataque es la culminación de una amenaza, todo lo que ya sucedió o está sucediendo y generó o genera un daño severo al activo.</span></li>
+<li><strong>Prevención contra recuperación: recuperarse cuesta más que prevenir.</strong><span class="evid">Evidencia: lo enfatizó, rebatió posturas de alumnos y lo ejemplificó con desastres reales (sismos, ransomware).</span></li>
+<li><strong>Estructura de un identificador CVE.</strong><span class="evid">Evidencia: la desglosó en el pizarrón (CVE – año – número) y pidió a los alumnos entrar a la base pública desde sus dispositivos.</span></li>
+<li><strong>Evolución de CVSS: v2 con 3 niveles, v3/v4 con 4 niveles y sus rangos.</strong><span class="evid">Evidencia: proyectó y amplió el diagrama comparativo con los rangos y los colores (verde, amarillo, naranja, rojo).</span></li>
+<li><strong>Tipos de análisis de vulnerabilidades (estático, dinámico, SCA, red, configuración).</strong><span class="evid">Evidencia: los explicó uno por uno con ejemplos (inscripciones de la UNAM, niveles de confianza, FileZilla). Evidencia más débil para DAST/SAST, que fue una explicación breve.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c10-verificacion" open><summary><span class="stitle">1 · Verificación periódica y reportes de análisis de vulnerabilidades</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es el proceso continuo y documentado de evaluación de seguridad que debe ejecutarse periódicamente (cada 6 meses o al menos una vez al año) para detectar debilidades en los activos antes de que ocurran cambios imprevistos.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como hacerse análisis médicos o pruebas de COVID con regularidad: aunque hoy te sientas bien o la prueba salga negativa, puede haber un periodo de incubación o cambios internos. La analogía deja de servir porque en los sistemas las condiciones cambian en milisegundos por una sola tecla, una mala configuración o un archivo borrado, a diferencia de los procesos biológicos, que son más lentos.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Para evitar falsos positivos y falsos negativos no se debe confiar en un solo tipo de escaneo ni en una prueba rápida de 5 minutos: hay que hacer varias pruebas de forma sistemática. Como las organizaciones suelen carecer de tiempo, presupuesto y personal, exigen resultados inmediatos. La profesora explicó que el profesional de la UNAM jamás debe prometer «de palabra» que una empresa no tiene vulnerabilidades solo porque el tiempo no alcanzó para completar las pruebas. Todo debe formalizarse en reportes escritos que digan qué pruebas se hicieron, con qué metodología, qué resultados se obtuvieron y qué limitaciones hubo. Si no se documenta por escrito, el cliente puede usar la falta de pruebas para deslindarse o culpar al consultor si luego ocurre una falla.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Se conecta con la ética profesional y la responsabilidad legal del especialista. Documentar protege el prestigio profesional y justifica técnicamente el nivel de riesgo ante la alta dirección.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> garantizar de palabra que un sistema es 100 % seguro, hacer un único escaneo superficial, o suponer que un sistema que funcionaba ayer seguirá igual hoy sin cambios.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c10-tipos-analisis" open><summary><span class="stitle">2 · Tipos de análisis de vulnerabilidades (estático, dinámico, SCA, red y configuración)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Una clasificación de cinco modalidades para examinar activos informáticos, físicos o humanos: <strong>estático</strong> (observación sin ejecutar), <strong>dinámico</strong> (evaluación en ejecución con datos de estrés), <strong>de composición de software (SCA)</strong>, <strong>basado en red</strong> (dispositivos y niveles de confianza) y <strong>revisión de configuración</strong> (comparar contra líneas base).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como revisar un vehículo: el estático es inspeccionar el motor apagado en el taller; el dinámico, manejarlo a máxima velocidad sobre piso mojado; el SCA, verificar que las piezas no sean pirata; el de red, revisar el camino y la suspensión; y el de configuración, ajustar la presión exacta de las llantas. La analogía deja de servir porque el software y los protocolos sufren colisiones de memoria, fugas de dependencias y saturaciones lógicas que no existen en piezas mecánicas rígidas.</p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>Análisis estático:</strong> se observa el sistema en su modo habitual de trabajo, sin ejecutar sus funciones activas, y se compara su comportamiento contra datos estandarizados o <em>baselines</em> ya registrados.</li>
+<li><strong>Análisis dinámico:</strong> se evalúa el sistema durante su ejecución, con cargas extremas o datos anómalos. <em>Ejercicio de clase:</em> en el sistema de inscripciones de la UNAM la carga no es igual un día normal que en la primera hora de inscripciones o en altas y bajas. Para detectar vulnerabilidades dinámicas se ingresan datos incorrectos o inusuales a propósito: números de cuenta de alumnos ya titulados, contraseñas en minúsculas cuando están registradas en mayúsculas, espacios en blanco adicionales o intermitencias en la energía eléctrica, para ver cómo responde la aplicación.</li>
+<li><strong>Análisis de composición de software (SCA):</strong> examina las bibliotecas y dependencias del código. La profesora señaló que los programadores, por falta de confianza o costumbre, a veces incluyen hasta 20 bibliotecas cuando solo necesitan una, lo que gasta recursos del sistema y mete huecos de seguridad conocidos.</li>
+<li><strong>Análisis basado en red y niveles de confianza:</strong> examina el estado de sistemas operativos, dispositivos y medios de transmisión de la red, y asigna niveles de confianza (alto, medio, bajo) a hardware, software, procesos y personas. Ejemplos: un switch nuevo empieza con nivel de confianza alto, pero si está mal configurado o mal conectado baja a bajo; un empleado recién contratado empieza con nivel bajo porque se desconoce su desempeño; y el nivel de confianza en la propia salud (por ejemplo, la rodilla al correr) puede caer de alto a bajo tras un evento de estrés o cambios de clima. Los niveles son dinámicos: pueden subir de bajo a medio y alto conforme se corrigen configuraciones o procesos.</li>
+<li><strong>Revisión de configuración:</strong> compara los parámetros del sistema contra manuales de buenas prácticas y líneas base. <em>Ejemplo real (FileZilla):</em> es un software para conexiones remotas y transferencia de archivos. En ciertas versiones, al ingresar los datos de conexión se genera automáticamente un espacio en blanco o un «enter» invisible al final de la cadena. Si el administrador no activa en los ajustes la opción de eliminar los espacios en blanco finales, la conexión remota se rechaza sistemáticamente aunque la contraseña sea correcta.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite elegir el enfoque de auditoría sin cerrarse a un solo método: lo que un análisis estático no detecta lo puede descubrir uno dinámico o de configuración.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> casarse con un solo tipo de análisis, asumir que un hardware nuevo no tendrá fallas sin importar cómo esté configurado, e importar bibliotecas masivas e innecesarias al programar.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c10-escaneo" open><summary><span class="stitle">3 · Técnicas de escaneo de vulnerabilidades (DAST, SAST, SCA)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Las metodologías automatizadas para descubrir debilidades en aplicaciones y código: <strong>DAST</strong> (Dynamic Application Security Testing), <strong>SAST</strong> (Static Application Security Testing) y <strong>SCA</strong> (Software Composition Analysis).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como evaluar una obra de teatro: SAST es revisar el libreto impreso buscando faltas de ortografía antes de actuar; DAST es ver el ensayo general con público para notar si a los actores se les olvida la línea; y SCA es revisar que el vestuario rentado no esté roto. La analogía deja de servir porque los escáneres de código revisan desbordamientos de búfer, inyecciones y vulnerabilidades criptográficas, incluso en binarios compilados, más allá del texto.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>DAST evalúa la aplicación en tiempo de ejecución e identifica vulnerabilidades visibles según las peticiones y respuestas activas. SAST inspecciona el código fuente sin ejecutarlo para localizar fallas de programación. SCA analiza el árbol de dependencias en busca de componentes de terceros o bibliotecas obsoletas registradas en bases de datos.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Se conecta con el desarrollo seguro de software (DevSecOps): erradicar fallas desde la codificación hasta producción.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> depender solo de SAST e ignorar el comportamiento dinámico del sistema en producción.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c10-cve-cvss" open><summary><span class="stitle">4 · Fuentes de información: CVE, NVD y CVSS</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Repositorios y métricas públicas estandarizadas a nivel mundial: <strong>CVE</strong> (Common Vulnerabilities and Exposures), <strong>NVD</strong> (National Vulnerability Database del NIST) y el sistema de puntuación <strong>CVSS</strong> (Common Vulnerability Scoring System).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>CVE es la CURP única de cada falla informática descubierta en el mundo; NVD es el expediente público donde un instituto oficial explica esa falla; y CVSS es el termómetro del 0 al 10 que dice qué tan grave es la fiebre. La analogía deja de servir porque las bases de datos globales ligan las claves con parches específicos, versiones de firmware y rangos de puertos que requieren interpretación técnica.</p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>Nomenclatura CVE:</strong> prefijo <code>CVE</code>, un guion, el año de detección y un número consecutivo o bloque asignado a la organización (por ejemplo <code>CVE-2022-10001</code>). Los rangos se reservan por bloques (por ejemplo, de los 10,000 para Microsoft o de los 50,000 para otros desarrolladores). Los registros se mantienen aunque el software o hardware sea viejo, porque hay organizaciones que siguen usando tecnología obsoleta. <em>Ejemplo de clase:</em> empresas que siguen con cable UTP categoría 5e (limitado a 100 Mbps), lo que vuelve inútil comprar switches de fibra óptica de 1000 Mbps si el medio físico no pasa de 100 Mbps.</li>
+<li><strong>NVD:</strong> repositorio del NIST (National Institute of Standards and Technology, de EE. UU.) con detalles técnicos, enlaces a parches y evaluaciones de impacto para cada registro CVE.</li>
+<li><strong>CVSS:</strong> evalúa la severidad con números reales de 0.0 a 10.0.
+ <ul>
+ <li><strong>CVSS v2:</strong> 3 niveles: Bajo (Low), Mediano (Medium) y Alto (High), con verde, amarillo y rojo.</li>
+ <li><strong>CVSS v3 y v4:</strong> 4 niveles: Bajo (0.1–3.9), Mediano (4.0–6.9), Alto (7.0–8.9) y Crítico (9.0–10.0). Se incorpora el naranja para Alto y el rojo queda para Crítico. El 0.0 se excluye de las categorías porque indica ausencia de vulnerabilidad.</li>
+ </ul></li>
+<li><strong>Explicación al cliente:</strong> el profesional nunca debe limitarse a entregar un número CVE ni a decir «es de severidad alta». La profesora insistió en justificar, en lenguaje de negocio, qué proceso o área de la empresa se verá afectada si no se corrige; de lo contrario, la organización ignorará el reporte.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite contrastar la seguridad de un activo contra registros globales auditados, y no guiarse por publicaciones informales o engañosas.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> guiarse por publicaciones no verificadas en redes sociales (como Facebook); confiar a ciegas en la inteligencia artificial (la profesora advirtió que suele inventar números CVE que no existen); usar la escala obsoleta de CVSS v2; o entregar listas de códigos CVE al cliente sin explicar el impacto en sus operaciones.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c10-ciberterrorismo" open><summary><span class="stitle">5 · Ciberterrorismo</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La difusión deliberada de información falsa, engañosa o alarmista por medios digitales y redes sociales para sembrar miedo y causar daño directo a la reputación, la economía o la salud de personas e instituciones.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como esparcir el rumor falso de que la comida de un restaurante local está envenenada: la gente entra en pánico y el negocio quiebra sin que haya habido una sola infección real. La analogía deja de servir porque en el ciberespacio las campañas de desinformación escalan a nivel global y pueden afectar infraestructuras críticas y políticas de salud pública.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Se usan canales digitales para propagar mitos que generen conmoción social. Ejemplos de clase: publicar que las vacunas contra el COVID-19 traen microchips para que la gente se niegue a vacunarse, o difundir que la carne de una cadena de comida rápida (como McDonald's) contiene aditivos tóxicos para provocar pérdidas masivas a la empresa.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Se conecta con las amenazas lógicas que buscan manipular la conducta humana y causar impactos físicos o económicos mediante ingeniería social masiva.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que el ciberterrorismo son solo ataques informáticos a servidores, cuando su mecanismo principal es la manipulación psicológica del miedo.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c10-ataques" open><summary><span class="stitle">6 · Tema 3: definición de ataque, bidireccionalidad físico-lógica y prevención contra recuperación</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Inicio formal del Tema 3. Un <strong>ataque</strong> es la culminación de una amenaza: todo lo que ya sucedió o está sucediendo y generó o está generando un daño severo al activo (físico o lógico).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>La amenaza es saber que hay ladrones sueltos en la calle; el ataque es cuando el ladrón rompe la chapa, entra a tu casa y se lleva tus cosas. La analogía deja de servir porque un ataque informático puede ejecutarse en silencio durante meses, con código malicioso o secuestro de datos, sin romper nada físico.</p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>Bidireccionalidad físico-lógica:</strong> los ataques lógicos pueden tener consecuencias físicas, y los físicos pueden detonar ataques lógicos. <em>De lógico a físico:</em> publicar fotografías muy sensibles de una persona en redes sociales puede causarle tanto estrés que sufra un ataque cardíaco. <em>De físico a lógico:</em> una persona furiosa por un conflicto personal publica datos o imágenes privadas en Facebook o Instagram para destruir a la otra en el ciberespacio.</li>
+<li><strong>Ejemplo de las Torres Gemelas (11 de septiembre):</strong> tras la tragedia física, una persona inventó una mentira viral: dijo ser sobreviviente y que su prometido murió en la otra torre. Medios y foros de televisión gastaron dinero y tiempo, y perdieron prestigio, al entrevistarla sin investigar su historial.</li>
+<li><strong>Minimizar ataques y ransomware:</strong> creer que un ataque es insignificante hace que se repita. La profesora destacó que más del 50 % de las empresas atacadas que pagan el rescate nunca reciben la clave de descifrado, y que hay organizaciones con ransomware 10, 20 o más veces al año por no corregir las vulnerabilidades de raíz.</li>
+<li><strong>Prevención contra recuperación:</strong> la recuperación es categóricamente más costosa que la prevención. Implica costos ocultos en tiempo, dinero y personal que debe suspender sus labores, pérdida irrecuperable de información sin respaldo y caída del nivel de confianza del cliente (de alto a bajo o nulo). <em>Ejemplo de los sismos en México (1985 contra 2017):</em> en 2017 la prevención (simulacros y normatividad de construcción para magnitudes superiores a 6) redujo las pérdidas humanas; pero reingresar a edificios dañados antes de la inspección formal de un Director Responsable de Obra (DRO) provocó colapsos mortales. En informática, la prevención son respaldos planificados, servidores espejo, almacenamiento en la nube y capacitación constante del personal (para erradicar prácticas como pegar contraseñas en post-its detrás del teclado o del monitor).</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Liga la gestión de riesgos con la continuidad de negocio: una empresa sin planes de prevención y recuperación puede quebrar tras un solo incidente grave.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> minimizar un ataque como evento aislado, pagar rescates por secuestro de información, suponer que prevenir cuesta más que recuperarse, o volver a operar sistemas o instalaciones dañadas sin visto bueno técnico formal.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c10-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuál es la definición formal de «ataque» que dio la profesora al inicio del Tema 3?</summary><p>Un ataque es la culminación de una amenaza: todo lo que ya sucedió o está sucediendo y generó o está generando algún daño severo al activo (físico o lógico).</p></details>
+<details class="qa"><summary>2. Explica con tus palabras por qué recuperarse de un ataque cuesta más que prevenirlo.</summary><p>Porque la recuperación trae costos ocultos de dinero, tiempo y recursos humanos (se detienen las actividades habituales), pérdida irrecuperable de datos sin respaldo, posible quiebra y una caída drástica de la confianza de los clientes.</p></details>
+<details class="qa"><summary>3. Un cliente recibe un reporte con solo «CVE-2022-41082, severidad Alta». ¿Por qué es inadecuado y cómo se corrige?</summary><p>Porque un código y una etiqueta sin contexto no le sirven. Debe explicarse y justificarse qué procesos, aplicaciones o áreas de negocio se verían afectadas si la vulnerabilidad se explota.</p></details>
+<details class="qa"><summary>4. Compara las categorías y colores de CVSS v2 contra v3/v4.</summary><p>v2: 3 niveles (Bajo, Mediano, Alto) en verde, amarillo y rojo. v3/v4: 4 niveles: Bajo (0.1–3.9), Mediano (4.0–6.9), Alto (7.0–8.9) y Crítico (9.0–10.0), con naranja para Alto y rojo para Crítico; el 0.0 queda fuera de las etiquetas de severidad.</p></details>
+<details class="qa"><summary>5. ¿Cómo se forma un identificador CVE?</summary><p>Prefijo CVE, un guion, el año de detección y un número consecutivo o rango asignado a la organización o fabricante (por ejemplo, CVE-2022-10001).</p></details>
+<details class="qa"><summary>6. En FileZilla las credenciales son correctas pero se rechaza la conexión. ¿Qué error de configuración se explicó y cómo se resuelve?</summary><p>Ciertas versiones agregan automáticamente un espacio en blanco o un «enter» al final del texto. Se resuelve activando en la configuración la opción de eliminar automáticamente los espacios en blanco finales.</p></details>
+<details class="qa"><summary>7. Con los ejemplos de clase, explica cómo un ataque lógico puede causar un daño físico y viceversa.</summary><p>De lógico a físico: publicar fotos muy sensibles de alguien en redes le provoca tanto estrés que sufre un ataque cardíaco. De físico a lógico: una persona furiosa por un conflicto personal publica fotos privadas de otra en Facebook o Instagram para destruirla digitalmente.</p></details>
+<details class="qa"><summary>8. Compara el análisis estático y el dinámico con el sistema de inscripciones de la UNAM.</summary><p>El estático observa el sistema en su modo habitual, sin ejecutarlo, y lo compara contra datos base. El dinámico lo ejecuta bajo estrés (la primera hora de inscripciones) y le mete datos anómalos (números de cuenta de titulados, contraseñas en minúsculas) para evaluar su resistencia.</p></details>
+</details>
+
+<details class="section-block sec" id="c10-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> Ejemplos de salud y hábitos personales: divertículos por comer picante en exceso (chilaquiles escala 10/10), dolor de rodilla al correr tras la lluvia, y cómo el estrés acumulado baja las defensas.</li>
+<li><em>(Contexto)</em> Evolución de los celulares: los analógicos tipo «tabique» de los años 80 y 90, que se conectaban dentro del automóvil y tenían un acceso muy limitado.</li>
+<li><em>(Contexto)</em> Mitos conspirativos y campañas de difamación sobre marcas (microchips en vacunas, la carne de una cadena de comida rápida).</li>
+<li><em>(Contexto)</em> La historia de la mujer que fingió haber sobrevivido a los atentados del 11 de septiembre de 2001 estando en realidad en el Reino Unido, y cómo engañó a los medios antes de que se verificara.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c10-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Cierre del temario de examen:</strong> la profesora confirmó que con el contenido de esta Clase 10 terminan los temas evaluables del Examen Parcial.</li>
+<li><strong>Formato del examen:</strong> preguntas cerradas sobre los conceptos, metodologías y clasificaciones vistos desde la Clase 1 hasta esta sesión. Recomendó estudiar a fondo porque no vendrá nada que no se haya tratado en el aula.</li>
+<li><strong>Siguiente sesión:</strong> será después de aplicar el examen. En esa clase se profundizará en las clasificaciones de ataques, se harán ejercicios prácticos y se asignará un trabajo de investigación.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Ataque = culminación de una amenaza: daño que ya ocurrió o está ocurriendo.</li>
+<li>Prevenir cuesta menos que recuperarse (costos ocultos, pérdida de datos y de confianza).</li>
+<li>CVE: prefijo, año y número; NVD (NIST) da el detalle; CVSS v2 tiene 3 niveles y v3/v4 tienen 4, con Crítico de 9.0 a 10.0.</li>
+<li>Cinco tipos de análisis: estático, dinámico, SCA, de red y de configuración; y escaneo DAST, SAST y SCA.</li>
+<li>Los hallazgos se reportan por escrito y en lenguaje de negocio; nunca se promete «de palabra» que algo es seguro.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

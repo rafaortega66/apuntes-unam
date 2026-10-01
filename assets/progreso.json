@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T16:55:09+00:00",
+ "generatedAt": "2026-10-01T17:00:49+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -417,6 +417,13 @@
     "resumen": "Tema 2 (2.2, continuación) — Recapitulación de la relación amenaza–vulnerabilidad–riesgo, ejercicio en equipo para identificar amenazas y vulnerabilidades de los personajes de un video, y dinámica individual del “Escudo ",
     "url": "materias/seguridad-informatica-basica/clase-09.html",
     "formato": "estudio"
+   },
+   {
+    "num": 10,
+    "fecha": "2026-10-01",
+    "resumen": "Tema 2 (2.2, cierre) e inicio del Tema 3 — Análisis y escaneo de vulnerabilidades (estático, dinámico, SCA, red y configuración; DAST/SAST/SCA), bases de datos CVE y NVD con la métrica CVSS, ciberterrorismo y definición ",
+    "url": "materias/seguridad-informatica-basica/clase-10.html",
+    "formato": "estudio"
    }
   ],
   "lab-de-fundamentos-de-sistemas-embebidos": [],
@@ -481,6 +488,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "82603ba",
+   "fecha": "2026-10-01T10:55:09-06:00",
+   "mensaje": "MD Clase 01: formato de estudio"
+  },
   {
    "hash": "2d16300",
    "fecha": "2026-10-01T10:53:23-06:00",
@@ -775,11 +787,6 @@
    "hash": "cb0c76e",
    "fecha": "2026-09-30T17:25:44-06:00",
    "mensaje": "Arreglar notas con fondo claro ilegibles en tema oscuro"
-  },
-  {
-   "hash": "92737b8",
-   "fecha": "2026-09-30T17:22:55-06:00",
-   "mensaje": "FSE: Clase 10 (30 sep) — I²C, SMBus, SPI, I²S, UART"
   }
  ]
 }
