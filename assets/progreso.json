@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-01T18:23:25+00:00",
+ "generatedAt": "2026-10-02T07:20:20+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -489,6 +489,11 @@
  },
  "gitlog": [
   {
+   "hash": "6e392f2",
+   "fecha": "2026-10-01T12:23:25-06:00",
+   "mensaje": "RP: presentación Clase 9 — agregar descripción de las imágenes (lectura multimodal de NotebookLM)"
+  },
+  {
    "hash": "ccbc995",
    "fecha": "2026-10-01T12:07:30-06:00",
    "mensaje": "RP: resumen de la presentación «Clase 9» del profesor (distancia mínima, K-means, LBG, ISODATA)"
@@ -782,11 +787,6 @@
    "hash": "4672db4",
    "fecha": "2026-10-01T01:42:22-06:00",
    "mensaje": "ACS Clase 10: formato de estudio"
-  },
-  {
-   "hash": "da08eb2",
-   "fecha": "2026-10-01T01:40:33-06:00",
-   "mensaje": "SIB Clase 09: formato de estudio"
   }
  ]
 }
