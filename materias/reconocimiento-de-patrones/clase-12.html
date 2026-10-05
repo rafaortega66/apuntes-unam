@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="formato" content="pendiente">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 12 — Reconocimiento de Patrones</title>
 <link rel="stylesheet" href="../../assets/style.css?v=20261001c">
@@ -13,10 +13,133 @@
 <div class="wrap">
 <a class="back" href="index.html">← Reconocimiento de Patrones</a>
 <div class="detail-head" style="border-color:#45B8A8"><h2>Clase 12</h2>
-  <p class="prof">Ing. Rubén Omar Azuara Domínguez · 5 oct 2026 · (por llenar)</p>
+  <p class="prof">Ing. Rubén Omar Azuara Domínguez · 5 oct 2026 · Tema 8 — Inicio del Segundo Parcial: repaso de clasificadores bayesianos (QDA, LDA, Naive Bayes y suavizado de Laplace), clustering por densidad con DBSCAN, clasificación por instancias con KNN y especificaciones de la Práctica 3 (segmentación de imágenes por color con QDA y benchmarking en Breast Cancer).</p>
 </div>
 
-<div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>⏳ Por llenar.</strong> Todavía no se ha procesado el audio de esta clase con NotebookLM. Esta página es un marcador de lugar para que el buscador y el índice de la materia no queden rotos — se completa en cuanto esté el transcript.</p></div>
+<details class="section-block sec" id="c12-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<p>El profesor aclaró que, a partir del tema de Bayes/Laplace, <strong>todo el contenido evaluado entra para el Segundo Examen Parcial</strong>.</p>
+<ol class="examen-lista">
+<li><strong>Puntos núcleo, frontera y ruido en DBSCAN</strong><span class="evid">Evidencia: los definió formalmente a partir de ε y min_samples, detalló la expansión de clústeres y respondió una pregunta explícita sobre cómo un punto de ruido puede reclasificarse como frontera.</span></li>
+<li><strong>Elección de ε (gráfica de K‑distancia y codo) y de min_pts</strong><span class="evid">Evidencia: explicó el procedimiento exacto (distancia al K‑ésimo vecino, ordenar, buscar el codo) y dio las cotas de min_pts: características + 1 y 2 × características.</span></li>
+<li><strong>Mecánica de KNN, votación por mayoría y efecto de K (sobreajuste vs. subajuste)</strong><span class="evid">Evidencia: lo analizó con gráficas de fronteras de decisión y curvas de exactitud vs. K, y advirtió enfáticamente que nunca se debe usar K = 1 en problemas reales.</span></li>
+<li><strong>Probabilidad cero en Naive Bayes discreto y suavizado de Laplace</strong><span class="evid">Evidencia: fue el repaso interactivo con que abrió la clase; preguntó directamente a varios alumnos cómo evitar que una característica no observada anule la probabilidad posterior.</span></li>
+<li><strong>QDA: media, covarianza y probabilidad a priori por clase</strong><span class="evid">Evidencia: es el núcleo de la Práctica 3 asignada en esta clase. Evidencia menos directa para examen que los puntos anteriores, pero ya se evaluó QDA en el primer parcial.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c12-bayes"><summary><span class="stitle">Repaso de clasificadores bayesianos: QDA, LDA, Naive Bayes y suavizado de Laplace</span></summary>
+<p>La clase abrió repasando la <a href="clase-08.html">Clase 08</a>: clasificación supervisada basada en medidas de similitud y probabilidades a posteriori mediante la regla de Bayes. La diferencia entre los clasificadores está en lo que suponen de la <strong>matriz de covarianza</strong>:</p>
+<table>
+<tr><th>Clasificador</th><th>Suposición sobre la covarianza</th></tr>
+<tr><td>QDA</td><td>Una matriz Σ<sub>k</sub> distinta por clase, calculada solo con los ejemplos de esa clase.</td></tr>
+<tr><td>LDA</td><td>Una única matriz Σ compartida por todas las clases, calculada con todo el conjunto de entrenamiento.</td></tr>
+<tr><td>Naive Bayes</td><td>Matriz diagonal (solo varianzas individuales): independencia condicional entre características, de modo que la posterior se vuelve un producto de P(x<sub>i</sub>|ω<sub>k</sub>).</td></tr>
+</table>
+<p>En variables continuas, la verosimilitud se modela como una normal calculando media y varianza; en variables discretas se hacen conteos de frecuencias sobre el total (ejemplo: filtro de spam). Al tomar el logaritmo natural de la verosimilitud gaussiana multivariada, la decisión depende de tres factores: la probabilidad a priori P(ω<sub>k</sub>), la matriz de covarianza Σ<sub>k</sub> y la distancia de Mahalanobis.</p>
+<p><strong>Probabilidad cero y suavizado de Laplace.</strong> Si llega una muestra con una característica nunca vista en el entrenamiento (por ejemplo, una palabra nueva en un correo), su P(x<sub>i</sub>|spam) = 0 y todo el producto de la posterior se vuelve cero. El profesor preguntó a Santiago cómo resolverlo; Santiago recordaba el concepto y Sebastián sugirió «sumar uno a las frecuencias». El profesor precisó que se llama <strong>suavizado (Laplace smoothing)</strong>: se suma una pequeña probabilidad uniforme al numerador y al denominador de <em>todas</em> las clases (spam y no spam), sin descompensar la distribución, de modo que la suma total de probabilidades siga siendo 1.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como diagnosticar según síntomas: QDA supone que cada enfermedad tiene su propia combinación de síntomas; LDA, que todas comparten la misma variabilidad; Naive Bayes, que cada síntoma ocurre de forma independiente.<span class="rompe">Dónde falla: si los síntomas están muy correlacionados (fiebre y escalofríos), Naive Bayes simplifica de más al ignorar esa interacción.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Conecta la teoría de probabilidad con la práctica: es la base de la segmentación de imágenes por color y de la evaluación de modelos en la Práctica 3.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> sumar el término de suavizado solo a una clase: descompensa las probabilidades y viola que la suma sobre el espacio muestral sea 1.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c12-dbscan"><summary><span class="stitle">DBSCAN: clustering basado en densidad</span></summary>
+<p><strong>DBSCAN</strong> (<em>Density-Based Spatial Clustering of Applications with Noise</em>) es un algoritmo no supervisado que agrupa puntos densamente poblados y separa las regiones densas mediante regiones de baja densidad; detecta automáticamente el número de clústers y el ruido. Sus parámetros:</p>
+<ul>
+<li><strong>ε (épsilon):</strong> distancia máxima para considerar vecinos a dos puntos.</li>
+<li><strong>min_samples / min_pts:</strong> número mínimo de puntos dentro del radio ε para formar una región densa.</li>
+</ul>
+<p>Tipos de punto: <strong>núcleo</strong> (tiene al menos min_pts dentro de su radio ε), <strong>frontera</strong> (está dentro del radio ε de un núcleo pero no reúne min_pts en su propia vecindad) y <strong>ruido / outlier</strong> (ni núcleo ni frontera, lejos de cualquier región densa).</p>
+<p><strong>Algoritmo:</strong></p>
+<ol>
+<li>Marcar todos los puntos de D como «no visitados» y fijar el contador de clústers K = 0.</li>
+<li>Recorrer cada punto P (una sola pasada por los datos, a diferencia de K‑Means). Si no ha sido visitado, marcarlo como visitado y calcular su vecindad (puntos a distancia ≤ ε).</li>
+<li>Si la vecindad tiene menos de min_pts, marcar P temporalmente como ruido.</li>
+<li>Si tiene min_pts o más, P es núcleo: se incrementa K, se le asigna el clúster K y se inicia la expansión: sus vecinos entran a una cola. Para cada punto Q de la cola: si estaba marcado como ruido se re-etiqueta como <em>frontera</em> del clúster K; si no estaba visitado se marca como visitado, se asigna al clúster K y, si su propia vecindad tiene al menos min_pts, sus vecinos se agregan a la cola.</li>
+</ol>
+<p>Un alumno preguntó si un punto de ruido puede volverse frontera; el profesor confirmó que sí: si un punto marcado como ruido cae dentro del radio ε de un núcleo procesado después, cambia a frontera.</p>
+<p><strong>Elección de hiperparámetros.</strong> Para <em>min_pts</em>, como cota inferior características + 1 y como cota superior 2 × características (con 2 características, probar entre 3 y 4). Para <em>ε</em>, se calcula la distancia de cada punto a su K‑ésimo vecino más cercano, se ordenan las distancias de mayor a menor y se grafica la K‑distancia contra los puntos; ε se toma en el <strong>codo</strong>, donde la curva empieza a estabilizarse.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como identificar ciudades en un mapa satelital nocturno: las zonas con luces concentradas son clústers, las luces aisladas son ruido, y no hay que decirle cuántas ciudades buscar.<span class="rompe">Dónde falla: si en el mismo mapa hay una metrópolis densísima y una zona rural uniforme, un solo parámetro de densidad no captura ambas.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>A diferencia de K‑Means e ISODATA (<a href="clase-09.html">Clase 09</a>), DBSCAN traza fronteras no lineales de forma arbitraria (anillos concéntricos, dos lunas entrelazadas) y detecta outliers de forma natural, útil para detección de anomalías.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> aplicarlo con densidades variables (un solo ε no sirve para todos los grupos) o en espacios de muy alta dimensión, donde las distancias se distorsionan.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c12-knn"><summary><span class="stitle">KNN: K vecinos más cercanos</span></summary>
+<p><strong>KNN</strong> es un algoritmo supervisado, <strong>no paramétrico</strong> (no asume ninguna distribución de los datos ni ajusta parámetros), <strong>basado en instancias</strong> y «perezoso» (<em>lazy learner</em>): no hay fase formal de entrenamiento, memoriza el conjunto completo y hace todos los cálculos de distancia cuando llega una consulta. Sirve para clasificación o regresión.</p>
+<p><strong>Paso a paso:</strong></p>
+<ol>
+<li>Almacenar todo el conjunto de entrenamiento (X<sub>i</sub>, Y<sub>i</sub>).</li>
+<li>Al llegar un punto nuevo X, calcular su distancia (Euclidiana, Manhattan, Mahalanobis, etc.) a todos los puntos almacenados.</li>
+<li>Ordenar las distancias de menor a mayor.</li>
+<li>Tomar los K vecinos más cercanos.</li>
+<li><strong>Votación por mayoría:</strong> asignar a X la clase más frecuente entre esos K.</li>
+</ol>
+<p>Con <strong>empates</strong> (por ejemplo K = 4 con 2 de la clase A y 2 de la B) se desempata al azar o por un criterio de costo del dominio.</p>
+<p><strong>Elección de K.</strong> Con K pequeño (1, 2, 3) el modelo es muy sensible al ruido y a los outliers, produce fronteras muy irregulares y tiene alto riesgo de <strong>sobreajuste</strong>; advertencia del profesor: <em>nunca usen K = 1 en aplicaciones reales</em>. Con K grande (30, 50, 70) las fronteras son demasiado suaves, se ignoran los patrones locales y hay <strong>subajuste</strong>; el rendimiento cae hasta equivaler a «lanzar una moneda». El K óptimo se busca graficando la exactitud contra K en validación y eligiendo el rango donde se estabiliza en su máximo (ejemplo: entre K = 8 y K = 14).</p>
+<p>Aplicaciones mencionadas: sistemas de recomendación (Netflix), detección de anomalías e imputación de datos faltantes (KNN Imputer, que rellena una característica ausente con la media de los K vecinos más cercanos).</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es decidir qué partido apoyas preguntando a tus K vecinos más cercanos y adoptando lo que opine la mayoría.<span class="rompe">Dónde falla: si la frontera entre colonias es muy irregular, preguntar a demasiados vecinos lejanos da una respuesta que no refleja tu calle.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es el ejemplo más simple de aprendizaje basado en instancias y cierra el contraste con los modelos gaussianos y paramétricos vistos antes.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> olvidar estandarizar o normalizar las características antes de calcular distancias, de modo que las variables de magnitud grande dominen la métrica.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c12-practica3"><summary><span class="stitle">Práctica 3: segmentación por color con QDA y benchmarking en Breast Cancer</span></summary>
+<p>La Práctica 3 tiene dos partes:</p>
+<p><strong>Parte 1 — clasificación de imágenes por color.</strong> Hay cuatro clases: plátanos, huevos, chiles y fondo. Para las 4 imágenes de entrenamiento se extraen máscaras binarias de segmentación (1 para el objeto, 0 para lo demás) de plátanos, huevos y chiles. La máscara del fondo <strong>no se dibuja a mano: se obtiene como el complemento de las máscaras de los tres objetos</strong>. Se construye un DataFrame de 4 columnas: canal rojo (R), verde (G), azul (B) y etiqueta de clase (0, 1, 2, 3); cada píxel es un ejemplo de entrenamiento. Se entrena <strong>QDA desde cero</strong> calculando, por clase k, el vector de medias μ<sub>k</sub>, la matriz de covarianza Σ<sub>k</sub> y la probabilidad a priori P(ω<sub>k</sub>); luego se clasifica píxel por píxel las imágenes de prueba (ejemplo: <code>prueba1.png</code>) con la regla de decisión cuadrática y se genera una imagen de salida donde cada píxel muestra su clase.</p>
+<p><strong>Parte 2 — Breast Cancer Wisconsin.</strong> Cargar el dataset, dividir en entrenamiento y prueba con <code>train_test_split</code>, estandarizar, entrenar y evaluar con Scikit-Learn tres clasificadores (QDA, LDA y Gaussian Naive Bayes) y calcular matriz de confusión, exactitud, precisión y exhaustividad (recall / sensibilidad) en el conjunto de prueba. Se debe analizar el desempeño y responder cuál modelo recomendar para diagnóstico médico y con qué criterios.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>La primera parte es enseñarle a la computadora a reconocer frutas y objetos por su color RGB; la segunda, comparar tres algoritmos para ver cuál detecta mejor el cáncer en muestras de laboratorio.<span class="rompe">Dónde falla: el fondo no se «dibuja», se calcula automáticamente como complemento de las máscaras de los objetos.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Aplica directamente las ecuaciones de los clasificadores gaussianos a matrices de imágenes reales y evalúa un modelo médico con las métricas de la matriz de confusión (<a href="clase-04.html">Clase 04</a>).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> dibujar a mano la máscara del fondo en vez de obtenerla como complemento.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c12-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Qué tres tipos de punto define DBSCAN y qué condición hace a un punto «núcleo»?</summary><p>Núcleo, frontera y ruido. Es núcleo si tiene al menos min_pts puntos dentro de su radio ε.</p></details>
+<details class="qa"><summary>2. ¿Por qué KNN es un clasificador «perezoso» y no paramétrico?</summary><p>No paramétrico porque no asume distribución ni ajusta parámetros; perezoso porque no tiene fase de entrenamiento: memoriza los datos y calcula las distancias al predecir.</p></details>
+<details class="qa"><summary>3. Para un dataset con 3 características, ¿qué cotas de min_pts sugirió el profesor para DBSCAN?</summary><p>Inferior: características + 1 = 4. Superior: 2 × características = 6.</p></details>
+<details class="qa"><summary>4. Compara DBSCAN y K‑Means en necesidad de fijar K, forma de las fronteras y pasadas sobre los datos.</summary><p>K‑Means requiere fijar K, produce fronteras esféricas/lineales e itera varias veces; DBSCAN descubre el número de clústers, traza fronteras de forma arbitraria y requiere una sola pasada.</p></details>
+<details class="qa"><summary>5. ¿Cómo se resuelve la probabilidad cero en Naive Bayes discreto?</summary><p>Con suavizado de Laplace: se suma una pequeña probabilidad uniforme a las frecuencias de todas las clases, manteniendo que la suma de probabilidades sea 1.</p></details>
+<details class="qa"><summary>6. ¿Por qué no usar K = 1 en KNN con datos reales?</summary><p>Porque el modelo memoriza el ruido local y los outliers: sobreajuste severo que falla con datos nuevos.</p></details>
+<details class="qa"><summary>7. En la Práctica 3, ¿cómo se obtiene la máscara de la clase «fondo»?</summary><p>Como el complemento de las máscaras de plátanos, huevos y chiles.</p></details>
+<details class="qa"><summary>8. ¿En qué difieren QDA, LDA y Naive Bayes respecto a la matriz de covarianza?</summary><p>QDA: una por clase. LDA: una compartida por todas. Naive Bayes: diagonal (independencia condicional).</p></details>
+<details class="qa"><summary>9. ¿Cómo se elige ε en DBSCAN?</summary><p>Se grafican, ordenadas, las distancias de cada punto a su K‑ésimo vecino más cercano y se toma el valor en el codo, donde la curva empieza a estabilizarse.</p></details>
+</details>
+
+<details class="section-block sec" id="c12-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> <strong>Regresión logística:</strong> al anunciar el tema de la siguiente clase, el profesor dijo que es «quizá el modelo más importante en la industria», el caballo de batalla de cualquier científico o ingeniero de datos y de Machine Learning.</li>
+<li><em>(Contexto)</em> <strong>Dinámica del repaso:</strong> nombró directamente a varios alumnos (Santiago, Sebastián y otros) para ayudarlos a recordar las técnicas vistas antes del parcial, en forma de diálogo guiado.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c12-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Entrega de la Práctica 3:</strong> «este viernes» (el viernes de esa semana es el 9 de oct; confirmar la fecha en Classroom).</li>
+<li><strong>Entregables:</strong> código reproducible, máscaras de segmentación, imagen clasificada píxel por píxel con QDA para <code>prueba1.png</code> y reporte comparativo de QDA, LDA y Naive Bayes en Breast Cancer.</li>
+<li><strong>Próxima clase (lunes 12 oct):</strong> tema nuevo, regresión logística.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c12-puntosclave"><summary><span class="stitle">📌 Puntos clave</span></summary><ul>
+<li>QDA: Σ por clase; LDA: Σ compartida; Naive Bayes: Σ diagonal. Laplace suma a todas las clases para evitar probabilidad cero.</li>
+<li>DBSCAN: núcleo / frontera / ruido con ε y min_pts; ε por el codo de la K‑distancia; min_pts entre características + 1 y 2 × características.</li>
+<li>KNN: perezoso y no paramétrico, voto por mayoría; K = 1 sobreajusta, K muy grande subajusta; estandarizar antes.</li>
+<li>Práctica 3: QDA desde cero píxel por píxel (fondo = complemento de máscaras) y comparación QDA/LDA/GNB en Breast Cancer.</li>
+</ul></details>
 
 </div>
 </body>

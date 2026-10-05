@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-05T16:02:48+00:00",
+ "generatedAt": "2026-10-05T16:09:35+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -82,9 +82,9 @@
    {
     "num": 12,
     "fecha": "2026-10-05",
-    "resumen": "(por llenar)",
+    "resumen": "Tema 8 — Inicio del Segundo Parcial: repaso de clasificadores bayesianos (QDA, LDA, Naive Bayes y suavizado de Laplace), clustering por densidad con DBSCAN, clasificación por instancias con KNN y especificaciones de la P",
     "url": "materias/reconocimiento-de-patrones/clase-12.html",
-    "formato": "viejo"
+    "formato": "estudio"
    }
   ],
   "organizacion-y-arquitectura-de-computadoras": [
@@ -510,6 +510,11 @@
  },
  "gitlog": [
   {
+   "hash": "977cb94",
+   "fecha": "2026-10-05T10:02:17-06:00",
+   "mensaje": "MD Clase 09 (1 oct) y RP Clase 11 (2 oct): Práctica 1 de clustering, reglas de asociación; revisión del primer parcial"
+  },
+  {
    "hash": "a2ab746",
    "fecha": "2026-10-05T15:17:38Z",
    "mensaje": "Quitar el disclaimer \"Formato de estudio\" de las páginas de clase"
@@ -803,11 +808,6 @@
    "hash": "d2519c5",
    "fecha": "2026-10-01T01:56:07-06:00",
    "mensaje": "SIB Clase 08: formato de estudio"
-  },
-  {
-   "hash": "8ddeaac",
-   "fecha": "2026-10-01T01:54:04-06:00",
-   "mensaje": "MD Clase 07: formato de estudio; quitar nombres de compañeros de la lista de equipos"
   }
  ]
 }
