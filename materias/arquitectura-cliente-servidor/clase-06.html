@@ -18,7 +18,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
 
-<details class="section-block sec" id="c6-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c6-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>La función signal() y sus tres escenarios de tratamiento (ignorar con SIG_IGN, manejar mediante un handler void f(int) o el comportamiento ineludible de SIGKILL)</strong><span class="evid">Evidencia: Lo resolvió y explicó en vivo en la terminal probando los programas 4, 5 y 6, y lo anunció como tema clave para el proyecto final.</span></li>
 <li><strong>Los conceptos de procesos huérfanos y la señal 17 (SIGCHLD) que envía el hijo al morir para que el padre limpie la tabla de procesos</strong><span class="evid">Evidencia: Lo explicó extensamente en el pizarrón al repasar la clase anterior y ligarlo a la formación de procesos zombie.</span></li>
@@ -27,7 +27,7 @@
 </ol>
 </details>
 
-<details class="section-block sec" id="c6-repaso" open><summary><span class="stitle">Repaso que hizo el profesor de la Clase 05 (la que no asistí)</span></summary>
+<details class="section-block sec" id="c6-repaso"><summary><span class="stitle">Repaso que hizo el profesor de la Clase 05 (la que no asistí)</span></summary>
 <ul>
 <li><strong>Inicio del Tema 2</strong> (estados de un proceso y señales) — confirmado que arrancó formalmente en la Clase 05.</li>
 <li><strong>Tarea moral:</strong> revisar <code>man 7 signal</code> en la terminal para familiarizarse con la arquitectura y numeración de señales — la columna que aplica para la materia es <strong>X86 ARM</strong>.</li>
@@ -43,7 +43,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c6-man-signal" open><summary><span class="stitle">Consulta y estructura del manual de señales (<code>man 7 signal</code>)</span></summary>
+<details class="section-block sec" id="c6-man-signal"><summary><span class="stitle">Consulta y estructura del manual de señales (<code>man 7 signal</code>)</span></summary>
 <p>Para inspeccionar las señales disponibles en la arquitectura del sistema se ejecuta <code>man 7 signal</code> (capítulo 7 del manual). Dentro de la sección <em>Signal numbering for standard signals</em>, hay que identificar la columna <strong>X86 ARM</strong> para la correspondencia exacta entre macro en C y número entero:</p>
 <ul>
 <li><strong><code>SIGINT</code> (2):</strong> generada por Ctrl+C; interrumpe la ejecución, se puede ignorar o manejar.</li>
@@ -61,7 +61,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c6-signal-func" open><summary><span class="stitle">La función <code>signal()</code> y sus 3 escenarios</span></summary>
+<details class="section-block sec" id="c6-signal-func"><summary><span class="stitle">La función <code>signal()</code> y sus 3 escenarios</span></summary>
 <p>Prototipo, en <code>&lt;signal.h&gt;</code>:</p>
 <pre><code>void (*signal(int sig, void (*func)(int)))(int);
 </code></pre>
@@ -103,7 +103,7 @@ int main() {
 </div>
 </details>
 
-<details class="section-block sec" id="c6-fgbg" open><summary><span class="stitle">Procesos en primer plano (foreground) y segundo plano (background)</span></summary>
+<details class="section-block sec" id="c6-fgbg"><summary><span class="stitle">Procesos en primer plano (foreground) y segundo plano (background)</span></summary>
 <ul>
 <li><strong>Foreground:</strong> el proceso está atado a la terminal activa, recibe la entrada estándar del teclado y bloquea la consola mientras se ejecuta.</li>
 <li><strong>Background:</strong> el proceso corre en tiempo compartido en segundo plano, dejando la línea de comandos libre para lanzar otros programas en paralelo.</li>
@@ -147,7 +147,7 @@ int main() {
 </ul>
 </details>
 
-<details class="section-block sec" id="c6-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<details class="section-block sec" id="c6-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
 <ul>
 <li><strong>Sin clase el martes 15 de septiembre</strong> (Día de la Independencia). Se reanuda el jueves 17 de septiembre.</li>
 <li><strong>Tarea 3</strong> ya disponible en la plataforma del curso. Para calificación máxima (10): entregar antes de la sesión del jueves 17 sep. Entregas extemporáneas de la Tarea 3 (y las Tareas 1 y 2 pendientes) se aceptan después, pero con calificación menor.</li>

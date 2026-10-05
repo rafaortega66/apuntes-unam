@@ -18,7 +18,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
 
-<details class="section-block sec" id="c7-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c7-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>Diferenciación entre muerte natural de un proceso y muerte anormal por señales, y la conveniencia de usar el nombre de la macro de la señal en kill en lugar del número</strong><span class="evid">Evidencia: Lo dijo explícitamente el profesor en clase explicando que el número cambia entre arquitecturas de hardware como x86/ARM y SPARC, por lo que el nombre garantiza portabilidad.</span></li>
 <li><strong>Creación y comportamiento de un proceso zombie provocado por un hijo que termina mientras el padre duerme en sleep(), inspeccionado con el comando ps</strong><span class="evid">Evidencia: Lo resolvió en vivo en la terminal usando el programa 8, mostrando la etiqueta Z+ y defunct durante los 60 segundos del sleep del padre.</span></li>
@@ -28,7 +28,7 @@
 </ol>
 </details>
 
-<details class="section-block sec" id="c7-terminacion-kill" open><summary><span class="stitle">Formas de terminación de un proceso y envío de señales desde la terminal</span></summary>
+<details class="section-block sec" id="c7-terminacion-kill"><summary><span class="stitle">Formas de terminación de un proceso y envío de señales desde la terminal</span></summary>
 <p>La clase arranca cerrando los últimos pendientes del Tema 2 antes de dar paso a la programación cliente-servidor. Se explica formalmente que un proceso en Linux puede terminar de dos maneras: la <strong>muerte natural</strong>, que ocurre cuando el proceso completa toda la ejecución de su código, llega al final de <code>main()</code> y regresa —implícita o explícitamente— la señal de terminación a su padre; y la <strong>muerte anormal</strong>, producida cuando el proceso es interrumpido de forma abrupta por una señal externa (Ctrl+C envía <code>SIGINT</code>, o un <code>kill</code> desde consola) o cuando el propio proceso se manda a sí mismo una señal de aborto con <code>abort()</code> (<code>SIGABRT</code>, señal 6).</p>
 <p>Sobre el comando <code>kill</code> desde terminal: para forzar la destrucción de un proceso se usa <code>kill -9 &lt;PID&gt;</code>, donde <strong>-9</strong> corresponde al número de <code>SIGKILL</code> en arquitectura x86. Sin embargo, el profesor recalca que la sintaxis recomendada es usar el <strong>nombre explícito de la macro en mayúsculas</strong> — <code>kill -SIGKILL &lt;PID&gt;</code> o <code>kill -SIGxx &lt;PID&gt;</code> — por una razón técnica de portabilidad: en x86/ARM un número concreto corresponde a una señal determinada, pero en otras arquitecturas como <strong>SPARC</strong> ese mismo número entero (por ejemplo 7 o 10) representa una señal completamente distinta. Si se ejecuta <code>kill &lt;PID&gt;</code> sin especificar señal, el sistema asume por defecto la señal de terminación.</p>
 <div class="estudio-extra">
@@ -39,7 +39,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c7-programa10" open><summary><span class="stitle">Demostración con programa10.c — switch/case de señales</span></summary>
+<details class="section-block sec" id="c7-programa10"><summary><span class="stitle">Demostración con programa10.c — switch/case de señales</span></summary>
 <p>Dentro del programa, cada bloque <code>case</code> atiende una señal específica (<code>SIGHUP</code>, <code>SIGINT</code>, <code>SIGQUIT</code>, <code>SIGILL</code>, <code>SIGTRAP</code>, <code>SIGABRT</code>, <code>SIGBUS</code>, <code>SIGFPE</code>, <code>SIGTERM</code>, <code>SIGCHLD</code>, entre otras) y termina con <code>break</code> para evitar la ejecución en cascada hacia otros casos; las señales sin <code>case</code> explícito caen en <code>default</code>. En <code>main()</code>, el programa intenta registrar el manejo de cada señal con llamadas sucesivas a <code>signal(SEÑAL, signal_handler)</code>: si tiene éxito imprime "Sí puedo manejar [SEÑAL]"; la única que da error, como era de esperarse, es <code>SIGKILL</code> (señal 9), imprimiendo "No puedo manejar SIGKILL". Tras registrar los manejadores, el programa entra en un <code>while(1)</code> que llama a <code>sleep(1)</code> en cada iteración sin imprimir nada, para no saturar la terminal.</p>
 <p>Para probarlo se abre una segunda terminal y se manda, por ejemplo, <code>kill -SIGHUP &lt;PID&gt;</code> o <code>kill -1 &lt;PID&gt;</code>: el proceso atrapa la señal, imprime dentro del <code>switch</code> y sigue vivo sin terminar.</p>
 <p>Como demostración adicional se provoca un <strong>bloqueo de señales</strong>: si un programa captura tanto <code>SIGINT</code> (Ctrl+C, señal 2) como <code>SIGTSTP</code> (Ctrl+Z, señal 20, <em>Terminal Stop</em>), el usuario queda sin poder interrumpirlo ni mandarlo a segundo plano desde esa misma terminal — la única salida es abrir una segunda terminal y mandarle <code>kill -9</code> por PID.</p>
@@ -52,7 +52,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c7-kill-c" open><summary><span class="stitle">Envío programático de señales en C — kill() y programa11.c</span></summary>
+<details class="section-block sec" id="c7-kill-c"><summary><span class="stitle">Envío programático de señales en C — kill() y programa11.c</span></summary>
 <p>La clase pasa del uso de <code>kill</code> en consola a su uso programático con la llamada al sistema <code>kill(pid_t pid, int sig)</code>, que requiere las cabeceras <code>&lt;sys/types.h&gt;</code> y <code>&lt;signal.h&gt;</code>. Recibe como primer argumento el PID del proceso destino y como segundo el nombre de la macro de señal (p. ej. <code>SIGKILL</code> o <code>SIGTERM</code>), sin guion antes del nombre. Se recalca la diferencia entre <code>SIGTERM</code> (señal 15, puede capturarse o ignorarse) y <code>SIGKILL</code> (señal 9, destruye al proceso de forma fulminante e ineludible).</p>
 <p>Para ilustrar el control de un hijo por parte de su padre vía <code>kill()</code>, se analiza <strong>programa11.c</strong>: el padre llama <code>fork()</code> dentro de <code>if ((pid = fork()) == 0)</code>. Como <code>fork()</code> regresa 0 al hijo y el PID del hijo al padre, el hijo entra al <code>if</code>: imprime su PID y entra en un bucle donde cada iteración duerme 1 segundo con <code>sleep(1)</code> e imprime una línea de estado. El padre, en cambio, no entra al <code>if</code> (su variable <code>pid</code> no es 0), se salta ese bloque y ejecuta de inmediato <code>sleep(10)</code>. Durante esos 10 segundos el hijo alcanza a imprimir 10 iteraciones. Al despertar, el padre ejecuta <code>kill(pid, SIGKILL)</code>, mandando la señal letal al hijo — que muere fulminantemente tras vivir solo 10 segundos — y el padre termina limpiamente con <code>exit(0)</code>.</p>
 <div class="estudio-extra">
@@ -63,7 +63,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c7-zombie" open><summary><span class="stitle">Procesos zombie: cómo se forman, cómo se inspeccionan con ps y cómo evitarlos</span></summary>
+<details class="section-block sec" id="c7-zombie"><summary><span class="stitle">Procesos zombie: cómo se forman, cómo se inspeccionan con ps y cómo evitarlos</span></summary>
 <p>Un <strong>proceso zombie</strong> es un hijo que ya terminó por completo la ejecución de su código, pero cuyo registro sigue retenido en la tabla de procesos porque su padre no ha leído su estado de salida ni procesado la señal de notificación. Cuando un hijo muere de forma natural, el kernel de Linux le manda automáticamente <code>SIGCHLD</code> (código <strong>17 en x86</strong>) al padre; si el padre está ocupado con una tarea de mayor prioridad o dormido, no la procesa de inmediato — la señal queda encolada y el hijo entra a ese estado intermedio "vivo y muerto" llamado zombie.</p>
 <p>Para provocar deliberadamente un zombie durante exactamente 60 segundos se examina <strong>programa8.c</strong>: el padre crea al hijo con <code>fork()</code>; el hijo termina de inmediato con <code>exit(0)</code> y manda <code>SIGCHLD</code> a su padre; pero el padre ejecuta <code>sleep(60)</code>, así que la señal queda encolada durante ese minuto completo. Al abrir una segunda terminal y filtrar con <code>ps -ef | grep Carlos</code>, el hijo aparece con estado <code>Z</code> (o <code>Z+</code> si está en primer plano) y la leyenda <code>&lt;defunct&gt;</code> junto al nombre. Cuando el padre despierta, desencola <code>SIGCHLD</code>, recoge la información de salida del hijo, y el zombie por fin se elimina de la tabla de procesos.</p>
 <p>A propósito, se repasó la tabla completa de códigos de estado de <code>man ps</code>:</p>
@@ -87,7 +87,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c7-tema3-intro" open><summary><span class="stitle">Introducción al Tema 3 — Arquitectura Cliente-Servidor, sockets y puertos lógicos</span></summary>
+<details class="section-block sec" id="c7-tema3-intro"><summary><span class="stitle">Introducción al Tema 3 — Arquitectura Cliente-Servidor, sockets y puertos lógicos</span></summary>
 <p>La última parte de la clase marca la transición formal al <strong>Tema 3</strong>. Se explica que este modelo es la base operativa de casi toda la vida cotidiana digital: reproducir películas en Netflix, mandar mensajes por WhatsApp, consultar apps bancarias o usar redes sociales como Instagram, Facebook o X.</p>
 <p>Para entender los roles se usa la <strong>analogía de un restaurante</strong>: el <strong>Cliente</strong> equivale al comensal que pide un platillo; la <strong>Red</strong> equivale al mesero que transporta peticiones y respuestas; el <strong>Servidor</strong> equivale a la cocina especializada que procesa y prepara el pedido. Formalmente: el <strong>Cliente</strong> tiene un rol activo — siempre inicia la conversación mandando una solicitud (<em>request</em>) — y corre en dispositivos de cómputo y recursos limitados, siendo la interfaz directa con el usuario final. El <strong>Servidor</strong> tiene un rol pasivo de escucha, respondiendo a las peticiones recibidas, y corre en sistemas de alta potencia.</p>
 <p>A propósito del servidor se introduce el concepto de <strong>disponibilidad</strong> y la regla de los <strong>"Cinco Nueves"</strong> (99.999%): ninguna empresa en el mundo puede ofrecer 100% de disponibilidad ni inmunidad total a fallas o ataques (como DDoS), así que los grandes proveedores de nube (AWS, Google Cloud, Oracle) garantizan sus contratos de nivel de servicio (SLA) sobre cinco nueves — un margen de probabilidad de caída de apenas 0.001%.</p>
@@ -125,7 +125,7 @@
 </ul>
 </details>
 
-<details class="section-block sec" id="c7-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<details class="section-block sec" id="c7-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
 <ul>
 <li><strong>Tarea moral</strong> (no entregable): probar y analizar <code>programa9_v1.c</code> y <code>programa9_v2.c</code>, las dos soluciones en C para evitar procesos zombie (<code>SIG_IGN</code> vs. manejador de <code>SIGCHLD</code> con <code>wait()</code>/<code>waitpid()</code>).</li>
 <li><strong>Lectura obligatoria:</strong> los 8 PDFs breves publicados en el Tema 3 del sitio del profesor, sobre conceptos básicos de redes (routers, módems), modelos OSI y TCP, puertos y firewall.</li>

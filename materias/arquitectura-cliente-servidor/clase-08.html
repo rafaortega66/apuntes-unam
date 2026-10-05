@@ -18,7 +18,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
 
-<details class="section-block sec" id="c8-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c8-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>Definición de socket como punto final de software para comunicar procesos y asignación consecutiva de file descriptors comenzando en 3</strong><span class="evid">Evidencia: Lo repitió extensamente durante la clase y lo ligó a la manipulación de recursos en Unix/Linux.</span></li>
 <li><strong>Diferenciación de los tres descriptores de archivo reservados (0 stdin, 1 stdout, 2 stderr) y su redirección con 1&gt; y 2&gt;</strong><span class="evid">Evidencia: Lo resolvió en vivo en la terminal mostrando cómo la salida de error (2) tiene prioridad sobre la de éxito (1).</span></li>
@@ -27,7 +27,7 @@
 </ol>
 </details>
 
-<details class="section-block sec" id="c8-modelo" open><summary><span class="stitle">Sockets y el modelo cliente-servidor a nivel de software</span></summary>
+<details class="section-block sec" id="c8-modelo"><summary><span class="stitle">Sockets y el modelo cliente-servidor a nivel de software</span></summary>
 <p>Se retoma la definición de la <a href="clase-07.html">Clase 07</a>: un <strong>socket</strong> es cada uno de los extremos finales de un canal de comunicación. El profesor insiste en que no debe concebirse como un canal de hardware físico, sino como un canal lógico de software para interconectar procesos.</p>
 <p>La premisa central es que los procesos involucrados pueden ejecutarse en la misma máquina física o en máquinas distintas distribuidas en red. Por eso un mismo equipo puede fungir simultáneamente como cliente y como servidor. Aunque la mente humana tiende a asociar "servidor" con un equipo físico por ser algo tangible, en esta materia el modelo cliente-servidor se aborda estrictamente a <strong>nivel de software</strong>, donde cliente y servidor son dos procesos independientes:</p>
 <ul>
@@ -51,7 +51,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c8-sincrona" open><summary><span class="stitle">Comunicación síncrona vs. asíncrona</span></summary>
+<details class="section-block sec" id="c8-sincrona"><summary><span class="stitle">Comunicación síncrona vs. asíncrona</span></summary>
 <ul>
 <li><strong>Síncrona:</strong> sigue un orden estricto de envío y recepción en secuencia lineal — el cliente envía una petición y no puede enviar otra hasta recibir y leer la respuesta del servidor (cliente envía → servidor recibe → servidor envía → cliente recibe → cliente vuelve a enviar). Una alumna propuso como ejemplo la radio o la televisión; el profesor lo confirmó y añadió el correo postal tradicional (redactar la carta, pegar la estampilla y esperar la respuesta por correo) como ejemplo analógico de comunicación síncrona.</li>
 <li><strong>Asíncrona:</strong> no exige un orden secuencial estricto ni espera inmediata. El cliente puede enviar varios mensajes consecutivos mientras el servidor los lee y responde en paralelo. Ejemplos cotidianos: WhatsApp o Telegram. Se reflexionó sobre cómo la sociedad digital actual vive con más prisa y usa predominantemente comunicaciones asíncronas.</li>
@@ -64,7 +64,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c8-af" open><summary><span class="stitle">Familias o dominios de sockets (Address Family — AF)</span></summary>
+<details class="section-block sec" id="c8-af"><summary><span class="stitle">Familias o dominios de sockets (Address Family — AF)</span></summary>
 <p>Además del <strong>dominio o familia del socket</strong> (<em>Address Family</em>), existe el <strong>tipo de socket</strong>. En C, las familias se representan con macros en mayúsculas con el prefijo <code>AF_</code>:</p>
 <ul>
 <li><strong><code>AF_INET</code>:</strong> familia de direcciones para sockets de dominio Internet bajo IPv4. Usa direcciones de 4 octetos (4 bytes), cada uno de 0 a 255 (2⁸ = 256 valores).</li>
@@ -80,7 +80,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c8-descriptores" open><summary><span class="stitle">Descriptores de archivo en Unix/Linux y redirección de entradas/salidas</span></summary>
+<details class="section-block sec" id="c8-descriptores"><summary><span class="stitle">Descriptores de archivo en Unix/Linux y redirección de entradas/salidas</span></summary>
 <p>Se repasa el principio de diseño de Unix/Linux: <em>"todo es un archivo"</em> (<em>everything is a file</em>). Cualquier recurso del sistema —una partición de disco, un puerto de red, el teclado o la pantalla— se representa internamente como un archivo y se manipula mediante un <strong>descriptor de archivo</strong> (<em>file descriptor</em>): un número entero asociado a un recurso abierto. Hay tres descriptores estándar reservados por el sistema operativo:</p>
 <table>
 <tr><th>Descriptor</th><th>Nombre</th><th>Uso</th></tr>
@@ -108,7 +108,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c8-sockaddr" open><summary><span class="stitle">Estructuras en C para sockets de red: <code>sockaddr_in</code> y <code>hostent</code></span></summary>
+<details class="section-block sec" id="c8-sockaddr"><summary><span class="stitle">Estructuras en C para sockets de red: <code>sockaddr_in</code> y <code>hostent</code></span></summary>
 <p>Para programar sockets en C en la Capa 4 (Transporte) se usa el protocolo fiable orientado a conexión <strong>TCP</strong> (a diferencia de UDP, que maneja datagramas no confiables). El manejo de sockets requiere definir y llenar la estructura <code>struct sockaddr_in</code> (para IPv4):</p>
 <pre><code>struct sockaddr_in {
     sa_family_t    sin_family; /* Familia de direcciones (AF_INET) */
@@ -155,7 +155,7 @@
 </ul>
 </details>
 
-<details class="section-block sec" id="c8-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<details class="section-block sec" id="c8-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
 <ul>
 <li><strong>Revisión de tareas:</strong> el profesor ya empezó a calificar la Tarea 2 (envió retroalimentación a las primeras 20 entregas); al terminar la Tarea 2 seguirá con la Tarea 3.</li>
 <li><strong>Sin tarea nueva:</strong> no se dejó ninguna práctica o entregable obligatorio para la siguiente clase. La única indicación es repasar la teoría de hoy: <code>sockaddr_in</code>, descriptores de archivo y familias de sockets.</li>

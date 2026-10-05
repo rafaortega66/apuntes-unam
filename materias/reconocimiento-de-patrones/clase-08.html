@@ -18,7 +18,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
 
-<details class="section-block sec" id="c8-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c8-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>Cálculo de riesgo condicional minimizado dada una matriz de pérdidas y probabilidades a posteriori</strong><span class="evid">Evidencia: evidencia de la clase: el profesor resolvió un ejercicio completo en vivo en el pizarrón con números reales (0.7 vs 0.3) y explícitamente indicó que vendrá un ejercicio práctico en el examen.</span></li>
 <li><strong>Diferencias en la matriz de covarianza entre QDA, LDA y Naive Bayes</strong><span class="evid">Evidencia: evidencia de la clase: el profesor lo repitió múltiples veces, lo explicó gráficamente y lo ligó a la práctica de evaluación en código con el dataset Iris.</span></li>
@@ -28,7 +28,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>⚠️ Por verificar contra el audio:</strong> en esta clase, los apuntes generados por NotebookLM traen <strong>números que no cuadran</strong> en los ejemplos resueltos de Dunn, Davies-Bouldin, Silueta y Spam, y una <strong>fecha de práctica que contradice la Clase 07</strong>. Están marcados con ⚠️ dentro de cada sección; las fórmulas y los conceptos sí son consistentes.</p></div>
 
-<details class="section-block sec" id="c8-repaso" open><summary><span class="stitle">Repaso de algoritmos no supervisados y métricas internas de validación</span></summary>
+<details class="section-block sec" id="c8-repaso"><summary><span class="stitle">Repaso de algoritmos no supervisados y métricas internas de validación</span></summary>
 <p>La sesión inició con un repaso de los métodos de agrupamiento no supervisados de la clase anterior: en este enfoque no hay etiquetas previas para las instancias de entrenamiento. Sobre <strong>K-Means</strong> se recordó que requiere fijar el parámetro K durante todas las iteraciones, que asume clusters esféricos por usar distancias geométricas y que tiene serias dificultades con fronteras no lineales, como las dos medias lunas entrelazadas. De <strong>LBG</strong> (Linde-Buzo-Gray) se recordó que es un algoritmo de cuantización vectorial que genera un <em>codebook</em> de <em>codewords</em> minimizando la distorsión global, y que su tamaño queda restringido a potencias de 2 (2, 4, 8, 16, 32…) porque en cada iteración los vectores se duplican con una perturbación positiva y negativa en la dirección de la varianza. De <strong>ISODATA</strong> se reiteró que evoluciona K-Means con heurísticas para separar clusters muy dispersos, fusionar los excesivamente cercanos y eliminar los que no tienen un mínimo de elementos.</p>
 <p>Después el profesor introdujo las <strong>métricas de evaluación de agrupamientos</strong>, clasificadas como <strong>métricas internas</strong>: se llaman así porque evalúan la calidad de los grupos formados analizando únicamente la geometría del espacio de características, sin requerir conocimiento previo ni etiquetas reales de clase (<em>ground truth</em>). Se explicaron tres.</p>
 
@@ -73,7 +73,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c8-similitud" open><summary><span class="stitle">Clasificación por funciones de similitud y repaso de probabilidad</span></summary>
+<details class="section-block sec" id="c8-similitud"><summary><span class="stitle">Clasificación por funciones de similitud y repaso de probabilidad</span></summary>
 <p>Concluido el bloque de métodos basados en distancias, el profesor pasó a los <strong>clasificadores basados en funciones de similitud y probabilidades</strong>. En vez de asignar patrones buscando la distancia mínima a un centroide o prototipo, la regla de decisión se modela evaluando qué tan probable o parecido es un patrón X con respecto a cada clase W<sub>i</sub>, mediante una función discriminante g<sub>i</sub>(X). La regla general: asignar X a la clase W<sub>i</sub> si</p>
 <p style="text-align:center"><em>g<sub>i</sub>(X) &gt; g<sub>j</sub>(X) &nbsp; para todo j ≠ i</em></p>
 <p>lo que equivale a que la probabilidad de pertenecer a la clase i sea estrictamente superior a la de cualquier otra clase j.</p>
@@ -95,7 +95,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c8-bayes" open><summary><span class="stitle">Teoría de decisión de Bayes, función de costo y riesgo condicional</span></summary>
+<details class="section-block sec" id="c8-bayes"><summary><span class="stitle">Teoría de decisión de Bayes, función de costo y riesgo condicional</span></summary>
 <p>La <strong>probabilidad condicional</strong> P(X|W<sub>i</sub>) es la probabilidad de observar el vector de características X dado que pertenece a la clase W<sub>i</sub>. Para formalizar la decisión como un problema estadístico se definen las clases ω<sub>1</sub>, ω<sub>2</sub>, …, ω<sub>c</sub>, un vector de características X y un conjunto de acciones α<sub>1</sub>, α<sub>2</sub>, …, α<sub>c</sub>, donde la acción α<sub>i</sub> es decidir que X se asigna a la clase ω<sub>i</sub>.</p>
 <p>Para evaluar las consecuencias de una decisión se introduce la <strong>función de costo o pérdida</strong> λ(α<sub>i</sub> | ω<sub>j</sub>): la penalización numérica de tomar la acción α<sub>i</sub> (asignar a la clase i) cuando el patrón pertenece realmente a ω<sub>j</sub>.</p>
 <ul>
@@ -130,7 +130,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c8-gaussianos" open><summary><span class="stitle">Clasificadores gaussianos de Bayes: QDA, LDA y Bayes ingenuo</span></summary>
+<details class="section-block sec" id="c8-gaussianos"><summary><span class="stitle">Clasificadores gaussianos de Bayes: QDA, LDA y Bayes ingenuo</span></summary>
 <p>Como calcular la verosimilitud P(X | ω<sub>i</sub>) de forma arbitraria es complejo, la aproximación estándar es suponer que los patrones de cada clase siguen una <strong>distribución normal multivariada</strong>. Sustituyendo la densidad gaussiana en la función de decisión con logaritmo, la expresión queda en términos de la <strong>distancia de Mahalanobis</strong>:</p>
 <p style="text-align:center"><em>g<sub>k</sub>(X) = −½ · d<sub>M</sub>²(X, μ<sub>k</sub>) − ½ · ln|Σ<sub>k</sub>| + ln P(ω<sub>k</sub>)</em></p>
 <p>donde d<sub>M</sub>²(X, μ<sub>k</sub>) = (X − μ<sub>k</sub>)<sup>T</sup> Σ<sub>k</sub><sup>−1</sup> (X − μ<sub>k</sub>) es la distancia de Mahalanobis al centroide μ<sub>k</sub>, |Σ<sub>k</sub>| es el determinante de la matriz de covarianza y P(ω<sub>k</sub>) es la probabilidad a priori. Según lo que se suponga de Σ<sub>k</sub>, salen tres clasificadores de la familia gaussiana de Bayes:</p>
@@ -149,7 +149,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c8-naive" open><summary><span class="stitle">Naive Bayes: caso continuo, discreto (filtro de spam) y suavizado de Laplace</span></summary>
+<details class="section-block sec" id="c8-naive"><summary><span class="stitle">Naive Bayes: caso continuo, discreto (filtro de spam) y suavizado de Laplace</span></summary>
 <p>El clasificador <strong>Naive Bayes (Bayes ingenuo)</strong> se basa en la <strong>independencia condicional de las características dada la clase</strong>. En vez de evaluar la verosimilitud conjunta P(X<sub>1</sub>, …, X<sub>d</sub> | ω<sub>i</sub>) —impracticable en altas dimensiones— la independencia permite descomponerla en el producto de las probabilidades de cada característica:</p>
 <p style="text-align:center"><em>P(X | ω<sub>i</sub>) = Π<sub>j=1..d</sub> P(X<sub>j</sub> | ω<sub>i</sub>)</em></p>
 <p>Se llama “ingenuo” porque en el mundo real las características casi siempre están correlacionadas; aun así, en la práctica rinde sorprendentemente bien y es muy eficiente.</p>
@@ -177,7 +177,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c8-codigo" open><summary><span class="stitle">Implementación en código, evaluación en Iris y ventajas/desventajas</span></summary>
+<details class="section-block sec" id="c8-codigo"><summary><span class="stitle">Implementación en código, evaluación en Iris y ventajas/desventajas</span></summary>
 <p>En Python, los cálculos se implementan con transformaciones logarítmicas para evitar el <em>underflow</em> numérico causado por multiplicar probabilidades decimales muy pequeñas: función de decisión = ln P(Gaussiana) + ln P(Prior).</p>
 <p>Se presentó la evaluación sobre el dataset <strong>Iris</strong> (120 muestras de entrenamiento, 30 de prueba, 4 características y 3 clases):</p>
 <ul>
@@ -219,7 +219,7 @@
 </ul>
 </details>
 
-<details class="section-block sec" id="c8-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<details class="section-block sec" id="c8-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
 <p>⚠️ <strong>Discrepancia a resolver:</strong> en la <a href="clase-07.html">Clase 07</a> los apuntes dicen que la <strong>Práctica 2</strong> (clasificadores) se entrega el viernes 25 sep; en esta clase los apuntes hablan de la <strong>Práctica 3</strong> (algoritmos no supervisados) con la misma fecha, 25 sep. Puede ser una sola práctica con dos nombres, o dos prácticas con la misma fecha. Contrastar con Classroom (<code>/revisar-classroom</code>) o el audio.</p>
 <ul>
 <li><strong>Práctica 3 — Algoritmos no supervisados</strong> (según los apuntes de esta clase):

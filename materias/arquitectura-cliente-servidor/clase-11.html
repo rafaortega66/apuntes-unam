@@ -18,7 +18,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Formato de estudio.</strong> Primero va lo que probablemente viene en el examen y por qué. Después, cada concepto explicado en este orden: qué es, explicado en simple, cómo funciona, por qué importa y errores comunes. Al final hay preguntas para ponerte a prueba. Todo sale del audio de la clase (procesado en NotebookLM).</p></div>
 
-<details class="section-block sec" id="c11-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c11-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>Diferencia entre <code>bind()</code> y <code>accept()</code> en el servidor.</strong><span class="evid">Evidencia: las comparó en vivo con el código proyectado. <code>bind()</code> recibe la estructura <code>servidor</code> que el programador inicializa y su tamaño; <code>accept()</code> recibe la estructura <code>cliente</code> (que se inicializa sola) y un apuntador a la longitud.</span></li>
 <li><strong>Sintaxis de <code>send()</code> y <code>recv()</code> y su uso en pareja.</strong><span class="evid">Evidencia: abrió la documentación de The Open Group, mostró la misma firma de 4 argumentos (socket, buffer, length, flags) y enfatizó que si un extremo usa <code>send()</code>, el otro debe usar <code>recv()</code>; el flag por defecto es 0.</span></li>
@@ -28,7 +28,7 @@
 </ol>
 </details>
 
-<details class="section-block sec" id="c11-programa04" open><summary><span class="stitle">1 · El par de programas 04 y su configuración inicial</span></summary>
+<details class="section-block sec" id="c11-programa04"><summary><span class="stitle">1 · El par de programas 04 y su configuración inicial</span></summary>
 <div class="concepto">
 <span class="lbl">Qué es</span>
 <p>Es el primer par de programas en C con comunicación cliente-servidor real por sockets TCP en el puerto <strong>4898</strong>: el cliente solicita la conexión y el servidor le responde con un mensaje de texto.</p>
@@ -51,7 +51,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c11-ascii" open><summary><span class="stitle">2 · char, byte y la tabla ASCII (LF y CR)</span></summary>
+<details class="section-block sec" id="c11-ascii"><summary><span class="stitle">2 · char, byte y la tabla ASCII (LF y CR)</span></summary>
 <div class="concepto">
 <span class="lbl">Qué es</span>
 <p>Para texto plano, <strong>1 char = 1 byte</strong>, así que los caracteres ASCII de 8 bits se transmiten sin pérdida.</p>
@@ -72,7 +72,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c11-servidor" open><summary><span class="stitle">3 · El socket servidor paso a paso (socket, bind, listen, accept) e inspección con gethostbyaddr</span></summary>
+<details class="section-block sec" id="c11-servidor"><summary><span class="stitle">3 · El socket servidor paso a paso (socket, bind, listen, accept) e inspección con gethostbyaddr</span></summary>
 <div class="concepto">
 <span class="lbl">Qué es</span>
 <p>La secuencia estricta de funciones en C que configuran el socket del servidor, lo ligan a una IP y puerto, lo ponen en escucha y aceptan clientes.</p>
@@ -94,7 +94,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c11-cliente" open><summary><span class="stitle">4 · El socket cliente paso a paso (socket, gethostbyname, memcpy, connect)</span></summary>
+<details class="section-block sec" id="c11-cliente"><summary><span class="stitle">4 · El socket cliente paso a paso (socket, gethostbyname, memcpy, connect)</span></summary>
 <div class="concepto">
 <span class="lbl">Qué es</span>
 <p>El flujo simplificado del cliente: resolver el nombre o IP del servidor, configurar su estructura y pedir la conexión con <code>connect()</code>.</p>
@@ -114,7 +114,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c11-sendrecv" open><summary><span class="stitle">5 · send(), recv() y write() sobre el descriptor 1</span></summary>
+<details class="section-block sec" id="c11-sendrecv"><summary><span class="stitle">5 · send(), recv() y write() sobre el descriptor 1</span></summary>
 <div class="concepto">
 <span class="lbl">Qué es</span>
 <p>El mecanismo de transferencia de bytes entre cliente y servidor con las funciones emparejadas <code>send()</code> y <code>recv()</code>, seguido de escribir el mensaje recibido en el monitor del cliente.</p>
@@ -155,7 +155,7 @@
 </ul>
 </details>
 
-<details class="section-block sec" id="c11-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<details class="section-block sec" id="c11-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
 <ul>
 <li><strong>Tarea moral:</strong> probar el par de programas 04 (servidor y cliente de Internet) en dos terminales, en Linux nativo, máquina virtual o GitHub Codespaces. Se puede usar <code>127.0.0.1</code> en la misma máquina, o la IP de la máquina virtual donde corre el servidor, con el puerto 4898, y verificar la recepción de los 46 bytes del mensaje.</li>
 <li><strong>Revisiones:</strong> el profesor seguirá calificando las entregas de la Tarea 3 durante el fin de semana.</li>

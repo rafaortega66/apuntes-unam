@@ -18,7 +18,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
 
-<details class="section-block sec" id="c7-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c7-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>La diferencia en el consumo de ciclos de reloj entre configurar GPIO con librerías estándar (machine.Pin) y hacerlo directamente con machine.mem32</strong><span class="evid">Evidencia: Lo resolvió en vivo demostrando que las librerías agregan al menos 4 ciclos extra por iteración al reejecutar la configuración dentro del bucle while True, mientras que la configuración por registros toma 5 ciclos fijos al inicio.</span></li>
 <li><strong>El cambio en la dirección base del bloque IO_BANK0 entre la Raspberry Pi Pico 1 (0x40014000) y la Pico 2 (0x40000000)</strong><span class="evid">Evidencia: Lo explicó con un diagrama de flujo de programa, lo resolvió en vivo y lo ligó explícitamente a los ejercicios prácticos de clase.</span></li>
@@ -30,7 +30,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>⚠️ Por verificar:</strong> los apuntes generados por NotebookLM dan como base de <code>IO_BANK0</code> en la Pico 2 la dirección <code>0x40000000</code>, y la rutina de ensamblador de la Pico 2 llega a <code>0x40000000</code> con <code>mov(R0, 0x40)</code> + <code>lsl(R0, R0, 24)</code>. Conviene contrastar ese valor con el datasheet del RP2350 y con el código que el profesor publique, antes de usarlo en una práctica. El fragmento de ensamblador del apunte también quedó incompleto (“…”) en la parte del PAD y del SIO.</p></div>
 
-<details class="section-block sec" id="c7-blink-machine" open><summary><span class="stitle">Blink con librerías estándar y el problema de los ciclos de reloj</span></summary>
+<details class="section-block sec" id="c7-blink-machine"><summary><span class="stitle">Blink con librerías estándar y el problema de los ciclos de reloj</span></summary>
 <p>La sesión comenzó con el método convencional para hacer parpadear un LED (programa <em>Blink</em>) en la Raspberry Pi Pico usando las librerías de alto nivel de MicroPython (<code>machine.Pin</code> y <code>time.sleep</code>). El pin 25, donde está el LED integrado de la placa, se declara con <code>Pin(25, Pin.OUT)</code> y su estado se conmuta dentro de un bucle infinito con <code>toggle()</code> o asignando valores directos:</p>
 <pre><code>from machine import Pin
 from time import sleep
@@ -49,7 +49,7 @@ while True:
 </div>
 </details>
 
-<details class="section-block sec" id="c7-mem32" open><summary><span class="stitle">Configuración de GPIO sin librerías: direccionamiento directo con machine.mem32</span></summary>
+<details class="section-block sec" id="c7-mem32"><summary><span class="stitle">Configuración de GPIO sin librerías: direccionamiento directo con machine.mem32</span></summary>
 <p>Para eliminar ese consumo indeterminado se presentó el acceso directo a registros de memoria con <code>machine.mem32</code>. A partir de un diagrama de flujo, el profesor explicó cómo calcular la dirección física absoluta de cada registro de control combinando una <strong>dirección base</strong> y un <strong>desplazamiento (offset)</strong>.</p>
 <table>
 <tr><th>Elemento</th><th>Pico 1</th><th>Pico 2 (RP2350)</th></tr>
@@ -96,7 +96,7 @@ while True:
 </div>
 </details>
 
-<details class="section-block sec" id="c7-asm" open><summary><span class="stitle">Ensamblador inline ARM Thumb (@micropython.asm_thumb)</span></summary>
+<details class="section-block sec" id="c7-asm"><summary><span class="stitle">Ensamblador inline ARM Thumb (@micropython.asm_thumb)</span></summary>
 <p>Para la máxima precisión en la temporización y en el conteo de ciclos se presentó la implementación en ensamblador incrustado bajo el conjunto de instrucciones ARM Thumb (<code>@micropython.asm_thumb</code>). En Thumb no se puede cargar una constante o dirección de 32 bits (como <code>0x40014000</code> o <code>0xd0000000</code>) en un registro con una sola instrucción de carga inmediata (<code>mov</code>). La solución es construir la dirección por pasos, combinando cargas inmediatas de 8 bits con desplazamientos lógicos a la izquierda (<code>lsl</code>):</p>
 <ol>
 <li>Se carga el valor <code>0x40</code> en el registro R0.</li>
@@ -123,7 +123,7 @@ def blink_asm():
 </div>
 </details>
 
-<details class="section-block sec" id="c7-uctypes" open><summary><span class="stitle">Registros como estructuras de campos de bits con uctypes</span></summary>
+<details class="section-block sec" id="c7-uctypes"><summary><span class="stitle">Registros como estructuras de campos de bits con uctypes</span></summary>
 <p>La tercera metodología usa la librería de bajo nivel <code>uctypes</code>. Permite describir un registro de hardware campo por campo (<em>bitfield</em>), mapeando posiciones y longitudes de bits específicas, y manipularlo como propiedades de un objeto de Python, sin enmascarar a mano con operadores lógicos (<code>&amp;</code>, <code>|</code>, <code>&lt;&lt;</code>).</p>
 <p>Como ejemplo se usó el registro de control y estado del convertidor analógico-digital (ADC_CS / ADC_CTRL):</p>
 <ul>
@@ -154,7 +154,7 @@ adc_cs.EN = 1   # modifica solo el bit 0 en memoria, sin alterar los demás</cod
 </div>
 </details>
 
-<details class="section-block sec" id="c7-plan" open><summary><span class="stitle">Reflexión: Plan de Estudios 2026 e inteligencia artificial en ingeniería</span></summary>
+<details class="section-block sec" id="c7-plan"><summary><span class="stitle">Reflexión: Plan de Estudios 2026 e inteligencia artificial en ingeniería</span></summary>
 <p>En la parte final el profesor abrió una discusión sobre las propuestas de actualización del plan de estudios 2026 de Ingeniería en Computación. Expresó su preocupación por la falta de claridad en los temarios de materias nuevas como “Inteligencia Artificial 1, 2 y 3” y por la intención de fusionar Arquitectura de Computadoras.</p>
 <p>Advirtió que la IA no debe enseñarse solo desde el consumo superficial de librerías o APIs, sino entendiendo la cadena de procesamiento en hardware que la sustenta:</p>
 <ul>

@@ -18,7 +18,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
 
-<details class="section-block sec" id="c6-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c6-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>Diferencia en disipación térmica entre la SRAM de los procesadores y la de un microcontrolador debido a la frecuencia y tamaño de caché</strong><span class="evid">Evidencia: Lo dijo explícitamente al comparar los 8 MB de caché a 1.5 GHz de Intel con los 264 KB a 150 MHz del RP2040.</span></li>
 <li><strong>La invención de la memoria Flash mediante clústeres/matrices en paralelo para acelerar la escritura</strong><span class="evid">Evidencia: Lo explicó detalladamente resolviendo los cálculos de tiempo en el pizarrón.</span></li>
@@ -28,7 +28,7 @@
 </ol>
 </details>
 
-<details class="section-block sec" id="c6-burst-disipacion" open><summary><span class="stitle">Funcionamiento en ráfaga (burst mode) y disipación térmica: SRAM vs. microcontrolador</span></summary>
+<details class="section-block sec" id="c6-burst-disipacion"><summary><span class="stitle">Funcionamiento en ráfaga (burst mode) y disipación térmica: SRAM vs. microcontrolador</span></summary>
 <p>La clase cerró formalmente el bloque de memorias retomando el <strong>funcionamiento en ráfaga (burst mode)</strong> de las memorias dinámicas modernas: en vez de leer y reescribir capacitor por capacitor, la memoria abre una fila completa y la reescribe en cada ciclo, usando señales de control que van de simples a más complejas según el protocolo. Esta es la razón física de que la RAM moderna pueda transferir bloques de datos mucho más rápido que si tuviera que direccionar cada bit por separado.</p>
 <p>De ahí, el profesor conectó con una comparación muy concreta de <strong>disipación térmica</strong> entre una caché SRAM pequeña y una grande, usando dos ejemplos reales:</p>
 <ul>
@@ -44,7 +44,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c6-no-volatiles-historia" open><summary><span class="stitle">Memorias no volátiles de estado sólido: de los bulbos a la EEPROM</span></summary>
+<details class="section-block sec" id="c6-no-volatiles-historia"><summary><span class="stitle">Memorias no volátiles de estado sólido: de los bulbos a la EEPROM</span></summary>
 <p>El profesor definió con precisión qué significa "estado sólido": se refiere estrictamente a componentes construidos con <strong>transistores de silicio</strong>, en contraste con la tecnología antigua basada en <strong>bulbos o tubos de vacío</strong>. A partir de esa definición recorrió la evolución histórica de las memorias de solo lectura:</p>
 <ul>
 <li><strong>ROM:</strong> matrices fijas de transistores, no modificables una vez fabricadas.</li>
@@ -61,7 +61,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c6-flash-ssd" open><summary><span class="stitle">La invención de la memoria Flash y la arquitectura interna del SSD</span></summary>
+<details class="section-block sec" id="c6-flash-ssd"><summary><span class="stitle">La invención de la memoria Flash y la arquitectura interna del SSD</span></summary>
 <p><strong>El cuello de botella de la EEPROM:</strong> leer un dato de una EEPROM a 5 V cuesta nanosegundos, pero escribir requiere decenas de milivoltios sostenidos durante aproximadamente <strong>1 milisegundo</strong> — que en un procesador corriendo a 20 MHz equivale a perder miles de ciclos de reloj solo esperando a que termine una escritura.</p>
 <p><strong>La solución por clústeres, que es justamente lo que define a la memoria Flash:</strong> en lugar de escribir byte por byte, las celdas se organizan en clústeres o bloques (por ejemplo de 64 KB, 128 KB o 4 MB) y se escriben miles de bytes <strong>en paralelo</strong> de una sola vez. El profesor lo tradujo a números: si escribir en paralelo un clúster completo de 64 KB tarda 50 ms, el tiempo <em>promedio</em> por byte cae a apenas ~0.8 microsegundos (y a nanosegundos por byte en clústeres de varios megabytes) — de ahí que la Flash se sienta ordenes de magnitud más rápida que la EEPROM aunque el mecanismo eléctrico de fondo sea parecido.</p>
 <p><strong>Estructura de celdas en los SSD modernos</strong>, de mayor a menor durabilidad:</p>
@@ -86,7 +86,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c6-magneticos-opticos" open><summary><span class="stitle">Medios magnéticos y ópticos</span></summary>
+<details class="section-block sec" id="c6-magneticos-opticos"><summary><span class="stitle">Medios magnéticos y ópticos</span></summary>
 <p>En medios <strong>magnéticos</strong> se repasó la evolución de los disquetes: de las cintas magnéticas de acceso secuencial, a los disquetes de 8", luego los de 5¼" (320 KB a 720 KB), y finalmente los de 3½" (720 KB a 1.44 MB, o 2.88 MB en versiones especiales). El avance clave de los disquetes de 3½" fue incorporar una plaquita metálica soldada que mejoraba la precisión del motor a pasos del lector.</p>
 <p>En medios <strong>ópticos</strong>, la comparación se organizó por la longitud de onda del láser usado, que es lo que determina cuánta información cabe en el disco:</p>
 <ul>
@@ -105,7 +105,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c6-modos-direccionamiento" open><summary><span class="stitle">Modos de direccionamiento de microprocesadores (modelo Motorola 6800)</span></summary>
+<details class="section-block sec" id="c6-modos-direccionamiento"><summary><span class="stitle">Modos de direccionamiento de microprocesadores (modelo Motorola 6800)</span></summary>
 <p>Con el bloque de memorias cerrado, la clase entró de inmediato al siguiente tema: los <strong>modos de direccionamiento</strong>, usando la arquitectura del <strong>Motorola 6800 / 68HC11</strong> como estándar didáctico. El profesor presentó seis modos:</p>
 <ul>
 <li><strong>Inherente (operando implícito):</strong> la instrucción no necesita ningún operando externo porque la operación ya está implícita en el código de operación mismo. Ejemplos: <code>NOP</code> (no operación), <code>RTS</code> (retorno de subrutina), <code>RESET</code>, y los corrimientos de acumulador.</li>
@@ -141,7 +141,7 @@
 <details class="qa"><summary>7. Compara el modo de direccionamiento directo y el modo de direccionamiento extendido en el modelo Motorola 6800.</summary><p>El modo directo usa una dirección corta de 8 bits para acceder a la parte baja de la memoria (\00 a \FF) en menos ciclos; el modo extendido utiliza una dirección completa de 16 bits (2 bytes) para acceder a cualquier ubicación de la memoria.</p></details>
 </details>
 
-<details class="section-block sec" id="c6-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<details class="section-block sec" id="c6-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
 <ul>
 <li><strong>Cierre oficial del Tema 2:</strong> con memorias y modos de direccionamiento ya cubiertos, el Tema 2 (Organización, arquitectura y plataformas embebidas) queda cerrado.</li>
 <li><strong>Próxima clase — inicio del Tema 3:</strong> Sistemas Operativos para Plataformas Embebidas.</li>

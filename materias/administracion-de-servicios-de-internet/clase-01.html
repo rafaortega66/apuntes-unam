@@ -15,16 +15,16 @@
   <p class="prof">Mtro. Juan Ángel Calvillo Pérez · 26 ago 2026 · Tema 1 — De la Máquina de Turing a la arquitectura Von Neumann/Harvard, jerarquía de directorios de Linux (FHS), criterios para elegir distribución, y arranque de la Práctica 0 en terminal (procesos, archivos y permisos).</p>
 </div>
 
-<details class="section-block sec" id="c1-turing" open><summary><span class="stitle">El procesador como Máquina de Turing</span></summary>
+<details class="section-block sec" id="c1-turing"><summary><span class="stitle">El procesador como Máquina de Turing</span></summary>
 <p>El profesor abrió el curso definiendo el <strong>procesador</strong> como el elemento central de la computadora, encargado de ejecutar los programas cargados en memoria. Explicó que este mecanismo electrónico no es más que la abstracción física de un modelo matemático mucho más antiguo: la <strong>Máquina de Turing</strong> propuesta por Alan Turing, formalizada como un autómata de doble pila con un lenguaje finito de operaciones. Su importancia histórica es que representa la demostración matemática de que un sistema autómata simple puede, en principio, computar cualquier cosa computable — es la base teórica de la que parte toda la arquitectura de computadoras que se vería después.</p>
 </details>
 
-<details class="section-block sec" id="c1-von-neumann" open><summary><span class="stitle">Arquitectura de Von Neumann y su cuello de botella</span></summary>
+<details class="section-block sec" id="c1-von-neumann"><summary><span class="stitle">Arquitectura de Von Neumann y su cuello de botella</span></summary>
 <p>Para pasar del modelo abstracto de Turing a una implementación física real con componentes electrónicos, surge la <strong>arquitectura de Von Neumann</strong>, compuesta por: el <strong>controlador</strong> (genera las señales de activación internas), el <strong>registro de estado</strong> (guarda banderas y el estado del procesamiento), el <strong>registro de propósito general</strong> (datos de trabajo temporales), el <strong>contador de programa</strong> (apunta a la siguiente instrucción), la <strong>ALU</strong> (operaciones aritméticas y lógicas), una <strong>unidad de almacenamiento única</strong> que contiene en el mismo espacio de direccionamiento el programa, los datos y la pila, y el <strong>mapeo de entradas/salidas</strong>.</p>
 <p>El problema central de este diseño es el llamado <strong>cuello de botella de Von Neumann</strong>: al compartir un solo bus y un solo espacio de memoria entre instrucciones y datos, el ciclo de ejecución (<strong>Fetch → Decode → Execute → Write Back</strong>) tiene que correr en serie, y durante cada fase la mayoría de los demás componentes están inactivos — mientras se lee la instrucción (Fetch), la ALU y el decodificador no hacen nada; durante Decode, el bus y la ALU están ociosos; durante Execute, el bus de memoria y el decodificador tampoco trabajan. Para ilustrarlo, se analizó un ejemplo comparativo ejecutando un ciclo <code>for (int i = 0; i &lt; n; i++)</code> en ensamblador sobre una arquitectura CISC tradicional: se mostró que solo entre un <strong>20% y un 33%</strong> del tiempo la ALU está haciendo cómputo real, y el resto — entre un <strong>66% y un 80%</strong> del tiempo — se pierde en accesos a memoria e inactividad de componentes.</p>
 </details>
 
-<details class="section-block sec" id="c1-harvard-pipeline" open><summary><span class="stitle">Arquitectura Harvard/RISC y segmentación de instrucciones (pipelining)</span></summary>
+<details class="section-block sec" id="c1-harvard-pipeline"><summary><span class="stitle">Arquitectura Harvard/RISC y segmentación de instrucciones (pipelining)</span></summary>
 <p>Para resolver esta ineficiencia, los investigadores <strong>David Patterson y John Hennessy</strong> propusieron el modelo <strong>Load-Store (carga y almacenamiento)</strong>: demostraron matemáticamente que cualquier programa, sin importar su complejidad, puede reescribirse usando solo operaciones simples de carga y almacenamiento sobre una ALU básica. De esa idea nace la filosofía <strong>RISC (Reduced Instruction Set Computer)</strong> combinada con la <strong>arquitectura Harvard</strong>, que separa físicamente la memoria de instrucciones de la memoria de datos — permitiendo leer una instrucción y acceder a un dato de forma simultánea, sin las colisiones del modelo Von Neumann.</p>
 <p>Esta separación es lo que hace posible la <strong>segmentación de instrucciones (pipelining)</strong>: dividir la ejecución de cada instrucción en 4 etapas (Fetch, Decode, Execute, Write Back) que corren en ciclos de reloj traslapados. Así se ve en la tabla que se usó en clase, donde cada fila es un ciclo de reloj y cada columna una instrucción distinta avanzando por las etapas:</p>
 <table><thead><tr><th>Ciclo</th><th>Fetch (F)</th><th>Decode (D)</th><th>Execute (E)</th><th>Write Back (WB)</th></tr></thead><tbody>
@@ -37,7 +37,7 @@
 <p>Tras la latencia inicial de llenado del "tubo" (4 ciclos), el procesador logra completar <strong>una instrucción por cada ciclo de reloj</strong>, en vez de una instrucción cada 4 ciclos — de ahí el salto de eficiencia frente a Von Neumann.</p>
 </details>
 
-<details class="section-block sec" id="c1-fhs" open><summary><span class="stitle">Jerarquía de directorios del sistema operativo Linux (FHS)</span></summary>
+<details class="section-block sec" id="c1-fhs"><summary><span class="stitle">Jerarquía de directorios del sistema operativo Linux (FHS)</span></summary>
 <p>En la segunda parte de la sesión se pasó de teoría de arquitectura a sistemas operativos, analizando la jerarquía del sistema de archivos Linux a partir de la raíz <code>/</code>. El profesor detalló los directorios esenciales del sistema, cada uno con su prioridad:</p>
 <table><thead><tr><th>Directorio</th><th>Prioridad</th><th>Qué contiene</th></tr></thead><tbody>
 <tr><td><code>/boot</code></td><td>Alta</td><td>Archivos esenciales para el arranque del sistema y la carga del kernel de Linux.</td></tr>
@@ -55,7 +55,7 @@
 <p>A propósito de <code>/tmp</code> y la memoria RAM, el profesor aclaró la diferencia entre <strong>rutas relativas</strong> (cortas, respecto al directorio actual) y <strong>rutas absolutas</strong> (completas, desde la raíz), y explicó que al reiniciar un equipo la RAM se desenergiza, liberando esas direcciones de memoria — por eso lo que está en <code>/tmp</code> desaparece.</p>
 </details>
 
-<details class="section-block sec" id="c1-distros" open><summary><span class="stitle">Criterios de selección de distribuciones de Linux</span></summary>
+<details class="section-block sec" id="c1-distros"><summary><span class="stitle">Criterios de selección de distribuciones de Linux</span></summary>
 <p>El profesor presentó una clasificación técnica para elegir la distribución adecuada según el escenario de uso:</p>
 <table><thead><tr><th>Distribución</th><th>Perfil / uso recomendado</th><th>Características</th></tr></thead><tbody>
 <tr><td>Ubuntu</td><td>Principiantes / usuario final</td><td>Fácil de usar, entorno gráfico intuitivo y semejante a Windows.</td></tr>
@@ -69,7 +69,7 @@
 </tbody></table>
 </details>
 
-<details class="section-block sec" id="c1-terminal-procesos" open><summary><span class="stitle">Terminal: localización de comandos y monitoreo de procesos</span></summary>
+<details class="section-block sec" id="c1-terminal-procesos"><summary><span class="stitle">Terminal: localización de comandos y monitoreo de procesos</span></summary>
 <p>Arrancó la Práctica 0 con ejercicios guiados en terminal. Primero se comparó <code>whereis &lt;comando&gt;</code> con <code>which &lt;comando&gt;</code> — un alumno preguntó la diferencia respecto a los comandos equivalentes en Windows, y el profesor demostró en vivo que <code>whereis ls</code> muestra todas las rutas asociadas (binarios, fuentes y manuales comprimidos), mientras que <code>which ls</code> devuelve únicamente la ruta absoluta del archivo ejecutable.</p>
 <p>Después se vio <code>man &lt;comando&gt;</code>, que abre el manual oficial en terminal (por ejemplo <code>man ls</code>); se sale de la vista con la tecla <kbd>q</kbd> o con <kbd>Ctrl+Z</kbd>.</p>
 <p>Para procesos: <code>ps</code> muestra los procesos activos de la sesión actual (columnas PID, terminal, tiempo, comando), mientras que <code>ps aux</code> lista con detalle todos los procesos del sistema. El profesor desglosó el significado exacto de cada bandera:</p>
@@ -81,18 +81,18 @@
 <p><strong>Aplicación en ciberseguridad:</strong> la bandera <code>x</code> es la primera que se revisa ante sospecha de malware, porque los procesos maliciosos suelen correr sin terminal asociada, escondidos en segundo plano. Complementando esto, <code>top</code> monitoriza en tiempo real los procesos en ejecución y el consumo dinámico de recursos del sistema.</p>
 </details>
 
-<details class="section-block sec" id="c1-terminal-archivos" open><summary><span class="stitle">Manipulación de archivos de texto y concatenación</span></summary>
+<details class="section-block sec" id="c1-terminal-archivos"><summary><span class="stitle">Manipulación de archivos de texto y concatenación</span></summary>
 <p>Se trabajó la creación y manipulación de archivos planos: <code>nano &lt;archivo&gt;</code> abre el editor de texto en terminal (se guarda y sale con <kbd>Ctrl+X</kbd>, confirmando la escritura); <code>cat &lt;archivo&gt;</code> despliega el contenido en pantalla, y <code>cat -n &lt;archivo&gt;</code> hace lo mismo pero numerando las líneas — útil para trabajo colaborativo o depuración de código.</p>
 <p>Sobre concatenación y redirección con <code>cat</code>: ejecutar <code>cat archivo1.txt archivo2.txt</code> imprime consecutivamente el contenido de ambos archivos en pantalla. Usando el operador de redirección se pueden fusionar en un archivo nuevo: <code>cat archivo1.txt archivo2.txt &gt; todito.txt</code> crea un archivo con el contenido combinado en el orden especificado. El profesor enfatizó un detalle que parece obvio pero se presta a errores: <strong>alterar el orden de los factores cambia el resultado</strong> — <code>cat archivo2.txt archivo1.txt &gt; todito2.txt</code> da un archivo distinto al anterior, con el contenido en el orden inverso.</p>
 </details>
 
-<details class="section-block sec" id="c1-ls-permisos" open><summary><span class="stitle">Listado detallado de archivos y sistema de permisos</span></summary>
+<details class="section-block sec" id="c1-ls-permisos"><summary><span class="stitle">Listado detallado de archivos y sistema de permisos</span></summary>
 <p>Se analizaron las banderas del comando <code>ls</code>: <code>ls -l</code> muestra el formato largo (permisos, propietario, grupo, tamaño en bytes, fecha y nombre); <code>ls -a</code> muestra todos los archivos incluyendo los ocultos (los que empiezan con punto) y las referencias <code>.</code> (directorio actual) y <code>..</code> (directorio anterior); <code>ls -s</code> y <code>ls -h</code> muestran el tamaño en kilobytes o en formato legible. Las banderas se pueden combinar libremente: <code>ls -la</code>, <code>ls -lsa</code>, etc.</p>
 <p><strong>Estructura octal de permisos:</strong> la primera columna de <code>ls -l</code> expone los permisos como una cadena de 10 caracteres (por ejemplo <code>drwxrwxrwx</code>), dividida en 4 bloques: el primer carácter indica el tipo de elemento (<code>-</code> archivo plano, <code>d</code> directorio); las posiciones 2–4 son los permisos del propietario (<em>Owner</em>); las posiciones 5–7 son los del grupo (<em>Group</em>); las posiciones 8–10 son los de otros/invitados (<em>Others</em>). Los valores numéricos son: Read = 4, Write = 2, Execute = 1 — se suman para formar cada dígito octal.</p>
 <p>El profesor advirtió con firmeza que <strong>nunca se debe usar la asignación 777</strong> (acceso total a todos), porque permite que cualquier usuario o proceso no autorizado escriba o ejecute contenido en ese archivo o carpeta — un riesgo de seguridad grave e innecesario en la inmensa mayoría de los casos.</p>
 </details>
 
-<details class="section-block sec" id="c1-mkdir" open><summary><span class="stitle">Creación avanzada de directorios (mkdir)</span></summary>
+<details class="section-block sec" id="c1-mkdir"><summary><span class="stitle">Creación avanzada de directorios (mkdir)</span></summary>
 <p>Para cerrar el bloque de terminal se vieron las variantes avanzadas de <code>mkdir</code>:</p>
 <ul>
 <li><code>mkdir &lt;nombre&gt;</code> — crea una carpeta con los permisos por defecto del sistema (habitualmente 755).</li>
@@ -114,7 +114,7 @@
 </ul>
 </details>
 
-<details class="section-block sec" id="c1-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<details class="section-block sec" id="c1-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
 <p>De esta clase sale la <a href="evaluacion.html" style="color:var(--indigo)">Práctica 0 — "Uso básico de Linux"</a>, con estos requisitos:</p>
 <ul>
 <li><strong>Sección de Desarrollo:</strong> todas las instrucciones y comandos explicados y ejecutados de forma guiada durante la clase.</li>

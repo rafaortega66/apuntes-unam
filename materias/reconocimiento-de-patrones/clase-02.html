@@ -19,7 +19,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
 
-<details class="section-block sec" id="c2-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c2-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>Formulación de la ecuación de varianza explicada en SVD elevando al cuadrado los valores singulares s_i²</strong><span class="evid">Evidencia: evidencia de la clase: el profesor lo remarcó explícitamente diciendo que no se les olvide elevar s_i al cuadrado porque si no da resultados raros al hacer los ejercicios.</span></li>
 <li><strong>Cálculo de eigenvalores y eigenvectores de una matriz de covarianza mediante el determinante det(C - lambda I) = 0</strong><span class="evid">Evidencia: evidencia de la clase: el profesor resolvió en vivo dos ejemplos numéricos completos en el pizarrón obteniendo lambdas y vectores propios.</span></li>
@@ -31,7 +31,7 @@
 
 
 <div class="files"><a class="btn" href="files/Clase-05-Seleccion-y-Reduccion-de-Dimensionalidad.pdf" target="_blank">📄 Diapositivas Clase 5 (prof.)</a></div>
-<details class="section-block sec" id="rdp-filtrado" open><summary><span class="stitle">Métodos de filtrado</span></summary>
+<details class="section-block sec" id="rdp-filtrado"><summary><span class="stitle">Métodos de filtrado</span></summary>
 <p>Evalúan cada característica de forma <strong>independiente del algoritmo de aprendizaje</strong>, antes de entrenar: 1) calcular una medida de relevancia, 2) ordenar por puntuación, 3) quedarse con las <em>k</em> mejores o las que superan un umbral.</p>
 <p><strong>Correlación de Pearson</strong> — relación lineal entre dos variables cuantitativas continuas.</p>
 <pre><code>r = Σ(xᵢ − x̄)(yᵢ − ȳ) / √( Σ(xᵢ − x̄)² · Σ(yᵢ − ȳ)² )
@@ -53,7 +53,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="rdp-wrapper" open><summary><span class="stitle">Métodos Wrapper (de envoltura)</span></summary>
+<details class="section-block sec" id="rdp-wrapper"><summary><span class="stitle">Métodos Wrapper (de envoltura)</span></summary>
 <p>Usan un algoritmo de aprendizaje como <strong>caja negra</strong> para evaluar iterativamente el rendimiento (exactitud del clasificador) de distintos subconjuntos de variables. El <strong>orden</strong> de las características en la matriz de entrada no importa para el modelo (<code>A+B</code> = <code>B+A</code>).</p>
 <p><strong>Forward Selection (hacia adelante):</strong> iniciar con subconjunto vacío (o con 1 característica; ej. <code>B</code> → 70 %). Añadir una variable a la vez, entrenar y evaluar; consolidar si mejora (<code>B+A</code> mejora; <code>B+A+C</code> → 80 %). Parar cuando añadir empeora (<code>B+A+C+D</code> baja 1 %). Óptimo: <code>{B, A, C}</code>.</p>
 <p><strong>Backward Selection (hacia atrás):</strong> iniciar con <strong>todas</strong> (<code>{A,B,C,D}</code> → 82 %). Quitar una variable a la vez; consolidar la remoción si mejora o mantiene (quitar <code>A</code> → 83 %; quitar <code>D</code> → 84 %). Parar cuando quitar <strong>cualquiera</strong> de las restantes desploma el desempeño (quitar <code>B</code> −24 %, quitar <code>C</code> −14 %). Óptimo: <code>{B, C}</code> con 84 %.</p>
@@ -188,7 +188,7 @@ Z = W · X           (W = matriz de vectores propios; X = datos originales; Z = 
 </ul>
 </details>
 
-<details class="section-block sec" id="tema-3-lda" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<details class="section-block sec" id="tema-3-lda"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
 <ul>
 <li><strong>Prácticas del curso:</strong> darán inicio oficialmente la siguiente semana.</li>
 <li><strong>Dinámica de entrega:</strong> todas las prácticas tendrán un plazo de una semana (de viernes a viernes). Para la evaluación de cada práctica, los equipos dispondrán de tiempo suficiente en clase para presentar.</li>

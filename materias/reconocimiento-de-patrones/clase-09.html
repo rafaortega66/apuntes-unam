@@ -18,7 +18,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
 
-<details class="section-block sec" id="c9-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c9-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>Cálculo a mano de distancias entre puntos (como la distancia Euclidiana)</strong><span class="evid">Evidencia: evidencia de la clase: el profesor lo dijo explícitamente al responder que los ejercicios prácticos a mano en el examen serían sencillos, midiendo diferencias al cuadrado.</span></li>
 <li><strong>Importancia de la estandarización frente a variables con escalas heterogéneas</strong><span class="evid">Evidencia: evidencia de la clase: el profesor lo repitió y preguntó explícitamente a ambos equipos sobre qué método de normalización convenía más y por qué magnitudes grandes como Proline dominan la distancia.</span></li>
@@ -29,7 +29,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>ℹ️ Sobre esta sesión:</strong> no fue una clase de teoría nueva, sino de <strong>exposición de los equipos</strong> con los resultados de sus experimentos. Los algoritmos y las métricas se explicaron en la <a href="clase-07.html">Clase 07</a> y la <a href="clase-08.html">Clase 08</a>; aquí se ven aplicados, con números reales de las corridas.</p></div>
 
-<details class="section-block sec" id="c9-repaso" open><summary><span class="stitle">Repaso: clasificación por distancia mínima, métricas y clustering</span></summary>
+<details class="section-block sec" id="c9-repaso"><summary><span class="stitle">Repaso: clasificación por distancia mínima, métricas y clustering</span></summary>
 <p>La sesión comenzó revisando el marco conceptual del reconocimiento de patrones y la clasificación basada en prototipos. En este enfoque, la <strong>regla de decisión por distancia mínima</strong> asigna un patrón o vector de características desconocido <em>x ∈ R<sup>d</sup></em> a la clase ω<sub>k</sub> cuyo centroide o prototipo representativo m<sub>k</sub> es el más cercano en el espacio vectorial: <em>x se asigna a ω<sub>k</sub> si d(x, m<sub>k</sub>) &lt; d(x, m<sub>j</sub>) para todo j ≠ k</em>. Cuando una clase cuenta con varios prototipos z<sub>i</sub><sup>λ</sup>, la distancia efectiva a la clase es la distancia al prototipo más próximo: <em>D<sub>i</sub> = min<sub>λ</sub> ‖x − z<sub>i</sub><sup>λ</sup>‖</em>.</p>
 <p>Entre las métricas de distancia y similitud expuestas:</p>
 <table>
@@ -52,7 +52,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c9-kmeans" open><summary><span class="stitle">K-Means, K-Means++ y LBG</span></summary>
+<details class="section-block sec" id="c9-kmeans"><summary><span class="stitle">K-Means, K-Means++ y LBG</span></summary>
 <p><strong>K-Means</strong> busca particionar un conjunto X = {x<sub>1</sub>, …, x<sub>n</sub>} en K clústeres fijos minimizando la <strong>inercia J</strong>, que suma los errores cuadráticos de cada punto respecto al centroide de su grupo:</p>
 <p style="text-align:center"><em>J = Σ<sub>j=1..K</sub> Σ<sub>x<sub>i</sub> ∈ C<sub>j</sub></sub> ‖x<sub>i</sub> − μ<sub>j</sub>‖²</em></p>
 <p>El procedimiento consta de cinco pasos iterativos:</p>
@@ -82,7 +82,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c9-isodata" open><summary><span class="stitle">ISODATA y métricas de evaluación</span></summary>
+<details class="section-block sec" id="c9-isodata"><summary><span class="stitle">ISODATA y métricas de evaluación</span></summary>
 <p><strong>ISODATA</strong> (<em>Iterative Self-Organizing Data Analysis Technique</em>) amplía la flexibilidad de K-Means: el número de clústeres puede cambiar durante la ejecución mediante operaciones de <strong>división, fusión y eliminación</strong>. Se regula con estos hiperparámetros:</p>
 <table>
 <tr><th>Parámetro</th><th>Función</th></tr>
@@ -118,7 +118,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c9-exp1" open><summary><span class="stitle">Experimento 1 — Datos sintéticos bidimensionales</span></summary>
+<details class="section-block sec" id="c9-exp1"><summary><span class="stitle">Experimento 1 — Datos sintéticos bidimensionales</span></summary>
 <p>El primer bloque expuesto por los alumnos evaluó los algoritmos sobre un dataset sintético de <strong>400 observaciones</strong> en <strong>4 clústeres reales (K = 4)</strong>. Primero se analizaron 6 corridas de K-Means comparando inicialización aleatoria contra K-Means++ con distintas semillas:</p>
 <table>
 <tr><th>Corrida</th><th>Inicialización</th><th>Semilla</th><th>Iteraciones</th><th>Inercia final (J)</th></tr>
@@ -145,7 +145,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c9-exp2" open><summary><span class="stitle">Experimento 2 — Dataset real Wine con estandarización y PCA</span></summary>
+<details class="section-block sec" id="c9-exp2"><summary><span class="stitle">Experimento 2 — Dataset real Wine con estandarización y PCA</span></summary>
 <p>El segundo experimento usó el conjunto real <strong>Wine</strong>: <strong>178 muestras</strong> de vino descritas por <strong>13 características químicas</strong> y clasificadas en <strong>3 categorías</strong> de origen.</p>
 <p>Los expositores insistieron en la necesidad del <strong>escalamiento por estandarización (Z-score / StandardScaler)</strong> antes de calcular distancias Euclidianas. Variables como <em>Proline</em> toman valores entre 70 y 1620, mientras que atributos como <em>Nonflavanoid phenols</em> o <em>Hue</em> oscilan en fracciones decimales (por ejemplo 0.69). Sin estandarizar, la variable de mayor magnitud dominaría la métrica de distancia y distorsionaría el agrupamiento.</p>
 <p>Tras estandarizar, aplicaron <strong>PCA</strong> conservando el <strong>95 % de la varianza explicada</strong>, lo que comprimió las 13 características originales a <strong>10 componentes principales</strong>. Sobre ese espacio se evaluaron:</p>
@@ -170,7 +170,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c9-preguntas" open><summary><span class="stitle">Preguntas del profesor a los equipos</span></summary>
+<details class="section-block sec" id="c9-preguntas"><summary><span class="stitle">Preguntas del profesor a los equipos</span></summary>
 <p>Durante y al final de las presentaciones, el Ing. Azuara planteó preguntas para discutir el comportamiento técnico de los algoritmos:</p>
 <p><strong>1. K-Means++.</strong> <em>Si al final K-Means aleatorio y K-Means++ llegan casi siempre al mismo resultado de inercia, ¿qué ventaja real tiene K-Means++?</em> Los alumnos respondieron que representa un ahorro importante de tiempo de cómputo y de iteraciones. El profesor complementó: K-Means++ evita caer en mínimos locales desfavorables por una mala inicialización. Si K-Means tradicional arranca con centroides demasiado juntos, o con un centroide abarcando dos clases reales, el algoritmo no puede separar esos grupos por sí solo; K-Means++ dispersa los centroides iniciales de forma probabilística y garantiza mejores puntos de partida.</p>
 <p><strong>2. Corrección de clústeres y parámetros de ISODATA.</strong> <em>Si en una gráfica hay dos centroides muy cercanos y uno solo capturando dos clases distintas, ¿cómo unirlos y separarlos con K-Means?, ¿y qué parámetros de ISODATA controlan esas operaciones?</em> Respuesta: en K-Means no se puede reestructurar así porque K permanece rígido durante todo el proceso. En ISODATA, separar un clúster alargado o disperso lo controla la desviación estándar máxima (σ<sub>max</sub>) y fusionar centroides cercanos lo regula la distancia mínima (d<sub>min</sub>).</p>

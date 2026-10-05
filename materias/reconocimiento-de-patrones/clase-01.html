@@ -19,7 +19,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
 
-<details class="section-block sec" id="c1-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c1-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>Tarea de momentos de Hu (Hu1 y Hu2) e inspección de textura con GLCM entregada hecha a mano</strong><span class="evid">Evidencia: evidencia de la clase: el profesor asignó la tarea explícitamente al final de la clase detallando los ejercicios de la figura C y las direcciones Oeste-Este y Norte-Sur.</span></li>
 <li><strong>Procedimiento paso a paso para el cálculo del descriptor HOG y dimensión exacta del vector final (3780)</strong><span class="evid">Evidencia: evidencia de la clase: el profesor explicó en detalle cada etapa desde los filtros de gradiente 1x3 y 3x1 hasta el desplazamiento de bloques de 16x16 píxeles.</span></li>
@@ -35,7 +35,7 @@
     <a class="btn" href="files/Clase-03-Extraccion-de-caracteristicas-II.pdf" target="_blank">📄 Extracción de características II (prof.)</a>
     <a class="btn" href="files/Clase-04-Extraccion-de-caracteristicas-III.pdf" target="_blank">📄 Extracción de características III (prof.)</a>
   </div>
-<details class="section-block sec" id="que-es-la-extraccion-de-caracteristicas" open><summary><span class="stitle">¿Qué es la extracción de características?</span></summary><p>Es el proceso que transforma un conjunto de <strong>datos crudos</strong> (imágenes, audio, series de tiempo…) en un <strong>vector de valores numéricos</strong> que describe de forma compacta la información relevante del patrón.</p>
+<details class="section-block sec" id="que-es-la-extraccion-de-caracteristicas"><summary><span class="stitle">¿Qué es la extracción de características?</span></summary><p>Es el proceso que transforma un conjunto de <strong>datos crudos</strong> (imágenes, audio, series de tiempo…) en un <strong>vector de valores numéricos</strong> que describe de forma compacta la información relevante del patrón.</p>
 <pre><code>y ∈ ℝᴺ  →  x ∈ ℝᵈ ,   d ≪ N</code></pre>
 <p>En lugar de trabajar con los datos originales (alta dimensionalidad, ruidosos, redundantes), se representa cada muestra con un conjunto reducido de atributos que conserven la <strong>información discriminante</strong> necesaria para separar clases.</p><div class="estudio-extra">
 <span class="lbl">Explicado en simple</span>
@@ -171,7 +171,7 @@ Centroide (x̄, ȳ) = ( M(1,0)/M(0,0) ,  M(0,1)/M(0,0) )</code></pre>
 </div>
 </details>
 
-<details class="section-block sec" id="ejercicios-hu-glcm-clase" open><summary><span class="stitle">Ejercicios resueltos en clase (Hu y GLCM)</span></summary>
+<details class="section-block sec" id="ejercicios-hu-glcm-clase"><summary><span class="stitle">Ejercicios resueltos en clase (Hu y GLCM)</span></summary>
 <p>Guardados en <a href="files/Ejercicios-Hu-y-GLCM-clase.pdf" target="_blank">Ejercicios de Hu y GLCM (PDF)</a>. Resumen de los que se pueden transcribir:</p>
 <p><strong>Ejemplo 1 — Momentos geom&eacute;tricos</strong> &nbsp; <code>M<sub>pq</sub> = &Sigma;&Sigma; x<sup>p</sup> y<sup>q</sup> f(x,y)</code>. Imagen 5&times;5 con cuatro p&iacute;xeles en 1 (x &isin; {2,3}, y &isin; {1,2}):</p>
 <pre><code>M00 = &Sigma; f            = 1+1+1+1                 = 4
@@ -425,7 +425,7 @@ Flatness = media geométrica / media aritmética           Ej. → ≈ 0.96 (esp
 </div>
 </details>
 
-<details class="section-block sec" id="para-investigar-siguiente" open><summary><span class="stitle">Pendiente / próxima clase — Tarea 1</span></summary>
+<details class="section-block sec" id="para-investigar-siguiente"><summary><span class="stitle">Pendiente / próxima clase — Tarea 1</span></summary>
 <ul>
 <li><strong>Fecha de entrega:</strong> el próximo viernes, a través de Google Classroom. Puede hacerse a mano o digitalizada en tablet, en formato legible.</li>
 <li><strong>Momentos de Hu:</strong> calcularlos para una imagen binaria con forma de "C" — primero el momento geométrico M(p,q), luego los momentos centrales/espaciales, aplicar normalización para momentos rotacionales y llegar a los 7 momentos de Hu.</li>

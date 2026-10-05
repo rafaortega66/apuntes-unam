@@ -18,7 +18,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
 
-<details class="section-block sec" id="c4-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c4-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>La diferencia entre ISA (definición del conjunto de instrucciones y organización funcional) y microarquitectura (implementación física concreta en silicio que cambia en cada generación)</strong><span class="evid">Evidencia: Lo explicó explícitamente y lo reforzó mediante la proyección del video técnico de 13 minutos.</span></li>
 <li><strong>La comparativa de tiempos en algoritmos de punto flotante entre la emulación por software en MicroPython de la Pico 1 (de 125 µs a 220 ms) y la ejecución por hardware FPU de la Pico 2 (102 µs)</strong><span class="evid">Evidencia: Lo explicó explícitamente con mediciones de laboratorio de un algoritmo de muestreo.</span></li>
@@ -28,7 +28,7 @@
 </ol>
 </details>
 
-<details class="section-block sec" id="c4-fpu-benchmark-apertura" open><summary><span class="stitle">Apertura: rendimiento en punto flotante, Pico 1 vs. Pico 2</span></summary>
+<details class="section-block sec" id="c4-fpu-benchmark-apertura"><summary><span class="stitle">Apertura: rendimiento en punto flotante, Pico 1 vs. Pico 2</span></summary>
 <p>El profesor abrió la sesión con una pregunta directa a la clase para verificar sus antecedentes sobre el tema; tras recibir una respuesta afirmativa unánime, justificó por qué vale la pena medir en números concretos la diferencia de tener o no una FPU dedicada. Compartió mediciones reales de laboratorio: un algoritmo de muestreo que originalmente tardaba <strong>125 µs</strong> en ejecutarse, al incorporar operaciones de punto flotante procesadas por software en la Pico 1 (sin FPU), elevó su tiempo hasta <strong>220 ms</strong>. En contraste, al ejecutar el mismo algoritmo en la Pico 2 aprovechando la FPU dedicada por hardware, el tiempo bajó a apenas <strong>102 µs</strong> — una diferencia de varios órdenes de magnitud, no un ajuste marginal.</p>
 <p>Sobre el mecanismo dual ARM/RISC-V de la Pico 2: la selección del modo de operación al encender la placa se gestiona a través de un registro leído por el bootloader, que determina si la ejecución arranca en modo ARM o en modo RISC-V. El profesor aclaró que para lograr un funcionamiento <strong>simultáneo</strong> en ambos modos (no solo uno u otro al arrancar) sería necesario desarrollar un bootloader personalizado escrito íntegramente en ensamblador puro — no es algo que el bootloader oficial ofrezca de fábrica.</p>
 <div class="estudio-extra">
@@ -39,7 +39,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c4-isa-microarq" open><summary><span class="stitle">ISA vs. Microarquitectura</span></summary>
+<details class="section-block sec" id="c4-isa-microarq"><summary><span class="stitle">ISA vs. Microarquitectura</span></summary>
 <p><strong>Instruction Set Architecture (ISA):</strong> organización funcional del procesador desde la perspectiva del software.</p>
 <ul>
 <li>Define qué instrucciones puede ejecutar el procesador.</li>
@@ -64,7 +64,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c4-cisc-risc" open><summary><span class="stitle">CISC vs. RISC — Filosofías de Diseño</span></summary>
+<details class="section-block sec" id="c4-cisc-risc"><summary><span class="stitle">CISC vs. RISC — Filosofías de Diseño</span></summary>
 <p><strong>CISC (Complex Instruction Set Computer):</strong></p>
 <ul>
 <li><strong>Conjunto de instrucciones:</strong> amplio y heterogéneo (x86 tiene ~1500 instrucciones).</li>
@@ -100,7 +100,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c4-arquitecturas-comerciales" open><summary><span class="stitle">Arquitecturas Comerciales: x86, ARM, RISC-V</span></summary>
+<details class="section-block sec" id="c4-arquitecturas-comerciales"><summary><span class="stitle">Arquitecturas Comerciales: x86, ARM, RISC-V</span></summary>
 <p><strong>x86 (Intel, AMD):</strong></p>
 <ul>
 <li><strong>Filosofía:</strong> CISC, instrucciones complejas de longitud variable.</li>
@@ -137,7 +137,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c4-pico-especificaciones" open><summary><span class="stitle">Raspberry Pi Pico: Pico 1 (RP2040) vs. Pico 2 (RP2350)</span></summary>
+<details class="section-block sec" id="c4-pico-especificaciones"><summary><span class="stitle">Raspberry Pi Pico: Pico 1 (RP2040) vs. Pico 2 (RP2350)</span></summary>
 <p><strong>Pico 1 (RP2040, 2021):</strong></p>
 <ul>
 <li>Procesador: 2x ARM Cortex-M0+ @ 133 MHz (inicializado a 125 MHz).</li>
@@ -168,7 +168,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c4-inline-assembly" open><summary><span class="stitle">Entornos de programación: C vs. Inline Assembly en MicroPython</span></summary>
+<details class="section-block sec" id="c4-inline-assembly"><summary><span class="stitle">Entornos de programación: C vs. Inline Assembly en MicroPython</span></summary>
 <p>Se discutieron las alternativas entre compilar en lenguaje C o trabajar directamente con MicroPython. El profesor manifestó su inconformidad ante la marcada preferencia de la plataforma Raspberry Pi por MicroPython, ya que oculta la arquitectura subyacente al programador. Como alternativa más accesible para trabajar a bajo nivel sin abandonar MicroPython, presentó el uso de <strong>ensamblador nativo incrustado (Inline Assembly)</strong> dentro de scripts de MicroPython: se declaran subrutinas especiales que contienen exclusivamente instrucciones de ensamblador, operando directamente sobre los registros de punto flotante de la FPU. El conjunto de instrucciones disponible en ese esquema está acotado a operaciones aritméticas elementales.</p>
 <p>El profesor enfatizó que el código máquina compilado para una arquitectura ARM específica no es automáticamente portable a cualquier otro chip ARM. Como caso comparativo citó la plataforma china <strong>Orange Pi</strong>: aunque usa procesadores ARM, su ISA no es 100% compatible con el de la Raspberry Pi, así que el código ensamblador optimizado para una placa no necesariamente corre en la otra sin adaptación.</p>
 <div class="estudio-extra">
@@ -180,7 +180,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c4-fpu-benchmarks" open><summary><span class="stitle">FPU (Unidad de Punto Flotante) — Benchmarks Pico 1 vs Pico 2</span></summary>
+<details class="section-block sec" id="c4-fpu-benchmarks"><summary><span class="stitle">FPU (Unidad de Punto Flotante) — Benchmarks Pico 1 vs Pico 2</span></summary>
 <p><strong>Problema:</strong> operaciones de punto flotante (multiplicación, división, trigonométricas, logaritmos) son costosas computacionalmente. En Pico 1 sin FPU integrada, la emulación por software (mediante rutinas compiladas en MicroPython) es lenta.</p>
 <p><strong>Benchmark (mismo algoritmo de procesamiento flotante):</strong></p>
 <ul>
@@ -198,7 +198,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c4-pio-perifericos" open><summary><span class="stitle">PIO (Programmable I/O) — Mini-FPGA del Microcontrolador</span></summary>
+<details class="section-block sec" id="c4-pio-perifericos"><summary><span class="stitle">PIO (Programmable I/O) — Mini-FPGA del Microcontrolador</span></summary>
 <p><strong>¿Qué es PIO?</strong> periférico dedicado que funciona como máquinas de estado programables independientes, capaces de implementar protocolos de comunicación o control de periféricos sin consumir ciclos del procesador principal.</p>
 <p><strong>Especificaciones Pico 2:</strong></p>
 <ul>
@@ -218,7 +218,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c4-seguridad-rp2350" open><summary><span class="stitle">Módulos de seguridad del RP2350: TrustZone, cripto y OTP</span></summary>
+<details class="section-block sec" id="c4-seguridad-rp2350"><summary><span class="stitle">Módulos de seguridad del RP2350: TrustZone, cripto y OTP</span></summary>
 <p>El chip RP2350 incorpora módulos de seguridad nuevos respecto a la generación anterior: <strong>ARM TrustZone</strong>, que permite aislar código sensible y proteger claves o credenciales (por ejemplo, credenciales de Wi-Fi) en una zona de memoria separada e inaccesible desde el código normal de la aplicación; <strong>aceleración criptográfica por hardware</strong>, que agiliza operaciones de cifrado sin cargar al procesador principal; y memoria <strong>OTP (One-Time Programmable)</strong>, para grabar de forma permanente e inalterable ciertos datos críticos (como claves de fábrica) que no deben poder modificarse después.</p>
 <div class="estudio-extra">
 <span class="lbl">Explicado en simple</span>
@@ -245,7 +245,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c4-overclocking-ciclo-fetch" open><summary><span class="stitle">Overclocking e Impacto en el Ciclo Fetch</span></summary>
+<details class="section-block sec" id="c4-overclocking-ciclo-fetch"><summary><span class="stitle">Overclocking e Impacto en el Ciclo Fetch</span></summary>
 <p><strong>Ciclo Fetch (Fase 1 del ciclo de máquina):</strong> etapa donde la CPU lee la próxima instrucción desde memoria (o caché de instrucciones) y la coloca en el registro de instrucción (IR).</p>
 <p><strong>Relación con frecuencia de reloj:</strong> el ciclo fetch toma 1 ciclo de reloj (en arquitecturas RISC modernas con pipeline). Si aumentamos la frecuencia del reloj, el ciclo de reloj se acorta:</p>
 <ul>
@@ -263,7 +263,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c4-ensamblador-inline" open><summary><span class="stitle">Ensamblador Inline en MicroPython — Acceso Directo a Registros</span></summary>
+<details class="section-block sec" id="c4-ensamblador-inline"><summary><span class="stitle">Ensamblador Inline en MicroPython — Acceso Directo a Registros</span></summary>
 <p><strong>Limitación de MicroPython puro:</strong> intérprete Python compilado a bytecode, no accede directamente a registros de hardware ni a FPU.</p>
 <p><strong>Solución: Decorador @micropython.asm_thumb en MicroPython:</strong> permite declarar subrutinas nativas en ensamblador ARM Thumb, operando directamente sobre registros y aceleradores (FPU).</p>
 <p><strong>Ejemplo (pseudocódigo):</strong></p>

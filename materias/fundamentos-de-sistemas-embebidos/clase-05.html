@@ -18,7 +18,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
 
-<details class="section-block sec" id="c5-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c5-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>Clasificación física de memorias volátiles (SRAM de 6 MOSFETs vs. DRAM de 1 transistor y capacitor)</strong><span class="evid">Evidencia: Lo dijo explícitamente en la clase y explicó en detalle la fuga de carga a los 60 ms.</span></li>
 <li><strong>La secuencia de arranque del bootloader en Raspberry Pi a partir de la dirección cero</strong><span class="evid">Evidencia: Lo dijo explícitamente y detalló los pasos desde la lectura en ROM hasta el salto a la RAM.</span></li>
@@ -28,7 +28,7 @@
 </ol>
 </details>
 
-<details class="section-block sec" id="c5-registros-avr" open><summary><span class="stitle">Arquitectura de registros de AVR/Arduino</span></summary>
+<details class="section-block sec" id="c5-registros-avr"><summary><span class="stitle">Arquitectura de registros de AVR/Arduino</span></summary>
 <p>La revisión inicia con la distribución interna de registros de la arquitectura de 8 bits de AVR (la que usan las tarjetas Arduino). A nivel de hardware, la ALU opera de forma exclusiva sobre sus <strong>32 registros de trabajo de propósito general</strong>, lo que obliga a mover primero cualquier variable a esos registros antes de poder calcular con ella. Justo debajo de los registros de trabajo hay <strong>64 registros de propósito general</strong> dedicados al control directo de los periféricos internos (puertos de entrada/salida, temporizadores, comparadores analógicos y convertidores analógico-digitales). Adicionalmente, la arquitectura tiene <strong>416 registros de entrada/salida externa</strong>, mapeados en el rango hexadecimal de <code>0x60</code> a <code>0xFF</code>.</p>
 <p>La RAM integrada de la tarjeta es de <strong>8 KB</strong> de 8 bits; sin embargo, la arquitectura permite renunciar a los registros externos, usando una línea de desplazamiento (<em>shift</em>), para conectar RAM externa y expandir la capacidad de direccionamiento hasta <strong>64 KB</strong>. El profesor contrapuso esta estructura de bajo nivel con la práctica común de programar con bibliotecas o funciones de alto nivel del IDE de Arduino, insistiendo en que la verdadera ingeniería exige entender la manipulación directa de registros.</p>
 <div class="estudio-extra">
@@ -40,7 +40,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c5-mapa-esp32" open><summary><span class="stitle">Mapa de memoria del ESP32 y algoritmos de búsqueda en ROM</span></summary>
+<details class="section-block sec" id="c5-mapa-esp32"><summary><span class="stitle">Mapa de memoria del ESP32 y algoritmos de búsqueda en ROM</span></summary>
 <p>El ESP32 de Espressif tiene una arquitectura RISC de 32 bits organizada con buses independientes para instrucciones y datos. Su memoria de solo lectura (ROM) se divide internamente en <strong>ROM 0 de 256 KB</strong> y <strong>ROM 1 de 128 KB</strong>. A diferencia de microcontroladores como el PIC o el Arduino — donde suele desperdiciarse RAM para guardar datos constantes o tablas —, el ESP32 optimiza el uso de memoria alojando programas fijos y tablas de transformación directamente en la ROM. En cuanto a RAM, dispone de <strong>RAM 0 (32 KB)</strong>, <strong>RAM 1 (412 KB)</strong> y una <strong>RAM 2 opcional</strong>, todas conectadas a ambos buses (instrucciones y datos) según el rango de direcciones que se accede, además de una caché dedicada para acelerar el tráfico del bus.</p>
 <p>Como el procesador no tiene hardware dedicado para calcular funciones trigonométricas complejas (seno, coseno, tangente), esos valores se precalculan en tablas guardadas en ROM. Para consultarlas se usan distintos algoritmos de búsqueda:</p>
 <table><thead><tr><th>Tipo de búsqueda</th><th>Condición de los datos</th><th>Complejidad</th><th>Mecanismo</th></tr></thead><tbody>
@@ -58,7 +58,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c5-mapa-rp2040" open><summary><span class="stitle">Mapa de memoria del RP2040 y el intercalado por retrocompatibilidad</span></summary>
+<details class="section-block sec" id="c5-mapa-rp2040"><summary><span class="stitle">Mapa de memoria del RP2040 y el intercalado por retrocompatibilidad</span></summary>
 <p>El RP2040 de Raspberry Pi organiza su mapa de memoria mediante tablas de rangos específicos de direcciones. Dentro del mapa existen direcciones estrictamente prohibidas o reservadas para periféricos que nunca pasan por la caché — la caché funciona como una "memoria proxy" que acelera la lectura de instrucciones y datos repetitivos, pero los datos que vienen de periféricos externos (como un puerto serie) cambian dinámicamente en el mundo real, así que leerlos desde caché entregaría datos desactualizados.</p>
 <p>Un fenómeno característico del mapa del RP2040 es el <strong>intercalado o traslape</strong> de bloques de memoria y periféricos. Esto no responde a retardos de propagación o tiempos de acceso (el acceso aleatorio a RAM toma tiempo constante), sino a la necesidad de mantener <strong>retrocompatibilidad entre revisiones de silicio</strong>: cuando el fabricante lanza una versión posterior del microcontrolador con más RAM, para no alterar las direcciones de los programas ya compilados ni mover los bloques de periféricos existentes, coloca los nuevos bloques de RAM <em>debajo</em> de los periféricos ya asignados — generando mapas de memoria alternados. El profesor citó como ejemplo al sucesor del RP2040, el <strong>RP2350</strong>, que dispone de <strong>512 KB de SRAM y 16 MB de memoria Flash</strong>. La disposición física de las pistas en la tarjeta madre también busca alinear directamente los pines de la RAM, los periféricos y el chipset, para facilitar el ruteado electrónico.</p>
 <div class="estudio-extra">
@@ -70,7 +70,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c5-mapa-cortex-m" open><summary><span class="stitle">Mapa de la arquitectura ARM Cortex-M (v6M)</span></summary>
+<details class="section-block sec" id="c5-mapa-cortex-m"><summary><span class="stitle">Mapa de la arquitectura ARM Cortex-M (v6M)</span></summary>
 <p>A nivel de sistema es necesario distinguir entre el mapa de direcciones de la tarjeta/integrado y el mapa de direcciones interno del propio núcleo ARM Cortex-M (versión 6M). La especificación de la arquitectura Cortex-M v6M reserva un espacio de direccionamiento teórico estructurado en estos rangos:</p>
 <ul>
 <li><strong>1 GB</strong> reservado para el bus de periféricos externos del integrado (pines de entrada/salida).</li>
@@ -87,7 +87,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c5-bootloader" open><summary><span class="stitle">Secuencia de arranque (bootloader) en Raspberry Pi</span></summary>
+<details class="section-block sec" id="c5-bootloader"><summary><span class="stitle">Secuencia de arranque (bootloader) en Raspberry Pi</span></summary>
 <p>En la Raspberry Pi (basada en ARM Cortex-A), el espacio de direcciones físicas inicia en <code>0x00000000</code> con el bloque obligatorio de RAM. En la parte superior del mapa de memoria se ubica el primer periférico: el cargador o <strong>bootloader</strong>, conectado a una ROM interna con el código base del sistema.</p>
 <p>Al energizarse, el procesador se ejecuta sin ningún sistema operativo cargado en RAM. La secuencia de arranque procede así:</p>
 <ol>
@@ -106,7 +106,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c5-espacio-virtual" open><summary><span class="stitle">Espacio virtual vs. físico, controladores y sistemas de archivos virtuales</span></summary>
+<details class="section-block sec" id="c5-espacio-virtual"><summary><span class="stitle">Espacio virtual vs. físico, controladores y sistemas de archivos virtuales</span></summary>
 <p>En sistemas Unix/Linux, la memoria se divide en <strong>Espacio de Kernel</strong> y <strong>Espacio de Usuario</strong>. Los programas de usuario se ejecutan en un espacio de direcciones virtuales administrado en páginas por el sistema operativo, lo que impide que una aplicación acceda directamente al espacio físico de la RAM. Para ilustrar las consecuencias de romper ese aislamiento, se analizó este fragmento en C:</p>
 <pre><code>int *s = NULL;
 // ...
@@ -122,7 +122,7 @@ s = 1;</code></pre>
 </div>
 </details>
 
-<details class="section-block sec" id="c5-sram-dram" open><summary><span class="stitle">Clasificación de memorias: SRAM vs. DRAM</span></summary>
+<details class="section-block sec" id="c5-sram-dram"><summary><span class="stitle">Clasificación de memorias: SRAM vs. DRAM</span></summary>
 <p>Atendiendo a la retención de datos, las memorias se clasifican en <strong>volátiles</strong> (pierden la información al interrumpirse la energía) y <strong>no volátiles</strong> (la conservan de forma permanente). Las volátiles se subdividen en estáticas (SRAM) y dinámicas (DRAM).</p>
 <p><strong>SRAM (memoria estática)</strong>: requiere <strong>6 transistores MOSFET por bit</strong> — alta complejidad de silicio, lo que la hace muy cara y de baja densidad por área. Cada vez que se escribe un estado lógico '0', la energía del '1' almacenado se drena hacia tierra y, por conservación de la energía, se transforma íntegramente en calor; por eso los bloques de caché SRAM en procesadores de alto rendimiento (como 4 MB de caché en un Intel) disipan temperaturas elevadas. Es extremadamente rápida — su límite de conmutación depende solo de la frecuencia de respuesta física del MOSFET, del orden de femtosegundos — y se usa principalmente para memorias caché.</p>
 <p><strong>DRAM (memoria dinámica / SDRAM)</strong>: requiere únicamente <strong>1 transistor y 1 capacitancia parásita por bit</strong>, inventada en <strong>1967 por Robert Dennard en IBM</strong>. Es mucho más económica y permite integrar <strong>6 veces más información</strong> en la misma área de silicio que una SRAM. Un pulso de activación breve en la base del transistor carga la capacitancia parásita, que retiene la carga representando un '1' lógico; esa carga se fuga con el tiempo, y el intervalo máximo en que el voltaje se mantiene dentro del margen de un '1' lógico es de apenas <strong>~60 milisegundos</strong> — pasado ese tiempo la señal cae en una zona de voltaje analógico indeterminado que corrompe la lectura. Para evitarlo, el sistema debe inyectar periódicamente un <strong>pulso de refresco cada 60 ms</strong> a todas las celdas. Como los capacitores no disipan esa energía a tierra en forma de calor, la DRAM opera a temperaturas bajas — por eso se usa como memoria RAM principal de los sistemas.</p>

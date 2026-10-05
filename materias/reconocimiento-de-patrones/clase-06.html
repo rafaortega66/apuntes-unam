@@ -19,7 +19,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
 
-<details class="section-block sec" id="c6-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c6-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>Evaluación de funciones de decisión lineales punto por punto</strong><span class="evid">Evidencia: evidencia de la clase: el profesor lo resolvió en vivo en el pizarrón evaluando 6 puntos numéricos completos en las funciones d1, d2 y d3.</span></li>
 <li><strong>Identificación de regiones indeterminadas o de ambigüedad en clasificación multiclase 1 vs Resto</strong><span class="evid">Evidencia: evidencia de la clase: el profesor lo explicó en vivo al obtener resultados con dos valores positivos y preguntó a la clase qué significaba.</span></li>
@@ -28,7 +28,7 @@
 </ol>
 </details>
 
-<details class="section-block sec" id="c6-repaso" open><summary><span class="stitle">Repaso de la clase anterior — métricas, evaluación y validación cruzada</span></summary>
+<details class="section-block sec" id="c6-repaso"><summary><span class="stitle">Repaso de la clase anterior — métricas, evaluación y validación cruzada</span></summary>
 <ul>
 <li><strong>Sesgo/varianza</strong> describen cómo aprende el clasificador; <strong>exactitud (accuracy)</strong> mide el rendimiento global. Repaso de precisión, recall, especificidad, F1 y exactitud balanceada.</li>
 <li><strong>Precisión vs. recall:</strong> precisión = TP/(TP+FP) (de lo predicho positivo, cuánto es real); recall = de todo lo real positivo, cuánto capturó el modelo.</li>
@@ -45,7 +45,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c6-pipeline" open><summary><span class="stitle">Pipeline de reconocimiento y funciones de decisión (lineales, cuadráticas, no lineales)</span></summary>
+<details class="section-block sec" id="c6-pipeline"><summary><span class="stitle">Pipeline de reconocimiento y funciones de decisión (lineales, cuadráticas, no lineales)</span></summary>
 <ul>
 <li><strong>Pipeline:</strong> patrones/objetos → extracción de características (vector x ∈ ℝⁿ) → selección/reducción de dimensionalidad → clasificador.</li>
 <li><strong>Función de decisión:</strong> g(x) recibe x ∈ ℝⁿ y produce un escalar cuyo signo asigna la clase.</li>
@@ -62,7 +62,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c6-multiclase" open><summary><span class="stitle">Clasificación multiclase: 1 vs. Resto, 1 vs. 1 y Máquinas Lineales</span></summary>
+<details class="section-block sec" id="c6-multiclase"><summary><span class="stitle">Clasificación multiclase: 1 vs. Resto, 1 vs. 1 y Máquinas Lineales</span></summary>
 <ul>
 <li><strong>1 vs. Resto:</strong> c funciones D₁(x)...D_c(x). Pertenece a la clase i solo si Dᵢ(x)&gt;0 y Dⱼ(x)&lt;0 para todo j≠i.</li>
 <li><strong>1 vs. 1:</strong> compara pares de clases con Dᵢⱼ(x). Se asigna a la clase i si Dᵢⱼ(x)&gt;0 para todo j≠i.</li>
@@ -79,7 +79,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c6-ejercicios" open><summary><span class="stitle">Ejercicios resueltos en clase</span></summary>
+<details class="section-block sec" id="c6-ejercicios"><summary><span class="stitle">Ejercicios resueltos en clase</span></summary>
 <p><strong>Binario (ℝ²):</strong> w = [-3, 0.75, 1]ᵀ → g(x) = -3 + 0.75x₁ + x₂.</p>
 <ul>
 <li>Punto (4,3): g = -3+0.75(4)+1(3) = 3 &gt; 0 → Clase 1.</li>
@@ -103,7 +103,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c6-geometria" open><summary><span class="stitle">Interpretación geométrica y comparación de espacios</span></summary>
+<details class="section-block sec" id="c6-geometria"><summary><span class="stitle">Interpretación geométrica y comparación de espacios</span></summary>
 <ul>
 <li><strong>Hiperplano de decisión:</strong> g(x)=wᵀx+w₀ define g(x)=0; el vector w es perpendicular a esa superficie.</li>
 <li><strong>Distancia al hiperplano:</strong> r = g(x)/|w| — evaluar la función de decisión equivale a medir la distancia dirigida del patrón al hiperplano.</li>
@@ -119,7 +119,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c6-perceptron" open><summary><span class="stitle">Algoritmo de aprendizaje de pesos (regla de actualización del perceptrón)</span></summary>
+<details class="section-block sec" id="c6-perceptron"><summary><span class="stitle">Algoritmo de aprendizaje de pesos (regla de actualización del perceptrón)</span></summary>
 <ol>
 <li>Inicialización: w en ceros o valores aleatorios pequeños.</li>
 <li>Evaluación: para cada par (xᵢ, yᵢ), se evalúa el signo de g(xᵢ).</li>
@@ -135,7 +135,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c6-ortogonales" open><summary><span class="stitle">Sistemas de funciones ortogonales</span></summary>
+<details class="section-block sec" id="c6-ortogonales"><summary><span class="stitle">Sistemas de funciones ortogonales</span></summary>
 <p><strong>Propósito:</strong> aproximar funciones de decisión complejas como combinación lineal de funciones base ortogonales: g(x) = Σwₖφₖ(x).</p>
 <p><strong>Ventajas:</strong> sin redundancia (cada base es independiente) · compresión eficiente (pocos coeficientes) · cálculo desacoplado (wₖ se calculan independientemente) · estabilidad numérica.</p>
 <p><strong>Familias y dominios:</strong></p>
@@ -152,7 +152,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c6-clasif-vs-cluster" open><summary><span class="stitle">Clasificación vs. Agrupamiento vs. Reconocimiento de Patrones</span></summary>
+<details class="section-block sec" id="c6-clasif-vs-cluster"><summary><span class="stitle">Clasificación vs. Agrupamiento vs. Reconocimiento de Patrones</span></summary>
 <ul>
 <li><strong>Clasificación (supervisado):</strong> recibe x con etiquetas y explícitas; genera un modelo que predice la clase.</li>
 <li><strong>Agrupamiento/Clustering (no supervisado):</strong> recibe x sin etiquetas; busca agrupaciones naturales (grupo 1, 2, 3...).</li>
@@ -187,7 +187,7 @@
 </ul>
 </details>
 
-<details class="section-block sec" id="c6-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<details class="section-block sec" id="c6-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
 <ul>
 <li><strong>Próxima sesión:</strong> viernes.</li>
 <li><strong>Tema a iniciar:</strong> métodos de clasificación no supervisada (Clustering) — primero clasificadores basados en funciones de distancia, luego funciones de similitud.</li>

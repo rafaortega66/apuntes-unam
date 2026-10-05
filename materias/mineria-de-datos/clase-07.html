@@ -18,7 +18,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #A98BD1"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
 
-<details class="section-block sec" id="c7-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c7-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>Diferenciación entre modelos supervisados (predictivos) y no supervisados (descriptivos)</strong><span class="evid">Evidencia: El profesor lo explicó detalladamente en el bloque teórico clasificando los algoritmos según la presencia de una variable objetivo etiquetada.</span></li>
 <li><strong>Ajuste del umbral de confianza en reglas de asociación</strong><span class="evid">Evidencia: Lo resolvió en vivo mediante la demostración en RapidMiner ajustando los parámetros para filtrar reglas significativas.</span></li>
@@ -26,7 +26,7 @@
 </ol>
 </details>
 
-<details class="section-block sec" id="c7-oracle" open><summary><span class="stitle">Exposición del equipo 5: Oracle (base de datos autónoma)</span></summary>
+<details class="section-block sec" id="c7-oracle"><summary><span class="stitle">Exposición del equipo 5: Oracle (base de datos autónoma)</span></summary>
 <p>El equipo presentó su diagrama de arquitectura de datos dividido en etapas: <strong>extracción</strong> de los datos, <strong>integración</strong> (dar formato a esos datos), <strong>almacenamiento</strong>, <strong>procesamiento con IA/machine learning</strong> para filtrar y tomar decisiones, y finalmente <strong>consulta y monitoreo</strong>, donde la empresa ya visualiza los resultados en gráficas.</p>
 <p>Sobre el repositorio: es un servidor de base de datos que combina hardware y software propios para ofrecer gran capacidad de almacenamiento y velocidad muy alta. Entre sus características distintivas: <strong>automatización</strong> (sistemas ya integrados con arquitectura moderna), <strong>autoescalado de CPU</strong> (hasta tres veces mayor capacidad que otros servidores, sin intervención manual, al combinar hardware y software propios), <strong>RPO y respaldo continuo</strong> con "autonomous data" (siempre hay un respaldo, incluso respaldo del respaldo), aprovisionamiento <strong>serverless en minutos</strong> (solo se define CPU y almacenamiento, el sistema siempre está activo) y servicios de prioridad <strong>high/medium/low</strong> según el tipo de carga (crítica, por lotes, recursos masivos).</p>
 <p>Mencionaron una herramienta de flujos tipo ETL (posiblemente <em>Oracle Data Flow</em>, no se distingue con claridad en el audio) para diseñar flujos de transformación con compatibilidad de alrededor del 95% entre configuraciones, sin necesidad de administrar clústeres manualmente, además de conectores hacia otras plataformas (mencionaron a Oracle como ejemplo de integración con Java).</p>
@@ -41,7 +41,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c7-cassandra" open><summary><span class="stitle">Exposición del equipo 13: Apache Cassandra</span></summary>
+<details class="section-block sec" id="c7-cassandra"><summary><span class="stitle">Exposición del equipo 13: Apache Cassandra</span></summary>
 <p>El equipo presentó Cassandra como una base de datos <strong>NoSQL</strong> de nueva generación, con una arquitectura <strong>descentralizada</strong>: si hay un conflicto o falla en un nodo, no afecta a los demás, porque todos los nodos comparten la misma jerarquía (no hay un nodo central del que dependan los demás). Es de <strong>código abierto</strong>, lo que da flexibilidad a las organizaciones para adaptarla a sus necesidades, y su diseño distribuido le da alta resistencia a fallas.</p>
 <p>Sobre su ecosistema de integración: tiene <strong>integración masiva</strong> y <strong>streaming en tiempo real</strong> (los cambios se propagan de forma simultánea a todos los nodos donde se necesiten). Cassandra en sí no tiene procesamiento analítico propio, pero se apoya en <strong>Apache Spark</strong> como motor complementario para administrar, transformar y cargar los datos: los pasa por un flujo tipo ETL (extraer, transformar, cargar) hacia una memoria interna, y de ahí a otras plataformas de integración compatibles. También cuenta con <strong>Change Data Capture (CDC)</strong>, que registra todos los cambios ocurridos tanto dentro del propio repositorio como en los sistemas conectados.</p>
 <p>Entre sus capacidades: modelos orientados a <strong>series de tiempo</strong> (reacciona bien a cambios por eventos), integración con sistemas de streaming con <strong>baja latencia y alta disponibilidad</strong> — priorizando velocidad sobre consistencia estricta. Aclararon que Cassandra <strong>no es un data warehouse analítico</strong> sino una base de datos <strong>operacional</strong>, y que se complementa con herramientas de Big Data/Data Warehouse externas para hacer análisis. Gracias a Spark tiene escalabilidad horizontal constante en su particionamiento; puede manejar datos crudos, alimentar bases analíticas externas y correr algoritmos de machine learning directamente contra la base.</p>
@@ -54,7 +54,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c7-azure" open><summary><span class="stitle">Exposición del equipo 2: Microsoft Azure</span></summary>
+<details class="section-block sec" id="c7-azure"><summary><span class="stitle">Exposición del equipo 2: Microsoft Azure</span></summary>
 <p>El equipo (Fernando, Cervantes, Ortega, Barria) planteó una arquitectura de datos completa basada en servicios de <strong>Azure</strong>, cubriendo prácticamente todo el proceso KDD por la amplitud de servicios que ofrece la plataforma. La organizaron en capas:</p>
 <ul>
 <li><strong>Capa 1 — Fuentes:</strong> bases de datos relacionales, archivos semiestructurados (JSON, CSV) y datos de telemetría/sensores en tiempo real.</li>
@@ -77,7 +77,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c7-snowflake" open><summary><span class="stitle">Exposición del equipo 12: Snowflake (plataforma multi-nube)</span></summary>
+<details class="section-block sec" id="c7-snowflake"><summary><span class="stitle">Exposición del equipo 12: Snowflake (plataforma multi-nube)</span></summary>
 <p><em>Nota: el equipo no menciona el nombre de la plataforma de forma clara en el audio ("a la Nico"), pero por las características descritas (arquitectura desacoplada de almacenamiento y cómputo, dato unificado estructurado/no estructurado, operación multi-nube sobre AWS/Azure/Google Cloud, plataforma propia de gobernanza) corresponde a <strong>Snowflake</strong>, asignada al equipo 12 según la tabla del Proyecto 2.</em></p>
 <p>Se centraron en tres puntos clave: (1) <strong>arquitectura desacoplada</strong>: el almacenamiento está separado físicamente del cómputo, lo que evita cuellos de botella y permite escalar cada recurso de forma independiente según la necesidad; (2) <strong>dato unificado</strong>: datos estructurados y no estructurados conviven en un solo lugar, facilitando el acceso a la información; (3) <strong>operación multi-nube</strong>: opera sobre las tres nubes principales (AWS, Microsoft Azure y Google Cloud), con gobernanza y disponibilidad de datos gestionadas por una plataforma de gobernanza propia.</p>
 <p>Plantearon el desafío que resuelve: las empresas generan muchos datos desde múltiples fuentes distintas, lo que exige una arquitectura robusta de lectura. Su solución se apoya en capacidades de transformación de datos bajo los esquemas <strong>ETL y ELT</strong>, además de soportar trabajos de machine learning, minería de datos y análisis avanzado. Fundamentaron esto en tres pilares: <strong>dato unificado</strong> (acceso sencillo al estar separado del almacenamiento), <strong>procesos de transformación</strong> (apoyados en herramientas como Apache Kafka para manejo de flujos, y una herramienta propia para trabajar con código sobre las bases de datos) y <strong>capacidades de streaming</strong> en tiempo real conforme se van generando los datos.</p>
@@ -92,7 +92,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c7-repaso-descriptivo" open><summary><span class="stitle">Repaso: modelos descriptivos (clustering y asociación)</span></summary>
+<details class="section-block sec" id="c7-repaso-descriptivo"><summary><span class="stitle">Repaso: modelos descriptivos (clustering y asociación)</span></summary>
 <p>Terminadas las exposiciones, el profesor hizo un repaso de lo visto en la Clase 06 antes de continuar con el tema. Recordó que el aprendizaje <strong>no supervisado</strong> requiere parametrización y varias decisiones de configuración antes de poder ejecutarlo, y que aunque lo típico es asociar "no supervisado" con "descriptivo", hay casos híbridos: por ejemplo, un modelo predictivo puede aplicarse en condiciones no supervisadas cuando solo se quiere verificar cierto dato, y ciertos análisis descriptivos requieren de todos modos interpretación supervisada de variables.</p>
 <p>Repasó los <strong>modelos descriptivos</strong> típicos: <strong>agrupación</strong> (formación de clusters), <strong>asociación</strong> (relación entre variables) y <strong>redes</strong> (cómo se conectan los elementos entre sí). Sobre los tipos de cluster vistos la clase anterior, insistió en que la elección del algoritmo de agrupación (K-means, jerárquico, etc.) depende del tipo de datos y de qué se quiere lograr: K-means tiende a formar grupos compactos, mientras que otros enfoques dispersan los datos de otra manera — por eso recomendó correr dos o tres algoritmos distintos sobre el mismo conjunto de datos y comparar cuál da resultados más útiles antes de decidir.</p>
 <p>Sobre <strong>asociación</strong>, la comparó con el clásico <em>market basket analysis</em>: analizar tickets de compra para ver qué productos se compran juntos (ej. quien compra pasta también lleva leche y pan). Dio un ejemplo aplicado a recomendaciones musicales: si en Spotify alguien escucha una canción de Pink Floyd, el sistema empieza a sugerir más canciones del mismo artista o con características similares (melódicas, acústicas, cierto tipo de ritmo) — esas asociaciones entre variables (artista, género, características de la canción) son las que generan la sugerencia, de la misma forma en que un supermercado ofrece promociones basadas en lo que ya compraste.</p>
@@ -104,7 +104,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c7-predictivos" open><summary><span class="stitle">Modelos predictivos: clasificación, regresión, series de tiempo y redes neuronales</span></summary>
+<details class="section-block sec" id="c7-predictivos"><summary><span class="stitle">Modelos predictivos: clasificación, regresión, series de tiempo y redes neuronales</span></summary>
 <p>El profesor introdujo los <strong>modelos predictivos</strong>, siempre de tipo supervisado. Aclaró que aunque existen miles de algoritmos distintos y muy especializados (mencionó el ejemplo de algoritmos específicos usados en minería de metales para decidir si conviene explorar un yacimiento según los niveles metálicos detectados en perforaciones), el curso se enfoca en los principales, que cubren aproximadamente el 90% de los casos de uso típicos: <strong>clasificación</strong>, <strong>regresión</strong>, <strong>redes neuronales</strong> y <strong>series de tiempo</strong>.</p>
 <p><strong>Clasificación.</strong> Repasó la regla central: se usa clasificación cuando la variable objetivo es <strong>binaria</strong> (enfermo/no enfermo, costo alto/no alto, existe anomalía/no existe) — si el resultado no es binario, no es un problema de clasificación. Puso el ejemplo de clasificación de imágenes: se compara una imagen contra cierto contexto mediante transformaciones vectoriales y el modelo responde si pertenece o no a esa categoría; aplicaciones típicas incluyen detección de cáncer y otras enfermedades. Mencionó que existen varios algoritmos de clasificación (árboles de decisión, regresión logística, redes neuronales, entre otros) y que cada uno ordena los datos de forma distinta — por eso, al desarrollar las prácticas, van a tener que probar dos o tres algoritmos distintos para comparar y ganar confianza en los resultados.</p>
 <p><strong>Regresión (lineal y logística).</strong> A diferencia de la clasificación, en <strong>regresión lineal</strong> la variable dependiente es <strong>continua</strong> (un valor, por ejemplo un costo), asociada con otras variables independientes — con una sola variable independiente se traza una línea de regresión que sirve para proyectar valores futuros. Insistió en que la calidad del resultado depende totalmente de la calidad de los datos de entrenamiento: si los datos están muy dispersos, la confianza de la proyección baja mucho, y ahí es donde entra el verdadero trabajo de quien hace ciencia de datos — no en correr el algoritmo (eso es sencillo una vez que se domina), sino en decidir qué hacer cuando los datos no son confiables. La <strong>regresión logística</strong>, en cambio, tiene una variable dependiente <strong>categórica</strong> (puede tener salida binaria), aunque el proceso interno maneje valores continuos antes de convertir el resultado a esa salida categórica.</p>
@@ -128,7 +128,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c7-demo-herramienta" open><summary><span class="stitle">Demo: RapidMiner</span></summary>
+<details class="section-block sec" id="c7-demo-herramienta"><summary><span class="stitle">Demo: RapidMiner</span></summary>
 <p>La herramienta mostrada es <strong>RapidMiner</strong> (confirmado por el usuario): un panel de operadores/algoritmos a la izquierda, parámetros a la derecha, lienzo de proceso al centro y una vista de resultados separada.</p>
 <p>El profesor mostró en vivo una herramienta de minería de datos de arrastrar y soltar, usando como ejemplo un caso de <strong>market basket analysis</strong>. Explicó el flujo de trabajo: se arrastra un bloque de <strong>carga de datos</strong> (se asigna el archivo de origen), luego un bloque de <strong>tratamiento de datos</strong>, y después el <strong>algoritmo</strong> elegido (por ejemplo, uno de segmentación o uno para reglas de asociación), configurando sus parámetros del lado derecho del lienzo.</p>
 <p>En la vista de resultados mostró cómo se despliegan las asociaciones encontradas entre productos, ajustables según el <strong>nivel de confianza</strong> deseado: entre más alto el umbral de confianza exigido, menos asociaciones sobreviven el filtro, pero las que quedan son más sólidas. Como ejemplo concreto, mostró que el producto 19 y el producto 11 cumplían un nivel de frecuencia y confianza suficiente para considerarse asociados, y de forma similar el producto 12 con el producto 11.</p>
@@ -141,7 +141,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c7-equipos" open><summary><span class="stitle">Asignación de equipos para las prácticas</span></summary>
+<details class="section-block sec" id="c7-equipos"><summary><span class="stitle">Asignación de equipos para las prácticas</span></summary>
 <p>El profesor organizó los equipos de tres personas para las prácticas de algoritmos: cada alumno eligió a un compañero, y el profesor asignó al tercer integrante. Los que no completaron equipo fueron asignados de forma aleatoria. (La lista de nombres de compañeros se omite aquí a propósito.) El profesor sugirió que, dentro de cada equipo, quien domine mejor el algoritmo en turno vaya explicándoselo a los demás antes de pasar al siguiente.</p>
 <div class="estudio-extra">
 <span class="lbl">Explicado en simple</span>
@@ -168,7 +168,7 @@
 </ul>
 </details>
 
-<details class="section-block sec" id="c7-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<details class="section-block sec" id="c7-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
 <ul>
 <li>Trabajar en los equipos de tres ya asignados las prácticas de algoritmos, empezando por los de agrupación/asociación ya vistos y avanzando hacia clasificación, regresión, series de tiempo y redes neuronales.</li>
 <li>Practicar por cuenta propia con RapidMiner, la herramienta mostrada en la demo, antes de las sesiones formales de práctica.</li>

@@ -18,7 +18,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
 
-<details class="section-block sec" id="c4-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c4-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>Doble pipeline superescalar U/V en Pentium y distribución estadística de instrucciones</strong><span class="evid">Evidencia: Lo dijo explícitamente y lo desglosó en el pizarrón mostrando que del 60% al 75% son operaciones simples de memoria.</span></li>
 <li><strong>Opciones del toolchain GCC (-c, -S, ld) para inspeccionar el ensamblador y acelerar compilaciones</strong><span class="evid">Evidencia: Lo explicó en el pizarrón detallando cómo checar fechas evita recompilaciones costosas.</span></li>
@@ -28,7 +28,7 @@
 </ol>
 </details>
 
-<details class="section-block sec" id="c4-pentium-p5" open><summary><span class="stitle">Microarquitectura del Pentium (P5): pipeline superescalar U/V y distribución estadística de instrucciones</span></summary>
+<details class="section-block sec" id="c4-pentium-p5"><summary><span class="stitle">Microarquitectura del Pentium (P5): pipeline superescalar U/V y distribución estadística de instrucciones</span></summary>
 <p>Tras el litigio con AMD, Intel abandonó la nomenclatura numérica y desarrolló la arquitectura <strong>P5</strong>, dando origen al procesador <strong>Pentium</strong> en 1993 a <strong>200 MHz</strong>. El Pentium introdujo una microarquitectura superescalar con <strong>doble pipeline de ejecución</strong>: el <strong>pipeline U</strong> (principal) es capaz de ejecutar cualquier instrucción del catálogo x86, incluyendo cómputo pesado en la FPU; el <strong>pipeline V</strong> (secundario) está optimizado exclusivamente para instrucciones simples de carga, almacenamiento y manipulación de índices en memoria.</p>
 <p>Esta separación se apoya en un dato estadístico que el profesor marcó como examinable: en cualquier programa compilado, entre el <strong>60 % y el 75 %</strong> de las instrucciones son operaciones simples de carga y almacenamiento (<em>load/store</em>) para mover datos entre registros y memoria; solo entre el <strong>25 % y el 40 %</strong> corresponde a cómputo matemático pesado (FPU, derivadas, integrales, funciones trigonométricas, multiplicación de matrices o evaluación de funciones sigmoides para IA). Esta distribución fundamenta el uso de pipelines dobles: mientras el pipeline U procesa una instrucción pesada de FPU (que puede tomar varios ciclos), el pipeline V ejecuta en paralelo múltiples instrucciones simples de lectura/escritura, maximizando el uso de los transistores disponibles.</p>
 <div class="estudio-extra">
@@ -39,7 +39,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c4-compilacion-gcc" open><summary><span class="stitle">Herramientas de compilación — el toolchain GCC en sistemas embebidos</span></summary>
+<details class="section-block sec" id="c4-compilacion-gcc"><summary><span class="stitle">Herramientas de compilación — el toolchain GCC en sistemas embebidos</span></summary>
 <p>En el desarrollo de sistemas embebidos se usa el toolchain de GNU GCC desde terminal:</p>
 <ul>
 <li><strong>Compilación directa</strong>: <code>gcc programa.c -o ejecutable</code> produce el binario final (o <code>a.out</code> si se omite <code>-o</code>).</li>
@@ -65,7 +65,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c4-alineacion-memory" open><summary><span class="stitle">Alineación de memoria y empaquetado de estructuras (struct packing)</span></summary>
+<details class="section-block sec" id="c4-alineacion-memory"><summary><span class="stitle">Alineación de memoria y empaquetado de estructuras (struct packing)</span></summary>
 <p>En arquitecturas modernas de 64 bits, la RAM no se direcciona byte por byte de forma aislada, sino en <strong>palabras de 8 bytes</strong> (64 bits). Al definir una estructura estándar en C:</p>
 <pre><code>struct Datos {
     int a;    // 4 bytes nominales
@@ -86,7 +86,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c4-mmx-sse" open><summary><span class="stitle">MMX, memorias DDR, y la llegada de SSE</span></summary>
+<details class="section-block sec" id="c4-mmx-sse"><summary><span class="stitle">MMX, memorias DDR, y la llegada de SSE</span></summary>
 <p>En <strong>1997</strong> se introdujo <strong>MMX</strong> (<em>Multimedia Extensions</em>) en los procesadores Pentium: una extensión SIMD (<em>Single Instruction Multiple Data</em>) que añade un registro vectorial de <strong>64 bits</strong>, compartido físicamente con la FPU, manipulable dinámicamente como 8 variables <code>char</code>, 4 <code>short</code>, 2 <code>int</code> o 1 <code>long</code>. La arquitectura MMX incorporó un pipeline de <strong>5 etapas</strong>, <strong>32 KB de caché L1</strong> y <strong>57 nuevos mnemónicos</strong> (llegando a un catálogo de unas <strong>43,000 instrucciones</strong>), pensados para acelerar la interfaz gráfica de Windows 95 y el renderizado 2D.</p>
 <p>En este mismo periodo surgieron las memorias <strong>DDR</strong> (<em>Double Data Rate</em>), que duplican el ancho de banda efectivo transfiriendo datos tanto en el flanco de subida como en el de bajada de la señal de reloj, sin ensanchar el bus físico.</p>
 <p>El <strong>Pentium II</strong> (1997, 450 MHz, núcleo P6) refinó la ejecución de código de 16 bits. En <strong>1999</strong> se lanzó el <strong>Pentium III</strong> (1 GHz+), que introdujo <strong>SSE</strong> (<em>Streaming SIMD Extensions</em>) para reemplazar a MMX: SSE añadió <strong>8 registros independientes de 128 bits</strong> (registros XMM), desvinculados de la FPU, con <strong>70 nuevas instrucciones vectoriales</strong> pensadas para procesamiento 3D.</p>
@@ -98,7 +98,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c4-pentium-pro" open><summary><span class="stitle">Pentium Pro (P6) — el salto a ejecución fuera de orden</span></summary>
+<details class="section-block sec" id="c4-pentium-pro"><summary><span class="stitle">Pentium Pro (P6) — el salto a ejecución fuera de orden</span></summary>
 <p>El <strong>Pentium Pro</strong> (1995) introdujo la microarquitectura de sexta generación <strong>P6</strong>, orientada a servidores. Sus innovaciones principales:</p>
 <ul>
 <li><strong>PAE</strong> (<em>Physical Address Extension</em>): extiende el bus de direcciones a <strong>36 bits</strong> para direccionar hasta <strong>64 GB de RAM</strong>, manteniendo los registros internos y el espacio lógico en 32 bits.</li>
@@ -126,7 +126,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c4-guerra-64bits" open><summary><span class="stitle">La segunda guerra de los 64 bits: Intel Itanium (IA-64) vs. AMD Opteron (AMD64)</span></summary>
+<details class="section-block sec" id="c4-guerra-64bits"><summary><span class="stitle">La segunda guerra de los 64 bits: Intel Itanium (IA-64) vs. AMD Opteron (AMD64)</span></summary>
 <p>El límite de 4 GB de RAM de las arquitecturas de 32 bits obligó la transición a los 64 bits. Intel desarrolló la arquitectura <strong>Itanium (IA-64)</strong> entre <strong>1989 y 2001</strong>: un diseño de 64 bits mononúcleo completamente nuevo que <strong>rompió la retrocompatibilidad binaria</strong> con x86 (IA-32). Adoptar Itanium exigía a las empresas recompilar e invertir en nuevos desarrollos de software y sistemas operativos — resultó en un <strong>fracaso comercial</strong>.</p>
 <p>En <strong>2003</strong>, AMD lanzó el <strong>Opteron</strong> con la arquitectura <strong>AMD64 (x86-64)</strong>, que ofrecía 64 bits con <strong>retrocompatibilidad nativa total</strong> para Modo Real (8086), Modo Protegido (286/386), Modo Virtual y Modo Largo (64 bits). La comparación de segunda generación entre ambas arquitecturas:</p>
 <table><thead><tr><th>Característica</th><th>Intel Itanium (2ª gen.)</th><th>AMD Opteron (2ª gen.)</th></tr></thead><tbody>

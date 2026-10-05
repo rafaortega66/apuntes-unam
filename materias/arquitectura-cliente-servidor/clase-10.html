@@ -18,7 +18,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
 
-<details class="section-block sec" id="c10-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c10-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>Creación de un programa completo cliente-servidor mediante sockets TCP en lenguaje C</strong><span class="evid">Evidencia: Lo dijo explícitamente el profesor en la clase ("más o menos en dos semanas vamos a tener la evaluación parcial... va a tratar de esto, tienen que crear un cliente servidor").</span></li>
 <li><strong>Diferenciación clara y uso de los dos file descriptors en el servidor (fd_s de conexión devuelto por socket() y fd_c de comunicación devuelto por accept())</strong><span class="evid">Evidencia: Lo enfatizó explícitamente durante la explicación diciendo que entender la diferencia entre ambos sockets es la clave para aprobar la materia y la base de todo el semestre.</span></li>
@@ -27,7 +27,7 @@
 </ol>
 </details>
 
-<details class="section-block sec" id="c10-socket" open><summary><span class="stitle">Documentación de The Open Group y la función socket()</span></summary>
+<details class="section-block sec" id="c10-socket"><summary><span class="stitle">Documentación de The Open Group y la función socket()</span></summary>
 <p>La sesión empezó revisando la documentación oficial en el sitio de The Open Group (opengroup.org). El profesor recomendó una buena práctica: buscar directamente el nombre de la función en el navegador para llegar a la especificación estándar POSIX, en inglés técnico. Se retomó la <a href="clase-09.html">Clase 09</a> (<code>struct hostent</code>, <code>gethostbyname()</code>, conversiones de IP, puertos de la IANA y la introducción teórica al ciclo de vida de los sockets) para ahora implementar el lado del servidor.</p>
 <p>La primera función del servidor es <code>socket()</code>, declarada en <code>&lt;sys/socket.h&gt;</code>. Su propósito formal es crear un extremo <strong>no ligado</strong> (<em>unbound</em>) de un canal de comunicación:</p>
 <pre><code>int socket(int domain, int type, int protocol);</code></pre>
@@ -47,7 +47,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c10-sockaddr" open><summary><span class="stitle">Inicialización de struct sockaddr_in (paso intermedio)</span></summary>
+<details class="section-block sec" id="c10-sockaddr"><summary><span class="stitle">Inicialización de struct sockaddr_in (paso intermedio)</span></summary>
 <p>Entre <code>socket()</code> y <code>bind()</code> es obligatorio inicializar la estructura de dirección del servidor, declarada como <code>struct sockaddr_in servidor;</code>. Si no se configura bien, las llamadas posteriores fallan y el servidor no arranca. En el <strong>Programa 04 del profesor</strong> (<code>004_servidor.c</code>) los pasos son:</p>
 <ol>
 <li><strong>Limpiar la memoria con <code>memset()</code></strong>, para eliminar valores basura:
@@ -72,7 +72,7 @@ La nemotecnia: <strong>H</strong> = Host, <strong>N</strong> = Network, <strong>
 </div>
 </details>
 
-<details class="section-block sec" id="c10-bind" open><summary><span class="stitle">La función bind()</span></summary>
+<details class="section-block sec" id="c10-bind"><summary><span class="stitle">La función bind()</span></summary>
 <p><code>bind</code> se traduce como “ligar”, “asociar” o “nombrar” el socket. En sockets de Internet (<code>AF_INET</code>), nombrar un socket significa vincular de forma definitiva el descriptor devuelto por <code>socket()</code> con una IP y un puerto concretos.</p>
 <pre><code>int bind(int socket, const struct sockaddr *address, socklen_t address_len);</code></pre>
 <ul>
@@ -95,7 +95,7 @@ La nemotecnia: <strong>H</strong> = Host, <strong>N</strong> = Network, <strong>
 </div>
 </details>
 
-<details class="section-block sec" id="c10-listen" open><summary><span class="stitle">listen(), la cola de conexiones (backlog) y el saludo de tres vías</span></summary>
+<details class="section-block sec" id="c10-listen"><summary><span class="stitle">listen(), la cola de conexiones (backlog) y el saludo de tres vías</span></summary>
 <p><code>listen()</code> pone el socket en <strong>modo de escucha activa</strong> para atender solicitudes de conexión:</p>
 <pre><code>int listen(int socket, int backlog);</code></pre>
 <p><code>socket</code> es el descriptor del socket servidor (<code>fd_s</code>) y <code>backlog</code> es el número máximo de conexiones entrantes pendientes que el sistema mantiene en la cola de espera.</p>
@@ -109,7 +109,7 @@ La nemotecnia: <strong>H</strong> = Host, <strong>N</strong> = Network, <strong>
 </div>
 </details>
 
-<details class="section-block sec" id="c10-accept" open><summary><span class="stitle">accept() y los dos sockets del servidor</span></summary>
+<details class="section-block sec" id="c10-accept"><summary><span class="stitle">accept() y los dos sockets del servidor</span></summary>
 <p>Después de <code>listen()</code>, el servidor llama a <code>accept()</code>, una <strong>llamada bloqueante</strong>: detiene la ejecución hasta que un cliente intenta conectarse y la conexión se extrae de la cola de <code>listen()</code>.</p>
 <pre><code>int accept(int socket, struct sockaddr *restrict address, socklen_t *restrict address_len);</code></pre>
 <ul>
@@ -134,7 +134,7 @@ La nemotecnia: <strong>H</strong> = Host, <strong>N</strong> = Network, <strong>
 </div>
 </details>
 
-<details class="section-block sec" id="c10-close" open><summary><span class="stitle">Por qué el servidor hace dos close() y el ciclo secuencial</span></summary>
+<details class="section-block sec" id="c10-close"><summary><span class="stitle">Por qué el servidor hace dos close() y el ciclo secuencial</span></summary>
 <p>Al revisar el cierre de sockets se explicó por qué el cliente llama una sola vez a <code>close()</code> y el servidor dos:</p>
 <ul>
 <li><strong>Cliente:</strong> <code>close(fd)</code> cierra su único socket.</li>

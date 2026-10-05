@@ -18,7 +18,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>⚠️ Nota:</strong> a esta clase no asistí por una entrevista. El grueso del contenido no viene de audio propio, sino que fue reconstruido a partir de la <strong>Práctica #3 "Procesos (continuación)"</strong> publicada en el <a href="https://cromanzamitiz.github.io/arquitectura-cliente-servidor/tema2/" target="_blank" rel="noopener" style="color:var(--indigo)">sitio del profesor</a> (Tema 2). No hay secciones de "para el examen" ni "contexto" propias porque no hay audio del que sacar el énfasis real del profesor ni sus anécdotas de ese día — solo el material escrito. <strong>Sí confirmado por audio</strong> (repaso que el profesor hizo al inicio de la <a href="clase-06.html" style="color:var(--indigo)">Clase 06</a>): que aquí arrancó formalmente el Tema 2, que dejó de tarea moral revisar <code>man 7 signal</code> (columna X86 ARM), que se demostró en vivo la adopción de huérfanos (PPID → 1), y que <strong>SIGCHLD es la señal 17 en X86/ARM</strong> (no 18 como en la tabla genérica de abajo, que es la numeración histórica de UNIX System V).</p></div>
 
-<details class="section-block sec" id="c5-estados" open><summary><span class="stitle">Estados de un proceso</span></summary>
+<details class="section-block sec" id="c5-estados"><summary><span class="stitle">Estados de un proceso</span></summary>
 <p>Un proceso puede ejecutarse en modo usuario o en modo núcleo (supervisor). Su tiempo de vida se divide en un conjunto de estados con reglas de transición bien definidas, impuestas por la competencia entre procesos por un recurso escaso: la CPU.</p>
 <p><strong>Los 9 estados posibles:</strong></p>
 <ol>
@@ -36,7 +36,7 @@
 <p><strong>Contexto de un proceso:</strong> su código, los valores de sus variables de usuario globales y sus estructuras de datos, el valor de los registros de la CPU, los valores almacenados en su entrada de la tabla de procesos y en su área de usuario, y el valor de sus pilas de usuario y núcleo.</p>
 </details>
 
-<details class="section-block sec" id="c5-senales" open><summary><span class="stitle">Señales (signals)</span></summary>
+<details class="section-block sec" id="c5-senales"><summary><span class="stitle">Señales (signals)</span></summary>
 <p>Las señales son un mecanismo de comunicación y manipulación de procesos en Linux: un mensaje especial enviado a un proceso. Son <strong>asíncronas</strong> — cuando un proceso recibe una señal, la procesa de inmediato, sin terminar la función o línea de código en curso. Cada señal tiene un número, pero en los programas se referencian por nombre. Requieren la cabecera <code>&lt;signal.h&gt;</code>.</p>
 <p>El sistema manda señales en respuesta a condiciones específicas: <code>SIGBUS</code> (error en el bus), <code>SIGSEGV</code> (violación de segmento) y <code>SIGFPE</code> (excepción de punto flotante) terminan el proceso y producen un archivo <em>core</em>. Un proceso también puede mandar una señal a otro: <code>SIGTERM</code> y <code>SIGKILL</code> terminan un proceso desde otro proceso; <code>SIGHUP</code> se usa para despertar un proceso. Un manejador de señales debe hacer el mínimo trabajo necesario y regresar el control (o terminar el programa); puede ser interrumpido por otra señal.</p>
 <p><strong>Clasificación de señales:</strong> terminación de procesos · excepciones inducidas (acceso fuera del espacio de direcciones virtuales, errores de punto flotante) · errores irrecuperables en una llamada al sistema · originadas desde un proceso en modo usuario (ej. <code>kill</code>, temporizador de alarma) · interacción con terminal (ej. Ctrl+C) · ejecución paso a paso (usadas por depuradores).</p>
@@ -67,7 +67,7 @@
 </table>
 </details>
 
-<details class="section-block sec" id="c5-wait" open><summary><span class="stitle">La función <code>wait()</code></span></summary>
+<details class="section-block sec" id="c5-wait"><summary><span class="stitle">La función <code>wait()</code></span></summary>
 <p>Permite a un proceso padre esperar a que sus procesos hijos terminen. Bloquea al padre hasta que el hijo finaliza, y regresa un código de estado (entero) del que se extrae información con macros:</p>
 <ul>
 <li><strong><code>WIFEXITED</code></strong> — verdadero (≠0) si el proceso terminó con <code>exit()</code> o <code>wait()</code>.</li>
@@ -166,7 +166,7 @@ int main(void) {
 <p><strong>Códigos de salida:</strong> por convención, 0 = sin problemas; otro valor = error. En Linux se consulta con <code>$?</code>. Un código entre 0 y 127 es un valor normal de salida; 128 o mayor indica que el proceso fue interrumpido por una señal.</p>
 </details>
 
-<details class="section-block sec" id="c5-pendiente" open><summary><span class="stitle">Pendiente — cuestionario de la Práctica 3</span></summary>
+<details class="section-block sec" id="c5-pendiente"><summary><span class="stitle">Pendiente — cuestionario de la Práctica 3</span></summary>
 <ul>
 <li>Usando el código de <code>kill.c</code>, crear otro proceso hijo e indicar qué pasa con el programa.</li>
 <li>Modificar el proceso creado para que termine su ejecución después de 20 segundos.</li>

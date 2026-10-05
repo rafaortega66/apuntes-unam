@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-02T07:20:20+00:00",
+ "generatedAt": "2026-10-05T15:08:34+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -71,6 +71,20 @@
     "resumen": "Primer Examen Parcial.",
     "url": "materias/reconocimiento-de-patrones/clase-10.html",
     "formato": "no-aplica"
+   },
+   {
+    "num": 11,
+    "fecha": "2026-10-02",
+    "resumen": "(por llenar)",
+    "url": "materias/reconocimiento-de-patrones/clase-11.html",
+    "formato": "viejo"
+   },
+   {
+    "num": 12,
+    "fecha": "2026-10-05",
+    "resumen": "(por llenar)",
+    "url": "materias/reconocimiento-de-patrones/clase-12.html",
+    "formato": "viejo"
    }
   ],
   "organizacion-y-arquitectura-de-computadoras": [
@@ -483,11 +497,23 @@
     "resumen": "Tema 3 — Cierre del Proyecto 2 con AWS y SAP HANA (procesamiento en RAM), formación definitiva de equipos, y algoritmos de agrupación: K-Means, PCA/t-SNE, método del codo y silueta, DBSCAN, clustering jerárquico (caso Co",
     "url": "materias/mineria-de-datos/clase-08.html",
     "formato": "estudio"
+   },
+   {
+    "num": 9,
+    "fecha": "2026-10-01",
+    "resumen": "(por llenar)",
+    "url": "materias/mineria-de-datos/clase-09.html",
+    "formato": "viejo"
    }
   ],
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "1b97dec",
+   "fecha": "2026-10-02T01:19:37-06:00",
+   "mensaje": "Lab FSE: corregir descripción de la Práctica 5 (Kiosco multimedia, no 'Linux en modo consola')"
+  },
   {
    "hash": "6e392f2",
    "fecha": "2026-10-01T12:23:25-06:00",
@@ -782,11 +808,6 @@
    "hash": "a22ff5a",
    "fecha": "2026-10-01T01:44:40-06:00",
    "mensaje": "ASI Clase 09: formato de estudio"
-  },
-  {
-   "hash": "4672db4",
-   "fecha": "2026-10-01T01:42:22-06:00",
-   "mensaje": "ACS Clase 10: formato de estudio"
   }
  ]
 }

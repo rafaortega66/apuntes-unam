@@ -18,7 +18,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #A98BD1"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
 
-<details class="section-block sec" id="c10-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c10-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>Transiciones de Start y Stop en el bus I²C</strong><span class="evid">Evidencia: Lo dijo explícitamente y remarcó que las transiciones de SDA con SCL en alto son la base física del protocolo.</span></li>
 <li><strong>Cálculo de rendimiento efectivo en I²C (20 bits por byte, 20 KB/s a 400 kHz)</strong><span class="evid">Evidencia: Lo resolvió en vivo en el pizarrón paso a paso para comparar su velocidad contra el puerto serie.</span></li>
@@ -30,7 +30,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #A98BD1"><p style="margin:0"><strong>✔️ Contrastado con el audio:</strong> las cifras de esta página fueron confirmadas contra el audio. Única observación aparte: el profesor habló de I²C a 2 MHz como “modo de alta velocidad”; las especificaciones de I²C no definen un modo de 2 MHz (sus modos son 100 kHz, 400 kHz, 1 MHz y 3.4 MHz), así que trátalo como la cifra de la clase.</p></div>
 
-<details class="section-block sec" id="c10-i2c-fisica" open><summary><span class="stitle">Electrónica del bus I²C: colector abierto y resistencias pull-up</span></summary>
+<details class="section-block sec" id="c10-i2c-fisica"><summary><span class="stitle">Electrónica del bus I²C: colector abierto y resistencias pull-up</span></summary>
 <p>La sesión retomó el bus I²C (Inter-Integrated Circuit) y profundizó en su capa física. Las líneas de señal, el reloj serie <strong>SCL</strong> y los datos serie <strong>SDA</strong>, se implementan con transistores en configuración de <strong>colector abierto</strong> (open-collector, o drenador abierto / open-drain), y requieren <strong>resistencias de pull-up</strong> conectadas a V<sub>CC</sub>.</p>
 <p>Funcionamiento eléctrico: cuando se inyecta corriente a la base del transistor, este conduce, la energía fluye del colector al emisor y la diferencia de potencial de la línea cae a un nivel cercano a 0 V (cero lógico). Si no se inyecta corriente a la base, el transistor no conduce y la resistencia de pull-up eleva la línea a V<sub>CC</sub> (uno lógico).</p>
 <p>Para hacerlo intuitivo, el profesor usó una <strong>analogía hidráulica</strong>: la corriente es un río; al poner piedras en el cauce (resistencia) el agua se represa arriba (nivel alto), mientras que río abajo el nivel cae al drenarse la presa.</p>
@@ -44,7 +44,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c10-i2c-trama" open><summary><span class="stitle">Protocolo y trama I²C: Start, dirección, R/W, ACK/NACK y Stop</span></summary>
+<details class="section-block sec" id="c10-i2c-trama"><summary><span class="stitle">Protocolo y trama I²C: Start, dirección, R/W, ACK/NACK y Stop</span></summary>
 <p>Toda transacción la coordina el maestro. Primero escucha el canal para verificar que esté libre (que ni SCL ni SDA estén oscilando) y luego genera la secuencia:</p>
 <ol>
 <li><strong>Condición de Start:</strong> flanco de bajada en SDA mientras SCL está en alto (1→0).</li>
@@ -70,7 +70,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c10-smbus" open><summary><span class="stitle">SMBus (System Management Bus)</span></summary>
+<details class="section-block sec" id="c10-smbus"><summary><span class="stitle">SMBus (System Management Bus)</span></summary>
 <p>SMBus es una variante simplificada y más lenta derivada de I²C, desarrollada por Intel y Philips. Conserva la capa física de 2 alambres (SCL y SDA) a colector abierto con pull-ups, pero es una arquitectura <strong>punto a punto</strong> (un maestro conectado a su esclavo dedicado), lo que elimina la necesidad de transmitir la dirección del esclavo en cada trama.</p>
 <p>Opera entre <strong>10 kHz y 100 kHz</strong> y es el estándar de gestión interna en las tarjetas madre: control de encendido y apagado de la fuente, lectura de sensores térmicos de la CPU, velocidad de ventiladores, módulos de memoria RAM y manejo de interrupciones. Sus comandos permiten rutinas de control rápido, lectura de registros en formato short o long, refresco automático de DRAM y transferencias en ráfaga (burst).</p>
 <div class="estudio-extra">
@@ -82,7 +82,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c10-spi" open><summary><span class="stitle">Bus SPI, QSPI y Octa-SPI</span></summary>
+<details class="section-block sec" id="c10-spi"><summary><span class="stitle">Bus SPI, QSPI y Octa-SPI</span></summary>
 <p>SPI (Serial Peripheral Interface) es un bus síncrono, punto a punto y de alta velocidad con <strong>4 alambres</strong>:</p>
 <ul>
 <li><strong>SCLK:</strong> reloj generado por el maestro.</li>
@@ -107,7 +107,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c10-i2s" open><summary><span class="stitle">Bus I²S (Inter-IC Sound) para audio digital</span></summary>
+<details class="section-block sec" id="c10-i2s"><summary><span class="stitle">Bus I²S (Inter-IC Sound) para audio digital</span></summary>
 <p>I²S es una variante síncrona, derivada de I²C, diseñada por Philips exclusivamente para audio digital entre circuitos integrados (lectores/decodificadores MP3, procesadores de señal, ecualizadores, DACs amplificadores). Es una conexión punto a punto con reloj de hasta <strong>3 MHz</strong>. Sus líneas son el reloj, los datos y <strong>Word Select (WS)</strong>, que conmuta en tiempo real para indicar si lo transmitido pertenece al canal izquierdo o derecho del flujo estéreo, evitando enviar direcciones.</p>
 <p><strong>Tráfico de audio resuelto en clase:</strong></p>
 <ul>
@@ -124,7 +124,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c10-uart" open><summary><span class="stitle">USART / UART, RS-232, MAX232 y paridad</span></summary>
+<details class="section-block sec" id="c10-uart"><summary><span class="stitle">USART / UART, RS-232, MAX232 y paridad</span></summary>
 <p>USART/UART (Universal Synchronous/Asynchronous Receiver-Transmitter) es asíncrono: no hay línea de reloj compartida; cada extremo tiene un generador interno configurado a la misma velocidad en <strong>baudios</strong> (p. ej. 115,200). La conexión es en modo <strong>null-modem</strong>: TX de un dispositivo cruzado con RX del otro.</p>
 <p><strong>Niveles físicos y MAX232.</strong> RS-232 opera con voltajes industriales de −12 V a +12 V (24 V pico a pico). Para conectarlo a la electrónica TTL de un microcontrolador (5 V o 3.3 V) es obligatorio un acoplador como el <strong>MAX232</strong>. Conectar +12 V directo a los pines de un Arduino lo destruye al instante (“le sale humo”).</p>
 <p><strong>Paquete y paridad.</strong> La línea está en alto (1) en reposo; la transmisión empieza con un bit de inicio (flanco 1→0) que activa el reloj del receptor. A diferencia de I²C o SPI, UART permite paquetes de 6, 7 u 8 bits seguidos de un bit de paridad y bits de paro.</p>
@@ -138,7 +138,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c10-plan" open><summary><span class="stitle">Debate sobre el plan de estudios de Ingeniería en Computación</span></summary>
+<details class="section-block sec" id="c10-plan"><summary><span class="stitle">Debate sobre el plan de estudios de Ingeniería en Computación</span></summary>
 <p>Un alumno relató que comentó a un profesor que los alumnos deberían poder crear un procesador desde cero, y este respondió molesto: “si quieren más hardware, mejor sean eléctricos/electrónicos”. El M.C. Matamoros rechazó esa postura: el Ingeniero en Computación es el <strong>pegamento entre el hardware y el software</strong>, el especialista de bajo nivel. Quien no quiera trabajar con hardware debió elegir Ciencias de la Computación (Facultad de Ciencias) o Informática (Contaduría).</p>
 <div class="estudio-extra">
 <span class="lbl">Explicado en simple</span>

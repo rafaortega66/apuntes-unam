@@ -18,7 +18,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #7C9CD6"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
 
-<details class="section-block sec" id="c3-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c3-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>La reestructuración del mapa de memoria entre la Pico 1 y la Pico 2 y el fallo al direccionar registros si no se considera el nuevo mapa</strong><span class="evid">Evidencia: Lo dijo explícitamente advirtiendo que al manipular registros directamente las instrucciones tipo 32 fallarán si no se usa el nuevo mapa de memoria, y lo ligó a ejercicios prácticos de la materia.</span></li>
 <li><strong>La ampliación de las máquinas de estado de la interfaz PIO de 4 a 8 y el cambio físico del chip RP2350 en versiones de 30 y 48 pines</strong><span class="evid">Evidencia: Lo explicó explícitamente comparando el hardware de la Pico 1 y la Pico 2 y detallando los pines accesorios de reloj u organización.</span></li>
@@ -29,7 +29,7 @@
 </ol>
 </details>
 
-<details class="section-block sec" id="c3-pico1-pico2" open><summary><span class="stitle">Diferencias de hardware entre Pico 1 y Pico 2: overclocking, máquinas de estado y mapa de memoria</span></summary>
+<details class="section-block sec" id="c3-pico1-pico2"><summary><span class="stitle">Diferencias de hardware entre Pico 1 y Pico 2: overclocking, máquinas de estado y mapa de memoria</span></summary>
 <p>El análisis comparativo inicia evaluando el comportamiento de ejecución de programas con operaciones de punto flotante: en la Pico 1, sin una unidad de FPU, esas operaciones se resuelven por software. Mediante <strong>overclocking</strong>, la Pico 2 permite incrementar sustancialmente la velocidad del ciclo máquina. A nivel de periferia, aunque la distribución general de bloques parece similar a simple vista, hay una diferencia técnica crítica: la <strong>reestructuración completa de los mapas de memoria</strong> entre ambas versiones. Si un programador intenta direccionar memoria manipulando directamente los registros sin tomar en cuenta este nuevo mapa, el programa falla o accede a direcciones equivocadas.</p>
 <p>A nivel físico, el chip RP2350 se fabrica en variantes de <strong>30 y 48 pines</strong>, siendo la versión de más pines la que tiene mayor cantidad de E/S disponibles. El incremento en el tamaño físico del chip no solo responde a la réplica de pines de entrada/salida, sino también a la ampliación de recursos internos: las <strong>máquinas de estado PIO pasan de 4 a 8</strong>. Estas modificaciones de hardware también alteran la forma en que se gestiona el paralelismo interno del chip.</p>
 <div class="estudio-extra">
@@ -41,7 +41,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c3-risc-v" open><summary><span class="stitle">Origen, filosofía y ecosistema de la arquitectura abierta RISC-V</span></summary>
+<details class="section-block sec" id="c3-risc-v"><summary><span class="stitle">Origen, filosofía y ecosistema de la arquitectura abierta RISC-V</span></summary>
 <p>El desarrollo de RISC-V responde a una necesidad económica y tecnológica de la industria: cuando un fabricante diseña un circuito integrado para líneas de producción masivas (miles o millones de unidades), pagar regalías de licencia por cada chip fabricado (como exige ARM) representa un costo enorme acumulado. Del mismo modo en que surgió Linux como alternativa libre en el software, <strong>RISC-V fue concebido como una arquitectura de hardware abierta y libre de regalías</strong>.</p>
 <p>La característica definitoria de RISC-V es su diseño <strong>modular</strong>: posee un conjunto básico de instrucciones (base) y permite añadir extensiones especializadas según las necesidades del diseño (por ejemplo, extensiones para punto flotante o multiplicación). La arquitectura se desarrolló originalmente en la <strong>Universidad de California en Berkeley</strong> alrededor de 2014-2015 como proyecto de investigación. Actualmente su adopción es una tendencia global entre fabricantes diversos; el consorcio internacional de RISC-V cuenta entre sus miembros a corporaciones líderes de la industria (Google, Intel, Huawei, Ali Cloud, entre otras). Para el estudio y desarrollo en esta arquitectura existen recursos de acceso libre, como libros traducidos y páginas de referencia rápida de instrucciones en línea.</p>
 <div class="estudio-extra">
@@ -52,7 +52,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c3-cisc-risc-estructura" open><summary><span class="stitle">Estructura de instrucciones, registros, ABI y modos de direccionamiento</span></summary>
+<details class="section-block sec" id="c3-cisc-risc-estructura"><summary><span class="stitle">Estructura de instrucciones, registros, ABI y modos de direccionamiento</span></summary>
 <p>En la clasificación de arquitecturas se distinguen dos filosofías: <strong>CISC</strong> (Complex Instruction Set Computer) y <strong>RISC</strong> (Reduced Instruction Set Computer). Intel y AMD mantienen la arquitectura CISC con instrucciones complejas y heterogéneas; ARM y RISC-V son RISC. Respecto a los anchos de palabra: Intel opera en 16, 32 y 64 bits; ARM abarca 32 y 64 bits; RISC-V soporta 32, 64 y hasta 128 bits.</p>
 <table><thead><tr><th>Criterio</th><th>Intel (x86/AMD)</th><th>ARM</th><th>RISC-V</th></tr></thead><tbody>
 <tr><td>Tipo de arquitectura</td><td>CISC</td><td>RISC</td><td>RISC</td></tr>
@@ -70,7 +70,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c3-independencia" open><summary><span class="stitle">Independencia funcional de periféricos: caso ADC y DMA</span></summary>
+<details class="section-block sec" id="c3-independencia"><summary><span class="stitle">Independencia funcional de periféricos: caso ADC y DMA</span></summary>
 <p>El principio de independencia funcional de periféricos establece que, una vez que un bloque periférico ha sido configurado, no requiere refrescarse ni intervenirse constantemente desde la CPU para seguir operando. Este principio se implementa desde las primeras generaciones de microcontroladores. Un ejemplo representativo es la integración del <strong>Convertidor Analógico-Digital (ADC)</strong> con el periférico <strong>DMA (Acceso Directo a Memoria)</strong>: al programar el DMA y reservar una región de memoria RAM específica, el ADC realiza continuamente sus conversiones y las almacena en esa región en ráfaga, de forma totalmente autónoma. Esta operación corre en segundo plano sin consumir ciclos de CPU, dejando a ambos núcleos libres para atender otras tareas mientras el periférico trabaja.</p>
 <div class="estudio-extra">
 <span class="lbl">Explicado en simple</span>
@@ -80,7 +80,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c3-bootloader" open><summary><span class="stitle">Mecanismo de selección de arquitectura en la Pico 2 mediante el bootloader</span></summary>
+<details class="section-block sec" id="c3-bootloader"><summary><span class="stitle">Mecanismo de selección de arquitectura en la Pico 2 mediante el bootloader</span></summary>
 <p>La Raspberry Pi Pico 2 (chip RP2350) tiene una arquitectura dual que integra núcleos ARM Cortex-M33 y núcleos RISC-V en el mismo silicio. El acceso a la arquitectura RISC-V no se realiza de forma simultánea ni arbitraria: está controlado por el <strong>bootloader</strong>. Al encender o reiniciar el microcontrolador, el bootloader evalúa el estado de un bit específico, habilitado por software al inicio en la CPU. Dependiendo del valor de ese bit, el sistema toma uno de dos caminos de ejecución exclusivos:</p>
 <ul>
 <li><strong>Modo ARM normal:</strong> el procesador arranca y ejecuta instrucciones en el entorno ARM Cortex-M33 convencional.</li>
@@ -96,7 +96,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c3-fpu" open><summary><span class="stitle">Unidad de Punto Flotante (FPU), registros S0–S31 y filtros digitales</span></summary>
+<details class="section-block sec" id="c3-fpu"><summary><span class="stitle">Unidad de Punto Flotante (FPU), registros S0–S31 y filtros digitales</span></summary>
 <p>A diferencia de la Pico 1, la Pico 2 incorpora una FPU por hardware. Debido a esta diferencia física, cualquier programa compilado en ensamblador que use instrucciones de FPU simplemente no puede ejecutarse en la Pico 1. La FPU de la Pico 2 dispone de un banco dedicado de <strong>32 registros de punto flotante</strong> (S0 a S31). El hardware soporta directamente las operaciones aritméticas fundamentales: suma, resta, multiplicación, división y raíz cuadrada (VSQRT). Sin embargo, la unidad <strong>no incluye soporte nativo por hardware para funciones trascendentales complejas</strong> (seno, coseno, etc.).</p>
 <p>Estos 32 registros permiten implementar algoritmos de procesamiento digital de señales de alto rendimiento. Un ejemplo práctico desarrollado en esta arquitectura es la traducción e implementación de un <strong>filtro digital</strong> programado íntegramente mediante rutinas en ensamblador con instrucciones de punto flotante. No obstante, existe una limitación actual en las herramientas de software: los compiladores de MicroPython todavía tienen soporte limitado para ciertas instrucciones especializadas de la FPU.</p>
 <div class="estudio-extra">
@@ -108,7 +108,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c3-entornos" open><summary><span class="stitle">Entornos de desarrollo, emulación en Visual Studio Code y expansión de memoria</span></summary>
+<details class="section-block sec" id="c3-entornos"><summary><span class="stitle">Entornos de desarrollo, emulación en Visual Studio Code y expansión de memoria</span></summary>
 <p>Para la programación y pruebas en ensamblador, el entorno de trabajo recomendado usa <strong>Visual Studio Code</strong> integrado con herramientas de compilación tipo Make y un emulador integrado, evitando el uso de máquinas virtuales pesadas como QEMU. El desarrollo de código en ensamblador puede hacerse desde C o mediante <em>inline assembly</em> (ensamblador cruzado) dentro de MicroPython, usando declaraciones directas. Para comprender a fondo el funcionamiento de los periféricos, la metodología del curso exige realizar ejercicios de <strong>direccionamiento directo a registros</strong>, manipulando la memoria sin el uso de librerías intermedias. Por último, para proyectos que requieran mayor capacidad de almacenamiento de datos, es posible usar módulos externos comerciales para expandir la memoria de la Pico vía interfaz serial.</p>
 <div class="estudio-extra">
 <span class="lbl">Explicado en simple</span>
@@ -138,7 +138,7 @@
 </ul>
 </details>
 
-<details class="section-block sec" id="c3-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<details class="section-block sec" id="c3-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
 <ul>
 <li><strong>Revisión individual del set de instrucciones:</strong> se iniciará el trabajo práctico tecleando y analizando el conjunto de instrucciones en ensamblador.</li>
 <li><strong>Estrategia de aprendizaje:</strong> se comenzará con las instrucciones aritméticas y lógicas más básicas antes de construir programas completos.</li>

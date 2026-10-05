@@ -18,7 +18,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Formato de estudio.</strong> Primero va lo que probablemente viene en el examen y por qué. Después, cada concepto explicado en este orden: qué es, explicado en simple, cómo funciona, por qué importa y errores comunes. Al final hay preguntas para ponerte a prueba. Todo sale del audio de la clase (procesado en NotebookLM).</p></div>
 
-<details class="section-block sec" id="c8-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c8-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>Instrucciones principales de la FPU (vadd, vsub, vmul, vdiv, vsqrt, vldr, vstr) y su sintaxis con prefijo v.</strong><span class="evid">Evidencia: las clasificó explícitamente en el pizarrón por función, detalló sus operandos y explicó la sintaxis de cada una.</span></li>
 <li><strong>Las instrucciones de multiplicación acumulativa (MAC) no son accesibles desde ensamblador inline.</strong><span class="evid">Evidencia: lo enfatizó: los manuales mencionan 5 variantes que convertirían a la Pico 2 en un DSP, pero los compiladores y ensambladores actuales no permiten acceder a ellas.</span></li>
@@ -28,7 +28,7 @@
 </ol>
 </details>
 
-<details class="section-block sec" id="c8-registros" open><summary><span class="stitle">1 · Banco de registros y límites de la FPU en la Pico 2</span></summary>
+<details class="section-block sec" id="c8-registros"><summary><span class="stitle">1 · Banco de registros y límites de la FPU en la Pico 2</span></summary>
 <div class="concepto">
 <span class="lbl">Qué es</span>
 <p>Es la organización interna de la Unidad de Punto Flotante del procesador RP2350: un mapa de <strong>32 registros dedicados de 32 bits</strong>, de <code>s0</code> a <code>s31</code>.</p>
@@ -42,7 +42,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c8-instrucciones" open><summary><span class="stitle">2 · Repertorio de instrucciones de la FPU y su sintaxis</span></summary>
+<details class="section-block sec" id="c8-instrucciones"><summary><span class="stitle">2 · Repertorio de instrucciones de la FPU y su sintaxis</span></summary>
 <div class="concepto">
 <span class="lbl">Qué es</span>
 <p>Es el conjunto de instrucciones de máquina de la FPU, que empiezan obligatoriamente con el prefijo <code>v</code> (<code>vadd</code>, <code>vsub</code>, <code>vmul</code>, <code>vdiv</code>, <code>vsqrt</code>, <code>vcvt</code>, <code>vldr</code>, <code>vstr</code>).</p>
@@ -67,7 +67,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c8-raiz" open><summary><span class="stitle">3 · Ejercicio 1: raíz cuadrada en ensamblador inline</span></summary>
+<details class="section-block sec" id="c8-raiz"><summary><span class="stitle">3 · Ejercicio 1: raíz cuadrada en ensamblador inline</span></summary>
 <div class="concepto">
 <span class="lbl">Qué es</span>
 <p>Un programa en MicroPython con ensamblador incrustado (<code>@micropython.asm_thumb</code>) que calcula la raíz cuadrada de un flotante, resuelto en clase con el valor 80.0.</p>
@@ -88,7 +88,7 @@ def raiz_cuadrada(r0, r1):   # r0 = dirección de input, r1 = dirección de outp
 </div>
 </details>
 
-<details class="section-block sec" id="c8-producto" open><summary><span class="stitle">4 · Ejercicio 2: sumatoria de productos y offset de 4 bytes</span></summary>
+<details class="section-block sec" id="c8-producto"><summary><span class="stitle">4 · Ejercicio 2: sumatoria de productos y offset de 4 bytes</span></summary>
 <div class="concepto">
 <span class="lbl">Qué es</span>
 <p>Un algoritmo en ensamblador que calcula el producto punto (∑ data1[i] × data2[i]) entre dos arreglos de flotantes del mismo tamaño.</p>
@@ -114,7 +114,7 @@ vstr(s4, [r2, 0])      # guarda el acumulador en el resultado</code></pre>
 </div>
 </details>
 
-<details class="section-block sec" id="c8-filtros" open><summary><span class="stitle">5 · Fundamentos de filtros digitales (FIR e IIR)</span></summary>
+<details class="section-block sec" id="c8-filtros"><summary><span class="stitle">5 · Fundamentos de filtros digitales (FIR e IIR)</span></summary>
 <div class="concepto">
 <span class="lbl">Qué es</span>
 <p>Es el modelo matemático para procesar señales discretas en el tiempo con la sumatoria de productos de coeficientes y muestras.</p>
@@ -149,7 +149,7 @@ vstr(s4, [r2, 0])      # guarda el acumulador en el resultado</code></pre>
 </ul>
 </details>
 
-<details class="section-block sec" id="c8-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<details class="section-block sec" id="c8-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
 <ul>
 <li><strong>Próxima clase:</strong> se dedicará completa a implementar varios tipos de filtros digitales (IIR/FIR) en la Pico 2.</li>
 <li><strong>Trabajos:</strong> se derivará un trabajo práctico sobre filtros digitales y se asignarán aproximadamente 3 trabajos prácticos de programación en ensamblador, con programas clásicos ya vistos adaptados al uso de la FPU.</li>

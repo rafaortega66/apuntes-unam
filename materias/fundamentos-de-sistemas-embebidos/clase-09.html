@@ -18,7 +18,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #A98BD1"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
 
-<details class="section-block sec" id="c9-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c9-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>Los cuatro modos de transferencia de USB 2.0 y 3.0 (Control, Bulk, Interrupt e Isócrono)</strong><span class="evid">Evidencia: Lo dijo explícitamente en la clase indicando que son tema obligatorio de examen.</span></li>
 <li><strong>La garantía de potencia por defecto en USB (100 mA a 5 V) y el límite máximo de USB 2.0 (500 mA / 2.5 W)</strong><span class="evid">Evidencia: Lo dijo explícitamente, lo explicó detalladamente y lo comparó con la corriente de LEDs y motores.</span></li>
@@ -30,7 +30,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #A98BD1"><p style="margin:0"><strong>⚠️ Por verificar:</strong> tres datos de los apuntes de NotebookLM conviene contrastarlos con el audio o con la especificación antes de citarlos: (1) que USB 3.0 entrega <strong>800 mA</strong> (la especificación suele hablar de 900 mA); (2) que I²C lo <strong>inventó Philips en 1980</strong> (suele citarse 1982); (3) que el límite práctico de <strong>112 dispositivos</strong> viene de la capacitancia parásita (112 es 128 direcciones menos las 16 reservadas; la capacitancia del bus es otro límite aparte).</p></div>
 
-<details class="section-block sec" id="c9-potencia" open><summary><span class="stitle">Interfaz física (PHY) y administración de potencia en USB 2.0 y 3.0</span></summary>
+<details class="section-block sec" id="c9-potencia"><summary><span class="stitle">Interfaz física (PHY) y administración de potencia en USB 2.0 y 3.0</span></summary>
 <p>La sesión inició con el diagrama del transceptor físico (PHY) de USB 1.1 y 2.0. A nivel electrónico la interfaz es muy económica: un circuito con puertas negadoras, un transceptor diferencial, un sensor de desconexión y un registro diferencial que entrega las señales positivas y negadas. Esa simplicidad, que contrasta con los diagramas de bloques de un microprocesador, explica el bajo costo comercial de los periféricos USB.</p>
 <p><strong>Alimentación por el bus.</strong> Durante la inicialización la especificación garantiza por defecto <strong>100 mA a 5 V</strong> a cualquier dispositivo que se conecte, sin negociar. El profesor calificó esta política, en tono de broma, de “absoluto comunismo”. Para un teclado, un ratón u otro periférico sencillo, 100 mA sobran. Si un dispositivo necesita más, debe iniciar una <strong>negociación por software</strong> con el controlador maestro para pedir más corriente.</p>
 <p>El máximo de USB 2.0 es <strong>500 mA a 5 V</strong>, es decir, una potencia nominal de <em>P = V × I = 5 V × 0.5 A = 2.5 W</em>. Para dar la escala, el profesor comparó consumos típicos:</p>
@@ -49,7 +49,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c9-hid" open><summary><span class="stitle">La pila de software USB y la clase HID (Human Interface Device)</span></summary>
+<details class="section-block sec" id="c9-hid"><summary><span class="stitle">La pila de software USB y la clase HID (Human Interface Device)</span></summary>
 <p>El profesor explicó el flujo de una transmisión desde el host (la computadora) hasta el dispositivo lógico, con el ejemplo de un videojuego que debe activar la vibración del control cuando el jugador recibe un golpe:</p>
 <ol>
 <li><strong>Aplicación:</strong> el juego genera un evento que requiere una respuesta del hardware.</li>
@@ -74,7 +74,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c9-modos" open><summary><span class="stitle">Los cuatro modos de transferencia de USB 2.0 y 3.0 (tema de examen)</span></summary>
+<details class="section-block sec" id="c9-modos"><summary><span class="stitle">Los cuatro modos de transferencia de USB 2.0 y 3.0 (tema de examen)</span></summary>
 <p>Para gestionar el tráfico del bus, USB 2.0 y 3.0 definen cuatro modos de transferencia.</p>
 <h4>A. Modo Control</h4>
 <p><strong>Obligatorio:</strong> el 100 % de los dispositivos USB lo usan en su negociación inicial. Transmite paquetes cortos para configurar el dispositivo, consultar las cartas de descriptores, modificar parámetros (sensibilidad del sensor del ratón, patrones de iluminación de un teclado) o mandar comandos de inicialización y apagado. Ejemplo de diferencia entre sistemas operativos: al elegir “Extraer disco de forma segura”, Windows envía un paquete de control que desmonta el dispositivo lógicamente pero deja encendido el LED de alimentación; en Linux el paquete de control ordena apagar el controlador, se corta la alimentación y el disco mecánico deja de girar físicamente.</p>
@@ -103,7 +103,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c9-baja-velocidad" open><summary><span class="stitle">Interfaces de baja velocidad y redes de sensores y actuadores</span></summary>
+<details class="section-block sec" id="c9-baja-velocidad"><summary><span class="stitle">Interfaces de baja velocidad y redes de sensores y actuadores</span></summary>
 <p>El profesor cerró el apartado de buses de alta velocidad (USB, Ethernet) y empezó con las interfaces de comunicación de bajo costo y baja velocidad (frecuencias menores a 1 MHz y pocos pines). Están orientadas al control industrial y a la interconexión de sensores, actuadores, memorias de respaldo (EEPROM, Flash) y pantallas pequeñas (LCD, OLED).</p>
 <ul>
 <li><strong>Transductor (sensor):</strong> convierte una magnitud física del entorno (temperatura, presión, luz) en una magnitud eléctrica (voltaje, corriente).</li>
@@ -122,7 +122,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c9-i2c" open><summary><span class="stitle">El bus I²C (Inter-Integrated Circuit)</span></summary>
+<details class="section-block sec" id="c9-i2c"><summary><span class="stitle">El bus I²C (Inter-Integrated Circuit)</span></summary>
 <p>El profesor presentó las especificaciones básicas del bus I²C, atribuido a Philips (los apuntes dicen 1980; ver aviso arriba).</p>
 <p><strong>Líneas.</strong> Es un bus serie síncrono que solo necesita <strong>2 alambres</strong> (sin contar tierra):</p>
 <ul>

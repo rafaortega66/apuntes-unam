@@ -19,7 +19,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
 
-<details class="section-block sec" id="c7-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c7-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>Cálculo a mano de la asignación de un punto a su centroide por distancia Euclidiana y actualización de la media</strong><span class="evid">Evidencia: evidencia de la clase: el profesor lo dijo explícitamente al explicar cómo vendrán los ejercicios del examen (diferencias al cuadrado a mano).</span></li>
 <li><strong>Regla de decisión por distancia mínima y la necesidad de normalizar/estandarizar las variables</strong><span class="evid">Evidencia: evidencia de la clase: lo repitió explícitamente durante la explicación de clasificadores y al responder dudas sobre el impacto de la escala.</span></li>
@@ -28,7 +28,7 @@
 </ol>
 </details>
 
-<details class="section-block sec" id="c7-distancia" open><summary><span class="stitle">Clasificación no supervisada y funciones de distancia</span></summary>
+<details class="section-block sec" id="c7-distancia"><summary><span class="stitle">Clasificación no supervisada y funciones de distancia</span></summary>
 <p>La sesión inició repasando la clasificación de patrones como un proceso en el cual se busca asignar un objeto o vector de características a una categoría predefinida, apoyándose en mediciones de semejanza o diferencia con prototipos representativos de cada clase. A diferencia de los métodos supervisados, los no supervisados no disponen de información previa ni etiquetas sobre la clase a la que pertenecen los datos de entrenamiento; su objetivo principal es inferir la forma en que los datos se agrupan de manera natural. En este formalismo, un <strong>patrón</strong> es el vector de características que describe un objeto o fenómeno, mientras que una <strong>clase</strong> o categoría es el conjunto de patrones que comparten propiedades similares o un mismo origen.</p>
 <p>Para cuantificar qué tan alejados o cercanos están dos puntos en el espacio de características se introduce la <strong>función de distancia</strong>. La intuición detrás de los modelos de clasificación por distancia mínima es que a menor distancia entre dos puntos, mayor es su similitud y la probabilidad de que pertenezcan a la misma clase; a mayor distancia, menor similitud. Bajo este esquema, un patrón desconocido <em>X</em> se asigna a la clase cuyo prototipo o centroide es el más cercano según la función de distancia elegida.</p>
 <p>Se repasaron las funciones de distancia más habituales:</p>
@@ -54,7 +54,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c7-clustering" open><summary><span class="stitle">Fundamentos de agrupamiento (clustering) y medidas de similitud</span></summary>
+<details class="section-block sec" id="c7-clustering"><summary><span class="stitle">Fundamentos de agrupamiento (clustering) y medidas de similitud</span></summary>
 <p>Para resolver la asignación cuando no hay etiquetas surgen los algoritmos de <strong>clustering</strong>, base del aprendizaje no supervisado. El clustering busca organizar un conjunto de datos en grupos o <em>clusters</em> de forma que los objetos de un mismo grupo sean más similares entre sí que con respecto a los de otros grupos. En este paradigma no hay etiquetas a priori, se desconoce la estructura intrínseca de los datos y, en muchos casos, tampoco se conoce el número total de grupos.</p>
 <p>Un algoritmo de agrupamiento evalúa constantemente dos métricas de calidad:</p>
 <ul>
@@ -78,7 +78,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c7-kmeans" open><summary><span class="stitle">Algoritmo K-Means (K-Medias)</span></summary>
+<details class="section-block sec" id="c7-kmeans"><summary><span class="stitle">Algoritmo K-Means (K-Medias)</span></summary>
 <p>El primer algoritmo iterativo analizado fue <strong>K-Means</strong>, muy usado por su simplicidad. Su objetivo es dividir el conjunto de datos en <em>K</em> grupos, minimizando implícitamente la distancia cuadrada entre cada punto y el centro de su cluster, cantidad llamada <strong>inercia</strong>.</p>
 <p>Al revisar el pseudocódigo en pantalla, el profesor pidió a los alumnos que explicaran los pasos:</p>
 <ul>
@@ -120,7 +120,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c7-lbg" open><summary><span class="stitle">Algoritmo LBG (Linde-Buzo-Gray) y cuantización vectorial</span></summary>
+<details class="section-block sec" id="c7-lbg"><summary><span class="stitle">Algoritmo LBG (Linde-Buzo-Gray) y cuantización vectorial</span></summary>
 <p>El algoritmo <strong>LBG</strong>, de Linde, Buzo y Gray, se concibió para diseñar un libro de códigos (<em>codebook</em>) orientado a la cuantización vectorial. Un codebook es un conjunto óptimo de vectores prototipo llamados <em>codewords</em> que representan de forma condensada un conjunto masivo de datos. Ejemplo: en lugar de manejar 5,000 datos de pacientes con cáncer y 10,000 sin cáncer, LBG resume esa información en un grupo reducido de codewords representativos.</p>
 <p>A diferencia de K-Means, LBG minimiza explícitamente la <strong>distorsión</strong> (D), definida como la distancia cuadrática promedio entre cada punto de entrenamiento X y su codeword más cercano (C):</p>
 <p style="text-align:center"><em>D = (1/N) · Σ<sub>i=1..N</sub> ‖X<sub>i</sub> − C<sub>cercano</sub>‖²</em></p>
@@ -150,7 +150,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c7-isodata" open><summary><span class="stitle">Algoritmo ISODATA (Self-Organizing Data Analysis Technique)</span></summary>
+<details class="section-block sec" id="c7-isodata"><summary><span class="stitle">Algoritmo ISODATA (Self-Organizing Data Analysis Technique)</span></summary>
 <p><strong>ISODATA</strong> es una evolución heurística de K-Means. El profesor enfatizó que no nace de un principio de optimización matemática riguroso que garantice un mínimo global, sino que se diseñó a partir de heurísticas y experiencia práctica para resolver los defectos conocidos de K-Means.</p>
 <p>A diferencia de K-Means (número de grupos fijo), ISODATA ajusta dinámicamente el número de clusters con tres operaciones:</p>
 <ol>
@@ -193,7 +193,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c7-comparativo" open><summary><span class="stitle">Aplicaciones reales y cuadro comparativo</span></summary>
+<details class="section-block sec" id="c7-comparativo"><summary><span class="stitle">Aplicaciones reales y cuadro comparativo</span></summary>
 <p>Para cerrar el bloque de teoría, el profesor enumeró aplicaciones de estos algoritmos no supervisados:</p>
 <ul>
 <li><strong>Teledetección:</strong> clasificación de cobertura de suelo y vegetación en imágenes satelitales.</li>
@@ -238,7 +238,7 @@
 </ul>
 </details>
 
-<details class="section-block sec" id="c7-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<details class="section-block sec" id="c7-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
 <ul>
 <li><strong>Próxima sesión (lunes 21 de septiembre):</strong> se concluye el temario del primer bloque con <strong>clasificación por funciones de similitud</strong> — clasificadores probabilísticos basados en la regla de Bayes.</li>
 <li><strong>Entrega de la Práctica 2:</strong> viernes <strong>25 de septiembre de 2026</strong>. El tema se enfoca en clasificadores (trabajo más práctico que teórico).</li>

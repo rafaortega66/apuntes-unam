@@ -18,7 +18,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #A98BD1"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
 
-<details class="section-block sec" id="c6-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c6-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>Diferencia fundamental entre el aprendizaje supervisado y el no supervisado (presencia de una variable objetivo etiquetada frente a la búsqueda de patrones ocultos sin etiqueta)</strong><span class="evid">Evidencia: El profesor Roberto Olvera lo explicó detalladamente al introducir el Tema 3 en la segunda mitad de la clase.</span></li>
 <li><strong>El concepto y los beneficios de la arquitectura Lakehouse en Databricks</strong><span class="evid">Evidencia: Fue el tema central expuesto por el Equipo 1 para unificar Data Lake y Data Warehouse, y el profesor resaltó su integración unificada sin necesidad de plataformas separadas.</span></li>
@@ -26,7 +26,7 @@
 </ol>
 </details>
 
-<details class="section-block sec" id="c6-databricks" open><summary><span class="stitle">Exposición del equipo 1: Databricks (arquitectura Lakehouse)</span></summary>
+<details class="section-block sec" id="c6-databricks"><summary><span class="stitle">Exposición del equipo 1: Databricks (arquitectura Lakehouse)</span></summary>
 <p>El equipo asignado a Databricks abrió preguntando al grupo si conocían el término <strong>arquitectura Lakehouse</strong>. La definieron como una arquitectura de datos moderna que une lo mejor de un <strong>Data Lake</strong> (almacenamiento económico y flexible) y un <strong>Data Warehouse</strong> (datos estructurados y alto rendimiento).</p>
 <p>Databricks es una plataforma colaborativa basada en <strong>Apache Spark</strong>, pensada para trabajo en equipo, procesamiento en tiempo real, análisis y transformación de datos, y para construir modelos de aprendizaje automático complejos. Su ventaja principal es que integra en un solo servicio tecnologías que normalmente estarían separadas en una empresa (data lake, data warehouse, streaming y machine learning), y está disponible en AWS, Microsoft Azure, Google Cloud o combinaciones de ellas.</p>
 <p>Presentaron la arquitectura en cuatro bloques: <strong>fuentes de datos</strong> (bases de datos, APIs, archivos, almacenamiento en la nube, IoT, etc.) → <strong>transporte</strong> de esos datos hacia la plataforma → <strong>procesamiento</strong> con Apache Spark, el motor de procesamiento de grandes volúmenes de datos → <strong>almacenamiento final</strong> en un <strong>Delta Lake</strong>.</p>
@@ -43,7 +43,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c6-pinecone" open><summary><span class="stitle">Exposición del equipo 6: Pinecone (base de datos vectorial)</span></summary>
+<details class="section-block sec" id="c6-pinecone"><summary><span class="stitle">Exposición del equipo 6: Pinecone (base de datos vectorial)</span></summary>
 <p><em>Nota: la fuente transcribe el nombre de este producto de forma inconsistente ("Pon", "Fcon", "Python") por errores de reconocimiento de voz — por el contexto (base de datos vectorial, equipo 6 de la tabla de asignaciones) corresponde a <strong>Pinecone</strong>.</em></p>
 <p>El equipo explicó primero qué es una base de datos vectorial: a diferencia de una base de datos relacional tradicional, el foco está en <strong>vectores</strong> y <strong>similitudes</strong>. Sobre eso se construyen búsquedas por similitud, <strong>filtrado</strong> (acotar resultados según ciertas características), <strong>ranking</strong> (ordenar los resultados según qué tanto se parecen a lo buscado) y <strong>embeddings</strong> (representar información como vectores). El acceso se hace por APIs, SDK y desde la consola.</p>
 <p>Como aplicaciones destacaron que es clave para muchas herramientas de inteligencia artificial actuales, y que también sirve para sistemas de recomendación y de búsqueda, apoyándose fuertemente en probabilidad. En seguridad mencionaron llaves de API y control de acceso.</p>
@@ -60,7 +60,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c6-mongodb" open><summary><span class="stitle">Exposición del equipo 4: MongoDB</span></summary>
+<details class="section-block sec" id="c6-mongodb"><summary><span class="stitle">Exposición del equipo 4: MongoDB</span></summary>
 <p>El equipo presentó MongoDB como una base de datos <strong>NoSQL</strong> (no relacional): los datos no se guardan en filas de tablas sino en <strong>BSON</strong> (el equivalente binario de JSON). Existen tres ediciones: <strong>Community</strong> (prácticamente gratuita, se descarga en un servidor propio), <strong>Enterprise Advanced</strong> (de paga) y <strong>Atlas</strong> (el servicio administrado en la nube).</p>
 <p>En su diagrama de arquitectura, las fuentes de datos (un sistema ERP, telemetría/IoT, APIs) alimentan el streaming vía <strong>Apache Kafka</strong> y el procesamiento por lotes vía <strong>Apache Spark</strong>; el repositorio central es <strong>MongoDB Atlas</strong> (NoSQL), y para minería de datos se apoyan en Atlas Charts y herramientas de BI.</p>
 <p>Entre sus características: <strong>modelo de documentos flexible</strong>, que permite reducir estructuras complejas a documentos sin exigir que todos tengan exactamente el mismo esquema dentro de una misma colección; <strong>alta disponibilidad</strong>, con copias sincronizadas en varios servidores sin necesidad de pagar almacenamiento extra ni reconfigurar nada; <strong>escala horizontal</strong> mediante <em>sharding</em>, que reparte los datos entre servidores según una clave, de forma balanceada; y <strong>despliegue multi-nube</strong> a través de Atlas, que opera sobre infraestructura de AWS, Azure o Google Cloud según convenga.</p>
@@ -80,7 +80,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c6-milvus" open><summary><span class="stitle">Exposición del equipo 11: Milvus</span></summary>
+<details class="section-block sec" id="c6-milvus"><summary><span class="stitle">Exposición del equipo 11: Milvus</span></summary>
 <p>El equipo abrió señalando que el reto real de la inteligencia artificial en producción no es hacer una prueba de concepto para 10 o 100 usuarios, sino servir a millones de usuarios y consultas con terabytes de información — y que ahí las bases de datos tradicionales no aguantan el manejo de vectores a esa escala.</p>
 <p><strong>Milvus</strong> es una base de datos vectorial de código abierto, de alto rendimiento y altamente escalable, que puede desplegarse en un esquema local, en clústeres orquestados, o de forma completamente gestionada como servicio a través de <strong>Zilliz Cloud</strong> (basado en Milvus).</p>
 <p>Su arquitectura se compone de cuatro capas independientes: (1) <strong>capa de proxies</strong>, el punto de acceso de los clientes, que ayuda a distribuir la carga de solicitudes; (2) <strong>capa de coordinadores</strong>, que coordina las consultas y distribuye el trabajo entre los nodos de streaming y de almacenamiento; (3) <strong>nodos trabajadores</strong>, de tres tipos — nodos de streaming, nodos de datos (indexan y compactan la información en vectores) y nodos de consulta (conectados a la capa de proxies y de clientes); (4) <strong>capa de almacenamiento</strong>, también de tres tipos — meta-almacenamiento (snapshots de metadatos, usando <strong>etcd</strong>), almacenamiento de log (con herramientas como Kafka), y almacenamiento de objetos (compatible con Amazon S3, Google Cloud Storage, Azure y MinIO).</p>
@@ -99,7 +99,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c6-tema3-supervisado" open><summary><span class="stitle">Tema 3: aprendizaje supervisado y no supervisado</span></summary>
+<details class="section-block sec" id="c6-tema3-supervisado"><summary><span class="stitle">Tema 3: aprendizaje supervisado y no supervisado</span></summary>
 <p>Terminadas las exposiciones, el profesor arrancó formalmente el <strong>Tema 3 — El proceso de minería de datos</strong>, anunciando que tomará varias semanas: hoy toca aprendizaje supervisado vs. no supervisado; la próxima clase, modelos predictivos y descriptivos; y a partir de la semana siguiente empiezan a trabajar algoritmo por algoritmo, ya con prácticas. También anunció que para las prácticas se van a formar nuevos grupos de tres personas: dos las elige cada alumno (el compañero con el que quiera trabajar) y la tercera persona la asigna el profesor; los grupos quedan definidos el jueves siguiente.</p>
 <p>Explicó la diferencia central entre los dos enfoques: en el <strong>aprendizaje no supervisado</strong> se busca encontrar patrones ocultos, agrupaciones o estructuras en los datos sin ningún tipo de definición previa de lo que va a ocurrir — es puramente un ordenamiento o descubrimiento, sin nada probabilístico de por medio. Los algoritmos típicos aquí son <strong>clustering</strong> (agrupación), <strong>asociación</strong> (cómo se interrelacionan las variables) y <strong>detección de anomalías</strong>.</p>
 <p>En el <strong>aprendizaje supervisado</strong>, en cambio, se trabaja con predicción y clasificación basadas en un entrenamiento previo: "si no lo entreno, no puedo sacarlo" — se necesitan datos ya conocidos (etiquetados) para entrenar el modelo antes de poder aplicarlo sobre datos nuevos. Los algoritmos típicos son clasificación, regresión y series de tiempo.</p>

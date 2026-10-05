@@ -18,7 +18,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #A98BD1"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
 
-<details class="section-block sec" id="c7-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c7-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>Definición formal de temporizador (timer) en hardware y sus 4 parámetros</strong><span class="evid">Evidencia: Lo dijo explícitamente en la clase, dictó la definición y remarcó las 4 características como preguntas de examen.</span></li>
 <li><strong>Diferencia entre resolución de interrupciones por tabla (ARM) y por vector (Intel)</strong><span class="evid">Evidencia: Lo dijo explícitamente en la clase y comparó la búsqueda en software O(N) frente a la precarga instantánea en hardware.</span></li>
@@ -30,7 +30,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #A98BD1"><p style="margin:0"><strong>📋 Nota sobre el temario:</strong> en la <a href="clase-06.html">Clase 06</a> el subtema 2.3 (Controlador de interrupciones) había quedado marcado como “omitido intencionalmente”. En esta clase sí se vio, junto con 2.4 (Temporizadores); el índice ya refleja el cambio.</p></div>
 
-<details class="section-block sec" id="c7-icu" open><summary><span class="stitle">Unidades controladoras de interrupción (ICU): enmascarables vs. no enmascarables</span></summary>
+<details class="section-block sec" id="c7-icu"><summary><span class="stitle">Unidades controladoras de interrupción (ICU): enmascarables vs. no enmascarables</span></summary>
 <p>La sesión inició con la Unidad Controladora de Interrupciones (ICU, <em>Interrupt Controller Unit</em>). Una <strong>interrupción</strong> es un mecanismo de hardware que altera o interrumpe el flujo normal de ejecución del programa principal para obligar al procesador a atender la petición de una señal enviada por un evento externo.</p>
 <p>Según la capacidad del sistema para bloquearlas, se clasifican en dos categorías:</p>
 <ul>
@@ -50,7 +50,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c7-prioridad" open><summary><span class="stitle">Niveles de prioridad (monivel vs. multinivel) y resolución (por tabla vs. por vector)</span></summary>
+<details class="section-block sec" id="c7-prioridad"><summary><span class="stitle">Niveles de prioridad (monivel vs. multinivel) y resolución (por tabla vs. por vector)</span></summary>
 <p>El profesor clasificó la gestión de interrupciones según la jerarquía de prioridad y según el mecanismo para localizar la rutina de servicio.</p>
 <p><strong>Niveles de prioridad:</strong></p>
 <ul>
@@ -70,7 +70,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c7-disparo" open><summary><span class="stitle">Desencadenamiento: por valor (nivel) vs. por flanco</span></summary>
+<details class="section-block sec" id="c7-disparo"><summary><span class="stitle">Desencadenamiento: por valor (nivel) vs. por flanco</span></summary>
 <p>Las señales de interrupción se desencadenan en los pines físicos del procesador con dos esquemas eléctricos.</p>
 <p><strong>Por valor (nivel, <em>level-triggered</em>).</strong> La interrupción se mantiene activa todo el tiempo que el pin conserve un nivel lógico específico (alto o bajo). Era el estándar en sistemas de las décadas de 1970 y 1980. Ejemplos:</p>
 <ul>
@@ -88,7 +88,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c7-dma" open><summary><span class="stitle">IRQ, bus PCI y controlador DMA</span></summary>
+<details class="section-block sec" id="c7-dma"><summary><span class="stitle">IRQ, bus PCI y controlador DMA</span></summary>
 <p>La evolución de los buses transformó la gestión de las líneas de interrupción:</p>
 <ul>
 <li><strong>Líneas IRQ dedicadas (bus ISA de 16 bits):</strong> cada tarjeta de expansión tenía un alambre físico dedicado (línea IRQ) conectado directamente desde el zócalo al controlador de interrupciones. Consumía pines exclusivos e imponía un ruteo complejo en la placa madre para mantener longitudes de pista idénticas por las altas frecuencias.</li>
@@ -108,7 +108,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c7-chipset" open><summary><span class="stitle">Arquitectura de chipset: Puente Norte y Puente Sur</span></summary>
+<details class="section-block sec" id="c7-chipset"><summary><span class="stitle">Arquitectura de chipset: Puente Norte y Puente Sur</span></summary>
 <p>La arquitectura tradicional de las tarjetas madre organiza la transferencia de datos en dos bloques o puentes de interconexión:</p>
 <ul>
 <li><strong>Puente Norte (<em>Northbridge</em>):</strong> canal de ultra alta velocidad conectado directamente con el procesador (3 GHz), la memoria RAM (2.66 GHz), la tarjeta gráfica (GPU en ranuras PCIe x16; tampoco se dio cifra para la ranura) y las unidades de estado sólido (SSD; el profesor no dio ninguna cifra de velocidad para ellos).</li>
@@ -126,7 +126,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c7-timers" open><summary><span class="stitle">Temporizadores (timers): definición, papel en el SO y las 4 características</span></summary>
+<details class="section-block sec" id="c7-timers"><summary><span class="stitle">Temporizadores (timers): definición, papel en el SO y las 4 características</span></summary>
 <p>Al concluir las interrupciones, la clase abordó los <strong>temporizadores</strong> (<em>timers</em>).</p>
 <p><strong>Definición formal (pregunta de examen):</strong> <em>“Un temporizador en hardware es un contador que activa una interrupción al llegar a cero y reinicia el conteo automáticamente (o se reconfigura mediante software).”</em></p>
 <p><strong>Los 3 componentes de un sistema operativo (relación con la Unidad 3).</strong> El profesor enfatizó que no puede existir un sistema operativo multitarea sin un timer. La arquitectura de una computadora tiene 3 componentes físicos básicos (procesador, memoria y periféricos), y por eso todo sistema operativo se compone de 3 módulos fundamentales:</p>
@@ -179,7 +179,7 @@
 </ul>
 </details>
 
-<details class="section-block sec" id="c7-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<details class="section-block sec" id="c7-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
 <p>⚠️ <strong>Fechas que no cuadran con el horario:</strong> según los apuntes, el profesor proyectó sesiones el <em>23, 25 y 30 de septiembre y 1 y 3 de octubre</em>, y el Primer Examen Parcial “tentativamente entre el <em>7 y el 10 de octubre</em>”. FSE solo tiene clase lunes y miércoles (13:00–14:30), y el 25 sep es viernes, el 1 oct jueves, el 3 oct sábado y el 10 oct sábado. Probablemente se trata de un error de transcripción; <strong>confirmar con el audio o con el profesor</strong> antes de usar estas fechas.</p>
 <ul>
 <li>Fechas que sí caen en lunes o miércoles: 23 y 30 de septiembre, 7 de octubre.</li>

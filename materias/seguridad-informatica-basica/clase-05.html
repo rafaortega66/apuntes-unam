@@ -18,7 +18,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
 
-<details class="section-block sec" id="c5-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c5-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>El estándar 7498 del modelo OSI considera solo 5 servicios de seguridad al asumir la disponibilidad como algo automático, mientras que los estándares de seguridad informática contemplan 6 servicios y exigen diseñar la disponibilidad de forma intencionada</strong><span class="evid">Evidencia: Lo dijo explícitamente la profesora en el pizarrón al inicio de la clase y lo contrastó con el modelo OSI.</span></li>
 <li><strong>La autenticación no aplica únicamente a seres humanos, sino a cualquier tipo de entidad o bien, incluyendo servicios informáticos, procesos del sistema operativo, hardware y animales</strong><span class="evid">Evidencia: Lo enfatizó explícitamente la profesora al detallar la verificación de identidades de procesos y servicios.</span></li>
@@ -28,7 +28,7 @@
 </ol>
 </details>
 
-<details class="section-block sec" id="c5-6-servicios" open><summary><span class="stitle">Los 6 servicios de seguridad vs. Estándar 74 (modelo OSI)</span></summary>
+<details class="section-block sec" id="c5-6-servicios"><summary><span class="stitle">Los 6 servicios de seguridad vs. Estándar 74 (modelo OSI)</span></summary>
 <p>El estándar 74 (modelo OSI) contempla solo 5 servicios porque asume que la disponibilidad se obtiene automáticamente al implementar autenticación, integridad, confidencialidad y control de acceso. La Dra. Quezada enfatizó que en entornos reales la disponibilidad <strong>no</strong> se implementa sola: un equipo puede reiniciarse inesperadamente en pleno uso, y tener control de acceso o no repudio no evita que el sistema quede inoperable si no se diseñaron mecanismos específicos de disponibilidad.</p>
 <p class="ojo">Ojo con el número del estándar: los apuntes dicen "estándar 74", pero casi seguro se refiere al ISO 7498-2 (arquitectura de seguridad del modelo OSI). Al volver a consultar el audio en NotebookLM salió "7498".</p>
 <div class="estudio-extra">
@@ -40,7 +40,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c5-control-acceso" open><summary><span class="stitle">Control de acceso y autenticación de entidades</span></summary>
+<details class="section-block sec" id="c5-control-acceso"><summary><span class="stitle">Control de acceso y autenticación de entidades</span></summary>
 <p><strong>Control de acceso:</strong> servicio que permite o deniega el paso de un bien (persona, proceso o dispositivo) hacia un área, servicio u otro bien. Requiere obligatoriamente autenticación previa.</p>
 <p><strong>Autenticación:</strong> verifica identidades para comprobar que una entidad es realmente quien dice ser. No se restringe a personas — aplica también a procesos de software, servicios de red y activos físicos.</p>
 <p><strong>Analogías usadas en clase:</strong></p>
@@ -57,7 +57,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c5-mecanismos" open><summary><span class="stitle">Clasificación de mecanismos de autenticación y evaluación biométrica</span></summary>
+<details class="section-block sec" id="c5-mecanismos"><summary><span class="stitle">Clasificación de mecanismos de autenticación y evaluación biométrica</span></summary>
 <ol>
 <li><strong>Algo que se sabe:</strong> información en la memoria (contraseñas, conocimiento exclusivo de eventos pasados). <em>Riesgo:</em> contraseñas débiles o anotadas en papel destruyen la responsabilidad individual; compartir contraseñas vuelve la responsabilidad legal/operativa compartida entre todos los involucrados. <em>Buenas prácticas de gestión:</em> cambiar las contraseñas de fábrica (ej. <code>admin123</code>) desde el primer uso, rotarlas periódicamente y prohibir reutilizar contraseñas previas.</li>
 <li><strong>Algo que se tiene:</strong> elementos lógicos o físicos transferibles/duplicables. Lógico: el inode de un archivo en Linux, una firma digital (~256 caracteres), la extensión de archivo (ej. detectar doble extensión sospechosa). Físico: credenciales con fotografía, tarjetas plásticas, fotochecks.</li>
@@ -78,7 +78,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c5-bolero" open><summary><span class="stitle">Confidencialidad y el síndrome/fenómeno del bolero</span></summary>
+<details class="section-block sec" id="c5-bolero"><summary><span class="stitle">Confidencialidad y el síndrome/fenómeno del bolero</span></summary>
 <p><strong>Confidencialidad:</strong> garantiza que la información o los bienes permanezcan ocultos y accesibles solo para personal autorizado.</p>
 <p><strong>Síndrome/fenómeno del bolero:</strong> vulnerabilidad social donde las personas minimizan el riesgo de su entorno asumiendo que quienes los rodean (un bolero, personal de limpieza, pasajeros de un elevador, comensales) son inofensivos o no entienden la relevancia de sus pláticas.</p>
 <p><strong>Manifestaciones descritas en clase:</strong></p>
@@ -98,7 +98,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c5-integridad" open><summary><span class="stitle">Integridad de los bienes y del factor humano</span></summary>
+<details class="section-block sec" id="c5-integridad"><summary><span class="stitle">Integridad de los bienes y del factor humano</span></summary>
 <p><strong>Integridad:</strong> evita la modificación no autorizada de información e infraestructura — pero también abarca la integridad de las personas que los operan.</p>
 <p><strong>Factores de riesgo humano:</strong></p>
 <ul>
@@ -114,7 +114,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c5-norepudio-disp" open><summary><span class="stitle">No repudio y disponibilidad</span></summary>
+<details class="section-block sec" id="c5-norepudio-disp"><summary><span class="stitle">No repudio y disponibilidad</span></summary>
 <p><strong>No repudio:</strong> garantiza que un usuario o entidad no pueda negar la autoría de una acción ejecutada. Mecanismos: acuse de recibido en oficios físicos, peritaje caligráfico sobre firmas autógrafas, llaves de firma digital, registro (logging) de comandos de alto riesgo ejecutados por administradores.</p>
 <p><strong>Disponibilidad:</strong> garantiza que los activos estén accesibles en los días/horarios oficialmente estipulados. No definir con precisión las necesidades de disponibilidad deja al sistema descubierto y vulnerable.</p>
 <p><strong>Equilibrio operacional:</strong> los servicios se gradúan según las necesidades del negocio. Ej. Liverpool: el catálogo público está disponible 24/7 sin autenticar, mientras el módulo de pago y entrega (Click and Collect) exige autenticación y controles de no repudio.</p>
@@ -153,7 +153,7 @@
 </ul>
 </details>
 
-<details class="section-block sec" id="c5-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<details class="section-block sec" id="c5-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
 <ul>
 <li><strong>Ejercicio en parejas (segunda mitad de la clase):</strong> redactar en papel una propuesta de necesidades y mecanismos de seguridad para 1) la Facultad de Ingeniería (edificios Anexo y Principal) y 2) una casa particular, cubriendo los 6 servicios de seguridad. Encabezado obligatorio: nombre de los integrantes, número de cuenta, fecha, materia (Seguridad Informática Básica), grupo (Grupo 2).
 <ul>

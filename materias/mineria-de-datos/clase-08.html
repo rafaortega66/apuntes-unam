@@ -18,7 +18,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #A98BD1"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
 
-<details class="section-block sec" id="c8-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c8-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>Implementación de un pipeline completo de clustering (preprocesamiento con StandardScaler, PCA/t-SNE, 3 algoritmos y evaluación con WSS/Silueta)</strong><span class="evid">Evidencia: Lo asignó explícitamente como la Práctica 1 obligatoria por equipos sobre un dataset de 50,000 registros al cierre de la sesión.</span></li>
 <li><strong>Comparación metodológica entre K-Means y DBSCAN (formas esféricas vs. densidad y manejo de ruido)</strong><span class="evid">Evidencia: Lo explicó extensamente en la clase contrastando ambos algoritmos y sus aplicaciones reales.</span></li>
@@ -27,7 +27,7 @@
 </ol>
 </details>
 
-<details class="section-block sec" id="c8-hana" open><summary><span class="stitle">Cierre de exposiciones: AWS y SAP HANA</span></summary>
+<details class="section-block sec" id="c8-hana"><summary><span class="stitle">Cierre de exposiciones: AWS y SAP HANA</span></summary>
 <p>La sesión empezó cerrando la exposición sobre <strong>Amazon Web Services (AWS)</strong>: un compañero destacó cómo Amazon pasó de ser un gigante del comercio electrónico a dominar la infraestructura en la nube con un catálogo enorme de servicios. El profesor complementó que las decisiones tecnológicas en una empresa suelen evaluar a tres o cuatro proveedores (AWS, IBM, SAP…) con matrices de capacidad técnica e integración; las capacidades técnicas y la escalabilidad <strong>no se regatean</strong>, el regateo comercial se hace solo con la opción que gana la evaluación técnica.</p>
 <p>Después el <strong>Equipo 8</strong> presentó la arquitectura de <strong>SAP HANA</strong>. Su rasgo fundamental es que procesa los datos <strong>directamente en memoria RAM</strong> en lugar de leer del disco, lo que multiplica la velocidad miles de veces, y que almacena las tablas <strong>por columnas</strong> (<em>column-store</em>). Ejemplo: en una base hipotética de plantas, con 10,000 registros de plantas de México la palabra “México” se repetiría 10,000 veces, ocupando espacio y frenando las lecturas; SAP HANA lo resuelve con un <strong>diccionario de compresión</strong> en memoria que evita las repeticiones y acelera las consultas.</p>
 <p>Componentes y capas de la arquitectura expuesta:</p>
@@ -47,7 +47,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c8-equipos" open><summary><span class="stitle">Equipos de trabajo y herramientas: RapidMiner y libro guía</span></summary>
+<details class="section-block sec" id="c8-equipos"><summary><span class="stitle">Equipos de trabajo y herramientas: RapidMiner y libro guía</span></summary>
 <p>El profesor dedicó un bloque a reorganizar y confirmar de forma definitiva los <strong>12 equipos</strong> de la materia, incluyendo a los alumnos que estaban pendientes por correo. Enfatizó que serán equipos de tres integrantes, definitivos para la parte programática y metodológica más exigente, donde se implementarán y evaluarán varios algoritmos de minería de datos.</p>
 <p>Preguntó quiénes ya habían instalado <strong>RapidMiner</strong>, que debían tener listo para la primera práctica. Explicó la diferencia entre herramientas: <strong>Python</strong> da control total de cada parámetro y del volumen de datos; <strong>RapidMiner</strong> ofrece un entorno visual con muchos algoritmos ya construidos, ideal para explorar rápido el comportamiento inicial de los datos. Recomendó que uno de los tres integrantes de cada equipo asuma el rol de explorar a fondo RapidMiner y capacitar al resto. Mencionó además un libro guía especializado que explica paso a paso todos los algoritmos de agrupación y segmentación con RapidMiner, y ofreció llevarlo físicamente a la siguiente clase.</p>
 <div class="estudio-extra">
@@ -59,7 +59,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c8-clustering" open><summary><span class="stitle">Fundamentos de los algoritmos de agrupación (clustering)</span></summary>
+<details class="section-block sec" id="c8-clustering"><summary><span class="stitle">Fundamentos de los algoritmos de agrupación (clustering)</span></summary>
 <p>El profesor abrió con una pregunta a una alumna:</p>
 <p><strong>Pregunta:</strong> <em>¿Qué entiendes por un algoritmo de cluster o de agrupación? ¿Cuál es su objetivo?</em><br>
 <strong>Respuesta de la alumna:</strong> separar toda la información e ir haciendo grupos con los valores más cercanos o más parecidos.</p>
@@ -79,7 +79,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c8-kmeans" open><summary><span class="stitle">K-Means, reducción de dimensionalidad (PCA / t-SNE) y métricas de evaluación</span></summary>
+<details class="section-block sec" id="c8-kmeans"><summary><span class="stitle">K-Means, reducción de dimensionalidad (PCA / t-SNE) y métricas de evaluación</span></summary>
 <p><strong>K-Means (K-medias)</strong> agrupa los datos con fronteras de decisión en forma de esferas o círculos basadas en la <strong>distancia Euclidiana</strong>.</p>
 <h4>Funcionamiento paso a paso</h4>
 <ol>
@@ -119,7 +119,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c8-dbscan" open><summary><span class="stitle">DBSCAN y detección de ruido</span></summary>
+<details class="section-block sec" id="c8-dbscan"><summary><span class="stitle">DBSCAN y detección de ruido</span></summary>
 <p>El profesor contrapuso K-Means con <strong>DBSCAN</strong> (<em>Density-Based Spatial Clustering of Applications with Noise</em>). K-Means obliga a todos los puntos a caer en alguna esfera; DBSCAN agrupa según la <strong>densidad y la conectividad espacial</strong> entre puntos vecinos.</p>
 <ul>
 <li><strong>Épsilon (ε):</strong> radio máximo de distancia para que dos puntos se consideren vecinos. El profesor mostró cómo cambia el resultado con ε = 0.1, 0.2 y 0.4.</li>
@@ -136,7 +136,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c8-jerarquico" open><summary><span class="stitle">Clustering jerárquico y el caso Coca-Cola FEMSA</span></summary>
+<details class="section-block sec" id="c8-jerarquico"><summary><span class="stitle">Clustering jerárquico y el caso Coca-Cola FEMSA</span></summary>
 <p>El <strong>clustering jerárquico</strong> construye una estructura en árbol con dos enfoques:</p>
 <ul>
 <li><strong>Aglomerativo (ascendente):</strong> cada punto empieza como su propio clúster y se van uniendo los pares más cercanos.</li>
@@ -152,7 +152,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c8-gmm" open><summary><span class="stitle">Modelo de mezcla gaussiana (GMM) y Mean-Shift</span></summary>
+<details class="section-block sec" id="c8-gmm"><summary><span class="stitle">Modelo de mezcla gaussiana (GMM) y Mean-Shift</span></summary>
 <ul>
 <li><strong>GMM (<em>Gaussian Mixture Model</em>):</strong> supone que los datos vienen de una combinación de distribuciones gaussianas. Es más flexible que K-Means porque admite formas elípticas y varianzas distintas. Se usa sobre todo en reconocimiento de voz y clasificación de imágenes por textura y color.</li>
 <li><strong>Mean-Shift:</strong> desplaza una ventana o radio hacia la zona de mayor densidad de puntos. Se aplica al seguimiento de objetos en video.</li>
@@ -166,7 +166,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c8-imagenes" open><summary><span class="stitle">Segmentación de imágenes por píxeles RGB y estandarización (StandardScaler)</span></summary>
+<details class="section-block sec" id="c8-imagenes"><summary><span class="stitle">Segmentación de imágenes por píxeles RGB y estandarización (StandardScaler)</span></summary>
 <p>Para aplicar agrupación a imágenes se toma cada píxel y se extraen sus valores en el espacio de color <strong>RGB</strong>. Con K-Means (K = 3) los píxeles se agrupan en regiones circulares o esféricas rígidas; con DBSCAN se detectan ramas, sombras y formas irregulares aisladas; con GMM se capturan gradientes y tonalidades con más suavidad.</p>
 <p>Por último, se recalcó el preprocesamiento con <strong>StandardScaler</strong>: los conjuntos de datos mezclan variables con escalas muy distintas (por ejemplo ingresos desde $3,500 hacia arriba frente a edades entre 18 y 60 años), así que es obligatorio estandarizar (normalmente a media 0 y desviación estándar 1) antes de calcular cualquier distancia euclidiana.</p>
 <div class="estudio-extra">

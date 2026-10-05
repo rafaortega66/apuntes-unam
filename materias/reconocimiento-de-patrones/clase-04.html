@@ -19,7 +19,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
 
-<details class="section-block sec" id="c4-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c4-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>La insuficiencia de la exactitud (Accuracy) en problemas con clases desbalanceadas</strong><span class="evid">Evidencia: evidencia de la clase: el profesor lo explicó en detalle con el ejemplo de detección de cáncer donde un modelo con 95% de exactitud no detecta a ningún enfermo.</span></li>
 <li><strong>Matriz de confusión y caracterización de los errores Tipo I y Tipo II</strong><span class="evid">Evidencia: evidencia de la clase: el profesor usó la analogía de la alarma de incendio para definir explícitamente el falso positivo (Tipo I) y el falso negativo (Tipo II).</span></li>
@@ -29,7 +29,7 @@
 </ol>
 </details>
 
-<details class="section-block sec" id="c4-repaso-lda" open><summary><span class="stitle">Repaso de cierre — PCA vs. LDA y otros métodos de reducción</span></summary>
+<details class="section-block sec" id="c4-repaso-lda"><summary><span class="stitle">Repaso de cierre — PCA vs. LDA y otros métodos de reducción</span></summary>
 <p>La sesión arrancó resolviendo dudas de logística de la Práctica 1 (el profesor dio libertad de exponer apoyándose en el código o en el reporte escrito, según lo que cada equipo prefiriera). Después, repasó la diferencia fundamental entre PCA y LDA con una pregunta directa: <em>"¿Se acuerdan cuál era la diferencia más importante entre lo que implica PCA y LDA?"</em> El alumno Sebastián respondió que LDA es un método <strong>supervisado</strong>. El profesor confirmó y precisó: LDA es supervisado porque requiere una <strong>etiqueta (label)</strong> que indica explícitamente a qué clase pertenece cada patrón; PCA, en cambio, es <strong>no supervisado</strong> — no necesita conocer de antemano la clase de los patrones.</p>
 <ul>
 <li>En cuanto a objetivos matemáticos: PCA maximiza la varianza total proyectada; LDA maximiza la separabilidad entre clases.</li>
@@ -46,7 +46,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c4-matriz-confusion" open><summary><span class="stitle">Matriz de confusión y tipos de error</span></summary>
+<details class="section-block sec" id="c4-matriz-confusion"><summary><span class="stitle">Matriz de confusión y tipos de error</span></summary>
 <p><strong>Matriz de confusión:</strong> tabla de contingencia que resume las predicciones de un clasificador. Filas = clases reales (<em>ground truth</em>); columnas = clases predichas. Diagonal principal = aciertos; triángulos = errores.</p>
 <ul>
 <li><strong>VP</strong> (verdadero positivo): era positivo y se predijo positivo.</li>
@@ -62,7 +62,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c4-metricas" open><summary><span class="stitle">Métricas de evaluación</span></summary>
+<details class="section-block sec" id="c4-metricas"><summary><span class="stitle">Métricas de evaluación</span></summary>
 <pre><code>Exactitud (Accuracy)     = (VP + VN) / (VP + FN + FP + VN)
 Precisión                = VP / (VP + FP)          (de lo predicho positivo, cuánto lo era)
 Recall / Sensibilidad    = VP / (VP + FN)          (de lo positivo real, cuánto se capturó)
@@ -81,7 +81,7 @@ Exactitud balanceada     = (Sensibilidad + Especificidad) / 2
 </div>
 </details>
 
-<details class="section-block sec" id="c4-roc-auc" open><summary><span class="stitle">Curva ROC y AUC</span></summary>
+<details class="section-block sec" id="c4-roc-auc"><summary><span class="stitle">Curva ROC y AUC</span></summary>
 <p>La <strong>curva ROC</strong> (Receiver Operating Characteristic) evalúa un clasificador <strong>probabilístico</strong> a lo largo de distintos <strong>umbrales de decisión</strong>.</p>
 <pre><code>Eje X  = FPR (tasa de falsos positivos) = FP / (FP + VN) = 1 − Especificidad
 Eje Y  = TPR (tasa de verdaderos positivos) = VP / (VP + FN) = Recall = Sensibilidad</code></pre>
@@ -102,7 +102,7 @@ Eje Y  = TPR (tasa de verdaderos positivos) = VP / (VP + FN) = Recall = Sensibil
 </div>
 </details>
 
-<details class="section-block sec" id="c4-sesgo-varianza" open><summary><span class="stitle">Sesgo, varianza, underfitting y overfitting</span></summary>
+<details class="section-block sec" id="c4-sesgo-varianza"><summary><span class="stitle">Sesgo, varianza, underfitting y overfitting</span></summary>
 <ul>
 <li><strong>Sesgo (bias):</strong> error sistemático por suposiciones incorrectas o simplificación excesiva. Analogía: arquero que siempre dispara desfasado a la izquierda (consistentemente inexacto).</li>
 <li><strong>Varianza (variance):</strong> sensibilidad excesiva al ruido del conjunto de entrenamiento. Analogía: arquero que dispara en todas direcciones.</li>
@@ -194,7 +194,7 @@ Eje Y  = TPR (tasa de verdaderos positivos) = VP / (VP + FN) = Recall = Sensibil
 </ul>
 </details>
 
-<details class="section-block sec" id="c4-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<details class="section-block sec" id="c4-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
 <ul>
 <li><strong>Viernes:</strong> presentación y evaluación en clase de la Práctica 1.</li>
 <li><strong>Lunes:</strong> inicio del tema de <strong>Clasificadores y Modelado de Patrones</strong>.</li>

@@ -18,7 +18,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
 
-<details class="section-block sec" id="c9-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c9-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>Conversión de direcciones IP entre formato binario de red y texto decimal punteado mediante inet_ntoa e inet_aton</strong><span class="evid">Evidencia: Lo explicó detalladamente desglosando la nemotecnia de cada letra (n = network/binario, a = ASCII/texto) y lo resolvió en vivo dentro del programa 1.</span></li>
 <li><strong>Uso de gethostbyname() y la estructura struct hostent para resolución DNS, incluyendo la necesidad de cast explícito a (struct in_addr **)</strong><span class="evid">Evidencia: Lo resolvió en vivo en la consola mostrando la iteración sobre h_addr_list hasta encontrar el puntero NULL.</span></li>
@@ -29,7 +29,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>ℹ️ Sobre esta página:</strong> se construyó con el audio <code>ACS-Clase9</code>, que continúa exactamente donde terminó la <a href="clase-08.html">Clase 08</a> (<code>sockaddr_in</code> y <code>hostent</code>) y termina hablando de “el martes”. Las IP y el número de direcciones que devuelven Google y la UNAM son las que salieron en esa demo; pueden cambiar en otro momento.</p></div>
 
-<details class="section-block sec" id="c9-hostent" open><summary><span class="stitle">struct hostent y la función gethostbyname()</span></summary>
+<details class="section-block sec" id="c9-hostent"><summary><span class="stitle">struct hostent y la función gethostbyname()</span></summary>
 <p>La clase retomó lo visto en la sesión anterior: los sockets como puntos finales de comunicación entre procesos, la estructura <code>struct sockaddr_in</code> con el tipo <code>in_addr</code> y los dos datos que necesita un cliente para conectarse a un servidor: la <strong>dirección IP (o dominio)</strong> y el <strong>puerto lógico</strong>.</p>
 <p>El problema del día: cómo obtener, desde C, la IP (o la lista de IPs) de un nombre de dominio legible como <code>www.google.com</code>. La biblioteca de C ofrece <code>gethostbyname(const char *name)</code>, que consulta la base de hosts o el servidor DNS del sistema y devuelve un apuntador a una estructura <code>struct hostent</code> (o <code>NULL</code> si el dominio no existe o la consulta falla). Campos principales de <code>struct hostent</code>:</p>
 <table>
@@ -57,7 +57,7 @@ addr_list = (struct in_addr **) he-&gt;h_addr_list;</code></pre>
 </div>
 </details>
 
-<details class="section-block sec" id="c9-inet" open><summary><span class="stitle">Conversión de IP entre binario y decimal punteado: inet_ntoa e inet_aton</span></summary>
+<details class="section-block sec" id="c9-inet"><summary><span class="stitle">Conversión de IP entre binario y decimal punteado: inet_ntoa e inet_aton</span></summary>
 <p>El kernel de Linux y los sockets guardan las IP internamente como enteros en <strong>formato binario de red</strong> (<em>network format</em>), mientras que las personas leemos <strong>notación decimal punteada</strong> (como 142.251.x.x). C ofrece dos funciones para traducir en ambos sentidos, y el profesor desglosó su nemotecnia para evitar confusiones:</p>
 <ul>
 <li><strong><code>inet_</code></strong>: Internet.</li>
@@ -76,7 +76,7 @@ addr_list = (struct in_addr **) he-&gt;h_addr_list;</code></pre>
 </div>
 </details>
 
-<details class="section-block sec" id="c9-demo" open><summary><span class="stitle">Demostración en vivo: dominios, alta disponibilidad y clústers</span></summary>
+<details class="section-block sec" id="c9-demo"><summary><span class="stitle">Demostración en vivo: dominios, alta disponibilidad y clústers</span></summary>
 <p>El profesor compiló y ejecutó el programa de prueba con varios dominios:</p>
 <ul>
 <li><strong><code>www.google.com</code>:</strong> devolvió <strong>8 direcciones IP distintas</strong>, todas con prefijo 142.251.x.x. Al consultar una en una herramienta de geolocalización (IP Location) resultó pertenecer a servidores de Google en Mountain View, California. Los alumnos lo corrieron a la vez en el salón y obtuvieron las mismas 8 IPs, pero <strong>en distinto orden</strong>.</li>
@@ -99,7 +99,7 @@ addr_list = (struct in_addr **) he-&gt;h_addr_list;</code></pre>
 </div>
 </details>
 
-<details class="section-block sec" id="c9-programa3" open><summary><span class="stitle">Formas de extraer la IP y el Programa 3</span></summary>
+<details class="section-block sec" id="c9-programa3"><summary><span class="stitle">Formas de extraer la IP y el Programa 3</span></summary>
 <p>Se presentó el <strong>Programa 3 del tema</strong> (<code>programa3.c</code>), que amplía la inspección de <code>struct hostent</code> y muestra cuatro maneras de obtener e imprimir una IP desde C:</p>
 <ol>
 <li><strong>Método A — <code>inet_ntoa()</code>:</strong> conversión directa de la estructura binaria a texto.</li>
@@ -116,7 +116,7 @@ addr_list = (struct in_addr **) he-&gt;h_addr_list;</code></pre>
 </div>
 </details>
 
-<details class="section-block sec" id="c9-puertos" open><summary><span class="stitle">Puertos lógicos y clasificación de la IANA</span></summary>
+<details class="section-block sec" id="c9-puertos"><summary><span class="stitle">Puertos lógicos y clasificación de la IANA</span></summary>
 <p>Un cliente necesita dos datos del servidor: IP (o dominio) y puerto lógico. El <strong>puerto lógico</strong> es una estructura de software representada por un número de <strong>16 bits sin signo</strong>, lo que da 2<sup>16</sup> = <strong>65,536 puertos</strong>, del 0 al 65535. La <strong>IANA</strong> (<em>Internet Assigned Numbers Authority</em>, iana.org) es la autoridad internacional que regula y asigna la correspondencia de números de puerto. Los puertos se dividen en tres rangos:</p>
 <table>
 <tr><th>Rango</th><th>Nombre</th><th>Reglas</th></tr>
@@ -143,7 +143,7 @@ addr_list = (struct in_addr **) he-&gt;h_addr_list;</code></pre>
 </div>
 </details>
 
-<details class="section-block sec" id="c9-ciclo" open><summary><span class="stitle">Ciclo de vida de un socket: funciones de servidor y cliente</span></summary>
+<details class="section-block sec" id="c9-ciclo"><summary><span class="stitle">Ciclo de vida de un socket: funciones de servidor y cliente</span></summary>
 <p>Al final el profesor proyectó el diagrama que guiará el resto del semestre: la secuencia de funciones en C que ejecutan el servidor y el cliente para comunicarse.</p>
 <pre><code>      SERVIDOR                                CLIENTE
    +------------+                          +------------+

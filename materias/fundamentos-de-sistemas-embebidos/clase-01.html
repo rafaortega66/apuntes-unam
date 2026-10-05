@@ -15,7 +15,7 @@
   <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 26 ago 2026 · Tema 1 — Delimitación conceptual del sistema embebido frente a lo mecánico/analógico, docenas de ejemplos clasificados en vivo, electromecánica de motores, propiedades científicas de los materiales, y definición formal de computadora.</p>
 </div>
 
-<details class="section-block sec" id="c1-definicion-infimo" open><summary><span class="stitle">Definición inicial: el sistema embebido como "ínfimo"</span></summary>
+<details class="section-block sec" id="c1-definicion-infimo"><summary><span class="stitle">Definición inicial: el sistema embebido como "ínfimo"</span></summary>
 <p>El profesor abrió la asignatura planteando el problema de definir con rigor qué es un sistema embebido. Para construirla desde una base técnica, recurrió a un concepto de las matemáticas puras: el <strong>ínfimo</strong>, que define textualmente como "la máxima cota inferior". Con esto estableció que un sistema embebido representa la cota mínima e indispensable de hardware y software necesaria para resolver una tarea específica — ni más ni menos de lo que la tarea exige.</p>
 <p>Para aterrizar la definición, analizó ejemplos cotidianos:</p>
 <ul>
@@ -27,7 +27,7 @@
 </ul>
 </details>
 
-<details class="section-block sec" id="c1-debate-ejemplos" open><summary><span class="stitle">Dinámica de clasificación: propuestas de los estudiantes</span></summary>
+<details class="section-block sec" id="c1-debate-ejemplos"><summary><span class="stitle">Dinámica de clasificación: propuestas de los estudiantes</span></summary>
 <p>El profesor abrió una dinámica de debate evaluando propuestas de dispositivos de los propios estudiantes, aplicando el criterio digital/computadora vs. mecánico/analógico:</p>
 <ul>
 <li><strong>Cámara de seguridad:</strong> digital — sensor + microcontrolador que procesa e interfaz la señal.</li>
@@ -38,12 +38,12 @@
 </ul>
 </details>
 
-<details class="section-block sec" id="c1-medidor-cfe" open><summary><span class="stitle">Caso de estudio: el medidor de consumo eléctrico de la CFE</span></summary>
+<details class="section-block sec" id="c1-medidor-cfe"><summary><span class="stitle">Caso de estudio: el medidor de consumo eléctrico de la CFE</span></summary>
 <p>El <strong>medidor electromecánico antiguo</strong> funcionaba con un inductor por el que circulaba la corriente de la vivienda, generando un campo magnético que hacía girar un disco. Ese giro se transmitía a un tren de engranajes suaves que movían físicamente los contadores numéricos. El lastre de este sistema era su propia <strong>fricción mecánica</strong>: si el consumo de la casa era mínimo (del orden de un nanoamperio), el torque generado por el campo magnético era insuficiente para vencer la fricción de los engranes, y ese consumo simplemente no se registraba.</p>
 <p>En un <strong>medidor digital</strong>, cada transistor tiene una corriente de activación específica; si esa corriente de activación es mayor que el consumo real del hogar, el medidor tampoco se "despierta" ni registra la lectura. El profesor conectó esto con el fenómeno del <strong>consumo fantasma</strong>: los aparatos modernos conectados continuamente en modo de espera (standby) generan un consumo mínimo cada uno. Aunque cada consumo individual sea infinitesimal, matemáticamente la suma de infinitos consumos diminutos no es cero, sino que tiende a un valor significativo — el profesor lo explicó apoyándose en la idea de una sumatoria/límite matemático. Para capturar ese cobro que antes se perdía, la CFE implementó nuevos medidores digitales con corrientes de activación mucho más bajas, capaces de registrar cualquier flujo mínimo de corriente de los aparatos conectados.</p>
 </details>
 
-<details class="section-block sec" id="c1-mas-ejemplos" open><summary><span class="stitle">Más ejemplos: oxímetro, planchadora de tarjetas, termostato bimetálico, semáforo</span></summary>
+<details class="section-block sec" id="c1-mas-ejemplos"><summary><span class="stitle">Más ejemplos: oxímetro, planchadora de tarjetas, termostato bimetálico, semáforo</span></summary>
 <ul>
 <li><strong>Oxímetro:</strong> sistema embebido digital — integra un procesador para controlar el sensor óptico de luz.</li>
 <li><strong>Lector manual de tarjetas de crédito ("planchadora"):</strong> dispositivo mecánico arcaico donde se coloca la tarjeta con números en relieve, se superpone papel carbón y se pasa un rodillo para imprimir los números — puramente físico, no lee los códigos de seguridad traseros ni ejecuta transacción alguna.</li>
@@ -52,12 +52,12 @@
 </ul>
 </details>
 
-<details class="section-block sec" id="c1-electromecanica" open><summary><span class="stitle">Electromecánica de motores y por qué se usa carbón</span></summary>
+<details class="section-block sec" id="c1-electromecanica"><summary><span class="stitle">Electromecánica de motores y por qué se usa carbón</span></summary>
 <p>Al detectar que los estudiantes de Ingeniería en Computación desconocían el funcionamiento de herramientas eléctricas básicas, el profesor explicó el <strong>taladro de corriente alterna</strong>: no contiene imanes permanentes, sino bobinas tanto en el estator como en el rotor. En el eje del rotor hay un conjunto de escobillas que hacen contacto físico con bloques de carbón (el conmutador). Al aplicar corriente se generan polos Norte y Sur magnéticos en estator y rotor, provocando el giro. Para evitar que el motor se detenga cuando los polos opuestos se alinean (Norte con Sur), el propio conmutador invierte la polaridad mecánicamente en cada media vuelta, manteniendo el giro continuo.</p>
 <p>¿Por qué carbón? El contacto entre las escobillas y el conmutador genera fricción intensa; si se usara metal contra cobre, la fricción destruiría las piezas. Se necesita un material suave, conductor de electricidad, que además funcione como lubricante sólido: el carbón cumple las tres condiciones. Se desgasta paulatinamente hasta que el resorte ya no logra empujarlo contra el conmutador, momento en el que el motor se detiene. En vez de desechar la herramienta, el profesor recomendó reemplazar los carbones por unos cuantos pesos en tiendas de refacciones (mencionó la calle República de Uruguay como ejemplo), extendiendo la vida útil del motor de forma muy económica.</p>
 </details>
 
-<details class="section-block sec" id="c1-propiedades-materiales" open><summary><span class="stitle">Definiciones científicas de propiedades de los materiales</span></summary>
+<details class="section-block sec" id="c1-propiedades-materiales"><summary><span class="stitle">Definiciones científicas de propiedades de los materiales</span></summary>
 <ul>
 <li><strong>Dureza:</strong> definida rigurosamente en ingeniería como "alta resistencia a la fricción, no se raya". Suele estar asociada a la <strong>fragilidad</strong>. Ejemplo del diamante: es el material más duro químicamente estable en la Tierra, raya cualquier superficie, pero al ser frágil se puede fracturar de un golpe seco. Ejemplo del aluminio: es duro y quebradizo en comparación con el acero.</li>
 <li><strong>Tenacidad o extensibilidad:</strong> el acero, bajo la definición científica estricta, no es "duro" (se raya si se le talla con algo más duro), pero tiene la capacidad de deformarse o doblarse sin romperse, lo que lo hace ideal para estructuras.</li>
@@ -65,7 +65,7 @@
 </ul>
 </details>
 
-<details class="section-block sec" id="c1-tabla-final" open><summary><span class="stitle">Clasificación exhaustiva del resto de ejemplos propuestos</span></summary>
+<details class="section-block sec" id="c1-tabla-final"><summary><span class="stitle">Clasificación exhaustiva del resto de ejemplos propuestos</span></summary>
 <table><thead><tr><th>Dispositivo</th><th>Clasificación</th><th>Justificación</th></tr></thead><tbody>
 <tr><td>Frenos ABS</td><td>Sistema embebido / digital</td><td>Control completamente electrónico con sensores de velocidad en las ruedas y procesamiento digital.</td></tr>
 <tr><td>Impresora</td><td>Sistema embebido / digital</td><td>Requiere microcontrolador para coordinar el motor a pasos e inyectar las burbujas de tinta.</td></tr>
@@ -95,7 +95,7 @@
 <p>Al concluir la revisión, el profesor señaló a la clase que quienes clasificaron ejemplos analógicos o mecánicos como "sistemas embebidos" cometieron el error conceptual central que la clase buscaba corregir.</p>
 </details>
 
-<details class="section-block sec" id="c1-computadora" open><summary><span class="stitle">Definición formal de computadora y procesadores</span></summary>
+<details class="section-block sec" id="c1-computadora"><summary><span class="stitle">Definición formal de computadora y procesadores</span></summary>
 <p>Para cerrar la sesión e iniciar formalmente el estudio de los procesadores, el profesor definió una computadora como: <em>"una máquina que consta de elementos de entrada, elementos de salida, procesador central y memoria"</em>.</p>
 </details>
 
@@ -111,7 +111,7 @@
 </ul>
 </details>
 
-<details class="section-block sec" id="c1-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<details class="section-block sec" id="c1-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
 <ul>
 <li><strong>Próxima sesión:</strong> inicio formal del estudio de los procesadores y arquitecturas de microcontroladores (PIC, AVR, entre otros).</li>
 <li><strong>Indicación académica:</strong> repasar y estudiar las definiciones fundamentales de sistemas embebidos vistas hoy, diferenciando claramente lo digital de lo mecánico/analógico/electromecánico.</li>

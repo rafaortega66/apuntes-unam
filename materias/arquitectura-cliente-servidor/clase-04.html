@@ -18,7 +18,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
 
-<details class="section-block sec" id="c4-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c4-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>Explicación de la familia de 6 funciones exec (execl, execv, execle, execve, execlp, execvp) y la diferencia de los sufijos l, v, e, p</strong><span class="evid">Evidencia: Lo explicó en el pizarrón y lo dejó explícitamente como tarea moral para la siguiente clase.</span></li>
 <li><strong>Reemplazo completo de la imagen del proceso mediante exec y la repetición del argumento cero (argv) con el nombre del ejecutable</strong><span class="evid">Evidencia: Lo resolvió en vivo analizando el programa 10 con execl("/bin/ls", "ls", "-l", "/", NULL).</span></li>
@@ -28,7 +28,7 @@
 </ol>
 </details>
 
-<details class="section-block sec" id="c4-strerror" open><summary><span class="stitle"><code>strerror()</code> y los códigos de error de Linux</span></summary>
+<details class="section-block sec" id="c4-strerror"><summary><span class="stitle"><code>strerror()</code> y los códigos de error de Linux</span></summary>
 <p><code>strerror(n)</code> — "devuelve el mensaje de sistema correspondiente al código que le pasas como parámetro". El prefijo <code>str</code> es por <em>string</em>: devuelve la cadena de texto asociada al código numérico. Análisis de <code>programa03_codigos_sistema.c</code>:</p>
 <pre><code>int i;
 for (i = 0; i &lt;= 150; i++)          /* el límite se puede subir a 200 para probar */

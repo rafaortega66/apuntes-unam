@@ -18,7 +18,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
 
-<details class="section-block sec" id="c2-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c2-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>Incompatibilidad de programas de punto flotante compilados para Pico 2 al intentarse ejecutar en la Pico 1</strong><span class="evid">Evidencia: Lo dijo explícitamente al detallar la diferencia fundamental entre procesadores en ensamblador.</span></li>
 <li><strong>Disponibilidad de 32 registros de punto flotante en la FPU de la Pico 2 para implementar funciones complejas</strong><span class="evid">Evidencia: Lo dijo explícitamente al explicar el modelo de registros de la Pico 2.</span></li>
@@ -29,7 +29,7 @@
 </ol>
 </details>
 
-<details class="section-block sec" id="c2-antecedentes" open><summary><span class="stitle">Antecedentes tecnológicos, lecturas y herramientas del curso</span></summary>
+<details class="section-block sec" id="c2-antecedentes"><summary><span class="stitle">Antecedentes tecnológicos, lecturas y herramientas del curso</span></summary>
 <p>La sesión comenzó con una revisión de material de lectura e historia de componentes de hardware. Entre las referencias históricas, se comentó el impacto del procesador <strong>IBM 180</strong>, que representó un hito en su momento, y hitos del nacimiento de la electrónica y la programación como el origen del temporizador 555 y de <strong>Texas Instruments</strong> — que originalmente inició como compañía petrolera antes de convertirse en un gigante de la electrónica (hoy destaca por sensores y chips biomédicos).</p>
 <p>Como lecturas y recursos recomendados para enriquecer el aprendizaje se sugirió el artículo <em>"He creado una CPU de 8 bits, corre tu propio juego"</em>, así como artículos sobre la diferencia conceptual y estructural entre microcontroladores y microprocesadores. En cuanto a software y herramientas de laboratorio, se presentó el <strong>Osciloscopio Virtual v3</strong> (con correcciones de errores y mejoras respecto a versiones previas) y una <strong>terminal web</strong> ejecutable directamente sin instalación previa.</p>
 <div class="estudio-extra">
@@ -40,7 +40,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c2-fpu" open><summary><span class="stitle">Diferencias de hardware entre Pico 1 y Pico 2: FPU y registros</span></summary>
+<details class="section-block sec" id="c2-fpu"><summary><span class="stitle">Diferencias de hardware entre Pico 1 y Pico 2: FPU y registros</span></summary>
 <p>Un bloque central de la clase fue el análisis comparativo entre la Raspberry Pi Pico 1 y la Pico 2. Aunque en lenguajes de alto nivel las diferencias en operaciones matemáticas no son tan evidentes, la Pico 2 incorpora una <strong>Unidad de Punto Flotante (FPU)</strong> que la Pico 1 no tiene físicamente. La Pico 2 dispone de <strong>32 registros de punto flotante</strong>, dando un espacio amplio para operaciones matemáticas complejas e implementar funciones que no existen por defecto.</p>
 <p>Esta diferencia arquitectónica impone una restricción estricta de portabilidad: un programa en ensamblador compilado con instrucciones de FPU para la Pico 2 <strong>no podrá ejecutarse en la Pico 1</strong>, ya que esta última carece por completo de la FPU a nivel físico — no es una limitación de software, es una ausencia real de hardware.</p>
 <div class="estudio-extra">
@@ -52,7 +52,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c2-mac-dma" open><summary><span class="stitle">Unidad multiplicadora (MAC), bootloader y acceso directo a registros</span></summary>
+<details class="section-block sec" id="c2-mac-dma"><summary><span class="stitle">Unidad multiplicadora (MAC), bootloader y acceso directo a registros</span></summary>
 <p>Además de la FPU, la arquitectura de la Pico 2 incorpora teóricamente una <strong>unidad de multiplicación acumulativa (MAC)</strong>, similar a la que tienen los procesadores de señales digitales (DSP). Sin embargo, el profesor señaló que al intentar acceder a este módulo a través de los entornos de desarrollo disponibles, no fue posible utilizarla — todavía no está integrada al software de desarrollo. De forma paralela, el <strong>bootloader</strong> oficial del fabricante aún no distingue entre Pico 1 y Pico 2: es el mismo para ambas tarjetas.</p>
 <p>El profesor enfatizó la importancia de no depender únicamente del software de alto nivel: al requerir el direccionamiento directo de los registros internos de la tarjeta, surgen limitaciones reales de las librerías comerciales estándar. Un ejemplo concreto es el <strong>Acceso Directo a Memoria (DMA)</strong>: ante el rendimiento insatisfactorio de las librerías estándar de DMA, el profesor desarrolló su propia librería para manejar imágenes directamente.</p>
 <div class="estudio-extra">
@@ -64,7 +64,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c2-bootloader-alt" open><summary><span class="stitle">Bootloaders alternativos, librerías matemáticas y proyectos aplicados</span></summary>
+<details class="section-block sec" id="c2-bootloader-alt"><summary><span class="stitle">Bootloaders alternativos, librerías matemáticas y proyectos aplicados</span></summary>
 <p>Para superar las limitaciones del bootloader oficial, se analizó el uso de un bootloader alternativo (transcrito de forma imprecisa como "Pori Bimor"). Este bootloader permite ejecutar una librería matemática reducida con capacidades similares a los módulos matemáticos de Python completo, para operaciones matriciales y solución de ecuaciones.</p>
 <p>Junto con esta librería, el material del curso integra otros controladores y ejemplos prácticos:</p>
 <ul>
@@ -81,7 +81,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c2-fpu64" open><summary><span class="stitle">Arquitecturas especializadas (FPU64) y bibliografía de algoritmos</span></summary>
+<details class="section-block sec" id="c2-fpu64"><summary><span class="stitle">Arquitecturas especializadas (FPU64) y bibliografía de algoritmos</span></summary>
 <p>Se presentó información sobre el microcontrolador <strong>FPU64</strong>: una arquitectura de 64 bits que opera a una frecuencia relativamente baja de 40 MHz, cuya particularidad técnica radica en la potencia de su conjunto de instrucciones en ensamblador, al punto de no necesitar componentes adicionales para tareas que en otras arquitecturas requerirían periféricos extra. El profesor hizo referencia a sus propios trabajos de investigación de maestría relacionados con este tipo de arquitecturas.</p>
 <p>Como bibliografía clave para implementar algoritmos en ingeniería, se recomendó el libro <strong>Numerical Recipes (in C)</strong>, que da algoritmos listos para operaciones numéricas como integración y derivación — se sugirió consultar la versión de dominio público en formato digital en vez de comprarlo.</p>
 <div class="estudio-extra">
@@ -113,7 +113,7 @@
 </ul>
 </details>
 
-<details class="section-block sec" id="c2-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<details class="section-block sec" id="c2-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
 <ul>
 <li><strong>Distribución del material digital:</strong> los alumnos deben copiar y compartirse las carpetas con el software y herramientas (Osciloscopio Virtual v3, Assembler Pico, terminal web) y ejemplos de código.</li>
 <li><strong>Grupo de comunicación:</strong> los estudiantes organizaron un grupo de WhatsApp durante el cierre de la clase para coordinar el envío de materiales.</li>

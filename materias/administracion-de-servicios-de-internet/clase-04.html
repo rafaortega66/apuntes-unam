@@ -18,7 +18,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #7C9CD6"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
 
-<details class="section-block sec" id="c4-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c4-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>El proceso DORA (Discover, Offer, Request, Acknowledge) y su diferencia operativa entre las redes RIU y PC Puma de la UNAM</strong><span class="evid">Evidencia: Lo explicó detalladamente al definir el ciclo de asignación automática de direcciones IP y la liberación de concesiones inactivas.</span></li>
 <li><strong>Los 6 componentes esenciales de la configuración DHCP (Ámbito, Tiempo de concesión, Gateway, Servidor DNS, Reservas y Exclusiones)</strong><span class="evid">Evidencia: Los enumeró explícitamente uno por uno en la presentación y detalló la función de cada uno.</span></li>
@@ -28,7 +28,7 @@
 </ol>
 </details>
 
-<details class="section-block sec" id="c4-dns-dhcp" open><summary><span class="stitle">DNS vs. DHCP: la analogía de la agenda telefónica</span></summary>
+<details class="section-block sec" id="c4-dns-dhcp"><summary><span class="stitle">DNS vs. DHCP: la analogía de la agenda telefónica</span></summary>
 <p>El profesor invitado, Mtro. Baldomero de Jesús Hernández Bañuelos, abrió la clase explicando la diferencia entre el servidor <strong>DNS (Domain Name System)</strong> y el servidor <strong>DHCP (Dynamic Host Configuration Protocol)</strong>. El DNS es el "traductor" de la red: transforma nombres de dominio en direcciones IP (por ejemplo del rango 192.168.x.x o 172.x.x.x). Para ilustrarlo, usó la analogía de la agenda telefónica de un celular — guardamos nombres, no números, y el teléfono hace la traducción por nosotros.</p>
 <p>Pero detrás del DNS hay un actor indispensable: el <strong>DHCP</strong>. Mientras el DNS traduce nombres, el DHCP es el encargado de administrar y distribuir las direcciones IP mismas. Sin un servidor DHCP, la asignación de direcciones IP tendría que hacerse manualmente, dispositivo por dispositivo.</p>
 <div class="estudio-extra">
@@ -40,7 +40,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c4-historia" open><summary><span class="stitle">Evolución histórica: de las operadoras manuales a la automatización</span></summary>
+<details class="section-block sec" id="c4-historia"><summary><span class="stitle">Evolución histórica: de las operadoras manuales a la automatización</span></summary>
 <p>Para explicar la necesidad de automatizar la asignación de IPs, el profesor hizo un repaso histórico recordando el funcionamiento de Teléfonos de México (Telmex): en sus inicios, las llamadas no se enrutaban automáticamente, sino que requerían operadoras humanas conectando físicamente los cables. Al crecer el volumen de llamadas, fue necesario automatizar ese proceso.</p>
 <p>En la administración de redes ocurrió una transición idéntica: antes se requería la presencia física de ingenieros expertos en equipos Cisco o Frecom para configurar direccionamiento manualmente. Con la creación del servidor DHCP, ese proceso se automatizó por completo — el administrador de red define reglas generales y el servidor se encarga de asignar cada IP.</p>
 <div class="estudio-extra">
@@ -52,7 +52,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c4-iot" open><summary><span class="stitle">La explosión de IoT y la impracticabilidad del direccionamiento estático</span></summary>
+<details class="section-block sec" id="c4-iot"><summary><span class="stitle">La explosión de IoT y la impracticabilidad del direccionamiento estático</span></summary>
 <p>La importancia del DHCP ha aumentado drásticamente por la masiva proliferación de dispositivos IoT: en un hogar promedio puede haber entre 15, 20 o hasta 100 dispositivos conectados (celulares, smart TVs, focos inteligentes, asistentes de voz, etc.). El profesor preguntó al grupo si alguien configuraba manualmente la dirección MAC de cada dispositivo en casa — si el direccionamiento manual resulta impráctico incluso en un hogar, en una empresa con cientos de nodos es sencillamente inviable. El servidor DHCP ahorra tener que hacer subneteo manual y configuraciones complejas en cada router.</p>
 <div class="estudio-extra">
 <span class="lbl">Explicado en simple</span>
@@ -63,7 +63,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c4-seguridad" open><summary><span class="stitle">Seguridad en DHCP: amenazas y mecanismos de protección</span></summary>
+<details class="section-block sec" id="c4-seguridad"><summary><span class="stitle">Seguridad en DHCP: amenazas y mecanismos de protección</span></summary>
 <p>A pesar de sus ventajas, el direccionamiento automático introduce vulnerabilidades importantes. El profesor introdujo el concepto de <strong>DMZ (Zonas Desmilitarizadas)</strong>, que funcionan como "campos minados virtuales" con alarmas para detectar intrusiones. Las principales amenazas analizadas:</p>
 <ul>
 <li><strong>Ataque de Denegación de Servicio (DoS) por agotamiento de IP:</strong> como el servidor DHCP administra un pool limitado de direcciones, un atacante puede solicitar masivamente IPs falsas hasta agotar el rango disponible, dejando sin servicio a usuarios legítimos.</li>
@@ -81,7 +81,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c4-ventajas" open><summary><span class="stitle">Ventajas operativas y empresariales del DHCP</span></summary>
+<details class="section-block sec" id="c4-ventajas"><summary><span class="stitle">Ventajas operativas y empresariales del DHCP</span></summary>
 <p>La automatización del DHCP elimina la necesidad de llevar una bitácora manual detallada que vincule cada nodo de la empresa con sus puertos e IPs asignadas, liberando tiempo del administrador de red. El profesor aclaró que instituciones con requerimientos de seguridad extremos (como bancos o el ejército) sí pueden preferir asignación estática pese al costo operativo, precisamente para minimizar superficie de ataque. Entre las ventajas principales:</p>
 <ul>
 <li><strong>Simplificación de la administración:</strong> genera un mapa o árbol de la topología de red que permite identificar rápidamente los dominios de colisión.</li>
@@ -97,7 +97,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c4-dora" open><summary><span class="stitle">El proceso DORA y el caso PC Puma vs. RIU (UNAM)</span></summary>
+<details class="section-block sec" id="c4-dora"><summary><span class="stitle">El proceso DORA y el caso PC Puma vs. RIU (UNAM)</span></summary>
 <p>El funcionamiento interno del DHCP para asignar una IP se ejecuta mediante el proceso <strong>DORA</strong>:</p>
 <table><thead><tr><th>Paso</th><th>Acción técnica</th></tr></thead><tbody>
 <tr><td><strong>D</strong>iscover (Descubrir)</td><td>El dispositivo cliente envía un mensaje de difusión (broadcast) a la red buscando un servidor DHCP activo.</td></tr>
@@ -115,7 +115,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c4-componentes" open><summary><span class="stitle">Los 6 componentes esenciales de la configuración DHCP</span></summary>
+<details class="section-block sec" id="c4-componentes"><summary><span class="stitle">Los 6 componentes esenciales de la configuración DHCP</span></summary>
 <ul>
 <li><strong>Ámbito (Scope):</strong> rango delimitado de direcciones IP que el servidor está autorizado a entregar (ej. de la <code>192.168.1.100</code> a la <code>192.168.1.200</code>). El profesor recordó que la primera IP identifica la red, la terminación <code>.255</code> se reserva para broadcast, y habitualmente la <code>.1</code> se asigna a la puerta de enlace. En empresas, los ámbitos se segmentan por departamento (ej. Contabilidad IPs 10-20, Finanzas 20-40).</li>
 <li><strong>Tiempo de concesión (Lease Time):</strong> periodo durante el cual el cliente puede conservar la IP asignada. Puede configurarse en segundos, minutos u horas, para desconectar nodos inactivos y liberar espacio. Se comparó el comportamiento de proveedores móviles frente a redes Wi-Fi domésticas.</li>
@@ -133,7 +133,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c4-practica" open><summary><span class="stitle">Práctica de laboratorio: de ISC DHCP a KEA DHCP</span></summary>
+<details class="section-block sec" id="c4-practica"><summary><span class="stitle">Práctica de laboratorio: de ISC DHCP a KEA DHCP</span></summary>
 <p><strong>Requisitos de la máquina virtual:</strong> la interfaz de red de la VM en VirtualBox/VMware debe configurarse en modo Puente (Bridge) o NAT, asegurando que la IP asignada esté dentro del rango del servidor DHCP, con permisos <code>sudo</code> y conexión a Internet.</p>
 <p><strong>Implementación con ISC DHCP tradicional:</strong></p>
 <ol>
@@ -192,7 +192,7 @@
 </ul>
 </details>
 
-<details class="section-block sec" id="c4-pendiente" open><summary><span class="stitle">Pendiente / próxima clase — Práctica 2 de Laboratorio</span></summary>
+<details class="section-block sec" id="c4-pendiente"><summary><span class="stitle">Pendiente / próxima clase — Práctica 2 de Laboratorio</span></summary>
 <ul>
 <li><strong>Contenido:</strong> el reporte debe incluir la documentación completa de <strong>ambas instalaciones</strong> (<code>isc-dhcp-server</code> y <code>kea-dhcp4-server</code>), mostrando los comandos ejecutados, la edición de los archivos de configuración, el reinicio del servicio y la verificación del <code>status</code>.</li>
 <li><strong>Estructura del reporte:</strong> todas las capturas y explicaciones de ambas instalaciones van dentro de la sección "Desarrollo". Para esta práctica <strong>no se incluye la sección de Resultados</strong>.</li>

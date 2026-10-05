@@ -18,7 +18,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #7C9CD6"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
 
-<details class="section-block sec" id="c9-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c9-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>Parámetros y modificadores del comando Nmap (-sn, -sS, -sV, -O, -A)</strong><span class="evid">Evidencia: Lo explicó paso a paso en la terminal, ejecutó cada comando en vivo y mostró sus salidas y diferencias.</span></li>
 <li><strong>Diferencia entre la interfaz de red Ethernet eth0 y la interfaz de loopback lo (127.0.0.1)</strong><span class="evid">Evidencia: Lo preguntó a la clase y lo explicó al ejecutar ip a para revisar las direcciones IP de la máquina virtual.</span></li>
@@ -30,7 +30,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #7C9CD6"><p style="margin:0"><strong>⚠️ Por verificar en Classroom:</strong> las fechas de entrega de esta clase (práctica individual de Kali y Reporte 1 de Scrum) salen solo del audio. Recuerda que Classroom es la fuente de verdad para fechas y ya hubo un caso donde difería del audio.</p></div>
 
-<details class="section-block sec" id="c9-repaso" open><summary><span class="stitle">Repaso de Kali Linux y Metasploit</span></summary>
+<details class="section-block sec" id="c9-repaso"><summary><span class="stitle">Repaso de Kali Linux y Metasploit</span></summary>
 <p>La primera parte fue un repaso de la sesión anterior sobre Kali Linux y el framework Metasploit. El profesor preguntó qué es Kali Linux y un alumno respondió que es un sistema operativo enfocado en ciberseguridad. Se recordó que en la clase previa se usó Metasploit para escanear puertos abiertos e inspeccionar sitios web. Ante la pregunta de qué puertos se habían detectado, los alumnos identificaron el <strong>80 (HTTP)</strong> y el <strong>443 (HTTPS)</strong>, y mencionaron brevemente servicios como FTP.</p>
 <p>Se analizó por qué importa la <strong>dirección IP</strong> obtenida en la auditoría: permite saber si los servicios web están concentrados en un solo servidor local o virtualizados en la nube. El profesor comentó que algunas universidades alojan sus páginas localmente con servidores como Apache o Tomcat. También se recordó que en los ejercicios anteriores se analizaron cuatro segmentos de red y que sitios como el de la UNAM usan protección perimetral como <strong>Cloudflare</strong>; a la duda de por qué la universidad invierte en eso, explicó que ya sufrió ataques cibernéticos y busca resguardar su infraestructura.</p>
 <p>Reiteró que las herramientas de Metasploit no se usan con fines maliciosos, sino para <strong>recolección de información con propósitos académicos</strong>. En la terminal de Metasploit se trabaja con librerías auxiliares (<code>auxiliary</code>), la dirección objetivo se guarda en la variable <code>RHOSTS</code> (<em>Remote Host</em>) y la configuración se verifica con <code>show options</code>.</p>
@@ -42,7 +42,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c9-http" open><summary><span class="stitle">Escaneo de encabezados HTTP y detección de infraestructura</span></summary>
+<details class="section-block sec" id="c9-http"><summary><span class="stitle">Escaneo de encabezados HTTP y detección de infraestructura</span></summary>
 <p>Con Metasploit se analizaron los encabezados HTTP de servidores objetivo, como el del Politécnico (<code>www.ipn.mx</code>). El profesor preguntó por qué tomarlo de ejemplo y señaló que en implementaciones débiles o sin protección todos los servicios corren dentro de una sola máquina. Eso es un riesgo crítico de <strong>disponibilidad</strong>: si un atacante compromete o tira ese equipo, no hay redundancia ni respaldos activos.</p>
 <p>Al ejecutar el módulo de escaneo de directorios y encabezados HTTP, el sistema devolvió un <strong>Error HTTP 404 (Not Found)</strong> y se quedó reintentando. Cuando el profesor preguntó qué estaba impidiendo el escaneo, los alumnos respondieron que la infraestructura está respaldada por la nube de <strong>Microsoft Azure</strong>, cuya protección perimetral filtra y bloquea las peticiones de Metasploit e impide navegar los directorios. Conclusión: en ese escenario Metasploit solo sirvió para identificar puertos abiertos, no para vulnerar la aplicación.</p>
 <div class="estudio-extra">
@@ -54,7 +54,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c9-nmap" open><summary><span class="stitle">Detección de hosts y escaneo avanzado de puertos con Nmap</span></summary>
+<details class="section-block sec" id="c9-nmap"><summary><span class="stitle">Detección de hosts y escaneo avanzado de puertos con Nmap</span></summary>
 <p>Tras ver las limitaciones de Metasploit en redes protegidas, el profesor presentó <strong>Nmap</strong> (<em>Network Mapper</em>) en la terminal de Kali. Escribir solo <code>nmap</code> muestra la sintaxis básica y exige una IP o un rango de red objetivo.</p>
 <p>Antes de escanear se revisó la configuración de red propia con <code>ip a</code> (o <code>ip addr</code>). Interfaces que se explicaron:</p>
 <ul>
@@ -93,7 +93,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c9-automatizacion" open><summary><span class="stitle">Automatización de auditorías con Bash e integración con Python</span></summary>
+<details class="section-block sec" id="c9-automatizacion"><summary><span class="stitle">Automatización de auditorías con Bash e integración con Python</span></summary>
 <p>El profesor explicó cómo automatizar estos procesos en la administración de servidores. Al preguntar qué es Bash, un alumno respondió que es un intérprete de terminal y una forma de ejecutar comandos automáticamente. El profesor confirmó que en Linux la programación a nivel de sistema operativo se hace con <em>scripts</em> (extensión <code>.sh</code>) que ejecuta el intérprete Bash.</p>
 <p>Se planteó la estrategia de programar un script en Bash que lance un escaneo sigiloso (<code>nmap -sS</code>) con un temporizador (<em>cron job</em> o <em>timer</em>), por ejemplo cada hora, para auditar la red de forma constante y generar un reporte automático si se abre un puerto nuevo o aparece una vulnerabilidad. Además se destacó la integración con <strong>Python</strong>: un script conectado a las salidas de Nmap puede procesar los resultados y enviar alertas en tiempo real (por ejemplo, mensajes automáticos por WhatsApp o SMS) a los administradores cuando ocurra un evento crítico.</p>
 <div class="estudio-extra">
@@ -104,7 +104,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c9-herramientas" open><summary><span class="stitle">Asignación individual de herramientas de hacking ético en Kali Linux</span></summary>
+<details class="section-block sec" id="c9-herramientas"><summary><span class="stitle">Asignación individual de herramientas de hacking ético en Kali Linux</span></summary>
 <p>Para cerrar el trabajo práctico con Kali, el profesor fijó la dinámica de la <strong>práctica individual</strong>: cada alumno elige una herramienta de ciberseguridad incluida en Kali, la investiga y documenta su funcionamiento paso a paso en la sección de “Resultados” del reporte. Restricciones:</p>
 <ul>
 <li>Quedaron prohibidas <strong>Metasploit</strong> y <strong>Nmap</strong> (ya se explicaron a detalle en clase).</li>

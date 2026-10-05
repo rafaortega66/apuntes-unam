@@ -18,7 +18,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #7C9CD6"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
 
-<details class="section-block sec" id="c8-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<details class="section-block sec" id="c8-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
 <ol class="examen-lista">
 <li><strong>Diferencia técnica y económica entre asesorías y consultorías de ciberseguridad</strong><span class="evid">Evidencia: Lo explicó detalladamente al presentar Kali Linux, comparando costos, aprendizaje del personal y tiempos de respuesta.</span></li>
 <li><strong>Tipos de hackers (sombrero blanco, negro y gris) y su caracterización en el mundo real</strong><span class="evid">Evidencia: Lo desglosó al explicar quiénes utilizan Kali Linux, afirmando que el gris busca aprender y que en la vida real todos están en un punto medio.</span></li>
@@ -30,7 +30,7 @@
 
 <div class="section-block nota" style="border-left:3px solid #7C9CD6"><p style="margin:0"><strong>📋 Nota:</strong> esta sesión no corresponde a un tema del temario oficial de la materia (servidores de correo, conexión remota, aplicaciones, archivos, directorios, web) — fue una introducción práctica a herramientas de ciberseguridad ofensiva (Kali Linux, Metasploit, Nmap), aplicada en vivo contra sitios reales con fines exclusivamente académicos.</p></div>
 
-<details class="section-block sec" id="c8-kali" open><summary><span class="stitle">Kali Linux: qué es y quién lo usa</span></summary>
+<details class="section-block sec" id="c8-kali"><summary><span class="stitle">Kali Linux: qué es y quién lo usa</span></summary>
 <p>El profesor presentó <strong>Kali Linux</strong> como una distribución que ya trae precargado todo un ecosistema de herramientas de seguridad, sin necesidad de instalar casi nada por separado: sirve para análisis de vulnerabilidades, recolección de datos, mapeo de redes, e identificación de puertos abiertos y cerrados.</p>
 <p>Sobre su modelo de negocio: Kali es <strong>gratis, pero solo hasta cierto punto</strong> — las funciones más avanzadas se cobran a través de servicios de <strong>asesoría</strong> o <strong>consultoría</strong>. La diferencia entre ambas: en la <strong>asesoría</strong>, el proveedor le indica a alguien de la empresa cómo hacer las cosas — es más barata y, según el profesor, más conveniente a largo plazo porque el personal interno va aprendiendo a resolver problemas similares en el futuro. En la <strong>consultoría</strong>, el proveedor resuelve el problema directamente y se retira, sin explicar necesariamente qué hizo ni dejar ese conocimiento documentado — es más cara, pero muchas empresas la prefieren porque implica menos tiempo invertido de su parte.</p>
 <p>Características técnicas que mencionó: cuenta con más de <strong>600 herramientas</strong>, tiene buen soporte, ofrece la información en distintos idiomas, no es complicado de instalar, maneja sistemas de archivos y conexiones a bases de datos, y su última versión ya incorpora un bloque de inteligencia artificial. Contó también que en 2024 se rumoraba que Kali iba a desaparecer — desapareció unos meses y luego regresó — mientras que otra herramienta que sí desapareció por completo fue la que se usaba como "servidor para servidores" para manejar grandes volúmenes de información (mencionada de forma poco clara en el audio como "Centro"; se usaba mucho en conferencias sobre manejo de grandes volúmenes de datos).</p>
@@ -44,7 +44,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c8-hackers" open><summary><span class="stitle">Tipos de hacker</span></summary>
+<details class="section-block sec" id="c8-hackers"><summary><span class="stitle">Tipos de hacker</span></summary>
 <p>El profesor repasó la clasificación clásica: <strong>hacker blanco</strong> (el "bueno", que reporta vulnerabilidades de forma ética), <strong>hacker negro</strong> (el "malo", que las explota con fines dañinos) y <strong>hacker gris</strong>, que según él es donde debería ubicarse la mayoría de la gente que apenas está aprendiendo: "no soy ni bueno ni malo, simplemente quiero aprender". Insistió en que en la vida real no existe un bueno o malo puro — la mayoría de quienes trabajan en esto se mueven en ese punto intermedio.</p>
 <div class="estudio-extra">
 <span class="lbl">Explicado en simple</span>
@@ -55,7 +55,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c8-metasploit" open><summary><span class="stitle">Práctica 1: Metasploit</span></summary>
+<details class="section-block sec" id="c8-metasploit"><summary><span class="stitle">Práctica 1: Metasploit</span></summary>
 <p>Antes de la demostración, un alumno definió Metasploit como una herramienta que "encuentra una vulnerabilidad en un sistema y entra". El profesor complementó: Metasploit <strong>inyecta código</strong> en un sistema — dando solo una dirección IP y un puerto es posible obtener información valiosa del servidor. Usó una analogía médica para explicarlo: en un electrocardiograma, se inyecta un líquido radioactivo que ilumina las venas del cuerpo, y donde el flujo se detiene, ahí está el bloqueo que causó el infarto — así los médicos detectan rápido dónde operar. De forma similar, Metasploit "inyecta" a través de un puerto y, si tiene éxito, revela información del servidor objetivo: puertos abiertos, dirección IP, máscara de red, proveedor de hosting (Microsoft, Google, local, Linux, etc.). Mencionó que empresas que ofrecen hosting de páginas web con ciberseguridad incluida hacen, como mínimo, un rastreo básico con Metasploit antes de publicar un sitio.</p>
 <p>Definición formal que se proyectó: <strong>Metasploit es un framework de código abierto utilizado principalmente para realizar pruebas de penetración, desarrollar y ejecutar exploits, e identificar y explotar vulnerabilidades en sistemas informáticos.</strong></p>
 <p>Repasaron puertos comunes como repaso rápido: <strong>80</strong> (HTTP), <strong>8080</strong>, y la diferencia entre HTTP y <strong>HTTPS</strong> (la "S" final indica que el protocolo es seguro), además de <strong>FTP</strong>. Explicó que un hacker blanco, en teoría, va probando puerto por puerto de forma sistemática. Mencionó otras herramientas similares que también vienen incluidas en Kali (los nombres se distinguen con dificultad en el audio, pero corresponden a herramientas de escaneo/pentesting conocidas del ecosistema, como Nmap, Burp Suite, Nessus y Wireshark) — algunas ya las habían tocado superficialmente en la materia de Redes, aunque solo para observar tráfico, sin llegar a extraer o analizar tramas a fondo.</p>
@@ -84,7 +84,7 @@
 </div>
 </details>
 
-<details class="section-block sec" id="c8-nmap" open><summary><span class="stitle">Práctica: Nmap</span></summary>
+<details class="section-block sec" id="c8-nmap"><summary><span class="stitle">Práctica: Nmap</span></summary>
 <p>Continuando la práctica, el profesor introdujo <strong>Nmap</strong> como otra herramienta de escaneo de puertos, también incluida en Kali. La corrió contra el mismo sitio de la UNAM: el escaneo tardó apenas unas <strong>0.04 segundos</strong> y encontró solo <strong>2 puertos abiertos</strong> (el 80 y otro adicional), de un total de cientos revisados.</p>
 <p>Explicó que Nmap, a diferencia de un escaneo simple de tráfico (como el que ya habían hecho de forma muy básica en Redes, solo observando el envío de paquetes), permite ver directamente <strong>qué puertos están abiertos</strong> y, además, <strong>qué versión de cada servicio</strong> está corriendo — dato que consideró clave, porque una versión antigua de un servicio (puso como ejemplo Python 2.0, muy distinto y con más fallas que Python 3) puede tener vulnerabilidades conocidas y explotables. Mencionó la <strong>inyección SQL</strong> como ejemplo de ataque que se puede investigar una vez identificado un servicio vulnerable, con el objetivo de tirar o romper el sistema. Hizo una analogía con los módems antiguos: cuando se perdía la conexión y alguien lo reiniciaba, ese breve momento de reconexión era una ventana de "filtración" que se podía aprovechar para meterse al sistema.</p>
 <p>En otro escaneo, el proceso tardó notablemente más que el de Google — el profesor explicó que esto indica que el objetivo <strong>no está tan expuesto</strong> como el anterior; ese es justamente el comportamiento de las empresas mejor protegidas. Insistió de nuevo en que las micro y medianas empresas suelen protegerse más por necesidad (no tienen personal capacitado disponible de inmediato) aunque tarden más en reaccionar cuando algo falla — puso el ejemplo cotidiano de formatear una computadora: una empresa pequeña sin equipo de sistemas tiene que contratar a alguien externo por ese servicio puntual, mientras que una empresa más grande ya tiene personal interno que hace de todo (redes, soporte, hasta páginas web).</p>
@@ -119,7 +119,7 @@
 </ul>
 </details>
 
-<details class="section-block sec" id="c8-pendiente" open><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<details class="section-block sec" id="c8-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
 <ul>
 <li>Continuar la práctica con <strong>Nmap a detalle</strong>: escaneo de directorios, puertos y servicios específicos.</li>
 <li>La presentación de esta sesión sigue incompleta (falta la parte de escaneo de directorios) — el profesor la irá completando y subiendo a Classroom.</li>
