@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="formato" content="pendiente">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 09 — Minería de Datos</title>
 <link rel="stylesheet" href="../../assets/style.css?v=20261001c">
@@ -13,10 +13,179 @@
 <div class="wrap">
 <a class="back" href="index.html">← Minería de Datos</a>
 <div class="detail-head" style="border-color:#A98BD1"><h2>Clase 09</h2>
-  <p class="prof">M.C. José Concepción Roberto Olvera López · 1 oct 2026 · (por llenar)</p>
+  <p class="prof">M.C. José Concepción Roberto Olvera López · 1 oct 2026 · Tema 3 — Metodología de la Práctica 1 (Python vs. RapidMiner, agregación de datos), StandardScaler + PCA, DBSCAN y elección de ε, guía de qué algoritmo de clustering usar según el dominio, caso real del Túnel Emisor Oriente e introducción a Reglas de Asociación (Market Basket Analysis / Apriori).</p>
 </div>
 
-<div class="section-block nota" style="border-left:3px solid #A98BD1"><p style="margin:0"><strong>⏳ Por llenar.</strong> Todavía no se ha procesado el audio de esta clase con NotebookLM. Esta página es un marcador de lugar para que el buscador y el índice de la materia no queden rotos — se completa en cuanto esté el transcript.</p></div>
+<details class="section-block sec" id="c9-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Selección del radio ε en DBSCAN</strong><span class="evid">Evidencia: el profesor lo mostró en vivo en el script de demostración variando ε: con ε = 0.3 el 100 % de los datos fue ruido (0 clústers), con ε = 1.0 todo cayó en 1 solo clúster y con ε = 1.2 se logró la separación óptima en 3 clústers.</span></li>
+<li><strong>Interpretación funcional de la matriz de componentes principales (PCA)</strong><span class="evid">Evidencia: recorrió componente por componente (PC1 = factores financieros y desempeño; PC2 = penetración y actividad de marketing; PC3 = calidad de servicio y redención) y pidió que se sepa interpretar el significado de la varianza explicada (47 % acumulado en el ejemplo).</span></li>
+<li><strong>Qué algoritmo de clustering corresponde a cada dominio</strong><span class="evid">Evidencia: hizo una síntesis explícita: K-Means para clientes/marketing, jerárquico para texto/documentos, DBSCAN para video y datos espaciales, GMM para reconocimiento de voz.</span></li>
+<li><strong>Agregación de datos transaccionales (de transacciones a entidades)</strong><span class="evid">Evidencia: resolvió la duda recurrente sobre las 59,000 filas del dataset: nunca se agrupan transacciones crudas, primero se agregan por cliente (~1,000 a 3,000 registros) o por producto.</span></li>
+<li><strong>Fundamentos de Reglas de Asociación y canasta de compra (Apriori)</strong><span class="evid">Evidencia: fue el tema teórico con el que cerró la sesión y anunció que la siguiente clase se dedica por completo a él. No hubo fórmulas aún; la evidencia es más débil que en los puntos anteriores.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c9-practica"><summary><span class="stitle">Logística y metodología de la Práctica 1: Python vs. RapidMiner y agregación</span></summary>
+<p>La sesión arrancó con dudas sobre cómo resolver la Práctica 1, que trabaja con un conjunto de unos <strong>59,000 registros transaccionales reales</strong>. La alumna Lin preguntó si debían entregar un script de Python y, aparte, un proyecto de RapidMiner. El profesor aclaró el reparto de papeles: <strong>RapidMiner</strong> sirve para importar los datos, visualizar el comportamiento preliminar y capturar imágenes del modelo y de los resultados para las láminas; <strong>Python</strong> es donde va el desarrollo analítico completo (filtrado, agregación, estandarización, PCA, ejecución de los algoritmos y validación).</p>
+<p>Ante la duda de si Google Colab aguantaría procesar los 59,000 registros, el profesor explicó que <strong>nunca se meten las 59,000 transacciones crudas a un algoritmo de agrupación</strong>. Lo correcto es agregar primero los datos por la entidad que se quiere analizar:</p>
+<ul>
+<li><strong>Por cliente:</strong> las 59,000 filas se consolidan en entre 1,000 y 3,000 perfiles únicos de clientes, calculando variables como gasto total, ticket promedio, frecuencia y tipos de productos comprados.</li>
+<li><strong>Por producto:</strong> se agrupa a nivel de sublíneas o productos específicos (por ejemplo presentaciones y marcas de aceite de oliva) para analizar cómo se asocian en la compra.</li>
+</ul>
+<p>Un alumno compartió su experiencia previa en reconocimiento de patrones (PCA, K-Means, ISODATA) y con cubos de información (dimensiones de tiempo, geografía, producto y jerarquías año/trimestre/mes/día). El profesor aprovechó para enfatizar que el valor de un científico de datos <strong>no está en correr el código</strong> (se consigue en minutos en Kaggle, Google o ChatGPT) sino en <strong>seleccionar las variables, estructurar los datos y dar la interpretación con sentido de negocio</strong>.</p>
+<div class="estudio-extra">
+<span class="lbl">Qué es</span>
+<p>El proceso metodológico obligatorio de la Práctica 1: análisis completo en Python sobre el dataset transaccional, con exploración visual y capturas de apoyo en RapidMiner.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como preparar un platillo en una cocina profesional (Python), donde controlas cada ingrediente al milímetro, y usar un procesador de alimentos automático (RapidMiner) para hacer pruebas rápidas de mezcla.<span class="rompe">Dónde falla la analogía: RapidMiner no hace la agregación previa que el dataset requiere antes de correr los modelos; eso se hace en Python.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Conecta la teoría de agrupación con problemas empresariales reales: un código ejecutado sin criterio ni selección previa genera clústers sin sentido comercial.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> intentar agrupar las 59,000 filas crudas directamente, o asumir que RapidMiner sustituye por completo la preparación de datos en Python.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c9-pca"><summary><span class="stitle">Estandarización con StandardScaler y reducción con PCA</span></summary>
+<p><strong>StandardScaler</strong> es el paso de preprocesamiento que lleva las variables a una escala homogénea (media 0 y varianza 1; el profesor también mencionó un rango entre −1 y 1). Es <strong>obligatorio</strong> cuando las variables numéricas son heterogéneas, por ejemplo ingresos de $2,500 frente a edades de 20 a 50 años, para que las magnitudes grandes no dominen el cálculo de distancias.</p>
+<p><strong>PCA</strong> (Análisis de Componentes Principales) transforma un espacio de muchas variables correlacionadas en un número menor de variables sintéticas, las <em>componentes principales</em>, que conservan la máxima varianza. Se ejecuta indicando cuántas componentes se desean (por ejemplo, bajar de 30 o 50 variables a solo 2 o 3).</p>
+<p>En el ejemplo detallado en clase se redujo a <strong>3 componentes (PC1, PC2, PC3) que explicaron el 47 % de la varianza acumulada</strong>, nivel que el profesor calificó como excelente. Al revisar la <strong>matriz de cargas (loadings)</strong>:</p>
+<table>
+<tr><th>Componente</th><th>Variables con carga alta</th><th>Interpretación de negocio</th></tr>
+<tr><td>PC1 (47 % de varianza; cargas de 0.7 y 0.5 en ingresos)</td><td>Incremento de ingresos e ingresos actuales</td><td>Factores financieros y desempeño del cliente</td></tr>
+<tr><td>PC2</td><td>Posición de campañas y tiempo promedio en el sitio web</td><td>Penetración y actividad de marketing</td></tr>
+<tr><td>PC3</td><td>Fallas de servicio y antigüedad</td><td>Calidad de servicio y redención</td></tr>
+</table>
+<p>Aplicar PCA antes del clustering acelera los algoritmos <strong>hasta 100 veces</strong> frente a usar las variables crudas, además de eliminar ruido y aislar las dimensiones con verdadero valor explicativo. El profesor insistió en que no basta con entregar la matriz como números abstractos: hay que <strong>interpretar qué significa cada componente</strong> para la empresa.</p>
+<div class="estudio-extra">
+<span class="lbl">Qué es</span>
+<p>StandardScaler escala las variables a una distribución homogénea; PCA reduce la dimensionalidad creando componentes que retienen la máxima varianza.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como comprimir una foto gigante a un formato liviano pero nítido: quitas peso innecesario y conservas los detalles clave.<span class="rompe">Dónde falla la analogía: las componentes principales ya no son las variables originales, sino combinaciones matemáticas de todas ellas.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es el preprocesamiento estándar antes de K-Means y DBSCAN (ver la <a href="clase-08.html">Clase 08</a>) y retoma lo que el grupo ya vio de PCA en otras materias.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> correr PCA o algoritmos de distancia sin estandarizar antes, o entregar la matriz de componentes sin interpretar su significado funcional.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c9-dominio"><summary><span class="stitle">Qué algoritmo de clustering usar según el dominio</span></summary>
+<p>El profesor dejó una guía de aplicación, y la planteó como el criterio para no usar el algoritmo equivocado:</p>
+<table>
+<tr><th>Algoritmo</th><th>Dominio recomendado</th></tr>
+<tr><td>K-Means</td><td>Segmentación comercial de clientes y análisis de marketing sobre datos tabulares convencionales.</td></tr>
+<tr><td>Clustering jerárquico / aglomerativo</td><td>Agrupamiento de documentos, análisis de texto y detección de comunidades.</td></tr>
+<tr><td>DBSCAN</td><td>Análisis de video, datos espaciales y escenarios con formas irregulares, ruido o datos atípicos.</td></tr>
+<tr><td>Modelos de mezcla gaussiana (GMM)</td><td>Procesamiento y reconocimiento de voz; segmentación de imágenes basada en distribuciones probabilísticas.</td></tr>
+</table>
+<div class="estudio-extra">
+<span class="lbl">Qué es</span>
+<p>El criterio de selección técnica que determina qué algoritmo de agrupación usar según la estructura de los datos y la naturaleza del problema.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como elegir calzado: tenis para correr, botas para la montaña, aletas para nadar.<span class="rompe">Dónde falla la analogía: en minería de datos la elección depende de la distribución matemática de los datos (esférica, por densidad, jerárquica o probabilística).</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Evita aplicar algoritmos inadecuados a datos complejos (por ejemplo, usar K-Means para reconocimiento de voz). Amplía la comparación K-Means vs. DBSCAN de la <a href="clase-08.html">Clase 08</a>.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> asumir que K-Means es el único algoritmo de agrupación y aplicarlo a cualquier tipo de dato.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c9-teo"><summary><span class="stitle">Caso real: Túnel Emisor Oriente (TEO)</span></summary>
+<p>El profesor contó un proyecto de minería de datos a gran escala en ingeniería civil: agrupar los tramos de excavación (anillos de concreto) del <strong>Túnel Emisor Oriente</strong>, que drena las aguas residuales de la Ciudad de México hacia Hidalgo, según sus propiedades mecánicas y geológicas. La tuneladora avanzaba entre unos 30 cm por día en roca dura y hasta 1 metro por día en suelo blando, colocando anillos de concreto (mencionó, por ejemplo, el anillo 1536 y el 1581).</p>
+<p>Se monitorearon <strong>entre 500 y 600 sensores</strong> y se seleccionaron alrededor de <strong>30 variables clave</strong> (frecuencia, varianza, presión de tierra, estrés). El modelo de clustering identificó <strong>5 segmentos de anillos</strong>. Al analizar los resultados junto con ingenieros civiles expertos, en un trabajo de 2 a 3 meses con 3 científicos de datos, descubrieron que la variable con mayor varianza e impacto en los clústers críticos (<strong>Clúster 4 y Clúster 1</strong>) era la <strong>presión de tierra número 3</strong> (lado derecho inferior), que correspondía a las zonas de máximo estrés y mayor resistencia a la perforación.</p>
+<div class="estudio-extra">
+<span class="lbl">Qué es</span>
+<p>Un caso de clustering aplicado a datos de sensores para agrupar tramos de excavación según sus propiedades mecánicas y geológicas.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como predecir en qué metros de una pared hay concreto blando y en cuáles hay varillas de acero, para ajustar la fuerza del taladro antes de que se queme el motor.<span class="rompe">Dónde falla la analogía: el túnel abarcó kilómetros de perforación profunda con más de 500 sensores enviando datos continuos de presión, frecuencia y resistencia.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Demuestra que en la industria los algoritmos por sí solos no dan la respuesta: hace falta trabajo multidisciplinario con el experto del dominio para interpretar las variables agrupadas.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> presentar al cliente clústers numéricos sin consultar al experto para traducirlos a conocimiento operativo.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c9-pipeline"><summary><span class="stitle">Pipeline de clustering en Python: demostración y elección de ε en DBSCAN</span></summary>
+<p>El profesor mostró el script integrado que sirve de plantilla para la Práctica 1, basado en un caso de segmentación de clientes. Los pasos fueron:</p>
+<ol>
+<li><strong>Limpieza:</strong> se eliminaron variables no informativas (por ejemplo, el gramaje del producto).</li>
+<li><strong>Agregación:</strong> las transacciones se consolidaron en <strong>89 perfiles de clientes</strong>.</li>
+<li><strong>Estandarización</strong> con StandardScaler.</li>
+<li><strong>PCA</strong> a PC1, PC2 y PC3, analizando las cargas.</li>
+<li><strong>K-Means:</strong> el número de clústers se evaluó con el método del codo y el coeficiente de silueta.</li>
+<li><strong>DBSCAN:</strong> prueba empírica de ε (ver abajo).</li>
+<li><strong>Clustering jerárquico:</strong> construcción del dendrograma.</li>
+<li><strong>Comparación de modelos:</strong> se compararon los coeficientes de silueta de los tres algoritmos; en ese conjunto de marketing, <strong>K-Means tuvo el mejor desempeño</strong>.</li>
+</ol>
+<p>La prueba de ε en DBSCAN mostró por qué no se debe asignar el radio a ojo:</p>
+<table>
+<tr><th>ε</th><th>Resultado</th></tr>
+<tr><td>0.3</td><td>El 100 % de los datos se clasificó como ruido (etiqueta −1); 0 clústers.</td></tr>
+<tr><td>1.0</td><td>Todos los puntos se unieron en 1 solo clúster.</td></tr>
+<tr><td>1.2</td><td>Separación óptima en 3 clústers.</td></tr>
+</table>
+<div class="estudio-extra">
+<span class="lbl">Qué es</span>
+<p>El flujo de trabajo en Python presentado como base de la Práctica 1, incluyendo la prueba de varios valores de ε en DBSCAN.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como enfocar unos binoculares: si aprietas demasiado no ves nada, si abres demasiado todo es una mancha, y a la distancia correcta la imagen es nítida.<span class="rompe">Dónde falla la analogía: ε es un radio de distancia en un espacio multidimensional ya estandarizado, no un ajuste óptico continuo.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la plantilla metodológica para la entrega de la Práctica 1: comparar varios algoritmos con métricas cuantitativas (silueta, codo).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> fijar ε arbitrariamente sin probar una cuadrícula de valores, lo que produce modelos fallidos donde todo es ruido o todo es un solo clúster.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c9-asociacion"><summary><span class="stitle">Introducción a Reglas de Asociación (Market Basket Analysis) y Apriori</span></summary>
+<p>Al cierre de la sesión el profesor presentó el tema siguiente: las <strong>reglas de asociación</strong>, o análisis de canasta de compra. Es una técnica no supervisada que busca relaciones y coocurrencias entre productos comprados al mismo tiempo en tickets de venta. En cadenas como Soriana o Walmart se analizan millones de tickets al mes; cada ticket es un conjunto de artículos (ejemplo: ticket 1 = pan, leche; ticket 2 = huevos, cerveza; ticket 3 = pan, leche). El objetivo es medir la frecuencia con que aparecen juntos para encontrar asociaciones significativas y descartar combinaciones casuales (como una lechuga y una playera en un solo ticket).</p>
+<p>Aplicaciones que mencionó:</p>
+<ul>
+<li><strong>Acomodo físico de tienda:</strong> relató que Walmart reorganizó sus pasillos para obligar al cliente a recorrer toda la tienda y aumentar la compra por impulso.</li>
+<li><strong>Hallazgos no intuitivos:</strong> relaciones raras, como la compra conjunta de detergente y jugo de naranja, que disparan investigaciones sobre la hora, la zona y el perfil del comprador.</li>
+<li><strong>Algoritmos mencionados:</strong> Apriori (generación iterativa de candidatos y búsqueda en conjuntos) y técnicas de árboles de frecuencia.</li>
+</ul>
+<div class="estudio-extra">
+<span class="lbl">Qué es</span>
+<p>Técnica no supervisada para descubrir patrones de coocurrencia entre productos comprados juntos en transacciones.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como revisar millones de recibos de supermercado para ver qué productos mete la gente junta al carrito, incluidas las sorpresas.<span class="rompe">Dónde falla la analogía: con millones de transacciones y miles de productos hacen falta algoritmos optimizados de teoría de conjuntos para no saturar la memoria.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la base de los sistemas de recomendación (Spotify, Amazon) y de la disposición de mercancía en estantes y catálogos digitales. Ya se había mencionado de pasada en las <a href="clase-06.html">Clases 06</a> y <a href="clase-07.html">07</a>; la siguiente clase lo desarrolla.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> reportar solo relaciones obvias (pan y leche) e ignorar las raras o no intuitivas, que son las que dan ventaja competitiva.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c9-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Por qué el profesor afirmó que Colab puede procesar el dataset de 59,000 registros sin problemas de memoria?</summary><p>Porque no se agrupan las 59,000 transacciones crudas: los datos se agregan antes por cliente (~1,000 a 3,000 registros) o por producto, y recién entonces se corre el clustering.</p></details>
+<details class="qa"><summary>2. Explica con tus palabras para qué se usa RapidMiner y para qué Python en la Práctica 1.</summary><p>RapidMiner: importar y explorar visualmente los datos y capturar imágenes del modelo para las láminas. Python: el desarrollo analítico completo (filtrado, agregación, estandarización, PCA, algoritmos y validación).</p></details>
+<details class="qa"><summary>3. ¿Qué pasó en la demostración de DBSCAN con ε = 0.3, ε = 1.0 y ε = 1.2?</summary><p>Con 0.3 todo fue ruido (−1) y 0 clústers; con 1.0 todos los puntos formaron un solo clúster; con 1.2 se obtuvieron 3 clústers, la separación óptima.</p></details>
+<details class="qa"><summary>4. En el ejemplo, ¿qué representaron PC1, PC2 y PC3?</summary><p>PC1: factores financieros y desempeño del cliente; PC2: penetración y actividad de marketing; PC3: calidad de servicio y redención. Las tres explicaron 47 % de la varianza acumulada.</p></details>
+<details class="qa"><summary>5. ¿Por qué hay que aplicar StandardScaler antes de PCA o K-Means?</summary><p>Para llevar todas las variables a una escala homogénea (media 0, varianza 1) y evitar que las de magnitud grande (ingresos) dominen el cálculo de distancias sobre las de rango pequeño (edad).</p></details>
+<details class="qa"><summary>6. Compara K-Means, GMM y DBSCAN según el dominio de aplicación que dio el profesor.</summary><p>K-Means: segmentación de clientes y marketing; GMM: reconocimiento de voz y segmentación probabilística de imágenes; DBSCAN: video y datos espaciales con formas irregulares y ruido.</p></details>
+<details class="qa"><summary>7. En el caso del Túnel Emisor Oriente, ¿qué variable resultó la más relevante en los clústers críticos?</summary><p>La presión de tierra número 3 (lado derecho inferior), que correspondía a las zonas de máximo estrés y resistencia a la perforación.</p></details>
+<details class="qa"><summary>8. ¿Qué diferencia hay entre un hallazgo obvio y uno valioso en reglas de asociación?</summary><p>El obvio es el esperado por intuición (pan con leche); el valioso es una asociación rara o no intuitiva (detergente con jugo de naranja) que revela comportamientos nuevos del cliente.</p></details>
+</details>
+
+<details class="section-block sec" id="c9-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> <strong>Comunicar es vender:</strong> el profesor dijo al grupo que en cualquier trabajo donde los entrevisten, comunicarse es vender: exponer y hacer que entiendan.</li>
+<li><em>(Contexto)</em> <strong>«Hay que ser flojo»:</strong> recordó a un profesor suyo de ciencias sísmicas que decía eso, en el sentido de no reinventar la rueda: buscar programas ya resueltos (Kaggle, Google, ChatGPT), adaptarlos y dedicar el 80 % del esfuerzo a seleccionar los datos e interpretar resultados.</li>
+<li><em>(Contexto)</em> <strong>Anécdota en Walmart:</strong> al ir a hacer el mandado que le encargó su esposa encontró todos los pasillos cambiados de lugar; le explicaron que se reorganiza para que el cliente recorra toda la tienda.</li>
+<li><em>(Contexto)</em> <strong>Dentro del túnel:</strong> contó su experiencia de estar físicamente en el túnel a varios kilómetros de profundidad, y que a un equipo de 3 científicos de datos les tomó casi 3 meses interpretar los clústers con los ingenieros civiles.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c9-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Nueva fecha límite de la Práctica 1 (clustering):</strong> según el resumen de NotebookLM, a petición del grupo el profesor la extendió «del martes al jueves 12 de octubre de 2026». <strong>Fecha por confirmar:</strong> el 12 de octubre de 2026 cae en lunes, no en jueves (los jueves cercanos son el 8 y el 15). Revisar la fecha real en Classroom antes de apuntarla. En <code>material.html</code> sigue figurando el vencimiento original (6 oct).</li>
+<li><strong>Equipos de 3 integrantes:</strong> repartir tareas: una persona en RapidMiner, una en preparación y agregación de datos, y una en adaptar el código de Python.</li>
+<li><strong>Próxima clase (martes 6 oct):</strong> teoría y práctica de reglas de asociación / Market Basket Analysis (Apriori y técnicas de conjuntos).</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c9-puntosclave"><summary><span class="stitle">📌 Puntos clave</span></summary><ul>
+<li>Nunca se agrupan transacciones crudas: primero se agregan por cliente o producto; RapidMiner explora y captura, Python hace el análisis completo.</li>
+<li>StandardScaler antes de PCA/K-Means; la matriz de componentes hay que interpretarla en términos de negocio (47 % de varianza con 3 componentes en el ejemplo).</li>
+<li>ε en DBSCAN se prueba con varios valores: 0.3 = todo ruido, 1.0 = un solo clúster, 1.2 = 3 clústers.</li>
+<li>K-Means → clientes/marketing; jerárquico → texto; DBSCAN → video/espacial; GMM → voz.</li>
+<li>Reglas de asociación (Apriori): coocurrencia de productos en tickets; lo valioso son los hallazgos no obvios.</li>
+</ul></details>
 
 </div>
 </body>

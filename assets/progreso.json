@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-05T15:17:38+00:00",
+ "generatedAt": "2026-10-05T16:02:48+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -75,9 +75,9 @@
    {
     "num": 11,
     "fecha": "2026-10-02",
-    "resumen": "(por llenar)",
+    "resumen": "Revisión del Primer Examen Parcial — solución pregunta por pregunta de las 32 preguntas teóricas y de los 3 ejercicios prácticos (momentos de Hu, GLCM y LDA), criterios de calificación y dudas del grupo.",
     "url": "materias/reconocimiento-de-patrones/clase-11.html",
-    "formato": "viejo"
+    "formato": "estudio"
    },
    {
     "num": 12,
@@ -501,27 +501,32 @@
    {
     "num": 9,
     "fecha": "2026-10-01",
-    "resumen": "(por llenar)",
+    "resumen": "Tema 3 — Metodología de la Práctica 1 (Python vs. RapidMiner, agregación de datos), StandardScaler + PCA, DBSCAN y elección de ε, guía de qué algoritmo de clustering usar según el dominio, caso real del Túnel Emisor Orie",
     "url": "materias/mineria-de-datos/clase-09.html",
-    "formato": "viejo"
+    "formato": "estudio"
    }
   ],
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
   {
+   "hash": "a2ab746",
+   "fecha": "2026-10-05T15:17:38Z",
+   "mensaje": "Quitar el disclaimer \"Formato de estudio\" de las páginas de clase"
+  },
+  {
    "hash": "57c5df7",
-   "fecha": "2026-10-05T15:12:40+00:00",
+   "fecha": "2026-10-05T15:12:40Z",
    "mensaje": "SIB: convertir \"Puntos clave\" de div fijo a sección plegable"
   },
   {
    "hash": "3fa3f6e",
-   "fecha": "2026-10-05T15:08:53+00:00",
+   "fecha": "2026-10-05T15:08:53Z",
    "mensaje": "Quitar __pycache__ del repo y agregarlo a .gitignore"
   },
   {
    "hash": "cda1331",
-   "fecha": "2026-10-05T15:08:42+00:00",
+   "fecha": "2026-10-05T15:08:42Z",
    "mensaje": "Colapsar secciones por defecto en todas las clases; stubs RP-11/12 y MD-09"
   },
   {
@@ -803,11 +808,6 @@
    "hash": "8ddeaac",
    "fecha": "2026-10-01T01:54:04-06:00",
    "mensaje": "MD Clase 07: formato de estudio; quitar nombres de compañeros de la lista de equipos"
-  },
-  {
-   "hash": "7cf8c20",
-   "fecha": "2026-10-01T01:51:45-06:00",
-   "mensaje": "RP Clase 09: formato de estudio"
   }
  ]
 }

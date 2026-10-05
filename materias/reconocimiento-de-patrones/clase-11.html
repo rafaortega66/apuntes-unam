@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="formato" content="pendiente">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 11 — Reconocimiento de Patrones</title>
 <link rel="stylesheet" href="../../assets/style.css?v=20261001c">
@@ -13,10 +13,179 @@
 <div class="wrap">
 <a class="back" href="index.html">← Reconocimiento de Patrones</a>
 <div class="detail-head" style="border-color:#45B8A8"><h2>Clase 11</h2>
-  <p class="prof">Ing. Rubén Omar Azuara Domínguez · 2 oct 2026 · (por llenar)</p>
+  <p class="prof">Ing. Rubén Omar Azuara Domínguez · 2 oct 2026 · Revisión del Primer Examen Parcial — solución pregunta por pregunta de las 32 preguntas teóricas y de los 3 ejercicios prácticos (momentos de Hu, GLCM y LDA), criterios de calificación y dudas del grupo.</p>
 </div>
 
-<div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>⏳ Por llenar.</strong> Todavía no se ha procesado el audio de esta clase con NotebookLM. Esta página es un marcador de lugar para que el buscador y el índice de la materia no queden rotos — se completa en cuanto esté el transcript.</p></div>
+<div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Sobre esta sesión.</strong> No hubo teoría nueva: fue la <strong>revisión del examen parcial</strong> (<a href="clase-10.html">Clase 10</a>, 28 sep). Por eso, en lugar de temas nuevos, el apunte sigue las preguntas del examen en el orden en que se resolvieron: sirve como guía de repaso para el segundo parcial y como banco de ejercicios resueltos. </p></div>
+
+<div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>⚠️ Cifras por verificar en el ejercicio de LDA.</strong> Los números del Ejercicio 3 (LDA) salen del resumen automático del audio y no cuadran del todo entre sí (por ejemplo, con μ<sub>1</sub> = (3, 3.6) y μ<sub>2</sub> = (11.4, 7.6) la media global sería (7.2, 5.6) y no (5.7, 5.6); y S<sub>1</sub> + S<sub>2</sub> da −2.2 fuera de la diagonal, no −2.02). El <strong>procedimiento</strong> es correcto; confirma las cifras con tu examen o con el audio antes de memorizarlas. Los ejercicios de Hu y GLCM sí los verifiqué a mano (Hu coincide).</p></div>
+
+<details class="section-block sec" id="c11-examen"><summary><span class="stitle">🎯 Lo que probablemente viene en el próximo examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Cálculo completo de LDA a mano</strong> (medias, S<sub>B</sub>, S<sub>W</sub>, inversa, valores y vectores propios)<span class="evid">Evidencia: fue el ejercicio de mayor peso del parcial (15 puntos, pregunta 35) y el profesor detalló cada matriz intermedia. Además dijo que dos de los tres ejercicios eran idénticos a las tareas y el otro, una adaptación de un ejemplo resuelto en el pizarrón: el patrón de «ejercicio visto en clase» se repetirá.</span></li>
+<li><strong>GLCM: simetría, normalización y descriptores (ASM, energía, contraste)</strong><span class="evid">Evidencia: ejercicio 34 (10 puntos). El profesor marcó como error recurrente olvidar sumar la transpuesta o no dividir entre la suma total (40).</span></li>
+<li><strong>Momentos geométricos, centrados, normalizados y de Hu</strong><span class="evid">Evidencia: ejercicio 33 (10 puntos), con la cadena exacta centroide → m<sub>11</sub> → μ<sub>11</sub> → η<sub>11</sub> → HU<sub>2</sub> → escala logarítmica.</span></li>
+<li><strong>Los 7 pasos de MFCC en orden</strong><span class="evid">Evidencia: pregunta 12 de ordenamiento estricto; el profesor revisó cada etapa en orden.</span></li>
+<li><strong>K-Means vs. ISODATA vs. LBG, evaluación de modelos (ROC, Data Drift) y Bayes/QDA</strong><span class="evid">Evidencia: preguntas 17 a 21 y 25 a 32. El profesor se detuvo en las dudas sobre sensibilidad, especificidad y FPR en la curva ROC. Aclaró también que el 100 % de la parte teórica salió de las diapositivas y discusiones de clase, así que son las fuentes a repasar.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c11-estructura"><summary><span class="stitle">Estructura y ponderación del examen</span></summary>
+<p>El examen tuvo <strong>35 preguntas</strong> sobre 100 puntos, en dos bloques:</p>
+<table>
+<tr><th>Bloque</th><th>Preguntas</th><th>Puntos</th></tr>
+<tr><td>Teoría (65 %)</td><td>32 preguntas: la 1 vale 3 puntos (el concepto fundamental del curso); la 2 a la 32 valen 2 cada una</td><td>65</td></tr>
+<tr><td>Práctica (35 %)</td><td>33 Momentos de Hu (10) · 34 Matriz GLCM (10) · 35 LDA y eigenvalores (15)</td><td>35</td></tr>
+</table>
+<p>En respuestas teóricas parciales se otorgaron medios puntos (1 o 1.5 puntos). Se indicó que cada quien sumara sus puntajes y, si había alguna imprecisión, se acercara al escritorio al final de la sesión.</p>
+</details>
+
+<details class="section-block sec" id="c11-conceptos"><summary><span class="stitle">Fundamentos: patrón, aprendizaje supervisado, etapas del sistema y espacios (preguntas 1 a 6)</span></summary>
+<p><strong>Pregunta 1 (3 pts).</strong> Pedía la definición formal de <em>patrón</em> y de reconocimiento supervisado vs. no supervisado, con un ejemplo. Un <strong>patrón</strong> es cualquier objeto, proceso o evento que puede describirse y distinguirse de otros. En el <strong>supervisado</strong> se conoce de antemano la clase o etiqueta de cada patrón (ejemplo válido: clasificar especies animales como perro, gato o caballo); en el <strong>no supervisado</strong> se desconoce la clase y el número total de clases (ejemplo válido: analizar datos clínicos de pacientes para descubrir cómo se agrupan de forma natural sin etiquetas previas). El error típico fue dar definiciones incompletas, sin mencionar que en el no supervisado tampoco se conoce el número de clases.</p>
+<p><strong>Pregunta 2.</strong> Completar el diagrama de las cuatro etapas de un sistema de reconocimiento de patrones: <em>patrón / sensing</em> (captura de mediciones) → <em>extracción de características</em> (de datos crudos a un vector) → <em>clasificación</em> (asignar el vector a una categoría con una función de decisión) → <em>evaluación del desempeño</em>. Se confundía la captura con la extracción de características.</p>
+<p><strong>Preguntas 3 y 5.</strong> El <strong>espacio de características</strong> es un espacio de <em>n</em> dimensiones en el que cada punto es un patrón descrito por sus atributos (x<sub>1</sub>, x<sub>2</sub>, …, x<sub>n</sub>). El <strong>espacio de pesos</strong> tiene como coordenadas los coeficientes (w<sub>0</sub>, w<sub>1</sub>, …, w<sub>n</sub>) de la función de decisión: cada punto es un clasificador, y esos coeficientes definen la orientación y posición del hiperplano. Los incisos incorrectos decían que las funciones del espacio de características representan el clasificador o las métricas.</p>
+<p><strong>Pregunta 6: maldición de la dimensionalidad.</strong> Seis consecuencias: dispersión de los datos (el espacio crece exponencialmente y los puntos quedan aislados); mayor costo computacional (memoria y procesamiento); sobreajuste (el modelo memoriza el ruido); pérdida de sentido de las distancias (cercanos y lejanos se vuelven casi iguales); degradación del rendimiento; y retos de visualización. Quedarse solo con lo computacional era respuesta incompleta.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Supervisado es clasificar fotos sabiendo ya cuáles son perros y cuáles gatos; no supervisado es juntar fichas por parecido sin que nadie te diga qué son. Y la maldición de la dimensionalidad es buscar a un amigo: en una línea es fácil, en un plano manejable, pero en un cubo de muchas dimensiones todos quedan lejísimos.<span class="rompe">Dónde falla: el «número de clases» también se desconoce en el no supervisado, y eso rara vez cabe en la analogía.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>La maldición de la dimensionalidad justifica toda la unidad de selección y reducción (PCA, LDA); las cuatro etapas son el esquema que articula el semestre.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c11-seleccion"><summary><span class="stitle">Extracción vs. selección, MFCC, PCA vs. LDA (preguntas 7, 8, 12 a 16)</span></summary>
+<p><strong>Extracción vs. selección (pregunta 7).</strong> La <strong>extracción</strong> transforma mediciones crudas en un nuevo vector numérico compacto; la <strong>selección</strong> elige un subconjunto de las variables más relevantes entre las ya extraídas. No son sinónimos ni etapas intercambiables.</p>
+<p><strong>Propiedades de un buen conjunto de características (pregunta 8):</strong> discriminabilidad (separa clases), compacidad (baja dimensión), robustez (tolera ruido y variación intraclase) y bajo costo computacional.</p>
+<p><strong>MFCC (pregunta 12), orden estricto de 7 pasos:</strong></p>
+<ol>
+<li><strong>Preénfasis:</strong> resalta las frecuencias altas.</li>
+<li><strong>Framing:</strong> divide la señal en fragmentos cortos solapados (análisis local).</li>
+<li><strong>Ventaneo (Hamming):</strong> suaviza los extremos de cada marco para evitar artefactos en la transformada.</li>
+<li><strong>Transformada de Fourier (FFT):</strong> del dominio del tiempo al de la frecuencia.</li>
+<li><strong>Banco de filtros Mel:</strong> escala no lineal que imita el oído humano.</li>
+<li><strong>Escala logarítmica:</strong> energía a una escala cercana a la percepción de volumen.</li>
+<li><strong>Transformada de coseno discreta (DCT):</strong> desacopla las características y da los coeficientes MFCC finales.</li>
+</ol>
+<p>El error típico es alterar el orden (por ejemplo, FFT antes del ventaneo o el banco Mel antes de la FFT).</p>
+<p><strong>Métodos de selección (preguntas 13 y 16).</strong> <em>Filtrado:</em> evalúa las características antes de e independientemente del modelo (ejemplo: correlación de Pearson). <em>Wrapper:</em> evalúa subconjuntos usando el desempeño real de un clasificador entrenado (ejemplo: Forward Selection). <em>Embebidos:</em> la selección está dentro del propio algoritmo durante el entrenamiento (ejemplo: penalización L<sub>1</sub> / Lasso). Un error: creer que el Wrapper no puede llegar al óptimo global; sí puede con la búsqueda exhaustiva, a alto costo.</p>
+<p><strong>PCA vs. LDA (preguntas 14 y 15).</strong> PCA es <strong>no supervisado</strong>: busca las direcciones de máxima varianza sin usar etiquetas. LDA es <strong>supervisado</strong>: usa las etiquetas para maximizar la razón entre la varianza entre clases y la varianza dentro de las clases. Afirmar que PCA separa clases es falso (no conoce las etiquetas).</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Extraer es exprimir naranjas para hacer jugo; seleccionar es elegir las 3 mejores botellas del estante. Filtrado es preseleccionar jugadores por estatura antes del partido; wrapper es probar alineaciones jugando partidos completos; embebido es ajustar la alineación durante el juego. PCA busca la foto con más dispersión sin saber quién es quién; LDA busca la línea que mejor separa dos equipos viendo sus camisetas.<span class="rompe">Dónde falla: el filtrado no «mira» al clasificador en absoluto, mientras que un jugador sí se ve afectado por el estilo del equipo.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Define el equilibrio entre velocidad y optimización para un clasificador concreto; MFCC es el estándar en voz y audio (<a href="clase-01.html">Clase 01</a>); PCA y LDA se retoman en los ejercicios 33 a 35.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c11-evaluacion"><summary><span class="stitle">Evaluación de modelos (preguntas 17 a 21)</span></summary>
+<p>En la <strong>matriz de confusión</strong>, un falso positivo (FP) es dar positivo cuando debió ser negativo; un falso negativo (FN), dar negativo cuando debió ser positivo. La <strong>curva ROC</strong> grafica en el eje Y la <em>True Positive Rate</em> (TPR, sensibilidad) y en el eje X la <em>False Positive Rate</em> (FPR); el profesor detuvo la clase para aclarar dudas sobre sensibilidad, especificidad y FPR.</p>
+<p>Esquemas de validación: <strong>Hold-Out</strong> divide los datos en tres conjuntos (entrenamiento, validación y prueba), no necesariamente del mismo tamaño. <strong>K-Fold</strong> divide en K particiones iguales y entrena K veces dejando una partición distinta para validar en cada iteración; el conjunto de <strong>prueba (test)</strong> se reserva exclusivamente para la evaluación final. Error conceptual aclarado en la pregunta 20: evaluar el conjunto de prueba en cada iteración de K-Fold. <strong>Data Drift:</strong> la distribución de los datos en producción cambia respecto a la de entrenamiento.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es el control de calidad que prueba el modelo en condiciones reales para que no haga trampa ni se vuelva obsoleto con el tiempo.<span class="rompe">Dónde falla: el Data Drift es silencioso: el sistema sigue funcionando sin errores, pero cada vez acierta menos.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Garantiza una evaluación imparcial y detecta la degradación del modelo en producción. Ver <a href="clase-04.html">Clase 04</a>.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c11-clasificacion"><summary><span class="stitle">Funciones discriminantes, distancia mínima, clustering y Bayes (preguntas 22 a 32)</span></summary>
+<p><strong>Funciones discriminantes (preguntas 22 a 24).</strong> Regla: x ∈ ω<sub>i</sub> si g<sub>i</sub>(x) &gt; g<sub>j</sub>(x) para todo j ≠ i. Una función de decisión lineal en un problema de dos clases genera un <strong>hiperplano</strong>. Si g<sub>i</sub>(x) = g<sub>j</sub>(x), la muestra está <strong>sobre la frontera de decisión</strong>; eso no invalida el clasificador ni obliga a descartar la muestra.</p>
+<p><strong>Distancia mínima y clustering (preguntas 25 a 29).</strong> K-Means / distancia mínima asume prototipos basados en la media y una forma <strong>esférica e isotrópica</strong> del espacio; asigna x a la clase k si d(x, m<sub>k</sub>) &lt; d(x, m<sub>j</sub>) para todo j ≠ k. La <strong>distancia de Mahalanobis</strong>, a diferencia de la Euclidiana, incorpora la matriz de covarianza para contemplar la correlación entre variables. <strong>LBG</strong> es no supervisado, enfocado en cuantización vectorial, y minimiza la <em>distorsión promedio</em> (no confundir con la inercia de K-Means). <strong>ISODATA</strong> frente a <strong>K-Means:</strong> K-Means mantiene K fijo; ISODATA lo ajusta dinámicamente con divisiones, fusiones y eliminaciones.</p>
+<p><strong>Clasificadores bayesianos (preguntas 30 a 32).</strong> Regla de Bayes: P(ω<sub>i</sub>|x) = P(x|ω<sub>i</sub>)·P(ω<sub>i</sub>) / P(x), donde P(ω<sub>i</sub>|x) es la posterior, P(x|ω<sub>i</sub>) la verosimilitud, P(ω<sub>i</sub>) la a priori y P(x) la evidencia. Con una gaussiana multivariada la expresión se simplifica en términos de la distancia de Mahalanobis, el determinante de la covarianza y la probabilidad a priori. <strong>QDA</strong> asume una matriz de covarianza distinta por clase y genera fronteras cuadráticas; no confundir con LDA (misma matriz compartida) ni con Naive Bayes (matriz diagonal).</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Cada clase tiene un juez que puntúa la muestra y gana el que da la nota más alta; con Mahalanobis, además, las «calles» de medir distancias se deforman según cuánto se dispersan los datos.<span class="rompe">Dónde falla: en una frontera de decisión dos jueces empatan; no hay un «juez absoluto».</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Bayes da el límite teórico óptimo (riesgo de Bayes); distancia mínima y clustering se vieron en las <a href="clase-07.html">Clases 07</a> a <a href="clase-09.html">09</a>.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c11-hu"><summary><span class="stitle">Ejercicio 33 (10 pts): momentos de Hu</span></summary>
+<p>Imagen binaria con 5 píxeles activos con forma de «H», en las coordenadas (x, y): (3,3), (3,1), (3,2), (1,3), (2,3).</p>
+<ol>
+<li><strong>Momentos ordinarios y centroide.</strong> m<sub>00</sub> = 5; m<sub>10</sub> = Σx = 3+3+3+2+1 = 12; m<sub>01</sub> = Σy = 3+3+1+2+3 = 12. Centroide: x̄ = 12/5 = 2.4 y ȳ = 12/5 = 2.4.</li>
+<li><strong>m<sub>11</sub> y μ<sub>11</sub>.</strong> m<sub>11</sub> = Σx·y = 3+6+3+6+9 = 27; μ<sub>11</sub> = m<sub>11</sub> − x̄·m<sub>01</sub> = 27 − (2.4)(12) = <strong>−1.8</strong>.</li>
+<li><strong>Momentos centrados de segundo orden.</strong> μ<sub>20</sub> = Σ(x − x̄)² = (1−2.4)² + (2−2.4)² + 3(3−2.4)² = 1.96 + 0.16 + 1.08 = <strong>3.2</strong>; por simetría μ<sub>02</sub> = 3.2.</li>
+<li><strong>Normalización</strong> con η<sub>ij</sub> = μ<sub>ij</sub> / m<sub>00</sub><sup>γ</sup>, γ = (i+j)/2 + 1 = 2: η<sub>11</sub> = −1.8/25 = <strong>−0.072</strong>; η<sub>20</sub> = η<sub>02</sub> = 3.2/25 = <strong>0.128</strong>.</li>
+<li><strong>Momento de Hu.</strong> HU<sub>2</sub> = (η<sub>20</sub> − η<sub>02</sub>)² + 4(η<sub>11</sub>)² = 0 + 4(0.005184) = <strong>0.020736</strong>. En escala logarítmica: −log<sub>10</sub>(0.020736) ≈ <strong>1.6832</strong>.</li>
+</ol>
+<div class="errores"><p><strong>Errores comunes:</strong> olvidar que μ<sub>00</sub> = m<sub>00</sub> = 5, o equivocarse en la potencia del denominador al normalizar (γ = 2 para orden 2).</p></div>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es medir cómo está repartida una figura para sacar números que no cambien si la mueves o la agrandas.<span class="rompe">Dónde falla: la invarianza real de los momentos de Hu cubre traslación, escala y rotación solo con las combinaciones específicas de η.</span></p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c11-glcm"><summary><span class="stitle">Ejercicio 34 (10 pts): GLCM y descriptores de textura</span></summary>
+<p>Análisis de textura con transiciones de nivel de gris en dirección <strong>norte-sur</strong> a distancia de 1 píxel, con niveles 0, 1, 2 y 3.</p>
+<ol>
+<li>Conteo de las transiciones verticales (norte a sur) entre niveles de gris.</li>
+<li><strong>Simetría:</strong> se suma la matriz de conteos con su transpuesta; la suma total de la matriz resultante es <strong>40</strong>.</li>
+<li><strong>Normalización:</strong> se divide cada celda entre 40 para obtener la matriz de probabilidades P(i, j).</li>
+<li><strong>Descriptores:</strong> ASM = Σ<sub>i</sub>Σ<sub>j</sub> P(i,j)² = <strong>0.1075</strong>; energía = √ASM = √0.1075 = <strong>0.3278</strong>; contraste = Σ P(i,j)·(i − j)², donde la diagonal queda multiplicada por 0 → <strong>1.1</strong>.</li>
+</ol>
+<div class="errores"><p><strong>Errores comunes:</strong> trabajar con la matriz de conteos sin normalizar entre 40 (arruina ASM y energía) y olvidar sumar la transpuesta.</p></div>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es contar cuántas veces un nivel de gris tiene otro específico justo debajo; luego, convertir esos conteos en probabilidades y medir qué tan «lisa» o «rugosa» es la textura.<span class="rompe">Dónde falla: el resultado depende de la dirección y distancia elegidas; otra dirección da otra GLCM.</span></p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c11-lda"><summary><span class="stitle">Ejercicio 35 (15 pts): LDA con cálculo completo</span></summary>
+<p>Dos clases con N<sub>1</sub> = 5 y N<sub>2</sub> = 5 ejemplos (N = 10). El procedimiento, que es lo que hay que dominar:</p>
+<ol>
+<li><strong>Vectores de media</strong> μ<sub>1</sub> y μ<sub>2</sub> y media global μ. Según el resumen: μ<sub>1</sub> = (3, 3.6), μ<sub>2</sub> = (11.4, 7.6) <em>(la media global anotada, (5.7, 5.6), no coincide con el promedio de las dos; ver advertencia arriba)</em>.</li>
+<li><strong>Matriz entre clases:</strong> S<sub>B</sub> = N<sub>1</sub>(μ<sub>1</sub> − μ)(μ<sub>1</sub> − μ)<sup>T</sup> + N<sub>2</sub>(μ<sub>2</sub> − μ)(μ<sub>2</sub> − μ)<sup>T</sup>.</li>
+<li><strong>Matriz dentro de clases:</strong> S<sub>W</sub> = S<sub>1</sub> + S<sub>2</sub>, suma de las matrices de dispersión individuales. Según el resumen, S<sub>1</sub> = [[4, −2], [−2, 13.2]] y S<sub>2</sub> = [[9.2, −0.2], [−0.2, 13.2]]; S<sub>W</sub> = [[13.2, −2.02], [−2.02, 26.4]] <em>(cifra fuera de la diagonal por verificar)</em>.</li>
+<li><strong>Inversa y matriz A:</strong> det(S<sub>W</sub>) = (13.2)(26.4) − (−2.02)² = 348.48 − 4.0804 = 344.396; S<sub>W</sub><sup>−1</sup> ≈ [[0.0766, 0.0058], [0.0058, 0.0383]]; A = S<sub>W</sub><sup>−1</sup>S<sub>B</sub> ≈ [[5.973, 4.3684], [2.400, 1.8452]].</li>
+<li><strong>Ecuación característica:</strong> det(A − λI) = 0 ⇒ (5.973 − λ)(1.8452 − λ) − (4.3684)(2.400) = 0 ⇒ λ² − 7.7425λ ≈ 0. Raíces: λ = 0 (sin interés) y <strong>λ<sub>1</sub> = 7.74</strong>.</li>
+<li><strong>Eigenvector:</strong> sustituyendo λ<sub>1</sub> en (A − λI)w = 0: −1.8452·w<sub>1</sub> + 4.3684·w<sub>2</sub> = 0 ⇒ w<sub>1</sub> = 2.3674·w<sub>2</sub>. Fijando w<sub>2</sub> = 1 resulta <strong>w ≈ (2.34, 1)<sup>T</sup></strong>.</li>
+</ol>
+<p>Como la matriz A de un problema de dos clases tiene rango 1, una de las raíces siempre es 0: es una buena verificación.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> equivocarse en el determinante de S<sub>W</sub> o en los signos al multiplicar la inversa por S<sub>B</sub>.</p></div>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es hallar la recta sobre la cual, al proyectar los puntos de los dos grupos, quedan lo más separados entre sí y lo más apretados dentro de cada grupo.<span class="rompe">Dónde falla: con muchas clases hay varias direcciones útiles (hasta C − 1), no una sola recta.</span></p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c11-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuáles son los 7 pasos, en orden estricto, para extraer MFCC?</summary><p>Preénfasis, framing, ventaneo (Hamming), FFT, banco de filtros Mel, escala logarítmica y DCT.</p></details>
+<details class="qa"><summary>2. ¿Por qué la distancia de Mahalanobis supera a la Euclidiana cuando las variables están correlacionadas?</summary><p>La Euclidiana asume un espacio isotrópico con ejes independientes; Mahalanobis incorpora la matriz de covarianza y por tanto considera la dispersión real y la correlación entre variables.</p></details>
+<details class="qa"><summary>3. Con centroide (2.4, 2.4), m<sub>00</sub> = 5 y μ<sub>11</sub> = −1.8, calcula η<sub>11</sub>.</summary><p>η<sub>11</sub> = μ<sub>11</sub> / m<sub>00</sub><sup>2</sup> = −1.8 / 25 = −0.072.</p></details>
+<details class="qa"><summary>4. Compara el objetivo de PCA con el de LDA.</summary><p>PCA (no supervisado) maximiza la varianza global sin usar etiquetas; LDA (supervisado) usa las etiquetas para maximizar la razón entre la varianza entre clases y la varianza dentro de las clases.</p></details>
+<details class="qa"><summary>5. En una matriz de confusión con TP = 30, FP = 5, FN = 5 y TN = 60, ¿qué significa FP = 5?</summary><p>Cinco muestras que el clasificador predijo como clase positiva cuando en realidad eran de la clase negativa.</p></details>
+<details class="qa"><summary>6. ¿Qué se asume sobre la geometría de las clases al usar distancia mínima a centroides (K-Means)?</summary><p>Que el espacio de características es esférico e isotrópico alrededor de cada centroide.</p></details>
+<details class="qa"><summary>7. ¿Qué es el Data Drift y por qué es peligroso?</summary><p>Es el cambio de la distribución de los datos en producción respecto a los de entrenamiento. Es peligroso porque degrada el desempeño en silencio, sin lanzar errores.</p></details>
+<details class="qa"><summary>8. ¿Cómo difieren los métodos Filter y Wrapper respecto al entrenamiento?</summary><p>Filter evalúa las características antes de e independientemente del modelo (por ejemplo, correlación); Wrapper evalúa subconjuntos usando el desempeño real de un clasificador entrenado.</p></details>
+<details class="qa"><summary>9. En la GLCM del ejercicio 34, ¿por qué se divide entre 40 y por qué se suma la transpuesta?</summary><p>Se suma la transpuesta para volver la matriz simétrica (total 40) y se divide entre 40 para convertir las cuentas en probabilidades; sin ello ASM y energía salen mal.</p></details>
+</details>
+
+<details class="section-block sec" id="c11-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><em>(Contexto)</em> <strong>Cómo se sintió el examen:</strong> varios alumnos comentaron que el parcial les pareció largo, cargado y pesado por el volumen acumulado desde el inicio del curso (K-Means, Hu, GLCM, LDA, Bayes, PCA…); alguno admitió sentirse abrumado y no haber sabido cómo estructurar su estudio.</li>
+<li><em>(Contexto)</em> <strong>Respuesta del profesor:</strong> ninguna pregunta teórica fue improvisada (todas salían de las diapositivas y discusiones de clase); en lo práctico, dos ejercicios eran idénticos a las tareas y el tercero era una adaptación de un ejemplo resuelto en el pizarrón.</li>
+<li><em>(Contexto)</em> <strong>Retención de exámenes:</strong> a la pregunta de si podían quedarse con el examen impreso, indicó que los recoge al final para asentar calificaciones en el acta.</li>
+<li><em>(Contexto)</em> <strong>Ponderación:</strong> recordó que prácticas y exámenes valen 45 % de la calificación final, mitad reportes de prácticas y mitad exámenes escritos; así, cada uno de los dos parciales vale 22.5 % de la nota final (ver <a href="evaluacion.html">Evaluación</a>).</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c11-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Calificaciones:</strong> el profesor subirá al sistema y a Classroom las notas de la evaluación teórica, los ejercicios prácticos, las tareas y las prácticas de laboratorio.</li>
+<li><strong>Revisión de puntajes:</strong> sumar los puntajes (P1 = 3; P2–32 = 2 c/u; P33 = 10; P34 = 10; P35 = 15) y acercarse al escritorio si hay alguna imprecisión antes de asentar la nota definitiva.</li>
+<li><strong>Siguiente sesión:</strong> según lo dicho, continúa el temario de clasificadores y se asignan las siguientes prácticas de laboratorio (sin fechas concretas en el audio).</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c11-puntosclave"><summary><span class="stitle">📌 Puntos clave</span></summary><ul>
+<li>Examen: 65 pts de teoría (32 preguntas) + 35 pts de práctica (Hu 10, GLCM 10, LDA 15).</li>
+<li>Los ejercicios del examen salen de las tareas y de ejemplos resueltos en el pizarrón: vale la pena rehacerlos a mano.</li>
+<li>Hu: centroide → m<sub>11</sub> → μ<sub>11</sub> → η<sub>11</sub> → HU<sub>2</sub> (= 0.020736 en el ejemplo); GLCM: sumar transpuesta y dividir entre la suma total (40).</li>
+<li>LDA: S<sub>B</sub>, S<sub>W</sub>, S<sub>W</sub><sup>−1</sup>S<sub>B</sub>, det(A − λI) = 0, eigenvector del λ distinto de cero.</li>
+<li>MFCC en orden: preénfasis → framing → Hamming → FFT → Mel → log → DCT.</li>
+</ul></details>
 
 </div>
 </body>
