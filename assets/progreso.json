@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-05T15:08:34+00:00",
+ "generatedAt": "2026-10-05T15:12:35+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -510,6 +510,16 @@
  },
  "gitlog": [
   {
+   "hash": "3fa3f6e",
+   "fecha": "2026-10-05T15:08:53+00:00",
+   "mensaje": "Quitar __pycache__ del repo y agregarlo a .gitignore"
+  },
+  {
+   "hash": "cda1331",
+   "fecha": "2026-10-05T15:08:42+00:00",
+   "mensaje": "Colapsar secciones por defecto en todas las clases; stubs RP-11/12 y MD-09"
+  },
+  {
    "hash": "1b97dec",
    "fecha": "2026-10-02T01:19:37-06:00",
    "mensaje": "Lab FSE: corregir descripción de la Práctica 5 (Kiosco multimedia, no 'Linux en modo consola')"
@@ -798,16 +808,6 @@
    "hash": "901bdd0",
    "fecha": "2026-10-01T01:49:34-06:00",
    "mensaje": "OAC Clase 07: formato de estudio; pendiente: re-subir audio OAC-Clase8 (falló en NotebookLM)"
-  },
-  {
-   "hash": "daf31d6",
-   "fecha": "2026-10-01T01:46:47-06:00",
-   "mensaje": "FSE Clase 09: formato de estudio; RP Clase 10 (día de examen) marcada como no-aplica"
-  },
-  {
-   "hash": "a22ff5a",
-   "fecha": "2026-10-01T01:44:40-06:00",
-   "mensaje": "ASI Clase 09: formato de estudio"
   }
  ]
 }
