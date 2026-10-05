@@ -1,8 +1,8 @@
 (function () {
-  var KEY = 'apuntes-view';
+  var KEY = 'apuntes-view-v2';
 
   function getView() {
-    try { return localStorage.getItem(KEY) || 'tema'; } catch (e) { return 'tema'; }
+    try { return localStorage.getItem(KEY) || 'clase'; } catch (e) { return 'clase'; }
   }
   function setView(v) {
     try { localStorage.setItem(KEY, v); } catch (e) {}
