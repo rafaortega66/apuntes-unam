@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-05T15:12:35+00:00",
+ "generatedAt": "2026-10-05T15:17:38+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -510,6 +510,11 @@
  },
  "gitlog": [
   {
+   "hash": "57c5df7",
+   "fecha": "2026-10-05T15:12:40+00:00",
+   "mensaje": "SIB: convertir \"Puntos clave\" de div fijo a sección plegable"
+  },
+  {
    "hash": "3fa3f6e",
    "fecha": "2026-10-05T15:08:53+00:00",
    "mensaje": "Quitar __pycache__ del repo y agregarlo a .gitignore"
@@ -803,11 +808,6 @@
    "hash": "7cf8c20",
    "fecha": "2026-10-01T01:51:45-06:00",
    "mensaje": "RP Clase 09: formato de estudio"
-  },
-  {
-   "hash": "901bdd0",
-   "fecha": "2026-10-01T01:49:34-06:00",
-   "mensaje": "OAC Clase 07: formato de estudio; pendiente: re-subir audio OAC-Clase8 (falló en NotebookLM)"
   }
  ]
 }
