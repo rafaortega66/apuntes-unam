@@ -22,7 +22,8 @@
   ],
   "_sin_clase": "Días sin clase. confirmado=false → la página lo muestra como 'por confirmar', no como clase faltante. Agregar aquí asuetos o suspensiones cuando el usuario los mencione. 'materias' vacío = todas.",
   "sin_clase": [
-    { "fecha": "2026-09-15", "motivo": "Ninguna materia de martes tiene clase registrada este día — ¿asueto/suspensión?", "confirmado": false, "materias": [] },
-    { "fecha": "2026-09-16", "motivo": "Día de la Independencia (asueto oficial)", "confirmado": true, "materias": [] }
+    { "fecha": "2026-09-15", "motivo": "Sin clase (confirmado por el usuario el 6 oct 2026: no hubo clase de las materias de martes)", "confirmado": true, "materias": [] },
+    { "fecha": "2026-09-16", "motivo": "Día de la Independencia (asueto oficial)", "confirmado": true, "materias": [] },
+    { "fecha": "2026-09-23", "motivo": "OAC sin clase este miércoles (confirmado por el usuario el 6 oct 2026)", "confirmado": true, "materias": ["OAC"] }
   ]
 }
