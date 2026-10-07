@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-10-01 (Classroom + audios de NotebookLM + sitio del prof. de ACS)",
+  "actualizado": "2026-10-07 (Classroom To-do verificado; entregas hasta 6 oct registradas)",
   "zona": "America/Mexico_City",
   "nota": "Solo tareas obligatorias. Cuando Classroom no muestra hora, se asume fin del día (23:59). Classroom manda sobre lo dicho en clase. Los ítems sin fecha exacta no se ocultan solos.",
   "items": [
@@ -9,7 +9,7 @@
       "color": "#A98BD1",
       "titulo": "Tarea 06: Formato",
       "vence": "2026-10-07T23:59:00-06:00",
-      "hora_confirmada": false,
+      "hora_confirmada": true,
       "detalle": "Serie \"Código limpio\". PDF único: NL-CURP-T06.pdf.",
       "link": "materias/fundamentos-de-sistemas-embebidos/files/tarea-06-enunciado.pdf",
       "classroom": "https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzQ2MjA2NzEw/details"
@@ -48,17 +48,6 @@
       "classroom": "https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzQ5NDg0Nzc2/details"
     },
     {
-      "id": "labfse-p5",
-      "materia": "Lab FSE",
-      "color": "#E8735C",
-      "titulo": "Práctica 5 — Linux en modo consola (Raspberry Pi)",
-      "vence": "2026-10-06T23:59:00-06:00",
-      "hora_confirmada": false,
-      "detalle": "Demostración en consola (terminal pura). Si se presenta con interfaz gráfica queda anulada (FSE Clase 09). Entrega: PDF NL-CURP-L05.pdf.",
-      "link": "materias/lab-de-fundamentos-de-sistemas-embebidos/material.html",
-      "classroom": "https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzY2MjE0MjU5/details"
-    },
-    {
       "id": "labfse-p6",
       "materia": "Lab FSE",
       "color": "#E8735C",
@@ -94,22 +83,11 @@
       "id": "asi-c11-prep",
       "materia": "ASI",
       "color": "#7C9CD6",
-      "titulo": "Para la clase: Oracle Live SQL, SQL Developer, Power BI Desktop + investigar ENOE y ENIGH",
-      "vence": "2026-10-05T17:00:00-06:00",
-      "hora_confirmada": false,
-      "detalle": "Pedido en la Clase 10 para la siguiente sesión (sin entregable escrito). Hora = inicio de la clase del lunes.",
-      "link": "materias/administracion-de-servicios-de-internet/clase-10.html#c10-pendiente"
-    },
-    {
-      "id": "asi-kali",
-      "materia": "ASI",
-      "color": "#7C9CD6",
-      "titulo": "Práctica Kali — reporte de la herramienta asignada",
-      "vence": "2026-10-05T23:59:00-06:00",
+      "titulo": "Análisis de ENOE y ENIGH (Classroom)",
+      "vence": "2026-10-07T17:00:00-06:00",
       "hora_confirmada": true,
-      "detalle": "Individual: reporte paso a paso (comandos exactos, capturas y uso). No se permiten Metasploit, Nmap ni Wireshark. Sin respuestas genéricas de IA. 100 puntos.",
-      "link": "materias/administracion-de-servicios-de-internet/clase-09.html#c9-pendiente",
-      "classroom": "https://classroom.google.com/c/ODcyMjMzMzAxNzY4/a/ODg3ODkwNzEyOTE1/details"
+      "detalle": "Asignación en Classroom, vence hoy mié 7 oct 17:00 (antes se creyó 5 oct). Además, para la clase: Oracle Live SQL, SQL Developer y Power BI Desktop.",
+      "link": "materias/administracion-de-servicios-de-internet/clase-10.html#c10-pendiente"
     },
     {
       "id": "asi-avance2",
@@ -146,44 +124,11 @@
       "materia": "MD",
       "color": "#A98BD1",
       "titulo": "Práctica 3.1 — Agrupación (clustering)",
-      "vence": "2026-10-06T23:59:00-06:00",
-      "hora_confirmada": false,
-      "detalle": "Mínimo 3 algoritmos de agrupación (K-Means, DBSCAN, jerárquico o GMM), con StandardScaler, PCA o t-SNE, métricas WSS/inercia y silueta, e interpretación con valor de negocio. Equipos de 3.",
+      "vence": "2026-10-08T12:00:00-06:00",
+      "hora_confirmada": true,
+      "detalle": "Vence jueves 8 oct, 12:00 pm (Classroom; antes figuraba 6 oct). Mínimo 3 algoritmos de agrupación (K-Means, DBSCAN, jerárquico o GMM), con StandardScaler, PCA o t-SNE, métricas WSS/inercia y silueta, e interpretación con valor de negocio. Equipos de 3.",
       "link": "materias/mineria-de-datos/clase-08.html#c8-pendiente",
       "classroom": "https://classroom.google.com/c/ODcwOTAwMDQ4Njcw/a/ODg4MTYxMDY0MzQ2/details"
-    },
-    {
-      "id": "laboac-de10",
-      "materia": "Lab OAC",
-      "color": "#7C9CD6",
-      "titulo": "Conseguir la tarjeta DE10-Lite (preguntarle a María)",
-      "vence": null,
-      "hora_confirmada": false,
-      "detalle": "Para el Laboratorio de OAC. Probablemente te la pueden prestar; si no, ver si hay que comprarla. Preguntarle también a María qué hay que hacer.",
-      "link": "materias/lab-de-organizacion-y-arquitectura-de-computadoras/index.html",
-      "fecha_texto": "Sin fecha"
-    },
-    {
-      "id": "laboac-rp1",
-      "materia": "Lab OAC",
-      "color": "#7C9CD6",
-      "titulo": "Reporte de la Práctica 1",
-      "vence": "2026-10-06T23:59:00-06:00",
-      "hora_confirmada": false,
-      "detalle": "Con carátula y nombres de todos los integrantes del equipo.",
-      "link": "materias/lab-de-organizacion-y-arquitectura-de-computadoras/index.html",
-      "classroom": "https://classroom.google.com/c/ODc4NDAzMTcxMjIw/a/ODg4MDg4ODI3ODQx/details"
-    },
-    {
-      "id": "laboac-rp2",
-      "materia": "Lab OAC",
-      "color": "#7C9CD6",
-      "titulo": "Reporte de la Práctica 2",
-      "vence": "2026-10-06T23:59:00-06:00",
-      "hora_confirmada": false,
-      "detalle": "Con carátula y nombres de los integrantes.",
-      "link": "materias/lab-de-organizacion-y-arquitectura-de-computadoras/index.html",
-      "classroom": "https://classroom.google.com/c/ODc4NDAzMTcxMjIw/a/ODg4MDkxMDU0ODgz/details"
     },
     {
       "id": "laboac-part",
@@ -204,7 +149,7 @@
       "titulo": "Práctica 3 — ASM, tablas, mapas, código e implementación en FPGA",
       "vence": null,
       "hora_confirmada": false,
-      "detalle": "Plazo de 1 semana desde que se asignó (\"esta semana\"); mostrar la carta ASM al profesor antes de programar. Fecha exacta no aclarada en el audio.",
+      "detalle": "Plazo de 1 semana desde que se asignó (\"esta semana\"); mostrar la carta ASM al profesor antes de programar. Fecha exacta no aclarada en el audio. Ya tienes la tarjeta DE10-Lite: puedes adelantarla.",
       "link": "materias/lab-de-organizacion-y-arquitectura-de-computadoras/index.html",
       "fecha_texto": "≈ 1 semana desde su asignación (sin fecha exacta)"
     },
@@ -215,20 +160,9 @@
       "titulo": "Raíz cuadrada entera en ensamblador (restas de impares)",
       "vence": null,
       "hora_confirmada": false,
-      "detalle": "Asignada en la Clase 06 sin fecha límite.",
+      "detalle": "Asignada en la Clase 06 sin fecha límite. Ya tienes la Raspberry Pi Pico 2 (llegó el 6 oct): lista para hacerse.",
       "link": "materias/organizacion-y-arquitectura-de-computadoras/clase-06.html",
       "fecha_texto": "Sin fecha (el profesor no la dio)"
-    },
-    {
-      "id": "oac-pico",
-      "materia": "OAC",
-      "color": "#45B8A8",
-      "titulo": "Comprar o conseguir una Raspberry Pi Pico",
-      "vence": null,
-      "hora_confirmada": false,
-      "detalle": "Hace falta para la tarea de la raíz cuadrada entera en ensamblador (la única tarea de OAC por ahora).",
-      "link": "materias/organizacion-y-arquitectura-de-computadoras/clase-06.html",
-      "fecha_texto": "Sin fecha — antes de hacer la tarea de la raíz"
     },
     {
       "id": "acs-t4",
@@ -305,6 +239,17 @@
       "detalle": "En el cuaderno de OAC aparece en rojo (error al procesar). Sin ese audio no se puede armar la clase del 30 sep. Tampoco hay audio de la clase del 23 sep — ¿hubo clase ese día?",
       "link": "progreso.html",
       "fecha_texto": "Cuando puedas"
+    },
+    {
+      "id": "rp-p3",
+      "materia": "RP",
+      "color": "#45B8A8",
+      "titulo": "Práctica 3 — Clasificadores Bayesianos",
+      "vence": "2026-10-09T07:00:00-06:00",
+      "hora_confirmada": true,
+      "detalle": "Vence viernes 9 oct, 7:00 am (Classroom, verificado el 7 oct).",
+      "link": null,
+      "classroom": "https://classroom.google.com/"
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-05T16:09:35+00:00",
+ "generatedAt": "2026-10-07T06:54:07+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -510,6 +510,21 @@
  },
  "gitlog": [
   {
+   "hash": "66b6189",
+   "fecha": "2026-10-06T17:18:34-06:00",
+   "mensaje": "horario.json: confirmar 15 sep (martes sin clase) y OAC 23 sep sin clase"
+  },
+  {
+   "hash": "296dba8",
+   "fecha": "2026-10-05T10:50:53-06:00",
+   "mensaje": "Vista por defecto 'Por clase' en todos los dispositivos (clave nueva de localStorage)"
+  },
+  {
+   "hash": "7190857",
+   "fecha": "2026-10-05T10:09:35-06:00",
+   "mensaje": "RP Clase 12 (5 oct): repaso Bayes/Laplace, DBSCAN, KNN y Práctica 3"
+  },
+  {
    "hash": "977cb94",
    "fecha": "2026-10-05T10:02:17-06:00",
    "mensaje": "MD Clase 09 (1 oct) y RP Clase 11 (2 oct): Práctica 1 de clustering, reglas de asociación; revisión del primer parcial"
@@ -793,21 +808,6 @@
    "hash": "e3da7c0",
    "fecha": "2026-10-01T02:01:36-06:00",
    "mensaje": "FSE Clase 08: formato de estudio"
-  },
-  {
-   "hash": "8534634",
-   "fecha": "2026-10-01T01:59:56-06:00",
-   "mensaje": "ASI Clase 08: formato de estudio"
-  },
-  {
-   "hash": "efadaa5",
-   "fecha": "2026-10-01T01:58:03-06:00",
-   "mensaje": "ACS Clase 09: formato de estudio"
-  },
-  {
-   "hash": "d2519c5",
-   "fecha": "2026-10-01T01:56:07-06:00",
-   "mensaje": "SIB Clase 08: formato de estudio"
   }
  ]
 }
