@@ -252,3 +252,7 @@ Hay memoria de proyecto en
 complementa esto con contexto de sesión a sesión (quién es el usuario, su
 equipo/proveedor asignado en cada proyecto, etc.) — revisarla al inicio pero
 tratar este `CLAUDE.md` como la referencia estructural definitiva del repo.
+
+## Retomar trabajo en curso (cambio de máquina)
+
+- **Tarea ASI «Análisis de ENOE y ENIGH»** (vence mié 7 oct 2026, 17:00): ver `trabajos/asi-enoe-enigh/RETOMAR.md`. El usuario pasa de Linux a Windows para usar Power BI Desktop; ahí está el estado, el tutorial y las respuestas de referencia. Borrar esta sección cuando la tarea esté entregada.
