@@ -102,6 +102,7 @@
       '<span class="pend-fecha">' + Pend.esc(cuando + faltan) + '</span></div>' +
       '<div class="pend-titulo">' + Pend.esc(it.titulo) + '</div>' +
       (compact || !it.detalle ? '' : '<div class="pend-detalle">' + Pend.esc(it.detalle) + '</div>') +
+      (compact || !it.avance ? '' : '<div class="pend-avance">📍 ' + Pend.esc(it.avance) + '</div>') +
       '</a>';
   };
   Pend.onChange = function (fn) { Pend.listeners.push(fn); if (Pend.loaded) fn(); };

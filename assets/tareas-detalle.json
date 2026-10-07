@@ -83,7 +83,50 @@
         "u": "../materias/administracion-de-servicios-de-internet/clase-10.html#c10-pendiente"
       }
     ],
-    "fuente": "Audios ASI-Clase9, ASI-Clase10 y ASI-Clase11 (NotebookLM, 7 oct 2026); fecha y descripción leídas en Classroom el mismo día."
+    "fuente": "Audios ASI-Clase9, ASI-Clase10 y ASI-Clase11 (NotebookLM, 7 oct 2026); fecha y descripción leídas en Classroom el mismo día.",
+    "progreso": {
+      "actualizado": "2026-10-07",
+      "estado": "en_curso",
+      "donde": "Instrucciones extraídas de NotebookLM y Classroom, y análisis de referencia hecho en Python. El usuario se cambia a Windows para armar los gráficos en Power BI Desktop. Sigue: instalar Power BI, cargar enoe.xlsx y hacer P1–P8.",
+      "pasos": [
+        {
+          "t": "Extraer las instrucciones de la tarea (ASI Clase 11, NotebookLM y Classroom)",
+          "hecho": true
+        },
+        {
+          "t": "Calcular las respuestas de referencia y graficar en Python (trabajos/asi-enoe-enigh/)",
+          "hecho": true
+        },
+        {
+          "t": "Escribir el tutorial paso a paso (trabajos/asi-enoe-enigh/TUTORIAL.md)",
+          "hecho": true
+        },
+        {
+          "t": "Instalar Power BI Desktop en Windows",
+          "hecho": false
+        },
+        {
+          "t": "Volver a bajar enoe.xlsx y viviendas.csv de Classroom",
+          "hecho": false
+        },
+        {
+          "t": "Cargar la ENOE y corregir «Prrimaria completa» en Power Query",
+          "hecho": false
+        },
+        {
+          "t": "Armar P1–P8 en Power BI (una página por pregunta)",
+          "hecho": false
+        },
+        {
+          "t": "Cargar viviendas.csv y armar la ENIGH: explicación, 3 gráficos útiles y 2 innecesarios",
+          "hecho": false
+        },
+        {
+          "t": "Guardar .pbix, exportar PDF y entregar en Classroom antes de las 17:00",
+          "hecho": false
+        }
+      ]
+    }
   },
   "fse-t06": {
     "resumen": "Síntesis de <strong>≈250 palabras</strong> del capítulo 5 (<em>Formatting</em>) de <em>Clean Code</em>, de Robert C. Martin.",

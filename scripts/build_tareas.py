@@ -56,6 +56,12 @@ def pagina(it, det):
                       % (color, e(it['titulo'])))
 
     cuerpo = ''
+    pr = det.get('progreso')
+    if pr:
+        hechos = sum(1 for x in pr['pasos'] if x['hecho'])
+        lista = ''.join('<li class="%s">%s %s</li>' % ('hecho' if x['hecho'] else 'falta', '✅' if x['hecho'] else '⬜', x['t']) for x in pr['pasos'])
+        cuerpo += seccion('donde-nos-quedamos', '📍 Dónde nos quedamos (%d de %d pasos)' % (hechos, len(pr['pasos'])),
+                          '<p>%s</p><ul class="tarea-progreso">%s</ul><p class="tarea-fuente">Actualizado: %s</p>' % (pr['donde'], lista, e(pr['actualizado'])))
     if det.get('pasos'):
         cuerpo += seccion('que-hacer', '✅ Qué tienes que hacer',
                           '<ol class="tarea-pasos">%s</ol>' % ''.join('<li>%s</li>' % p for p in det['pasos']))
@@ -97,8 +103,8 @@ def pagina(it, det):
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{titulo_plano} — {materia}</title>
-<link rel="stylesheet" href="../assets/style.css?v=20261007a">
-<script src="../assets/app.js?v=20261007a" defer></script>
+<link rel="stylesheet" href="../assets/style.css?v=20261007b">
+<script src="../assets/app.js?v=20261007b" defer></script>
 </head>
 <body>
 <div class="wrap">

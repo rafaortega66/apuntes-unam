@@ -253,6 +253,14 @@ complementa esto con contexto de sesión a sesión (quién es el usuario, su
 equipo/proveedor asignado en cada proyecto, etc.) — revisarla al inicio pero
 tratar este `CLAUDE.md` como la referencia estructural definitiva del repo.
 
-## Retomar trabajo en curso (cambio de máquina)
+## Estado de las tareas: dónde nos quedamos (leer al empezar, actualizar al terminar)
 
-- **Tarea ASI «Análisis de ENOE y ENIGH»** (vence mié 7 oct 2026, 17:00): ver `trabajos/asi-enoe-enigh/RETOMAR.md`. El usuario pasa de Linux a Windows para usar Power BI Desktop; ahí está el estado, el tutorial y las respuestas de referencia. Borrar esta sección cuando la tarea esté entregada.
+El avance de cada asignación vive en el propio sitio, para que cualquier sesión nueva (en cualquier máquina) sepa en qué quedó el trabajo:
+
+- `assets/pendientes.json`: cada ítem puede traer `avance` (una línea; se ve en la tarjeta de Pendientes).
+- `assets/tareas-detalle.json`: cada tarea puede traer `progreso` = `{actualizado, estado, donde, pasos:[{t, hecho}]}`; `python3 scripts/build_tareas.py` lo pinta en `tareas/<id>.html` como «📍 Dónde nos quedamos».
+
+**Al empezar una sesión:** revisa los ítems con `avance`/`progreso` (hoy: `asi-c11-prep`) y retoma desde el primer paso sin marcar; no le preguntes al usuario qué faltaba.
+**Al avanzar o cerrar una sesión de trabajo en una tarea:** marca los pasos hechos, reescribe `donde` y `avance` con la fecha, corre `python3 scripts/build_tareas.py` y haz commit y push. Cuando la tarea se entregue, quita el ítem de `pendientes.json` (o ponle `oculto: true`) y bórrale el `progreso`.
+
+- **Tarea abierta hoy: ASI «Análisis de ENOE y ENIGH»** (vence mié 7 oct 2026, 17:00). El usuario pasó de Linux a Windows para usar Power BI Desktop. Materiales: `trabajos/asi-enoe-enigh/RETOMAR.md` y `TUTORIAL.md`. Los datos `enoe.xlsx` y `viviendas.csv` no están en el repo: se bajan de Classroom.
