@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-07T06:54:07+00:00",
+ "generatedAt": "2026-10-07T13:42:24+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -438,6 +438,13 @@
     "resumen": "Tema 2 (2.2, cierre) e inicio del Tema 3 — Análisis y escaneo de vulnerabilidades (estático, dinámico, SCA, red y configuración; DAST/SAST/SCA), bases de datos CVE y NVD con la métrica CVSS, ciberterrorismo y definición ",
     "url": "materias/seguridad-informatica-basica/clase-10.html",
     "formato": "estudio"
+   },
+   {
+    "num": 11,
+    "fecha": "2026-10-06",
+    "resumen": "Examen parcial (Temas 1 a 3, hasta CVSS).",
+    "url": "materias/seguridad-informatica-basica/clase-11.html",
+    "formato": "no-aplica"
    }
   ],
   "lab-de-fundamentos-de-sistemas-embebidos": [],
@@ -509,6 +516,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "3d2ccc2",
+   "fecha": "2026-10-07T00:53:56-06:00",
+   "mensaje": "Pendientes y entregas al 7 oct: Classroom verificado (ASI Kali, Lab FSE P5, Lab OAC reportes 1-2 entregados; fechas de ASI/MD corregidas; RP Práctica 3 agregada)"
+  },
   {
    "hash": "66b6189",
    "fecha": "2026-10-06T17:18:34-06:00",
@@ -803,11 +815,6 @@
    "hash": "476c357",
    "fecha": "2026-10-01T02:03:50-06:00",
    "mensaje": "MD Clase 06: formato de estudio"
-  },
-  {
-   "hash": "e3da7c0",
-   "fecha": "2026-10-01T02:01:36-06:00",
-   "mensaje": "FSE Clase 08: formato de estudio"
   }
  ]
 }
