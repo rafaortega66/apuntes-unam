@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Práctica 2 — Asociación / Market Basket Analysis (comidas preparadas) — MD</title>
+<link rel="stylesheet" href="../assets/style.css?v=20261007a">
+<script src="../assets/app.js?v=20261007a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="../pendientes.html">← Pendientes</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Práctica 2 — Asociación / Market Basket Analysis (comidas preparadas)</h2>
+  <p class="prof"><strong style="color:#A98BD1">MD</strong> · Vence: Sin fecha límite confirmada<span class="tarea-faltan" id="tarea-faltan"></span></p>
+</div>
+<p class="tarea-resumen"><strong>Market Basket Analysis</strong> sobre «comidas preparadas» (55,000 registros): reglas de asociación en Python y RapidMiner.</p>
+<details class="section-block sec" id="que-hacer" open><summary><span class="stitle">✅ Qué tienes que hacer</span></summary>
+<ol class="tarea-pasos"><li>Procesa el archivo de 55,000 tickets.</li><li>Fija el <strong>soporte mínimo en 0.01 (1 %)</strong>; con un valor demasiado bajo (0.0001) salen más de 90 reglas irrelevantes.</li><li>Enfoca el análisis en la categoría de comidas preparadas (burritos, flapis, pizzas, pechugas rellenas).</li><li>Compara <strong>Apriori contra FP-Growth</strong>, en Python y en RapidMiner.</li><li>Identifica los <strong>productos ancla</strong> que arrastran la compra de otros y propón estrategias de venta cruzada y promociones.</li></ol>
+</details>
+<details class="section-block sec" id="entrega" open><summary><span class="stitle">📤 Cómo y cuándo se entrega</span></summary>
+<p>Notebook de Python explicado paso por paso y diapositivas (PPT o PDF) con capturas del flujo de RapidMiner. Fecha: «el martes» (por confirmar).</p>
+</details>
+<details class="section-block sec" id="faltante" open><summary><span class="stitle">⚠️ Lo que NO está dicho / por confirmar</span></summary>
+<ul><li>El profesor dijo que mandará por Classroom la descripción detallada y los enlaces de apoyo; aún no aparece publicada.</li><li>No se dio fecha exacta.</li></ul>
+</details>
+<details class="section-block sec" id="enlaces" open><summary><span class="stitle">🔗 Enlaces</span></summary>
+<ul><li><a href="../materias/mineria-de-datos/clase-10.html#c10-pendiente">MD · Clase 10, sección «Pendiente»</a></li></ul>
+</details>
+
+<p class="tarea-fuente">Fuente: Audio MD-Clase10 (NotebookLM, 7 oct 2026).</p>
+</div>
+<script>
+(function () {
+  var el = document.getElementById('tarea-faltan');
+  if (!el || !el.dataset.vence) return;
+  function tick() {
+    var d = new Date(el.dataset.vence).getTime() - Date.now();
+    if (d <= 0) { el.textContent = ' · ya venció'; return; }
+    var m = Math.floor(d / 60000), h = Math.floor(m / 60);
+    el.textContent = ' · ' + (h < 48 ? 'faltan ' + h + ' h ' + (m % 60) + ' min' : 'faltan ' + Math.floor(h / 24) + ' días');
+  }
+  tick(); setInterval(tick, 30000);
+})();
+</script>
+</body>
+</html>

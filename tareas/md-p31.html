@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Práctica 3.1 — Agrupación (clustering) — MD</title>
+<link rel="stylesheet" href="../assets/style.css?v=20261007a">
+<script src="../assets/app.js?v=20261007a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="../pendientes.html">← Pendientes</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Práctica 3.1 — Agrupación (clustering)</h2>
+  <p class="prof"><strong style="color:#A98BD1">MD</strong> · Vence: jueves 8 oct 2026, 12:00<span class="tarea-faltan" id="tarea-faltan" data-vence="2026-10-08T12:00:00-06:00"></span></p>
+</div>
+<p class="tarea-resumen">Práctica de <strong>agrupación (clustering)</strong> con el dataset de transacciones de ventas, en equipos de 3. La entrega se recorrió al <strong>jueves 8 oct, 12:00</strong> (Classroom y Clase 10).</p>
+<details class="section-block sec" id="que-hacer" open><summary><span class="stitle">✅ Qué tienes que hacer</span></summary>
+<ol class="tarea-pasos"><li>Trabaja con el dataset <code>practica-3-1-transacciones-de-ventas.csv</code>.</li><li>Aplica <strong>mínimo 3 algoritmos de agrupación</strong> (K-Means, DBSCAN, jerárquico o GMM).</li><li>Usa <code>StandardScaler</code>, PCA o t-SNE, las métricas WSS/inercia y silueta, e interpreta los grupos con valor de negocio.</li><li>Hazlo en <strong>Python</strong> (notebook explicado paso por paso, deteniéndote en los puntos clave) y en <strong>RapidMiner</strong> (diapositivas con capturas del flujo y comentarios).</li></ol>
+</details>
+<details class="section-block sec" id="entrega" open><summary><span class="stitle">📤 Cómo y cuándo se entrega</span></summary>
+<p>Notebook de Python desglosado paso por paso <strong>más</strong> presentación (PPT o PDF) con capturas del modelo de RapidMiner, a más tardar el jueves 8 de octubre a las 12:00 (Classroom).</p>
+</details>
+<details class="section-block sec" id="faltante" open><summary><span class="stitle">⚠️ Lo que NO está dicho / por confirmar</span></summary>
+<ul><li>Los criterios de evaluación no están en los audios; revisa la descripción en Classroom.</li></ul>
+</details>
+<details class="section-block sec" id="enlaces" open><summary><span class="stitle">🔗 Enlaces</span></summary>
+<ul><li><a href="../materias/mineria-de-datos/files/practica-3-1-transacciones-de-ventas.csv">Dataset de la práctica (CSV)</a></li><li><a href="../materias/mineria-de-datos/clase-10.html#c10-aclaraciones">MD · Clase 10, entregables y prórroga</a></li><li><a href="../materias/mineria-de-datos/clase-08.html#c8-pendiente">MD · Clase 08, sección «Pendiente»</a></li><li><a href="https://classroom.google.com/c/ODcwOTAwMDQ4Njcw/a/ODg4MTYxMDY0MzQ2/details" target="_blank" rel="noopener">Abrir la tarea en Classroom</a></li></ul>
+</details>
+
+<p class="tarea-fuente">Fuente: Clases 08, 09 y 10 de MD (NotebookLM) y Classroom, 7 oct 2026.</p>
+</div>
+<script>
+(function () {
+  var el = document.getElementById('tarea-faltan');
+  if (!el || !el.dataset.vence) return;
+  function tick() {
+    var d = new Date(el.dataset.vence).getTime() - Date.now();
+    if (d <= 0) { el.textContent = ' · ya venció'; return; }
+    var m = Math.floor(d / 60000), h = Math.floor(m / 60);
+    el.textContent = ' · ' + (h < 48 ? 'faltan ' + h + ' h ' + (m % 60) + ' min' : 'faltan ' + Math.floor(h / 24) + ' días');
+  }
+  tick(); setInterval(tick, 30000);
+})();
+</script>
+</body>
+</html>

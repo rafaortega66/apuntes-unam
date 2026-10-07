@@ -83,10 +83,10 @@
    "id": "asi-c11-prep",
    "materia": "ASI",
    "color": "#7C9CD6",
-   "titulo": "Análisis de ENOE y ENIGH (Classroom)",
+   "titulo": "Análisis de ENOE y ENIGH",
    "vence": "2026-10-07T17:00:00-06:00",
    "hora_confirmada": true,
-   "detalle": "Asignación en Classroom, vence hoy mié 7 oct 17:00 (antes se creyó 5 oct). Además, para la clase: Oracle Live SQL, SQL Developer y Power BI Desktop.",
+   "detalle": "Hoy 17:00. Sin reporte: investigar qué son ENOE y ENIGH y llegar con Oracle Live SQL, SQL Developer, Excel/Power Query y Power BI Desktop listos. Toca para ver las instrucciones exactas.",
    "link": "materias/administracion-de-servicios-de-internet/clase-10.html#c10-pendiente"
   },
   {
@@ -227,7 +227,8 @@
    "hora_confirmada": false,
    "detalle": "En el cuaderno de OAC aparece en rojo (error al procesar). Sin ese audio no se puede armar la clase del 30 sep. Tampoco hay audio de la clase del 23 sep — ¿hubo clase ese día?",
    "link": "progreso.html",
-   "fecha_texto": "Cuando puedas"
+   "fecha_texto": "Cuando puedas",
+   "sin_pagina": true
   },
   {
    "id": "rp-p3",

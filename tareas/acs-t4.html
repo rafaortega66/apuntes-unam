@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarea 4: peticiones concurrentes con netcat + monitoreo con ss (capturas) — ACS</title>
+<link rel="stylesheet" href="../assets/style.css?v=20261007a">
+<script src="../assets/app.js?v=20261007a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="../pendientes.html">← Pendientes</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Tarea 4: peticiones concurrentes con netcat + monitoreo con ss (capturas)</h2>
+  <p class="prof"><strong style="color:#E8735C">ACS</strong> · Vence: Sin fecha — por anunciar en clase<span class="tarea-faltan" id="tarea-faltan"></span></p>
+</div>
+<p class="tarea-resumen">Provocar el desbordamiento de la cola de conexiones de <code>listen()</code> y documentarlo con capturas de <code>ss</code> y <code>netcat</code>.</p>
+<details class="section-block sec" id="que-hacer" open><summary><span class="stitle">✅ Qué tienes que hacer</span></summary>
+<ol class="tarea-pasos"><li>Ajusta los parámetros del kernel: <code>sudo sysctl -w net.ipv4.tcp_syncookies=0</code> y <code>sudo sysctl -w net.ipv4.tcp_syn_retries=1</code>.</li><li>Ejecuta el servidor con <strong>backlog = 1</strong> en el puerto <strong>4898</strong> (parte de <code>ejemplo_listen.c</code>).</li><li>Abre al menos 4 terminales: 2 del lado del servidor con <code>watch -n1 "ss -atnp"</code> y 3 o 4 clientes con <code>nc -v &lt;IP&gt; 4898</code>.</li><li>Investiga la función del kernel que revisa si la cola de aceptación está llena y el comportamiento de <code>tcp_syncookies</code> y <code>tcp_syn_retries</code>.</li><li>Arma un reporte con capturas de todas las terminales que muestren las conexiones <strong>aceptadas, encoladas y rechazadas</strong>, y la teoría investigada.</li></ol>
+</details>
+<details class="section-block sec" id="entrega" open><summary><span class="stitle">📤 Cómo y cuándo se entrega</span></summary>
+<p><strong>Reporte en PDF.</strong> Plazo dicho en clase: «antes del próximo jueves» (el audio no aclara si es el 8 o el 15 de octubre).</p>
+</details>
+<details class="section-block sec" id="faltante" open><summary><span class="stitle">⚠️ Lo que NO está dicho / por confirmar</span></summary>
+<ul><li>Fecha exacta de entrega.</li><li>El profesor reenviará por Telegram la liga del sitio y las instrucciones; revísalas porque pueden precisar el formato.</li></ul>
+</details>
+<details class="section-block sec" id="enlaces" open><summary><span class="stitle">🔗 Enlaces</span></summary>
+<ul><li><a href="../materias/arquitectura-cliente-servidor/clase-12.html#c12-pendiente">ACS · Clase 12, sección «Pendiente»</a></li><li><a href="../materias/arquitectura-cliente-servidor/programas.html">Programas y base de la Tarea 4</a></li></ul>
+</details>
+
+<p class="tarea-fuente">Fuente: Audio ACS-Clase12 (NotebookLM, 7 oct 2026).</p>
+</div>
+<script>
+(function () {
+  var el = document.getElementById('tarea-faltan');
+  if (!el || !el.dataset.vence) return;
+  function tick() {
+    var d = new Date(el.dataset.vence).getTime() - Date.now();
+    if (d <= 0) { el.textContent = ' · ya venció'; return; }
+    var m = Math.floor(d / 60000), h = Math.floor(m / 60);
+    el.textContent = ' · ' + (h < 48 ? 'faltan ' + h + ' h ' + (m % 60) + ' min' : 'faltan ' + Math.floor(h / 24) + ' días');
+  }
+  tick(); setInterval(tick, 30000);
+})();
+</script>
+</body>
+</html>

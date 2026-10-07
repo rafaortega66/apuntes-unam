@@ -503,3 +503,14 @@ details.qa p { font-size: 14px; }
 .section-block table.izq td:last-child, .section-block table.izq th:last-child { text-align: left; }
 .estudio-extra { margin: 16px 0 6px; padding-top: 4px; border-top: 1px dashed rgba(255,255,255,0.12); }
 .estudio-extra p { white-space: normal; }
+
+/* ===== Páginas de asignación (tareas/<id>.html) ===== */
+.tarea-resumen { font-size: 16px; line-height: 1.65; margin: 4px 0 18px; }
+.tarea-faltan { color: var(--ink-soft); }
+.tarea-pasos { padding-left: 22px; line-height: 1.7; }
+.tarea-pasos li { margin: 8px 0; }
+.tarea-citas { list-style: none; padding: 0; margin: 0; }
+.tarea-citas li { margin: 0 0 16px; }
+.tarea-citas blockquote { margin: 4px 0 2px; padding: 8px 12px; border-left: 3px solid rgba(255,255,255,0.25); background: rgba(255,255,255,0.04); border-radius: 0 8px 8px 0; font-size: 14.5px; line-height: 1.6; }
+.tarea-audio { font-size: 11.5px; font-weight: 700; letter-spacing: .04em; color: var(--ink-soft); }
+.tarea-fuente { color: var(--ink-soft); font-size: 12.5px; margin: 18px 0 0; }

@@ -96,7 +96,7 @@
         (it.hora_confirmada === false ? ' (fin del día)' : '')
       : (it.fecha_texto || 'Sin fecha');
     var faltan = t && (t - Pend.now() < 48 * 3600000) ? ' · ' + Pend.faltan(t) : '';
-    var href = it.link ? (SITE_ROOT + it.link) : (it.classroom || '#');
+    var href = (it.id && !it.sin_pagina) ? (SITE_ROOT + 'tareas/' + it.id + '.html') : (it.link ? (SITE_ROOT + it.link) : (it.classroom || '#'));
     return '<a class="pend-card" href="' + Pend.esc(href) + '" style="--c:' + Pend.esc(it.color || '#7C9CD6') + '">' +
       '<div class="pend-top"><span class="pend-materia">' + Pend.esc(it.materia) + '</span>' +
       '<span class="pend-fecha">' + Pend.esc(cuando + faltan) + '</span></div>' +

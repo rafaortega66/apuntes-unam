@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Raíz cuadrada entera en ensamblador (restas de impares) — OAC</title>
+<link rel="stylesheet" href="../assets/style.css?v=20261007a">
+<script src="../assets/app.js?v=20261007a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="../pendientes.html">← Pendientes</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Raíz cuadrada entera en ensamblador (restas de impares)</h2>
+  <p class="prof"><strong style="color:#45B8A8">OAC</strong> · Vence: Sin fecha (el profesor no la dio)<span class="tarea-faltan" id="tarea-faltan"></span></p>
+</div>
+<p class="tarea-resumen">Subrutina en ensamblador inline que calcula la <strong>parte entera de la raíz cuadrada</strong> restando impares consecutivos.</p>
+<details class="section-block sec" id="que-hacer" open><summary><span class="stitle">✅ Qué tienes que hacer</span></summary>
+<ol class="tarea-pasos"><li>Toma el número de entrada (por ejemplo, 25 o 27).</li><li>Réstale sucesivamente los impares 1, 3, 5, 7, 9…</li><li>Cuenta cuántas restas completas hiciste hasta llegar a cero o hasta que el residuo sea menor que el siguiente impar.</li><li>Ese conteo es la parte entera de la raíz.</li><li>Prográmalo con <code>@micropython.asm_thumb</code> usando los registros R0 a R2.</li></ol>
+</details>
+<details class="section-block sec" id="entrega" open><summary><span class="stitle">📤 Cómo y cuándo se entrega</span></summary>
+<p>No se dijo (asignada en la Clase 06 sin fecha).</p>
+</details>
+<details class="section-block sec" id="faltante" open><summary><span class="stitle">⚠️ Lo que NO está dicho / por confirmar</span></summary>
+<ul><li>Fecha límite, medio de entrega y rúbrica.</li></ul>
+</details>
+<details class="section-block sec" id="enlaces" open><summary><span class="stitle">🔗 Enlaces</span></summary>
+<ul><li><a href="../materias/organizacion-y-arquitectura-de-computadoras/clase-06.html">OAC · Clase 06</a></li></ul>
+</details>
+
+<p class="tarea-fuente">Fuente: Audio OAC (NotebookLM, 7 oct 2026).</p>
+</div>
+<script>
+(function () {
+  var el = document.getElementById('tarea-faltan');
+  if (!el || !el.dataset.vence) return;
+  function tick() {
+    var d = new Date(el.dataset.vence).getTime() - Date.now();
+    if (d <= 0) { el.textContent = ' · ya venció'; return; }
+    var m = Math.floor(d / 60000), h = Math.floor(m / 60);
+    el.textContent = ' · ' + (h < 48 ? 'faltan ' + h + ' h ' + (m % 60) + ' min' : 'faltan ' + Math.floor(h / 24) + ' días');
+  }
+  tick(); setInterval(tick, 30000);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Examen parcial (código C: esquema cliente-servidor con sockets) — ACS</title>
+<link rel="stylesheet" href="../assets/style.css?v=20261007a">
+<script src="../assets/app.js?v=20261007a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="../pendientes.html">← Pendientes</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Examen parcial (código C: esquema cliente-servidor con sockets)</h2>
+  <p class="prof"><strong style="color:#E8735C">ACS</strong> · Vence: ≈ mediados de octubre (por confirmar)<span class="tarea-faltan" id="tarea-faltan"></span></p>
+</div>
+<p class="tarea-resumen">Anunciado el 24 y el 29 sep: «más o menos en dos semanas». Programar en C un cliente-servidor TCP (socket/bind/listen/accept/connect, sockaddr_in, htons, IP y puerto por argv). Reglas aún no dichas; el PDF de especificaciones existe en el sitio del profesor pero aún no lo publica.</p>
+<div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Instrucciones completas:</strong> todavía no se extraen del notebook para esta asignación. Pídele a Claude «extrae las instrucciones de Examen parcial (código C: esquema cliente-servidor con sockets) del notebook» y esta página se actualiza.</p></div>
+<details class="section-block sec" id="enlaces" open><summary><span class="stitle">🔗 Enlaces</span></summary>
+<ul><li><a href="../materias/arquitectura-cliente-servidor/evaluacion.html#examen-parcial">Ir a la sección de la materia donde se explica</a></li></ul>
+</details>
+
+</div>
+<script>
+(function () {
+  var el = document.getElementById('tarea-faltan');
+  if (!el || !el.dataset.vence) return;
+  function tick() {
+    var d = new Date(el.dataset.vence).getTime() - Date.now();
+    if (d <= 0) { el.textContent = ' · ya venció'; return; }
+    var m = Math.floor(d / 60000), h = Math.floor(m / 60);
+    el.textContent = ' · ' + (h < 48 ? 'faltan ' + h + ' h ' + (m % 60) + ' min' : 'faltan ' + Math.floor(h / 24) + ' días');
+  }
+  tick(); setInterval(tick, 30000);
+})();
+</script>
+</body>
+</html>
