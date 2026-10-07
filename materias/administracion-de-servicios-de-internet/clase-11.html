@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="formato" content="estudio">
+<title>Clase 11 — Administración de Servicios de Internet</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261005a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Administración de Servicios de Internet</a>
+<div class="detail-head" style="border-color:#7C9CD6"><h2>Clase 11</h2>
+  <p class="prof">Mtro. Juan Ángel Calvillo Pérez · 5 oct 2026 · Arquitectura de datos (fuera del temario) — Análisis práctico de la ENOE (y primer vistazo a la ENIGH) del INEGI en Power BI Desktop: sueldos por edad, sexo, escolaridad, geografía y formalidad, con suma frente a recuento y promedio. Se asignan las dos actividades (ENOE y ENIGH).</p>
+</div>
+
+<details class="section-block sec" id="c11-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<p>El profesor no dijo qué entra al examen. Estos puntos son los que desarrolló con preguntas en vivo o con ejercicios resueltos, y conectan con lo visto en la <a href="clase-10.html" style="color:var(--indigo)">Clase 10</a>.</p>
+<ol class="examen-lista">
+<li><strong>Base transaccional frente a Data Warehouse, y por qué los datos no regresan.</strong><span class="evid">Evidencia: lo cuestionó en vivo y enfatizó que del Data Warehouse no se reingresan datos a la base de origen para no perder la integridad.</span></li>
+<li><strong>Las 5 vistas del lado izquierdo y las 3 fichas del lado derecho de Power BI Desktop.</strong><span class="evid">Evidencia: las explicó una por una con el programa abierto.</span></li>
+<li><strong>Suma frente a recuento frente a promedio al leer un gráfico.</strong><span class="evid">Evidencia: ejercicio resuelto en vivo: la suma total de ingresos engaña si no se ajusta por el número de personas o por el promedio individual.</span></li>
+<li><strong>Distorsión por categorías agrupadas (Media Superior y Superior en una sola).</strong><span class="evid">Evidencia: lo demostró al desglosar por años reales de estudio, donde aparecen los picos salariales reales.</span></li>
+<li><strong>Formalidad e informalidad por región.</strong><span class="evid">Evidencia: comparó CDMX y Oaxaca (mucho comercio informal) contra el norte y Quintana Roo (más empleo formal).</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c11-etl"><summary><span class="stitle">1 · Proceso ETL y Data Warehouse frente a base de datos transaccional</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El Data Warehouse es un repositorio de datos preparado para análisis y consultas históricas, que integra distintos orígenes. De él se extraen reportes, pero su información no puede volver a ingresarse a la base de datos de origen.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es tomarle una fotografía a un expediente: te sirve para consultar y analizar el pasado sin alterar el documento original. Deja de servir cuando necesitas actualizar el saldo de un cliente en un cajero en tiempo real.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Sigue el proceso <strong>ETL</strong>:</p>
+<ul>
+<li><strong>Extracción:</strong> lee datos sin importar la fuente (Excel, CSV, XML, JSON, PDF, MySQL, Postgres, Oracle, Azure, GitHub, Meta, etc.).</li>
+<li><strong>Transformación:</strong> limpieza, filtrado y modelado de los datos en Power Query.</li>
+<li><strong>Carga:</strong> los datos se cargan en la estructura del modelo analítico.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Se conecta con Business Intelligence, IA y <em>Machine Learning</em>, y protege la integridad de la base operativa. Es la regla que ya apareció en la <a href="clase-10.html" style="color:var(--indigo)">Clase 10</a>.</p>
+<div class="errores"><p><strong>Error común:</strong> reingresar datos procesados del Data Warehouse a la base transaccional, rompiendo la integridad de los datos.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c11-powerbi"><summary><span class="stitle">2 · El entorno de Power BI Desktop</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es la herramienta de Microsoft para visualización ejecutiva y construcción de tableros de control (<em>dashboards</em>).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es el tablero de instrumentos de un coche: no enciende el motor ni inyecta gasolina, pero te muestra la velocidad y el nivel de aceite en medidores claros. Deja de servir si lo quieres usar como el motor para procesar transacciones.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Cinco vistas en el lado izquierdo:</strong></p>
+<ul>
+<li><strong>Informe:</strong> el lienzo donde se colocan los gráficos.</li>
+<li><strong>Tabla / Datos:</strong> la información en filas y columnas.</li>
+<li><strong>Modelo:</strong> el modelo entidad-relación y las cardinalidades (1:1, 1:N).</li>
+<li><strong>DAX y TML:</strong> para crear campos y medidas personalizadas.</li>
+</ul>
+<p><strong>Tres fichas en el lado derecho:</strong> <em>Datos</em> (tablas y campos; un icono de sumatoria Σ indica un campo numérico sumable), <em>Visualizaciones</em> (catálogo de tipos de gráfico) y <em>Filtros</em> (restringir los datos visibles). Las pestañas inferiores sirven para crear varias páginas y no amontonar gráficos.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Se conecta con archivos Excel, CSV y Oracle para armar la interfaz gráfica ejecutiva. Es la herramienta final del flujo que planteó el profesor: Excel y Power Query para el análisis básico, Oracle para el almacenamiento y Power BI para el tablero.</p>
+<div class="errores"><p><strong>Error común:</strong> poner toda la información en una sola página en lugar de usar las pestañas inferiores.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c11-edad"><summary><span class="stitle">3 · ENOE: edad e ingresos (suma frente a recuento)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La Encuesta Nacional de Ocupación y Empleo (ENOE) del INEGI analiza las características laborales de la población en México.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es una radiografía laboral del país, desde la población joven hasta los adultos mayores que mantienen un hogar.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Al cargar la ENOE 2017 en Power BI se pone <strong>Edad en el eje X</strong> e <strong>Ingreso mensual en el eje Y</strong>. Por defecto Power BI aplica la función <strong>Suma</strong>.</p>
+<p><strong>Ejercicio resuelto en vivo con datos reales.</strong> A los 12 años hay 8 personas que trabajan y mantienen un hogar, y suman $12,000. A los 98 años hay 4 personas laborando, con $36,900 acumulados en la muestra. La curva sube a partir de los 20–22 años, tiene una pequeña caída entre los 26 y 28, llega a su pico máximo acumulado a los 36 años y tiene un segundo repunte a los 42 (puestos ejecutivos).</p>
+<p>El profesor preguntó qué representa el pico más alto; los alumnos respondieron que la edad laboral fuerte. Él demostró que, cambiando la función a <strong>Recuento</strong>, se ve cuántas personas componen cada edad.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite evaluar la importancia de la estabilidad laboral antes de los 30 años.</p>
+<div class="errores"><p><strong>Error común:</strong> creer que el pico máximo de la gráfica de suma es el sueldo de una sola persona, cuando es el acumulado de toda la población de esa edad.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c11-genero"><summary><span class="stitle">4 · Género y brecha salarial</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es la evaluación de los ingresos al agregar la variable Sexo a las visualizaciones de la ENOE.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es comparar dos acumulados de dinero para saber si la diferencia viene del monto de los sueldos o de la cantidad de personas que trabajan.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Al agregar Sexo al gráfico de líneas o a la tabla, la suma de ingresos muestra que los hombres acumulan casi el doble (unos $647 mil) que las mujeres. Pero al cambiar a Recuento se ve que en la muestra hay <strong>6,300 hombres laborando frente a 4,000 mujeres</strong>. La mayor baja de mujeres ocurre entre los 25 y 35 años, por maternidad y salida del mercado laboral.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Demuestra que la disparidad en la suma se debe sobre todo al volumen de población ocupada. Es parte de lo que tienes que justificar en la Actividad 1.</p>
+<div class="errores"><p><strong>Error común:</strong> afirmar una brecha salarial desproporcionada solo con la suma global, sin revisar el recuento de personas que trabajan por género.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c11-escolaridad"><summary><span class="stitle">5 · Escolaridad, años de estudio y trampas estadísticas</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es el análisis de la relación entre el nivel educativo (o los años de escolaridad) y el ingreso.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es medir si cada año invertido en la escuela se traduce realmente en un mejor sueldo individual.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El profesor mostró que el campo <em>Nivel de estudios</em> de la ENOE agrupa «Media Superior» con «Superior» en una sola categoría. Al desglosar por <strong>Años de estudio</strong> (eje X) e ingresos (eje Y) aparecen picos de población en 6 años (primaria), 9 años (secundaria) y de 12 a 17 años (preparatoria y universidad). La mayor suma de ingresos está en el grupo con secundaria completa, por su gran volumen de personas.</p>
+<p>En maestría y doctorado el número de personas en la muestra cae mucho (3, 6 o 9 personas). Sin embargo, al cambiar la agregación a <strong>Promedio</strong>, el ingreso individual de un doctorado sube de forma notable (unos $45,000 mensuales, más becas).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Confirma que seguir estudiando un posgrado sí aumenta el ingreso promedio individual.</p>
+<div class="errores"><p><strong>Error común:</strong> combinar niveles educativos de forma heterogénea y ocultar las diferencias reales entre preparatoria y universidad.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c11-geografia"><summary><span class="stitle">6 · Geografía e ingresos por estado</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es la distribución del ingreso mensual según la entidad federativa.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es comparar qué estados concentran más masa de dinero y cuáles pagan mejores sueldos individuales.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Con la <strong>suma</strong> total de ingresos, la CDMX y el Estado de México encabezan la lista por densidad poblacional. Con el <strong>promedio</strong>, la CDMX ni siquiera entra al Top 10. Los sueldos promedio más altos están en el norte y el occidente (Baja California, Nuevo León, Sinaloa, Coahuila, Sonora).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra la atracción industrial y la competencia salarial de la frontera norte.</p>
+<div class="errores"><p><strong>Error común:</strong> creer que vivir en la CDMX da los mejores sueldos promedio del país.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c11-formalidad"><summary><span class="stitle">7 · Empleo formal frente a informal</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es la clasificación de la ocupación según el registro fiscal y la formalidad laboral.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es comparar empleos registrados ante el SAT, con prestaciones, contra el comercio informal o el tianguis.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>A nivel nacional, el trabajo formal registra mayores ingresos brutos (antes de impuestos). En CDMX y Oaxaca predomina el volumen de comercio e ingreso informal. En Nuevo León y Quintana Roo prevalece el empleo formal, por la industria y el sector hotelero.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Se relaciona con la tributación ante el SAT y el desarrollo económico regional.</p>
+<div class="errores"><p><strong>Error común:</strong> omitir el efecto de los impuestos al comparar el sueldo formal bruto con el ingreso informal.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c11-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuáles son las 5 vistas del panel izquierdo de Power BI Desktop?</summary><p>Informe (el lienzo), Tabla/Datos, Modelo (entidad-relación), DAX y TML.</p></details>
+<details class="qa"><summary>2. ¿Cuáles son las 3 fichas del panel derecho?</summary><p>Datos, Visualizaciones y Filtros.</p></details>
+<details class="qa"><summary>3. ¿Por qué los datos procesados en un Data Warehouse no deben regresar a la base de origen?</summary><p>Para proteger la integridad de los datos en el sistema operativo o transaccional.</p></details>
+<details class="qa"><summary>4. ¿Por qué un pico alto en la suma de ingresos no significa que esa edad gane más individualmente?</summary><p>Porque la suma acumula el ingreso de todas las personas de esa edad: con muchos trabajadores la suma es alta aunque cada sueldo sea bajo. Hay que revisar el recuento y el promedio.</p></details>
+<details class="qa"><summary>5. ¿Qué métrica aplicas al ingreso para ver si conviene estudiar un doctorado?</summary><p>El <strong>promedio</strong>, no la suma: hay pocas personas con doctorado, pero su sueldo individual promedio es el más alto (unos $45,000).</p></details>
+<details class="qa"><summary>6. ¿En qué difiere la CDMX de los estados del norte en ingresos promedio?</summary><p>La CDMX tiene una suma total alta por su población, pero no entra al Top 10 de sueldos promedio. El norte (Nuevo León, Baja California…) lidera los promedios individuales y tiene más empleo formal.</p></details>
+<details class="qa"><summary>7. ¿Cómo se reconoce en Power BI que un campo es numérico?</summary><p>Aparece con un icono de sumatoria (Σ) junto al nombre.</p></details>
+<details class="qa"><summary>8. ¿Qué distorsión genera la ENOE al analizar escolaridad si no miras los años de estudio?</summary><p>Agrupa «Media Superior» y «Superior» en una sola categoría y mezcla preparatoria con universidad.</p></details>
+</details>
+
+<details class="section-block sec" id="c11-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li>El profesor bromeó con una alumna (a quien apoda «Maruchan») por comer uvas y manzana en clase.</li>
+<li>Contó que compró su casa antes de los 30 porque juntó efectivo y le compró a alguien con apuros de dinero, y reconoció que hoy en la CDMX es muy difícil.</li>
+<li>Su compadre, ingeniero industrial de la UNAM, prefirió administrar el negocio de tamales de su papá en lugar de trabajar por un sueldo de ingeniero.</li>
+<li>Dijo que las generaciones actuales no planean hacer antigüedad en una empresa: trabajan 2 o 3 años, juntan dinero y se van de viaje a Europa.</li>
+<li>En maestría y doctorado el ingreso real combina el sueldo con las becas.</li>
+<li>Criticó las cuotas de contratación: a su empresa le llegó un oficio del gobierno para contratar a 4 hombres, 4 mujeres y 2 personas trans por cada 10 empleados, y opinó que debería contratarse por capacidad técnica.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c11-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<p><strong>Actividad 1 — ENOE en Power BI (8 puntos, justificando cada respuesta con gráficas).</strong> Con la base de la ENOE 2017, contesta y justifica con gráficos o tablas:</p>
+<ol>
+<li>Criterios para elegir los gráficos correctos (cuándo usar líneas, barras, dispersión, etc.).</li>
+<li>¿Qué estado tiene mayor ingreso y cuánto de ese ingreso es formal?</li>
+<li>Justifica con datos si existe o no brecha salarial entre hombres y mujeres.</li>
+<li>¿Cuántas horas trabajan a la semana las personas que más laboran?</li>
+<li>¿Hay relación entre las horas trabajadas y el ingreso?</li>
+<li>¿Hay relación entre el nivel de estudio y las horas trabajadas? (a mayor estudio, ¿menos horas?)</li>
+<li>Edades extremas que mantienen hogar (la persona de menor edad y la de mayor edad).</li>
+<li>Un gráfico o tabla combinada de ingresos mensuales por sexo, nivel de estudio y número de empleos (1, 2, 3 o 4) en una sola visualización.</li>
+</ol>
+<p><strong>Actividad 2 — ENIGH.</strong></p>
+<ul>
+<li>Explica la base de la ENIGH con tus propias palabras.</li>
+<li>Genera al menos <strong>3 gráficos útiles</strong> que aporten a una investigación.</li>
+<li>Genera <strong>2 gráficos innecesarios o irrelevantes</strong> de los que suelen pedir en las empresas (por ejemplo, estado civil).</li>
+</ul>
+<p><strong>Fecha:</strong> el profesor dijo que abría la asignación el miércoles («El miércoles lo voy a abrir de una vez. Ya se pueden ir»). En Classroom la tarea «Análisis de ENOE y ENIGH» vence el miércoles 7 de octubre a las 17:00.</p>
+<p><strong>Después:</strong> seguir con la arquitectura de datos, ejecutando el script del INEGI en Oracle Live SQL / SQL Developer y conectándolo a Power BI. Detalle completo en <a href="../../tareas/asi-c11-prep.html" style="color:var(--indigo)">la página de la tarea</a>.</p>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>ETL = extraer, transformar y cargar; del Data Warehouse no se regresa a la base de origen.</li>
+<li>Power BI Desktop: 5 vistas a la izquierda, 3 fichas a la derecha, varias páginas con las pestañas inferiores.</li>
+<li>Suma, recuento y promedio cuentan historias distintas: revisa siempre las tres antes de concluir.</li>
+<li>La ENOE agrupa Media Superior y Superior; desglosa por años de estudio.</li>
+<li>Actividad 1 (ENOE, 8 preguntas justificadas con gráficas) y Actividad 2 (ENIGH, 3 gráficos útiles y 2 innecesarios).</li>
+</ul></div>
+
+</div>
+</body>
+</html>

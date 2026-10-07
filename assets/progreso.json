@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-07T14:48:28+00:00",
+ "generatedAt": "2026-10-07T15:36:44+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -301,6 +301,13 @@
     "resumen": "Arquitectura de datos (fuera del temario) — Puestos en bases de datos, cubos de información (OLAP) con medidas, dimensiones y pregunta, Data Warehouse, esquemas estrella / copo de nieve / constelación, tableros ejecutivo",
     "url": "materias/administracion-de-servicios-de-internet/clase-10.html",
     "formato": "estudio"
+   },
+   {
+    "num": 11,
+    "fecha": "2026-10-05",
+    "resumen": "Arquitectura de datos (fuera del temario) — Análisis práctico de la ENOE (y primer vistazo a la ENIGH) del INEGI en Power BI Desktop: sueldos por edad, sexo, escolaridad, geografía y formalidad, con suma frente a recuent",
+    "url": "materias/administracion-de-servicios-de-internet/clase-11.html",
+    "formato": "estudio"
    }
   ],
   "arquitectura-cliente-servidor": [
@@ -544,6 +551,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "9abdf49",
+   "fecha": "2026-10-07T08:48:28-06:00",
+   "mensaje": "Página por asignación (tareas/<id>.html) con instrucciones exactas: ASI ENOE/ENIGH, FSE T06-T09, Labs FSE, MD, ACS, OAC; las tarjetas de Pendientes ahora enlazan ahí"
+  },
   {
    "hash": "24d79b5",
    "fecha": "2026-10-07T08:22:35-06:00",
@@ -838,11 +850,6 @@
    "hash": "cd3780b",
    "fecha": "2026-10-01T02:09:06-06:00",
    "mensaje": "ASI Clase 07: formato de estudio"
-  },
-  {
-   "hash": "cbbee95",
-   "fecha": "2026-10-01T02:07:10-06:00",
-   "mensaje": "ACS Clase 08: formato de estudio"
   }
  ]
 }
