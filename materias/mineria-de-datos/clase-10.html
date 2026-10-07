@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 10 — Minería de Datos</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261005a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Minería de Datos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 10</h2>
+  <p class="prof">M.C. José Concepción Roberto Olvera López · 6 oct 2026 · Tema 3 — Aclaraciones de proyectos y prácticas, Market Basket Analysis y reglas de asociación (soporte, confianza y lift), algoritmos Apriori, ECLAT y FP-Growth, los tres niveles de validación y el caso «comidas preparadas» (Práctica 2).</p>
+</div>
+
+<details class="section-block sec" id="c10-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<p>El profesor marcó explícitamente una pregunta de examen en esta clase (los tres niveles de validación). El resto son los puntos que desarrolló con fórmulas, ejemplos o comparaciones.</p>
+<ol class="examen-lista">
+<li><strong>Los tres niveles de validación de un modelo de minería de datos.</strong><span class="evid">Evidencia: lo dijo textualmente: «Recuerden que todos los algoritmos… siempre hay tres niveles de validación que tenemos que tener… Es pregunta de examen». Nivel 1, validación técnica (confianza, soporte, lift); nivel 2, con usuarios operativos y gente de negocio; nivel 3, con la alta dirección, alineada a la estrategia de la empresa.</span></li>
+<li><strong>Diferencias entre Apriori, ECLAT y FP-Growth.</strong><span class="evid">Evidencia: los comparó detalladamente. Apriori hace varios escaneos y con muchos datos «se duerme»; ECLAT usa listas de identificadores de transacción (TID-lists) e intersecciones, es bueno para datos dispersos pero consume mucha RAM; FP-Growth construye un FP-Tree con solo 2 escaneos y es el más usado.</span></li>
+<li><strong>Cálculo e interpretación de soporte, confianza y lift.</strong><span class="evid">Evidencia: revisó las fórmulas, hizo el ejemplo con 10 y 14 transacciones y destacó que el lift es el indicador más fino porque compara contra una compra al azar.</span></li>
+<li><strong>Patrones «raros» o sorprendentes.</strong><span class="evid">Evidencia: lo enfatizó con el ejemplo de detergente y jugo de naranja: el valor está en descubrir asociaciones atípicas pero frecuentes, no solo las obvias como pan y leche.</span></li>
+<li><strong>Formato obligatorio de los entregables de práctica.</strong><span class="evid">Evidencia: lo especificó: notebook de Python explicado paso por paso y presentación o PDF con capturas del modelo de RapidMiner.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c10-aclaraciones"><summary><span class="stitle">1 · Aclaraciones sobre proyectos y prácticas</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es el bloque inicial de la sesión, dedicado a resolver dudas de metodología, formato y fechas de entrega de los trabajos de minería de datos.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es revisar las reglas del juego antes del partido para no perder puntos por errores de entrega. La analogía deja de servir si se piensa que cumplir el formato exime de tener un análisis técnico correcto.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Para Python hay que entregar un <strong>notebook desglosado paso por paso</strong>, deteniéndose en los puntos clave del análisis. Para RapidMiner se entregan <strong>diapositivas (PPT o PDF) con capturas de pantalla</strong> del flujo y comentarios explicativos. El profesor confirmó además que se dio una <strong>prórroga para entregar la práctica de agrupación (clustering): el jueves a mediodía</strong>.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Une el desarrollo técnico con la capacidad de comunicar resultados a clientes y ejecutivos. Es la continuación de la Práctica 1 de la <a href="clase-09.html" style="color:var(--plum)">Clase 09</a>.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> entregar código sin explicaciones, o archivos de RapidMiner sin capturas ni interpretación.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c10-mba"><summary><span class="stitle">2 · Market Basket Analysis y reglas de asociación</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es una técnica de minería de datos que analiza transacciones o tickets de compra para descubrir qué productos o eventos se relacionan o se compran juntos.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es observar miles de carritos de supermercado en la caja para ver qué se llevan juntos en la misma visita. Deja de servir si se supone que comprar dos cosas juntas significa que una causa a la otra.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Se analiza la presencia conjunta de artículos en los tickets. Cada regla tiene un <strong>antecedente (X)</strong> y un <strong>consecuente (Y)</strong>: si un cliente compra pan y huevos (X), se mide la probabilidad de que también compre leche (Y). La técnica busca relaciones lógicas obvias y también «sorpresas» o patrones raros con frecuencia significativa, como detergente comprado junto con jugo de naranja.</p>
+<p>Aplicaciones que se vieron en clase:</p>
+<ul>
+<li><strong>Retail y supermercados:</strong> acomodo de estantes, paquetes de promoción y venta cruzada (<em>cross-selling</em>) en portales como Amazon o Mercado Libre.</li>
+<li><strong>Manufactura y mantenimiento:</strong> detección de fallas en líneas de producción; por ejemplo, temperatura alta + vibración alta → falla de sensor o equipo, lo que permite mantenimiento preventivo.</li>
+<li><strong>Salud:</strong> asociación entre síntomas, diagnósticos y tratamientos; por ejemplo, hipertensión + diabetes → control de glucosa (HbA1c), o dolor de pecho → electrocardiograma.</li>
+<li><strong>Telecomunicaciones:</strong> asociar servicios para sugerir líneas adicionales o paquetes de streaming según la velocidad de internet.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Convierte bases de datos transaccionales en decisiones de negocio, logística y mantenimiento. Retoma la introducción a reglas de asociación de la <a href="clase-09.html" style="color:var(--plum)">Clase 09</a>.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> descartar reglas poco comunes sin revisar su frecuencia, o quedarse solo con lo que ya era obvio para el negocio.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c10-metricas"><summary><span class="stitle">3 · Métricas de las reglas: soporte, confianza y lift</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Son los indicadores matemáticos que miden la frecuencia, la probabilidad y la fuerza de una regla de asociación X → Y.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><ul>
+<li><strong>Soporte:</strong> ¿qué tan popular es la combinación en toda la tienda?</li>
+<li><strong>Confianza:</strong> si ya llevo X, ¿qué tan seguro es que agregue Y?</li>
+<li><strong>Lift:</strong> ¿cuánto más probable es que se compren juntos frente a una compra hecha al azar?</li>
+</ul><p>La analogía deja de servir si se confunde la probabilidad condicional (confianza) con el incremento relativo sobre el azar (lift).</p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>Soporte(X → Y)</strong> = transacciones con X e Y ÷ total de transacciones. Ejemplo de clase: se cuentan las transacciones que contienen ambos productos (10 con cepillo de dientes y leche) entre el total.</li>
+<li><strong>Confianza(X → Y)</strong> = transacciones con X e Y ÷ transacciones con X. Ejemplo: el antecedente, cepillo de dientes (X), aparece en 14 transacciones; 10 ÷ 14 = <strong>0.7 (70 %)</strong>. El profesor dijo que los valores atractivos son mayores a 0.7 o, preferentemente, mayores a 0.8.</li>
+<li><strong>Lift(X → Y)</strong> = Confianza(X → Y) ÷ Soporte(Y) = Soporte(X ∪ Y) ÷ [Soporte(X) × Soporte(Y)].</li>
+</ul>
+<p>Ejemplos numéricos que se vieron en Python: la regla <em>Yogurt griego de fresa → Yogurt de fresa</em> tuvo un lift de <strong>9.28</strong>, y <em>Jamón de pavo → Chorizo de pavo</em> un lift de <strong>8.39</strong>. Un lift alto (el profesor señaló especialmente por encima de 4.5) indica una relación muy fuerte y rentable frente a comprar al azar.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite filtrar miles de combinaciones posibles y quedarse con las reglas de impacto económico o práctico real. Por eso el profesor dijo que el lift es el indicador más fino e importante.</p>
+<div class="errores"><p><strong>Error común:</strong> guiarse solo por la confianza sin revisar el lift: se infla la importancia de productos masivos que se venden solos de todos modos.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c10-algoritmos"><summary><span class="stitle">4 · Algoritmos de asociación: Apriori, ECLAT y FP-Growth</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Son algoritmos que identifican conjuntos de artículos frecuentes y generan reglas de asociación de forma eficiente en bases de datos transaccionales.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><ul>
+<li><strong>Apriori:</strong> revisa los tickets una y otra vez, combinando de 1 en 1, luego de 2 en 2, descartando lo que no llega al mínimo.</li>
+<li><strong>ECLAT:</strong> en lugar de leer ticket por ticket, hace una lista por producto anotando en qué tickets aparece y luego cruza las listas.</li>
+<li><strong>FP-Growth:</strong> arma un árbol comprimido en memoria para ver los caminos más transitados sin releer el dataset.</li>
+</ul><p>Dejan de servir cuando el tamaño de los datos supera la memoria RAM disponible.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Apriori.</strong> Se define un umbral de soporte mínimo (en clase, <code>min_support = 2</code> o 0.01, es decir, 1 %). Se escanea la base para contar la frecuencia de los artículos individuales y se eliminan los que quedan por debajo del umbral («adiós, fuera»). Con los sobrevivientes se generan combinaciones de 2 artículos ({A,B}, {A,C}, {A,E}), se evalúa su soporte y se eliminan las que no llegan. Ejemplo en vivo: con un ticket {A,C,D}, el artículo D tuvo frecuencia 1 (menor que 2) y salió; la combinación {B,C,D} tuvo frecuencia 2 y se mantuvo como interesante. <em>Desventaja:</em> hace muchos escaneos masivos de la base; con millones de registros se vuelve muy lento («se duerme»).</p>
+<p><strong>ECLAT (Equivalence Class Transformation).</strong> Transforma los datos a listas de identificadores de transacción (TID-lists) por artículo y ordena los productos de mayor a menor frecuencia. Para evaluar la asociación de dos productos (por ejemplo, leche y mantequilla) intersecta sus TID-lists. <em>Ventajas:</em> reduce la carga de cómputo al no revisar transacciones individuales y funciona muy bien con datos dispersos. <em>Desventajas:</em> necesita mucha RAM para guardar TID-lists gigantes y pierde eficiencia en datasets muy densos.</p>
+<p><strong>FP-Growth (Frequent Pattern Growth).</strong> Hace un primer escaneo para contar frecuencias y ordenar los artículos de mayor a menor (ejemplo en vivo: pan 4, leche 4, mantequilla 4). En un segundo escaneo construye una estructura comprimida en memoria, el <strong>FP-Tree</strong>. Aplica el soporte mínimo y poda («corta ramas») las ramas que no lo alcanzan. <em>Ventajas:</em> solo 2 escaneos completos, alta eficiencia con grandes volúmenes y es el algoritmo más usado en la práctica.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Define si se pueden procesar millones de datos transaccionales sin colapsar la infraestructura.</p>
+<div class="errores"><p><strong>Error común:</strong> usar Apriori en bases masivas de producción en lugar de FP-Growth o ECLAT.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c10-validacion"><summary><span class="stitle">5 · Los tres niveles de validación (pregunta de examen)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es un proceso secuencial de tres etapas para validar la calidad, la utilidad y el impacto estratégico de un modelo de minería de datos.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es lanzar una receta nueva en un restaurante: primero el chef la prueba (técnica), luego los meseros ven si es fácil de servir (operativa) y al final el dueño evalúa si deja ganancias (directiva). Si una etapa falla, el platillo no entra al menú.</p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>Nivel 1, validación técnica:</strong> el científico de datos ejecuta el algoritmo y mide métricas técnicas (confianza, soporte, lift).</li>
+<li><strong>Nivel 2, validación operativa:</strong> se revisan los resultados con quienes operan el día a día (gerentes de tienda, supervisores, médicos) para ver que las reglas tengan sentido práctico y resuelvan el problema real.</li>
+<li><strong>Nivel 3, validación directiva o ejecutiva:</strong> se presentan los resultados a la alta dirección para alinearlos con las metas estratégicas (ejemplo del profesor: metas de expansión o crecimiento de 50 % en tiendas).</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Evita que los modelos se queden como ejercicios teóricos archivados y asegura que se implementen.</p>
+<div class="errores"><p><strong>Error común:</strong> saltarse la validación operativa, o ir con la alta dirección sin haber comprobado con el personal de piso que las reglas tienen sentido.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c10-practica2"><summary><span class="stitle">6 · Caso práctico «comidas preparadas» y productos ancla (Práctica 2)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es el ejercicio asignado para aplicar reglas de asociación en Python y RapidMiner sobre un dataset transaccional de 55,000 registros.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es analizar las compras de comida lista para llevar en el supermercado para descubrir qué platillo «arrastra» la venta de otros productos y armar promociones irresistibles.</p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li>Se procesa un archivo de 55,000 registros de tickets.</li>
+<li>Se ajustan los parámetros («perillas»): soporte mínimo de <strong>0.01 (1 %)</strong> para no generar cientos de relaciones insignificantes.</li>
+<li>El análisis se enfoca en la categoría de comidas preparadas (burritos, flapis, pizzas, pechugas rellenas).</li>
+<li>Ejemplos del caso en Python: pechugas rellenas asociadas con pizzas, salchichas y frijoles; queso americano con burritos y pasta. En embutidos, chorizo, queso americano y queso fresco como antecedente tuvieron como consecuente crema dulce, pasta y salchicha, con un lift de 8.39.</li>
+<li>El objetivo es identificar <strong>productos ancla</strong> que arrastren la compra de otros, para definir estrategias de venta cruzada y promociones combinadas.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra la aplicación directa de los algoritmos sobre un dataset real para tomar decisiones de negocio. Se compara Apriori contra FP-Growth, en Python y en RapidMiner.</p>
+<div class="errores"><p><strong>Error común:</strong> usar un umbral de soporte demasiado bajo (por ejemplo, 0.0001), lo que satura el análisis con más de 90 reglas irrelevantes.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c10-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuáles son las tres métricas para evaluar una regla X → Y y qué mide cada una?</summary><p><strong>Soporte:</strong> frecuencia conjunta de X e Y en el total de transacciones. <strong>Confianza:</strong> probabilidad de comprar Y dado que se compró X. <strong>Lift:</strong> fuerza de la regla frente a una compra al azar del consecuente.</p></details>
+<details class="qa"><summary>2. Explica por qué FP-Growth es más eficiente que Apriori con millones de transacciones.</summary><p>Porque hace solo 2 escaneos para construir un árbol comprimido en memoria (FP-Tree) y poda ramas por soporte mínimo, mientras que Apriori hace múltiples escaneos generando combinaciones candidatas, lo que alenta el cómputo.</p></details>
+<details class="qa"><summary>3. Aplica: la regla Chorizo de pavo → Jamón de pavo tiene confianza 0.85 y lift 8.39. ¿Qué acción comercial recomiendas?</summary><p>Colocar las carnes frías y quesos de pavo en secciones contiguas, o crear un combo con descuento: un lift de 8.39 indica una asociación muy fuerte y rentable.</p></details>
+<details class="qa"><summary>4. ¿En qué se diferencia la estructura de datos de ECLAT frente a la de Apriori?</summary><p>Apriori examina las transacciones en formato horizontal, de forma iterativa. ECLAT las transforma a formato vertical, con listas de identificadores de transacción (TID-lists) por producto, y calcula el soporte por intersección de conjuntos.</p></details>
+<details class="qa"><summary>5. ¿Cuáles son los tres niveles de validación que exige el profesor?</summary><p>1) Técnica (soporte, confianza, lift). 2) Operativa, con usuarios del negocio y personal de piso. 3) Directiva o ejecutiva, alineada con la estrategia de la empresa.</p></details>
+<details class="qa"><summary>6. Si X aparece en 14 transacciones y {X, Y} en 10, ¿cuál es la confianza de X → Y?</summary><p>10 ÷ 14 ≈ <strong>0.714 (71.4 %)</strong>, por encima del umbral de 0.7 recomendado en clase.</p></details>
+<details class="qa"><summary>7. ¿Por qué no basta con guiarse por la confianza?</summary><p>Porque los productos masivos que se venden solos inflan la confianza. El lift compara contra el azar y descubre si hay una relación real.</p></details>
+</details>
+
+<details class="section-block sec" id="c10-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>Diagnóstico de dengue con el IMSS en Chiapas y Oaxaca:</strong> el profesor contó un proyecto real durante una epidemia, con reglas de asociación sobre unas 30 variables clínicas y ambientales (fiebre, vómito, temperatura regional, humedad, época de lluvias, agua acumulada). Se implementó en iPads para el personal de triaje: de 1,000 pacientes al día se identificaban de inmediato los 10 casos críticos que requerían encamamiento y se mandaba a casa con tratamiento general a los de bajo riesgo.</li>
+<li><strong>Tiendas CNI en Guadalajara:</strong> trabajo con el dueño holandés de las tiendas. Descubrieron que las papas a la francesa funcionaban como «producto gancho»; las colocaron al fondo de la tienda para que los clientes recorrieran todos los pasillos de ropa y promociones antes de comer, y las ventas cruzadas subieron.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c10-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Jueves 8 de octubre, 12:00:</strong> entrega de la práctica de agrupación (clustering): notebook de Python y presentación (PPT o PDF) con capturas de RapidMiner.</li>
+<li><strong>Martes:</strong> entrega de la Práctica 2 de asociación o Market Basket Analysis (comidas preparadas, productos ancla, comparación Apriori vs. FP-Growth en Python y RapidMiner).</li>
+<li><strong>Formato obligatorio:</strong> notebook de Python explicado paso por paso y documentación en diapositivas con capturas de los flujos de RapidMiner.</li>
+<li>El profesor enviará por Classroom la descripción detallada de la Práctica 2 y los enlaces de apoyo.</li>
+<li><strong>Próximos temas:</strong> algoritmos de clasificación, series de tiempo y redes neuronales.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Soporte = frecuencia conjunta; confianza = P(Y | X); lift = confianza ÷ soporte(Y). Confianza buena: mayor a 0.7 o a 0.8.</li>
+<li>Apriori: muchos escaneos; ECLAT: TID-lists e intersecciones (mucha RAM); FP-Growth: FP-Tree con 2 escaneos, el más usado.</li>
+<li>Tres niveles de validación: técnica, operativa y directiva (pregunta de examen).</li>
+<li>Entregables: notebook de Python paso por paso y PPT/PDF con capturas de RapidMiner.</li>
+<li>Clustering: jueves 12:00. Práctica 2 de asociación: martes.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

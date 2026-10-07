@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 09 — Organización y Arquitectura de Computadoras</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261005a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Organización y Arquitectura de Computadoras</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Clase 09</h2>
+  <p class="prof">M.I. José Antonio de Jesús Arredondo Garza · 5 oct 2026 · Tema 3 (continuación) — Filtro digital IIR de segundo orden en ensamblador con la FPU de la Raspberry Pi Pico 2: de la ecuación en diferencias en Matlab a la subrutina <code>@micropython.asm_thumb</code>, conversión de H(s) a H(z) y el trabajo práctico del filtro subamortiguado.</p>
+</div>
+
+<details class="section-block sec" id="c9-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<p>No se mencionó fecha de examen en esta sesión. La clase gira alrededor del trabajo práctico del filtro IIR, así que los puntos de abajo son lo que el profesor resolvió o enfatizó con más insistencia.</p>
+<ol class="examen-lista">
+<li><strong>Conversión de una función de transferencia continua H(s) a discreta H(z) y extracción de coeficientes.</strong><span class="evid">Evidencia: resolvió en vivo la conversión de H(s) = 2/(s + 2) con T<sub>s</sub> = 0.025 s, obtuvo 0.024(z + 1)/(z − 0.95) y desglosó término a término los coeficientes A<sub>0</sub>, A<sub>1</sub>, A<sub>2</sub>, B<sub>1</sub> y B<sub>2</sub>.</span></li>
+<li><strong>Arreglos <code>array('f')</code> y paso de punteros a la FPU por registros enteros.</strong><span class="evid">Evidencia: escribió la estructura de arreglos en MicroPython y explicó cómo R0 a R3 reciben las direcciones base de entrada, salida, coeficientes y ADC.</span></li>
+<li><strong>Instrucciones vectoriales de la FPU y desplazamientos de 4 bytes.</strong><span class="evid">Evidencia: repitió y enfatizó que, con flotantes de 32 bits en memoria lineal, cada desplazamiento exige un salto exacto de 4 bytes en los apuntadores.</span></li>
+<li><strong>Actualización de estados U<sub>k</sub>, U<sub>k−1</sub>, Y<sub>k</sub> y Y<sub>k−1</sub> dentro de la subrutina.</strong><span class="evid">Evidencia: comparó el flujo de actualización de un script de Matlab con el llenado directo de registros en ensamblador dentro del bucle en tiempo real.</span></li>
+<li><strong>Criterio de Nyquist para elegir la frecuencia natural de un filtro de segundo orden.</strong><span class="evid">Evidencia: lo ligó directamente con la práctica asignada: con T<sub>s</sub> = 0.05 s (f<sub>s</sub> = 20 Hz), ω<sub>n</sub> debe quedar por debajo del límite de Nyquist.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c9-matlab"><summary><span class="stitle">1 · La ecuación en diferencias: simulación en Matlab frente a ejecución en hardware</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es la representación discreta de un sistema dinámico mediante una ecuación en diferencias, que calcula la salida presente Y<sub>k</sub> a partir de entradas y salidas pasadas.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como estimar la posición de un auto con base en dónde estuvo hace un segundo y hace dos. La analogía deja de servir si el auto da un viraje más rápido de lo que el sensor alcanza a tomar muestras.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>En Matlab se define un script <code>.m</code> con los estados inicializados en cero (U<sub>k</sub>, U<sub>k−1</sub>, U<sub>k−2</sub>, Y<sub>k</sub>, Y<sub>k−1</sub>, Y<sub>k−2</sub>) y un vector de entrada escalón. Dentro de un bucle <code>for i = 1:100</code> se calcula:</p>
+<p style="text-align:center">Y<sub>k</sub> = A<sub>0</sub>·U<sub>k</sub> + A<sub>1</sub>·U<sub>k−1</sub> + A<sub>2</sub>·U<sub>k−2</sub> − B<sub>1</sub>·Y<sub>k−1</sub> − B<sub>2</sub>·Y<sub>k−2</sub></p>
+<p>Después se desplazan los estados pasados (U<sub>k−2</sub> ← U<sub>k−1</sub>, U<sub>k−1</sub> ← U<sub>k</sub>, Y<sub>k−2</sub> ← Y<sub>k−1</sub>, Y<sub>k−1</sub> ← Y<sub>k</sub>) y se grafica la respuesta. El profesor destacó que este script corre bien en simulación pero «no se asemeja en nada a la realidad» de lo que ocurre al ejecutarlo físicamente en un microcontrolador.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite validar los coeficientes numéricos antes de llevarlos a instrucciones de bajo nivel. Sigue lo visto en la <a href="clase-08.html" style="color:var(--green)">Clase 08</a> sobre filtros FIR/IIR y la FPU.</p>
+<div class="errores"><p><strong>Error común:</strong> desplazar los estados pasados antes de calcular la salida presente Y<sub>k</sub>: se corrompe el cálculo.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c9-hs-hz"><summary><span class="stitle">2 · De H(s) continua a H(z) discreta y sus coeficientes</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es la transformación de un modelo continuo en el dominio de Laplace (s) a un modelo discreto en el dominio z, usando un tiempo de muestreo T<sub>s</sub> específico.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es convertir una película analógica de cinta continua en una secuencia de fotogramas digitales tomados a intervalos fijos.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El profesor tomó H(s) = 2/(s + 2) y aplicó la transformación bilineal con T<sub>s</sub> = 0.025 s. El resultado en z fue H(z) = 0.024(z + 1)/(z − 0.95). De esa expresión salen los coeficientes del algoritmo:</p>
+<ul>
+<li>A<sub>0</sub> = 0.024 y A<sub>1</sub> = 0.024.</li>
+<li>A<sub>2</sub> = 0, que se fija en cero para mantener compatibilidad con la estructura de segundo orden.</li>
+<li>B<sub>1</sub> = −0.95: el signo se invierte porque el término del denominador pasa al miembro derecho de la ecuación en diferencias.</li>
+<li>B<sub>2</sub> = 0.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Son los números exactos que se cargan en la memoria del microcontrolador para filtrar señales físicas.</p>
+<div class="errores"><p><strong>Error común:</strong> olvidar invertir el signo del coeficiente del denominador (B<sub>1</sub>) al pasarlo a la ecuación en diferencias.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c9-arreglos"><summary><span class="stitle">3 · Arreglos <code>array('f')</code> en MicroPython y paso de punteros</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es la reserva de bloques continuos de RAM formateados como flotantes de precisión simple de 32 bits.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es una fila de cajones de tamaño fijo en el almacén de la memoria, donde cada cajón ocupa exactamente 4 bytes.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Se importan las librerías y se definen las estructuras de datos:</p>
+<pre><code>U_k_S      = array('f', [0.0, 0.0, 0.0])               # Estados de entrada (Uk, Uk-1, Uk-2)
+Y_k_S      = array('f', [0.0, 0.0, 0.0])               # Estados de salida (Yk, Yk-1, Yk-2)
+Constantes = array('f', [0.024, 0.024, 0.0, -0.95, 0.0]) # Coeficientes A y B
+in_ADC     = array('f', [0.0])                         # Valor de entrada</code></pre>
+<p>Al invocar la subrutina de ensamblador <code>ecuacion(U_k_S, Y_k_S, Constantes, in_ADC)</code>, los registros enteros de propósito general de ARM reciben las direcciones base:</p>
+<ul>
+<li>R0 ← dirección base de <code>U_k_S</code></li>
+<li>R1 ← dirección base de <code>Y_k_S</code></li>
+<li>R2 ← dirección base de <code>Constantes</code></li>
+<li>R3 ← dirección base de <code>in_ADC</code></li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>El ensamblador no trabaja con variables dinámicas de alto nivel: necesita las direcciones físicas exactas en la RAM.</p>
+<div class="errores"><p><strong>Error común:</strong> intentar pasar variables sueltas de Python en lugar de arreglos estructurados con <code>array('f')</code>.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c9-asm"><summary><span class="stitle">4 · La subrutina en ensamblador con la FPU (<code>@micropython.asm_thumb</code>)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es el código máquina que ejecuta las operaciones matemáticas directamente sobre los registros de punto flotante de la FPU del chip RP2350.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es manejar directamente la calculadora de alta velocidad integrada en el chip, sin pasar por la «traducción» de Python.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>La subrutina se declara con el decorador <code>@micropython.asm_thumb</code> y la firma <code>def ecuacion(R0, R1, R2, R3):</code>. Primero se cargan los valores de la RAM a los registros de la FPU (S0 a S31) con <code>VLDR</code>, con desplazamientos de 4 bytes:</p>
+<pre><code>VLDR S0, [R0, #0]   → S0 = Uk
+VLDR S1, [R0, #4]   → S1 = Uk-1
+VLDR S2, [R0, #8]   → S2 = Uk-2
+VLDR S3, [R1, #0]   → S3 = Yk
+VLDR S4, [R1, #4]   → S4 = Yk-1
+VLDR S5, [R1, #8]   → S5 = Yk-2</code></pre>
+<p>Las constantes se cargan de forma idéntica desde R2, con desplazamientos #0, #4, #8, #12 y #16. Luego se calcula la suma de productos con las instrucciones <code>VMUL</code>, <code>VADD</code> y <code>VSUB</code> para obtener la nueva salida Y<sub>k</sub>, y se guarda el resultado con <code>VSTR</code>, por ejemplo <code>VSTR S3, [R0, #0]</code> para asignar la nueva salida al vector principal. En MicroPython corre un bucle continuo <code>while True:</code> que envía las muestras al graficador de Thonny con <code>print((Y_k_S,))</code>.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Baja el tiempo de cómputo a microsegundos, lo que permite filtrar señales en tiempo real sin perder muestras.</p>
+<div class="errores"><p><strong>Error común:</strong> usar incrementos de 1 o 2 bytes en los desplazamientos en lugar de 4 bytes, el tamaño de un flotante de 32 bits.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c9-practica"><summary><span class="stitle">5 · Trabajo práctico: filtro IIR de segundo orden subamortiguado</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es la implementación práctica de un filtro digital con respuesta subamortiguada, partiendo de la plantilla <code>filtro_iir2</code> que dio el profesor.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Se ajustan los parámetros del filtro para que, al recibir un cambio brusco (una onda cuadrada), la respuesta oscile un poco antes de estabilizarse.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Las reglas que dio el profesor para el trabajo:</p>
+<ul>
+<li>Tomar como base la ecuación continua de segundo orden H(s) = ω<sub>n</sub>² / (s² + 2ζω<sub>n</sub>s + ω<sub>n</sub>²).</li>
+<li>Usar un tiempo de muestreo T<sub>s</sub> = 0.05 s, es decir, f<sub>s</sub> = 1/0.05 = 20 Hz.</li>
+<li><strong>Regla de Nyquist:</strong> la frecuencia natural debe cumplir f &lt; f<sub>s</sub>/2 (f &lt; 10 Hz, o ω<sub>n</sub> &lt; 2π·10 ≈ 62.8 rad/s) para evitar aliasing o inestabilidad.</li>
+<li><strong>Subamortiguamiento:</strong> proponer un factor de amortiguamiento ζ &lt; 1 (por ejemplo, ζ = 0.2 o similar) para forzar la oscilación en la salida.</li>
+<li>Sustituir los coeficientes calculados en la plantilla <code>filtro_iir2</code> y verificar la respuesta oscilatoria frente a una onda cuadrada.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Reúne toda la cadena: modelado continuo, discretización, arquitectura del procesador y programación en ensamblador con FPU.</p>
+<div class="errores"><p><strong>Error común:</strong> elegir una frecuencia natural por encima de la mitad de la frecuencia de muestreo: el filtro digital se vuelve inestable.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c9-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuántos bytes ocupa un flotante de precisión simple en la FPU de la Pico 2 y cómo afecta eso a los desplazamientos?</summary><p>Ocupa <strong>4 bytes (32 bits)</strong>. Por eso los desplazamientos de <code>VLDR</code> y <code>VSTR</code> avanzan de 4 en 4 (#0, #4, #8, #12…).</p></details>
+<details class="qa"><summary>2. ¿Por qué conviene implementar el filtro IIR en ensamblador con <code>@micropython.asm_thumb</code> y no en Python puro?</summary><p>Porque el ensamblador accede directamente a los registros S0–S31 de la FPU, sin la sobrecarga del intérprete, y el cómputo baja a microsegundos.</p></details>
+<details class="qa"><summary>3. Aplica: con T<sub>s</sub> = 0.05 s, ¿qué límite tiene ω<sub>n</sub> según la regla del profesor?</summary><p>f<sub>s</sub> = 20 Hz. La frecuencia natural debe ser menor que f<sub>s</sub>/2 = 10 Hz, o sea ω<sub>n</sub> &lt; 62.8 rad/s.</p></details>
+<details class="qa"><summary>4. ¿Qué diferencia hay entre los ejemplos <code>filtro_iir</code> y <code>filtro_iir2</code>?</summary><p><code>filtro_iir</code> es una prueba de primer orden en lazo cerrado ante una entrada fija o escalón; <code>filtro_iir2</code> está estructurado para un sistema de segundo orden que procesa una onda cuadrada en tiempo real.</p></details>
+<details class="qa"><summary>5. ¿Qué registros enteros de ARM reciben las direcciones de los arreglos?</summary><p>R0, R1, R2 y R3: direcciones de <code>U_k_S</code>, <code>Y_k_S</code>, <code>Constantes</code> e <code>in_ADC</code>, respectivamente.</p></details>
+<details class="qa"><summary>6. ¿Por qué B<sub>1</sub> se ingresa con signo negativo (−0.95)?</summary><p>Porque al despejar la salida presente Y<sub>k</sub>, los términos del denominador pasan al miembro derecho restando.</p></details>
+<details class="qa"><summary>7. Explica con tus palabras cómo pasó el profesor de H(s) = 2/(s + 2) a los coeficientes.</summary><p>Aplicó la transformación bilineal con T<sub>s</sub> = 0.025 s y obtuvo H(z) = 0.024(z + 1)/(z − 0.95). De ahí A<sub>0</sub> = A<sub>1</sub> = 0.024, A<sub>2</sub> = 0, B<sub>1</sub> = −0.95 y B<sub>2</sub> = 0.</p></details>
+</details>
+
+<details class="section-block sec" id="c9-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>Reforma del plan de estudios 2026:</strong> el profesor expresó su preocupación por las propuestas del nuevo plan, que pretenden incluir cuatro materias de Inteligencia Artificial sin definir si los alumnos tendrán las bases previas de procesamiento de señales, análisis de sistemas, modelado y arquitectura de computadoras.</li>
+<li><strong>Informe de investigación:</strong> comentó al final que estaría trabajando en el aula para entregar un informe que necesita para cerrar su proyecto de investigación.</li>
+<li><strong>Llamadas bancarias:</strong> una mención humorística sobre cómo los sistemas actuales marcan automáticamente como spam las llamadas de los bancos.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c9-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Trabajo práctico:</strong> modificar la plantilla <code>filtro_iir2</code> para implementar un filtro IIR de segundo orden con respuesta subamortiguada, eligiendo ω<sub>n</sub> y ζ que cumplan la condición de Nyquist.</li>
+<li><strong>Entrega:</strong> en la grabación de esta clase no se menciona fecha límite, medio ni formato de entrega. Hay que confirmarlo en Classroom o con el profesor.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Y<sub>k</sub> = A<sub>0</sub>U<sub>k</sub> + A<sub>1</sub>U<sub>k−1</sub> + A<sub>2</sub>U<sub>k−2</sub> − B<sub>1</sub>Y<sub>k−1</sub> − B<sub>2</sub>Y<sub>k−2</sub>; primero se calcula Y<sub>k</sub> y después se desplazan los estados.</li>
+<li>H(s) = 2/(s + 2) con T<sub>s</sub> = 0.025 s → H(z) = 0.024(z + 1)/(z − 0.95).</li>
+<li>Punteros en R0–R3 y desplazamientos de 4 bytes con <code>VLDR</code>/<code>VSTR</code>; el cálculo usa <code>VMUL</code>, <code>VADD</code> y <code>VSUB</code>.</li>
+<li>Práctica: T<sub>s</sub> = 0.05 s (20 Hz), ω<sub>n</sub> &lt; 62.8 rad/s y ζ &lt; 1 para respuesta subamortiguada.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

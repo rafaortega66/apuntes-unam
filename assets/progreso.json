@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-07T13:42:24+00:00",
+ "generatedAt": "2026-10-07T14:22:30+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -143,6 +143,13 @@
     "resumen": "Tema 3 (continuación) — Unidad de Punto Flotante (FPU) de la Raspberry Pi Pico 2: registros s0–s31, instrucciones v…, ejemplos en ensamblador inline (raíz cuadrada y sumatoria de productos) y fundamentos de filtros digit",
     "url": "materias/organizacion-y-arquitectura-de-computadoras/clase-08.html",
     "formato": "estudio"
+   },
+   {
+    "num": 9,
+    "fecha": "2026-10-05",
+    "resumen": "Tema 3 (continuación) — Filtro digital IIR de segundo orden en ensamblador con la FPU de la Raspberry Pi Pico 2: de la ecuación en diferencias en Matlab a la subrutina @micropython.asm_thumb , conversión de H(s) a H(z) y",
+    "url": "materias/organizacion-y-arquitectura-de-computadoras/clase-09.html",
+    "formato": "estudio"
    }
   ],
   "fundamentos-de-sistemas-embebidos": [
@@ -214,6 +221,13 @@
     "fecha": "2026-09-30",
     "resumen": "Tema 2 (subtema 2.7) — Colector abierto y trama del bus I²C, SMBus, familia SPI (QSPI y Octa-SPI), I²S para audio digital y UART / RS-232 / MAX232 con paridad.",
     "url": "materias/fundamentos-de-sistemas-embebidos/clase-10.html",
+    "formato": "estudio"
+   },
+   {
+    "num": 11,
+    "fecha": "2026-10-05",
+    "resumen": "Tema 2 (subtema 2.7) — Conectores USB de las tarjetas, temporización de la comunicación serie asíncrona (UART), control de flujo RTS/CTS vs. XON/XOFF, RS-485 frente a RS-232, y el protocolo One-Wire con alimentación pará",
+    "url": "materias/fundamentos-de-sistemas-embebidos/clase-11.html",
     "formato": "estudio"
    }
   ],
@@ -366,6 +380,13 @@
     "resumen": "Tema 2 — El par de programas 04 (servidor y cliente de Internet): ciclo de vida de los sockets TCP, send() y recv(), relación char = byte y tabla ASCII, write(1, buffer, N) e inspección del cliente con gethostbyaddr() y ",
     "url": "materias/arquitectura-cliente-servidor/clase-11.html",
     "formato": "estudio"
+   },
+   {
+    "num": 12,
+    "fecha": "2026-10-06",
+    "resumen": "Tema 2 — Reintentos de connect() , puertos efímeros, listen() con el Three-Way Handshake y las colas SYN y ACCEPT del kernel, la regla n+1, SYN flood y SYN cookies, y la Tarea 4 con netcat y ss .",
+    "url": "materias/arquitectura-cliente-servidor/clase-12.html",
+    "formato": "estudio"
    }
   ],
   "seguridad-informatica-basica": [
@@ -511,11 +532,23 @@
     "resumen": "Tema 3 — Metodología de la Práctica 1 (Python vs. RapidMiner, agregación de datos), StandardScaler + PCA, DBSCAN y elección de ε, guía de qué algoritmo de clustering usar según el dominio, caso real del Túnel Emisor Orie",
     "url": "materias/mineria-de-datos/clase-09.html",
     "formato": "estudio"
+   },
+   {
+    "num": 10,
+    "fecha": "2026-10-06",
+    "resumen": "Tema 3 — Aclaraciones de proyectos y prácticas, Market Basket Analysis y reglas de asociación (soporte, confianza y lift), algoritmos Apriori, ECLAT y FP-Growth, los tres niveles de validación y el caso «comidas preparad",
+    "url": "materias/mineria-de-datos/clase-10.html",
+    "formato": "estudio"
    }
   ],
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "a99f47b",
+   "fecha": "2026-10-07T07:42:25-06:00",
+   "mensaje": "SIB Clase 11 (6 oct): examen parcial"
+  },
   {
    "hash": "3d2ccc2",
    "fecha": "2026-10-07T00:53:56-06:00",
@@ -810,11 +843,6 @@
    "hash": "0827911",
    "fecha": "2026-10-01T02:05:28-06:00",
    "mensaje": "SIB Clase 07: formato de estudio"
-  },
-  {
-   "hash": "476c357",
-   "fecha": "2026-10-01T02:03:50-06:00",
-   "mensaje": "MD Clase 06: formato de estudio"
   }
  ]
 }

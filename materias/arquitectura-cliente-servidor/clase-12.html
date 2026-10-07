@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 12 — Arquitectura Cliente-Servidor</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261005a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Arquitectura Cliente-Servidor</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 12</h2>
+  <p class="prof">Mtro. Carlos Alberto Román Zamitiz · 6 oct 2026 · Tema 2 — Reintentos de <code>connect()</code>, puertos efímeros, <code>listen()</code> con el Three-Way Handshake y las colas SYN y ACCEPT del kernel, la regla n+1, SYN flood y SYN cookies, y la Tarea 4 con <code>netcat</code> y <code>ss</code>.</p>
+</div>
+
+<div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>🔎 Nota de verificación:</strong> dos nombres técnicos salieron mal escritos en la transcripción del audio. El parámetro real de Linux es <code>net.ipv4.tcp_syncookies</code> (aquí aparece como «tcp_sync_cookies»), y la función del kernel que revisa si la cola de aceptación está llena se llama <code>sk_acceptq_is_full()</code> (aquí aparece como «s_accept_is_queue_full»). Antes de usarlos en la Tarea 4, confírmalos en el artículo que proyectó el profesor.</p></div>
+
+<details class="section-block sec" id="c12-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<p>El examen parcial será de código en C con sockets (ver <a href="clase-11.html" style="color:var(--coral)">Clase 11</a>); esta clase aporta el comportamiento de <code>listen()</code>, <code>connect()</code> y los puertos, que es lo que explica por qué un cliente-servidor falla o se bloquea.</p>
+<ol class="examen-lista">
+<li><strong>Diferencia entre la cola SYN y la cola ACCEPT en el Three-Way Handshake.</strong><span class="evid">Evidencia: proyectó el artículo técnico del kernel de Linux y explicó cómo el SYN entrante guarda la solicitud semiabierta en la cola SYN y, al llegar el ACK final, el kernel la mueve a la cola ACCEPT para que la lea <code>accept()</code>.</span></li>
+<li><strong>La regla n+1 del backlog.</strong><span class="evid">Evidencia: analizó el código del kernel y mostró que compara «mayor que» (&gt;) y no «mayor o igual» (&gt;=), de modo que <code>listen(fd, 1)</code> encola en realidad 1 + 1 = 2 conexiones pendientes.</span></li>
+<li><strong>SYN flood y para qué sirven las SYN cookies.</strong><span class="evid">Evidencia: lo explicó en pantalla: miles de SYN con IP falsificada (<em>spoofing</em>) que nunca mandan el ACK final llenan la cola SYN y la memoria; las cookies evitan reservar memoria para peticiones sin confirmar.</span></li>
+<li><strong>Cómo hacer que un cliente reintente si el servidor aún no arranca.</strong><span class="evid">Evidencia: lanzó la pregunta directa al grupo, buscó la especificación de <code>connect()</code> en The Open Group (devuelve −1 si falla) y propuso un <code>while</code> con <code>sleep()</code>.</span></li>
+<li><strong>Puertos efímeros.</strong><span class="evid">Evidencia: lo resolvió en vivo con <code>ss</code>: varias conexiones desde la misma IP pública de PC Puma salían por puertos distintos (49802, 48469, 49808) asignados por el kernel del cliente.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c12-connect"><summary><span class="stitle">1 · Repaso del par 04, pruebas remotas y reintentos en <code>connect()</code></span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es el repaso del ciclo de conexión cliente-servidor con el programa 04 y la forma de dar tolerancia a fallos al cliente evaluando el valor de retorno de <code>connect()</code>.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es volver a marcar el número de un local ocupado o cerrado: si no contesta, esperas 5 segundos y marcas otra vez en vez de colgar. La analogía deja de servir porque en C no hay un tono de audio: <code>connect()</code> devuelve el entero −1 para avisar que el servidor no aceptó el saludo TCP.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El profesor revisó la especificación formal de <code>connect()</code> en The Open Group: devuelve <strong>0</strong> si se conecta y <strong>−1</strong> si hay un error (y deja la causa en <code>errno</code>). Para un cliente robusto, que no aborta cuando el servidor todavía no arrancó, se pone la llamada dentro de un <code>while</code>:</p>
+<pre><code>while (connect(fd, (struct sockaddr *)&amp;servidor, sizeof(servidor)) == -1) {
+    printf("Servidor no disponible, reintentando en 5 segundos...\n");
+    sleep(5);
+}</code></pre>
+<p>En las pruebas en vivo, un alumno ejecutó el cliente en C desde su casa por escritorio remoto contra el servidor del profesor (132.248.59.6); el servidor aceptó la conexión e imprimió la IP pública desde la que entró. Otro alumno abrió la IP y el puerto en un navegador: eso mandó cabeceras HTTP (<code>GET / HTTP/1.1</code>, <code>User-Agent</code>) y llenó el socket de texto, porque el navegador no cierra la sesión de forma limpia.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite construir clientes que esperan a que un servidor arranque o se recupere de una caída. Continúa el par 04 de la <a href="clase-11.html" style="color:var(--coral)">Clase 11</a>.</p>
+<div class="errores"><p><strong>Error común:</strong> omitir <code>sleep()</code> dentro del bucle: se vuelve un ciclo infinito de alta frecuencia que satura la red y el procesador con miles de solicitudes por segundo.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c12-efimeros"><summary><span class="stitle">2 · Puertos efímeros del cliente</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Son puertos lógicos temporales que el sistema operativo del cliente asigna dinámicamente para identificar de forma única cada una de sus conexiones salientes.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un edificio donde todas las cartas salen con la misma dirección de remitente y a cada empleado se le asigna una extensión temporal en el sobre, para saber a quién entregar la respuesta. La analogía se queda corta: el puerto efímero no está escrito a mano, es un campo de 16 bits en la cabecera TCP.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Cuando varios procesos o dispositivos salen a la red desde una misma IP pública (la del proveedor de internet de una casa, o la de PC Puma, 132.247.100.226), no pueden compartir el mismo puerto de origen. El kernel del cliente asigna automáticamente un puerto efímero del rango dinámico o privado (por ejemplo, 49802, 48469, 49808). En la demostración con <code>ss</code> el profesor proyectó tres conexiones simultáneas desde la IP de PC Puma, cada una con un puerto de salida distinto. Al cerrar la sesión, el puerto se libera.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Explica cómo el kernel distingue varias conversaciones salientes simultáneas desde una misma máquina o red sin que se mezclen las respuestas.</p>
+<div class="errores"><p><strong>Error común:</strong> confundir el puerto de escucha del servidor (fijo, por ejemplo 4898) con el puerto de salida del cliente (efímero y aleatorio).</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c12-listen"><summary><span class="stitle">3 · <code>listen()</code>, el Three-Way Handshake y las dos colas (SYN y ACCEPT)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es el mecanismo del kernel de Linux que establece las conexiones TCP usando dos colas independientes, la cola SYN y la cola ACCEPT, cuando el servidor ejecuta <code>listen()</code>.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es el control de acceso de un concierto: primero muestras el boleto en la verja exterior y esperas en un pasillo de revisión (cola SYN); una vez validado pasas a la sala de espera interior (cola ACCEPT), donde el acomodador te lleva a tu asiento (<code>accept()</code>). La analogía deja de servir porque las personas son físicas y las colas del kernel son estructuras de datos en RAM con bloques de control de socket. El profesor también usó la imagen de aventar piezas de Lego: mandar una (SYN), pegarle otra (SYN-ACK) y regresar la pieza extra (ACK).</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El profesor analizó el diagrama de arquitectura del kernel al llamar <code>listen(fds, backlog)</code>. El establecimiento de conexión TCP sigue tres pasos:</p>
+<ol>
+<li><strong>SYN.</strong> El cliente envía un paquete SYN (<em>Synchronize</em>) y pasa a <code>SYN_SENT</code>. El servidor recibe el SYN, pasa a <code>SYN_RECV</code> y guarda la petición semiabierta en la <strong>cola SYN</strong> (cola de semiconexiones).</li>
+<li><strong>SYN-ACK.</strong> El servidor responde con un paquete combinado SYN-ACK. El cliente lo recibe y pasa a <code>ESTABLISHED</code>.</li>
+<li><strong>ACK.</strong> El cliente devuelve la confirmación ACK. Al recibirla, el servidor marca la conexión como <code>ESTABLISHED</code>, la saca de la cola SYN y la pasa a la <strong>cola ACCEPT</strong>. Cuando el programa en C llama <code>accept()</code>, extrae la primera conexión de la cola ACCEPT y devuelve el socket del cliente (<code>fdc</code>).</li>
+</ol>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra lo que ocurre dentro del sistema operativo entre <code>listen()</code> y <code>accept()</code>; es la base para entender el rendimiento de servidores concurrentes y la prevención de ataques.</p>
+<div class="errores"><p><strong>Error común:</strong> creer que <code>listen()</code> maneja una sola cola de conexiones, cuando son dos: la cola SYN (semiconexiones) y la cola ACCEPT (conexiones completadas).</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c12-n1"><summary><span class="stitle">4 · La regla n+1, <code>sysctl</code>, SYN flood y herramientas de monitoreo</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es la lógica interna del kernel que decide cuántas conexiones se pueden encolar (regla n+1), junto con los parámetros de <code>sysctl</code> y las herramientas (<code>ss</code> y <code>netcat</code>) que se usan para observarla en la Tarea 4.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un letrero de «capacidad: 1 persona en espera», pero el guardia solo detiene a la gente cuando hay estrictamente más de una persona en la fila: por eso entran 2. La analogía deja de servir porque el guardia ve personas y el kernel compara variables enteras en C.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>La regla n+1.</strong> En el código del kernel que mostró el artículo, la función que verifica si la cola de aceptación está llena usa el operador estricto «mayor que»:</p>
+<pre><code>/* Evaluación interna en el kernel de Linux */
+if (longitud_actual &gt; backlog) {
+    /* cola llena: rechazar o ignorar la conexión */
+}</code></pre>
+<p>Con <code>listen(fds, 1)</code> (n = 1), cuando llega la primera conexión encolada se evalúa 1 &gt; 1, que es falso, así que se acepta en la cola. La cola solo se considera llena cuando llega otra petición y se evalúa 2 &gt; 1 (verdadero). El número real de conexiones encoladas es siempre <strong>n + 1</strong>: con backlog = 1, la cola acepta 1 + 1 = 2 conexiones pendientes.</p>
+<p><strong>Parámetros del kernel con <code>sysctl</code>.</strong> Para reproducir el ejercicio de la Tarea 4 y forzar el rechazo de conexiones se cambian dos parámetros:</p>
+<pre><code>sudo sysctl -w net.ipv4.tcp_syncookies=0
+sudo sysctl -w net.ipv4.tcp_syn_retries=1</code></pre>
+<ul>
+<li><code>tcp_syncookies = 0</code> desactiva las SYN cookies, para que no absorban peticiones sin llenar la cola.</li>
+<li><code>tcp_syn_retries = 1</code> limita los reintentos de SYN a uno (2 intentos en total) y reduce el bloqueo de 63–180 segundos a unos instantes.</li>
+</ul>
+<p><strong>SYN flood y SYN cookies.</strong> Es un ataque de denegación de servicio en el que el atacante manda miles de SYN con IP falsificada. El servidor responde con SYN-ACK y reserva memoria en la cola SYN esperando un ACK que nunca llega (las IP son falsas o el atacante lo ignora), así que la memoria se agota y se rechaza a usuarios legítimos. Activar las SYN cookies evita reservar memoria en la cola SYN para peticiones semiabiertas.</p>
+<p><strong>Monitoreo.</strong> Se usa <code>ss</code> (<em>socket statistics</em>) con <code>-atnp</code>, que muestra <code>Recv-Q</code> (conexiones encoladas ahora) y <code>Send-Q</code> (longitud máxima del backlog) para un socket en <code>LISTEN</code>. Para refrescar cada segundo:</p>
+<pre><code>watch -n1 "ss -atnp"</code></pre>
+<p>Los clientes en paralelo se simulan con <code>netcat</code>: <code>nc -v &lt;IP&gt; &lt;puerto&gt;</code>.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite entender los límites reales de concurrencia en Linux, configurar el kernel para pruebas de estrés y proteger servidores contra denegación de servicio.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> suponer que backlog = 1 rechaza la segunda conexión encolada (se olvida la regla n+1, que acepta 2), o intentar cambiar <code>sysctl</code> sin permisos de <code>sudo</code>.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c12-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Qué devuelve <code>connect()</code> si tiene éxito y si falla?</summary><p><strong>0</strong> si se conecta y <strong>−1</strong> si hay error, con el código de la falla en <code>errno</code>.</p></details>
+<details class="qa"><summary>2. ¿Cómo programas un cliente en C que reintente si el servidor aún no está activo?</summary><p>Metes <code>connect()</code> en un <code>while</code> que compare el resultado con −1 y llamas <code>sleep()</code> dentro del bucle antes de cada nuevo intento.</p></details>
+<details class="qa"><summary>3. ¿Qué son los puertos efímeros y para qué los usa el cliente?</summary><p>Son puertos temporales que asigna el kernel del cliente para identificar cada conexión saliente, de modo que varias peticiones desde la misma IP pública usen puertos de origen distintos.</p></details>
+<details class="qa"><summary>4. Describe los tres pasos del Three-Way Handshake y qué pasa en las colas.</summary><p>1) El cliente manda SYN y el servidor guarda la solicitud en la cola SYN. 2) El servidor responde SYN-ACK. 3) El cliente manda ACK y el servidor mueve la conexión de la cola SYN a la cola ACCEPT, de donde la toma <code>accept()</code>.</p></details>
+<details class="qa"><summary>5. ¿Por qué el kernel encola n+1 conexiones con un backlog n?</summary><p>Porque la comparación es estricta (&gt;) y no &gt;=: con backlog = 1, la condición 1 &gt; 1 es falsa y se permite una segunda conexión (1 + 1 = 2).</p></details>
+<details class="qa"><summary>6. ¿Qué es un SYN flood y cómo ayudan las SYN cookies?</summary><p>Es una denegación de servicio con miles de SYN falsificados que nunca mandan el ACK final y llenan la memoria de la cola SYN. Las SYN cookies evitan reservar memoria para las peticiones semiabiertas.</p></details>
+<details class="qa"><summary>7. ¿Qué comandos ajustan los parámetros de la Tarea 4?</summary><p><code>sudo sysctl -w net.ipv4.tcp_syncookies=0</code> y <code>sudo sysctl -w net.ipv4.tcp_syn_retries=1</code>.</p></details>
+<details class="qa"><summary>8. ¿Qué significan <code>ss</code>, <code>Recv-Q</code> y <code>Send-Q</code> en un socket en LISTEN?</summary><p><code>ss</code> es <em>Socket Statistics</em>. <code>Recv-Q</code> es la cantidad actual de conexiones en la cola de aceptación y <code>Send-Q</code> es la longitud máxima configurada del backlog.</p></details>
+</details>
+
+<details class="section-block sec" id="c12-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>El paraguas olvidado:</strong> el profesor abrió la clase preguntando entre risas por un paraguas que alguien dejó en la sesión anterior.</li>
+<li><strong>Clase suspendida por lluvia:</strong> recordó que la sesión previa se canceló por el pronóstico de tormentas, y que se avisó por el canal de Telegram.</li>
+<li><strong>Probar el servidor desde casa:</strong> el profesor señaló que la IP detectada era la del proveedor de internet del alumno y explicó cómo la IP pública del módem protege el perímetro de una red doméstica.</li>
+<li><strong>El navegador «mete ruido»:</strong> la prueba con el navegador ilustró cómo manda cabeceras HTTP y no cierra el socket de forma limpia.</li>
+<li><strong>Analogías del profesor:</strong> el estadio de fútbol y sus pasillos de acceso para la cola, y las piezas de Lego para el handshake.</li>
+<li><strong>Zoomit:</strong> mostró este programa en su memoria USB para hacer acercamientos de pantalla con Control + 4.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c12-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<p><strong>Tarea 4 (obligatoria):</strong> practicar y analizar el desbordamiento de la cola de conexiones con <code>listen()</code>, <code>netcat</code> y monitoreo con <code>ss</code>. Pasos que dio el profesor:</p>
+<ol>
+<li>Ajustar los parámetros del kernel con los dos comandos <code>sysctl</code> de arriba.</li>
+<li>Ejecutar el servidor con backlog = 1 en el puerto 4898.</li>
+<li>Abrir al menos 4 terminales: 2 para el servidor ejecutando <code>watch -n1 "ss -atnp"</code> y 3 o 4 para clientes con <code>nc -v &lt;IP&gt; 4898</code>.</li>
+<li>Investigar la función del kernel que revisa la cola llena y el comportamiento de <code>tcp_syncookies</code> y <code>tcp_syn_retries</code>.</li>
+<li>Entregar un <strong>reporte en PDF</strong> con capturas de todas las terminales que muestren las conexiones aceptadas, encoladas y rechazadas, con la teoría investigada.</li>
+</ol>
+<ul>
+<li><strong>Plazo:</strong> «antes del próximo jueves». El audio no aclara si es el 8 o el 15 de octubre; confírmalo en el sitio del profesor o en Telegram.</li>
+<li>El profesor reenviará por Telegram la liga del sitio y las instrucciones de la Tarea 4.</li>
+<li>Seguirá calificando y enviando los resultados de la Tarea 3.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li><code>connect()</code> devuelve 0 o −1; un <code>while</code> con <code>sleep()</code> da reintentos sin saturar la red.</li>
+<li>Puerto de escucha del servidor = fijo; puerto del cliente = efímero, asignado por su kernel.</li>
+<li>Three-Way Handshake: SYN → SYN-ACK → ACK; la conexión pasa de la cola SYN a la cola ACCEPT.</li>
+<li>Regla n+1: <code>listen(fd, n)</code> encola n + 1 conexiones porque la comparación es &gt;, no &gt;=.</li>
+<li>SYN flood = SYN falsificados sin ACK; las SYN cookies evitan reservar memoria.</li>
+<li>Tarea 4: <code>sysctl</code> (syncookies = 0, syn_retries = 1), backlog = 1, <code>watch ss</code>, varios <code>nc</code> y PDF con capturas.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

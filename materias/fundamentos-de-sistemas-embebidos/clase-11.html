@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 11 — Fundamentos de Sistemas Embebidos</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261005a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Fundamentos de Sistemas Embebidos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 11</h2>
+  <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 5 oct 2026 · Tema 2 (subtema 2.7) — Conectores USB de las tarjetas, temporización de la comunicación serie asíncrona (UART), control de flujo RTS/CTS vs. XON/XOFF, RS-485 frente a RS-232, y el protocolo One-Wire con alimentación parásita, búsqueda de direcciones ROM e integración en Linux.</p>
+</div>
+
+<details class="section-block sec" id="c11-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<p>El profesor comentó al final de la sesión que el primer examen parcial se proyecta tentativamente entre el 7 y el 10 de octubre, así que esta clase y la anterior son material de examen inminente. Cada punto lleva su evidencia de la clase.</p>
+<ol class="examen-lista">
+<li><strong>Circuito de la alimentación parásita de One-Wire.</strong><span class="evid">Evidencia: lo explicó en detalle en el pizarrón, dibujando el esquema con el capacitor interno de 800 pF, el diodo de bloqueo, la resistencia de pull-up de 4.7 kΩ y el cortocircuito obligatorio de los pines V<sub>DD</sub> y GND a tierra.</span></li>
+<li><strong>Algoritmo de búsqueda de direcciones ROM de 64 bits (bit y su complemento).</strong><span class="evid">Evidencia: lo resolvió paso a paso en el pizarrón, mostrando cómo el maestro detecta una colisión cuando lee 0 0 y recorre el árbol binario.</span></li>
+<li><strong>Control de flujo por hardware (RTS/CTS) frente a por software (XON/XOFF).</strong><span class="evid">Evidencia: lo dijo explícitamente en clase y justificó históricamente el cambio con la velocidad del microprocesador frente a la del puerto serie y la disponibilidad de RAM para búferes.</span></li>
+<li><strong>RS-485 frente a RS-232: señal diferencial, alcance de 1.2 km y topología multipunto.</strong><span class="evid">Evidencia: dictó en el pizarrón la tabla comparativa de estándares serie y destacó el blindaje natural del par trenzado en entornos con motores.</span></li>
+<li><strong>Cálculo de tiempo de transmisión por un puerto serie N81 y efectividad de la paridad.</strong><span class="evid">Evidencia: resolvió en vivo el ejercicio del archivo MP3 y demostró numéricamente por qué la paridad solo detecta errores de un número impar de bits.</span></li>
+<li><strong>Emulación de One-Wire con una UART (9,600 y 115,200 baudios).</strong><span class="evid">Evidencia: explicó explícitamente que se cambia la velocidad a 9,600 baudios para generar el pulso de Reset (0xF0) y a 115,200 baudios para transmitir y leer bits individuales.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c11-usb"><summary><span class="stitle">1 · Conectores USB y compatibilidad de hardware</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es la elección del conector mecánico y eléctrico de una tarjeta de desarrollo según la revisión de hardware del fabricante: Micro-USB o USB-C en la Raspberry Pi Pico (RP2040) y USB tipo B en las tarjetas Arduino tradicionales (Uno y Mega).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como intentar enchufar una clavija europea en un contacto americano: si la forma no embona, no pasa ni corriente ni datos. La analogía se queda corta porque una clavija solo lleva fase y neutro, mientras que un conector USB integra líneas de alimentación y pares diferenciales de datos de alta frecuencia.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>La Raspberry Pi Pico (RP2040) se vende en versiones con conector Micro-USB o con USB-C. Las tarjetas Arduino Uno y Mega usan el conector USB tipo B, el cuadrado y robusto que suelen tener las impresoras. El profesor ilustró la incompatibilidad de forzar un cable USB-B en una Pico con una broma sobre algo que «no entra ni a la fuerza».</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Elegir el cable correcto desde la compra evita dañar mecánicamente los puertos de las tarjetas del laboratorio y evita fallas de conexión: un cable económico que solo carga no trae los hilos de datos D+ y D−.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> forzar conectores no compatibles o usar cables que solo transportan alimentación pero no datos serie.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c11-uart"><summary><span class="stitle">2 · Comunicación serie asíncrona: temporización, paridad y ancho de banda</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es un estándar de comunicación serie en el que no existe un alambre de reloj compartido. La sincronización descansa en generadores de reloj internos en cada extremo, ajustados a la misma velocidad de baudios (UART, RS-232).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Son dos personas que sincronizan sus relojes antes de entrar a un túnel: si acuerdan caminar a un paso por segundo, el receptor sabe en qué segundo exacto abrir los ojos para leer cada letra. Deja de servir si el túnel es muy largo y el reloj de uno se atrasa unos milisegundos: empieza a leer las letras fuera de tiempo.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Cada byte viaja envuelto en una trama. La línea descansa en nivel ALTO (V<sub>CC</sub> en TTL, +12 V en RS-232). La transmisión comienza con el <strong>bit de inicio</strong>: un flanco de bajada, de ALTO a BAJO (0 V o −12 V). Ese flanco dispara en el receptor un circuito temporizador (el profesor lo describió como un resonador astable tipo 555 o un circuito RC) que genera pulsos cuadrados.</p>
+<p>Para el muestreo, el receptor espera <strong>medio periodo de reloj (0.5 T)</strong> después del flanco, de modo que lee cada bit justo en el centro del pulso y no en las esquinas, donde el ruido podría confundirlo. Después llegan los bits de datos, y opcionalmente un <strong>bit de paridad</strong>. El profesor demostró numéricamente en el pizarrón que, si cambia un solo bit, la cuenta de unos se altera y el error se detecta, pero si cambian dos bits a la vez, la suma de unos vuelve a coincidir y el hardware no se entera. Por eso dijo que la paridad en UART tiene una efectividad de solo 50 %: «es mejor que nada».</p>
+<p>La trama termina con los <strong>bits de paro</strong>: la línea regresa a ALTO durante 1, 1.5 o 2 ciclos de reloj. Ese tiempo muerto es necesario para que las capacitancias parásitas acumuladas en cables largos se descarguen antes de que llegue el siguiente bit de inicio.</p>
+<p><strong>Ejercicio resuelto en vivo (ancho de banda y tiempo de descarga).</strong> En la configuración <strong>N81</strong> (sin paridad, 8 bits de datos, 1 bit de paro) cada byte ocupa 1 + 8 + 0 + 1 = <strong>10 bits</strong> en la línea. Se quiere transmitir un MP3 de 3 MB (3×10<sup>6</sup> bytes), y luego uno de 5 MB, por un módem de 56,600 baudios (56,600 bits/s):</p>
+<ul>
+<li>Rendimiento efectivo: 56,600 bits/s ÷ 10 bits/byte = <strong>5,660 bytes/s</strong> ≈ 5.66 KB/s.</li>
+<li>Archivo de 3 MB: 3,000,000 ÷ 5,660 ≈ <strong>530 s ≈ 8.8 min</strong>.</li>
+<li>Archivo de 5 MB: 5,000,000 ÷ 5,660 ≈ <strong>883 s ≈ 14.7 min</strong>. El profesor acotó que en la práctica tardaba de 20 minutos a una hora por los retardos de la línea.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es el protocolo básico para conectar terminales de desarrollo, microcontroladores y módems, y es la base del UART/RS-232/MAX232 de la <a href="clase-10.html" style="color:var(--plum)">Clase 10</a>.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> configurar velocidades distintas en el emisor y el receptor (por ejemplo, un Arduino enviando a 115,200 baudios y la consola leyendo a 9,600): el resultado es texto distorsionado, «basura».</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c11-flujo"><summary><span class="stitle">3 · Control de flujo: hardware (RTS/CTS) y software (XON/XOFF)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es el mecanismo con el que el receptor le dice al emisor cuándo detenerse y cuándo reanudar la transmisión, para no desbordar sus búferes de RAM.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p><strong>Hardware (RTS/CTS):</strong> como una paleta física de «Siga / Alto» que detiene los coches antes de que llenen el estacionamiento. <strong>Software (XON/XOFF):</strong> como meter dentro del mismo paquete una carta que dice «deja de escribirme» y luego otra que dice «ya tengo espacio, continúa». La analogía deja de servir si el receptor se satura tanto que ya no alcanza a mandar la carta de aviso a tiempo.</p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>RTS/CTS (Request to Send / Clear to Send).</strong> Usa dos cables dedicados adicionales. El emisor activa RTS cuando quiere transmitir y el receptor activa CTS solo cuando su búfer de entrada tiene espacio. Se usaba en los orígenes de la computación, cuando los microprocesadores eran muy lentos (el profesor mencionó cristales de 32 kHz) y la RAM era demasiado cara para tener búferes.</li>
+<li><strong>XON/XOFF.</strong> Transmite bytes ASCII de control por el mismo hilo de datos: XOFF = Ctrl+S (ASCII 19) para pausar y XON = Ctrl+Q (ASCII 17) para reanudar. Apareció cuando las CPU llegaron a 8–20 MHz y la RAM abarató los búferes manejados por interrupciones, lo que permitió quitar dos cables del conector.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Evita perder datos cuando un dispositivo rápido le manda información a uno lento, como una impresora o un módem. La justificación histórica (velocidad del procesador frente a la del puerto serie y disponibilidad de RAM) es la que dio el profesor para distinguir ambos métodos.</p>
+<div class="errores"><p><strong>Error común:</strong> dejar activado el control de flujo por hardware en un cable de solo 3 hilos (TX, RX, GND): el emisor se queda congelado esperando una señal CTS que nunca llega.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c11-rs485"><summary><span class="stitle">4 · Redes industriales y la capa física RS-485 (EIA-485)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es una especificación de capa física para comunicación serie industrial que usa transmisión diferencial sobre par trenzado y permite redes multipunto a largas distancias.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Son dos personas sosteniendo dos cuerdas paralelas: si una sube y la otra baja al mismo tiempo, una ráfaga de viento afecta a ambas por igual y el receptor puede restar el viento y quedarse con la señal original. Deja de servir si una cuerda se rompe o se aplica un voltaje fuera de la tolerancia física.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Señalización diferencial.</strong> El receptor mide la diferencia de voltaje entre las líneas A y B, con diferenciales de apenas ±1.5 V y un rango de modo común de −7 V a +12 V. El trenzado forma espiras que generan campos magnéticos que se cancelan, lo que da un blindaje inductivo natural frente a los campos de motores e inductores industriales (el profesor habló de motores de 20 a 40 caballos de fuerza).</p>
+<p><strong>Topología y distancia.</strong> Opera en half-duplex (2 hilos) o full-duplex (4 hilos), con topología de bus encadenado (<em>daisy-chain</em>): 1 maestro y hasta 32 transceptores, por ejemplo motores a pasos en robótica. Llega a 1.2 km (1,200 m) a 100 kbps, o a 10–35 Mbps en distancias cortas, de alrededor de 12 m.</p>
+<p><strong>Tabla comparativa dictada en clase:</strong></p>
+<table>
+<thead><tr><th>Parámetro</th><th>RS-232</th><th>RS-422</th><th>RS-485</th></tr></thead>
+<tbody>
+<tr><td>Tipo de señal</td><td>No diferencial (referida a GND)</td><td>Diferencial</td><td>Diferencial</td></tr>
+<tr><td>Número de receptores</td><td>1 (punto a punto)</td><td>10 (multidrop)</td><td>32 (multipunto)</td></tr>
+<tr><td>Modo de operación</td><td>Full duplex</td><td>Full / half duplex</td><td>Half / full duplex</td></tr>
+<tr><td>Distancia máxima</td><td>15 m</td><td>1.2 km</td><td>1.2 km</td></tr>
+<tr><td>Velocidad máxima</td><td>20 kbps (115.2 kbps en distancia corta)</td><td>10 Mbps</td><td>35 Mbps</td></tr>
+<tr><td>Niveles de voltaje</td><td>±5 V a ±12 V</td><td>±1.5 V</td><td>±1.5 V (rango −7 V a +12 V)</td></tr>
+</tbody>
+</table>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la interfaz estándar de la industria pesada y la robótica para comunicar controladores centrales con motores y actuadores sin que la interferencia electromagnética dañe la señal.</p>
+<div class="errores"><p><strong>Error común:</strong> armar la red RS-485 en estrella en lugar de bus lineal encadenado: provoca reflexiones de onda en los extremos del cable.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c11-onewire"><summary><span class="stitle">5 · Protocolo One-Wire (1-Wire) y alimentación parásita</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es un protocolo de red serie asíncrono para interconectar sensores, desarrollado por Dallas Semiconductor (Maxim Integrated). Transmite datos y energía por un solo hilo de datos, además de la masa común.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como una lámpara recargable conectada al mismo cable del teléfono por el que se habla: cuando nadie habla, el cable la carga, y cuando hay conversación la lámpara usa la batería que guardó para no apagarse. Deja de servir si la conversación dura demasiado sin pausas y la batería interna se agota.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Líneas físicas.</strong> Solo hay un hilo de datos y GND. La línea de datos va conectada a V<sub>CC</sub> (3.3 V o 5 V) mediante una resistencia de pull-up R<sub>P</sub> = 4.7 kΩ.</p>
+<p><strong>Alimentación parásita.</strong> Elimina la necesidad de llevar un cable de V<sub>CC</sub> a cada sensor. Cada circuito integrado tiene internamente un diodo y un capacitor de 800 pF:</p>
+<ul>
+<li>Cuando la línea de datos está en reposo en ALTO, la corriente atraviesa el diodo y carga el capacitor de 800 pF.</li>
+<li>Cuando la línea cae a BAJO (un '0' durante la transmisión), el diodo bloquea la descarga hacia el bus y los 800 pF alimentan la lógica interna del sensor.</li>
+<li>Para usar el modo parásito puro, los pines V<sub>DD</sub> y GND del sensor deben cortocircuitarse a tierra.</li>
+</ul>
+<p><strong>Alcance.</strong> Opera a velocidades bajas, de 2 a 3 kbps. Llega a unos 100 m en modo parásito y a unos 300 m con cable blindado y un transceptor de potencia.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite desplegar redes grandes de sensores (por ejemplo, DS18B20 de temperatura en ductos, hornos o invernaderos) con un costo de cableado mínimo.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> olvidar cortocircuitar V<sub>DD</sub> y GND a tierra al usar el modo parásito, o no poner la resistencia de pull-up de 4.7 kΩ.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c11-rom"><summary><span class="stitle">6 · Búsqueda de direcciones ROM de 64 bits en One-Wire (árbol binario)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es un algoritmo determinista de exploración sobre un árbol binario con el que el maestro identifica e inventaría las direcciones únicas de 64 bits de todos los sensores conectados al mismo hilo.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un profesor pasando lista en un salón donde nadie dice su nombre completo y todos responden letra por letra: si dos alumnos coinciden en la primera letra, el profesor explora primero la rama de los que dijeron «A» y luego regresa a explorar la de los que dijeron «B». Deja de servir si no existe un identificador binario único de longitud fija.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Estructura del código ROM de 64 bits:</strong></p>
+<ul>
+<li>8 bits de <strong>código de familia</strong> (por ejemplo, 0x28 para el DS18B20).</li>
+<li>48 bits de <strong>número de serie único</strong>, grabado con láser (2<sup>48</sup> ≈ 281 billones de dispositivos posibles).</li>
+<li>8 bits de <strong>CRC</strong> para verificación.</li>
+</ul>
+<p><strong>Inicio (Reset y presencia).</strong> El maestro fuerza la línea a BAJO durante 480 µs (equivalente a 8 bits a 9,600 baudios); eso vacía los capacitores de los sensores y reinicia sus microcontroladores. Luego libera la línea. Después de 15–60 µs, los esclavos responden jalando la línea a BAJO durante 60–240 µs: es el «pulso de presencia», «aquí estoy».</p>
+<p><strong>Búsqueda (Search ROM, comando 0xF0).</strong> Todos los esclavos transmiten el primer bit de su dirección ROM y, enseguida, su complemento (el bit negado). El maestro lee la línea dos veces seguidas:</p>
+<ul>
+<li>Lee <strong>0 1</strong>: todos los sensores tienen un 0 en esa posición.</li>
+<li>Lee <strong>1 0</strong>: todos tienen un 1.</li>
+<li>Lee <strong>0 0</strong>: <strong>colisión</strong>. Hay sensores con 0 y sensores con 1 en esa posición.</li>
+<li>Lee <strong>1 1</strong>: falla en el bus; ningún sensor respondió.</li>
+</ul>
+<p>Ante una colisión, el maestro elige arbitrariamente una rama (escribe 0 o 1). Los esclavos cuya dirección no coincide con el bit elegido pasan a reposo (<em>sleep</em>) y solo siguen los que coinciden. El proceso se repite 64 veces para identificar la dirección completa de un dispositivo, y el maestro vuelve a ejecutar el algoritmo explorando las ramas que no tomó hasta listar todos los sensores.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite conectar, en teoría, hasta 2<sup>48</sup> sensores en un solo cable sin configurar direcciones a mano con interruptores.</p>
+<div class="errores"><p><strong>Error común:</strong> creer que la lista de sensores sale en un solo paso. La búsqueda hace 64 iteraciones binarias por cada dispositivo presente.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c11-linux"><summary><span class="stitle">7 · One-Wire sobre una UART e integración en Linux</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es una técnica para controlar One-Wire con el puerto serie (UART) estándar de un microcontrolador o de una Raspberry Pi, y la forma en que Linux expone esos sensores a través de un sistema de archivos virtual.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como mandar código Morse con una máquina de escribir cambiando la velocidad de la manivela: despacio para las pausas largas y rápido para las letras cortas. Deja de servir si la máquina no permite cambiar de velocidad.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Emulación por hardware con una UART.</strong> Para el pulso de Reset de 480 µs se configura la UART a 9,600 baudios y se envía el byte 0xF0. Para leer y escribir bits se sube la UART a 115,200 baudios: transmitir 0xFF escribe un '1' o realiza una lectura, y transmitir 0x00 escribe un '0'. Para unir TX y RX al cable único de datos sin provocar un cortocircuito en la salida de la UART, se coloca una resistencia de 10 kΩ y un diodo entre ambas líneas.</p>
+<p><strong>En Linux (Raspberry Pi).</strong> Se habilita el módulo del kernel <code>w1-gpio</code>. El kernel mapea los sensores en el sistema de archivos virtual, en la ruta <code>/sys/bus/w1/devices/</code>, y cada sensor aparece como una carpeta con el nombre de su dirección ROM (por ejemplo, <code>28-00000xxxx</code>). Para leer la temperatura desde Python o consola basta abrir el archivo de texto <code>w1_slave</code>:</p>
+<pre><code>cat /sys/bus/w1/devices/28-xxxxx/w1_slave</code></pre>
+<p>El archivo muestra el estado del CRC y la temperatura en miligrados Celsius (por ejemplo, <code>t=23125</code> equivale a 23.125 °C).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra la abstracción de Linux: leer un sensor físico se reduce a abrir y leer un archivo de texto. Conecta con la Práctica 5 (Linux en modo consola en la Raspberry Pi).</p>
+<div class="errores"><p><strong>Error común:</strong> intentar generar los tiempos de One-Wire desde C en espacio de usuario sin usar el controlador del kernel; los retardos del planificador (<em>scheduler</em>) arruinan la temporización.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c11-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cómo funciona la alimentación parásita de One-Wire y qué resistencia de pull-up usa?</summary><p>Usa un pull-up de <strong>4.7 kΩ</strong> a V<sub>CC</sub>. Cada sensor tiene un diodo y un capacitor de <strong>800 pF</strong>: con la línea en ALTO el capacitor se carga; cuando la línea cae a BAJO para transmitir, el diodo impide que se descargue hacia el bus y los 800 pF alimentan la lógica interna. Los pines V<sub>DD</sub> y GND se cortocircuitan a tierra.</p></details>
+<details class="qa"><summary>2. Explica cómo detecta y resuelve el maestro una colisión en la búsqueda de ROM.</summary><p>Con Search ROM (0xF0) cada esclavo manda su bit y luego su complemento. Si el maestro lee <strong>0 0</strong>, hay colisión (sensores con 0 y con 1 en esa posición). El maestro elige un bit arbitrario (0 o 1) y lo escribe en el bus; los sensores que no coinciden pasan a reposo y los demás siguen. Después regresa a explorar la rama que no tomó.</p></details>
+<details class="qa"><summary>3. ¿Por qué la paridad en UART solo tiene 50 % de efectividad?</summary><p>Porque solo detecta la alteración de un número impar de bits. Si se corrompen dos bits a la vez, la suma de unos vuelve a coincidir con la paridad y el hardware no detecta el error.</p></details>
+<details class="qa"><summary>4. Aplica: un MP3 de 4 MB por un puerto serie N81 a 115,200 baudios. ¿Cuánto tarda?</summary><p>En N81 cada byte son 10 bits (1 inicio + 8 datos + 1 paro). Rendimiento: 115,200 ÷ 10 = <strong>11,520 bytes/s</strong>. Tiempo: 4,000,000 ÷ 11,520 ≈ <strong>347.2 s ≈ 5.8 min</strong>.</p></details>
+<details class="qa"><summary>5. Compara RS-232 y RS-485 en señalización, distancia y topología.</summary><p>RS-232 es no diferencial (±5 a ±12 V), punto a punto (1 emisor, 1 receptor) y llega a 15 m. RS-485 es diferencial (±1.5 V), multipunto en bus encadenado (hasta 32 dispositivos) y llega a 1.2 km.</p></details>
+<details class="qa"><summary>6. ¿Cómo se genera el pulso de Reset de 480 µs de One-Wire con una UART?</summary><p>Se configura la UART a <strong>9,600 baudios</strong> y se envía el byte <strong>0xF0</strong>: a esa velocidad la línea queda en BAJO unos 480 µs, lo que dispara el Reset y el pulso de presencia de los sensores.</p></details>
+<details class="qa"><summary>7. Compara el control de flujo RTS/CTS con XON/XOFF.</summary><p>RTS/CTS usa dos hilos adicionales y se empleaba en sistemas antiguos, con procesadores lentos y sin RAM para búferes. XON/XOFF manda bytes ASCII de control (Ctrl+S para pausar, Ctrl+Q para reanudar) por el mismo hilo de datos y se usa cuando el procesador es más rápido que el puerto serie y hay búferes en RAM.</p></details>
+<details class="qa"><summary>8. ¿Cómo se lee un DS18B20 desde Python en una Raspberry Pi con Linux?</summary><p>Se habilita el driver <code>w1-gpio</code>, que monta los sensores como carpetas en <code>/sys/bus/w1/devices/28-xxxxx/</code>. En Python se abre el archivo de texto <code>w1_slave</code> con <code>open()</code> y se lee la cadena con la temperatura en miligrados Celsius.</p></details>
+<details class="qa"><summary>9. ¿Por qué el receptor UART espera medio periodo (0.5 T) tras el flanco del bit de inicio?</summary><p>Para muestrear cada bit en el centro del pulso, lejos de los bordes, donde el ruido podría producir lecturas erróneas.</p></details>
+</details>
+
+<details class="section-block sec" id="c11-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>Estrategia militar en Rusia:</strong> comentarios del profesor sobre las invasiones de Napoleón y de Hitler, la táctica de «tierra quemada» y los retrasos del ejército alemán por rescatar a las tropas italianas de Mussolini en Europa del Este.</li>
+<li><strong>Apuntes a mano frente a fotos del pizarrón:</strong> explicó que tomar fotos del pizarrón genera retención casi nula, porque el cerebro asume que la información ya está guardada en el celular, mientras que escribir a mano refuerza la memoria por vía neuromotora.</li>
+<li><strong>Porros en las escuelas:</strong> recuerdos satíricos de cuando los padres iban a buscar a sus hijos si los porros armaban desmanes en los planteles.</li>
+<li><strong>La «guerra del uranio»:</strong> comentó el conflicto en el que un país africano suspendió la venta de uranio enriquecido a Francia y se tuvieron que apagar reactores por falta de suministro.</li>
+<li>Relato humorístico de disputas con vecinos por ruido y la presencia de patrullas.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c11-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Práctica 5 (Linux en modo consola en la Raspberry Pi):</strong> hay que llevar la Raspberry Pi configurada en consola pura. Las resistencias de pull-up de 4.7 kΩ para I²C y 1-Wire ya vienen conectadas internamente en la Raspberry Pi, pero hay que conectarlas externamente si se usan dos Arduinos o dos Picos.</li>
+<li><strong>Práctica 6 (lectura del ADC en Arduino):</strong> demostración obligatoria en el laboratorio de la lectura del convertidor analógico-digital.</li>
+<li><strong>Práctica 8 (kernel de Linux personalizado):</strong> modificar el controlador de video para reemplazar la imagen de arranque por un <em>boot splash</em> propio.</li>
+<li><strong>Próxima sesión teórica:</strong> avanzar en los protocolos industriales restantes y preparar el primer examen parcial, proyectado tentativamente entre el 7 y el 10 de octubre.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>UART N81: 10 bits por byte; tiempo = bytes × 10 ÷ baudios. La paridad detecta errores de un bit, no de dos.</li>
+<li>RTS/CTS (2 hilos extra, sistemas viejos) frente a XON/XOFF (Ctrl+S / Ctrl+Q por el mismo hilo).</li>
+<li>RS-485: diferencial, bus multipunto de hasta 32 dispositivos y hasta 1.2 km.</li>
+<li>One-Wire: 1 hilo + GND, pull-up de 4.7 kΩ, capacitor de 800 pF, ROM de 64 bits (8 familia + 48 serie + 8 CRC).</li>
+<li>Búsqueda ROM: bit + complemento; 0 0 es colisión; 64 iteraciones por dispositivo.</li>
+<li>En Linux, el sensor es un archivo: <code>/sys/bus/w1/devices/28-…/w1_slave</code>.</li>
+</ul></div>
+
+</div>
+</body>
+</html>
