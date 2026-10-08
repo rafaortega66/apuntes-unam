@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proyecto final — práctica-tutorial (entrega presencial) — Lab FSE</title>
+<link rel="stylesheet" href="../assets/style.css?v=20261007b">
+<script src="../assets/app.js?v=20261007b" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="../pendientes.html">← Pendientes</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Proyecto final — práctica-tutorial (entrega presencial)</h2>
+  <p class="prof"><strong style="color:#E8735C">Lab FSE</strong> · Vence: martes 24 nov 2026, 13:00<span class="tarea-faltan" id="tarea-faltan" data-vence="2026-11-24T13:00:00-06:00"></span></p>
+</div>
+<p class="tarea-resumen">Martes 24 nov, 13:00, en el salón. Diseñar una práctica-tutorial sobre sistemas embebidos; anexar video-evidencia y código según el PDF de especificaciones.</p>
+<div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Instrucciones completas:</strong> todavía no se extraen del notebook para esta asignación. Pídele a Claude «extrae las instrucciones de Proyecto final — práctica-tutorial (entrega presencial) del notebook» y esta página se actualiza.</p></div>
+<details class="section-block sec" id="enlaces" open><summary><span class="stitle">🔗 Enlaces</span></summary>
+<ul><li><a href="../materias/lab-de-fundamentos-de-sistemas-embebidos/material.html">Ir a la sección de la materia donde se explica</a></li></ul>
+</details>
+
+</div>
+<script>
+(function () {
+  var el = document.getElementById('tarea-faltan');
+  if (!el || !el.dataset.vence) return;
+  function tick() {
+    var d = new Date(el.dataset.vence).getTime() - Date.now();
+    if (d <= 0) { el.textContent = ' · ya venció'; return; }
+    var m = Math.floor(d / 60000), h = Math.floor(m / 60);
+    el.textContent = ' · ' + (h < 48 ? 'faltan ' + h + ' h ' + (m % 60) + ' min' : 'faltan ' + Math.floor(h / 24) + ' días');
+  }
+  tick(); setInterval(tick, 30000);
+})();
+</script>
+</body>
+</html>

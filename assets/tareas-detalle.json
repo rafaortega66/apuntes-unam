@@ -1,0 +1,438 @@
+{
+  "_nota": "Detalle por asignación, clave = id de assets/pendientes.json. Los textos son HTML de confianza. scripts/build_tareas.py genera tareas/<id>.html con esto. Campos: resumen, pasos[], entrega, citas[{audio,cita,implica}], texto_oficial (HTML, del PDF/Classroom), faltante[], enlaces[{t,u}], fuente.",
+  "asi-c11-prep": {
+    "resumen": "Dos actividades en <strong>Power BI Desktop</strong> con las encuestas del INEGI: la <strong>Actividad 1 (ENOE 2017, 8 puntos justificados con gráficas)</strong> y la <strong>Actividad 2 (ENIGH)</strong>. Se asignaron en la Clase 11 (5 oct); en Classroom la tarea vence hoy a las 17:00 y no trae descripción propia.",
+    "pasos": [
+      "<strong>Actividad 1 — ENOE 2017.</strong> Con la base de la ENOE 2017 en Power BI, contesta y <strong>justifica cada respuesta con gráficos o tablas</strong>:",
+      "&nbsp;&nbsp;1) Criterios para elegir los gráficos correctos (cuándo usar líneas, barras, dispersión, etc.).",
+      "&nbsp;&nbsp;2) ¿Qué estado tiene mayor ingreso y cuánto de ese ingreso es formal?",
+      "&nbsp;&nbsp;3) Justifica con datos si existe o no brecha salarial entre hombres y mujeres.",
+      "&nbsp;&nbsp;4) ¿Cuántas horas a la semana trabajan las personas que más laboran?",
+      "&nbsp;&nbsp;5) ¿Hay relación entre las horas trabajadas y el ingreso?",
+      "&nbsp;&nbsp;6) ¿Hay relación entre el nivel de estudio y las horas trabajadas? (a mayor estudio, ¿menos horas?)",
+      "&nbsp;&nbsp;7) Edades extremas que mantienen hogar: la persona de menor edad y la de mayor edad.",
+      "&nbsp;&nbsp;8) Un gráfico o tabla combinada de <strong>ingresos mensuales por sexo, nivel de estudio y número de empleos</strong> (1, 2, 3 o 4) en una sola visualización.",
+      "<strong>Actividad 2 — ENIGH.</strong> Explica la base de la ENIGH con tus propias palabras; genera <strong>al menos 3 gráficos útiles</strong> que aporten a una investigación y <strong>2 gráficos innecesarios o irrelevantes</strong> de los que suelen pedir en las empresas (por ejemplo, estado civil).",
+      "<strong>Recuerda al graficar:</strong> revisa suma, recuento y promedio antes de concluir (la suma engaña cuando hay muchas personas); desglosa escolaridad por años de estudio, porque la ENOE junta Media Superior y Superior.",
+      "<strong>Herramientas:</strong> Power BI Desktop (gratuito), Excel con Power Query, y para la siguiente parte del curso Oracle Live SQL con SQL Developer."
+    ],
+    "entrega": "El audio <strong>no dice en qué formato ni por qué medio</strong> se entrega (por ejemplo, archivo de Power BI, PDF o capturas). En Classroom aparece «Assigned» con «Add or create» y «Mark as done», sin descripción ni adjuntos. En la Clase 11 el profesor dijo: «El miércoles lo voy a abrir de una vez. Ya se pueden ir». Si tienes duda del formato, mándale un comentario privado desde la propia tarea. En la Clase 10 había dicho que de la investigación previa de ENOE y ENIGH no quería reporte.",
+    "citas": [
+      {
+        "audio": "ASI-Clase11.m4a",
+        "cita": "El miércoles lo voy a abrir de una vez. Ya se pueden ir.",
+        "implica": "La asignación de Classroom (vence hoy a las 17:00) es la entrega de las dos actividades de esta clase."
+      },
+      {
+        "audio": "ASI-Clase10.m4a",
+        "cita": "La siguiente van a investigar dos archivos. Uno se llama Enoe… NOE es la encuesta nacional de ocupación y empleo… la otra… Encuesta nacional de ingresos y gastos de los [hogares]… Entonces, vayan, no, no quiero que me den un reporte ni nada, quiero que vayan [y vean] ¿para qué sirven esos dos? ¿Estamos de acuerdo? Son las que vamos a analizar.",
+        "implica": "Investigar para qué sirven ambas encuestas; no se entrega reporte."
+      },
+      {
+        "audio": "ASI-Clase10.m4a",
+        "cita": "Como no puedo usar los datos del año presente, vamos a utilizar los del [20]17 o 2018… nunca ocupen los datos del año que estás cinco para atrás, no pueden ser utilizados… Es por ley, hay algo que se llama gobernanza de datos…",
+        "implica": "Los ejercicios usan datos históricos de 2017 o 2018, por la ley de gobernanza de datos (no usar datos de los últimos 5 años sin permiso)."
+      },
+      {
+        "audio": "ASI-Clase10.m4a",
+        "cita": "Aquí va a haber una base que les voy a pasar, que es la [del INEGI]. Van a ejecutar aquí su script y aquí nos vamos a ir… a donde dice conectar.",
+        "implica": "El profesor da una base / script con los datos del INEGI que se ejecuta en el gestor."
+      },
+      {
+        "audio": "ASI-Clase10.m4a",
+        "cita": "Nos vamos a colgar de un servicio externo que es en la nube para hacer esta práctica. Aquí nada más le ponen live SQL o free SQL… es de Oracle… antes tenías que hacer un usuario, ahora ya no, pero sí hagan el usuario. ¿Por qué? Porque este usuario nos va a servir para que guarde como el data warehouse, la base de datos y todo eso.",
+        "implica": "Crear tu usuario en Oracle Live SQL con anticipación."
+      },
+      {
+        "audio": "ASI-Clase10.m4a",
+        "cita": "Necesito que se den de alta [en Live] SQL y que tengan instalado SQL Developer porque de ahí vamos a trabajar… ya no necesita estar instalado Oracle porque… esta va a ser nuestra interfaz gráfica y de aquí nos vamos a conectar… a la parte web.",
+        "implica": "SQL Developer instalado como cliente gráfico para conectarse a Live SQL."
+      },
+      {
+        "audio": "ASI-Clase10.m4a",
+        "cita": "A grandes rasgos, lo que voy a utilizar es Excel para hacer un análisis básico, Oracle para… los almacenamientos, el data warehouse y el SQL y Power BI, los modelos semánticos…",
+        "implica": "Excel (con Power Query) para el análisis básico; Oracle para el almacenamiento; Power BI para los modelos y el tablero."
+      },
+      {
+        "audio": "ASI-Clase10.m4a",
+        "cita": "Que tengan instalado Power BI Desktop. Okay. ¿Por qué no [la] web pro? Porque [con] esta licencia no paguen.",
+        "implica": "Instalar Power BI Desktop (gratuito), no la versión web de pago."
+      },
+      {
+        "audio": "ASI-Clase9.m4a",
+        "cita": "Les voy a subir un archivo antes de la siguiente clase. Lo vamos a ocupar aquí. Lo traen descargado para que sea más rápido. Es una basita de datos.",
+        "implica": "Descargar de antemano el archivo de datos que el profesor suba."
+      }
+    ],
+    "faltante": [
+      "Formato y medio exacto de entrega: no se dijo en el audio y Classroom no trae descripción.",
+      "Dónde bajar la base de la ENOE 2017: el profesor dijo en la Clase 9 que subiría un archivo; revisa Classroom o el material de la clase.",
+      "No se menciona rúbrica más allá de «8 puntos justificados con gráficas»."
+    ],
+    "enlaces": [
+      {
+        "t": "ASI · Clase 11 (apuntes completos)",
+        "u": "../materias/administracion-de-servicios-de-internet/clase-11.html#c11-pendiente"
+      },
+      {
+        "t": "Abrir la tarea en Classroom",
+        "u": "https://classroom.google.com/c/ODcyMjMzMzAxNzY4/a/ODg5MjgzNzM3MDQ0/details"
+      },
+      {
+        "t": "ASI · Clase 10, sección «Pendiente»",
+        "u": "../materias/administracion-de-servicios-de-internet/clase-10.html#c10-pendiente"
+      }
+    ],
+    "fuente": "Audios ASI-Clase9, ASI-Clase10 y ASI-Clase11 (NotebookLM, 7 oct 2026); fecha y descripción leídas en Classroom el mismo día.",
+    "progreso": {
+      "actualizado": "2026-10-07",
+      "estado": "en_curso",
+      "donde": "Instrucciones extraídas de NotebookLM y Classroom, y análisis de referencia hecho en Python. El usuario se cambia a Windows para armar los gráficos en Power BI Desktop. Sigue: instalar Power BI, cargar enoe.xlsx y hacer P1–P8.",
+      "pasos": [
+        {
+          "t": "Extraer las instrucciones de la tarea (ASI Clase 11, NotebookLM y Classroom)",
+          "hecho": true
+        },
+        {
+          "t": "Calcular las respuestas de referencia y graficar en Python (trabajos/asi-enoe-enigh/)",
+          "hecho": true
+        },
+        {
+          "t": "Escribir el tutorial paso a paso (trabajos/asi-enoe-enigh/TUTORIAL.md)",
+          "hecho": true
+        },
+        {
+          "t": "Instalar Power BI Desktop en Windows",
+          "hecho": false
+        },
+        {
+          "t": "Volver a bajar enoe.xlsx y viviendas.csv de Classroom",
+          "hecho": false
+        },
+        {
+          "t": "Cargar la ENOE y corregir «Prrimaria completa» en Power Query",
+          "hecho": false
+        },
+        {
+          "t": "Armar P1–P8 en Power BI (una página por pregunta)",
+          "hecho": false
+        },
+        {
+          "t": "Cargar viviendas.csv y armar la ENIGH: explicación, 3 gráficos útiles y 2 innecesarios",
+          "hecho": false
+        },
+        {
+          "t": "Guardar .pbix, exportar PDF y entregar en Classroom antes de las 17:00",
+          "hecho": false
+        }
+      ]
+    }
+  },
+  "fse-t06": {
+    "resumen": "Síntesis de <strong>≈250 palabras</strong> del capítulo 5 (<em>Formatting</em>) de <em>Clean Code</em>, de Robert C. Martin.",
+    "pasos": [
+      "Lee el <strong>capítulo 5: Formatting</strong> del libro <em>Clean Code</em>.",
+      "Escribe una síntesis de aproximadamente 250 palabras con los puntos más relevantes del autor.",
+      "Pon atención especial en: <strong>i)</strong> por qué es importante dar buen formato al código, <strong>ii)</strong> por qué debe indentarse, <strong>iii)</strong> por qué todo el equipo debe seguir las mismas reglas de formato.",
+      "Sin carátula, mínimo media cuartilla y máximo una cuartilla. No se piden citas ni bibliografía.",
+      "Revisa ortografía y gramática: cada error resta 10 puntos."
+    ],
+    "entrega": "Un solo PDF llamado <code>NL-CURP-T06.pdf</code>. <code>NL</code> es tu número de lista con <strong>dos dígitos</strong> (01, 02, 09…), como aclaró el profesor en la Clase 08. El profesor también dijo que las tareas se suben con 3 días de anticipación a la fecha límite.",
+    "texto_oficial": "<p>«Lea detenidamente el Capítulo 5: Formatting del libro Clean Code de Robert C. Martin y escriba una breve síntesis de aproximadamente 250 palabras donde se discutan los puntos más relevantes presentados por el autor. Ponga especial atención en i) por qué es importante dar buen formato al código, ii) por qué debe indentarse el código y iii) por qué todo el equipo de desarrollo debe seguir las mismas reglas de formato.»</p><p><strong>Especificaciones:</strong> sin carátula; al menos media cuartilla; máximo una cuartilla; sin citas ni bibliografía.</p><p><strong>Rúbrica:</strong> 100 puntos de calificación base; −10 puntos por cada error ortográfico o gramatical. Aplican los criterios estándar del documento general de evaluación.</p>",
+    "faltante": [
+      "La regla del nombre del archivo (número de lista de dos dígitos) y la de los 3 días de anticipación salen del audio FSE-Clase8, no del PDF."
+    ],
+    "enlaces": [
+      {
+        "t": "Enunciado oficial (PDF)",
+        "u": "../materias/fundamentos-de-sistemas-embebidos/files/tarea-06-enunciado.pdf"
+      },
+      {
+        "t": "Abrir la tarea en Classroom",
+        "u": "https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzQ2MjA2NzEw/details"
+      }
+    ],
+    "fuente": "Enunciado: PDF del profesor guardado en el sitio. Reglas de entrega: audio FSE-Clase8 (NotebookLM, 7 oct 2026)."
+  },
+  "fse-t07": {
+    "resumen": "Síntesis de <strong>≈250 palabras</strong> del capítulo 8 (<em>Boundaries</em>) de <em>Clean Code</em>.",
+    "pasos": [
+      "Lee el <strong>capítulo 8: Boundaries</strong> de <em>Clean Code</em> (Robert C. Martin).",
+      "Escribe una síntesis de aproximadamente 250 palabras con los puntos más relevantes.",
+      "Pon atención especial en <strong>cómo y cuándo elegir código de terceros</strong> para integrarlo en tu aplicación o proyecto.",
+      "Sin carátula, mínimo media cuartilla y máximo una cuartilla. Sin citas ni bibliografía.",
+      "Cada error ortográfico o gramatical resta 10 puntos."
+    ],
+    "entrega": "Un solo PDF llamado <code>NL-CURP-T07.pdf</code> (<code>NL</code> = número de lista con dos dígitos). Regla del profesor: subirlo con 3 días de anticipación.",
+    "texto_oficial": "<p>«Lea detenidamente el Capítulo 8: Boundaries del libro Clean Code de Robert C. Martin y escriba una breve síntesis de aproximadamente 250 palabras donde se discutan los puntos más relevantes presentados por el autor. Ponga especial atención en cómo y cuándo debe elegirse código de terceros para integrarse en la aplicación o proyecto que se está desarrollando.»</p><p><strong>Rúbrica:</strong> 100 puntos base; −10 por cada error ortográfico o gramatical.</p>",
+    "faltante": [],
+    "enlaces": [
+      {
+        "t": "Enunciado oficial (PDF)",
+        "u": "../materias/fundamentos-de-sistemas-embebidos/files/tarea-07-enunciado.pdf"
+      },
+      {
+        "t": "Abrir la tarea en Classroom",
+        "u": "https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzQ4Njk2NDEy/details"
+      }
+    ],
+    "fuente": "Enunciado: PDF del profesor guardado en el sitio. Reglas de entrega: audio FSE-Clase8."
+  },
+  "fse-t08": {
+    "resumen": "Síntesis de <strong>≈250 palabras</strong> del capítulo 17 (<em>Smells</em>) de <em>Clean Code</em>.",
+    "pasos": [
+      "Lee el <strong>capítulo 17: Smells and Heuristics</strong> de <em>Clean Code</em> (el enunciado lo llama «Smells»).",
+      "Escribe una síntesis de aproximadamente 250 palabras con los puntos más relevantes del autor.",
+      "Sin carátula, mínimo media cuartilla y máximo una cuartilla. Sin citas ni bibliografía.",
+      "Cada error ortográfico o gramatical resta 10 puntos."
+    ],
+    "entrega": "Un solo PDF llamado <code>NL-CURP-T08.pdf</code> (<code>NL</code> = número de lista con dos dígitos). Regla del profesor: subirlo con 3 días de anticipación.",
+    "texto_oficial": "<p>«Lea detenidamente el Capítulo 17: Smells del libro Clean Code de Robert C. Martin y escriba una breve síntesis de aproximadamente 250 palabras donde se discutan los puntos más relevantes presentados por el autor.»</p><p><strong>Rúbrica:</strong> 100 puntos base; −10 por cada error ortográfico o gramatical.</p>",
+    "faltante": [],
+    "enlaces": [
+      {
+        "t": "Enunciado oficial (PDF)",
+        "u": "../materias/fundamentos-de-sistemas-embebidos/files/tarea-08-enunciado.pdf"
+      },
+      {
+        "t": "Abrir la tarea en Classroom",
+        "u": "https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzQ3MDM4OTYy/details"
+      }
+    ],
+    "fuente": "Enunciado: PDF del profesor guardado en el sitio."
+  },
+  "fse-t09": {
+    "resumen": "<strong>Organizador gráfico</strong> (cuadro sinóptico, mapa mental, infografía…) sobre el documental <em>The Social Dilemma</em>, en PDF.",
+    "pasos": [
+      "Ve el documental <em>The Social Dilemma</em>.",
+      "Arma un organizador gráfico con la información ordenada en torno a cuatro temas: <strong>i)</strong> las variables que tratan de maximizar los algoritmos de las compañías de big tech; <strong>ii)</strong> por qué los desarrolladores que hablan en el documental dejaron sus empresas, no usan redes sociales ni se las permiten a sus hijos y impulsan una legislación; <strong>iii)</strong> los objetivos con que se crearon las redes sociales y el fenómeno bio-psico-social en que se convirtieron, con énfasis en noticias falsas, realidades personalizadas y explotación de la biología humana para crear adicción; <strong>iv)</strong> los peligros del mal uso de la información recabada por dispositivos como Alexa, Google Home, Apple Watch y otros dispositivos IoT.",
+      "Que se entienda: ideas que expliquen cada punto de forma clara y concisa, <strong>no palabras sueltas</strong> sin sentido.",
+      "Entrégalo en PDF."
+    ],
+    "entrega": "Un solo PDF llamado <code>NL-CURP-T09.pdf</code> (<code>NL</code> = número de lista con dos dígitos).",
+    "texto_oficial": "<p>«Elabora un organizador gráfico donde ordenes la información del documental «The Social Dilemma» en torno a los siguientes temas: i) Las variables que tratan de maximizar los algoritmos de las compañías del big tech. ii) Las razones por las cuales los desarrolladores que hablan en el documental optaron por dejar a sus empresas, no usar redes sociales ni permitirlas a sus hijos y por impulsar una legislación que ponga freno a las prácticas que explotan la psicología y la fisiología de los humanos. iii) Los objetivos de las redes sociales cuando se crearon y el fenómeno bio-psico-social en que se convirtieron. Hacer énfasis especial en: (a) las noticias falsas, (b) el problema de presentar realidades acordes a cada individuo y (c) la explotación de la propia biología humana para crear adicción. iv) A la luz de la información del documental, cuáles serían los potenciales peligros derivados del mal uso de la información recabada por dispositivos tales como Alexa, Google Home, Apple Watch, etc. así como otros dispositivos Internet of Things.»</p>",
+    "faltante": [
+      "El enunciado no incluye rúbrica."
+    ],
+    "enlaces": [
+      {
+        "t": "Enunciado oficial (PDF)",
+        "u": "../materias/fundamentos-de-sistemas-embebidos/files/tarea-09-enunciado.pdf"
+      },
+      {
+        "t": "Abrir la tarea en Classroom",
+        "u": "https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzQ5NDg0Nzc2/details"
+      }
+    ],
+    "fuente": "Enunciado: PDF del profesor guardado en el sitio."
+  },
+  "labfse-p6": {
+    "resumen": "Leer la temperatura de un sensor <strong>LM35</strong> con el ADC de un Arduino y enviarla por I²C a la Raspberry Pi. El profesor dijo que la evalúa con criterio muy riguroso.",
+    "pasos": [
+      "Objetivo del guion: aprender a comunicar circuitos integrados por el bus I²C y a leer e interpretar señales analógicas con un microcontrolador.",
+      "Leer la señal del LM35 (10 mV/°C) con el convertidor analógico-digital de un Arduino UNO/Mega.",
+      "Enviar los datos por I²C a una Raspberry Pi para llevar una bitácora de temperatura que se pueda ver en un navegador web.",
+      "Seguir el guion completo (conexiones, código y pruebas); los archivos de apoyo vienen en el .7z de la práctica."
+    ],
+    "entrega": "Un solo PDF llamado <code>NL-CURP-L06.pdf</code>. Además, hay que <strong>demostrar el circuito y el código en la sesión de laboratorio</strong> (FSE Clase 05).",
+    "citas": [
+      {
+        "audio": "FSE-Clase5.m4a",
+        "cita": "(El profesor advirtió que evaluará la lectura del ADC con extrema severidad y que no tendrá consideración con quien diga que no le sale la lectura analógico-digital con el Arduino.)",
+        "implica": "Llega con la lectura del ADC funcionando; no se aceptan excusas."
+      }
+    ],
+    "faltante": [
+      "La rúbrica y la fecha de demostración en el laboratorio no están en el guion; la fecha límite 13 oct sale de Classroom."
+    ],
+    "enlaces": [
+      {
+        "t": "Guion de la práctica (PDF)",
+        "u": "../materias/lab-de-fundamentos-de-sistemas-embebidos/files/practica-06-guion.pdf"
+      },
+      {
+        "t": "Archivos de apoyo (.7z)",
+        "u": "../materias/lab-de-fundamentos-de-sistemas-embebidos/files/practica-06-archivos.7z"
+      },
+      {
+        "t": "Abrir la tarea en Classroom",
+        "u": "https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzcxNDM1NTYw/details"
+      }
+    ],
+    "fuente": "Guion oficial guardado en el sitio y audio FSE-Clase5 (NotebookLM, 7 oct 2026)."
+  },
+  "labfse-p7": {
+    "resumen": "<strong>Modular la potencia de una lámpara incandescente</strong> con un detector de cruce por cero y un TRIAC controlados por un Arduino, y enviar el control por I²C desde la Raspberry Pi.",
+    "pasos": [
+      "Objetivo del guion: modular la potencia de una carga resistiva de alta potencia optoacoplada a un microcontrolador, con un detector de cruce por cero y un TRIAC.",
+      "Armar el circuito (puente rectificador, optoacoplador, detector de cruce por cero y TRIAC) siguiendo el guion.",
+      "Programar el Arduino y comunicarlo por I²C con la Raspberry Pi para controlar la intensidad del foco.",
+      "<strong>Cuidado:</strong> es una carga de corriente alterna de la red; sigue las precauciones del guion."
+    ],
+    "entrega": "Un solo PDF llamado <code>NL-CURP-L07.pdf</code>.",
+    "faltante": [
+      "No hay criterios de evaluación ni fecha de demostración en el guion; el plazo del 27 oct sale de Classroom."
+    ],
+    "enlaces": [
+      {
+        "t": "Guion de la práctica (PDF)",
+        "u": "../materias/lab-de-fundamentos-de-sistemas-embebidos/files/practica-07-guion.pdf"
+      },
+      {
+        "t": "Archivos de apoyo (.7z)",
+        "u": "../materias/lab-de-fundamentos-de-sistemas-embebidos/files/practica-07-archivos.7z"
+      },
+      {
+        "t": "Abrir la tarea en Classroom",
+        "u": "https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzY5MjY3ODA1/details"
+      }
+    ],
+    "fuente": "Guion oficial guardado en el sitio."
+  },
+  "labfse-p8": {
+    "resumen": "Práctica 8 del laboratorio de FSE. <strong>Ojo:</strong> las fuentes no coinciden en el tema; confírmalo antes de empezar.",
+    "pasos": [
+      "Según el audio de FSE: <strong>compilar un kernel de Linux personalizado</strong> para la Raspberry Pi y cambiar la imagen de arranque (<em>boot splash</em>) (FSE Clase 11).",
+      "Según el guion guardado en el sitio (<code>practica-08c-guion.pdf</code>): control de temperatura en lazo cerrado de una lámpara incandescente con Arduino y Raspberry Pi (LM35, TRIAC, controlador proporcional, I²C).",
+      "Pregunta al profesor o revisa Classroom cuál es la vigente."
+    ],
+    "entrega": "PDF <code>NL-CURP-L08.pdf</code>.",
+    "faltante": [
+      "Esta práctica aún no aparece como asignación en Classroom; la fecha del 10 nov viene de lo anotado en el sitio.",
+      "Discrepancia entre el audio (kernel y boot splash) y el guion (lazo cerrado de temperatura)."
+    ],
+    "enlaces": [
+      {
+        "t": "Guion 08c (PDF)",
+        "u": "../materias/lab-de-fundamentos-de-sistemas-embebidos/files/practica-08c-guion.pdf"
+      },
+      {
+        "t": "FSE · Clase 11, sección «Pendiente»",
+        "u": "../materias/fundamentos-de-sistemas-embebidos/clase-11.html#c11-pendiente"
+      }
+    ],
+    "fuente": "Audio FSE-Clase11 (NotebookLM) y guion guardado en el sitio."
+  },
+  "md-p31": {
+    "resumen": "Práctica de <strong>agrupación (clustering)</strong> con el dataset de transacciones de ventas, en equipos de 3. La entrega se recorrió al <strong>jueves 8 oct, 12:00</strong> (Classroom y Clase 10).",
+    "pasos": [
+      "Trabaja con el dataset <code>practica-3-1-transacciones-de-ventas.csv</code>.",
+      "Aplica <strong>mínimo 3 algoritmos de agrupación</strong> (K-Means, DBSCAN, jerárquico o GMM).",
+      "Usa <code>StandardScaler</code>, PCA o t-SNE, las métricas WSS/inercia y silueta, e interpreta los grupos con valor de negocio.",
+      "Hazlo en <strong>Python</strong> (notebook explicado paso por paso, deteniéndote en los puntos clave) y en <strong>RapidMiner</strong> (diapositivas con capturas del flujo y comentarios)."
+    ],
+    "entrega": "Notebook de Python desglosado paso por paso <strong>más</strong> presentación (PPT o PDF) con capturas del modelo de RapidMiner, a más tardar el jueves 8 de octubre a las 12:00 (Classroom).",
+    "faltante": [
+      "Los criterios de evaluación no están en los audios; revisa la descripción en Classroom."
+    ],
+    "enlaces": [
+      {
+        "t": "Dataset de la práctica (CSV)",
+        "u": "../materias/mineria-de-datos/files/practica-3-1-transacciones-de-ventas.csv"
+      },
+      {
+        "t": "MD · Clase 10, entregables y prórroga",
+        "u": "../materias/mineria-de-datos/clase-10.html#c10-aclaraciones"
+      },
+      {
+        "t": "MD · Clase 08, sección «Pendiente»",
+        "u": "../materias/mineria-de-datos/clase-08.html#c8-pendiente"
+      },
+      {
+        "t": "Abrir la tarea en Classroom",
+        "u": "https://classroom.google.com/c/ODcwOTAwMDQ4Njcw/a/ODg4MTYxMDY0MzQ2/details"
+      }
+    ],
+    "fuente": "Clases 08, 09 y 10 de MD (NotebookLM) y Classroom, 7 oct 2026."
+  },
+  "md-p2": {
+    "resumen": "<strong>Market Basket Analysis</strong> sobre «comidas preparadas» (55,000 registros): reglas de asociación en Python y RapidMiner.",
+    "pasos": [
+      "Procesa el archivo de 55,000 tickets.",
+      "Fija el <strong>soporte mínimo en 0.01 (1 %)</strong>; con un valor demasiado bajo (0.0001) salen más de 90 reglas irrelevantes.",
+      "Enfoca el análisis en la categoría de comidas preparadas (burritos, flapis, pizzas, pechugas rellenas).",
+      "Compara <strong>Apriori contra FP-Growth</strong>, en Python y en RapidMiner.",
+      "Identifica los <strong>productos ancla</strong> que arrastran la compra de otros y propón estrategias de venta cruzada y promociones."
+    ],
+    "entrega": "Notebook de Python explicado paso por paso y diapositivas (PPT o PDF) con capturas del flujo de RapidMiner. Fecha: «el martes» (por confirmar).",
+    "faltante": [
+      "El profesor dijo que mandará por Classroom la descripción detallada y los enlaces de apoyo; aún no aparece publicada.",
+      "No se dio fecha exacta."
+    ],
+    "enlaces": [
+      {
+        "t": "MD · Clase 10, sección «Pendiente»",
+        "u": "../materias/mineria-de-datos/clase-10.html#c10-pendiente"
+      }
+    ],
+    "fuente": "Audio MD-Clase10 (NotebookLM, 7 oct 2026)."
+  },
+  "acs-t4": {
+    "resumen": "Provocar el desbordamiento de la cola de conexiones de <code>listen()</code> y documentarlo con capturas de <code>ss</code> y <code>netcat</code>.",
+    "pasos": [
+      "Ajusta los parámetros del kernel: <code>sudo sysctl -w net.ipv4.tcp_syncookies=0</code> y <code>sudo sysctl -w net.ipv4.tcp_syn_retries=1</code>.",
+      "Ejecuta el servidor con <strong>backlog = 1</strong> en el puerto <strong>4898</strong> (parte de <code>ejemplo_listen.c</code>).",
+      "Abre al menos 4 terminales: 2 del lado del servidor con <code>watch -n1 \"ss -atnp\"</code> y 3 o 4 clientes con <code>nc -v &lt;IP&gt; 4898</code>.",
+      "Investiga la función del kernel que revisa si la cola de aceptación está llena y el comportamiento de <code>tcp_syncookies</code> y <code>tcp_syn_retries</code>.",
+      "Arma un reporte con capturas de todas las terminales que muestren las conexiones <strong>aceptadas, encoladas y rechazadas</strong>, y la teoría investigada."
+    ],
+    "entrega": "<strong>Reporte en PDF.</strong> Plazo dicho en clase: «antes del próximo jueves» (el audio no aclara si es el 8 o el 15 de octubre).",
+    "faltante": [
+      "Fecha exacta de entrega.",
+      "El profesor reenviará por Telegram la liga del sitio y las instrucciones; revísalas porque pueden precisar el formato."
+    ],
+    "enlaces": [
+      {
+        "t": "ACS · Clase 12, sección «Pendiente»",
+        "u": "../materias/arquitectura-cliente-servidor/clase-12.html#c12-pendiente"
+      },
+      {
+        "t": "Programas y base de la Tarea 4",
+        "u": "../materias/arquitectura-cliente-servidor/programas.html"
+      }
+    ],
+    "fuente": "Audio ACS-Clase12 (NotebookLM, 7 oct 2026)."
+  },
+  "oac-iir2": {
+    "resumen": "Filtro digital <strong>IIR de segundo orden subamortiguado</strong> en ensamblador con la FPU de la Raspberry Pi Pico 2, sobre la plantilla <code>filtro_iir2</code>.",
+    "pasos": [
+      "Parte de la plantilla <code>filtro_iir2</code> que dio el profesor.",
+      "Toma H(s) = ωn² / (s² + 2ζωn·s + ωn²) y un tiempo de muestreo <strong>Ts = 0.05 s</strong> (fs = 20 Hz).",
+      "Elige <strong>ωn &lt; 62.8 rad/s</strong> (menos de la mitad de fs, regla de Nyquist) y un <strong>ζ &lt; 1</strong> (por ejemplo 0.2) para que la respuesta sea subamortiguada.",
+      "Discretiza (transformación bilineal), obtén los coeficientes A0, A1, A2, B1, B2 y cárgalos en el arreglo de constantes (el signo de B va invertido).",
+      "Verifica la respuesta oscilatoria contra una onda cuadrada en el graficador de Thonny."
+    ],
+    "entrega": "No se dijo. La grabación no menciona fecha, medio ni formato; confírmalo en Classroom o con el profesor.",
+    "faltante": [
+      "Fecha límite, medio y formato de entrega, rúbrica."
+    ],
+    "enlaces": [
+      {
+        "t": "OAC · Clase 09 (explicación completa)",
+        "u": "../materias/organizacion-y-arquitectura-de-computadoras/clase-09.html"
+      }
+    ],
+    "fuente": "Audio OAC-Clase9 (NotebookLM, 7 oct 2026)."
+  },
+  "oac-raiz": {
+    "resumen": "Subrutina en ensamblador inline que calcula la <strong>parte entera de la raíz cuadrada</strong> restando impares consecutivos.",
+    "pasos": [
+      "Toma el número de entrada (por ejemplo, 25 o 27).",
+      "Réstale sucesivamente los impares 1, 3, 5, 7, 9…",
+      "Cuenta cuántas restas completas hiciste hasta llegar a cero o hasta que el residuo sea menor que el siguiente impar.",
+      "Ese conteo es la parte entera de la raíz.",
+      "Prográmalo con <code>@micropython.asm_thumb</code> usando los registros R0 a R2."
+    ],
+    "entrega": "No se dijo (asignada en la Clase 06 sin fecha).",
+    "faltante": [
+      "Fecha límite, medio de entrega y rúbrica."
+    ],
+    "enlaces": [
+      {
+        "t": "OAC · Clase 06",
+        "u": "../materias/organizacion-y-arquitectura-de-computadoras/clase-06.html"
+      }
+    ],
+    "fuente": "Audio OAC (NotebookLM, 7 oct 2026)."
+  }
+}

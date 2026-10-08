@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-08T05:39:20+00:00",
+ "generatedAt": "2026-10-07T15:36:44+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -147,9 +147,9 @@
    {
     "num": 9,
     "fecha": "2026-10-05",
-    "resumen": "Pendiente de contenido",
+    "resumen": "Tema 3 (continuación) — Filtro digital IIR de segundo orden en ensamblador con la FPU de la Raspberry Pi Pico 2: de la ecuación en diferencias en Matlab a la subrutina @micropython.asm_thumb , conversión de H(s) a H(z) y",
     "url": "materias/organizacion-y-arquitectura-de-computadoras/clase-09.html",
-    "formato": "viejo"
+    "formato": "estudio"
    }
   ],
   "fundamentos-de-sistemas-embebidos": [
@@ -226,9 +226,9 @@
    {
     "num": 11,
     "fecha": "2026-10-05",
-    "resumen": "Pendiente de contenido",
+    "resumen": "Tema 2 (subtema 2.7) — Conectores USB de las tarjetas, temporización de la comunicación serie asíncrona (UART), control de flujo RTS/CTS vs. XON/XOFF, RS-485 frente a RS-232, y el protocolo One-Wire con alimentación pará",
     "url": "materias/fundamentos-de-sistemas-embebidos/clase-11.html",
-    "formato": "viejo"
+    "formato": "estudio"
    }
   ],
   "administracion-de-servicios-de-internet": [
@@ -305,9 +305,9 @@
    {
     "num": 11,
     "fecha": "2026-10-05",
-    "resumen": "Pendiente de contenido",
+    "resumen": "Arquitectura de datos (fuera del temario) — Análisis práctico de la ENOE (y primer vistazo a la ENIGH) del INEGI en Power BI Desktop: sueldos por edad, sexo, escolaridad, geografía y formalidad, con suma frente a recuent",
     "url": "materias/administracion-de-servicios-de-internet/clase-11.html",
-    "formato": "viejo"
+    "formato": "estudio"
    }
   ],
   "arquitectura-cliente-servidor": [
@@ -391,9 +391,9 @@
    {
     "num": 12,
     "fecha": "2026-10-06",
-    "resumen": "Pendiente de contenido",
+    "resumen": "Tema 2 — Reintentos de connect() , puertos efímeros, listen() con el Three-Way Handshake y las colas SYN y ACCEPT del kernel, la regla n+1, SYN flood y SYN cookies, y la Tarea 4 con netcat y ss .",
     "url": "materias/arquitectura-cliente-servidor/clase-12.html",
-    "formato": "viejo"
+    "formato": "estudio"
    }
   ],
   "seguridad-informatica-basica": [
@@ -470,9 +470,9 @@
    {
     "num": 11,
     "fecha": "2026-10-06",
-    "resumen": "Pendiente de contenido",
+    "resumen": "Examen parcial (Temas 1 a 3, hasta CVSS).",
     "url": "materias/seguridad-informatica-basica/clase-11.html",
-    "formato": "viejo"
+    "formato": "no-aplica"
    }
   ],
   "lab-de-fundamentos-de-sistemas-embebidos": [],
@@ -543,18 +543,28 @@
    {
     "num": 10,
     "fecha": "2026-10-06",
-    "resumen": "Pendiente de contenido",
+    "resumen": "Tema 3 — Aclaraciones de proyectos y prácticas, Market Basket Analysis y reglas de asociación (soporte, confianza y lift), algoritmos Apriori, ECLAT y FP-Growth, los tres niveles de validación y el caso «comidas preparad",
     "url": "materias/mineria-de-datos/clase-10.html",
-    "formato": "viejo"
+    "formato": "estudio"
    }
   ],
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
   {
-   "hash": "2e5bbb0",
-   "fecha": "2026-10-07T23:39:08-06:00",
-   "mensaje": "Stubs de clases faltantes (5-6 oct)"
+   "hash": "9abdf49",
+   "fecha": "2026-10-07T08:48:28-06:00",
+   "mensaje": "Página por asignación (tareas/<id>.html) con instrucciones exactas: ASI ENOE/ENIGH, FSE T06-T09, Labs FSE, MD, ACS, OAC; las tarjetas de Pendientes ahora enlazan ahí"
+  },
+  {
+   "hash": "24d79b5",
+   "fecha": "2026-10-07T08:22:35-06:00",
+   "mensaje": "Agregar OAC Clase 09, FSE Clase 11 (5 oct), ACS Clase 12 y MD Clase 10 (6 oct); pendientes actualizados al 7 oct"
+  },
+  {
+   "hash": "a99f47b",
+   "fecha": "2026-10-07T07:42:25-06:00",
+   "mensaje": "SIB Clase 11 (6 oct): examen parcial"
   },
   {
    "hash": "3d2ccc2",
@@ -840,16 +850,6 @@
    "hash": "cd3780b",
    "fecha": "2026-10-01T02:09:06-06:00",
    "mensaje": "ASI Clase 07: formato de estudio"
-  },
-  {
-   "hash": "cbbee95",
-   "fecha": "2026-10-01T02:07:10-06:00",
-   "mensaje": "ACS Clase 08: formato de estudio"
-  },
-  {
-   "hash": "0827911",
-   "fecha": "2026-10-01T02:05:28-06:00",
-   "mensaje": "SIB Clase 07: formato de estudio"
   }
  ]
 }

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proyecto final (equipo) — RP</title>
+<link rel="stylesheet" href="../assets/style.css?v=20261007b">
+<script src="../assets/app.js?v=20261007b" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="../pendientes.html">← Pendientes</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Proyecto final (equipo)</h2>
+  <p class="prof"><strong style="color:#45B8A8">RP</strong> · Vence: Tentativo 30 nov (por confirmar)<span class="tarea-faltan" id="tarea-faltan"></span></p>
+</div>
+<p class="tarea-resumen">Fecha tentativa 30 nov según las diapositivas de encuadre; en audio solo se dijo que habrá detalles después. Vale 40 %.</p>
+<div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>Instrucciones completas:</strong> todavía no se extraen del notebook para esta asignación. Pídele a Claude «extrae las instrucciones de Proyecto final (equipo) del notebook» y esta página se actualiza.</p></div>
+<details class="section-block sec" id="enlaces" open><summary><span class="stitle">🔗 Enlaces</span></summary>
+<ul><li><a href="../materias/reconocimiento-de-patrones/index.html">Ir a la sección de la materia donde se explica</a></li></ul>
+</details>
+
+</div>
+<script>
+(function () {
+  var el = document.getElementById('tarea-faltan');
+  if (!el || !el.dataset.vence) return;
+  function tick() {
+    var d = new Date(el.dataset.vence).getTime() - Date.now();
+    if (d <= 0) { el.textContent = ' · ya venció'; return; }
+    var m = Math.floor(d / 60000), h = Math.floor(m / 60);
+    el.textContent = ' · ' + (h < 48 ? 'faltan ' + h + ' h ' + (m % 60) + ' min' : 'faltan ' + Math.floor(h / 24) + ' días');
+  }
+  tick(); setInterval(tick, 30000);
+})();
+</script>
+</body>
+</html>

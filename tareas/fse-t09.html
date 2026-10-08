@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarea 09: The Social Dilemma — FSE</title>
+<link rel="stylesheet" href="../assets/style.css?v=20261007b">
+<script src="../assets/app.js?v=20261007b" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="../pendientes.html">← Pendientes</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Tarea 09: The Social Dilemma</h2>
+  <p class="prof"><strong style="color:#A98BD1">FSE</strong> · Vence: miércoles 28 oct 2026, 23:59 (fin del día; la hora no está confirmada)<span class="tarea-faltan" id="tarea-faltan" data-vence="2026-10-28T23:59:00-06:00"></span></p>
+</div>
+<p class="tarea-resumen"><strong>Organizador gráfico</strong> (cuadro sinóptico, mapa mental, infografía…) sobre el documental <em>The Social Dilemma</em>, en PDF.</p>
+<details class="section-block sec" id="que-hacer" open><summary><span class="stitle">✅ Qué tienes que hacer</span></summary>
+<ol class="tarea-pasos"><li>Ve el documental <em>The Social Dilemma</em>.</li><li>Arma un organizador gráfico con la información ordenada en torno a cuatro temas: <strong>i)</strong> las variables que tratan de maximizar los algoritmos de las compañías de big tech; <strong>ii)</strong> por qué los desarrolladores que hablan en el documental dejaron sus empresas, no usan redes sociales ni se las permiten a sus hijos y impulsan una legislación; <strong>iii)</strong> los objetivos con que se crearon las redes sociales y el fenómeno bio-psico-social en que se convirtieron, con énfasis en noticias falsas, realidades personalizadas y explotación de la biología humana para crear adicción; <strong>iv)</strong> los peligros del mal uso de la información recabada por dispositivos como Alexa, Google Home, Apple Watch y otros dispositivos IoT.</li><li>Que se entienda: ideas que expliquen cada punto de forma clara y concisa, <strong>no palabras sueltas</strong> sin sentido.</li><li>Entrégalo en PDF.</li></ol>
+</details>
+<details class="section-block sec" id="entrega" open><summary><span class="stitle">📤 Cómo y cuándo se entrega</span></summary>
+<p>Un solo PDF llamado <code>NL-CURP-T09.pdf</code> (<code>NL</code> = número de lista con dos dígitos).</p>
+</details>
+<details class="section-block sec" id="texto-oficial" open><summary><span class="stitle">📄 Enunciado oficial (texto exacto)</span></summary>
+<p>«Elabora un organizador gráfico donde ordenes la información del documental «The Social Dilemma» en torno a los siguientes temas: i) Las variables que tratan de maximizar los algoritmos de las compañías del big tech. ii) Las razones por las cuales los desarrolladores que hablan en el documental optaron por dejar a sus empresas, no usar redes sociales ni permitirlas a sus hijos y por impulsar una legislación que ponga freno a las prácticas que explotan la psicología y la fisiología de los humanos. iii) Los objetivos de las redes sociales cuando se crearon y el fenómeno bio-psico-social en que se convirtieron. Hacer énfasis especial en: (a) las noticias falsas, (b) el problema de presentar realidades acordes a cada individuo y (c) la explotación de la propia biología humana para crear adicción. iv) A la luz de la información del documental, cuáles serían los potenciales peligros derivados del mal uso de la información recabada por dispositivos tales como Alexa, Google Home, Apple Watch, etc. así como otros dispositivos Internet of Things.»</p>
+</details>
+<details class="section-block sec" id="faltante" open><summary><span class="stitle">⚠️ Lo que NO está dicho / por confirmar</span></summary>
+<ul><li>El enunciado no incluye rúbrica.</li></ul>
+</details>
+<details class="section-block sec" id="enlaces" open><summary><span class="stitle">🔗 Enlaces</span></summary>
+<ul><li><a href="../materias/fundamentos-de-sistemas-embebidos/files/tarea-09-enunciado.pdf">Enunciado oficial (PDF)</a></li><li><a href="https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzQ5NDg0Nzc2/details" target="_blank" rel="noopener">Abrir la tarea en Classroom</a></li></ul>
+</details>
+
+<p class="tarea-fuente">Fuente: Enunciado: PDF del profesor guardado en el sitio.</p>
+</div>
+<script>
+(function () {
+  var el = document.getElementById('tarea-faltan');
+  if (!el || !el.dataset.vence) return;
+  function tick() {
+    var d = new Date(el.dataset.vence).getTime() - Date.now();
+    if (d <= 0) { el.textContent = ' · ya venció'; return; }
+    var m = Math.floor(d / 60000), h = Math.floor(m / 60);
+    el.textContent = ' · ' + (h < 48 ? 'faltan ' + h + ' h ' + (m % 60) + ' min' : 'faltan ' + Math.floor(h / 24) + ' días');
+  }
+  tick(); setInterval(tick, 30000);
+})();
+</script>
+</body>
+</html>

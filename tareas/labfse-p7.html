@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Práctica 7 — Lab FSE</title>
+<link rel="stylesheet" href="../assets/style.css?v=20261007b">
+<script src="../assets/app.js?v=20261007b" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="../pendientes.html">← Pendientes</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Práctica 7</h2>
+  <p class="prof"><strong style="color:#E8735C">Lab FSE</strong> · Vence: martes 27 oct 2026, 23:59 (fin del día; la hora no está confirmada)<span class="tarea-faltan" id="tarea-faltan" data-vence="2026-10-27T23:59:00-06:00"></span></p>
+</div>
+<p class="tarea-resumen"><strong>Modular la potencia de una lámpara incandescente</strong> con un detector de cruce por cero y un TRIAC controlados por un Arduino, y enviar el control por I²C desde la Raspberry Pi.</p>
+<details class="section-block sec" id="que-hacer" open><summary><span class="stitle">✅ Qué tienes que hacer</span></summary>
+<ol class="tarea-pasos"><li>Objetivo del guion: modular la potencia de una carga resistiva de alta potencia optoacoplada a un microcontrolador, con un detector de cruce por cero y un TRIAC.</li><li>Armar el circuito (puente rectificador, optoacoplador, detector de cruce por cero y TRIAC) siguiendo el guion.</li><li>Programar el Arduino y comunicarlo por I²C con la Raspberry Pi para controlar la intensidad del foco.</li><li><strong>Cuidado:</strong> es una carga de corriente alterna de la red; sigue las precauciones del guion.</li></ol>
+</details>
+<details class="section-block sec" id="entrega" open><summary><span class="stitle">📤 Cómo y cuándo se entrega</span></summary>
+<p>Un solo PDF llamado <code>NL-CURP-L07.pdf</code>.</p>
+</details>
+<details class="section-block sec" id="faltante" open><summary><span class="stitle">⚠️ Lo que NO está dicho / por confirmar</span></summary>
+<ul><li>No hay criterios de evaluación ni fecha de demostración en el guion; el plazo del 27 oct sale de Classroom.</li></ul>
+</details>
+<details class="section-block sec" id="enlaces" open><summary><span class="stitle">🔗 Enlaces</span></summary>
+<ul><li><a href="../materias/lab-de-fundamentos-de-sistemas-embebidos/files/practica-07-guion.pdf">Guion de la práctica (PDF)</a></li><li><a href="../materias/lab-de-fundamentos-de-sistemas-embebidos/files/practica-07-archivos.7z">Archivos de apoyo (.7z)</a></li><li><a href="https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzY5MjY3ODA1/details" target="_blank" rel="noopener">Abrir la tarea en Classroom</a></li><li><a href="../materias/lab-de-fundamentos-de-sistemas-embebidos/material.html">Ir a la sección de la materia donde se explica</a></li></ul>
+</details>
+
+<p class="tarea-fuente">Fuente: Guion oficial guardado en el sitio.</p>
+</div>
+<script>
+(function () {
+  var el = document.getElementById('tarea-faltan');
+  if (!el || !el.dataset.vence) return;
+  function tick() {
+    var d = new Date(el.dataset.vence).getTime() - Date.now();
+    if (d <= 0) { el.textContent = ' · ya venció'; return; }
+    var m = Math.floor(d / 60000), h = Math.floor(m / 60);
+    el.textContent = ' · ' + (h < 48 ? 'faltan ' + h + ' h ' + (m % 60) + ' min' : 'faltan ' + Math.floor(h / 24) + ' días');
+  }
+  tick(); setInterval(tick, 30000);
+})();
+</script>
+</body>
+</html>

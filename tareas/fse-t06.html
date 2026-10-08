@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarea 06: Formato — FSE</title>
+<link rel="stylesheet" href="../assets/style.css?v=20261007b">
+<script src="../assets/app.js?v=20261007b" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="../pendientes.html">← Pendientes</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Tarea 06: Formato</h2>
+  <p class="prof"><strong style="color:#A98BD1">FSE</strong> · Vence: miércoles 7 oct 2026, 23:59<span class="tarea-faltan" id="tarea-faltan" data-vence="2026-10-07T23:59:00-06:00"></span></p>
+</div>
+<p class="tarea-resumen">Síntesis de <strong>≈250 palabras</strong> del capítulo 5 (<em>Formatting</em>) de <em>Clean Code</em>, de Robert C. Martin.</p>
+<details class="section-block sec" id="que-hacer" open><summary><span class="stitle">✅ Qué tienes que hacer</span></summary>
+<ol class="tarea-pasos"><li>Lee el <strong>capítulo 5: Formatting</strong> del libro <em>Clean Code</em>.</li><li>Escribe una síntesis de aproximadamente 250 palabras con los puntos más relevantes del autor.</li><li>Pon atención especial en: <strong>i)</strong> por qué es importante dar buen formato al código, <strong>ii)</strong> por qué debe indentarse, <strong>iii)</strong> por qué todo el equipo debe seguir las mismas reglas de formato.</li><li>Sin carátula, mínimo media cuartilla y máximo una cuartilla. No se piden citas ni bibliografía.</li><li>Revisa ortografía y gramática: cada error resta 10 puntos.</li></ol>
+</details>
+<details class="section-block sec" id="entrega" open><summary><span class="stitle">📤 Cómo y cuándo se entrega</span></summary>
+<p>Un solo PDF llamado <code>NL-CURP-T06.pdf</code>. <code>NL</code> es tu número de lista con <strong>dos dígitos</strong> (01, 02, 09…), como aclaró el profesor en la Clase 08. El profesor también dijo que las tareas se suben con 3 días de anticipación a la fecha límite.</p>
+</details>
+<details class="section-block sec" id="texto-oficial" open><summary><span class="stitle">📄 Enunciado oficial (texto exacto)</span></summary>
+<p>«Lea detenidamente el Capítulo 5: Formatting del libro Clean Code de Robert C. Martin y escriba una breve síntesis de aproximadamente 250 palabras donde se discutan los puntos más relevantes presentados por el autor. Ponga especial atención en i) por qué es importante dar buen formato al código, ii) por qué debe indentarse el código y iii) por qué todo el equipo de desarrollo debe seguir las mismas reglas de formato.»</p><p><strong>Especificaciones:</strong> sin carátula; al menos media cuartilla; máximo una cuartilla; sin citas ni bibliografía.</p><p><strong>Rúbrica:</strong> 100 puntos de calificación base; −10 puntos por cada error ortográfico o gramatical. Aplican los criterios estándar del documento general de evaluación.</p>
+</details>
+<details class="section-block sec" id="faltante" open><summary><span class="stitle">⚠️ Lo que NO está dicho / por confirmar</span></summary>
+<ul><li>La regla del nombre del archivo (número de lista de dos dígitos) y la de los 3 días de anticipación salen del audio FSE-Clase8, no del PDF.</li></ul>
+</details>
+<details class="section-block sec" id="enlaces" open><summary><span class="stitle">🔗 Enlaces</span></summary>
+<ul><li><a href="../materias/fundamentos-de-sistemas-embebidos/files/tarea-06-enunciado.pdf">Enunciado oficial (PDF)</a></li><li><a href="https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzQ2MjA2NzEw/details" target="_blank" rel="noopener">Abrir la tarea en Classroom</a></li></ul>
+</details>
+
+<p class="tarea-fuente">Fuente: Enunciado: PDF del profesor guardado en el sitio. Reglas de entrega: audio FSE-Clase8 (NotebookLM, 7 oct 2026).</p>
+</div>
+<script>
+(function () {
+  var el = document.getElementById('tarea-faltan');
+  if (!el || !el.dataset.vence) return;
+  function tick() {
+    var d = new Date(el.dataset.vence).getTime() - Date.now();
+    if (d <= 0) { el.textContent = ' · ya venció'; return; }
+    var m = Math.floor(d / 60000), h = Math.floor(m / 60);
+    el.textContent = ' · ' + (h < 48 ? 'faltan ' + h + ' h ' + (m % 60) + ' min' : 'faltan ' + Math.floor(h / 24) + ' días');
+  }
+  tick(); setInterval(tick, 30000);
+})();
+</script>
+</body>
+</html>

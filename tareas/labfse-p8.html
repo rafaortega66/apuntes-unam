@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Práctica 8 — Kernel Linux personalizado (boot splash) — Lab FSE</title>
+<link rel="stylesheet" href="../assets/style.css?v=20261007b">
+<script src="../assets/app.js?v=20261007b" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="../pendientes.html">← Pendientes</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Práctica 8 — Kernel Linux personalizado (boot splash)</h2>
+  <p class="prof"><strong style="color:#E8735C">Lab FSE</strong> · Vence: martes 10 nov 2026, 23:59 (fin del día; la hora no está confirmada)<span class="tarea-faltan" id="tarea-faltan" data-vence="2026-11-10T23:59:00-06:00"></span></p>
+</div>
+<p class="tarea-resumen">Práctica 8 del laboratorio de FSE. <strong>Ojo:</strong> las fuentes no coinciden en el tema; confírmalo antes de empezar.</p>
+<details class="section-block sec" id="que-hacer" open><summary><span class="stitle">✅ Qué tienes que hacer</span></summary>
+<ol class="tarea-pasos"><li>Según el audio de FSE: <strong>compilar un kernel de Linux personalizado</strong> para la Raspberry Pi y cambiar la imagen de arranque (<em>boot splash</em>) (FSE Clase 11).</li><li>Según el guion guardado en el sitio (<code>practica-08c-guion.pdf</code>): control de temperatura en lazo cerrado de una lámpara incandescente con Arduino y Raspberry Pi (LM35, TRIAC, controlador proporcional, I²C).</li><li>Pregunta al profesor o revisa Classroom cuál es la vigente.</li></ol>
+</details>
+<details class="section-block sec" id="entrega" open><summary><span class="stitle">📤 Cómo y cuándo se entrega</span></summary>
+<p>PDF <code>NL-CURP-L08.pdf</code>.</p>
+</details>
+<details class="section-block sec" id="faltante" open><summary><span class="stitle">⚠️ Lo que NO está dicho / por confirmar</span></summary>
+<ul><li>Esta práctica aún no aparece como asignación en Classroom; la fecha del 10 nov viene de lo anotado en el sitio.</li><li>Discrepancia entre el audio (kernel y boot splash) y el guion (lazo cerrado de temperatura).</li></ul>
+</details>
+<details class="section-block sec" id="enlaces" open><summary><span class="stitle">🔗 Enlaces</span></summary>
+<ul><li><a href="../materias/lab-de-fundamentos-de-sistemas-embebidos/files/practica-08c-guion.pdf">Guion 08c (PDF)</a></li><li><a href="../materias/fundamentos-de-sistemas-embebidos/clase-11.html#c11-pendiente">FSE · Clase 11, sección «Pendiente»</a></li><li><a href="../materias/lab-de-fundamentos-de-sistemas-embebidos/material.html">Ir a la sección de la materia donde se explica</a></li></ul>
+</details>
+
+<p class="tarea-fuente">Fuente: Audio FSE-Clase11 (NotebookLM) y guion guardado en el sitio.</p>
+</div>
+<script>
+(function () {
+  var el = document.getElementById('tarea-faltan');
+  if (!el || !el.dataset.vence) return;
+  function tick() {
+    var d = new Date(el.dataset.vence).getTime() - Date.now();
+    if (d <= 0) { el.textContent = ' · ya venció'; return; }
+    var m = Math.floor(d / 60000), h = Math.floor(m / 60);
+    el.textContent = ' · ' + (h < 48 ? 'faltan ' + h + ' h ' + (m % 60) + ' min' : 'faltan ' + Math.floor(h / 24) + ' días');
+  }
+  tick(); setInterval(tick, 30000);
+})();
+</script>
+</body>
+</html>
