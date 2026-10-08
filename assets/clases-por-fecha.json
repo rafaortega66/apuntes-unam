@@ -25,8 +25,20 @@
     {
       "materia": "ACS",
       "numero": 13,
-      "pagina_creada": false,
-      "notas": "Clase dictada hoy 7:00–8:30; sin página aún"
+      "pagina_creada": true,
+      "notas": "Clase dictada 07:00-08:30"
+    },
+    {
+      "materia": "SIB",
+      "numero": 11,
+      "pagina_creada": true,
+      "notas": "Clase dictada 09:00-11:00"
+    },
+    {
+      "materia": "MD",
+      "numero": 11,
+      "pagina_creada": true,
+      "notas": "Clase dictada 15:00-17:00"
     }
   ]
 }

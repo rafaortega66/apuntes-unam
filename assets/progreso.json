@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-08T16:03:15+00:00",
+ "generatedAt": "2026-10-08T23:18:08+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -394,6 +394,13 @@
     "resumen": "Tema 2 — Reintentos de connect() , puertos efímeros, listen() con el Three-Way Handshake y las colas SYN y ACCEPT del kernel, la regla n+1, SYN flood y SYN cookies, y la Tarea 4 con netcat y ss .",
     "url": "materias/arquitectura-cliente-servidor/clase-12.html",
     "formato": "estudio"
+   },
+   {
+    "num": 13,
+    "fecha": null,
+    "resumen": "",
+    "url": "materias/arquitectura-cliente-servidor/clase-13.html",
+    "formato": "viejo"
    }
   ],
   "seguridad-informatica-basica": [
@@ -469,10 +476,10 @@
    },
    {
     "num": 11,
-    "fecha": "2026-10-06",
-    "resumen": "Examen parcial (Temas 1 a 3, hasta CVSS).",
+    "fecha": null,
+    "resumen": "",
     "url": "materias/seguridad-informatica-basica/clase-11.html",
-    "formato": "no-aplica"
+    "formato": "viejo"
    }
   ],
   "lab-de-fundamentos-de-sistemas-embebidos": [],
@@ -546,11 +553,48 @@
     "resumen": "Tema 3 — Aclaraciones de proyectos y prácticas, Market Basket Analysis y reglas de asociación (soporte, confianza y lift), algoritmos Apriori, ECLAT y FP-Growth, los tres niveles de validación y el caso «comidas preparad",
     "url": "materias/mineria-de-datos/clase-10.html",
     "formato": "estudio"
+   },
+   {
+    "num": 11,
+    "fecha": null,
+    "resumen": "",
+    "url": "materias/mineria-de-datos/clase-11.html",
+    "formato": "viejo"
    }
   ],
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "9381ddb",
+   "fecha": "2026-10-08T10:05:33-06:00",
+   "mensaje": "ASI: agregar sección Prácticas"
+  },
+  {
+   "hash": "adab58e",
+   "fecha": "2026-10-08T10:03:17-06:00",
+   "mensaje": "Actualizar estructura: agregar secciones Evaluación, Tareas, Exámenes, Proyectos en todas las 7 asignaturas; botón Prácticas en FSE y OAC"
+  },
+  {
+   "hash": "65e2551",
+   "fecha": "2026-10-07T23:49:23-06:00",
+   "mensaje": "Actualizar pendientes: ACS Tarea 4 (15 oct) + info de OAC/ACS desde notebooks"
+  },
+  {
+   "hash": "917319a",
+   "fecha": "2026-10-07T23:39:35-06:00",
+   "mensaje": "Resolver conflictos de merge con contenido del remote"
+  },
+  {
+   "hash": "a774382",
+   "fecha": "2026-10-07T23:39:20-06:00",
+   "mensaje": "Pendientes actualizados al 7 oct + índice de búsqueda regenerado"
+  },
+  {
+   "hash": "2e5bbb0",
+   "fecha": "2026-10-07T23:39:08-06:00",
+   "mensaje": "Stubs de clases faltantes (5-6 oct)"
+  },
   {
    "hash": "5e87304",
    "fecha": "2026-10-07T09:50:42-06:00",
@@ -820,36 +864,6 @@
    "hash": "897dde3",
    "fecha": "2026-10-01T06:01:49-06:00",
    "mensaje": "OAC Clase 05: formato de estudio"
-  },
-  {
-   "hash": "d47dc79",
-   "fecha": "2026-10-01T06:00:00-06:00",
-   "mensaje": "FSE Clase 06: formato de estudio + aviso sobre longitudes de onda de CD/DVD/Blu-ray"
-  },
-  {
-   "hash": "f564625",
-   "fecha": "2026-10-01T05:57:48-06:00",
-   "mensaje": "ASI Clase 06 (sesión de logística del proyecto) marcada como no-aplica para el formato de estudio"
-  },
-  {
-   "hash": "d61f0e3",
-   "fecha": "2026-10-01T05:57:32-06:00",
-   "mensaje": "ACS Clase 07: formato de estudio"
-  },
-  {
-   "hash": "f5ea5bc",
-   "fecha": "2026-10-01T05:55:44-06:00",
-   "mensaje": "SIB Clase 06: formato de estudio; MD Clase 05 (examen) marcada como no-aplica"
-  },
-  {
-   "hash": "1b55957",
-   "fecha": "2026-10-01T05:53:48-06:00",
-   "mensaje": "RP Clase 07: formato de estudio"
-  },
-  {
-   "hash": "0040b00",
-   "fecha": "2026-10-01T05:52:11-06:00",
-   "mensaje": "RP Clase 08: formato de estudio"
   }
  ]
 }
