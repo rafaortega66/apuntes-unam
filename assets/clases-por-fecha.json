@@ -1,0 +1,32 @@
+{
+  "_descripcion": "Registro de qué clases ocurrieron en cada fecha. Fuente: audios grabados por el usuario. Se actualiza al final de cada sesión de trabajo.",
+  "_ultima_actualizacion": "2026-10-08",
+  "2026-10-07": [
+    {
+      "materia": "FSE",
+      "numero": 12,
+      "pagina_creada": false,
+      "notas": "Clase dictada pero sin página aún"
+    },
+    {
+      "materia": "ASI",
+      "numero": 12,
+      "pagina_creada": false,
+      "notas": "Clase dictada pero sin página aún"
+    },
+    {
+      "materia": "OAC",
+      "numero": null,
+      "pagina_creada": false,
+      "notas": "No hubo clase (confirmado por el usuario el 8 oct)"
+    }
+  ],
+  "2026-10-08": [
+    {
+      "materia": "ACS",
+      "numero": 13,
+      "pagina_creada": false,
+      "notas": "Clase dictada hoy 7:00–8:30; sin página aún"
+    }
+  ]
+}

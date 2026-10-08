@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-07T15:36:44+00:00",
+ "generatedAt": "2026-10-08T16:03:15+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -552,6 +552,21 @@
  },
  "gitlog": [
   {
+   "hash": "5e87304",
+   "fecha": "2026-10-07T09:50:42-06:00",
+   "mensaje": "Estado de tareas en el sitio: «Dónde nos quedamos» por asignación, avance en la tarjeta y regla en CLAUDE.md"
+  },
+  {
+   "hash": "9444533",
+   "fecha": "2026-10-07T09:48:34-06:00",
+   "mensaje": "Guardar contexto de la tarea ASI ENOE/ENIGH para retomar en Windows (tutorial, gráficas de referencia, scripts)"
+  },
+  {
+   "hash": "7b638a0",
+   "fecha": "2026-10-07T09:36:44-06:00",
+   "mensaje": "ASI Clase 11 (5 oct): ENOE en Power BI y actividades ENOE/ENIGH; página de la tarea actualizada con instrucciones reales"
+  },
+  {
    "hash": "9abdf49",
    "fecha": "2026-10-07T08:48:28-06:00",
    "mensaje": "Página por asignación (tareas/<id>.html) con instrucciones exactas: ASI ENOE/ENIGH, FSE T06-T09, Labs FSE, MD, ACS, OAC; las tarjetas de Pendientes ahora enlazan ahí"
@@ -835,21 +850,6 @@
    "hash": "0040b00",
    "fecha": "2026-10-01T05:52:11-06:00",
    "mensaje": "RP Clase 08: formato de estudio"
-  },
-  {
-   "hash": "f85d19d",
-   "fecha": "2026-10-01T02:12:29-06:00",
-   "mensaje": "OAC Clase 06: formato de estudio"
-  },
-  {
-   "hash": "c05faef",
-   "fecha": "2026-10-01T02:10:48-06:00",
-   "mensaje": "FSE Clase 07: formato de estudio"
-  },
-  {
-   "hash": "cd3780b",
-   "fecha": "2026-10-01T02:09:06-06:00",
-   "mensaje": "ASI Clase 07: formato de estudio"
   }
  ]
 }
