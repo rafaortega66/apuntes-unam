@@ -6,6 +6,7 @@
       "tarea": "Tarea 06: Formato",
       "fechaEntrega": "2026-10-07",
       "urgencia": "HOY",
+      "fuente": "Classroom",
       "estado": "no-entregado"
     },
     {
@@ -14,6 +15,7 @@
       "tarea": "Práctica 3.1 Agrupación",
       "fechaEntrega": "2026-10-08",
       "urgencia": "mañana",
+      "fuente": "Classroom",
       "estado": "no-entregado"
     },
     {
@@ -22,6 +24,17 @@
       "tarea": "Práctica 3 Clasificadores Bayesianos",
       "fechaEntrega": "2026-10-09",
       "urgencia": "viernes",
+      "fuente": "Classroom",
+      "estado": "no-entregado"
+    },
+    {
+      "materia": "Arquitectura Cliente-Servidor",
+      "sigla": "ACS",
+      "tarea": "Tarea 4 - Investigación kernel SYN cookies",
+      "fechaEntrega": "2026-10-15",
+      "urgencia": "próximo jueves",
+      "fuente": "Correo/Telegram profesor",
+      "descripcion": "Investigar sk_acceptq_is_queue_full(), tcp_sync_cookies, tcp_syn_retries. Reporte PDF con capturas de pantalla.",
       "estado": "no-entregado"
     },
     {
@@ -30,6 +43,7 @@
       "tarea": "Práctica 6",
       "fechaEntrega": "2026-10-13",
       "urgencia": "próxima semana",
+      "fuente": "Classroom",
       "estado": "no-entregado"
     },
     {
@@ -38,7 +52,12 @@
       "tarea": "Tarea 07: Límites claros",
       "fechaEntrega": "2026-10-14",
       "urgencia": "próxima semana",
+      "fuente": "Classroom",
       "estado": "no-entregado"
     }
-  ]
+  ],
+  "notas": {
+    "OAC": "Tareas sin fechas específicas en notebook. Entrega por correo individual: Tarea 1 (Raíz cuadrada ensamblador), Tarea 2 (Filtros IIR), Tarea 3 (por especificar)",
+    "ACS": "No usa Classroom. Profesor comunica por correo y Telegram. Liga del sitio alterno en canal de Telegram."
+  }
 }
