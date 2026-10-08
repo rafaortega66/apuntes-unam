@@ -1,0 +1,44 @@
+{
+  "pendientes": [
+    {
+      "materia": "Fundamentos de Sistemas Embebidos",
+      "sigla": "FSE",
+      "tarea": "Tarea 06: Formato",
+      "fechaEntrega": "2026-10-07",
+      "urgencia": "HOY",
+      "estado": "no-entregado"
+    },
+    {
+      "materia": "Minería de Datos",
+      "sigla": "MD",
+      "tarea": "Práctica 3.1 Agrupación",
+      "fechaEntrega": "2026-10-08",
+      "urgencia": "mañana",
+      "estado": "no-entregado"
+    },
+    {
+      "materia": "Reconocimiento de Patrones",
+      "sigla": "RP",
+      "tarea": "Práctica 3 Clasificadores Bayesianos",
+      "fechaEntrega": "2026-10-09",
+      "urgencia": "viernes",
+      "estado": "no-entregado"
+    },
+    {
+      "materia": "Fundamentos de Sistemas Embebidos",
+      "sigla": "FSE",
+      "tarea": "Práctica 6",
+      "fechaEntrega": "2026-10-13",
+      "urgencia": "próxima semana",
+      "estado": "no-entregado"
+    },
+    {
+      "materia": "Fundamentos de Sistemas Embebidos",
+      "sigla": "FSE",
+      "tarea": "Tarea 07: Límites claros",
+      "fechaEntrega": "2026-10-14",
+      "urgencia": "próxima semana",
+      "estado": "no-entregado"
+    }
+  ]
+}
