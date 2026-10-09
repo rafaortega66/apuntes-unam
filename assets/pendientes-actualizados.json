@@ -54,6 +54,17 @@
       "urgencia": "próxima semana",
       "fuente": "Classroom",
       "estado": "no-entregado"
+    },
+    {
+      "materia": "Fundamentos de Sistemas Embebidos",
+      "sigla": "FSE",
+      "tipo": "examen",
+      "tarea": "Examen de FSE (todas las clases hasta la fecha)",
+      "fechaEntrega": "2026-10-15",
+      "fuente": "Dicho por el usuario (9 oct 2026); hora por confirmar",
+      "descripcion": "Repasar todas las clases de FSE hasta el momento. Hora y salón por confirmar.",
+      "estado": "pendiente",
+      "link": "materias/fundamentos-de-sistemas-embebidos/index.html"
     }
   ],
   "notas": {

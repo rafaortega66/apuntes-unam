@@ -264,3 +264,22 @@ El avance de cada asignación vive en el propio sitio, para que cualquier sesió
 **Al avanzar o cerrar una sesión de trabajo en una tarea:** marca los pasos hechos, reescribe `donde` y `avance` con la fecha, corre `python3 scripts/build_tareas.py` y haz commit y push. Cuando la tarea se entregue, quita el ítem de `pendientes.json` (o ponle `oculto: true`) y bórrale el `progreso`.
 
 - **Tarea abierta hoy: ASI «Análisis de ENOE y ENIGH»** (vence mié 7 oct 2026, 17:00). El usuario pasó de Linux a Windows para usar Power BI Desktop. Materiales: `trabajos/asi-enoe-enigh/RETOMAR.md` y `TUTORIAL.md`. Los datos `enoe.xlsx` y `viviendas.csv` no están en el repo: se bajan de Classroom.
+
+## Nueva estrategia de estudio (9 oct 2026) — reemplaza la automatización de clases
+
+El usuario **ya no quiere que Claude genere automáticamente las páginas de
+cada clase**. El sitio pasa a ser un *hub* de apuntes: el usuario le pide a
+NotebookLM (con un prompt que se va puliendo según las salidas) la
+información de cada clase y él mismo escribe su resumen a mano, con apoyo de
+NotebookLM y de Claude para el repaso. No correr `/nueva-clase` ni
+`/migrar-clase` por iniciativa propia.
+
+- **Examen de FSE: jueves 15 oct 2026** (hora/salón por confirmar; el 15 es
+  jueves y FSE no tiene clase ese día según el horario, así que hay que
+  confirmarlo). Prioridad: repasar todas las clases de FSE hasta la fecha.
+- **Siguiente tarea pedida:** verificar que el cuaderno de NotebookLM esté
+  al día con el calendario en papel del usuario (lo ha mandado en sesiones
+  anteriores; si no está en el repo, pedirle una foto y guardarlo aquí).
+- Los pendientes de la portada (`assets/pendientes-actualizados.json` →
+  `python3 scripts/build_pendientes.py`) aceptan `tipo: "examen"`, `hora`
+  ("HH:MM") y `link`; cada tarjeta muestra la cuenta regresiva.

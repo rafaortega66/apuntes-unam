@@ -72,12 +72,12 @@
     });
   };
   Pend.faltan = function (ms) {
-    var d = ms - Pend.now();
-    var min = Math.floor(d / 60000);
-    if (min < 60) return 'en ' + Math.max(min, 1) + ' min';
+    var min = Math.floor((ms - Pend.now()) / 60000);
+    if (min < 60) return 'faltan ' + Math.max(min, 1) + ' min';
     var h = Math.floor(min / 60);
-    if (h < 48) return 'en ' + h + ' h ' + (min % 60) + ' min';
-    return 'en ' + Math.floor(h / 24) + ' días';
+    if (h < 24) return 'faltan ' + h + ' h ' + (min % 60) + ' min';
+    var dias = Math.floor(h / 24);
+    return 'faltan ' + dias + (dias === 1 ? ' día ' : ' días ') + (h % 24) + ' h';
   };
   Pend.grupo = function (it) {
     if (!it.vence) return 'sin';
@@ -90,16 +90,21 @@
     return 'despues';
   };
   Pend.cardHtml = function (it, compact) {
-    var t = it.vence ? new Date(it.vence).getTime() : null;
-    var cuando = t
+    var examen = it.tipo === 'examen';
+    var sinHora = examen && it.hora_confirmada === false && it.vence;
+    var t = sinHora ? new Date(it.vence.slice(0, 10) + 'T00:00:00-06:00').getTime() : (it.vence ? new Date(it.vence).getTime() : null);
+    var cuando = sinHora
+      ? Pend.fmt(t, { weekday: 'short', day: 'numeric', month: 'short' }) + ' · hora por confirmar'
+      : t
       ? Pend.fmt(t, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hour12: false }) +
         (it.hora_confirmada === false ? ' (fin del día)' : '')
       : (it.fecha_texto || 'Sin fecha');
-    var faltan = t && (t - Pend.now() < 48 * 3600000) ? ' · ' + Pend.faltan(t) : '';
+    var urgente = t && (t - Pend.now() < 48 * 3600000);
     var href = (it.id && !it.sin_pagina) ? (SITE_ROOT + 'tareas/' + it.id + '.html') : (it.link ? (SITE_ROOT + it.link) : (it.classroom || '#'));
-    return '<a class="pend-card" href="' + Pend.esc(href) + '" style="--c:' + Pend.esc(it.color || '#7C9CD6') + '">' +
-      '<div class="pend-top"><span class="pend-materia">' + Pend.esc(it.materia) + '</span>' +
-      '<span class="pend-fecha">' + Pend.esc(cuando + faltan) + '</span></div>' +
+    return '<a class="pend-card' + (examen ? ' pend-examen' : '') + '" href="' + Pend.esc(href) + '" style="--c:' + Pend.esc(it.color || '#7C9CD6') + '">' +
+      '<div class="pend-top"><span class="pend-materia">' + (examen ? '📝 EXAMEN · ' : '') + Pend.esc(it.sigla || it.materia) + '</span>' +
+      '<span class="pend-fecha">' + Pend.esc(cuando) + '</span></div>' +
+      (t ? '<div class="pend-faltan' + (urgente ? ' urgente' : '') + '">⏳ ' + Pend.esc(Pend.faltan(t)) + '</div>' : '') +
       '<div class="pend-titulo">' + Pend.esc(it.titulo) + '</div>' +
       (compact || !it.detalle ? '' : '<div class="pend-detalle">' + Pend.esc(it.detalle) + '</div>') +
       (compact || !it.avance ? '' : '<div class="pend-avance">📍 ' + Pend.esc(it.avance) + '</div>') +
@@ -147,7 +152,7 @@
     var mount = document.getElementById('pend-carousel');
     if (!mount) return;
     Pend.onChange(function () {
-      var v = Pend.vigentes().filter(function (it) { return it.vence; }).slice(0, 5);
+      var v = Pend.vigentes().filter(function (it) { return it.vence; });
       if (!v.length) { mount.innerHTML = ''; return; }
       mount.innerHTML =
         '<div class="pend-carousel-head"><h2>📌 Próximos vencimientos</h2><a href="' + SITE_ROOT + 'pendientes.html">Ver todo →</a></div>' +

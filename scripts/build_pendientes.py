@@ -26,9 +26,9 @@ for task in data.get('pendientes', []):
 
     # Convertir fecha a ISO con hora 23:59 (fin del día)
     fecha_str = task.get('fechaEntrega', '')
+    hora = task.get('hora')
     if fecha_str:
-        # Agregar hora fin del día (23:59 en Mexico City)
-        vence = fecha_str + 'T23:59:00-06:00'
+        vence = fecha_str + 'T' + (hora or '23:59') + ':00-06:00'
     else:
         vence = None
 
@@ -39,8 +39,11 @@ for task in data.get('pendientes', []):
         'titulo': task.get('tarea', ''),
         'detalle': task.get('descripcion', ''),
         'vence': vence,
-        'hora_confirmada': False,  # no especificada, asumir fin del día
+        'hora_confirmada': bool(hora),
     }
+    for k in ('tipo', 'link'):
+        if task.get(k):
+            item[k] = task[k]
     items.append(item)
 
 output = {
