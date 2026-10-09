@@ -274,9 +274,8 @@ información de cada clase y él mismo escribe su resumen a mano, con apoyo de
 NotebookLM y de Claude para el repaso. No correr `/nueva-clase` ni
 `/migrar-clase` por iniciativa propia.
 
-- **Examen de FSE: jueves 15 oct 2026** (hora/salón por confirmar; el 15 es
-  jueves y FSE no tiene clase ese día según el horario, así que hay que
-  confirmarlo). Prioridad: repasar todas las clases de FSE hasta la fecha.
+- **Examen de FSE: miércoles 14 oct 2026** (corregido por el usuario el 9 oct;
+  coincide con día de FSE, 13:00–14:30 A107, pero la hora no está confirmada). Prioridad: repasar todas las clases de FSE hasta la fecha.
 - **Siguiente tarea pedida:** verificar que el cuaderno de NotebookLM esté
   al día con el calendario en papel del usuario (lo ha mandado en sesiones
   anteriores; si no está en el repo, pedirle una foto y guardarlo aquí).

@@ -60,12 +60,12 @@
       "color": "#A98BD1",
       "titulo": "Examen de FSE (todas las clases hasta la fecha)",
       "detalle": "Repasar todas las clases de FSE hasta el momento. Hora y salón por confirmar.",
-      "vence": "2026-10-15T23:59:00-06:00",
+      "vence": "2026-10-14T23:59:00-06:00",
       "hora_confirmada": false,
       "tipo": "examen",
       "link": "materias/fundamentos-de-sistemas-embebidos/index.html"
     }
   ],
-  "actualizado": "2026-10-09 17:49 (hora de servidor)",
+  "actualizado": "2026-10-09 18:03 (hora de servidor)",
   "nota": "Generado por build_pendientes.py desde pendientes-actualizados.json"
 }
