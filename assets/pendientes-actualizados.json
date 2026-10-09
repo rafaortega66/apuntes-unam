@@ -31,11 +31,11 @@
       "materia": "Arquitectura Cliente-Servidor",
       "sigla": "ACS",
       "tarea": "Tarea 4 - Investigación kernel SYN cookies",
-      "fechaEntrega": "2026-10-15",
-      "urgencia": "próximo jueves",
-      "fuente": "Correo/Telegram profesor",
-      "descripcion": "Investigar sk_acceptq_is_queue_full(), tcp_sync_cookies, tcp_syn_retries. Reporte PDF con capturas de pantalla.",
-      "estado": "no-entregado"
+      "fechaEntrega": "2026-10-08",
+      "urgencia": "HOY (VENCIDA)",
+      "fuente": "Clase 12 (6 oct) / Correo/Telegram profesor",
+      "descripcion": "Investigar sk_acceptq_is_queue_full(), tcp_sync_cookies, tcp_syn_retries. Reporte PDF con capturas de pantalla. Profesor dijo en clase 12 que debía ser antes del jueves 8 de octubre.",
+      "estado": "vencida"
     },
     {
       "materia": "Fundamentos de Sistemas Embebidos",
