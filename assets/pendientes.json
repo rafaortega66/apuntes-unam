@@ -212,10 +212,10 @@
    "sigla": "FSE",
    "color": "#A98BD1",
    "tipo": "examen",
-   "titulo": "Examen de FSE (todas las clases hasta la fecha)",
+   "titulo": "Examen de FSE (Unidades 1 y 2)",
    "vence": "2026-10-14T13:00:00-06:00",
    "hora_confirmada": false,
-   "detalle": "Miércoles 14 oct. Hora no confirmada (día de FSE: 13:00–14:30, A107). Repasar todas las clases de FSE.",
+   "detalle": "Miércoles 14 oct. Hora no confirmada (día de FSE: 13:00–14:30, A107). Temario: Unidad 1 y Unidad 2.",
    "link": "materias/fundamentos-de-sistemas-embebidos/index.html",
    "sin_pagina": true
   },
