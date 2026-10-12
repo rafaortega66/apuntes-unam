@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-12T22:36:31+00:00",
+ "generatedAt": "2026-10-12T22:47:14+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -566,6 +566,11 @@
  },
  "gitlog": [
   {
+   "hash": "4750b13",
+   "fecha": "2026-10-12T16:36:31-06:00",
+   "mensaje": "Lab FSE: «Manuales» en vez de guiones, nombres de las 8 prácticas con estatus de Classroom, P6 con Pico (manual 6b)"
+  },
+  {
    "hash": "b79bf2a",
    "fecha": "2026-10-12T16:21:20-06:00",
    "mensaje": "Barra «Apuntes.» en todas las páginas (app.js en las 29 que no lo cargaban) y cache-busting global para ver el home nuevo"
@@ -859,11 +864,6 @@
    "hash": "8963649",
    "fecha": "2026-10-01T06:23:22-06:00",
    "mensaje": "FSE Clase 04: formato de estudio"
-  },
-  {
-   "hash": "5ec36e3",
-   "fecha": "2026-10-01T06:21:46-06:00",
-   "mensaje": "ASI Clase 04: formato de estudio"
   }
  ]
 }
