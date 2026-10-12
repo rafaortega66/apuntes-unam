@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarea 3 — Infografía de 35 ataques informáticos — SIB</title>
+<link rel="stylesheet" href="../assets/style.css?v=20261007b">
+<script src="../assets/app.js?v=20261007b" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="../pendientes.html">← Pendientes</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Tarea 3 — Infografía de 35 ataques informáticos</h2>
+  <p class="prof"><strong style="color:#E8735C">SIB</strong> · Vence: martes 13 oct 2026, 09:00<span class="tarea-faltan" id="tarea-faltan" data-vence="2026-10-13T09:00:00-06:00"></span></p>
+</div>
+<p class="tarea-resumen"><strong>Infografía</strong> con 35 ataques informáticos: número, nombre y descripción de cada uno, con imágenes.</p>
+<details class="section-block sec" id="que-hacer" open><summary><span class="stitle">✅ Qué tienes que hacer</span></summary>
+<ol class="tarea-pasos"><li>Haz una infografía con una <strong>lista numerada</strong> de <strong>35 ataques informáticos</strong> existentes.</li><li>De cada uno, menciona el <strong>nombre</strong> y <strong>describe</strong> en qué consiste.</li><li>Incluye <strong>imágenes</strong>.</li><li>Ejemplo del profesor: «1. Spam: es cualquier forma de comunicación no solicitada que se envía de forma masiva».</li></ol>
+</details>
+<details class="section-block sec" id="entrega" open><summary><span class="stitle">📤 Cómo y cuándo se entrega</span></summary>
+<p>Un PDF llamado <code>EquipoXTarea3.pdf</code> (X = número de equipo). <strong>Vence mar 13 oct 2026, 9:00 AM</strong>; Classroom no permite entregar después de la fecha. Solo el representante del equipo ve y entrega la tarea.</p>
+</details>
+<details class="section-block sec" id="texto-oficial" open><summary><span class="stitle">📄 Enunciado oficial (texto exacto)</span></summary>
+<p>«En una infografía liste con números, mencione el nombre y describa 35 ataques informáticos existentes. Incluya imágenes. Por ejemplo: 1. Spam: es cualquier forma de comunicación no solicitada que se envía de forma masiva. Nombre del archivo: EquipoXTarea3.pdf»</p>
+</details>
+<details class="section-block sec" id="faltante" open><summary><span class="stitle">⚠️ Lo que NO está dicho / por confirmar</span></summary>
+<ul><li>Enlace de Classroom (la captura no lo incluye).</li><li>Número de equipo para el nombre del archivo.</li></ul>
+</details>
+<details class="section-block sec" id="enlaces" open><summary><span class="stitle">🔗 Enlaces</span></summary>
+<ul><li><a href="../tareas/sib-t3.html">Ir a la sección de la materia donde se explica</a></li></ul>
+</details>
+
+<p class="tarea-fuente">Fuente: Captura de Classroom del usuario (12 oct 2026). Materia SIB inferida por el tema y por el vencimiento (martes 9:00 = inicio de clase de SIB); confirmar.</p>
+</div>
+<script>
+(function () {
+  var el = document.getElementById('tarea-faltan');
+  if (!el || !el.dataset.vence) return;
+  function tick() {
+    var d = new Date(el.dataset.vence).getTime() - Date.now();
+    if (d <= 0) { el.textContent = ' · ya venció'; return; }
+    var m = Math.floor(d / 60000), h = Math.floor(m / 60);
+    el.textContent = ' · ' + (h < 48 ? 'faltan ' + h + ' h ' + (m % 60) + ' min' : 'faltan ' + Math.floor(h / 24) + ' días');
+  }
+  tick(); setInterval(tick, 30000);
+})();
+</script>
+</body>
+</html>

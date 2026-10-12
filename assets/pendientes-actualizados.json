@@ -65,6 +65,17 @@
       "descripcion": "Repasar todas las clases de FSE hasta el momento. Hora y salón por confirmar.",
       "estado": "pendiente",
       "link": "materias/fundamentos-de-sistemas-embebidos/index.html"
+    },
+    {
+      "materia": "Seguridad Informática Básica",
+      "sigla": "SIB",
+      "tarea": "Tarea 3 — Infografía de 35 ataques informáticos",
+      "fechaEntrega": "2026-10-13",
+      "hora": "09:00",
+      "descripcion": "Infografía numerada con nombre y descripción de 35 ataques informáticos, con imágenes. Archivo: EquipoXTarea3.pdf. Solo el representante del equipo la ve en Classroom; no se puede entregar después del vencimiento.",
+      "fuente": "Classroom (captura del usuario)",
+      "estado": "no-entregado",
+      "link": "tareas/sib-t3.html"
     }
   ],
   "notas": {

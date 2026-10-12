@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-08T23:18:08+00:00",
+ "generatedAt": "2026-10-12T22:02:17+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -566,6 +566,11 @@
  },
  "gitlog": [
   {
+   "hash": "03af35a",
+   "fecha": "2026-10-08T17:18:08-06:00",
+   "mensaje": "Agregar páginas de clase 8 octubre: ACS-Clase13, SIB-Clase11, MD-Clase11"
+  },
+  {
    "hash": "9381ddb",
    "fecha": "2026-10-08T10:05:33-06:00",
    "mensaje": "ASI: agregar sección Prácticas"
@@ -859,11 +864,6 @@
    "hash": "e134e0f",
    "fecha": "2026-10-01T06:03:35-06:00",
    "mensaje": "RP Clase 06: formato de estudio"
-  },
-  {
-   "hash": "897dde3",
-   "fecha": "2026-10-01T06:01:49-06:00",
-   "mensaje": "OAC Clase 05: formato de estudio"
   }
  ]
 }

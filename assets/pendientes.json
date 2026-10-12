@@ -64,8 +64,18 @@
       "hora_confirmada": false,
       "tipo": "examen",
       "link": "materias/fundamentos-de-sistemas-embebidos/index.html"
+    },
+    {
+      "materia": "Seguridad Informática Básica",
+      "sigla": "SIB",
+      "color": "#E8735C",
+      "titulo": "Tarea 3 — Infografía de 35 ataques informáticos",
+      "detalle": "Infografía numerada con nombre y descripción de 35 ataques informáticos, con imágenes. Archivo: EquipoXTarea3.pdf. Solo el representante del equipo la ve en Classroom; no se puede entregar después del vencimiento.",
+      "vence": "2026-10-13T09:00:00-06:00",
+      "hora_confirmada": true,
+      "link": "tareas/sib-t3.html"
     }
   ],
-  "actualizado": "2026-10-09 18:03 (hora de servidor)",
+  "actualizado": "2026-10-12 16:02 (hora de servidor)",
   "nota": "Generado por build_pendientes.py desde pendientes-actualizados.json"
 }
