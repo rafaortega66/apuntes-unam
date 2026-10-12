@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-12T22:02:17+00:00",
+ "generatedAt": "2026-10-12T22:02:35+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -566,6 +566,36 @@
  },
  "gitlog": [
   {
+   "hash": "935f074",
+   "fecha": "2026-10-12T16:02:20-06:00",
+   "mensaje": "SIB: agregar Tarea 3 (infografía de 35 ataques, vence 13 oct 9:00)"
+  },
+  {
+   "hash": "f2daf42",
+   "fecha": "2026-10-09T18:03:32Z",
+   "mensaje": "Examen de FSE: mover al 14 oct"
+  },
+  {
+   "hash": "9aec770",
+   "fecha": "2026-10-09T17:49:57Z",
+   "mensaje": "Pendientes: examen de FSE (15 oct) y cuenta regresiva en cada tarjeta"
+  },
+  {
+   "hash": "c89b6f4",
+   "fecha": "2026-10-08T20:18:21-06:00",
+   "mensaje": "Agregar pendientes.json con tareas visibles en home - ACS Tarea 4 incluida"
+  },
+  {
+   "hash": "a6fcbeb",
+   "fecha": "2026-10-08T20:05:15-06:00",
+   "mensaje": "Merge remote changes"
+  },
+  {
+   "hash": "46af508",
+   "fecha": "2026-10-08T20:02:27-06:00",
+   "mensaje": "ACS Tarea 4: corregir fecha de entrega (8 oct, no 15 oct) - vencida hoy"
+  },
+  {
    "hash": "03af35a",
    "fecha": "2026-10-08T17:18:08-06:00",
    "mensaje": "Agregar páginas de clase 8 octubre: ACS-Clase13, SIB-Clase11, MD-Clase11"
@@ -834,36 +864,6 @@
    "hash": "babdff6",
    "fecha": "2026-10-01T06:13:25-06:00",
    "mensaje": "FSE Clase 05: formato de estudio"
-  },
-  {
-   "hash": "d2841d0",
-   "fecha": "2026-10-01T06:11:43-06:00",
-   "mensaje": "ASI Clase 05 (logística del proyecto) marcada como no-aplica"
-  },
-  {
-   "hash": "dcea98f",
-   "fecha": "2026-10-01T06:11:18-06:00",
-   "mensaje": "ACS Clase 06: formato de estudio; script: títulos de sección con <code>"
-  },
-  {
-   "hash": "696d7d0",
-   "fecha": "2026-10-01T06:09:23-06:00",
-   "mensaje": "SIB Clase 05: formato de estudio + nota sobre el ISO 7498-2"
-  },
-  {
-   "hash": "31a9de3",
-   "fecha": "2026-10-01T06:07:17-06:00",
-   "mensaje": "MD Clase 04: formato de estudio"
-  },
-  {
-   "hash": "7b24d70",
-   "fecha": "2026-10-01T06:05:08-06:00",
-   "mensaje": "RP Clase 05: formato de estudio"
-  },
-  {
-   "hash": "e134e0f",
-   "fecha": "2026-10-01T06:03:35-06:00",
-   "mensaje": "RP Clase 06: formato de estudio"
   }
  ]
 }
