@@ -260,10 +260,10 @@ El avance de cada asignación vive en el propio sitio, para que cualquier sesió
 - `assets/pendientes.json`: cada ítem puede traer `avance` (una línea; se ve en la tarjeta de Pendientes).
 - `assets/tareas-detalle.json`: cada tarea puede traer `progreso` = `{actualizado, estado, donde, pasos:[{t, hecho}]}`; `python3 scripts/build_tareas.py` lo pinta en `tareas/<id>.html` como «📍 Dónde nos quedamos».
 
-**Al empezar una sesión:** revisa los ítems con `avance`/`progreso` (hoy: `asi-c11-prep`) y retoma desde el primer paso sin marcar; no le preguntes al usuario qué faltaba.
+**Al empezar una sesión:** revisa los ítems con `avance`/`progreso` (hoy ninguno) y retoma desde el primer paso sin marcar; no le preguntes al usuario qué faltaba.
 **Al avanzar o cerrar una sesión de trabajo en una tarea:** marca los pasos hechos, reescribe `donde` y `avance` con la fecha, corre `python3 scripts/build_tareas.py` y haz commit y push. Cuando la tarea se entregue, quita el ítem de `pendientes.json` (o ponle `oculto: true`) y bórrale el `progreso`.
 
-- **Tarea abierta hoy: ASI «Análisis de ENOE y ENIGH»** (vence mié 7 oct 2026, 17:00). El usuario pasó de Linux a Windows para usar Power BI Desktop. Materiales: `trabajos/asi-enoe-enigh/RETOMAR.md` y `TUTORIAL.md`. Los datos `enoe.xlsx` y `viviendas.csv` no están en el repo: se bajan de Classroom.
+- La tarea ASI «Análisis de ENOE y ENIGH» ya se entregó (Classroom «Turned in», verificado el 12 oct 2026); sus materiales siguen en `trabajos/asi-enoe-enigh/`.
 
 ## Nueva estrategia de estudio (9 oct 2026) — reemplaza la automatización de clases
 
@@ -279,6 +279,5 @@ NotebookLM y de Claude para el repaso. No correr `/nueva-clase` ni
 - **Siguiente tarea pedida:** verificar que el cuaderno de NotebookLM esté
   al día con el calendario en papel del usuario (lo ha mandado en sesiones
   anteriores; si no está en el repo, pedirle una foto y guardarlo aquí).
-- Los pendientes de la portada (`assets/pendientes-actualizados.json` →
-  `python3 scripts/build_pendientes.py`) aceptan `tipo: "examen"`, `hora`
+- Los pendientes de la portada se editan directo en `assets/pendientes.json` (con `id` por ítem, para que enlacen a `tareas/<id>.html`; **no** regenerarlo desde otra fuente: se borró `build_pendientes.py` el 12 oct 2026 porque perdía los ids y los enlaces). Aceptan `tipo: "examen"`, `hora`
   ("HH:MM") y `link`; cada tarjeta muestra la cuenta regresiva.
