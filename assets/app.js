@@ -152,11 +152,13 @@
     var mount = document.getElementById('pend-carousel');
     if (!mount) return;
     Pend.onChange(function () {
-      var v = Pend.vigentes().filter(function (it) { return it.vence; });
-      if (!v.length) { mount.innerHTML = ''; return; }
+      var hoy = Pend.dayKey(Pend.now());
+      var v = Pend.vigentes().filter(function (it) { return it.vence && Pend.dayKey(new Date(it.vence).getTime()) === hoy; });
+      var otros = Pend.vigentes().filter(function (it) { return v.indexOf(it) < 0; }).length;
+      var ver = '<a class="pend-ver-mas" href="' + SITE_ROOT + 'pendientes.html">' + (otros ? 'Ver más (' + otros + ') →' : 'Ver todo →') + '</a>';
       mount.innerHTML =
-        '<div class="pend-carousel-head"><h2>📌 Próximos vencimientos</h2><a href="' + SITE_ROOT + 'pendientes.html">Ver todo →</a></div>' +
-        v.map(function (it) { return Pend.cardHtml(it, true); }).join('');
+        '<div class="pend-carousel-head"><h2>📌 Vencen hoy</h2>' + ver + '</div>' +
+        (v.length ? v.map(function (it) { return Pend.cardHtml(it, true); }).join('') : '<p class="pend-empty">Nada vence hoy. 🎉</p>');
     });
   }
 

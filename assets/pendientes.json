@@ -125,11 +125,10 @@
    "materia": "OAC",
    "color": "#45B8A8",
    "titulo": "Raíz cuadrada entera en ensamblador (restas de impares)",
-   "vence": null,
-   "hora_confirmada": false,
-   "detalle": "Asignada en la Clase 06 sin fecha límite. Ya tienes la Raspberry Pi Pico 2 (llegó el 6 oct): lista para hacerse.",
-   "link": "materias/organizacion-y-arquitectura-de-computadoras/clase-06.html",
-   "fecha_texto": "Sin fecha (el profesor no la dio)"
+   "vence": "2026-10-14T09:00:00-06:00",
+   "hora_confirmada": true,
+   "detalle": "Asignada en la Clase 06 sin fecha límite. Ya tienes la Raspberry Pi Pico 2 (llegó el 6 oct): lista para hacerse. Entrega acordada: miércoles 14 oct, en la siguiente clase de OAC (09:00, A107).",
+   "link": "materias/organizacion-y-arquitectura-de-computadoras/clase-06.html"
   },
   {
    "id": "acs-parcial",
@@ -201,9 +200,9 @@
    "materia": "OAC",
    "color": "#45B8A8",
    "titulo": "Filtro IIR de 2º orden subamortiguado en ensamblador (Pico 2)",
-   "vence": null,
-   "hora_confirmada": false,
-   "detalle": "Asignado en la Clase 9 (5 oct): modificar la plantilla filtro_iir2 (Ts=0.05 s, wn<62.8 rad/s, zeta<1). La grabación no menciona fecha ni medio de entrega; confirmar en Classroom/con el profesor.",
+   "vence": "2026-10-14T09:00:00-06:00",
+   "hora_confirmada": true,
+   "detalle": "Asignado en la Clase 9 (5 oct): modificar la plantilla filtro_iir2 (Ts=0.05 s, wn<62.8 rad/s, zeta<1). La grabación no menciona fecha ni medio de entrega; confirmar en Classroom/con el profesor. Entrega acordada: miércoles 14 oct, en la siguiente clase de OAC (09:00, A107).",
    "link": "materias/organizacion-y-arquitectura-de-computadoras/clase-09.html#c9-pendiente"
   },
   {
