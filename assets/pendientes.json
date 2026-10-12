@@ -132,16 +132,6 @@
    "fecha_texto": "Sin fecha (el profesor no la dio)"
   },
   {
-   "id": "acs-t4",
-   "materia": "ACS",
-   "color": "#E8735C",
-   "titulo": "Tarea 4: peticiones concurrentes con netcat + monitoreo con ss (capturas)",
-   "vence": "2026-10-08T23:59:00-06:00",
-   "hora_confirmada": false,
-   "detalle": "Anunciada en clase el 6 oct (ACS Clase 12). Ajustar sysctl (tcp_syncookies=0, tcp_syn_retries=1), servidor con backlog=1 en el puerto 4898, 4+ terminales con watch ss -atnp y varios nc; reporte PDF con capturas y la teoría investigada. Plazo dicho: «antes del jueves 8 oct»; ACS no usa Classroom, así que no se puede verificar si ya se entregó (¿entregada?).",
-   "link": "materias/arquitectura-cliente-servidor/clase-12.html#c12-pendiente"
-  },
-  {
    "id": "acs-parcial",
    "materia": "ACS",
    "color": "#E8735C",
