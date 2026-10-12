@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-12T22:18:02+00:00",
+ "generatedAt": "2026-10-12T22:36:31+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -566,6 +566,16 @@
  },
  "gitlog": [
   {
+   "hash": "b79bf2a",
+   "fecha": "2026-10-12T16:21:20-06:00",
+   "mensaje": "Barra «Apuntes.» en todas las páginas (app.js en las 29 que no lo cargaban) y cache-busting global para ver el home nuevo"
+  },
+  {
+   "hash": "1d03041",
+   "fecha": "2026-10-12T16:18:05-06:00",
+   "mensaje": "OAC: entregas para el 14 oct; portada solo muestra lo que vence hoy + Ver más"
+  },
+  {
    "hash": "721eb36",
    "fecha": "2026-10-12T16:16:42-06:00",
    "mensaje": "Examen FSE: alcance Unidades 1 y 2"
@@ -854,16 +864,6 @@
    "hash": "5ec36e3",
    "fecha": "2026-10-01T06:21:46-06:00",
    "mensaje": "ASI Clase 04: formato de estudio"
-  },
-  {
-   "hash": "ca299d4",
-   "fecha": "2026-10-01T06:19:36-06:00",
-   "mensaje": "SIB Clase 04: formato de estudio"
-  },
-  {
-   "hash": "bab6e0a",
-   "fecha": "2026-10-01T06:17:47-06:00",
-   "mensaje": "MD Clase 03: quitar pregunta no respaldada por la clase"
   }
  ]
 }

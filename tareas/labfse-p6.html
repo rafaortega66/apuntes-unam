@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Práctica 6 — Lectura del ADC (Arduino) — Lab FSE</title>
-<link rel="stylesheet" href="../assets/style.css?v=20261012a">
-<script src="../assets/app.js?v=20261012a" defer></script>
+<title>Práctica 6 — Lectura analógica con Raspberry Pi Pico (RP2040) — Lab FSE</title>
+<link rel="stylesheet" href="../assets/style.css?v=20261007b">
+<script src="../assets/app.js?v=20261007b" defer></script>
 </head>
 <body>
 <div class="wrap">
 <a class="back" href="../pendientes.html">← Pendientes</a>
-<div class="detail-head" style="border-color:#E8735C"><h2>Práctica 6 — Lectura del ADC (Arduino)</h2>
+<div class="detail-head" style="border-color:#E8735C"><h2>Práctica 6 — Lectura analógica con Raspberry Pi Pico (RP2040)</h2>
   <p class="prof"><strong style="color:#E8735C">Lab FSE</strong> · Vence: martes 13 oct 2026, 23:59<span class="tarea-faltan" id="tarea-faltan" data-vence="2026-10-13T23:59:00-06:00"></span></p>
 </div>
-<p class="tarea-resumen">Leer la temperatura de un sensor <strong>LM35</strong> con el ADC de un Arduino y enviarla por I²C a la Raspberry Pi. El profesor dijo que la evalúa con criterio muy riguroso.</p>
+<p class="tarea-resumen">Leer la temperatura de un sensor <strong>LM35</strong> con el ADC de la <strong>Raspberry Pi Pico (RP2040)</strong> y enviarla por I²C a la Raspberry Pi. El profesor dijo que la evalúa con criterio muy riguroso.</p>
 <details class="section-block sec" id="que-hacer" open><summary><span class="stitle">✅ Qué tienes que hacer</span></summary>
-<ol class="tarea-pasos"><li>Objetivo del guion: aprender a comunicar circuitos integrados por el bus I²C y a leer e interpretar señales analógicas con un microcontrolador.</li><li>Leer la señal del LM35 (10 mV/°C) con el convertidor analógico-digital de un Arduino UNO/Mega.</li><li>Enviar los datos por I²C a una Raspberry Pi para llevar una bitácora de temperatura que se pueda ver en un navegador web.</li><li>Seguir el guion completo (conexiones, código y pruebas); los archivos de apoyo vienen en el .7z de la práctica.</li></ol>
+<ol class="tarea-pasos"><li>Objetivo del manual: aprender a comunicar circuitos integrados por el bus I²C y a leer e interpretar señales analógicas con un microcontrolador.</li><li>Esta práctica se hace con la <strong>Pico (RP2040)</strong>: sigue el <strong>manual 6b</strong> (la versión Arduino es el 6a).</li><li>Leer la señal del LM35 (10 mV/°C) con el convertidor analógico-digital de la Pico.</li><li>Enviar los datos por I²C a una Raspberry Pi para llevar una bitácora de temperatura que se pueda ver en un navegador web.</li><li>Seguir el manual completo (conexiones, código y pruebas); los archivos de apoyo vienen en el .7z de la práctica 6b.</li></ol>
 </details>
 <details class="section-block sec" id="entrega" open><summary><span class="stitle">📤 Cómo y cuándo se entrega</span></summary>
 <p>Un solo PDF llamado <code>NL-CURP-L06.pdf</code>. Además, hay que <strong>demostrar el circuito y el código en la sesión de laboratorio</strong> (FSE Clase 05).</p>
@@ -24,13 +24,13 @@
 <ul class="tarea-citas"><li><span class="tarea-audio">FSE-Clase5.m4a</span><blockquote>«(El profesor advirtió que evaluará la lectura del ADC con extrema severidad y que no tendrá consideración con quien diga que no le sale la lectura analógico-digital con el Arduino.)»</blockquote><span class="evid">→ Llega con la lectura del ADC funcionando; no se aceptan excusas.</span></li></ul>
 </details>
 <details class="section-block sec" id="faltante" open><summary><span class="stitle">⚠️ Lo que NO está dicho / por confirmar</span></summary>
-<ul><li>La rúbrica y la fecha de demostración en el laboratorio no están en el guion; la fecha límite 13 oct sale de Classroom.</li></ul>
+<ul><li>La rúbrica y la fecha de demostración en el laboratorio no están en el manual; la fecha límite 13 oct sale de Classroom.</li></ul>
 </details>
 <details class="section-block sec" id="enlaces" open><summary><span class="stitle">🔗 Enlaces</span></summary>
-<ul><li><a href="../materias/lab-de-fundamentos-de-sistemas-embebidos/files/practica-06-guion.pdf">Guion de la práctica (PDF)</a></li><li><a href="../materias/lab-de-fundamentos-de-sistemas-embebidos/files/practica-06-archivos.7z">Archivos de apoyo (.7z)</a></li><li><a href="https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzcxNDM1NTYw/details" target="_blank" rel="noopener">Abrir la tarea en Classroom</a></li><li><a href="../materias/lab-de-fundamentos-de-sistemas-embebidos/material.html">Ir a la sección de la materia donde se explica</a></li></ul>
+<ul><li><a href="../materias/lab-de-fundamentos-de-sistemas-embebidos/files/practica-06b-guion.pdf">Manual 6b — Raspberry Pi Pico (PDF)</a></li><li><a href="../materias/lab-de-fundamentos-de-sistemas-embebidos/files/practica-06b-archivos.7z">Archivos de apoyo 6b (.7z)</a></li><li><a href="../materias/lab-de-fundamentos-de-sistemas-embebidos/files/practica-06-guion.pdf">Manual 6a — Arduino (PDF, alternativa)</a></li><li><a href="https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzcxNDM1NTYw/details" target="_blank" rel="noopener">Abrir la tarea en Classroom</a></li></ul>
 </details>
 
-<p class="tarea-fuente">Fuente: Guion oficial guardado en el sitio y audio FSE-Clase5 (NotebookLM, 7 oct 2026).</p>
+<p class="tarea-fuente">Fuente: Manual oficial guardado en el sitio y audio FSE-Clase5 (NotebookLM, 7 oct 2026).</p>
 </div>
 <script>
 (function () {

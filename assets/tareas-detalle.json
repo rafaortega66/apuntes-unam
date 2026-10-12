@@ -184,12 +184,13 @@
   "fuente": "Enunciado: PDF del profesor guardado en el sitio."
  },
  "labfse-p6": {
-  "resumen": "Leer la temperatura de un sensor <strong>LM35</strong> con el ADC de un Arduino y enviarla por I²C a la Raspberry Pi. El profesor dijo que la evalúa con criterio muy riguroso.",
+  "resumen": "Leer la temperatura de un sensor <strong>LM35</strong> con el ADC de la <strong>Raspberry Pi Pico (RP2040)</strong> y enviarla por I²C a la Raspberry Pi. El profesor dijo que la evalúa con criterio muy riguroso.",
   "pasos": [
-   "Objetivo del guion: aprender a comunicar circuitos integrados por el bus I²C y a leer e interpretar señales analógicas con un microcontrolador.",
-   "Leer la señal del LM35 (10 mV/°C) con el convertidor analógico-digital de un Arduino UNO/Mega.",
+   "Objetivo del manual: aprender a comunicar circuitos integrados por el bus I²C y a leer e interpretar señales analógicas con un microcontrolador.",
+   "Esta práctica se hace con la <strong>Pico (RP2040)</strong>: sigue el <strong>manual 6b</strong> (la versión Arduino es el 6a).",
+   "Leer la señal del LM35 (10 mV/°C) con el convertidor analógico-digital de la Pico.",
    "Enviar los datos por I²C a una Raspberry Pi para llevar una bitácora de temperatura que se pueda ver en un navegador web.",
-   "Seguir el guion completo (conexiones, código y pruebas); los archivos de apoyo vienen en el .7z de la práctica."
+   "Seguir el manual completo (conexiones, código y pruebas); los archivos de apoyo vienen en el .7z de la práctica 6b."
   ],
   "entrega": "Un solo PDF llamado <code>NL-CURP-L06.pdf</code>. Además, hay que <strong>demostrar el circuito y el código en la sesión de laboratorio</strong> (FSE Clase 05).",
   "citas": [
@@ -200,39 +201,43 @@
    }
   ],
   "faltante": [
-   "La rúbrica y la fecha de demostración en el laboratorio no están en el guion; la fecha límite 13 oct sale de Classroom."
+   "La rúbrica y la fecha de demostración en el laboratorio no están en el manual; la fecha límite 13 oct sale de Classroom."
   ],
   "enlaces": [
    {
-    "t": "Guion de la práctica (PDF)",
-    "u": "../materias/lab-de-fundamentos-de-sistemas-embebidos/files/practica-06-guion.pdf"
+    "t": "Manual 6b — Raspberry Pi Pico (PDF)",
+    "u": "../materias/lab-de-fundamentos-de-sistemas-embebidos/files/practica-06b-guion.pdf"
    },
    {
-    "t": "Archivos de apoyo (.7z)",
-    "u": "../materias/lab-de-fundamentos-de-sistemas-embebidos/files/practica-06-archivos.7z"
+    "t": "Archivos de apoyo 6b (.7z)",
+    "u": "../materias/lab-de-fundamentos-de-sistemas-embebidos/files/practica-06b-archivos.7z"
+   },
+   {
+    "t": "Manual 6a — Arduino (PDF, alternativa)",
+    "u": "../materias/lab-de-fundamentos-de-sistemas-embebidos/files/practica-06-guion.pdf"
    },
    {
     "t": "Abrir la tarea en Classroom",
     "u": "https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzcxNDM1NTYw/details"
    }
   ],
-  "fuente": "Guion oficial guardado en el sitio y audio FSE-Clase5 (NotebookLM, 7 oct 2026)."
+  "fuente": "Manual oficial guardado en el sitio y audio FSE-Clase5 (NotebookLM, 7 oct 2026)."
  },
  "labfse-p7": {
   "resumen": "<strong>Modular la potencia de una lámpara incandescente</strong> con un detector de cruce por cero y un TRIAC controlados por un Arduino, y enviar el control por I²C desde la Raspberry Pi.",
   "pasos": [
-   "Objetivo del guion: modular la potencia de una carga resistiva de alta potencia optoacoplada a un microcontrolador, con un detector de cruce por cero y un TRIAC.",
-   "Armar el circuito (puente rectificador, optoacoplador, detector de cruce por cero y TRIAC) siguiendo el guion.",
+   "Objetivo del manual: modular la potencia de una carga resistiva de alta potencia optoacoplada a un microcontrolador, con un detector de cruce por cero y un TRIAC.",
+   "Armar el circuito (puente rectificador, optoacoplador, detector de cruce por cero y TRIAC) siguiendo el manual.",
    "Programar el Arduino y comunicarlo por I²C con la Raspberry Pi para controlar la intensidad del foco.",
-   "<strong>Cuidado:</strong> es una carga de corriente alterna de la red; sigue las precauciones del guion."
+   "<strong>Cuidado:</strong> es una carga de corriente alterna de la red; sigue las precauciones del manual."
   ],
   "entrega": "Un solo PDF llamado <code>NL-CURP-L07.pdf</code>.",
   "faltante": [
-   "No hay criterios de evaluación ni fecha de demostración en el guion; el plazo del 27 oct sale de Classroom."
+   "No hay criterios de evaluación ni fecha de demostración en el manual; el plazo del 27 oct sale de Classroom."
   ],
   "enlaces": [
    {
-    "t": "Guion de la práctica (PDF)",
+    "t": "Manual de la práctica (PDF)",
     "u": "../materias/lab-de-fundamentos-de-sistemas-embebidos/files/practica-07-guion.pdf"
    },
    {
@@ -244,23 +249,23 @@
     "u": "https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzY5MjY3ODA1/details"
    }
   ],
-  "fuente": "Guion oficial guardado en el sitio."
+  "fuente": "Manual oficial guardado en el sitio."
  },
  "labfse-p8": {
   "resumen": "Práctica 8 del laboratorio de FSE. <strong>Ojo:</strong> las fuentes no coinciden en el tema; confírmalo antes de empezar.",
   "pasos": [
    "Según el audio de FSE: <strong>compilar un kernel de Linux personalizado</strong> para la Raspberry Pi y cambiar la imagen de arranque (<em>boot splash</em>) (FSE Clase 11).",
-   "Según el guion guardado en el sitio (<code>practica-08c-guion.pdf</code>): control de temperatura en lazo cerrado de una lámpara incandescente con Arduino y Raspberry Pi (LM35, TRIAC, controlador proporcional, I²C).",
+   "Según el manual guardado en el sitio (<code>practica-08c-manual.pdf</code>): control de temperatura en lazo cerrado de una lámpara incandescente con Arduino y Raspberry Pi (LM35, TRIAC, controlador proporcional, I²C).",
    "Pregunta al profesor o revisa Classroom cuál es la vigente."
   ],
   "entrega": "PDF <code>NL-CURP-L08.pdf</code>.",
   "faltante": [
    "Esta práctica aún no aparece como asignación en Classroom; la fecha del 10 nov viene de lo anotado en el sitio.",
-   "Discrepancia entre el audio (kernel y boot splash) y el guion (lazo cerrado de temperatura)."
+   "Discrepancia entre el audio (kernel y boot splash) y el manual (lazo cerrado de temperatura)."
   ],
   "enlaces": [
    {
-    "t": "Guion 08c (PDF)",
+    "t": "Manual 08c (PDF)",
     "u": "../materias/lab-de-fundamentos-de-sistemas-embebidos/files/practica-08c-guion.pdf"
    },
    {
@@ -268,7 +273,7 @@
     "u": "../materias/fundamentos-de-sistemas-embebidos/clase-11.html#c11-pendiente"
    }
   ],
-  "fuente": "Audio FSE-Clase11 (NotebookLM) y guion guardado en el sitio."
+  "fuente": "Audio FSE-Clase11 (NotebookLM) y manual guardado en el sitio."
  },
  "md-p31": {
   "resumen": "Práctica de <strong>agrupación (clustering)</strong> con el dataset de transacciones de ventas, en equipos de 3. La entrega se recorrió al <strong>jueves 8 oct, 12:00</strong> (Classroom y Clase 10).",
