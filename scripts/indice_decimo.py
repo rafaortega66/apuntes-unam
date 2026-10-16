@@ -1,66 +1,71 @@
 #!/usr/bin/env python3
-"""Genera decimo/INDICE.md: cada entrega (carpeta X-NN) con sus archivos y su carpeta -ad.
+"""Genera decimo/INDICE.md: cada entrega (carpeta X-NN) con indicaciones, entregables y adicionales.
 
 Uso: python3 scripts/indice_decimo.py
 """
 import os
+import re
 
 RAIZ = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'decimo')
 NOMBRES = {'ACS': 'Arquitectura Cliente-Servidor', 'ASI': 'Administración de Servicios de Internet',
            'FSE': 'Fundamentos de Sistemas Embebidos (+ Lab)', 'MD': 'Minería de Datos',
            'OAC': 'Organización y Arquitectura de Computadoras (+ Lab L+)', 'RP': 'Reconocimiento de Patrones',
            'SIB': 'Seguridad Informática Básica', 'docs': 'Documentos académicos'}
+ENTREGA = re.compile(r'^(ACS|ASI|FSE|MD|OAC|RP|SIB)-(T|P|Proy|E|Exp|EC|R)(\d[\d-]*|Final)$')
 
 
 def archivos(d):
     out = []
     for dp, _, fs in os.walk(d):
-        for f in sorted(fs):
+        for f in fs:
             if f != '.gitkeep':
                 out.append(os.path.relpath(os.path.join(dp, f), d))
     return sorted(out)
 
 
-def enlace(ruta):
-    return ruta.replace(' ', '%20')
+def enlace(texto, ruta):
+    return f'[{texto}]({ruta.replace(" ", "%20")})'
 
 
 lineas = ['# Índice de decimo/', '',
-          'Generado por `scripts/indice_decimo.py`. Una fila por entrega; **Entregado** = contenido de la carpeta',
-          '`X-NN`, **Adicionales** = número de archivos en `X-NN-ad`.', '']
+          'Generado por `scripts/indice_decimo.py`. Una fila por entrega: indicaciones, lo **entregado** y cuántos',
+          'archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*-Material`.', '']
 for sigla in sorted(os.listdir(RAIZ)):
     ds = os.path.join(RAIZ, sigla)
     if not os.path.isdir(ds):
         continue
     lineas += [f'## {sigla} — {NOMBRES.get(sigla, "")}', '']
     if sigla == 'docs':
-        lineas += [f'- [{f}]({enlace("docs/" + f)})' for f in archivos(ds)] + ['']
+        lineas += ['- ' + enlace(f, 'docs/' + f) for f in archivos(ds)] + ['']
         continue
-    for cat in sorted(os.listdir(ds)):
-        dc = os.path.join(ds, cat)
-        if not os.path.isdir(dc):
-            continue
-        hijos = sorted(h for h in os.listdir(dc) if os.path.isdir(os.path.join(dc, h)))
-        entregas = [h for h in hijos if not h.endswith('-ad')]
-        sueltos = [f for f in os.listdir(dc) if os.path.isfile(os.path.join(dc, f)) and f != '.gitkeep']
-        solo_ad = [h for h in hijos if h.endswith('-ad') and h[:-3] not in entregas]
-        lineas.append(f'### {cat}')
-        if not (entregas or sueltos or solo_ad):
-            lineas += ['', '_(vacío)_', '']
-            continue
-        if entregas or solo_ad:
-            lineas += ['', '| Entrega | Entregado | Adicionales |', '|---|---|---|']
-            for e in entregas:
-                fs = archivos(os.path.join(dc, e))
-                ad = os.path.join(dc, e + '-ad')
-                n_ad = len(archivos(ad)) if os.path.isdir(ad) else 0
-                ent = '<br>'.join(f'[{f}]({enlace(f"{sigla}/{cat}/{e}/{f}")})' for f in fs) or '—'
-                lineas.append(f'| {e} | {ent} | {n_ad or "—"} |')
-            for a in solo_ad:
-                lineas.append(f'| {a[:-3]} | _sin entrega (solo material)_ | {len(archivos(os.path.join(dc, a)))} |')
-        if sueltos:
-            lineas += ['', f'{len(sueltos)} archivos sueltos (material).']
+    entregas, materiales = [], []
+    for dp, dns, _ in os.walk(ds):
+        dns.sort()
+        for d in dns:
+            ruta = os.path.relpath(os.path.join(dp, d), RAIZ)
+            if d.endswith('-Material'):
+                materiales.append(ruta)
+            elif ENTREGA.match(d) and 'Material' not in dp:
+                entregas.append(ruta)
+    for m in materiales:
+        lineas.append(f'- **{os.path.basename(m)}**: {len(archivos(os.path.join(RAIZ, m)))} archivos ({m}/)')
+    if materiales:
         lineas.append('')
+    actual = None
+    for e in entregas:
+        cat = os.path.dirname(e)
+        if cat != actual:
+            actual = cat
+            lineas += ['', f'### {os.path.basename(cat)}', '', '| Entrega | Indicaciones | Entregado | Adicionales |', '|---|---|---|---|']
+        code = os.path.basename(e)
+        de = os.path.join(RAIZ, e)
+        ind = [f for f in os.listdir(de) if f.startswith(code + '-indicaciones')]
+        ind_txt = '<br>'.join(enlace(f, f'{e}/{f}') for f in sorted(ind)) or '—'
+        ent = archivos(os.path.join(de, code + '-entregables'))
+        ent_txt = '<br>'.join(enlace(f, f'{e}/{code}-entregables/{f}') for f in ent) or '_(sin entrega aún)_'
+        n_ad = len(archivos(os.path.join(de, code + '-adicionales')))
+        lineas.append(f'| {code} | {ind_txt} | {ent_txt} | {n_ad or "—"} |')
+    lineas.append('')
 
 open(os.path.join(RAIZ, 'INDICE.md'), 'w').write('\n'.join(lineas) + '\n')
 print('OK: decimo/INDICE.md')

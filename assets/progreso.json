@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-16T02:19:53+00:00",
+ "generatedAt": "2026-10-16T02:28:55+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -566,6 +566,11 @@
  },
  "gitlog": [
   {
+   "hash": "eb5b61a",
+   "fecha": "2026-10-15T20:19:54-06:00",
+   "mensaje": "decimo/: cada entrega X-NN con X-NN-entregables, X-NN-adicionales y X-NN-indicaciones; X-Material solo para material independiente"
+  },
+  {
    "hash": "54e6a04",
    "fecha": "2026-10-15T20:06:02-06:00",
    "mensaje": "decimo/ASI: quitar carpetas vacías (todo vive en ASI-Entregables)"
@@ -859,11 +864,6 @@
    "hash": "10d3670",
    "fecha": "2026-10-01T06:38:29-06:00",
    "mensaje": "Progreso: actualizar estado de la migración al formato de estudio"
-  },
-  {
-   "hash": "5cc8025",
-   "fecha": "2026-10-01T06:37:44-06:00",
-   "mensaje": "ACS Clase 04: formato de estudio"
   }
  ]
 }

@@ -98,25 +98,23 @@ materias/<slug>/
 ```
 
 **Todos los archivos viven en `decimo/` (desde el 15 oct 2026; antes en
-`materias/<slug>/files/`, ya no existe).** Estructura (validada con los
-cuadernos de NotebookLM de cada materia; detalle en `decimo/README.md`):
+`materias/<slug>/files/`, ya no existe).** Estructura (pedida por el usuario; detalle en `decimo/README.md`):
 
 ```
-decimo/<SIGLA>/<SIGLA>-<Categoría>/<SIGLA>-<Tipo><NN>/      ← solo lo ENTREGADO (nombre exacto de Classroom)
-decimo/<SIGLA>/<SIGLA>-<Categoría>/<SIGLA>-<Tipo><NN>-ad/   ← adicionales: enunciado, borradores, datos,
-                                                               código de apoyo, version-previa/
+decimo/<SIGLA>/<SIGLA>-Material/                         ← material INDEPENDIENTE del profesor (presentaciones, temario…)
+decimo/<SIGLA>/<SIGLA>-<Categoría>/<SIGLA>-XNN/
+    <SIGLA>-XNN-indicaciones.pdf|.md   ← enunciado; si no hay archivo: texto de Classroom (+ NotebookLM si es vago), citando la fuente
+    <SIGLA>-XNN-entregables/           ← solo lo ENTREGADO (nombre exacto de Classroom)
+    <SIGLA>-XNN-adicionales/           ← lo usado y no entregado (datos-del-profesor/, version-previa/…)
 ```
 
 - Siglas: ACS, ASI, FSE, MD, OAC, RP, SIB (+ `decimo/docs/` académicos).
-- Tipos: `T` tarea · `P` práctica/lab · `Proy` proyecto · `E` examen · `Exp` exposición · `EC` ejercicio de clase.
-  Numeración = la de Classroom.
-- Labs: Lab FSE en `FSE/FSE-Lab/` (mismo profesor); Lab OAC (L+) en `OAC/OAC-Lab/`.
-- **ASI es la excepción** (decisión del usuario): todo va en `ASI/ASI-Entregables/`,
-  cada carpeta con su etiqueta en el nombre: `ASI-P01-practica-entorno`,
-  `ASI-T01-tarea-enoe-enigh`, `ASI-R01-reposicion`, `ASI-Proy0N-proyecto-…`.
-- Material del profesor → `<SIGLA>-Presentaciones/` (ACS: código en `ACS-Programas/temaN/`).
+- Tipos: `T` tarea · `P` práctica/lab · `Proy` proyecto · `E` examen · `Exp` exposición · `EC` ejercicio de clase · `R` reposición.
+  Numeración = la de Classroom. **Toda** entrega lleva las dos carpetas y su archivo de indicaciones.
+- Labs: Lab FSE en `FSE/FSE-Lab/` (mismo profesor); Lab OAC (L+) en `OAC/OAC-Lab/` con `OAC-Lab-Material/`.
+- **ASI**: una sola categoría, `ASI/ASI-Entregables/` (P01–P04, T01, R01, Proy01–Proy05), + `ASI-Material/`.
 - Si hay versiones distintas de un archivo, la entregada en Classroom es la buena
-  (comparar tamaño/contenido); las otras van a `-ad/version-previa/`.
+  (comparar tamaño/contenido); las otras van a `-adicionales/version-previa/`.
 - **Nunca** en el sitio: libros (repo privado `apuntes-unam-biblioteca`), INE,
   datos bancarios, fotos personales; servicio social → repo privado `servicio-social`.
 - `material.html` y `entregas.html` de cada materia enlazan a `decimo/`.
