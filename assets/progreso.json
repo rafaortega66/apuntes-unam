@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-16T02:05:14+00:00",
+ "generatedAt": "2026-10-16T02:19:53+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -566,6 +566,16 @@
  },
  "gitlog": [
   {
+   "hash": "54e6a04",
+   "fecha": "2026-10-15T20:06:02-06:00",
+   "mensaje": "decimo/ASI: quitar carpetas vacías (todo vive en ASI-Entregables)"
+  },
+  {
+   "hash": "dddee60",
+   "fecha": "2026-10-15T20:05:22-06:00",
+   "mensaje": "Renombrar noveno/ -> decimo/ (es décimo semestre)"
+  },
+  {
    "hash": "6ffaa3c",
    "fecha": "2026-10-15T19:57:31-06:00",
    "mensaje": "noveno/: todos los archivos del semestre clasificados por materia y entrega"
@@ -854,16 +864,6 @@
    "hash": "5cc8025",
    "fecha": "2026-10-01T06:37:44-06:00",
    "mensaje": "ACS Clase 04: formato de estudio"
-  },
-  {
-   "hash": "475b1b4",
-   "fecha": "2026-10-01T06:35:51-06:00",
-   "mensaje": "SIB Clase 03: formato de estudio"
-  },
-  {
-   "hash": "76302d8",
-   "fecha": "2026-10-01T06:33:29-06:00",
-   "mensaje": "MD Clase 02: formato de estudio"
   }
  ]
 }
