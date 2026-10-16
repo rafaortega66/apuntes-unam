@@ -1,4 +1,4 @@
-# noveno — archivos del semestre 2027-1
+# decimo — archivos del semestre 2027-1
 
 Un directorio por asignatura (sigla). Dentro, una carpeta por categoría (`RP-Tareas`, `RP-Practicas`, …)
 y una carpeta por entrega:

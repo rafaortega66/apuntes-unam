@@ -1,6 +1,6 @@
-# Índice de noveno/
+# Índice de decimo/
 
-Generado por `scripts/indice_noveno.py`. Una fila por entrega; **Entregado** = contenido de la carpeta
+Generado por `scripts/indice_decimo.py`. Una fila por entrega; **Entregado** = contenido de la carpeta
 `X-NN`, **Adicionales** = número de archivos en `X-NN-ad`.
 
 ## ACS — Arquitectura Cliente-Servidor

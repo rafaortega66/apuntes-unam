@@ -97,17 +97,17 @@ materias/<slug>/
   clase-NN.html      ← apuntes completos de cada clase (ver plantilla abajo)
 ```
 
-**Todos los archivos viven en `noveno/` (desde el 15 oct 2026; antes en
+**Todos los archivos viven en `decimo/` (desde el 15 oct 2026; antes en
 `materias/<slug>/files/`, ya no existe).** Estructura (validada con los
-cuadernos de NotebookLM de cada materia; detalle en `noveno/README.md`):
+cuadernos de NotebookLM de cada materia; detalle en `decimo/README.md`):
 
 ```
-noveno/<SIGLA>/<SIGLA>-<Categoría>/<SIGLA>-<Tipo><NN>/      ← solo lo ENTREGADO (nombre exacto de Classroom)
-noveno/<SIGLA>/<SIGLA>-<Categoría>/<SIGLA>-<Tipo><NN>-ad/   ← adicionales: enunciado, borradores, datos,
+decimo/<SIGLA>/<SIGLA>-<Categoría>/<SIGLA>-<Tipo><NN>/      ← solo lo ENTREGADO (nombre exacto de Classroom)
+decimo/<SIGLA>/<SIGLA>-<Categoría>/<SIGLA>-<Tipo><NN>-ad/   ← adicionales: enunciado, borradores, datos,
                                                                código de apoyo, version-previa/
 ```
 
-- Siglas: ACS, ASI, FSE, MD, OAC, RP, SIB (+ `noveno/docs/` académicos).
+- Siglas: ACS, ASI, FSE, MD, OAC, RP, SIB (+ `decimo/docs/` académicos).
 - Tipos: `T` tarea · `P` práctica/lab · `Proy` proyecto · `E` examen · `Exp` exposición · `EC` ejercicio de clase.
   Numeración = la de Classroom.
 - Labs: Lab FSE en `FSE/FSE-Lab/` (mismo profesor); Lab OAC (L+) en `OAC/OAC-Lab/`.
@@ -119,10 +119,10 @@ noveno/<SIGLA>/<SIGLA>-<Categoría>/<SIGLA>-<Tipo><NN>-ad/   ← adicionales: en
   (comparar tamaño/contenido); las otras van a `-ad/version-previa/`.
 - **Nunca** en el sitio: libros (repo privado `apuntes-unam-biblioteca`), INE,
   datos bancarios, fotos personales; servicio social → repo privado `servicio-social`.
-- `material.html` y `entregas.html` de cada materia enlazan a `noveno/`.
+- `material.html` y `entregas.html` de cada materia enlazan a `decimo/`.
   Al mover archivos, actualizar los enlaces y correr `build_search_index.py`.
-- `noveno/INDICE.md` lista cada entrega con sus archivos (regenerar con
-  `python3 scripts/indice_noveno.py` tras cualquier cambio). Para preguntas tipo
+- `decimo/INDICE.md` lista cada entrega con sus archivos (regenerar con
+  `python3 scripts/indice_decimo.py` tras cualquier cambio). Para preguntas tipo
   «enlista las tareas de MD», leer ese índice.
 
 El `index.html` de cada materia
@@ -250,7 +250,7 @@ una acción que se pueda automatizar sin permiso, por regla del harness.
 
 Cuando el usuario entrega algo (o Classroom confirma "Turned in"), agregar
 una fila a `entregas.html` de esa materia con: qué es, cuándo, y enlace al
-PDF (en su carpeta `noveno/<SIGLA>/…/<SIGLA>-XNN/` si es un archivo nuevo) o a la página de la clase
+PDF (en su carpeta `decimo/<SIGLA>/…/<SIGLA>-XNN/` si es un archivo nuevo) o a la página de la clase
 donde se presentó (si fue una exposición en vivo, no un PDF).
 
 ## Labs (decisión del usuario, 30 sep 2026)
@@ -286,7 +286,7 @@ El avance de cada asignación vive en el propio sitio, para que cualquier sesió
 **Al empezar una sesión:** revisa los ítems con `avance`/`progreso` (hoy ninguno) y retoma desde el primer paso sin marcar; no le preguntes al usuario qué faltaba.
 **Al avanzar o cerrar una sesión de trabajo en una tarea:** marca los pasos hechos, reescribe `donde` y `avance` con la fecha, corre `python3 scripts/build_tareas.py` y haz commit y push. Cuando la tarea se entregue, quita el ítem de `pendientes.json` (o ponle `oculto: true`) y bórrale el `progreso`.
 
-- La tarea ASI «Análisis de ENOE y ENIGH» ya se entregó (Classroom «Turned in», verificado el 12 oct 2026); sus materiales están en `noveno/ASI/ASI-Entregables/ASI-T01-tarea-enoe-enigh(-ad)/`.
+- La tarea ASI «Análisis de ENOE y ENIGH» ya se entregó (Classroom «Turned in», verificado el 12 oct 2026); sus materiales están en `decimo/ASI/ASI-Entregables/ASI-T01-tarea-enoe-enigh(-ad)/`.
 
 ## Nueva estrategia de estudio (9 oct 2026) — reemplaza la automatización de clases
 

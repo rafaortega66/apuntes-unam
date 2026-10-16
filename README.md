@@ -17,7 +17,7 @@ materias/
   reconocimiento-de-patrones/
     index.html                      ← placeholder, se llena después
   ...(resto de las 9 materias)
-noveno/                             ← TODOS los archivos (entregas, adicionales, material) por sigla
+decimo/                             ← TODOS los archivos (entregas, adicionales, material) por sigla
 ```
 
 ## Cómo llevarlo a producción con Claude Code
@@ -43,7 +43,7 @@ pídele a Claude Code que:
 - cree/edite el `index.html` de la materia correspondiente, o
 - agregue una página nueva (como `tema-02.html`) siguiendo el mismo patrón
   de `tema-01.html`, y
-- copie cualquier archivo nuevo en su carpeta de `noveno/` (ver `noveno/README.md`).
+- copie cualquier archivo nuevo en su carpeta de `decimo/` (ver `decimo/README.md`).
 
 Luego solo es `git add . && git commit -m "..." && git push` y GitHub Pages
 se actualiza solo.

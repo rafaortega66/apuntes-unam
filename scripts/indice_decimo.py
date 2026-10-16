@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Genera noveno/INDICE.md: cada entrega (carpeta X-NN) con sus archivos y su carpeta -ad.
+"""Genera decimo/INDICE.md: cada entrega (carpeta X-NN) con sus archivos y su carpeta -ad.
 
-Uso: python3 scripts/indice_noveno.py
+Uso: python3 scripts/indice_decimo.py
 """
 import os
 
-RAIZ = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'noveno')
+RAIZ = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'decimo')
 NOMBRES = {'ACS': 'Arquitectura Cliente-Servidor', 'ASI': 'Administración de Servicios de Internet',
            'FSE': 'Fundamentos de Sistemas Embebidos (+ Lab)', 'MD': 'Minería de Datos',
            'OAC': 'Organización y Arquitectura de Computadoras (+ Lab L+)', 'RP': 'Reconocimiento de Patrones',
@@ -25,8 +25,8 @@ def enlace(ruta):
     return ruta.replace(' ', '%20')
 
 
-lineas = ['# Índice de noveno/', '',
-          'Generado por `scripts/indice_noveno.py`. Una fila por entrega; **Entregado** = contenido de la carpeta',
+lineas = ['# Índice de decimo/', '',
+          'Generado por `scripts/indice_decimo.py`. Una fila por entrega; **Entregado** = contenido de la carpeta',
           '`X-NN`, **Adicionales** = número de archivos en `X-NN-ad`.', '']
 for sigla in sorted(os.listdir(RAIZ)):
     ds = os.path.join(RAIZ, sigla)
@@ -63,4 +63,4 @@ for sigla in sorted(os.listdir(RAIZ)):
         lineas.append('')
 
 open(os.path.join(RAIZ, 'INDICE.md'), 'w').write('\n'.join(lineas) + '\n')
-print('OK: noveno/INDICE.md')
+print('OK: decimo/INDICE.md')

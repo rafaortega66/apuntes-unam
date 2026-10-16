@@ -37,7 +37,7 @@
 <p><strong>Tarea 2 ajustada:</strong> <code>fdisk</code> <strong>no viene</strong> en el contenedor de Codespaces.</p>
 <ul>
 <li><strong>Actividad 1</strong> (probar SetUID con <code>fdisk</code>): solo quien tenga un <strong>Linux local</strong> propio.</li>
-<li><strong>Actividad 2</strong> (obligatoria para todos): compilar y analizar <a href="../../noveno/ACS/ACS-Programas/tema1/programa02_ids.c" download style="color:var(--indigo)">programa02_ids.c</a> con <code>getuid</code> / <code>geteuid</code> bajo el bit SetUID.</li>
+<li><strong>Actividad 2</strong> (obligatoria para todos): compilar y analizar <a href="../../decimo/ACS/ACS-Programas/tema1/programa02_ids.c" download style="color:var(--indigo)">programa02_ids.c</a> con <code>getuid</code> / <code>geteuid</code> bajo el bit SetUID.</li>
 </ul>
 <p><em>get</em> = leer / obtener; <em>set</em> = escribir / establecer. C y Python no son estrictos con el nombre del archivo (a diferencia de Java): en C todo se estructura desde <code>main</code>.</p>
 <div class="estudio-extra">
@@ -118,7 +118,7 @@ ls -l programa02_ids               # la 'x' del usuario se vuelve 's'/'S'; nombr
 </ul></li>
 <li><strong><code>0</code> = éxito</strong> (success), estandarizado. Cualquier entero ≠ 0 se interpreta como error. Por eso <code>int main</code> termina con <code>return 0;</code> — le devuelve 0 al proceso padre.</li>
 </ul>
-<p><strong><a href="../../noveno/ACS/ACS-Programas/tema1/programa03_codigos_sistema.c" download style="color:var(--indigo)">programa03_codigos_sistema.c</a>:</strong> bucle <code>for</code> de <code>i = 0</code> (éxito) a <code>150</code>. Aunque el estándar dice 131, se puede iterar más sin riesgo; los índices sobrantes imprimen <code>Unknown error</code>. En la distro del contenedor la tabla real llega hasta el <strong>código 133</strong>. Salida: índice <code>0</code> → <code>Success</code>; índice <code>2</code> → <code>No such file or directory</code>.</p>
+<p><strong><a href="../../decimo/ACS/ACS-Programas/tema1/programa03_codigos_sistema.c" download style="color:var(--indigo)">programa03_codigos_sistema.c</a>:</strong> bucle <code>for</code> de <code>i = 0</code> (éxito) a <code>150</code>. Aunque el estándar dice 131, se puede iterar más sin riesgo; los índices sobrantes imprimen <code>Unknown error</code>. En la distro del contenedor la tabla real llega hasta el <strong>código 133</strong>. Salida: índice <code>0</code> → <code>Success</code>; índice <code>2</code> → <code>No such file or directory</code>.</p>
 <div class="estudio-extra">
 <span class="lbl">Explicado en simple</span>
 <div class="simple"><p>Es como la luz del motor de un auto que se enciende cuando hay un fallo y te da un código numérico para que el mecánico consulte el manual y sepa qué pieza falló.<span class="rompe">Dónde falla la analogía: La luz del auto se queda encendida, pero en Linux la variable errno cambia de valor automáticamente tras cada llamada al sistema.</span></p></div>
