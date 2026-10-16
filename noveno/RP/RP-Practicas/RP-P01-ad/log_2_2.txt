@@ -1,0 +1,37 @@
+============================================================
+2.2 Dataset Iris
+============================================================
+
+Figura guardada: fig_2_2_iris_pairplot.png
+
+Inspeccion de pares de caracteristicas: 'petal length' y 'petal width' muestran la separacion mas clara entre las 3 clases (setosa se separa totalmente de versicolor/virginica, y estas dos se traslapan poco).
+
+Valores propios (pca_cov), ordenados de mayor a menor:
+[4.22824171 0.24267075 0.0782095  0.02383509]
+
+Vectores propios (columnas, pca_cov):
+[[-0.36138659  0.65658877  0.58202985  0.31548719]
+ [ 0.08452251  0.73016143 -0.59791083 -0.3197231 ]
+ [-0.85667061 -0.17337266 -0.07623608 -0.47983899]
+ [-0.3582892  -0.07548102 -0.54583143  0.75365743]]
+
+Datos proyectados Z, forma: (150, 4)
+
+Varianza explicada por componente: [0.92461872 0.05306648 0.01710261 0.00521218]
+Varianza explicada acumulada: [0.92461872 0.97768521 0.99478782 1.        ]
+
+Figura guardada: fig_2_2_iris_scree_plot.png
+
+Componentes necesarios para >=90% de varianza: 1
+Componentes necesarios para >=95% de varianza: 2
+Vectores propios elegidos (primeras 2 columnas de eigvecs):
+[[-0.36138659  0.65658877]
+ [ 0.08452251  0.73016143]
+ [-0.85667061 -0.17337266]
+ [-0.3582892  -0.07548102]]
+
+Figura guardada: fig_2_2_iris_pca_2d.png
+
+Observacion sobre la separacion en el espacio PCA: en el plano PC1-PC2 la clase 'setosa' queda claramente separada del resto, mientras que 'versicolor' y 'virginica' se traslapan ligeramente, de forma muy similar a lo observado en el pairplot original con petal length/width. PCA no elimina caracteristicas originales ni crea variables medibles fisicamente: crea NUEVAS variables (combinaciones lineales de las originales) que concentran la mayor varianza posible; las caracteristicas originales dejan de usarse directamente pero su informacion se conserva (comprimida) en las componentes.
+
+Script 2.2 finalizado correctamente.

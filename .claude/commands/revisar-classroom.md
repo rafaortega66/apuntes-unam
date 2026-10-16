@@ -49,7 +49,7 @@ Para cada materia, compara lo que acabas de ver contra:
   discrepancia, corrige el sitio y dilo explícitamente (ya pasó una vez: una
   fecha de ASI estaba mal por 8 días).
 - Archivos: si Classroom tiene un adjunto (PDF, docx) que no está en
-  `materias/<slug>/files/`, pregunta al usuario si quiere que lo descargues
+  `noveno/<SIGLA>/…` (ver CLAUDE.md), pregunta al usuario si quiere que lo descargues
   — descargar un archivo requiere su confirmación explícita cada vez (nombre,
   origen, tamaño), nunca lo hagas sin preguntar.
 

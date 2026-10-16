@@ -1,0 +1,56 @@
+Intefaz PIO y las Máquinas de Estado de las Pico
+
+--Ventajas--
+-> Pseudo FPGA's
+-> Se comunican con los Pines
+-> PIO = Paraller I/O
+-> Usa Maquinas de Estado
+-> Creqxción de periféricos más rápidos
+
+--Desventajas--
+-> Requiere mas programación
+Nueve Instrucciones pseudo Assembler
+
+--Pico1--
+-> 4 + 4 Máquinas de estado
+--Pico2--
+-> 4+4+4 Máquinas de estado = 12
+
+Las máquinas pueden interactuar ente ellos.
+
+--¿Cómo se programa le PIO?--
+-> PIO Assembler
+-> 9 instrucciones
+-> Auxiliares: "NOP". Unida a algún Jump -> label
+
+--Instrucciones:--
+-> PUSH, PULL (stack)
+-> IRQ -> Interrupción
+-> mov -> Manejo de Datos
+-> SET -> Asignar valor a Registro
+-> WAIT -> Esperar
+-> IN, OUT -> Entrada/Salida
+-> JMP -> Salto
+
+-> Cada instrucción tiene la posibilidad de agregar ciclos extra (hasta 32 ciclos)
+-> Detalla de la Máquina de estado
+->Reg. de Corrimiento
+	-> out Shift, In Shift, Scratch: Reg x, y de 32 bits, Clock Dir, Lógica de Control
+
+--Filosofía de Manejo--
+->Programa en C
+	->Set pindir, 1 -> Enable (output)
+->Loop
+	Set pin,1 [9] 	-> Pin ="1" y la instrucción mas 9 Ciclos de delay (Total = 1+9=10)
+	Set pin 0 		-> Pin = "0"
+	Jm Loop
+
+--¿Cómo se programa la PIO?--
+-> Caso Micropython
+import rp2 imp ort PIO, StateMachine, asm_pico
+#Se requiere de un decorados
+@asm_pico(Parametro):	-> Decorador
+def My_assembler (parametro):
+	Assembler PIO
+
+En resumen es muy facil de programar pero hay que ver que cosas haces. No se va a entrar a DMA. 

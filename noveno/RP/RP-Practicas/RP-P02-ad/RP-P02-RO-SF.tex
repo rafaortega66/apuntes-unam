@@ -1,0 +1,638 @@
+\documentclass[10pt,twocolumn]{article}
+
+\usepackage[margin=1.7cm,columnsep=0.65cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,bm}
+\usepackage{graphicx}
+\usepackage{booktabs,tabularx,array,multirow}
+\usepackage{siunitx}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{subcaption}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+% Dos columnas sin regla de separación y texto completamente negro.
+\setlength{\columnseprule}{0pt}
+\color{black}
+\hypersetup{colorlinks=false}
+\graphicspath{{figures/}}
+\sisetup{output-decimal-marker={.},round-mode=places,round-precision=4}
+\captionsetup[table]{position=top,skip=4pt}
+\captionsetup[figure]{position=bottom,skip=4pt}
+% Babel usa «Cuadro» por defecto; se redefine dentro del idioma español
+% para que el cambio permanezca activo después de \begin{document}.
+\addto\captionsspanish{\renewcommand{\tablename}{Tabla}}
+\floatname{algorithm}{Algoritmo}
+\renewcommand{\algorithmicrequire}{\textbf{Entrada:}}
+\renewcommand{\algorithmicensure}{\textbf{Salida:}}
+\setlength{\parindent}{1em}
+\setlength{\parskip}{0pt}
+\raggedbottom
+\renewcommand{\textfraction}{0.05}
+
+\begin{document}
+\twocolumn[
+\begin{center}
+{\Large\bfseries
+Práctica 2: Clasificación por Funciones de Distancia --- K-means e\\
+ISODATA\par}
+\vspace{0.7em}
+\begin{tabular*}{\textwidth}{@{}l@{\extracolsep{\fill}}r@{}}
+Rafael Ortega de la Paz --- No. de cuenta 420054085 &
+Sebastian Andre Fuentes Poma --- No. de cuenta 620271005
+\end{tabular*}
+\vspace{0.25em}
+
+{\itshape Facultad de Ingeniería, Universidad Nacional Autónoma de México
+--- Reconocimiento de Patrones\par}
+\end{center}
+\vspace{0.45em}
+
+\noindent{\small\bfseries Resumen---Este reporte documenta la implementación
+y comparación de dos algoritmos de clasificación no supervisada basados en
+distancias: K-means e ISODATA. Ambos se implementaron desde cero con NumPy,
+incluyendo inicialización aleatoria y K-means++ para K-means, y eliminación,
+división y fusión de grupos para ISODATA. Se estudió el efecto de la semilla
+sobre la convergencia en datos sintéticos y se compararon ambos métodos mediante
+Silhouette, el índice de Davies--Bouldin (DBI) y el índice de Rand ajustado
+(ARI). También se analizaron los datos Wine tras estandarizar sus 13
+características y aplicar PCA. En Wine, ISODATA identificó tres grupos y obtuvo
+resultados ligeramente superiores a K-means en Silhouette y ARI, aunque no en
+DBI.\par}
+\vspace{1.1em}
+]
+
+\section{Introducción y objetivo}
+
+El objetivo de esta práctica es implementar y analizar K-means e ISODATA,
+comprender el efecto de sus parámetros y comparar su desempeño en conjuntos
+de datos sintéticos y reales. Además de visualizar la evolución de los
+centroides y la asignación de grupos, se emplean métricas internas y externas
+para evaluar cuantitativamente las particiones obtenidas.
+
+\section{Metodología}
+
+Sea $X=\{\bm{x}_1,\ldots,\bm{x}_n\}\subset\mathbb{R}^p$. Ambos métodos usan
+la distancia euclidiana
+\begin{equation}
+ d(\bm{x}_i,\bm{\mu}_j)
+ =\lVert\bm{x}_i-\bm{\mu}_j\rVert_2
+ =\sqrt{\sum_{\ell=1}^{p}(x_{i\ell}-\mu_{j\ell})^2}.
+ \label{eq:distancia}
+\end{equation}
+
+\subsection{K-means}
+
+K-means divide las observaciones en $k$ grupos minimizando la suma de
+cuadrados intra-grupo o inercia:
+\begin{equation}
+ J=\sum_{j=1}^{k}\sum_{\bm{x}_i\in C_j}
+ \lVert\bm{x}_i-\bm{\mu}_j\rVert_2^2.
+ \label{eq:inercia}
+\end{equation}
+En la etapa de asignación,
+$c_i=\arg\min_j d(\bm{x}_i,\bm{\mu}_j)$; después, cada centroide se actualiza
+como
+\begin{equation}
+ \bm{\mu}_j=\frac{1}{|C_j|}\sum_{\bm{x}_i\in C_j}\bm{x}_i.
+ \label{eq:centroide}
+\end{equation}
+La inicialización aleatoria toma $k$ observaciones del conjunto. En K-means++,
+una vez elegidos algunos centroides, el siguiente punto se selecciona con
+probabilidad
+\begin{equation}
+ \Pr(\bm{x}_i)=\frac{D(\bm{x}_i)^2}
+ {\sum_{r=1}^{n}D(\bm{x}_r)^2},
+ \quad D(\bm{x})=\min_j d(\bm{x},\bm{\mu}_j).
+ \label{eq:kpp}
+\end{equation}
+Se detiene cuando
+$\max_j\lVert\bm{\mu}_j^{(t)}-\bm{\mu}_j^{(t-1)}\rVert_2<\varepsilon$.
+
+\begin{algorithm}[H]
+\small
+\caption{K-means}
+\label{alg:kmeans}
+\begin{algorithmic}[1]
+\Require $X$, $k$, método de inicio, $T$, $\varepsilon$
+\Ensure Etiquetas $\bm{c}$ y centroides $\{\bm{\mu}_j\}$
+\State Inicializar $k$ centroides (aleatorio o K-means++)
+\For{$t=1,\ldots,T$}
+  \State $c_i\gets\arg\min_j\lVert\bm{x}_i-\bm{\mu}_j\rVert_2$
+  \State $\bm{\mu}'_j\gets |C_j|^{-1}\sum_{\bm{x}_i\in C_j}\bm{x}_i$
+  \If{$\max_j\lVert\bm{\mu}'_j-\bm{\mu}_j\rVert_2<\varepsilon$}
+    \State \textbf{terminar}
+  \EndIf
+  \State $\bm{\mu}_j\gets\bm{\mu}'_j$
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{ISODATA}
+
+ISODATA extiende K-means y modifica dinámicamente el número de grupos. Para
+cada $C_j$ se calculan su tamaño $n_j$, su centroide y su desviación estándar
+por componente:
+\begin{equation}
+ \sigma_{j\ell}=\sqrt{\frac{1}{n_j}
+ \sum_{\bm{x}_i\in C_j}(x_{i\ell}-\mu_{j\ell})^2}.
+ \label{eq:sigma}
+\end{equation}
+Los grupos con $n_j<N_{\min}$ se eliminan. Si
+$\max_\ell\sigma_{j\ell}>\sigma_{\max}$ y $k<k_{\max}$, se divide el grupo
+sobre la dirección $\ell^*$ de mayor dispersión:
+\begin{equation}
+ \bm{\mu}_{j}^{\pm}=\bm{\mu}_j
+ \pm \alpha\sigma_{j\ell^*}\bm{e}_{\ell^*}.
+ \label{eq:division}
+\end{equation}
+Si $d(\bm{\mu}_a,\bm{\mu}_b)<d_{\min}$, los grupos se fusionan mediante el
+promedio ponderado
+\begin{equation}
+ \bm{\mu}_{ab}=\frac{n_a\bm{\mu}_a+n_b\bm{\mu}_b}{n_a+n_b}.
+ \label{eq:fusion}
+\end{equation}
+
+\begin{algorithm}[H]
+\small
+\caption{ISODATA}
+\label{alg:isodata}
+\begin{algorithmic}[1]
+\Require $X$, $k_{\mathrm{init}}$, $N_{\min}$, $\sigma_{\max}$,
+$d_{\min}$, $\theta_c$, $k_{\max}$, $T$, $\varepsilon$
+\Ensure Etiquetas y centroides finales
+\State Inicializar $k_{\mathrm{init}}$ centroides
+\For{$t=1,\ldots,T$}
+  \State Asignar cada punto al centroide más cercano
+  \State Eliminar $C_j$ si $n_j<N_{\min}$ y reasignar sus puntos
+  \State Recalcular centroides y desviaciones $\sigma_{j\ell}$
+  \If{existe $\max_\ell\sigma_{j\ell}>\sigma_{\max}$ y $k<k_{\max}$}
+    \State Dividir $C_j$ con la Ec.~\eqref{eq:division}
+  \Else
+    \State Fusionar hasta $\theta_c$ pares con distancia $<d_{\min}$
+  \EndIf
+  \If{el desplazamiento máximo es $<\varepsilon$}
+    \State \textbf{terminar}
+  \EndIf
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Preprocesamiento y métricas}
+
+Para Wine, cada variable se estandarizó como
+$z_{i\ell}=(x_{i\ell}-\bar{x}_{\ell})/s_{\ell}$. PCA diagonaliza la matriz de
+covarianza $S=V\Lambda V^\top$ y proyecta los datos mediante $Z_m=ZV_m$.
+Se eligió el menor $m$ que satisface
+\begin{equation}
+ \frac{\sum_{r=1}^{m}\lambda_r}{\sum_{r=1}^{p}\lambda_r}\geq0.95.
+ \label{eq:pca}
+\end{equation}
+Entre las tres estrategias de preprocesamiento consideradas para Wine
+--usar las 13 características estandarizadas directamente, reducir
+mediante PCA, o seleccionar variables por correlación de Pearson-- se
+optó por PCA porque obtuvo, en pruebas preliminares del equipo, mejor
+Silhouette y menor DBI que usar las 13 características sin reducir, y
+porque la selección por Pearson con un umbral razonable no eliminó
+variables redundantes de forma efectiva en este conjunto de datos. PCA
+además mitiga el efecto de la maldición de la dimensionalidad sobre las
+distancias euclidianas que emplean ambos algoritmos.
+
+Para cada observación, el coeficiente Silhouette es
+\begin{equation}
+ s_i=\frac{b_i-a_i}{\max(a_i,b_i)},
+ \label{eq:silhouette}
+\end{equation}
+donde $a_i$ es la distancia media al propio grupo y $b_i$ la menor distancia
+media a otro grupo. El DBI se define como
+\begin{equation}
+ \mathrm{DBI}=\frac{1}{k}\sum_{i=1}^{k}\max_{j\ne i}
+ \frac{S_i+S_j}{d(\bm{\mu}_i,\bm{\mu}_j)},
+ \label{eq:dbi}
+\end{equation}
+donde $S_i$ mide la dispersión de $C_i$. Silhouette y ARI se prefieren altos;
+DBI se prefiere bajo. El ARI corrige por azar la concordancia entre las
+etiquetas estimadas y las reales.
+
+\section{Resultados}
+
+\subsection{K-means en datos sintéticos}
+
+Primero se generaron 400 observaciones bidimensionales distribuidas en cuatro
+grupos mediante \texttt{make\_blobs}, con \texttt{cluster\_std=1.7} y
+\texttt{random\_state=20}. La Figura~\ref{fig:sinteticos} muestra los datos
+antes de aplicar cualquier algoritmo; los colores corresponden a las clases
+reales y sólo se usan como referencia para evaluar el agrupamiento.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\columnwidth]{datos_sinteticos.png}
+  \caption{Datos sintéticos de entrada: 400 observaciones, dos características
+  y cuatro clases reales.}
+  \label{fig:sinteticos}
+\end{figure}
+
+K-means se ejecutó con $k=4$ usando las semillas 10, 20 y 30 para cada método
+de inicialización. La Figura~\ref{fig:kmeans-corridas} reúne las seis
+particiones finales: la fila superior corresponde al inicio aleatorio y la
+inferior a K-means++. Cada color representa un grupo estimado y las cruces
+marcan los centroides finales. Esta comparación permite observar la
+sensibilidad del algoritmo a la posición inicial de los centroides.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\columnwidth]{kmeans_corridas.png}
+  \caption{K-means: asignaciones y centroides finales para tres semillas con
+  inicio aleatorio (arriba) y K-means++ (abajo).}
+  \label{fig:kmeans-corridas}
+\end{figure}
+
+La Figura~\ref{fig:kmeans-inercia} presenta la inercia después de cada
+iteración. Una curva descendente indica que las actualizaciones mejoran la
+partición; la meseta señala la convergencia. Cinco corridas alcanzan el mismo
+mínimo, mientras que K-means++ con semilla 20 se estabiliza en un valor mayor.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\columnwidth]{kmeans_inercia.png}
+  \caption{K-means: evolución de la inercia en cada una de las seis corridas.}
+  \label{fig:kmeans-inercia}
+\end{figure}
+
+% La tabla y su interpretación se mantienen juntas y en ese orden.
+\noindent\begin{minipage}{\columnwidth}
+{\centering
+\captionsetup{hypcap=false}
+\captionof{table}{Inercia final de K-means ($k=4$).}
+\label{tab:inercia-kmeans}
+\small
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{lrrrr}
+\toprule
+Inicio & Mín. & Máx. & Media & Rango\\
+\midrule
+Aleatorio & 2086.69 & 2086.69 & 2086.69 & 0.00\\
+K-means++ & 2086.69 & 3679.84 & 2617.79 & 1593.15\\
+\bottomrule
+\end{tabular}
+\par}
+\smallskip
+
+La Tabla~\ref{tab:inercia-kmeans} cuantifica lo observado en las figuras. Las
+tres corridas aleatorias alcanzaron el mejor valor, mientras que K-means++
+quedó en un mínimo local con la semilla 20 (inercia 76\% mayor). K-means++
+reduce probabilísticamente el riesgo de una mala inicialización, pero no lo
+elimina; con sólo tres repeticiones, una corrida atípica modifica fuertemente
+el promedio.
+\end{minipage}
+
+\subsection{ISODATA en datos sintéticos}
+
+ISODATA se ejecutó con $k_{\mathrm{init}}=6$ y $k_{\mathrm{init}}=3$. El primer
+caso convergió en seis iteraciones a cuatro grupos e inercia 2086.6895; el
+segundo lo hizo en cinco iteraciones, también con cuatro grupos, e inercia
+2086.8061. Así, el método recuperó el número real de grupos desde una
+sobreestimación y desde una subestimación inicial. La
+Figura~\ref{fig:isodata-k} registra el número de grupos en cada iteración: con
+$k_{\mathrm{init}}=6$ se eliminan o fusionan grupos hasta llegar a cuatro;
+con $k_{\mathrm{init}}=3$ se divide un grupo disperso para alcanzar el mismo
+valor.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\columnwidth]{isodata_k_iteracion.png}
+  \caption{ISODATA: evolución del número de grupos desde
+  $k_{\mathrm{init}}=6$ y 3; la línea punteada marca el valor real $k=4$.}
+  \label{fig:isodata-k}
+\end{figure}
+
+La Figura~\ref{fig:isodata-inercia} verifica que ambas configuraciones reducen
+rápidamente el error intra-grupo y terminan en valores casi idénticos.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\columnwidth]{isodata_inercia.png}
+  \caption{ISODATA: inercia por iteración para los dos valores de
+  $k_{\mathrm{init}}$.}
+  \label{fig:isodata-inercia}
+\end{figure}
+
+La Figura~\ref{fig:isodata-clusters} muestra el resultado espacial final. Los
+dos puntos de partida producen cuatro regiones y centroides prácticamente
+coincidentes, lo que confirma que la adaptación de $k$ no alteró la solución
+óptima de forma apreciable.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\columnwidth]{isodata_clusters.png}
+  \caption{ISODATA: grupos y centroides finales desde
+  $k_{\mathrm{init}}=6$ (izquierda) y 3 (derecha).}
+  \label{fig:isodata-clusters}
+\end{figure}
+
+La comparación numérica con la mejor corrida de K-means se presenta en la
+Tabla~\ref{tab:comparacion-sintetica}.
+
+\begin{table}[H]
+\centering
+\caption{Comparación de las soluciones sintéticas.}
+\label{tab:comparacion-sintetica}
+\small
+\begin{tabular}{lcc}
+\toprule
+Algoritmo & Grupos & Inercia\\
+\midrule
+K-means (mejor) & 4 & 2086.6895\\
+ISODATA ($k_{\mathrm{init}}=6$) & 4 & 2086.6895\\
+ISODATA ($k_{\mathrm{init}}=3$) & 4 & 2086.8061\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Las soluciones coinciden en posición con diferencias menores que 0.04 por
+coordenada. ISODATA, por tanto, alcanza prácticamente la misma partición que
+K-means sin requerir que $k$ sea conocido de antemano.
+
+\subsection{Métricas en datos sintéticos}
+
+Para el Ejercicio 3 se eligió la corrida de menor inercia de cada algoritmo.
+La Tabla~\ref{tab:metricas-sinteticas} compara las tres métricas solicitadas.
+
+\begin{table}[H]
+\centering
+\caption{Métricas en los datos sintéticos.}
+\label{tab:metricas-sinteticas}
+\small
+\begin{tabular}{lccc}
+\toprule
+Algoritmo & Silhouette $\uparrow$ & DBI $\downarrow$ & ARI $\uparrow$\\
+\midrule
+K-means & 0.5639 & 0.6131 & 0.9156\\
+ISODATA & 0.5639 & 0.6131 & 0.9156\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Las métricas de la Tabla~\ref{tab:metricas-sinteticas} son idénticas porque
+las mejores corridas produjeron la misma asignación. El Silhouette de 0.56 y
+el DBI de 0.61 indican grupos compactos y razonablemente separados; el ARI de
+0.92 muestra alta concordancia con las etiquetas reales.
+
+\subsection{Conjunto de datos Wine}
+
+Wine contiene 178 observaciones, 13 características con escalas distintas y
+tres clases conocidas. Tras estandarizar, PCA retuvo 10 componentes, que
+explican 96.17\% de la varianza. La Figura~\ref{fig:wine-pca} muestra la
+varianza acumulada y justifica la selección: el umbral de 95\% se supera por
+primera vez al conservar diez componentes.
+
+La Tabla~\ref{tab:eigenvalores-wine} presenta los eigenvalores de la matriz de
+covarianza de los datos estandarizados. Los primeros componentes concentran la
+mayor parte de la información: PC1 y PC2 explican conjuntamente 55.41\% de la
+varianza, mientras que los diez componentes retenidos acumulan 96.17\%.
+
+\begin{table}[H]
+\centering
+\caption{Eigenvalores y varianza explicada del PCA de Wine.}
+\label{tab:eigenvalores-wine}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{crrr}
+\toprule
+PC & Eigenvalor $\lambda_j$ & Var. (\%) & Acum. (\%)\\
+\midrule
+1  & 4.7324 & 36.20 & 36.20\\
+2  & 2.5111 & 19.21 & 55.41\\
+3  & 1.4542 & 11.12 & 66.53\\
+4  & 0.9242 &  7.07 & 73.60\\
+5  & 0.8580 &  6.56 & 80.16\\
+6  & 0.6453 &  4.94 & 85.10\\
+7  & 0.5541 &  4.24 & 89.34\\
+8  & 0.3505 &  2.68 & 92.02\\
+9  & 0.2905 &  2.22 & 94.24\\
+10 & 0.2523 &  1.93 & 96.17\\
+11 & 0.2271 &  1.74 & 97.91\\
+12 & 0.1697 &  1.30 & 99.20\\
+13 & 0.1040 &  0.80 & 100.00\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Los coeficientes de los eigenvectores asociados a los diez componentes
+conservados aparecen en la Tabla~\ref{tab:eigenvectores-wine}. Cada columna es
+un eigenvector o componente principal, mientras que las filas indican sus
+coordenadas respecto a las 13 características originales estandarizadas. La
+magnitud absoluta de cada coeficiente indica el peso de la característica y su
+signo determina la dirección de la asociación.
+
+\begin{table*}[t]
+\centering
+\caption{Coeficientes de los eigenvectores del PCA de Wine.}
+\label{tab:eigenvectores-wine}
+\footnotesize
+\setlength{\tabcolsep}{4.5pt}
+\renewcommand{\arraystretch}{1.05}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrrrrrrrr}
+\toprule
+Característica & PC1 & PC2 & PC3 & PC4 & PC5 & PC6 & PC7 & PC8 & PC9 & PC10\\
+\midrule
+Alcohol                        &  0.144 &  0.484 & -0.207 & -0.018 & -0.266 &  0.214 & -0.056 &  0.396 & -0.509 &  0.212\\
+Ácido málico                   & -0.245 &  0.225 &  0.089 &  0.537 &  0.035 &  0.537 &  0.421 &  0.066 &  0.075 & -0.309\\
+Ceniza                         & -0.002 &  0.316 &  0.626 & -0.214 & -0.143 &  0.154 & -0.149 & -0.170 &  0.308 & -0.027\\
+Alcalinidad de la ceniza       & -0.239 & -0.011 &  0.612 &  0.061 &  0.066 & -0.101 & -0.287 &  0.428 & -0.200 &  0.053\\
+Magnesio                       &  0.142 &  0.300 &  0.131 & -0.352 &  0.727 &  0.038 &  0.323 & -0.156 & -0.271 &  0.068\\
+Fenoles totales                &  0.395 &  0.065 &  0.146 &  0.198 & -0.149 & -0.084 & -0.028 & -0.406 & -0.286 & -0.320\\
+Flavonoides                    &  0.423 & -0.003 &  0.151 &  0.152 & -0.109 & -0.019 & -0.061 & -0.187 & -0.050 & -0.163\\
+Fenoles no flavonoides         & -0.299 &  0.029 &  0.170 & -0.203 & -0.501 & -0.259 &  0.595 & -0.233 & -0.196 &  0.216\\
+Proantocianinas                &  0.313 &  0.039 &  0.149 &  0.399 &  0.137 & -0.534 &  0.372 &  0.368 &  0.209 &  0.134\\
+Intensidad de color            & -0.089 &  0.530 & -0.137 &  0.066 & -0.076 & -0.419 & -0.228 & -0.034 & -0.056 & -0.291\\
+Tono                           &  0.297 & -0.279 &  0.085 & -0.428 & -0.174 &  0.106 &  0.232 &  0.437 & -0.086 & -0.522\\
+OD280/OD315 de vinos diluidos  &  0.376 & -0.164 &  0.166 &  0.184 & -0.101 &  0.266 & -0.045 & -0.078 & -0.137 &  0.524\\
+Prolina                        &  0.287 &  0.365 & -0.127 & -0.232 & -0.158 &  0.120 &  0.077 &  0.120 &  0.576 &  0.162\\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\columnwidth]{wine_pca.png}
+  \caption{Wine: varianza explicada acumulada por PCA y umbral de 95\%.}
+  \label{fig:wine-pca}
+\end{figure}
+
+K-means se ejecutó con $k=3$, K-means++ y semilla 20; convergió en nueve
+iteraciones con inercia 1189.64. Para ISODATA se usaron
+$k_{\mathrm{init}}=5$, $N_{\min}=8$, $\sigma_{\max}=1.6$,
+$d_{\min}=2.2$, $\theta_c=2$ y $k_{\max}=6$; estos valores se calibraron
+a la escala de las diez componentes principales, cuya varianza es del
+orden de 1 tras estandarizar, de modo que $\sigma_{\max}$ y $d_{\min}$
+se fijaron en ese mismo orden de magnitud en lugar de usar los valores
+de referencia del caso sintético, que estaba en la escala original de
+los datos sin estandarizar. ISODATA convergió a tres grupos
+con inercia 1190.36. La Figura~\ref{fig:wine-convergencia} coloca las curvas
+de inercia junto a la evolución de $k$: las dos inercias se estabilizan en
+valores similares e ISODATA reduce el número de grupos de cinco a tres.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\columnwidth]{wine_convergencia.png}
+  \caption{Wine: inercia por iteración de ambos algoritmos y evolución del
+  número de grupos de ISODATA.}
+  \label{fig:wine-convergencia}
+\end{figure}
+
+La Tabla~\ref{tab:centroides-wine} muestra las coordenadas de los centroides
+finales en las diez componentes principales utilizadas para el agrupamiento.
+Los resultados aparecen en un orden distinto porque, al ser algoritmos no
+supervisados, los números asignados a los grupos son arbitrarios y no indican
+una jerarquía. Por ello, el grupo 0 de K-means corresponde al grupo 2 de
+ISODATA, aunque ambos representan prácticamente el mismo conjunto.
+
+\begin{table*}[t]
+\centering
+\caption{Centroides finales de K-means e ISODATA para Wine en el espacio PCA.}
+\label{tab:centroides-wine}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.1}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llrrrrrrrrrr}
+\toprule
+Algoritmo & Grupo & PC1 & PC2 & PC3 & PC4 & PC5 & PC6 & PC7 & PC8 & PC9 & PC10\\
+\midrule
+\multirow{3}{*}{K-means}
+ & 0 & -2.720 &  1.126 & -0.239 &  0.063 &  0.074 & -0.100 & -0.060 &  0.007 & -0.020 & -0.062\\
+ & 1 & -0.037 & -1.772 &  0.186 &  0.080 &  0.071 & -0.130 & -0.002 &  0.018 & -0.032 & -0.023\\
+ & 2 &  2.276 &  0.932 &  0.002 & -0.136 & -0.135 &  0.218 &  0.052 & -0.025 &  0.050 &  0.075\\
+\midrule
+\multirow{3}{*}{ISODATA}
+ & 0 &  2.292 &  0.943 & -0.086 & -0.142 & -0.141 &  0.235 &  0.063 &  0.004 &  0.058 &  0.080\\
+ & 1 & -0.016 & -1.742 &  0.264 &  0.083 &  0.073 & -0.140 & -0.011 & -0.009 & -0.038 & -0.027\\
+ & 2 & -2.720 &  1.126 & -0.239 &  0.063 &  0.074 & -0.100 & -0.060 &  0.007 & -0.020 & -0.062\\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}
+
+La Tabla~\ref{tab:contingencia-wine} cuenta cuántas observaciones de cada clase
+real contiene cada grupo. Una fila concentrada en una sola columna indica una
+buena correspondencia entre grupo y clase.
+
+\begin{table}[H]
+\centering
+\caption{Matrices de contingencia para Wine.}
+\label{tab:contingencia-wine}
+\begin{subtable}[t]{0.98\columnwidth}
+\centering
+\caption{K-means ($k=3$)}
+\begin{tabular}{lrrr}
+\toprule
+Grupo & Clase 1 & Clase 2 & Clase 3\\
+\midrule
+0 & 0 & 3 & 48\\
+1 & 0 & 65 & 0\\
+2 & 59 & 3 & 0\\
+\bottomrule
+\end{tabular}
+\end{subtable}
+\medskip
+
+\begin{subtable}[t]{0.98\columnwidth}
+\centering
+\caption{ISODATA ($k=3$)}
+\begin{tabular}{lrrr}
+\toprule
+Grupo & Clase 1 & Clase 2 & Clase 3\\
+\midrule
+0 & 59 & 2 & 0\\
+1 & 0 & 66 & 0\\
+2 & 0 & 3 & 48\\
+\bottomrule
+\end{tabular}
+\end{subtable}
+\end{table}
+
+Cada grupo está dominado casi completamente por una clase real. El principal
+traslape ocurre entre las clases 2 y 3. Como apoyo visual, la
+Figura~\ref{fig:wine-clusters} proyecta la solución de K-means sobre PC1 y PC2:
+las clases asociadas a los grupos morado y amarillo se separan claramente,
+mientras que el grupo turquesa presenta mayor dispersión y cercanía con ambos.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\columnwidth]{wine_clusters.png}
+  \caption{Wine: proyección PC1--PC2 coloreada según el grupo asignado por
+  K-means. Esta figura es una visualización; el agrupamiento se calculó con
+  las 10 componentes retenidas.}
+  \label{fig:wine-clusters}
+\end{figure}
+
+Finalmente, la Tabla~\ref{tab:metricas-wine} resume la calidad global de ambas
+particiones en las diez componentes.
+
+\begin{table}[H]
+\centering
+\caption{Métricas de evaluación en Wine.}
+\label{tab:metricas-wine}
+\small
+\begin{tabular}{lccc}
+\toprule
+Algoritmo & Silhouette $\uparrow$ & DBI $\downarrow$ & ARI $\uparrow$\\
+\midrule
+K-means & 0.2987 & \textbf{1.3363} & 0.8975\\
+ISODATA & \textbf{0.2997} & 1.3387 & \textbf{0.9149}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+ISODATA obtuvo una mejora pequeña en Silhouette y una mejora más clara en ARI;
+K-means presentó un DBI ligeramente menor. La diferencia de DBI es mínima,
+por lo que el resultado global es comparable, con ventaja de ISODATA al
+recuperar $k=3$ automáticamente y aproximar mejor las clases reales. Para
+mejorar ambos métodos podría realizarse una búsqueda sistemática de
+$\sigma_{\max}$ y $d_{\min}$, variar el número de componentes o estudiar una
+distancia de Mahalanobis, adecuada para grupos no esféricos.
+
+\section{Conclusiones}
+
+La inicialización influye en K-means, pero su ventaja es estadística y no está
+garantizada en cada corrida. Con las semillas estudiadas, el inicio aleatorio
+superó por azar a K-means++. ISODATA estimó correctamente cuatro grupos en los
+datos sintéticos desde $k_{\mathrm{init}}=3$ y 6, y tres grupos en Wine desde
+$k_{\mathrm{init}}=5$. En Wine obtuvo el mejor ARI y un Silhouette apenas
+superior, mientras K-means logró un DBI apenas menor. La estandarización y PCA
+fueron esenciales para trabajar con características de escalas diferentes; en
+ISODATA, la calibración de los umbrales a esa nueva escala resultó igualmente
+determinante.
+
+\begin{thebibliography}{9}
+\small
+\bibitem{macqueen}
+J. MacQueen, ``Some methods for classification and analysis of multivariate
+observations,'' en \emph{Proc. 5th Berkeley Symp. Math. Statist. Prob.}, vol.~1,
+1967, pp.~281--297.
+
+\bibitem{kmeanspp}
+D. Arthur y S. Vassilvitskii, ``k-means++: The advantages of careful
+seeding,'' en \emph{Proc. 18th ACM--SIAM Symp. Discrete Algorithms}, 2007,
+pp.~1027--1035.
+
+\bibitem{isodata}
+G. H. Ball y D. J. Hall, ``ISODATA, a novel method of data analysis and
+pattern classification,'' Stanford Research Institute, Tech. Rep. AD699616,
+1965.
+
+\bibitem{sklearn}
+F. Pedregosa et al., ``Scikit-learn: Machine learning in Python,''
+\emph{J. Mach. Learn. Res.}, vol.~12, pp.~2825--2830, 2011.
+\end{thebibliography}
+
+\end{document}

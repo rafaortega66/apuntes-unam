@@ -1,0 +1,232 @@
+\documentclass[conference]{IEEEtran}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+
+\title{Clasificación bayesiana de imágenes por color y diagnóstico de cáncer de mama}
+
+\author{\IEEEauthorblockN{Nombre del estudiante}
+\IEEEauthorblockA{Reconocimiento de Patrones}}
+
+\begin{document}
+\maketitle
+\raggedbottom
+
+\begin{abstract}
+Se comparan clasificadores bayesianos en dos problemas: clasificación de píxeles por color y clasificación del conjunto Breast Cancer Wisconsin. Para las imágenes, QDA se ajusta con 1\,440\,000 píxeles de cuatro imágenes de entrenamiento y se analizan cualitativamente tres imágenes de prueba. Para cáncer de mama se entrenan QDA, LDA y Gaussian Naive Bayes (GNB) con una partición estratificada y estandarización. QDA y LDA alcanzan una exactitud de 95.61\% en prueba, frente a 92.98\% de GNB.
+\end{abstract}
+
+\begin{IEEEkeywords}
+QDA, LDA, Gaussian Naive Bayes, segmentación por color, Breast Cancer Wisconsin.
+\end{IEEEkeywords}
+
+\section{Introducción}
+Los clasificadores bayesianos asignan una observación a la clase con mayor probabilidad posterior. Su comportamiento depende de los supuestos sobre las distribuciones de las características: QDA estima una matriz de covarianza por clase, LDA supone una covarianza compartida y GNB supone independencia condicional entre características. Esta práctica compara estos métodos en una tarea de clasificación de píxeles y en un problema tabular de diagnóstico, siguiendo la consigna proporcionada~\cite{practica}.
+
+\section{Métodos}
+Para una clase $k$, QDA calcula una puntuación discriminante proporcional al logaritmo de la probabilidad posterior:
+\begin{equation}
+g_k(\mathbf{x})=-\frac{1}{2}(\mathbf{x}-\boldsymbol{\mu}_k)^T\boldsymbol{\Sigma}_k^{-1}(\mathbf{x}-\boldsymbol{\mu}_k)-\frac{1}{2}\log|\boldsymbol{\Sigma}_k|+\log\pi_k,
+\end{equation}
+donde $\boldsymbol{\mu}_k$, $\boldsymbol{\Sigma}_k$ y $\pi_k$ son, respectivamente, la media, la covarianza y la probabilidad a priori de la clase. La predicción es la clase que maximiza $g_k$.
+
+\section{Parte I: clasificación de imágenes por color}
+\subsection{Datos y extracción de características}
+Se trabajó con cuatro imágenes de entrenamiento y tres imágenes de prueba, reservadas para evaluar visualmente el clasificador una vez ajustado. Solo las cuatro imágenes de entrenamiento se utilizan para generar las máscaras, construir el DataFrame y estimar los parámetros de QDA.
+
+Las máscaras de plátano, chile y huevo se obtuvieron mediante segmentación en HSV: el verde identifica chile, el amarillo plátano y la baja saturación con alto valor huevo. Los umbrales HSV se usan únicamente para generar etiquetas de entrenamiento; no forman parte del clasificador QDA. Se eliminaron solapamientos entre las máscaras y se aplicaron operaciones morfológicas de apertura y cierre con un elemento estructurante de $3\times3$ píxeles. La máscara de fondo se definió como el complemento de la unión de las tres máscaras de objetos. La Fig.~\ref{fig:mascaras} muestra, para las cuatro imágenes de entrenamiento, la imagen original y las máscaras de plátano, chile, huevo y fondo.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.98\columnwidth]{figures/mascaras-entrenamiento-1.png}\\[2pt]
+\includegraphics[width=0.98\columnwidth]{figures/mascaras-entrenamiento-2.png}\\[2pt]
+\includegraphics[width=0.98\columnwidth]{figures/mascaras-entrenamiento-3.png}\\[2pt]
+\includegraphics[width=0.98\columnwidth]{figures/mascaras-entrenamiento-4.png}
+\caption{Máscaras generadas para las cuatro imágenes de entrenamiento. Cada panel muestra, de izquierda a derecha, la imagen original, plátano, chile, huevo y fondo.}
+\label{fig:mascaras}
+\end{figure}
+
+Cada píxel de las máscaras de entrenamiento se representó mediante sus canales rojo, verde y azul y la etiqueta de clase, formando las columnas R, G, B y Clase. El DataFrame resultante tiene dimensiones $1\,440\,000\times4$. El Cuadro~\ref{tab:conteos} resume los píxeles etiquetados por clase, sus probabilidades a priori y el total; el Cuadro~\ref{tab:ejemplos-rgb} presenta tres ejemplos RGB por clase con sus índices originales del DataFrame.
+
+\begin{table}[!t]
+\centering
+\caption{Píxeles etiquetados y probabilidad a priori por clase.}
+\label{tab:conteos}
+\small
+\begin{tabular}{lrr}
+\toprule
+Clase & Píxeles & $\pi_k$ \\
+\midrule
+Fondo & 1\,105\,113 & 0.7674 \\
+Plátano & 172\,285 & 0.1196 \\
+Huevo & 111\,307 & 0.0773 \\
+Chile & 51\,295 & 0.0356 \\
+\midrule
+Total & 1\,440\,000 & 1.0000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!t]
+\centering
+\caption{Ejemplos de píxeles RGB por clase, con índices originales del DataFrame.}
+\label{tab:ejemplos-rgb}
+\scriptsize
+\begin{tabular}{lrrrr}
+\toprule
+Clase & Índice & R & G & B \\
+\midrule
+Plátano & 0 & 206 & 138 & 41 \\
+Plátano & 1 & 205 & 137 & 38 \\
+Plátano & 2 & 212 & 144 & 45 \\
+Chile & 43528 & 43 & 54 & 12 \\
+Chile & 43529 & 42 & 58 & 11 \\
+Chile & 43530 & 44 & 62 & 10 \\
+Huevo & 56295 & 251 & 168 & 164 \\
+Huevo & 56296 & 243 & 172 & 166 \\
+Huevo & 56297 & 247 & 182 & 178 \\
+Fondo & 84033 & 222 & 77 & 56 \\
+Fondo & 84034 & 220 & 75 & 54 \\
+Fondo & 84035 & 219 & 74 & 53 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Parámetros QDA}
+Para cada clase se estimaron la media $\boldsymbol{\mu}_k$, que representa el color RGB promedio; la matriz de covarianza $\boldsymbol{\Sigma}_k$, que describe la dispersión y covariación de los canales RGB; y el prior $\pi_k$, que corresponde a la proporción de píxeles de esa clase en el conjunto de entrenamiento. El Cuadro~\ref{tab:qda-parametros} presenta estas estadísticas, calculadas exclusivamente con las cuatro imágenes de entrenamiento. Las covarianzas se expresan en unidades de intensidad al cuadrado.
+
+\begin{table}[!ht]
+\centering
+\caption{Estadísticas RGB de QDA por clase.}
+\label{tab:qda-parametros}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\setlength{\arraycolsep}{1pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{l c c c}
+\toprule
+Clase & Media $\boldsymbol{\mu}_k$ & Covarianza $\boldsymbol{\Sigma}_k$ & Prior $\pi_k$ \\
+\midrule
+Chile & $[48.57,\;89.80,\;23.95]$ & $\left[\begin{array}{@{}rrr@{}}522.23&622.29&542.87\\622.29&843.73&681.25\\542.87&681.25&729.62\end{array}\right]$ & 0.0356 \\
+\midrule
+Fondo & $[218.84,\;91.74,\;61.65]$ & $\left[\begin{array}{@{}rrr@{}}458.69&198.36&197.13\\198.36&168.49&117.79\\197.13&117.79&117.38\end{array}\right]$ & 0.7674 \\
+\midrule
+Huevo & $[231.54,\;229.88,\;230.85]$ & $\left[\begin{array}{@{}rrr@{}}95.14&116.81&120.67\\116.81&309.39&337.85\\120.67&337.85&384.97\end{array}\right]$ & 0.0773 \\
+\midrule
+Plátano & $[215.91,\;194.95,\;59.07]$ & $\left[\begin{array}{@{}rrr@{}}323.36&400.95&237.75\\400.95&555.40&333.55\\237.75&333.55&447.51\end{array}\right]$ & 0.1196 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+QDA emplea una matriz de covarianza diferente para cada clase y asigna cada píxel a la clase con mayor puntuación discriminante según sus características RGB. Por tanto, los umbrales HSV no intervienen en la clasificación posterior.
+
+\subsection{Clasificación y análisis de las imágenes de prueba}
+Una vez estimados los parámetros con los datos de entrenamiento, se aplicó QDA a las tres imágenes reservadas. Para cada píxel, sus valores $[R,G,B]$ se introdujeron al clasificador y se obtuvo una clase predicha. Las Figs.~\ref{fig:prueba-1}--\ref{fig:prueba-3} muestran las imágenes de prueba y sus mapas de clasificación.
+
+La Fig.~\ref{fig:prueba-1} muestra la imagen Prueba1 y su mapa QDA.
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.98\columnwidth]{figures/clasificacion-prueba-1.png}
+\caption{Imagen Prueba1 y mapa de clasificación QDA. Negro: fondo; amarillo: plátano; verde: chile; blanco: huevo.}
+\label{fig:prueba-1}
+\end{figure}
+
+La Fig.~\ref{fig:prueba-2} muestra la imagen Prueba2 y su mapa QDA.
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.98\columnwidth]{figures/clasificacion-prueba-2.png}
+\caption{Imagen Prueba2 y mapa de clasificación QDA. Negro: fondo; amarillo: plátano; verde: chile; blanco: huevo.}
+\label{fig:prueba-2}
+\end{figure}
+
+La Fig.~\ref{fig:prueba-3} muestra la imagen Prueba3 y su mapa QDA.
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.98\columnwidth]{figures/clasificacion-prueba-3.png}
+\caption{Imagen Prueba3 y mapa de clasificación QDA. Negro: fondo; amarillo: plátano; verde: chile; blanco: huevo.}
+\label{fig:prueba-3}
+\end{figure}
+
+En los tres mapas se reconocen visualmente las clases principales, aunque aparecen pequeñas confusiones en los bordes. Las sombras, los reflejos y los cambios de iluminación modifican los valores RGB y pueden generar asignaciones entre clases. Además, un objeto que no pertenece a las clases de entrenamiento puede asignarse a la clase cromáticamente más similar. Un ejemplo es la papa de la Prueba3 (Fig.~\ref{fig:prueba-3}), que no pertenece a ninguna clase de entrenamiento y se asigna en buena parte a plátano por su color amarillento. Como no se dispone de máscaras de referencia para las imágenes de prueba, el análisis es cualitativo y no se reporta exactitud por píxel.
+
+\section{Parte II: Breast Cancer Wisconsin}
+\subsection{Configuración experimental}
+El conjunto completo contiene 569 muestras y 30 características. La clase 0 (maligno) reúne 212 observaciones (37.26\%) y la clase 1 (benigno), 357 (62.74\%); la Fig.~\ref{fig:bc-distribucion} muestra esta distribución.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.5\columnwidth]{figures/breast-cancer-distribucion-clases.png}
+\caption{Distribución de las clases maligno y benigno en Breast Cancer Wisconsin.}
+\label{fig:bc-distribucion}
+\end{figure}
+
+Se realizó una división estratificada con semilla 42: 455 muestras de entrenamiento (80\%) y 114 de prueba (20\%). En entrenamiento, la clase 0 contiene 170 muestras (37.36\%) y la clase 1, 285 (62.64\%); en prueba, la clase 0 contiene 42 (36.84\%) y la clase 1, 72 (63.16\%). El escalador se ajustó únicamente con entrenamiento y se aplicó a ambos subconjuntos, de modo que ninguna información de prueba participó en el ajuste. Se entrenaron QDA con regularización $0.01$, y LDA y Gaussian Naive Bayes (GNB) con los parámetros por omisión de scikit-learn.
+
+\subsection{Resultados y análisis}
+El Cuadro~\ref{tab:metricas} resume las métricas en el conjunto de prueba; la precisión y el recall se presentan por separado para las clases maligno y benigno, y la Fig.~\ref{fig:bc-evaluacion} muestra las matrices de confusión.
+
+\begin{table}[!t]
+\centering
+\caption{Resultados en prueba.}
+\label{tab:metricas}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{l c c c c c}
+\toprule
+Modelo & Accuracy & \shortstack{Precision\\(Maligno)} & \shortstack{Precision\\(Benigno)} & \shortstack{Recall\\(Maligno)} & \shortstack{Recall\\(Benigno)} \\
+\midrule
+QDA & 95.61\% & 97.44\% & 94.67\% & 90.48\% & 98.61\% \\
+LDA & 95.61\% & 97.44\% & 94.67\% & 90.48\% & 98.61\% \\
+GNB & 92.98\% & 90.48\% & 94.44\% & 90.48\% & 94.44\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[!t]
+\centering
+\begin{minipage}[t]{0.48\columnwidth}
+\centering
+\includegraphics[width=\linewidth]{figures/breast-cancer-comparacion-accuracy.png}
+\par\footnotesize (a) Comparación de accuracy.
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\columnwidth}
+\centering
+\includegraphics[width=\linewidth]{figures/breast-cancer-matriz-confusion-qda.png}
+\par\footnotesize (b) Matriz de confusión de QDA.
+\end{minipage}
+
+\vspace{2pt}
+
+\begin{minipage}[t]{0.48\columnwidth}
+\centering
+\includegraphics[width=\linewidth]{figures/breast-cancer-matriz-confusion-lda.png}
+\par\footnotesize (c) Matriz de confusión de LDA.
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\columnwidth}
+\centering
+\includegraphics[width=\linewidth]{figures/breast-cancer-matriz-confusion-gnb.png}
+\par\footnotesize (d) Matriz de confusión de GNB.
+\end{minipage}
+\caption{Evaluación gráfica en el conjunto de prueba. En las matrices, las filas son la clase real y las columnas la predicción.}
+\label{fig:bc-evaluacion}
+\end{figure}
+
+QDA y LDA clasificaron correctamente 109 de 114 muestras y produjeron matrices de confusión idénticas: identifican 38 de 42 casos malignos y 71 de 72 benignos, es decir, cuatro falsos negativos (malignos clasificados como benignos) y un falso positivo. GNB clasificó correctamente 106 muestras; conserva los cuatro falsos negativos y eleva a cuatro los falsos positivos. El recall maligno es igual en los tres modelos (90.48\%); GNB se distingue por una menor precisión maligna (90.48\% frente a 97.44\%) y un menor recall benigno (94.44\% frente a 98.61\%).
+
+El menor desempeño de GNB es consistente con su supuesto de independencia condicional: varias características del conjunto, como el radio, el perímetro y el área, miden magnitudes geométricamente relacionadas y están fuertemente correlacionadas, por lo que el supuesto no se cumple. Por otra parte, QDA no mejora a LDA aunque es más flexible: cada matriz de covarianza de 30 características tiene 465 parámetros y la clase maligna cuenta con solo 170 muestras de entrenamiento, por lo que su estimación por clase es menos estable (de ahí la regularización) y la ventaja potencial de covarianzas distintas no se refleja en esta partición.
+
+Para este problema se recomienda LDA: iguala a QDA en todas las métricas, supera a GNB, tiene menos parámetros y no requiere regularización. Sin embargo, la comparación se basa en una sola partición de 114 muestras, donde un único caso modifica la exactitud en 0.88 puntos porcentuales, por lo que conviene confirmarla con validación cruzada. Para otras aplicaciones, la elección se basaría en cuatro criterios: el costo relativo de los errores y, con él, el recall de la clase crítica, que puede mejorarse ajustando el umbral de decisión; la relación entre el número de muestras por clase y el de parámetros, que favorece a LDA o GNB con pocos datos y a QDA con muchos; la validez de los supuestos (covarianzas iguales, independencia o normalidad) verificada con los datos; y la simplicidad, interpretabilidad y costo de cómputo. En un contexto clínico, además, un recall maligno de 90.48\% implica que cerca de uno de cada diez casos malignos no se detecta, por lo que ningún modelo debe usarse sin validación con datos independientes.
+
+\section{Conclusiones}
+El QDA basado en color produce mapas visualmente coherentes para los objetos de las tres imágenes, aunque los umbrales HSV y la iluminación generan errores locales. La separación entre entrenamiento y prueba evita que las imágenes de prueba participen en el ajuste; aun así, sin máscaras de referencia solo es posible evaluar los resultados de forma cualitativa. En Breast Cancer Wisconsin, QDA y LDA logran la mayor exactitud (95.61\%) y superan a GNB (92.98\%). Dado el empate observado, LDA ofrece un modelo más simple, pero la sensibilidad a casos malignos y la validación en otras particiones deben guiar cualquier uso posterior.
+
+\begin{thebibliography}{1}
+\bibitem{practica}
+\emph{Práctica 3: Clasificadores Bayesianos}. Material de la asignatura Reconocimiento de Patrones, documento y cuadernos de trabajo proporcionados para la práctica.
+\end{thebibliography}
+
+\end{document}

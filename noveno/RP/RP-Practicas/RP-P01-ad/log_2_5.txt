@@ -1,0 +1,45 @@
+============================================================
+2.5 EigenFaces - dataset Olivetti Faces
+============================================================
+Forma de X: (400, 4096)  (n=400 imagenes, p=4096 pixeles, 64x64)
+
+Se calcularon 400 componentes principales (eigenfaces).
+Primeros 10 valores propios: [18.840178  11.071763   6.304614   3.9545844  2.8560426  2.49771
+  1.9200633  1.611159   1.5492224  1.3229507]
+
+Figura guardada: fig_2_5_rostro_promedio.png
+Figura guardada: fig_2_5_primeras_10_eigenfaces.png
+Figura guardada: fig_2_5_ultimas_10_eigenfaces.png
+
+Figura guardada: fig_2_5_reconstruccion_por_k.png
+
+MSE de reconstruccion (todo el dataset) para distintos k:
+  k= 20 -> MSE = 0.004559
+  k= 40 -> MSE = 0.002877
+  k= 60 -> MSE = 0.002093
+  k= 80 -> MSE = 0.001594
+  k=100 -> MSE = 0.001246
+  k=120 -> MSE = 0.000988
+  k=140 -> MSE = 0.000791
+  k=160 -> MSE = 0.000634
+  k=180 -> MSE = 0.000507
+  k=200 -> MSE = 0.000404
+  k=220 -> MSE = 0.000319
+  k=240 -> MSE = 0.000250
+  k=260 -> MSE = 0.000193
+  k=280 -> MSE = 0.000145
+  k=300 -> MSE = 0.000106
+  k=320 -> MSE = 0.000073
+  k=340 -> MSE = 0.000047
+  k=360 -> MSE = 0.000026
+  k=380 -> MSE = 0.000010
+  k=400 -> MSE = 0.000000
+
+Figura guardada: fig_2_5_mse_vs_k.png
+
+Varianza explicada acumulada en k=300: 99.4520%
+Varianza descartada en k=300: 0.5480%
+
+El error de reconstruccion (MSE) disminuye al aumentar el numero de componentes k porque cada eigenvector adicional que se incorpora aporta la varianza (informacion) asociada a su valor propio, la cual antes se estaba descartando. El MSE de reconstruccion es, salvo un factor de escala, exactamente la suma de los valores propios NO utilizados (la varianza descartada): al usar los k componentes de mayor varianza, el error residual es proporcional a la suma de los eigvals de las componentes k+1, k+2, ..., p. Como el algoritmo SVD/PCA ordena las componentes de mayor a menor varianza, cada componente adicional que se agrega es la que mas reduce ese residuo posible en ese paso; por eso el MSE decrece monotonamente y de forma cada vez mas lenta (la curva se aplana) conforme los eigenvalores restantes son cada vez mas pequenos.
+
+Script 2.5 finalizado correctamente.

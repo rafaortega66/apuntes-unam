@@ -1,0 +1,9 @@
+Interfaz PIO + Machine State
+Declaración de State Machine
+-Configurar Subrutina
+	-Decoradores
+-Crear la máquina de estados
+-Comandos Enable/Disable
+
+Caso del generador de Pulsos
+#Decorador 

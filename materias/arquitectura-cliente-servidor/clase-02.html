@@ -69,7 +69,7 @@ fdisk -l                     # -> AHORA SÍ funciona: lista las particiones
 # 5) OBLIGATORIO: revertir de inmediato
 chmod 755 /sbin/fdisk        # (o los permisos que tuviera antes)</code></pre>
 <p><em>[inaudible: la ruta se dicta rápido como "diagonal se bin diagonal fis" → /sbin/fdisk]</em></p>
-<p><strong>Actividad 2:</strong> programa en C (<a href="files/prof-tema1/programa02_ids.c" download style="color:var(--indigo)">programa02_ids.c</a> en el repo) que imprime <code>getuid()</code> y <code>geteuid()</code>. Compilar <code>gcc programa02_ids.c -o programa02_ids</code>. Ejecutado normal → ID real == ID efectivo. Aplicando <code>chmod 4511</code> al binario y ejecutándolo con <strong>otro usuario</strong> → salen distintos.</p>
+<p><strong>Actividad 2:</strong> programa en C (<a href="../../noveno/ACS/ACS-Programas/tema1/programa02_ids.c" download style="color:var(--indigo)">programa02_ids.c</a> en el repo) que imprime <code>getuid()</code> y <code>geteuid()</code>. Compilar <code>gcc programa02_ids.c -o programa02_ids</code>. Ejecutado normal → ID real == ID efectivo. Aplicando <code>chmod 4511</code> al binario y ejecutándolo con <strong>otro usuario</strong> → salen distintos.</p>
 <p><strong>⚠️ Para sacar 10:</strong> las capturas deben mostrar <strong>ID real ≠ ID efectivo</strong>.</p>
 <p><strong>⚠️ No entregar la Tarea 2 todavía</strong> — el profesor no pudo hacer la demo en el laboratorio; reactivará la fecha de entrega después. (Recomienda clonar el repo localmente con git en vez de usar Codespaces.)</p></details>
 
@@ -89,12 +89,12 @@ al HIJO   ->  0</code></pre>
 } else {
     // código exclusivo del hijo
 }</code></pre>
-<p>Sin <code>if</code>, todo lo que va después de <code>fork()</code> se ejecuta en ambos → sale <strong>duplicado</strong>. En <a href="files/prof-tema1/programa05_fork_v1.c" download style="color:var(--indigo)">programa05_fork_v1.c</a>: la línea de antes del <code>fork()</code> se imprime una vez; las dos de después, dos veces cada una.</p>
+<p>Sin <code>if</code>, todo lo que va después de <code>fork()</code> se ejecuta en ambos → sale <strong>duplicado</strong>. En <a href="../../noveno/ACS/ACS-Programas/tema1/programa05_fork_v1.c" download style="color:var(--indigo)">programa05_fork_v1.c</a>: la línea de antes del <code>fork()</code> se imprime una vez; las dos de después, dos veces cada una.</p>
 <p><em>Nota semántica del profesor: antes del <code>fork()</code> lo llama "proceso main / principal"; "padre" solo cuando ya hay hijo.</em></p></details>
 
 <details class="section-block sec" id="deadlock-candado-abrazo-mortal"><summary><span class="chip chip-examen">examen</span><span class="stitle">⚠️ Deadlock (candado / abrazo mortal)</span></summary><p>Si el padre espera a que termine el hijo para continuar y a la vez el hijo espera a que termine el padre → bloqueo indefinido. Única salida: <code>Ctrl + C</code>.</p></details>
 
-<details class="section-block sec" id="ejemplo-de-ejecucion-programa05-fork-v2-"><summary><span class="stitle">Ejemplo de ejecución — programa05_fork_v2.c</span></summary><p>Valores de esa corrida (<a href="files/prof-tema1/programa05_fork_v2.c" download style="color:var(--indigo)">programa05_fork_v2.c</a>):</p><table><thead><tr><th>Dato</th><th>Valor</th></tr></thead><tbody>
+<details class="section-block sec" id="ejemplo-de-ejecucion-programa05-fork-v2-"><summary><span class="stitle">Ejemplo de ejecución — programa05_fork_v2.c</span></summary><p>Valores de esa corrida (<a href="../../noveno/ACS/ACS-Programas/tema1/programa05_fork_v2.c" download style="color:var(--indigo)">programa05_fork_v2.c</a>):</p><table><thead><tr><th>Dato</th><th>Valor</th></tr></thead><tbody>
 <tr><td>PID del padre</td><td><code>30405</code></td></tr>
 <tr><td>PID del hijo</td><td><code>30406</code> (el entero inmediato siguiente)</td></tr>
 <tr><td><code>id_hijo</code> en el padre</td><td><code>30406</code></td></tr>

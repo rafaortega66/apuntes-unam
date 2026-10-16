@@ -112,10 +112,10 @@ En `materias/<slug>/index.html`:
 
 Si la clase trae tareas o rúbricas nuevas, también actualizar
 `evaluacion.html` si existe. Si el usuario comparte un archivo nuevo del
-profesor (guion, diapositiva, plantilla), va a `files/` y se agrega una fila
-en `material.html`; si comparte algo que él mismo entregó, va a
-`files/entregas/` y se agrega una fila en `entregas.html` — nunca mezclar los
-dos (ver "Regla de oro de archivos" en `CLAUDE.md`).
+profesor (guion, diapositiva, plantilla), va a `noveno/<SIGLA>/<SIGLA>-Presentaciones/`
+(o al `-ad` de la entrega a la que pertenece) y se agrega una fila en `material.html`;
+si comparte algo que él mismo entregó, va a su carpeta `noveno/<SIGLA>/…/<SIGLA>-XNN/`
+y se agrega una fila en `entregas.html` (ver la estructura de `noveno/` en `CLAUDE.md`).
 
 ## Paso 5 — Buscador y publicación
 

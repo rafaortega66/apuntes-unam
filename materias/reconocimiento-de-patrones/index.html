@@ -46,7 +46,7 @@
 
 <details class="section-block tema" id="tema-1" open><summary><span class="stitle">Tema 1 &mdash; Conceptos b&aacute;sicos de reconocimiento de patrones</span> <span class="thrs">&middot; presentaci&oacute;n del profesor</span></summary><div class="tema-body">
 <div class="files">
-    <a class="btn" href="files/Clase-01-Presentacion-del-curso.pdf" target="_blank">📄 Presentación del curso (prof.)</a>
+    <a class="btn" href="../../noveno/RP/RP-Presentaciones/Clase-01-Presentacion-del-curso.pdf" target="_blank">📄 Presentación del curso (prof.)</a>
   </div>
 <div class="encorto"><h4>En corto</h4><ul><li>RdP = asignar una identidad (<strong>clase</strong>) a un patrón a partir de mediciones; el que decide la clase es el <strong>clasificador</strong>.</li><li>Cantidad desconocida continua → teoría de la estimación; discreta → reconocimiento de patrones.</li><li>Dos partes: <strong>extracción de características</strong> + <strong>clasificación</strong>.</li><li>Vector de características <code>x = (x₁ … xₙ)</code>; más dimensiones ≠ mejor (maldición de la dimensionalidad).</li></ul></div>
 <div class="examen"><h4>🎯 Para el examen</h4><ul><li>Términos: patrón, clase, característica, clasificación, entrenamiento.</li><li>Los 3 problemas del diseño: representación, extracción / reducción de dimensionalidad, decisión óptima.</li><li>Maldición de la dimensionalidad: la <strong>variabilidad</strong> de la distancia cae exponencialmente con las dimensiones (ése es el problema real); se resuelve con reducción de dimensionalidad, que implica pérdida de información.</li></ul></div>
@@ -100,11 +100,11 @@
 </div></details>
 
 <details class="section-block tema" id="tema-2" open><summary><span class="stitle">Tema 2 &mdash; Extracci&oacute;n de caracter&iacute;sticas</span> <span class="thrs">&middot; Clase 01</span></summary><div class="tema-body">
-<p class="empty">Contenido de la <a href="clase-01.html">Clase 01</a> (audio) + diapositivas del profesor <a href="files/Clase-02-Extraccion-de-caracteristicas-I.pdf" target="_blank">I</a> &middot; <a href="files/Clase-03-Extraccion-de-caracteristicas-II.pdf" target="_blank">II</a> &middot; <a href="files/Clase-04-Extraccion-de-caracteristicas-III.pdf" target="_blank">III</a>.</p>
+<p class="empty">Contenido de la <a href="clase-01.html">Clase 01</a> (audio) + diapositivas del profesor <a href="../../noveno/RP/RP-Presentaciones/Clase-02-Extraccion-de-caracteristicas-I.pdf" target="_blank">I</a> &middot; <a href="../../noveno/RP/RP-Presentaciones/Clase-03-Extraccion-de-caracteristicas-II.pdf" target="_blank">II</a> &middot; <a href="../../noveno/RP/RP-Presentaciones/Clase-04-Extraccion-de-caracteristicas-III.pdf" target="_blank">III</a>.</p>
 <div class="files">
-    <a class="btn" href="files/Clase-02-Extraccion-de-caracteristicas-I.pdf" target="_blank">📄 Extracción de características I (prof.)</a>
-    <a class="btn" href="files/Clase-03-Extraccion-de-caracteristicas-II.pdf" target="_blank">📄 Extracción de características II (prof.)</a>
-    <a class="btn" href="files/Clase-04-Extraccion-de-caracteristicas-III.pdf" target="_blank">📄 Extracción de características III (prof.)</a>
+    <a class="btn" href="../../noveno/RP/RP-Presentaciones/Clase-02-Extraccion-de-caracteristicas-I.pdf" target="_blank">📄 Extracción de características I (prof.)</a>
+    <a class="btn" href="../../noveno/RP/RP-Presentaciones/Clase-03-Extraccion-de-caracteristicas-II.pdf" target="_blank">📄 Extracción de características II (prof.)</a>
+    <a class="btn" href="../../noveno/RP/RP-Presentaciones/Clase-04-Extraccion-de-caracteristicas-III.pdf" target="_blank">📄 Extracción de características III (prof.)</a>
   </div>
 <div class="encorto"><h4>En corto</h4><ul><li>Extracción de características = pasar datos crudos (imagen / audio) a un vector numérico corto que separe clases (<code>y ∈ ℝᴺ → x ∈ ℝᵈ</code>, d ≪ N).</li><li>Imagen: estadísticas, histogramas, momentos geométricos (Hu = invariante a traslación / escala / rotación), textura <strong>GLCM</strong>, forma con <strong>HOG</strong>, puntos clave SIFT / SURF.</li><li>Audio: temporales (energía, RMS, ZCR), espectrales (centroide, ancho de banda, roll-off, flux, flatness), tiempo-frecuencia (<strong>MFCC</strong> + Δ / ΔΔ).</li><li>HOG de una imagen 64×128 → vector de <strong>3 780</strong>; audio → vector de <strong>80</strong> dimensiones.</li></ul></div>
 <div class="examen"><h4>🎯 Para el examen</h4><ul><li>Momentos: espaciales (dependen de la posición) → centrales (invariantes a traslación) → normalizados (+ escala) → <strong>Hu</strong> (+ rotación).</li><li>GLCM: parámetros N, d, θ; hacerla <strong>simétrica</strong> y <strong>normalizar</strong> antes de sacar descriptores (contraste, ASM / energía, entropía…).</li><li>MFCC: se descarta <strong>obligatoriamente el coeficiente 0</strong> (solo energía promedio); el proceso es <strong>irreversible</strong>.</li><li>Δ = velocidad del cambio del timbre; ΔΔ = aceleración.</li></ul></div>
@@ -195,7 +195,7 @@ Centroide (x̄, ȳ) = ( M(1,0)/M(0,0) ,  M(0,1)/M(0,0) )</code></pre>
 </ul></details>
 
 <details class="section-block sec" id="ejercicios-hu-glcm-clase" open><summary><span class="stitle">Ejercicios resueltos en clase (Hu y GLCM)</span></summary>
-<p>Guardados en <a href="files/Ejercicios-Hu-y-GLCM-clase.pdf" target="_blank">Ejercicios de Hu y GLCM (PDF)</a>. Resumen de los que se pueden transcribir:</p>
+<p>Guardados en <a href="../../noveno/RP/RP-Presentaciones/Ejercicios-Hu-y-GLCM-clase.pdf" target="_blank">Ejercicios de Hu y GLCM (PDF)</a>. Resumen de los que se pueden transcribir:</p>
 <p><strong>Ejemplo 1 — Momentos geom&eacute;tricos</strong> &nbsp; <code>M<sub>pq</sub> = &Sigma;&Sigma; x<sup>p</sup> y<sup>q</sup> f(x,y)</code>. Imagen 5&times;5 con cuatro p&iacute;xeles en 1 (x &isin; {2,3}, y &isin; {1,2}):</p>
 <pre><code>M00 = &Sigma; f            = 1+1+1+1                 = 4
 M10 = &Sigma; x&middot;f          = 2+3+2+3                 = 10
@@ -357,8 +357,8 @@ Flatness = media geométrica / media aritmética           Ej. → ≈ 0.96 (esp
 </div></details>
 
 <details class="section-block tema" id="tema-3" open><summary><span class="stitle">Tema 3 &mdash; Selecci&oacute;n y reducci&oacute;n de dimensionalidad</span> <span class="thrs">&middot; Clases 02&ndash;03, 05</span></summary><div class="tema-body">
-<p class="empty">Contenido de la <a href="clase-02.html">Clase 02</a> y la <a href="clase-03.html">Clase 03</a> (esta con audio parcial, completada con el deck) + diapositivas del profesor <a href="files/Clase-05-Seleccion-y-Reduccion-de-Dimensionalidad.pdf" target="_blank">Clase 5</a> y <a href="files/Clase-06-Reduccion-de-Dimensionalidad-II.pdf" target="_blank">Clase 6</a>. Retomado en la <a href="clase-05.html">Clase 05</a> del sitio (11 sep) con la presentaci&oacute;n y evaluaci&oacute;n de la Pr&aacute;ctica 1 (PCA/SVD/reconstrucci&oacute;n).</p>
-<div class="files"><a class="btn" href="files/Clase-05-Seleccion-y-Reduccion-de-Dimensionalidad.pdf" target="_blank">📄 Diapositivas Clase 5 (prof.)</a> <a class="btn" href="files/Clase-06-Reduccion-de-Dimensionalidad-II.pdf" target="_blank">📄 Diapositivas Clase 6 (prof.)</a></div>
+<p class="empty">Contenido de la <a href="clase-02.html">Clase 02</a> y la <a href="clase-03.html">Clase 03</a> (esta con audio parcial, completada con el deck) + diapositivas del profesor <a href="../../noveno/RP/RP-Presentaciones/Clase-05-Seleccion-y-Reduccion-de-Dimensionalidad.pdf" target="_blank">Clase 5</a> y <a href="../../noveno/RP/RP-Presentaciones/Clase-06-Reduccion-de-Dimensionalidad-II.pdf" target="_blank">Clase 6</a>. Retomado en la <a href="clase-05.html">Clase 05</a> del sitio (11 sep) con la presentaci&oacute;n y evaluaci&oacute;n de la Pr&aacute;ctica 1 (PCA/SVD/reconstrucci&oacute;n).</p>
+<div class="files"><a class="btn" href="../../noveno/RP/RP-Presentaciones/Clase-05-Seleccion-y-Reduccion-de-Dimensionalidad.pdf" target="_blank">📄 Diapositivas Clase 5 (prof.)</a> <a class="btn" href="../../noveno/RP/RP-Presentaciones/Clase-06-Reduccion-de-Dimensionalidad-II.pdf" target="_blank">📄 Diapositivas Clase 6 (prof.)</a></div>
 <div class="encorto"><h4>En corto</h4><ul>
 <li><strong>Selección de características</strong> = quedarse con un subconjunto de las variables originales (no las transforma). <strong>Reducción de dimensionalidad</strong> = <em>proyectar</em> a un espacio nuevo donde las variables ya no representan lo mismo.</li>
 <li>Tres familias de <strong>selección</strong>: <strong>Filtrado</strong> (mide relevancia de cada variable por separado, antes de entrenar: Pearson, χ², ANOVA F, información mutua), <strong>Wrapper</strong> (usan el modelo como caja negra) y <strong>Embebidos</strong> (seleccionan durante el entrenamiento).</li>

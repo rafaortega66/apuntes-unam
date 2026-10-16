@@ -1,0 +1,50 @@
+============================================================
+2.4 Comparacion pca_cov vs pca_svd vs sklearn.PCA (Iris)
+============================================================
+
+--- Valores propios ---
+pca_cov     : [4.22824171 0.24267075 0.0782095  0.02383509]
+pca_svd     : [4.22824171 0.24267075 0.0782095  0.02383509]
+sklearn.PCA : [4.22824171 0.24267075 0.0782095  0.02383509]
+
+--- Vectores propios (columnas) ---
+pca_cov:
+[[-0.36138659  0.65658877  0.58202985  0.31548719]
+ [ 0.08452251  0.73016143 -0.59791083 -0.3197231 ]
+ [-0.85667061 -0.17337266 -0.07623608 -0.47983899]
+ [-0.3582892  -0.07548102 -0.54583143  0.75365743]]
+
+pca_svd:
+[[ 0.36138659 -0.65658877  0.58202985  0.31548719]
+ [-0.08452251 -0.73016143 -0.59791083 -0.3197231 ]
+ [ 0.85667061  0.17337266 -0.07623608 -0.47983899]
+ [ 0.3582892   0.07548102 -0.54583143  0.75365743]]
+
+sklearn.PCA:
+[[ 0.36138659  0.65658877 -0.58202985  0.31548719]
+ [-0.08452251  0.73016143  0.59791083 -0.3197231 ]
+ [ 0.85667061 -0.17337266  0.07623608 -0.47983899]
+ [ 0.3582892  -0.07548102  0.54583143  0.75365743]]
+
+--- Vectores propios alineados en signo (referencia: pca_cov) ---
+pca_svd alineado:
+[[-0.36138659  0.65658877  0.58202985  0.31548719]
+ [ 0.08452251  0.73016143 -0.59791083 -0.3197231 ]
+ [-0.85667061 -0.17337266 -0.07623608 -0.47983899]
+ [-0.3582892  -0.07548102 -0.54583143  0.75365743]]
+
+sklearn.PCA alineado:
+[[-0.36138659  0.65658877  0.58202985  0.31548719]
+ [ 0.08452251  0.73016143 -0.59791083 -0.3197231 ]
+ [-0.85667061 -0.17337266 -0.07623608 -0.47983899]
+ [-0.3582892  -0.07548102 -0.54583143  0.75365743]]
+
+--- Diferencias maximas absolutas (tras alinear signo) ---
+max|eigvals_cov - eigvals_svd|      = 3.96e-16
+max|eigvals_cov - eigvals_sklearn|  = 3.55e-15
+max|eigvecs_cov - eigvecs_svd|      = 8.88e-16
+max|eigvecs_cov - eigvecs_sklearn|  = 2.11e-15
+
+Conclusion: los valores y vectores propios que entregan los tres metodos son (numericamente) iguales una vez que se alinea el signo de los vectores propios. La unica 'diferencia' visible antes de alinear es el signo de algunos vectores propios (v y -v representan la misma direccion/eje principal, asi que son equivalentes), producto de que tanto la descomposicion en eigenvalores como la SVD no fijan un signo unico para los vectores/valores singulares. Las magnitudes coinciden porque matematicamente diagonalizar la matriz de covarianza (pca_cov) y aplicar SVD sobre los datos centrados (pca_svd, y sklearn.PCA internamente) son dos caminos equivalentes para el mismo problema: los valores propios de la covarianza son los valores singulares al cuadrado divididos entre (n-1), y los vectores propios son las columnas de V en X = U S V^T. Las diferencias numericas remanentes son del orden del error de redondeo de punto flotante (~1e-14 o menor).
+
+Script 2.4 finalizado correctamente.

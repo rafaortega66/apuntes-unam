@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-12T22:47:14+00:00",
+ "generatedAt": "2026-10-16T01:56:35+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -566,6 +566,26 @@
  },
  "gitlog": [
   {
+   "hash": "bcdf039",
+   "fecha": "2026-10-15T19:44:57-06:00",
+   "mensaje": "noveno/: esqueleto de carpetas por asignatura (validado con NotebookLM)"
+  },
+  {
+   "hash": "66942df",
+   "fecha": "2026-10-12T17:16:28-06:00",
+   "mensaje": "FSE Clase 11: apuntes tipo libro (NotebookLM) como fuente en apuntes-fuente/"
+  },
+  {
+   "hash": "79bf9b2",
+   "fecha": "2026-10-12T17:06:38-06:00",
+   "mensaje": "Prompts de NotebookLM para apuntes tipo libro de FSE (U1 y U2 prioridad)"
+  },
+  {
+   "hash": "7500c92",
+   "fecha": "2026-10-12T16:47:14-06:00",
+   "mensaje": "FSE: agregar diapositivas Clase 07 y 08 (U2) del Classroom"
+  },
+  {
    "hash": "4750b13",
    "fecha": "2026-10-12T16:36:31-06:00",
    "mensaje": "Lab FSE: «Manuales» en vez de guiones, nombres de las 8 prácticas con estatus de Classroom, P6 con Pico (manual 6b)"
@@ -844,26 +864,6 @@
    "hash": "c65bf99",
    "fecha": "2026-10-01T06:31:33-06:00",
    "mensaje": "RP Clase 03: formato de estudio"
-  },
-  {
-   "hash": "2ae116e",
-   "fecha": "2026-10-01T06:29:18-06:00",
-   "mensaje": "RP Clase 04: formato de estudio"
-  },
-  {
-   "hash": "4fc4de9",
-   "fecha": "2026-10-01T06:25:34-06:00",
-   "mensaje": "OAC Clase 03: formato de estudio"
-  },
-  {
-   "hash": "28fbbcf",
-   "fecha": "2026-10-01T06:23:52-06:00",
-   "mensaje": "FSE Clase 04: limpiar LaTeX en Ponte a prueba; script: limpieza de LaTeX de NotebookLM"
-  },
-  {
-   "hash": "8963649",
-   "fecha": "2026-10-01T06:23:22-06:00",
-   "mensaje": "FSE Clase 04: formato de estudio"
   }
  ]
 }

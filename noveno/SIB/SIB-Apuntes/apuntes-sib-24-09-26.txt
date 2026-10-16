@@ -1,0 +1,69 @@
+Vulnerabilidades
+1. Amenazas NO son vulnerabilidades
+2. Amenazas EXPLOTAN (APROVECHAN) Vulnerabilidades
+3. Amenazas -> 1 vulnerabilidad o varias vulnerabilidades
+4. 1 Amenaza -> 1 vulnerabilidad o varias vulnerabilidades
+5. Las vulnerabilidades son omisiones, es algo que NO se ha tomado en cuenta, algo que falta, algo de lo que se carece
+
+EJEMPLO
+Activo				Amenaza(s)								Vulnerabilidades
+Teléfono celular	Que se rompa							No tiene buenos materiales, no tiene funda, por descuido, carece de mica protectora
+					Que lo roben
+					Que se caiga al aggua
+					Que se infle la batería y explote
+					Que se apague y ya no prenda
+					Que se formatee solo
+					Que se prenda
+					Que roben tarjetas
+
+Conclusiones
+-Una vulnerabilidad se identifica fácilmente si se analiza "qué es lo que NO se ha hecho?"
+-En la medida que se eliminen vulnerabilidades, se correrán menos riesgos, se contrarrestarán amenazas y entonces disminuirán los ataques.
+
+EJERCICIO. Si dice A se contesta con amenaza, si dice V contestar con vulnerabilidad
+Complete las siguientes aseveraciones con una amenaza o una vulnerabilidad según se pida
+Ej a) A No considerar cerrar bien la puera -> Que alguien pueda entrar a la casa y robar los bienes del interior
+Ej b) V Caere de las escaleras -> no me sujeté del barandal
+
+1.-V Que alguien entre en mi cuenta de Facebook -> No usar contraseña segura ni verificación de dos pasos
+
+2.-V Que alguien me suplante al hablar por teléfono -> No verificar la identidad de quien llama antes de dar información
+
+3.-A No seguir normas del cableado estructurado -> Que se generen fallas en la red, cortocircuitos o pérdida de conectividad.
+
+4.-A No lavarse las manos antes de comer -> Que me enferme por contaminación con bacterias o virus
+
+5.-A No tener en el dispositivo un antivirus -> Que el dispositivo se infecte con malware
+
+6.-V Resbalarse  en el pasillo de la Facultad de Ingeniería -> El piso está mojado y no hay señalización de advertencia
+
+7.-V Posibilidad de reprobrar algún examen -> No haber estudiado lo suficiente
+
+8.-A Confianza plena en lo que me dice mi amigo -> Que me dé información falsa y tome una decisión equivocada
+
+9.-V Llegar tarde a una cita -> No calcular bien el tiempo de traslado ni salir con anticipación
+
+10.-V Perder el proyecto final que estaba almacenado en mi 
+dispositivo -> No contar con un respaldo del proyecto
+
+11.-A No tener cuidado al instalar un cierto software en el 
+servidor -> Que el servidor se vea comprometido o infectado
+
+12.-A No salir con cubrebocas a la calle cuando estoy enfermo -> Que contagie mi enfermedad a otras personas
+
+13.-V Enfermarse de COVID -> No usar cubrebocas ni mantener sana distancia
+
+14.-A No contar con un respaldo -> Que se pierda la información importante de forma definitiva
+
+15.-V Perder el trabajo -> No cumplir con las responsabilidades laborales asignadas
+
+16.-A Carecer de los medios económicos -> Que no pueda cubrir mis necesidades básicas
+
+17.-V Quedarse sin red al momento de las sesiones en línea -> No contar con un respaldo de conexión (datos móviles)
+
+18.-V Perder la contraseña para ingresar a ágar algún servicio en 
+línea -> No usar un gestor de contraseñas ni guardarla de forma segura
+
+19.-A Falta de pintura no flamable en las paredes de la organización -> Que un incendio se propague con mayor facilidad
+
+20.-A Omitir las protecciones contra filtraciones en el techo -> Que se dañen equipos o documentos por filtraciones de agua

@@ -1,0 +1,7 @@
+ASI-BD
+1.-Agregar que dbería hacer yo para que mis datos deban ser correctos. 
+
+2.-¿Qué estado tiene mayor ingreso y cuanto de ese ingreso es formal? 
+3.-Justificar si existe o no una brecha salarial entre hombre y mujeres.
+4.- Cuantas horas trabajan las personas con mas horas a la semana.
+5.- ¿Existe relación entre las horas trabajadas y los ingresos? Si tiene relación con el nivel de estudios?

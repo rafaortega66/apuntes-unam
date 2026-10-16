@@ -95,14 +95,37 @@ materias/<slug>/
   material.html      ← TODOS los archivos que dio el profesor/a (guiones, diapositivas, plantillas)
   entregas.html      ← TODO lo que el usuario ya entregó (con enlace al PDF/código o a la clase)
   clase-NN.html      ← apuntes completos de cada clase (ver plantilla abajo)
-  files/             ← archivos del profesor (los que se listan en material.html)
-  files/entregas/    ← archivos que el usuario ya entregó (los que se listan en entregas.html)
 ```
 
-**Regla de oro de archivos (site-wide desde el 14 sep 2026):** todo archivo del
-profesor va en `files/` (raíz de la materia) y se lista en `material.html`;
-todo archivo que el usuario haya entregado va en `files/entregas/` y se lista
-en `entregas.html`. Nunca mezclar los dos. El `index.html` de cada materia
+**Todos los archivos viven en `noveno/` (desde el 15 oct 2026; antes en
+`materias/<slug>/files/`, ya no existe).** Estructura (validada con los
+cuadernos de NotebookLM de cada materia; detalle en `noveno/README.md`):
+
+```
+noveno/<SIGLA>/<SIGLA>-<Categoría>/<SIGLA>-<Tipo><NN>/      ← solo lo ENTREGADO (nombre exacto de Classroom)
+noveno/<SIGLA>/<SIGLA>-<Categoría>/<SIGLA>-<Tipo><NN>-ad/   ← adicionales: enunciado, borradores, datos,
+                                                               código de apoyo, version-previa/
+```
+
+- Siglas: ACS, ASI, FSE, MD, OAC, RP, SIB (+ `noveno/docs/` académicos).
+- Tipos: `T` tarea · `P` práctica/lab · `Proy` proyecto · `E` examen · `Exp` exposición · `EC` ejercicio de clase.
+  Numeración = la de Classroom.
+- Labs: Lab FSE en `FSE/FSE-Lab/` (mismo profesor); Lab OAC (L+) en `OAC/OAC-Lab/`.
+- **ASI es la excepción** (decisión del usuario): todo va en `ASI/ASI-Entregables/`,
+  cada carpeta con su etiqueta en el nombre: `ASI-P01-practica-entorno`,
+  `ASI-T01-tarea-enoe-enigh`, `ASI-R01-reposicion`, `ASI-Proy0N-proyecto-…`.
+- Material del profesor → `<SIGLA>-Presentaciones/` (ACS: código en `ACS-Programas/temaN/`).
+- Si hay versiones distintas de un archivo, la entregada en Classroom es la buena
+  (comparar tamaño/contenido); las otras van a `-ad/version-previa/`.
+- **Nunca** en el sitio: libros (repo privado `apuntes-unam-biblioteca`), INE,
+  datos bancarios, fotos personales; servicio social → repo privado `servicio-social`.
+- `material.html` y `entregas.html` de cada materia enlazan a `noveno/`.
+  Al mover archivos, actualizar los enlaces y correr `build_search_index.py`.
+- `noveno/INDICE.md` lista cada entrega con sus archivos (regenerar con
+  `python3 scripts/indice_noveno.py` tras cualquier cambio). Para preguntas tipo
+  «enlista las tareas de MD», leer ese índice.
+
+El `index.html` de cada materia
 tiene siempre estas tarjetas, en este orden: Evaluación (si existe) →
 Material → Entregas → (otras específicas de la materia, ej. Programas de ACS).
 
@@ -227,7 +250,7 @@ una acción que se pueda automatizar sin permiso, por regla del harness.
 
 Cuando el usuario entrega algo (o Classroom confirma "Turned in"), agregar
 una fila a `entregas.html` de esa materia con: qué es, cuándo, y enlace al
-PDF (en `files/entregas/` si es un archivo nuevo) o a la página de la clase
+PDF (en su carpeta `noveno/<SIGLA>/…/<SIGLA>-XNN/` si es un archivo nuevo) o a la página de la clase
 donde se presentó (si fue una exposición en vivo, no un PDF).
 
 ## Labs (decisión del usuario, 30 sep 2026)
@@ -263,7 +286,7 @@ El avance de cada asignación vive en el propio sitio, para que cualquier sesió
 **Al empezar una sesión:** revisa los ítems con `avance`/`progreso` (hoy ninguno) y retoma desde el primer paso sin marcar; no le preguntes al usuario qué faltaba.
 **Al avanzar o cerrar una sesión de trabajo en una tarea:** marca los pasos hechos, reescribe `donde` y `avance` con la fecha, corre `python3 scripts/build_tareas.py` y haz commit y push. Cuando la tarea se entregue, quita el ítem de `pendientes.json` (o ponle `oculto: true`) y bórrale el `progreso`.
 
-- La tarea ASI «Análisis de ENOE y ENIGH» ya se entregó (Classroom «Turned in», verificado el 12 oct 2026); sus materiales siguen en `trabajos/asi-enoe-enigh/`.
+- La tarea ASI «Análisis de ENOE y ENIGH» ya se entregó (Classroom «Turned in», verificado el 12 oct 2026); sus materiales están en `noveno/ASI/ASI-Entregables/ASI-T01-tarea-enoe-enigh(-ad)/`.
 
 ## Nueva estrategia de estudio (9 oct 2026) — reemplaza la automatización de clases
 

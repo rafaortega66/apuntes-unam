@@ -11,7 +11,7 @@
    "vence": "2026-10-14T23:59:00-06:00",
    "hora_confirmada": true,
    "detalle": "Serie \"Código limpio\". PDF único: NL-CURP-T07.pdf.",
-   "link": "materias/fundamentos-de-sistemas-embebidos/files/tarea-07-enunciado.pdf",
+   "link": "noveno/FSE/FSE-Tareas/FSE-T07-ad/tarea-07-enunciado.pdf",
    "classroom": "https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzQ4Njk2NDEy/details"
   },
   {
@@ -22,7 +22,7 @@
    "vence": "2026-10-21T23:59:00-06:00",
    "hora_confirmada": true,
    "detalle": "Serie \"Código limpio\". PDF único: NL-CURP-T08.pdf.",
-   "link": "materias/fundamentos-de-sistemas-embebidos/files/tarea-08-enunciado.pdf",
+   "link": "noveno/FSE/FSE-Tareas/FSE-T08-ad/tarea-08-enunciado.pdf",
    "classroom": "https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzQ3MDM4OTYy/details"
   },
   {
@@ -33,7 +33,7 @@
    "vence": "2026-10-28T23:59:00-06:00",
    "hora_confirmada": true,
    "detalle": "PDF único: NL-CURP-T09.pdf.",
-   "link": "materias/fundamentos-de-sistemas-embebidos/files/tarea-09-enunciado.pdf",
+   "link": "noveno/FSE/FSE-Tareas/FSE-T09-ad/tarea-09-enunciado.pdf",
    "classroom": "https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzQ5NDg0Nzc2/details"
   },
   {
@@ -44,7 +44,7 @@
    "vence": "2026-10-13T23:59:00-06:00",
    "hora_confirmada": true,
    "detalle": "Vence 13 oct, 11:59 pm. Se hace con la Pico (manual 6b, LM35 → I²C → Raspberry Pi). El profesor avisó que se evalúa con criterio riguroso (FSE Clase 05). Entrega: PDF NL-CURP-L06.pdf.",
-   "link": "materias/lab-de-fundamentos-de-sistemas-embebidos/files/practica-06b-guion.pdf",
+   "link": "noveno/FSE/FSE-Lab/FSE-P06-ad/practica-06b-guion.pdf",
    "classroom": "https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzcxNDM1NTYw/details"
   },
   {

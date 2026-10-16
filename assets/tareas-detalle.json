@@ -102,7 +102,7 @@
   "enlaces": [
    {
     "t": "Enunciado oficial (PDF)",
-    "u": "../materias/fundamentos-de-sistemas-embebidos/files/tarea-06-enunciado.pdf"
+    "u": "../noveno/FSE/FSE-Tareas/FSE-T06-ad/tarea-06-enunciado.pdf"
    },
    {
     "t": "Abrir la tarea en Classroom",
@@ -126,7 +126,7 @@
   "enlaces": [
    {
     "t": "Enunciado oficial (PDF)",
-    "u": "../materias/fundamentos-de-sistemas-embebidos/files/tarea-07-enunciado.pdf"
+    "u": "../noveno/FSE/FSE-Tareas/FSE-T07-ad/tarea-07-enunciado.pdf"
    },
    {
     "t": "Abrir la tarea en Classroom",
@@ -149,7 +149,7 @@
   "enlaces": [
    {
     "t": "Enunciado oficial (PDF)",
-    "u": "../materias/fundamentos-de-sistemas-embebidos/files/tarea-08-enunciado.pdf"
+    "u": "../noveno/FSE/FSE-Tareas/FSE-T08-ad/tarea-08-enunciado.pdf"
    },
    {
     "t": "Abrir la tarea en Classroom",
@@ -174,7 +174,7 @@
   "enlaces": [
    {
     "t": "Enunciado oficial (PDF)",
-    "u": "../materias/fundamentos-de-sistemas-embebidos/files/tarea-09-enunciado.pdf"
+    "u": "../noveno/FSE/FSE-Tareas/FSE-T09-ad/tarea-09-enunciado.pdf"
    },
    {
     "t": "Abrir la tarea en Classroom",
@@ -206,15 +206,15 @@
   "enlaces": [
    {
     "t": "Manual 6b — Raspberry Pi Pico (PDF)",
-    "u": "../materias/lab-de-fundamentos-de-sistemas-embebidos/files/practica-06b-guion.pdf"
+    "u": "../noveno/FSE/FSE-Lab/FSE-P06-ad/practica-06b-guion.pdf"
    },
    {
     "t": "Archivos de apoyo 6b (.7z)",
-    "u": "../materias/lab-de-fundamentos-de-sistemas-embebidos/files/practica-06b-archivos.7z"
+    "u": "../noveno/FSE/FSE-Lab/FSE-P06-ad/practica-06b-archivos.7z"
    },
    {
     "t": "Manual 6a — Arduino (PDF, alternativa)",
-    "u": "../materias/lab-de-fundamentos-de-sistemas-embebidos/files/practica-06-guion.pdf"
+    "u": "../noveno/FSE/FSE-Lab/FSE-P06-ad/practica-06-guion.pdf"
    },
    {
     "t": "Abrir la tarea en Classroom",
@@ -238,11 +238,11 @@
   "enlaces": [
    {
     "t": "Manual de la práctica (PDF)",
-    "u": "../materias/lab-de-fundamentos-de-sistemas-embebidos/files/practica-07-guion.pdf"
+    "u": "../noveno/FSE/FSE-Lab/FSE-P07-ad/practica-07-guion.pdf"
    },
    {
     "t": "Archivos de apoyo (.7z)",
-    "u": "../materias/lab-de-fundamentos-de-sistemas-embebidos/files/practica-07-archivos.7z"
+    "u": "../noveno/FSE/FSE-Lab/FSE-P07-ad/practica-07-archivos.7z"
    },
    {
     "t": "Abrir la tarea en Classroom",
@@ -266,7 +266,7 @@
   "enlaces": [
    {
     "t": "Manual 08c (PDF)",
-    "u": "../materias/lab-de-fundamentos-de-sistemas-embebidos/files/practica-08c-guion.pdf"
+    "u": "../noveno/FSE/FSE-Lab/FSE-P08-ad/practica-08c-guion.pdf"
    },
    {
     "t": "FSE · Clase 11, sección «Pendiente»",
@@ -290,7 +290,7 @@
   "enlaces": [
    {
     "t": "Dataset de la práctica (CSV)",
-    "u": "../materias/mineria-de-datos/files/practica-3-1-transacciones-de-ventas.csv"
+    "u": "../noveno/MD/MD-Practicas/MD-P03-1-ad/practica-3-1-transacciones-de-ventas.csv"
    },
    {
     "t": "MD · Clase 10, entregables y prórroga",

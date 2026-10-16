@@ -1,0 +1,67 @@
+\section{Parte II: Breast Cancer Wisconsin}
+\subsection{Configuración experimental}
+El conjunto completo contiene 569 muestras y 30 características. La clase 0 (maligno) reúne 212 observaciones (37.26\%) y la clase 1 (benigno), 357 (62.74\%); la Fig.~\ref{fig:bc-distribucion} muestra esta distribución.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.5\columnwidth]{figures/breast-cancer-distribucion-clases.png}
+\caption{Distribución de las clases maligno y benigno en Breast Cancer Wisconsin.}
+\label{fig:bc-distribucion}
+\end{figure}
+
+Se realizó una división estratificada con semilla 42: 455 muestras de entrenamiento (80\%) y 114 de prueba (20\%). En entrenamiento, la clase 0 contiene 170 muestras (37.36\%) y la clase 1, 285 (62.64\%); en prueba, la clase 0 contiene 42 (36.84\%) y la clase 1, 72 (63.16\%). El escalador se ajustó únicamente con entrenamiento y se aplicó a ambos subconjuntos, de modo que ninguna información de prueba participó en el ajuste. Se entrenaron QDA con regularización $0.01$, y LDA y Gaussian Naive Bayes (GNB) con los parámetros por omisión de scikit-learn.
+
+\subsection{Resultados y análisis}
+El Cuadro~\ref{tab:metricas} resume las métricas en el conjunto de prueba; la precisión y el recall se presentan por separado para las clases maligno y benigno, y la Fig.~\ref{fig:bc-evaluacion} muestra las matrices de confusión.
+
+\begin{table}[!t]
+\centering
+\caption{Resultados en prueba.}
+\label{tab:metricas}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{l c c c c c}
+\toprule
+Modelo & Accuracy & \shortstack{Precision\\(Maligno)} & \shortstack{Precision\\(Benigno)} & \shortstack{Recall\\(Maligno)} & \shortstack{Recall\\(Benigno)} \\
+\midrule
+QDA & 95.61\% & 97.44\% & 94.67\% & 90.48\% & 98.61\% \\
+LDA & 95.61\% & 97.44\% & 94.67\% & 90.48\% & 98.61\% \\
+GNB & 92.98\% & 90.48\% & 94.44\% & 90.48\% & 94.44\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[!t]
+\centering
+\begin{minipage}[t]{0.48\columnwidth}
+\centering
+\includegraphics[width=\linewidth]{figures/breast-cancer-comparacion-accuracy.png}
+\par\footnotesize (a) Comparación de accuracy.
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\columnwidth}
+\centering
+\includegraphics[width=\linewidth]{figures/breast-cancer-matriz-confusion-qda.png}
+\par\footnotesize (b) Matriz de confusión de QDA.
+\end{minipage}
+
+\vspace{2pt}
+
+\begin{minipage}[t]{0.48\columnwidth}
+\centering
+\includegraphics[width=\linewidth]{figures/breast-cancer-matriz-confusion-lda.png}
+\par\footnotesize (c) Matriz de confusión de LDA.
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\columnwidth}
+\centering
+\includegraphics[width=\linewidth]{figures/breast-cancer-matriz-confusion-gnb.png}
+\par\footnotesize (d) Matriz de confusión de GNB.
+\end{minipage}
+\caption{Evaluación gráfica en el conjunto de prueba. En las matrices, las filas son la clase real y las columnas la predicción.}
+\label{fig:bc-evaluacion}
+\end{figure}
+
+QDA y LDA clasificaron correctamente 109 de 114 muestras y produjeron matrices de confusión idénticas: identifican 38 de 42 casos malignos y 71 de 72 benignos, es decir, cuatro falsos negativos (malignos clasificados como benignos) y un falso positivo. GNB clasificó correctamente 106 muestras; conserva los cuatro falsos negativos y eleva a cuatro los falsos positivos. El recall maligno es igual en los tres modelos (90.48\%); GNB se distingue por una menor precisión maligna (90.48\% frente a 97.44\%) y un menor recall benigno (94.44\% frente a 98.61\%).
+
+El menor desempeño de GNB es consistente con su supuesto de independencia condicional: varias características del conjunto, como el radio, el perímetro y el área, miden magnitudes geométricamente relacionadas y están fuertemente correlacionadas, por lo que el supuesto no se cumple. Por otra parte, QDA no mejora a LDA aunque es más flexible: cada matriz de covarianza de 30 características tiene 465 parámetros y la clase maligna cuenta con solo 170 muestras de entrenamiento, por lo que su estimación por clase es menos estable (de ahí la regularización) y la ventaja potencial de covarianzas distintas no se refleja en esta partición.
+
+Para este problema se recomienda LDA: iguala a QDA en todas las métricas, supera a GNB, tiene menos parámetros y no requiere regularización. Sin embargo, la comparación se basa en una sola partición de 114 muestras, donde un único caso modifica la exactitud en 0.88 puntos porcentuales, por lo que conviene confirmarla con validación cruzada. Para otras aplicaciones, la elección se basaría en cuatro criterios: el costo relativo de los errores y, con él, el recall de la clase crítica, que puede mejorarse ajustando el umbral de decisión; la relación entre el número de muestras por clase y el de parámetros, que favorece a LDA o GNB con pocos datos y a QDA con muchos; la validez de los supuestos (covarianzas iguales, independencia o normalidad) verificada con los datos; y la simplicidad, interpretabilidad y costo de cómputo. En un contexto clínico, además, un recall maligno de 90.48\% implica que cerca de uno de cada diez casos malignos no se detecta, por lo que ningún modelo debe usarse sin validación con datos independientes.
