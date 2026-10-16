@@ -1,3 +1,4 @@
+<!-- Generado por scripts/build_entregas.py desde decimo/. No editar a mano: agrega o mueve archivos en decimo/ y vuelve a correr el script. -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -5,51 +6,59 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Entregas — Lab. de Organización y Arquitectura de Computadoras</title>
 <link rel="stylesheet" href="../../assets/style.css?v=20261012a">
-<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
 <script src="../../assets/app.js?v=20261012a" defer></script>
+<style>
+.entrega h5{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);margin:14px 0 4px}
+.entrega .estado{display:inline-block;font-size:12.5px;padding:2px 10px;border-radius:99px;border:1px solid var(--c);color:var(--c);margin:2px 0 4px}
+.entrega .indicaciones p,.entrega .indicaciones li{font-size:14px;line-height:1.6;white-space:normal}
+.entrega .indicaciones blockquote{margin:6px 0;padding:4px 12px;border-left:3px solid var(--c);color:var(--ink-soft)}
+.entrega a{color:var(--indigo);word-break:break-word}
+.entrega details{margin-top:10px}.entrega summary{cursor:pointer;font-size:13px;color:var(--ink-soft)}
+.entrega details p{font-size:13px;line-height:1.7}
+.indice-entregas{font-size:14px;line-height:1.9}
+</style>
 </head>
-<body>
-<button class="viewswitch" role="switch" aria-label="Cambiar vista: por tema o por clase">
-<span class="vs-label vs-tema">Por tema</span>
-<span class="vs-track"><span class="vs-knob"></span></span>
-<span class="vs-label vs-clase">Por clase</span>
-</button>
+<body style="--c:#7C9CD6">
 <div class="wrap">
 <a class="back" href="index.html">← Lab. de Organización y Arquitectura de Computadoras</a>
 <div class="detail-head" style="border-color:#7C9CD6"><h2>Entregas</h2>
-  <p class="prof">Práctica 1 con la Mtra. Rosa Elena Lobera Sánchez · desde Práctica 2, con Ricardo Daniel Vega Gutierrez · Grupo 3 · Cada archivo abre en una pestaña nueva con opción de descarga.</p>
+  <p class="prof">Generado desde <code>decimo/</code>. Cada entrega: indicaciones del profesor, lo que se entregó y los archivos adicionales. Estado verificado en Classroom el 15 oct 2026.</p>
 </div>
-
-<div class="section-block"><h4>Práctica 1 — Introducción a las herramientas de desarrollo de los FPGAs</h4>
-<table><thead><tr><th>Archivo</th><th>Qué es</th></tr></thead><tbody>
-<tr><td><a href="../../decimo/OAC/OAC-Lab/OAC-P01/OAC-P01-entregables/Practica-01-Pre-reporte.pdf" target="_blank" style="color:var(--indigo)">Pre-reporte 1 (entregado)</a></td><td>Cuestionario previo entregado · 100/100</td></tr>
-<tr><td><a href="../../decimo/OAC/OAC-Lab/OAC-P01/OAC-P01-indicaciones.pdf" target="_blank" style="color:var(--indigo)">Guion de la práctica</a></td><td>Instrucciones de la maestra (Quartus + 74193)</td></tr>
-<tr><td><a href="../../decimo/OAC/OAC-Lab/OAC-Lab-Material/Estructura-Cuestionario-Previo.docx" target="_blank" style="color:var(--indigo)">Estructura del Cuestionario Previo</a></td><td>Requisitos y lista de cotejo del pre-reporte</td></tr>
-<tr><td><a href="../../decimo/OAC/OAC-Lab/OAC-Lab-Material/Estructura-Reporte.docx" target="_blank" style="color:var(--indigo)">Estructura del Reporte</a></td><td>Requisitos y lista de cotejo del reporte (por equipo, entrega 9 sep)</td></tr>
-</tbody></table></div>
-
-<div class="section-block"><h4>Cotejo del Pre-reporte 1 contra los requisitos de la maestra</h4>
-<p>Revisado contra <em>Estructura de documento para entrega de Cuestionarios Previos</em>.</p>
-<table><thead><tr><th>Criterio</th><th>¿Cumple?</th></tr></thead><tbody>
-<tr><td>Portada: UNAM · FI</td><td>Sí</td></tr>
-<tr><td>Portada: nombre del curso de laboratorio</td><td>Sí — aparece como «Organización y Arquitectura de Computadoras»; conviene poner «Laboratorio de…»</td></tr>
-<tr><td>Portada: título de la práctica</td><td>Sí</td></tr>
-<tr><td>Portada: nombre · número de cuenta (420054085) · grupo de teoría (Grupo 1) · fecha (02 sep 2026)</td><td>Sí</td></tr>
-<tr><td>Análisis de circuitos</td><td>Sí — descripción del 74193 + tabla de terminales</td></tr>
-<tr><td>Diseño de circuitos</td><td>Sí — configuración del proyecto en Quartus + esquemático (Fig. 1)</td></tr>
-<tr><td>Simulaciones</td><td>Sí — conteo ascendente y descendente (Fig. 3 y 4)</td></tr>
-<tr><td>Cálculos</td><td>Sí — nº de estados, tiempo de ciclo, frecuencia de simulación y f<sub>máx</sub> del Timing Analyzer</td></tr>
-<tr><td>Análisis de resultados</td><td>Sí</td></tr>
-<tr><td>Bibliografía en formato APA</td><td>Sí — Arredondo Garza (2026), Intel/Altera (2021), Mano &amp; Ciletti (2018), Texas Instruments (1988), Wakerly</td></tr>
-</tbody></table>
-<p>Contenido completo según la lista de cotejo. Únicas observaciones: (1) el documento está capturado a computadora y la maestra pide «a mano en hojas blancas, escaneado» — se aceptó y calificó 100/100, pero tenlo presente para el reporte; (2) precisar «Laboratorio de» en el nombre del curso en la portada. El uso de mapa mental/conceptual/V de Gowin es opcional.</p></div>
-
-<div class="section-block"><h4>Reportes entregados (verificado en Classroom el 7 oct 2026)</h4>
-<ul>
-<li><strong>Reporte práctica 1</strong> — Turned in (por equipo, con carátula). Estructura pedida: Portada 5 · Introducción 10 · Objetivos 10 · Desarrollo 30 · Análisis de Resultados 30 · Conclusiones individuales 10 · Bibliografía APA 5.</li>
-<li><strong>Reporte práctica 2</strong> — Turned in. Los archivos no están en el sitio.</li>
-</ul></div>
-
+<div class="section-block entrega" id="OAC-P01">
+<h4>OAC-P01 · Práctica 1</h4>
+<p class="estado">Entregada</p>
+<h5>Indicaciones</h5>
+<p><a href="../../decimo/OAC/OAC-Lab/OAC-P01/OAC-P01-indicaciones.pdf" target="_blank">OAC-P01-indicaciones.pdf</a> (enunciado del profesor)</p>
+<h5>Entregado</h5>
+<p><a href="../../decimo/OAC/OAC-Lab/OAC-P01/OAC-P01-entregables/Practica-01-Pre-reporte.pdf" target="_blank">Practica-01-Pre-reporte.pdf</a> · <a href="../../decimo/OAC/OAC-Lab/OAC-P01/OAC-P01-entregables/practica01_equipo07_OrtegaDeLaPaz.pdf" target="_blank">practica01_equipo07_OrtegaDeLaPaz.pdf</a></p>
+<details><summary>Adicionales (9)</summary><p><a href="../../decimo/OAC/OAC-Lab/OAC-P01/OAC-P01-adicionales/Practica1_Reporte.docx" target="_blank">Practica1_Reporte.docx</a> · <a href="../../decimo/OAC/OAC-Lab/OAC-P01/OAC-P01-adicionales/Practica1_Reporte.pdf" target="_blank">Practica1_Reporte.pdf</a> · <a href="../../decimo/OAC/OAC-Lab/OAC-P01/OAC-P01-adicionales/README.md" target="_blank">README.md</a> · <a href="../../decimo/OAC/OAC-Lab/OAC-P01/OAC-P01-adicionales/run_sim.do" target="_blank">run_sim.do</a> · <a href="../../decimo/OAC/OAC-Lab/OAC-P01/OAC-P01-adicionales/capturas/compilacion.png" target="_blank">capturas/compilacion.png</a> · <a href="../../decimo/OAC/OAC-Lab/OAC-P01/OAC-P01-adicionales/capturas/diagrama.png" target="_blank">capturas/diagrama.png</a> · <a href="../../decimo/OAC/OAC-Lab/OAC-P01/OAC-P01-adicionales/capturas/sim_base.png" target="_blank">capturas/sim_base.png</a> · <a href="../../decimo/OAC/OAC-Lab/OAC-P01/OAC-P01-adicionales/capturas/sim_reloj20.png" target="_blank">capturas/sim_reloj20.png</a> · <a href="../../decimo/OAC/OAC-Lab/OAC-P01/OAC-P01-adicionales/capturas/sim_reset1.png" target="_blank">capturas/sim_reset1.png</a></p></details>
+</div>
+<div class="section-block entrega" id="OAC-P02">
+<h4>OAC-P02 · Práctica 2</h4>
+<p class="estado">Entregada</p>
+<h5>Indicaciones</h5>
+<p><a href="../../decimo/OAC/OAC-Lab/OAC-P02/OAC-P02-indicaciones.pdf" target="_blank">OAC-P02-indicaciones.pdf</a> (enunciado del profesor)</p>
+<h5>Entregado</h5>
+<p><a href="../../decimo/OAC/OAC-Lab/OAC-P02/OAC-P02-entregables/practica02_equipo07_Rea_OrtegaDeLaPaz.pdf" target="_blank">practica02_equipo07_Rea_OrtegaDeLaPaz.pdf</a></p>
+<details><summary>Adicionales (3)</summary><p><a href="../../decimo/OAC/OAC-Lab/OAC-P02/OAC-P02-adicionales/Practica2_Reporte.docx" target="_blank">Practica2_Reporte.docx</a> · <a href="../../decimo/OAC/OAC-Lab/OAC-P02/OAC-P02-adicionales/mapasp2.jpg" target="_blank">mapasp2.jpg</a> · <a href="../../decimo/OAC/OAC-Lab/OAC-P02/OAC-P02-adicionales/practica-02-formato-reporte.pdf" target="_blank">practica-02-formato-reporte.pdf</a></p></details>
+</div>
+<div class="section-block entrega" id="OAC-P03">
+<h4>OAC-P03 · Práctica 3 — Cartas ASM</h4>
+<p class="estado">Entregada</p>
+<h5>Indicaciones</h5>
+<p><a href="../../decimo/OAC/OAC-Lab/OAC-P03/OAC-P03-indicaciones.pdf" target="_blank">OAC-P03-indicaciones.pdf</a> (enunciado del profesor)</p>
+<h5>Entregado</h5>
+<p><a href="../../decimo/OAC/OAC-Lab/OAC-P03/OAC-P03-entregables/practica03_equipo07_Rea_Ortega.pdf" target="_blank">practica03_equipo07_Rea_Ortega.pdf</a></p>
+<details><summary>Adicionales (1)</summary><p><a href="../../decimo/OAC/OAC-Lab/OAC-P03/OAC-P03-adicionales/carta_asm_unida.png" target="_blank">carta_asm_unida.png</a></p></details>
+</div>
+<div class="section-block entrega" id="OAC-P04">
+<h4>OAC-P04 · Práctica 4 — Máquinas de estados con memorias</h4>
+<p class="estado">Pendiente / sin entrega todavía</p>
+<h5>Indicaciones</h5>
+<p><a href="../../decimo/OAC/OAC-Lab/OAC-P04/OAC-P04-indicaciones.pdf" target="_blank">OAC-P04-indicaciones.pdf</a> (enunciado del profesor)</p>
+<h5>Entregado</h5>
+<p>— (sin archivo entregado)</p>
+</div>
 </div>
 </body>
 </html>

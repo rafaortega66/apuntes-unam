@@ -119,6 +119,9 @@ decimo/<SIGLA>/<SIGLA>-<Categoría>/<SIGLA>-XNN/
   datos bancarios, fotos personales; servicio social → repo privado `servicio-social`.
 - `material.html` y `entregas.html` de cada materia enlazan a `decimo/`.
   Al mover archivos, actualizar los enlaces y correr `build_search_index.py`.
+- Las páginas `tareas/practicas/proyectos/examenes/entregas.html` de cada materia (y `entregas.html`
+  de los labs) se **generan** desde `decimo/` con `python3 scripts/build_entregas.py` — no editarlas a mano;
+  el estado de Classroom y los títulos viven en ese script (`ESTADO`, `TITULOS`).
 - `decimo/INDICE.md` lista cada entrega con sus archivos (regenerar con
   `python3 scripts/indice_decimo.py` tras cualquier cambio). Para preguntas tipo
   «enlista las tareas de MD», leer ese índice.

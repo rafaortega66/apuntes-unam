@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-16T02:28:55+00:00",
+ "generatedAt": "2026-10-16T02:45:58+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -566,6 +566,11 @@
  },
  "gitlog": [
   {
+   "hash": "84f1d83",
+   "fecha": "2026-10-15T20:28:55-06:00",
+   "mensaje": "decimo/: indicaciones en cada entrega (Classroom + NotebookLM), material faltante del profesor (UML 9-13, MD P3.2, formatos Scrum), README/CLAUDE.md/índice al día"
+  },
+  {
    "hash": "eb5b61a",
    "fecha": "2026-10-15T20:19:54-06:00",
    "mensaje": "decimo/: cada entrega X-NN con X-NN-entregables, X-NN-adicionales y X-NN-indicaciones; X-Material solo para material independiente"
@@ -859,11 +864,6 @@
    "hash": "28b1e0d",
    "fecha": "2026-10-01T10:18:39-06:00",
    "mensaje": "OAC Clase 08 (30 sep) y ACS Clase 11 (1 oct): formato de estudio"
-  },
-  {
-   "hash": "10d3670",
-   "fecha": "2026-10-01T06:38:29-06:00",
-   "mensaje": "Progreso: actualizar estado de la migración al formato de estudio"
   }
  ]
 }

@@ -1,3 +1,4 @@
+<!-- Generado por scripts/build_entregas.py desde decimo/. No editar a mano: agrega o mueve archivos en decimo/ y vuelve a correr el script. -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -5,44 +6,103 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Entregas — Lab. de Fundamentos de Sistemas Embebidos</title>
 <link rel="stylesheet" href="../../assets/style.css?v=20261012a">
-<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
 <script src="../../assets/app.js?v=20261012a" defer></script>
+<style>
+.entrega h5{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);margin:14px 0 4px}
+.entrega .estado{display:inline-block;font-size:12.5px;padding:2px 10px;border-radius:99px;border:1px solid var(--c);color:var(--c);margin:2px 0 4px}
+.entrega .indicaciones p,.entrega .indicaciones li{font-size:14px;line-height:1.6;white-space:normal}
+.entrega .indicaciones blockquote{margin:6px 0;padding:4px 12px;border-left:3px solid var(--c);color:var(--ink-soft)}
+.entrega a{color:var(--indigo);word-break:break-word}
+.entrega details{margin-top:10px}.entrega summary{cursor:pointer;font-size:13px;color:var(--ink-soft)}
+.entrega details p{font-size:13px;line-height:1.7}
+.indice-entregas{font-size:14px;line-height:1.9}
+</style>
 </head>
-<body>
-<button class="viewswitch" role="switch" aria-label="Cambiar vista: por tema o por clase">
-<span class="vs-label vs-tema">Por tema</span>
-<span class="vs-track"><span class="vs-knob"></span></span>
-<span class="vs-label vs-clase">Por clase</span>
-</button>
+<body style="--c:#E8735C">
 <div class="wrap">
 <a class="back" href="index.html">← Lab. de Fundamentos de Sistemas Embebidos</a>
 <div class="detail-head" style="border-color:#E8735C"><h2>Entregas</h2>
-  <p class="prof">Documentos (PDF) que ya entregaste en esta asignatura. Cada uno se abre en pestaña nueva; desde el visor de Chrome se puede descargar.</p>
+  <p class="prof">Generado desde <code>decimo/</code>. Cada entrega: indicaciones del profesor, lo que se entregó y los archivos adicionales. Estado verificado en Classroom el 15 oct 2026.</p>
 </div>
-<div class="section-block"><h4>Registro de entregas</h4>
-<table><thead><tr><th>Archivo</th><th>Qué es</th></tr></thead><tbody>
-<tr><td><a href="../../decimo/FSE/FSE-Lab/FSE-P01/FSE-P01-entregables/p01-FSE-420054085.pdf.pdf" target="_blank" style="color:var(--indigo)">Práctica 1 — Instalación de Raspbian en la Raspberry Pi</a></td><td>Entregada el 1 sep 2026 — <strong>ya calificada</strong> (resaltado del profesor visible en el PDF, sin nota escrita — ver retroalimentación abajo). Raspberry Pi OS Lite grabado por terminal con <code>dd</code>, archivos <code>ssh</code>/<code>userconf.txt</code> para acceso sin periféricos, red <code>eth0</code> por DHCP vía <code>nmconnection</code>, actualización con <code>apt</code> (resolviendo el error de <code>dpkg frontend lock</code> por mal uso de <code>&amp;&amp;</code> con <code>sudo</code>), y verificación de persistencia tras reinicio.</td></tr>
-<tr><td><a href="../../decimo/FSE/FSE-Lab/FSE-P02/FSE-P02-adicionales/version-previa/Practica-02-LineageOS-en-Raspberry-Pi.pdf" target="_blank" style="color:var(--indigo)">Práctica 2 — Instalación de LineageOS en la Raspberry Pi</a></td><td>Documento final entregado (versión actualizada, 8 sep 2026). LineageOS 20 / Android 13 en Raspberry Pi 4 + NikGapps para la Play Store. Introducción, antecedentes, desarrollo (Etcher con discos del sistema, USB FAT32 por terminal con <code>wipefs</code>/<code>parted</code>/<code>mkfs.vfat</code>, paquete <code>NikGapps-core-arm64-13</code>, recovery TWRP), resultados y conclusiones con las dificultades resueltas.</td></tr>
-<tr><td><a href="../../decimo/FSE/FSE-Lab/FSE-P03/FSE-P03-entregables/19-OEPR-L03.pdf" target="_blank" style="color:var(--indigo)">Práctica 3 — entrega (PDF)</a></td><td>Entregada en Classroom (Turned in), junto con un video de YouTube. Vencía el 22 sep 2026.</td></tr>
-<tr><td><a href="../../decimo/FSE/FSE-Lab/FSE-P04/FSE-P04-entregables/19-OEPR-L04.pdf" target="_blank" style="color:var(--indigo)">Práctica 4 — entrega (PDF)</a></td><td>Entregada en Classroom (Turned in). Vencía el 29 sep 2026. Código fuente LaTeX: <a href="../../decimo/FSE/FSE-Lab/FSE-P04/FSE-P04-adicionales/19-OEPR-L04.tex" target="_blank" style="color:var(--indigo)">.tex</a>.</td></tr>
-<tr><td>Práctica 5 — Kiosco multimedia (Raspberry Pi)</td><td><strong>Turned in</strong> en Classroom (verificado el 7 oct 2026; vencía el 6 oct). El archivo no está en el sitio.</td></tr>
-</tbody></table>
+<div class="section-block entrega" id="FSE-P01">
+<h4>FSE-P01 · Práctica 1 — Raspbian en Raspberry Pi</h4>
+<p class="estado">Entregada · 90/100</p>
+<h5>Indicaciones</h5>
+<p><a href="../../decimo/FSE/FSE-Lab/FSE-P01/FSE-P01-indicaciones.pdf" target="_blank">FSE-P01-indicaciones.pdf</a> (enunciado del profesor)</p>
+<h5>Entregado</h5>
+<p><a href="../../decimo/FSE/FSE-Lab/FSE-P01/FSE-P01-entregables/p01-FSE-420054085.pdf.pdf" target="_blank">p01-FSE-420054085.pdf.pdf</a></p>
+<details><summary>Adicionales (3)</summary><p><a href="../../decimo/FSE/FSE-Lab/FSE-P01/FSE-P01-adicionales/practica-01-archivos.7z" target="_blank">practica-01-archivos.7z</a> · <a href="../../decimo/FSE/FSE-Lab/FSE-P01/FSE-P01-adicionales/version-previa/P01-FSE-420054085.pdf" target="_blank">version-previa/P01-FSE-420054085.pdf</a> · <a href="../../decimo/FSE/FSE-Lab/FSE-P01/FSE-P01-adicionales/version-previa/Reporte_Practica01_OrtegaDeLaPaz.pdf" target="_blank">version-previa/Reporte_Practica01_OrtegaDeLaPaz.pdf</a></p></details>
 </div>
-
-<div class="section-block nota" style="border-left:3px solid #E8735C"><h4>⚠️ Retroalimentación de la Práctica 1 — aplicar en las siguientes</h4>
-<ul>
-<li><strong>Introducción incompleta:</strong> faltaron antecedentes históricos (contexto de dónde viene la tecnología/el problema, no solo qué se hizo en la práctica).</li>
-<li><strong>Todo debe estar referenciado:</strong> cualquier afirmación técnica necesita su cita (no solo las que ya se citaron en Bibliografía) — no basta con poner la bibliografía al final si el cuerpo del texto no referencia explícitamente cada afirmación.</li>
-<li><strong>No debe existir una sección separada de "Resultados experimentales":</strong> los resultados se integran directamente dentro de Desarrollo, no aparte.</li>
-</ul>
-<p class="empty" style="padding-top:6px">Nota: la Práctica 2 (arriba) también tiene una sección de "Resultados" separada de Desarrollo — probablemente aplica la misma observación; confirmar si ya se calificó con este criterio o si conviene ajustarla.</p>
+<div class="section-block entrega" id="FSE-P02">
+<h4>FSE-P02 · Práctica 2 — LineageOS en Raspberry Pi</h4>
+<p class="estado">Entregada · 60/100</p>
+<h5>Indicaciones</h5>
+<p><a href="../../decimo/FSE/FSE-Lab/FSE-P02/FSE-P02-indicaciones.pdf" target="_blank">FSE-P02-indicaciones.pdf</a> (enunciado del profesor)</p>
+<h5>Entregado</h5>
+<p><a href="../../decimo/FSE/FSE-Lab/FSE-P02/FSE-P02-entregables/p02-FSE-420054085.pdf" target="_blank">p02-FSE-420054085.pdf</a></p>
+<details><summary>Adicionales (5)</summary><p><a href="../../decimo/FSE/FSE-Lab/FSE-P02/FSE-P02-adicionales/practica-02c-archivos.7z" target="_blank">practica-02c-archivos.7z</a> · <a href="../../decimo/FSE/FSE-Lab/FSE-P02/FSE-P02-adicionales/otras-versiones-del-guion/practica-02-guion.pdf" target="_blank">otras-versiones-del-guion/practica-02-guion.pdf</a> · <a href="../../decimo/FSE/FSE-Lab/FSE-P02/FSE-P02-adicionales/otras-versiones-del-guion/practica-02c-guion.pdf" target="_blank">otras-versiones-del-guion/practica-02c-guion.pdf</a> · <a href="../../decimo/FSE/FSE-Lab/FSE-P02/FSE-P02-adicionales/version-previa/Practica-02-LineageOS-en-Raspberry-Pi.pdf" target="_blank">version-previa/Practica-02-LineageOS-en-Raspberry-Pi.pdf</a> · <a href="../../decimo/FSE/FSE-Lab/FSE-P02/FSE-P02-adicionales/version-previa/p02-FSE-420054085-mac-2026-09-08.pdf" target="_blank">version-previa/p02-FSE-420054085-mac-2026-09-08.pdf</a></p></details>
 </div>
-
-<div class="section-block"><h4>Manuales del profesor</h4>
-<table><thead><tr><th>Archivo</th><th>Qué es</th></tr></thead><tbody>
-<tr><td><a href="../../decimo/FSE/FSE-Lab/FSE-P01/FSE-P01-indicaciones.pdf" target="_blank" style="color:var(--indigo)">Práctica 1 — Instalación de Raspbian en la Raspberry Pi (manual)</a></td><td>Instrucciones del M.C. José Mauricio Matamoros (versión 2025): material, descarga de Raspberry Pi OS, grabado con Etcher / <code>dd</code>, asistente de configuración, <code>raspi-config</code> (expandir sistema de archivos) y configuración de red cableada <code>eth0</code> con IP fija (network-manager).</td></tr>
-<tr><td><a href="../../decimo/FSE/FSE-Lab/FSE-P02/FSE-P02-indicaciones.pdf" target="_blank" style="color:var(--indigo)">Práctica 2 bis — Instalación de LineageOS en la Raspberry Pi (manual)</a></td><td>Instrucciones del M.C. José Mauricio Matamoros: descarga de LineageOS (KonstaKANG), NikGapps, grabado con Etcher, particionado (boot/root/vendor/userdata), asistente de configuración e instalación de Google Play desde modo recovery.</td></tr>
-</tbody></table>
+<div class="section-block entrega" id="FSE-P03">
+<h4>FSE-P03 · Práctica 3</h4>
+<p class="estado">Entregada · 100/100</p>
+<h5>Indicaciones</h5>
+<p><a href="../../decimo/FSE/FSE-Lab/FSE-P03/FSE-P03-indicaciones.pdf" target="_blank">FSE-P03-indicaciones.pdf</a> (enunciado del profesor)</p>
+<h5>Entregado</h5>
+<p><a href="../../decimo/FSE/FSE-Lab/FSE-P03/FSE-P03-entregables/19-OEPR-L03.pdf" target="_blank">19-OEPR-L03.pdf</a></p>
+<details><summary>Adicionales (7)</summary><p><a href="../../decimo/FSE/FSE-Lab/FSE-P03/FSE-P03-adicionales/FSE-p03.zip" target="_blank">FSE-p03.zip</a> · <a href="../../decimo/FSE/FSE-Lab/FSE-P03/FSE-P03-adicionales/experimento1.py" target="_blank">experimento1.py</a> · <a href="../../decimo/FSE/FSE-Lab/FSE-P03/FSE-P03-adicionales/experimento2.py" target="_blank">experimento2.py</a> · <a href="../../decimo/FSE/FSE-Lab/FSE-P03/FSE-P03-adicionales/experimento3.py" target="_blank">experimento3.py</a> · <a href="../../decimo/FSE/FSE-Lab/FSE-P03/FSE-P03-adicionales/experimento4.py" target="_blank">experimento4.py</a> · <a href="../../decimo/FSE/FSE-Lab/FSE-P03/FSE-P03-adicionales/experimento5.py" target="_blank">experimento5.py</a> · <a href="../../decimo/FSE/FSE-Lab/FSE-P03/FSE-P03-adicionales/practica-03-archivos.7z" target="_blank">practica-03-archivos.7z</a></p></details>
+</div>
+<div class="section-block entrega" id="FSE-P04">
+<h4>FSE-P04 · Práctica 4 — Control remoto por WiFi y servidor web</h4>
+<p class="estado">Entregada</p>
+<h5>Indicaciones</h5>
+<p><a href="../../decimo/FSE/FSE-Lab/FSE-P04/FSE-P04-indicaciones.pdf" target="_blank">FSE-P04-indicaciones.pdf</a> (enunciado del profesor)</p>
+<h5>Entregado</h5>
+<p><a href="../../decimo/FSE/FSE-Lab/FSE-P04/FSE-P04-entregables/19-OEPR-L04.pdf" target="_blank">19-OEPR-L04.pdf</a></p>
+<details><summary>Adicionales (3)</summary><p><a href="../../decimo/FSE/FSE-Lab/FSE-P04/FSE-P04-adicionales/19-OEPR-L04.tex" target="_blank">19-OEPR-L04.tex</a> · <a href="../../decimo/FSE/FSE-Lab/FSE-P04/FSE-P04-adicionales/setup_ap.sh" target="_blank">setup_ap.sh</a> · <a href="../../decimo/FSE/FSE-Lab/FSE-P04/FSE-P04-adicionales/otras-versiones-del-guion/practica-04-guion.pdf" target="_blank">otras-versiones-del-guion/practica-04-guion.pdf</a></p></details>
+</div>
+<div class="section-block entrega" id="FSE-P05">
+<h4>FSE-P05 · Práctica 5</h4>
+<p class="estado">Entregada</p>
+<h5>Indicaciones</h5>
+<p><a href="../../decimo/FSE/FSE-Lab/FSE-P05/FSE-P05-indicaciones.pdf" target="_blank">FSE-P05-indicaciones.pdf</a> (enunciado del profesor)</p>
+<h5>Entregado</h5>
+<p><a href="../../decimo/FSE/FSE-Lab/FSE-P05/FSE-P05-entregables/19-OEPR-L05-adicionales.zip" target="_blank">19-OEPR-L05-adicionales.zip</a> · <a href="../../decimo/FSE/FSE-Lab/FSE-P05/FSE-P05-entregables/19-OEPR-L05.pdf" target="_blank">19-OEPR-L05.pdf</a></p>
+<details><summary>Adicionales (1)</summary><p><a href="../../decimo/FSE/FSE-Lab/FSE-P05/FSE-P05-adicionales/practica-05-archivos.7z" target="_blank">practica-05-archivos.7z</a></p></details>
+</div>
+<div class="section-block entrega" id="FSE-P06">
+<h4>FSE-P06 · Práctica 6 — I²C con Raspberry Pi Pico</h4>
+<p class="estado">Entregada tarde</p>
+<h5>Indicaciones</h5>
+<p><a href="../../decimo/FSE/FSE-Lab/FSE-P06/FSE-P06-indicaciones.pdf" target="_blank">FSE-P06-indicaciones.pdf</a> (enunciado del profesor)</p>
+<h5>Entregado</h5>
+<p><a href="../../decimo/FSE/FSE-Lab/FSE-P06/FSE-P06-entregables/19-OEPR-L06-adicionales.zip" target="_blank">19-OEPR-L06-adicionales.zip</a> · <a href="../../decimo/FSE/FSE-Lab/FSE-P06/FSE-P06-entregables/19-OEPR-L06.pdf" target="_blank">19-OEPR-L06.pdf</a></p>
+<details><summary>Adicionales (10)</summary><p><a href="../../decimo/FSE/FSE-Lab/FSE-P06/FSE-P06-adicionales/practica-06-archivos.7z" target="_blank">practica-06-archivos.7z</a> · <a href="../../decimo/FSE/FSE-Lab/FSE-P06/FSE-P06-adicionales/practica-06b-archivos.7z" target="_blank">practica-06b-archivos.7z</a> · <a href="../../decimo/FSE/FSE-Lab/FSE-P06/FSE-P06-adicionales/otras-versiones-del-guion/practica-06-guion.pdf" target="_blank">otras-versiones-del-guion/practica-06-guion.pdf</a> · <a href="../../decimo/FSE/FSE-Lab/FSE-P06/FSE-P06-adicionales/practica-06/src/arduino-code-i2c.cpp" target="_blank">practica-06/src/arduino-code-i2c.cpp</a> · <a href="../../decimo/FSE/FSE-Lab/FSE-P06/FSE-P06-adicionales/practica-06/src/arduino-code.cpp" target="_blank">practica-06/src/arduino-code.cpp</a> · <a href="../../decimo/FSE/FSE-Lab/FSE-P06/FSE-P06-adicionales/practica-06/src/raspberry-code-i2c.py" target="_blank">practica-06/src/raspberry-code-i2c.py</a> · <a href="../../decimo/FSE/FSE-Lab/FSE-P06/FSE-P06-adicionales/practica-06b/src/i2cslave.py" target="_blank">practica-06b/src/i2cslave.py</a> · <a href="../../decimo/FSE/FSE-Lab/FSE-P06/FSE-P06-adicionales/practica-06b/src/pico-code-adc.py" target="_blank">practica-06b/src/pico-code-adc.py</a> · <a href="../../decimo/FSE/FSE-Lab/FSE-P06/FSE-P06-adicionales/practica-06b/src/pico-code-i2c.py" target="_blank">practica-06b/src/pico-code-i2c.py</a> · <a href="../../decimo/FSE/FSE-Lab/FSE-P06/FSE-P06-adicionales/practica-06b/src/raspberry-code-i2c.py" target="_blank">practica-06b/src/raspberry-code-i2c.py</a></p></details>
+</div>
+<div class="section-block entrega" id="FSE-P07">
+<h4>FSE-P07 · Práctica 7</h4>
+<p class="estado">Pendiente / sin entrega todavía</p>
+<h5>Indicaciones</h5>
+<p><a href="../../decimo/FSE/FSE-Lab/FSE-P07/FSE-P07-indicaciones.pdf" target="_blank">FSE-P07-indicaciones.pdf</a> (enunciado del profesor)</p>
+<h5>Entregado</h5>
+<p>— (sin archivo entregado)</p>
+<details><summary>Adicionales (4)</summary><p><a href="../../decimo/FSE/FSE-Lab/FSE-P07/FSE-P07-adicionales/practica-07-archivos.7z" target="_blank">practica-07-archivos.7z</a> · <a href="../../decimo/FSE/FSE-Lab/FSE-P07/FSE-P07-adicionales/practica-07b-archivos.7z" target="_blank">practica-07b-archivos.7z</a> · <a href="../../decimo/FSE/FSE-Lab/FSE-P07/FSE-P07-adicionales/otras-versiones-del-guion/practica-07b-guion.pdf" target="_blank">otras-versiones-del-guion/practica-07b-guion.pdf</a> · <a href="../../decimo/FSE/FSE-Lab/FSE-P07/FSE-P07-adicionales/otras-versiones-del-guion/practica-07c-guion.pdf" target="_blank">otras-versiones-del-guion/practica-07c-guion.pdf</a></p></details>
+</div>
+<div class="section-block entrega" id="FSE-P08">
+<h4>FSE-P08 · Práctica 8</h4>
+<p class="estado">Pendiente / sin entrega todavía</p>
+<h5>Indicaciones</h5>
+<p><a href="../../decimo/FSE/FSE-Lab/FSE-P08/FSE-P08-indicaciones.pdf" target="_blank">FSE-P08-indicaciones.pdf</a> (enunciado del profesor)</p>
+<h5>Entregado</h5>
+<p>— (sin archivo entregado)</p>
+<details><summary>Adicionales (1)</summary><p><a href="../../decimo/FSE/FSE-Lab/FSE-P08/FSE-P08-adicionales/practica-08c-archivos.7z" target="_blank">practica-08c-archivos.7z</a></p></details>
+</div>
+<div class="section-block entrega" id="FSE-ProyFinal">
+<h4>FSE-ProyFinal · Proyecto final del laboratorio</h4>
+<p class="estado">Pendiente / sin entrega todavía</p>
+<h5>Indicaciones</h5>
+<p><a href="../../decimo/FSE/FSE-Lab/FSE-ProyFinal/FSE-ProyFinal-indicaciones.pdf" target="_blank">FSE-ProyFinal-indicaciones.pdf</a> (enunciado del profesor)</p>
+<h5>Entregado</h5>
+<p>— (sin archivo entregado)</p>
 </div>
 </div>
 </body>

@@ -1,19 +1,60 @@
+<!-- Generado por scripts/build_entregas.py desde decimo/. No editar a mano: agrega o mueve archivos en decimo/ y vuelve a correr el script. -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Proyectos</title>
+<title>Proyectos — Organización y Arquitectura de Computadoras</title>
 <link rel="stylesheet" href="../../assets/style.css?v=20261012a">
 <script src="../../assets/app.js?v=20261012a" defer></script>
+<style>
+.entrega h5{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);margin:14px 0 4px}
+.entrega .estado{display:inline-block;font-size:12.5px;padding:2px 10px;border-radius:99px;border:1px solid var(--c);color:var(--c);margin:2px 0 4px}
+.entrega .indicaciones p,.entrega .indicaciones li{font-size:14px;line-height:1.6;white-space:normal}
+.entrega .indicaciones blockquote{margin:6px 0;padding:4px 12px;border-left:3px solid var(--c);color:var(--ink-soft)}
+.entrega a{color:var(--indigo);word-break:break-word}
+.entrega details{margin-top:10px}.entrega summary{cursor:pointer;font-size:13px;color:var(--ink-soft)}
+.entrega details p{font-size:13px;line-height:1.7}
+.indice-entregas{font-size:14px;line-height:1.9}
+</style>
 </head>
-<body>
+<body style="--c:#45B8A8">
 <div class="wrap">
-<a class="back" href="index.html">← Volver a la materia</a>
-<div class="detail-head">
-  <h2>Proyectos</h2>
+<a class="back" href="index.html">← Organización y Arquitectura de Computadoras</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Proyectos</h2>
+  <p class="prof">Generado desde <code>decimo/</code>. Cada entrega: indicaciones del profesor, lo que se entregó y los archivos adicionales. Estado verificado en Classroom el 15 oct 2026.</p>
 </div>
-<p class="empty">Contenido por agregar.</p>
+<div class="section-block entrega" id="OAC-Proy01">
+<h4>OAC-Proy01 · Proyecto 1 — Seno y coseno por series de Taylor</h4>
+<p class="estado">Entregada (OAC teoría no usa Classroom)</p>
+<h5>Indicaciones</h5>
+<div class="indicaciones"><p>OAC (teoría) no usa Classroom. Fuente: NotebookLM, cuaderno OAC (audios de clase).</p>
+<ul>
+<li>Calcular <strong>sen(x)</strong> y <strong>cos(x)</strong> con <strong>series de Taylor</strong> en la Raspberry Pi Pico 2, usando la <strong>FPU</strong> en ensamblador en línea (<code>@micropython.asm_thumb</code>).</li>
+<li>Sugerencia del profesor: <strong>precalcular los factoriales</strong> como constantes y multiplicar (las divisiones repetidas alentan el procesador).</li>
+<li>No poner demasiados términos: basta una aproximación.</li>
+<li>No se pidió menú, teclado, pantalla ni validación de ángulos.</li>
+<li>Fecha: tentativa, «máximo… el lunes que viene el otro» (no especificada con exactitud).</li>
+</ul></div>
+<h5>Entregado</h5>
+<p><a href="../../decimo/OAC/OAC-Proyectos/OAC-Proy01/OAC-Proy01-entregables/proyecto_calculadora.py" target="_blank">proyecto_calculadora.py</a> · <a href="../../decimo/OAC/OAC-Proyectos/OAC-Proy01/OAC-Proy01-entregables/proyecto_taylor.py" target="_blank">proyecto_taylor.py</a></p>
+<details><summary>Adicionales (1)</summary><p><a href="../../decimo/OAC/OAC-Proyectos/OAC-Proy01/OAC-Proy01-adicionales/capturas/Proy01_salida.png" target="_blank">capturas/Proy01_salida.png</a></p></details>
+</div>
+<div class="section-block entrega" id="OAC-Proy02">
+<h4>OAC-Proy02 · Proyecto 2 — Filtro digital IIR</h4>
+<p class="estado">Entregada (OAC teoría no usa Classroom)</p>
+<h5>Indicaciones</h5>
+<div class="indicaciones"><p>OAC (teoría) no usa Classroom. Fuente: NotebookLM, cuaderno OAC (audios de clase).</p>
+<ul>
+<li>Implementar en ensamblador la <strong>ecuación de diferencias de un filtro IIR de segundo orden</strong>.</li>
+<li>Proponer coeficientes para una respuesta <strong>subamortiguada</strong>, con tiempo de muestreo <strong>Ts = 0.05 s</strong> y frecuencia f &lt; 1/(2·Ts).</li>
+<li>Procesar una <strong>onda cuadrada</strong> generada por el programa, actualizando en cada iteración las entradas/salidas presentes y pasadas en arreglos de punto flotante, <strong>sin loops dentro del ensamblador</strong>.</li>
+<li>Formato: MicroPython con subrutina en ensamblador FPU (<code>@micropython.asm_thumb</code>). Fecha: no especificada.</li>
+</ul></div>
+<h5>Entregado</h5>
+<p><a href="../../decimo/OAC/OAC-Proyectos/OAC-Proy02/OAC-Proy02-entregables/proyecto_filtro_iir.py" target="_blank">proyecto_filtro_iir.py</a></p>
+<details><summary>Adicionales (1)</summary><p><a href="../../decimo/OAC/OAC-Proyectos/OAC-Proy02/OAC-Proy02-adicionales/capturas/Proy02_escalon.png" target="_blank">capturas/Proy02_escalon.png</a></p></details>
+</div>
 </div>
 </body>
 </html>

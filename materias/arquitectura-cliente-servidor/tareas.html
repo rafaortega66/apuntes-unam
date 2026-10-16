@@ -1,19 +1,79 @@
+<!-- Generado por scripts/build_entregas.py desde decimo/. No editar a mano: agrega o mueve archivos en decimo/ y vuelve a correr el script. -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tareas</title>
+<title>Tareas — Arquitectura Cliente-Servidor</title>
 <link rel="stylesheet" href="../../assets/style.css?v=20261012a">
 <script src="../../assets/app.js?v=20261012a" defer></script>
+<style>
+.entrega h5{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);margin:14px 0 4px}
+.entrega .estado{display:inline-block;font-size:12.5px;padding:2px 10px;border-radius:99px;border:1px solid var(--c);color:var(--c);margin:2px 0 4px}
+.entrega .indicaciones p,.entrega .indicaciones li{font-size:14px;line-height:1.6;white-space:normal}
+.entrega .indicaciones blockquote{margin:6px 0;padding:4px 12px;border-left:3px solid var(--c);color:var(--ink-soft)}
+.entrega a{color:var(--indigo);word-break:break-word}
+.entrega details{margin-top:10px}.entrega summary{cursor:pointer;font-size:13px;color:var(--ink-soft)}
+.entrega details p{font-size:13px;line-height:1.7}
+.indice-entregas{font-size:14px;line-height:1.9}
+</style>
 </head>
-<body>
+<body style="--c:#E8735C">
 <div class="wrap">
-<a class="back" href="index.html">← Volver a la materia</a>
-<div class="detail-head">
-  <h2>Tareas</h2>
+<a class="back" href="index.html">← Arquitectura Cliente-Servidor</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Tareas</h2>
+  <p class="prof">Generado desde <code>decimo/</code>. Cada entrega: indicaciones del profesor, lo que se entregó y los archivos adicionales. Estado verificado en Classroom el 15 oct 2026.</p>
 </div>
-<p class="empty">Contenido por agregar.</p>
+<div class="section-block entrega" id="ACS-T01">
+<h4>ACS-T01 · Tarea 1 — Investigar procesos</h4>
+<p class="estado">Entregada (por correo; ACS no usa Classroom)</p>
+<h5>Indicaciones</h5>
+<div class="indicaciones"><p>ACS no usa Classroom. Fuente: NotebookLM, cuaderno ACS (audios de clase).</p>
+<ul>
+<li>Investigar <strong>qué es un proceso</strong> y <strong>qué es la imagen de un proceso</strong> en sistemas operativos, definiendo ambos conceptos.</li>
+<li>Entrega <strong>por correo</strong>, en <strong>PDF</strong>. Quien se inscribió en altas y bajas debía poner nombre completo y número de cuenta en el mensaje.</li>
+<li>Fecha: no especificada en las fuentes (se revisó al inicio de la Clase 1).</li>
+</ul></div>
+<h5>Entregado</h5>
+<p><a href="../../decimo/ACS/ACS-Tareas/ACS-T01/ACS-T01-entregables/ACS-T01-420054085.pdf" target="_blank">ACS-T01-420054085.pdf</a></p>
+<details><summary>Adicionales (1)</summary><p><a href="../../decimo/ACS/ACS-Tareas/ACS-T01/ACS-T01-adicionales/tarea1ACS.pages" target="_blank">tarea1ACS.pages</a></p></details>
+</div>
+<div class="section-block entrega" id="ACS-T02">
+<h4>ACS-T02 · Tarea 2 — Permisos, fdisk y setuid</h4>
+<p class="estado">Entregada (por correo; ACS no usa Classroom)</p>
+<h5>Indicaciones</h5>
+<p><a href="../../decimo/ACS/ACS-Tareas/ACS-T02/ACS-T02-indicaciones.pdf" target="_blank">ACS-T02-indicaciones.pdf</a> (enunciado del profesor)</p>
+<h5>Entregado</h5>
+<p><a href="../../decimo/ACS/ACS-Tareas/ACS-T02/ACS-T02-entregables/ACS-T02-420054085.pdf" target="_blank">ACS-T02-420054085.pdf</a></p>
+</div>
+<div class="section-block entrega" id="ACS-T03">
+<h4>ACS-T03 · Tarea 3 — fork, exec y execve</h4>
+<p class="estado">Entregada (por correo; ACS no usa Classroom)</p>
+<h5>Indicaciones</h5>
+<p><a href="../../decimo/ACS/ACS-Tareas/ACS-T03/ACS-T03-indicaciones.pdf" target="_blank">ACS-T03-indicaciones.pdf</a> (enunciado del profesor)</p>
+<h5>Entregado</h5>
+<p><a href="../../decimo/ACS/ACS-Tareas/ACS-T03/ACS-T03-entregables/ACS-T03-420054085.pdf" target="_blank">ACS-T03-420054085.pdf</a></p>
+</div>
+<div class="section-block entrega" id="ACS-T04">
+<h4>ACS-T04 · Tarea 4 — ejemplo_listen.c (cola de listen)</h4>
+<p class="estado">Entregada (por correo; ACS no usa Classroom)</p>
+<h5>Indicaciones</h5>
+<div class="indicaciones"><p>ACS no usa Classroom. Fuente: NotebookLM, cuaderno ACS (audios de clase).</p>
+<p>Programa del profesor: <code>../../ACS-Material/programas/tema3/ejemplo_listen.c</code>.</p>
+<ol>
+<li>Investigar la función del kernel <strong><code>sk_acceptq_is_full</code></strong> y la teoría del desbordamiento de las colas <strong>TCP SYN</strong> y <strong>ACCEPT</strong>.</li>
+<li>Investigar los parámetros <strong><code>tcp_syncookies</code></strong> y <strong><code>tcp_syn_retries</code></strong>.</li>
+<li>Con root (<code>sudo sysctl -w</code>): <code>tcp_syncookies=0</code> y <code>tcp_syn_retries=1</code>.</li>
+<li>Ejecutar el servidor <code>ejemplo_listen</code> (backlog 1 en <code>listen</code>) y conectar <strong>4 o más clientes con <code>nc</code></strong> para mostrar cuántas conexiones se encolan antes de rechazarse.</li>
+</ol>
+<ul>
+<li>Entrega: <strong>PDF por correo</strong>, con la explicación teórica y <strong>capturas de todas las terminales</strong> (servidor, opcionalmente <code>watch -n1 ss …</code>, y los clientes).</li>
+<li>Fecha: antes del jueves de la semana siguiente a la clase en que se explicó.</li>
+</ul></div>
+<h5>Entregado</h5>
+<p><a href="../../decimo/ACS/ACS-Tareas/ACS-T04/ACS-T04-entregables/ACS-T04-420054085.pdf" target="_blank">ACS-T04-420054085.pdf</a></p>
+<details><summary>Adicionales (1)</summary><p><a href="../../decimo/ACS/ACS-Tareas/ACS-T04/ACS-T04-adicionales/ejemplo_listen" target="_blank">ejemplo_listen</a></p></details>
+</div>
 </div>
 </body>
 </html>

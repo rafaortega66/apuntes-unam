@@ -1,3 +1,4 @@
+<!-- Generado por scripts/build_entregas.py desde decimo/. No editar a mano: agrega o mueve archivos en decimo/ y vuelve a correr el script. -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -5,39 +6,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Entregas — Arquitectura Cliente-Servidor</title>
 <link rel="stylesheet" href="../../assets/style.css?v=20261012a">
-<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
 <script src="../../assets/app.js?v=20261012a" defer></script>
+<style>
+.entrega h5{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);margin:14px 0 4px}
+.entrega .estado{display:inline-block;font-size:12.5px;padding:2px 10px;border-radius:99px;border:1px solid var(--c);color:var(--c);margin:2px 0 4px}
+.entrega .indicaciones p,.entrega .indicaciones li{font-size:14px;line-height:1.6;white-space:normal}
+.entrega .indicaciones blockquote{margin:6px 0;padding:4px 12px;border-left:3px solid var(--c);color:var(--ink-soft)}
+.entrega a{color:var(--indigo);word-break:break-word}
+.entrega details{margin-top:10px}.entrega summary{cursor:pointer;font-size:13px;color:var(--ink-soft)}
+.entrega details p{font-size:13px;line-height:1.7}
+.indice-entregas{font-size:14px;line-height:1.9}
+</style>
 </head>
-<body>
-<button class="viewswitch" role="switch" aria-label="Cambiar vista: por tema o por clase">
-<span class="vs-label vs-tema">Por tema</span>
-<span class="vs-track"><span class="vs-knob"></span></span>
-<span class="vs-label vs-clase">Por clase</span>
-</button>
+<body style="--c:#E8735C">
 <div class="wrap">
 <a class="back" href="index.html">← Arquitectura Cliente-Servidor</a>
 <div class="detail-head" style="border-color:#E8735C"><h2>Entregas</h2>
-  <p class="prof">Documentos (PDF) que ya entregaste en esta asignatura. Cada uno se abre en pestaña nueva; desde el visor de Chrome se puede descargar.</p>
+  <p class="prof">Generado desde <code>decimo/</code>. Cada entrega: indicaciones del profesor, lo que se entregó y los archivos adicionales. Estado verificado en Classroom el 15 oct 2026.</p>
 </div>
-<div class="section-block"><h4>Registro de entregas</h4>
-<table><thead><tr><th>Archivo</th><th>Qué es</th></tr></thead><tbody>
-<tr><td><a href="../../decimo/ACS/ACS-Tareas/ACS-T01/ACS-T01-entregables/ACS-T01-420054085.pdf" target="_blank" style="color:var(--indigo)">Tarea 1 — Investigar (Sistemas Operativos)</a></td><td>Investigación «¿Qué es un proceso?» e imagen de memoria del proceso (Tanenbaum 2009, Gay 2000). APA 7.</td></tr>
-<tr><td><a href="../../decimo/ACS/ACS-Tareas/ACS-T02/ACS-T02-entregables/ACS-T02-420054085.pdf" target="_blank" style="color:var(--indigo)">Tarea 2 — Permisos, fdisk y bit setuid</a></td><td>Entregada el 3 sep 2026. Actividad 1 (dos terminales root / no-root, <code>whoami</code>, <code>fdisk -l</code>, <code>chmod 4511</code>, restaurar) + Actividad 2 (<code>ids.c</code>: UID real vs. efectivo con setuid). APA 7 (Negus 2020, Shotts 2019).</td></tr>
-<tr><td><a href="../../decimo/ACS/ACS-Tareas/ACS-T03/ACS-T03-entregables/ACS-T03-420054085.pdf" target="_blank" style="color:var(--indigo)">Tarea 3 — fork(), exec() y manejo de errores</a></td><td>17 sep 2026. Actividad 1 (<code>programa20_myecho.c</code> y <code>programa21_execve.c</code> comentados línea por línea, ejecución con argumentos genéricos y con el nombre propio, llamada encadenada <code>programa21_execve ./programa20_myecho</code>, corrección del bloque <code>if</code>/<code>exit(EXIT_FAILURE)</code> en <code>execve()</code>) + Actividad 2 (<code>programa23_fork-exec.c</code> comentado, misma corrección en <code>execvp()</code> dentro de <code>spawn()</code>). Código fuente tomado de <code>profesores.fi-b.unam.mx/carlos/acs</code>, compilado y ejecutado realmente para obtener la evidencia. APA 7 (The Open Group, Stevens &amp; Rago 2013).</td></tr>
-<tr><td><a href="clase-12.html#c12-pendiente" style="color:var(--indigo)">Tarea 4 — Peticiones concurrentes con netcat + monitoreo con ss</a></td><td>Entregada (confirmado por el usuario el 12 oct 2026; ACS no usa Classroom). El archivo no está en el sitio.</td></tr>
-</tbody></table>
-<p>El enunciado del profesor está en <a href="../../decimo/ACS/ACS-Tareas/ACS-T02/ACS-T02-indicaciones.pdf" target="_blank" style="color:var(--indigo)">Tarea-02.pdf</a> y <a href="../../decimo/ACS/ACS-Tareas/ACS-T03/ACS-T03-indicaciones.pdf" target="_blank" style="color:var(--indigo)">Tarea-03.pdf</a>.</p>
-</div>
-
-<div class="section-block"><h4>Cotejo rápido</h4>
-<ul>
-<li><strong>Tarea 2 — Actividad 1:</strong> cubre los 10 pasos del ejercicio (whoami en ambas terminales, <code>fdisk -l</code> denegado, <code>which fdisk</code> + permisos originales <code>-rwxr-xr-x</code>, <code>chmod 4511</code> → <code>r-s</code>, ejecución exitosa como no-root, restauración con <code>chmod 755</code>). Incluye la investigación previa de <code>fdisk</code> y de la opción <code>-l</code>. ✔</li>
-<li><strong>Tarea 2 — Actividad 2:</strong> <code>ids.c</code> con <code>getuid/geteuid/getgid/getegid</code>, compilado con <code>gcc</code>, primera ejecución (real == efectivo = 1000), luego <code>chown root:root</code> + <code>chmod 4755</code> → <code>-rwsr-xr-x</code>, ejecución como no-root con Real UID 1000 y Effective UID 0. Coincide con lo que pide el enunciado. ✔</li>
-<li><strong>Tarea 1:</strong> definición de proceso, distinción proceso/programa, tabla de procesos e imagen de memoria, con citas a Tanenbaum y Gay en APA 7. ✔</li>
-<li><strong>Tarea 3 — Actividad 1:</strong> cubre los 5 incisos (a-e): comentario detallado de ambos programas, ejecución de <code>myecho</code> con argumentos genéricos y con el nombre en formato apellidoPaterno apellidoMaterno nombre(s), corrección del bloque <code>if</code>/<code>exit(EXIT_FAILURE)</code> en <code>execve()</code>, y ejecución encadenada <code>programa21_execve ./programa20_myecho</code>. Incluye verificación adicional del manejo de errores (ruta inexistente). ✔</li>
-<li><strong>Tarea 3 — Actividad 2:</strong> <code>programa23_fork-exec.c</code> comentado, con la misma corrección aplicada a <code>execvp()</code> dentro de <code>spawn()</code>; compilado y ejecutado, mostrando el listado real de <code>ls -l /</code> y explicando por qué aparece después del mensaje del padre (no hay <code>wait()</code>). ✔</li>
-</ul>
-</div>
+<div class="section-block"><ul class="indice-entregas"><li><a href="tareas.html#ACS-T01">ACS-T01</a> — Tarea 1 — Investigar procesos <span style="color:var(--ink-soft)">(Entregada (por correo; ACS no usa Classroom))</span></li><li><a href="tareas.html#ACS-T02">ACS-T02</a> — Tarea 2 — Permisos, fdisk y setuid <span style="color:var(--ink-soft)">(Entregada (por correo; ACS no usa Classroom))</span></li><li><a href="tareas.html#ACS-T03">ACS-T03</a> — Tarea 3 — fork, exec y execve <span style="color:var(--ink-soft)">(Entregada (por correo; ACS no usa Classroom))</span></li><li><a href="tareas.html#ACS-T04">ACS-T04</a> — Tarea 4 — ejemplo_listen.c (cola de listen) <span style="color:var(--ink-soft)">(Entregada (por correo; ACS no usa Classroom))</span></li></ul></div>
 </div>
 </body>
 </html>
