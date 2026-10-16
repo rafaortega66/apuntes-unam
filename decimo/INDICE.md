@@ -52,22 +52,6 @@ _(vacío)_
 | ASI-R01-reposicion | [Reposicion-ASI-420054085.pdf](ASI/ASI-Entregables/ASI-R01-reposicion/Reposicion-ASI-420054085.pdf) | 7 |
 | ASI-T01-tarea-enoe-enigh | [ASI-ENOE-ENIGH-420054085.pbix](ASI/ASI-Entregables/ASI-T01-tarea-enoe-enigh/ASI-ENOE-ENIGH-420054085.pbix)<br>[ASI-ENOE-ENIGH-420054085.pdf](ASI/ASI-Entregables/ASI-T01-tarea-enoe-enigh/ASI-ENOE-ENIGH-420054085.pdf) | 24 |
 
-### ASI-Examenes
-
-_(vacío)_
-
-### ASI-Practicas
-
-_(vacío)_
-
-### ASI-Proyecto
-
-_(vacío)_
-
-### ASI-Tareas
-
-_(vacío)_
-
 ## FSE — Fundamentos de Sistemas Embebidos (+ Lab)
 
 ### FSE-Examenes
