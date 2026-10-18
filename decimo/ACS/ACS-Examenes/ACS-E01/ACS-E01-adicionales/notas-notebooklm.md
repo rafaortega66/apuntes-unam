@@ -1,7 +1,12 @@
-# ACS-E01 — Examen parcial (programa cliente-servidor con sockets TCP) · indicaciones
+# ACS-E01 — notas de NotebookLM (complemento)
+
+> **Las indicaciones oficiales son `../ACS-E01-indicaciones.pdf`** (las mandó el profesor por correo, 18 oct 2026).
+> NotebookLM tenía dos datos mal, ya corregidos abajo según el PDF: el puerto es **4898** (no 4899) y
+> `date` se ejecuta **después** de que termine el cliente, en esa misma terminal.
+> El servidor además debe **imprimir el nombre** recibido. Correo: carlos.roman@ingenieria.unam.edu
 
 ACS no usa Classroom. Fuente: NotebookLM, cuaderno ACS (audios ACS-Clase14 y ACS-Clase15), consultado el 18 oct 2026.
-Base: `../../ACS-Material/programas/tema3/programa04_servidor_internet.c` y `programa04_cliente_internet.c`.
+Base: `../../../ACS-Material/programas/tema3/programa04_servidor_internet.c` y `programa04_cliente_internet.c`.
 
 - **Modalidad:** examen de casa, práctico, individual, en C. Se asignó el **jueves 15 oct (Clase 15), 8:30**;
   se entrega por **correo el lunes 19 oct en la noche** (hora exacta no especificada en las fuentes).
@@ -16,11 +21,11 @@ Base: `../../ACS-Material/programas/tema3/programa04_servidor_internet.c` y `pro
 5. El servidor obtiene la **IP de origen del cliente** (`sin_addr` de la estructura del cliente o `gethostbyaddr`)
    y le **responde confirmando el registro**.
 6. **Prueba local:** dos terminales en la misma máquina (servidor y cliente lado a lado).
-7. **Prueba remota:** contra el servidor del profesor, **132.248.59.6, puerto 4899**, ejecutando antes `date` en la terminal del cliente.
+7. **Prueba remota:** contra el servidor del profesor, **132.248.59.6, puerto 4898**; al terminar el cliente, en esa misma terminal, ejecutar `date` y capturar.
 
 ## Qué se entrega (por correo)
 - `.c` del servidor y `.c` del cliente.
-- Capturas (PNG o en un PDF) de la prueba local y de la prueba remota (con la salida de `date` visible).
+- Capturas (PNG o en un PDF) de la prueba local y de la prueba remota (con la salida de `date` visible, después del cliente).
 - **Nunca** adjuntar ejecutables: el servidor de correo los rechaza como malware.
 
 ## Avisos del profesor

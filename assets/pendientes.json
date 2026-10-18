@@ -11,8 +11,8 @@
       "titulo": "Examen parcial ACS: cliente-servidor TCP (de casa)",
       "vence": "2026-10-19T23:59:00-06:00",
       "hora_confirmada": false,
-      "detalle": "Basado en Programa 04, pero el cliente escribe primero (nombre). Puerto por línea de comandos (htons). Prueba local + remota a 132.248.59.6:4899 tras `date`. Correo: .c del servidor y cliente + capturas, sin ejecutables.",
-      "link": "decimo/ACS/ACS-Examenes/ACS-E01/ACS-E01-indicaciones.md"
+      "detalle": "Basado en el par Programa 04: el cliente manda tu nombre (APELLIDO_PATERNO APELLIDO_MATERNO NOMBRE(S), leído del teclado), el servidor lo imprime, captura la IP del cliente y responde. Puerto por línea de comandos con htons(). Prueba local (127.0.0.1) + remota a 132.248.59.6:4898 y luego `date` en esa terminal. Correo a carlos.roman@ingenieria.unam.edu: los dos .c + 2 capturas, sin ejecutables.",
+      "link": "decimo/ACS/ACS-Examenes/ACS-E01/ACS-E01-indicaciones.pdf"
     },
     {
       "id": "fse-t07",

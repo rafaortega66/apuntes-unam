@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-18T17:56:48+00:00",
+ "generatedAt": "2026-10-18T17:58:42+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -566,6 +566,11 @@
  },
  "gitlog": [
   {
+   "hash": "82b46f8",
+   "fecha": "2026-10-18T11:56:52-06:00",
+   "mensaje": "ACS: examen parcial (ACS-E01) con indicaciones de NotebookLM, vence lun 19 oct; ASI sin clase el 14 oct"
+  },
+  {
    "hash": "da38c78",
    "fecha": "2026-10-15T20:45:59-06:00",
    "mensaje": "Páginas de tareas/prácticas/proyectos/exámenes/entregas generadas desde decimo/ (scripts/build_entregas.py)"
@@ -859,11 +864,6 @@
    "hash": "e7146cf",
    "fecha": "2026-10-01T10:49:10-06:00",
    "mensaje": "FSE Clase 03: formato de estudio"
-  },
-  {
-   "hash": "3b8ff1c",
-   "fecha": "2026-10-01T10:45:20-06:00",
-   "mensaje": "ASI Clase 03: formato de estudio"
   }
  ]
 }

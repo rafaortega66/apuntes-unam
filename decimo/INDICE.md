@@ -12,7 +12,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 
 | Entrega | Indicaciones | Entregado | Adicionales |
 |---|---|---|---|
-| ACS-E01 | [ACS-E01-indicaciones.md](ACS/ACS-Examenes/ACS-E01/ACS-E01-indicaciones.md) | _(sin entrega aún)_ | — |
+| ACS-E01 | [ACS-E01-indicaciones.pdf](ACS/ACS-Examenes/ACS-E01/ACS-E01-indicaciones.pdf) | _(sin entrega aún)_ | 1 |
 
 ### ACS-Tareas
 
