@@ -298,6 +298,14 @@ información de cada clase y él mismo escribe su resumen a mano, con apoyo de
 NotebookLM y de Claude para el repaso. No correr `/nueva-clase` ni
 `/migrar-clase` por iniciativa propia.
 
+- **El sitio es solo de consulta y estudio (18 oct 2026).** Las tareas y los
+  exámenes se resuelven en Claude, en el proyecto (Projects) de cada materia
+  (ej. «ACS»), **no aquí**: no ofrecer programarlos ni resolverlos en este repo.
+  Aquí solo se registran y publican (archivos en `decimo/`, páginas, pendientes).
+- **ACS no usa Classroom:** el profesor manda los archivos por correo; el usuario
+  los baja y se los pasa a Claude para meterlos en `decimo/ACS/…`. El archivo del
+  profesor manda sobre NotebookLM (las notas de NotebookLM van en `-adicionales/`).
+
 - **Examen de FSE: miércoles 14 oct 2026** (corregido por el usuario el 9 oct;
   coincide con día de FSE, 13:00–14:30 A107, pero la hora no está confirmada). Alcance (confirmado por el usuario el 12 oct): solo Unidades 1 y 2, no todas las clases.
 - **Siguiente tarea pedida:** verificar que el cuaderno de NotebookLM esté
