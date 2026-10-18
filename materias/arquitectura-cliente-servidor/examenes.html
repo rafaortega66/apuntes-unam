@@ -24,7 +24,50 @@
 <div class="detail-head" style="border-color:#E8735C"><h2>Exámenes</h2>
   <p class="prof">Generado desde <code>decimo/</code>. Cada entrega: indicaciones del profesor, lo que se entregó y los archivos adicionales. Estado verificado en Classroom el 15 oct 2026.</p>
 </div>
-<p class="empty">No hay exámenes registradas todavía en <code>decimo/ACS/</code>.</p>
+<div class="section-block entrega" id="ACS-E01">
+<h4>ACS-E01 · Examen parcial — cliente-servidor TCP (de casa)</h4>
+<p class="estado">Pendiente · se entrega por correo el lun 19 oct (noche)</p>
+<h5>Indicaciones</h5>
+<div class="indicaciones"><p>ACS no usa Classroom. Fuente: NotebookLM, cuaderno ACS (audios ACS-Clase14 y ACS-Clase15), consultado el 18 oct 2026.</p>
+<p>Base: <code>../../ACS-Material/programas/tema3/programa04_servidor_internet.c</code> y <code>programa04_cliente_internet.c</code>.</p>
+<ul>
+<li><strong>Modalidad:</strong> examen de casa, práctico, individual, en C. Se asignó el <strong>jueves 15 oct (Clase 15), 8:30</strong>;</li>
+</ul>
+<p>se entrega por <strong>correo el lunes 19 oct en la noche</strong> (hora exacta no especificada en las fuentes).</p>
+<ul>
+<li><strong>Valor en la calificación:</strong> no aparece en las fuentes.</li>
+</ul>
+<p>## Qué hay que hacer</p>
+<ol>
+<li>Servidor y cliente TCP en C (<code>socket</code>, <code>bind</code>, <code>listen</code>, <code>accept</code>, <code>connect</code>, <code>send</code>/<code>recv</code>), basados en el Programa 04.</li>
+<li><strong>Diferencia clave con el Programa 04:</strong> en el examen <strong>el cliente escribe primero</strong> (manda el nombre del alumno).</li>
+<li>El servidor recibe el <strong>puerto por línea de comandos</strong> (nada fijo en el código) y lo convierte con <code>htons</code></li>
+</ol>
+<p>(NotebookLM lo transcribe como «H2NS»).</p>
+<ol>
+<li>El cliente lee el <strong>nombre completo desde el teclado</strong>, en formato *Apellido Paterno Apellido Materno Nombre(s)*.</li>
+<li>El servidor obtiene la <strong>IP de origen del cliente</strong> (<code>sin_addr</code> de la estructura del cliente o <code>gethostbyaddr</code>)</li>
+</ol>
+<p>y le <strong>responde confirmando el registro</strong>.</p>
+<ol>
+<li><strong>Prueba local:</strong> dos terminales en la misma máquina (servidor y cliente lado a lado).</li>
+<li><strong>Prueba remota:</strong> contra el servidor del profesor, <strong>132.248.59.6, puerto 4899</strong>, ejecutando antes <code>date</code> en la terminal del cliente.</li>
+</ol>
+<p>## Qué se entrega (por correo)</p>
+<ul>
+<li><code>.c</code> del servidor y <code>.c</code> del cliente.</li>
+<li>Capturas (PNG o en un PDF) de la prueba local y de la prueba remota (con la salida de <code>date</code> visible).</li>
+<li><strong>Nunca</strong> adjuntar ejecutables: el servidor de correo los rechaza como malware.</li>
+</ul>
+<p>## Avisos del profesor</p>
+<ul>
+<li>El servidor remoto registra IP, fecha, hora y nombre; dos nombres distintos desde la misma IP se detectan como copia.</li>
+<li>«El examen es muy parecido» a los programas 04 y 05 y a <code>compara_tiempos_buffers.c</code> (Clase 14). No confiarse por ser de casa.</li>
+<li>No entra teoría escrita ni cuestionario.</li>
+</ul></div>
+<h5>Entregado</h5>
+<p>— (sin archivo entregado)</p>
+</div>
 </div>
 </body>
 </html>

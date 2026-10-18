@@ -59,6 +59,7 @@ TITULOS = {
     'SIB-T01': 'Tarea 1 — Perfiles de protección (Equipo 4)', 'SIB-T02': 'Tarea 2 — Línea del tiempo (Equipo 4)',
     'SIB-T03': 'Tarea 3 — Tipos de atacantes (Equipo 4)', 'SIB-Exp01': 'Exposición — Normatividad (Equipo 4)',
     'SIB-EC01': 'Ejercicio en clase — Video (curso de colisión)',
+    'ACS-E01': 'Examen parcial — cliente-servidor TCP (de casa)',
 }
 # Estado verificado en Google Classroom el 15 oct 2026 (las materias sin Classroom se marcan aparte).
 ESTADO = {
@@ -73,6 +74,7 @@ ESTADO = {
     'ASI-P01': 'Entregada tarde', 'ASI-P02': 'Entregada', 'ASI-P03': 'Entregada', 'ASI-P04': 'Entregada', 'ASI-T01': 'Entregada',
     'ASI-R01': 'Entregada', 'ASI-Proy01': 'Entregada', 'ASI-Proy02': 'Entregada', 'ASI-Proy03': 'Entregada', 'ASI-Proy04': 'Entregada',
     'ASI-Proy05': 'Entregada',
+    'ACS-E01': 'Pendiente · se entrega por correo el lun 19 oct (noche)',
 }
 SIN_CLASSROOM = {'ACS': 'Entregada (por correo; ACS no usa Classroom)', 'SIB': 'Entregada (por correo, en equipo)',
                  'OAC': 'Entregada (OAC teoría no usa Classroom)'}
