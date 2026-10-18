@@ -12,7 +12,8 @@
       "vence": "2026-10-19T23:59:00-06:00",
       "hora_confirmada": false,
       "detalle": "Basado en el par Programa 04: el cliente manda tu nombre (APELLIDO_PATERNO APELLIDO_MATERNO NOMBRE(S), leído del teclado), el servidor lo imprime, captura la IP del cliente y responde. Puerto por línea de comandos con htons(). Prueba local (127.0.0.1) + remota a 132.248.59.6:4898 y luego `date` en esa terminal. Correo a carlos.roman@ingenieria.unam.edu: los dos .c + 2 capturas, sin ejecutables.",
-      "link": "decimo/ACS/ACS-Examenes/ACS-E01/ACS-E01-indicaciones.pdf"
+      "link": "decimo/ACS/ACS-Examenes/ACS-E01/ACS-E01-indicaciones.pdf",
+      "avance": "18 oct: código terminado (examen_cliente.c y examen_servidor.c en ACS-E01-entregables). Falta: capturas (local y remota con date) y mandar el correo."
     },
     {
       "id": "fse-t07",
