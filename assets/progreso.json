@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-18T17:58:42+00:00",
+ "generatedAt": "2026-10-18T18:35:27+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -566,6 +566,16 @@
  },
  "gitlog": [
   {
+   "hash": "5fd9f97",
+   "fecha": "2026-10-18T12:21:29-06:00",
+   "mensaje": "CLAUDE.md: el sitio es solo de consulta; tareas y exámenes se hacen en Claude Projects. ACS: archivos por correo"
+  },
+  {
+   "hash": "5b56d66",
+   "fecha": "2026-10-18T11:58:43-06:00",
+   "mensaje": "ACS-E01: PDF oficial del examen (correo del profesor) como indicaciones; puerto 4898 y date después del cliente"
+  },
+  {
    "hash": "82b46f8",
    "fecha": "2026-10-18T11:56:52-06:00",
    "mensaje": "ACS: examen parcial (ACS-E01) con indicaciones de NotebookLM, vence lun 19 oct; ASI sin clase el 14 oct"
@@ -854,16 +864,6 @@
    "hash": "82603ba",
    "fecha": "2026-10-01T10:55:09-06:00",
    "mensaje": "MD Clase 01: formato de estudio"
-  },
-  {
-   "hash": "2d16300",
-   "fecha": "2026-10-01T10:53:23-06:00",
-   "mensaje": "OAC Clase 02: formato de estudio"
-  },
-  {
-   "hash": "e7146cf",
-   "fecha": "2026-10-01T10:49:10-06:00",
-   "mensaje": "FSE Clase 03: formato de estudio"
   }
  ]
 }
