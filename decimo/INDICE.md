@@ -53,7 +53,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 
 | Entrega | Indicaciones | Entregado | Adicionales |
 |---|---|---|---|
-| FSE-E01 | [FSE-E01-indicaciones.md](FSE/FSE-Examenes/FSE-E01/FSE-E01-indicaciones.md) | _(sin entrega aún)_ | 1 |
+| FSE-E01 | [FSE-E01-indicaciones.md](FSE/FSE-Examenes/FSE-E01/FSE-E01-indicaciones.md) | [FSE-E01-examen-escaneado.pdf](FSE/FSE-Examenes/FSE-E01/FSE-E01-entregables/FSE-E01-examen-escaneado.pdf) | 1 |
 
 ### FSE-Lab
 

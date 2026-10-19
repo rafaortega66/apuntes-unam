@@ -81,6 +81,7 @@ ESTADO = {
     'ASI-R01': 'Entregada', 'ASI-Proy01': 'Entregada', 'ASI-Proy02': 'Entregada', 'ASI-Proy03': 'Entregada', 'ASI-Proy04': 'Entregada',
     'ASI-Proy05': 'Entregada',
     'ACS-E01': 'Entregada por correo (18 oct 2026, 18:34)',
+    'FSE-E01': 'Presentado en papel (14 oct 2026) · 101 (36 + 65, incluye punto extra)',
     'SIB-EC02': 'Resuelto en mis apuntes · sin confirmar si se entregó',
     'SIB-EC03': 'Ejercicio de clase · sin confirmar si se entregó',
     'SIB-EC04': 'Ejercicio de clase · sin confirmar si se entregó',

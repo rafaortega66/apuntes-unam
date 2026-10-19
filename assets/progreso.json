@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-19T17:51:03+00:00",
+ "generatedAt": "2026-10-19T19:31:22+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -629,6 +629,11 @@
  },
  "gitlog": [
   {
+   "hash": "330daf9",
+   "fecha": "2026-10-19T11:51:07-06:00",
+   "mensaje": "SIB: numeración corregida según la hoja RegistroClases (Clase 11 = examen 6 oct; 8, 13 y 15 oct = Clases 12, 13 y 14); CLAUDE.md registra la hoja como fuente de verdad"
+  },
+  {
    "hash": "b22c5d5",
    "fecha": "2026-10-19T11:44:17-06:00",
    "mensaje": "SIB: escaneos de ejercicios en clase — EC05 cuestionario de normatividad (Clase 04, calificado 3) y EC06 amenazas a la persona y a la casa (Clase 07, foto tapada)"
@@ -922,11 +927,6 @@
    "hash": "7190857",
    "fecha": "2026-10-05T10:09:35-06:00",
    "mensaje": "RP Clase 12 (5 oct): repaso Bayes/Laplace, DBSCAN, KNN y Práctica 3"
-  },
-  {
-   "hash": "977cb94",
-   "fecha": "2026-10-05T10:02:17-06:00",
-   "mensaje": "MD Clase 09 (1 oct) y RP Clase 11 (2 oct): Práctica 1 de clustering, reglas de asociación; revisión del primer parcial"
   }
  ]
 }
