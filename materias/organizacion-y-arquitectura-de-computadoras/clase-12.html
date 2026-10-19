@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 12 — Organización y Arquitectura de Computadoras</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Organización y Arquitectura de Computadoras</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Clase 12</h2>
+  <p class="prof">M.I. José Antonio de Jesús Arredondo Garza · 19 oct 2026 · Sesión sin tema nuevo — El profesor borró por accidente sus notas del día: charla sobre minicomputadoras (SBC), almacenamiento MicroSD frente a SSD M.2 y aislamiento de ruido eléctrico, y luego revisión individual de proyectos.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>OAC-Clase12.m4a</code>), 19 oct 2026. No hubo código ni fórmulas en esta sesión.</p>
+</div>
+
+<details class="section-block sec" id="c12-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<p>Evidencia débil: no se vio tema nuevo del temario. Si algo aparece, sería como pregunta de criterio de diseño.</p>
+<ol class="examen-lista">
+<li><strong>Por qué un SSD M.2 en vez de una MicroSD «ultra rápida».</strong><span class="evid">Evidencia: dio precios concretos y lo desaconsejó de forma categórica.</span></li>
+<li><strong>Cómo aislar el ruido eléctrico de una Pico o Raspberry Pi en mediciones sensibles.</strong><span class="evid">Evidencia: contó su solución real (baterías de litio, conversor serie a fibra óptica, jaula de Faraday).</span></li>
+<li><strong>Elegir el hardware según la escala del proyecto.</strong><span class="evid">Evidencia: criticó usar SBC de 8 o 12 núcleos para tareas pequeñas.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c12-sbc"><summary><span class="stitle">1 · Elegir una minicomputadora (SBC) según el proyecto</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Evaluar tarjetas monoplaca (<em>Single Board Computers</em>) por número de núcleos, capacidad de correr un sistema operativo y costo, frente a lo que de verdad pide el proyecto.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es elegir entre un tráiler y una moto para entregar una carta: si el trabajo es chico, el tráiler sale caro y sobra.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Le regalaron una <strong>Orange Pi 5</strong> de 8 núcleos (que no ha tenido tiempo de probar), y ya existe la <strong>Orange Pi 6</strong> de 12. En su opinión, pedirle 8 o 12 núcleos a un programa pequeño o de enseñanza es excesivo. Una <strong>Raspberry Pi 5</strong> cuesta entre $3,000 y $4,000 pesos.</p>
+<p>Como opción barata recomendó la <strong>Raspberry Pi Zero 2 W</strong>: corre un sistema operativo completo, cree recordar que tiene 4 núcleos, es apenas más grande que una Pico 2 y tiene MicroSD, alimentación por USB-C y un puerto USB para periféricos.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Elegir la plataforma por requerimientos reales y presupuesto, antes de empezar a desarrollar.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c12-biosenales"><summary><span class="stitle">2 · Experiencia: 40 bioseñales con una Raspberry Pi multinúcleo</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un proyecto del profesor para adquirir y transmitir 40 bioseñales a la vez, repartiendo el trabajo entre varios núcleos.</p>
+<span class="lbl">Cómo funciona</span>
+<p>Usó módulos de Texas Instruments y aprovechó los 4 núcleos de una Raspberry Pi 4 (después evaluó la Pi 5), porque transmitir 40 señales en tiempo real exigía un procesador multinúcleo. El montaje artesanal tenía graves problemas de <strong>ruido eléctrico</strong>. Al final, una empresa inglesa le ofreció un equipo portátil cerrado («caja negra» que se cuelga al cuerpo) con hasta 30 % de descuento, y desechó la solución con Raspberry Pi.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra para qué sirven los multinúcleo en instrumentación y cuándo conviene comprar una solución comercial en vez de desarrollarla. Más núcleos no arreglan una señal con ruido.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c12-almacenamiento"><summary><span class="stitle">3 · Almacenamiento: MicroSD frente a SSD M.2</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Comparar el rendimiento de E/S de una SBC al arrancar el sistema desde una MicroSD o desde una unidad de estado sólido M.2.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Correr el sistema desde una MicroSD normal es como vaciar una alberca con un popote; un SSD M.2 es abrir una tubería ancha.<span class="rompe">Dónde deja de servir: el M.2 necesita adaptador o puerto y ocupa más espacio que la tarjeta.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>En la Raspberry Pi 4 o 5, la MicroSD es el cuello de botella del sistema operativo. El profesor conectó a su módulo un SSD M.2 externo pequeño, de 128 GB, y el sistema se aceleró muchísimo.</p>
+<ul>
+<li>MicroSD estándar de 32 GB: entre $100 y $200 pesos.</li>
+<li>MicroSD «ultra rápida» (la que usan reporteros y fotógrafos): entre $8,000 y $10,000 pesos.</li>
+<li>SSD M.2 de 128 GB: una fracción de lo que cuesta la SD ultra rápida, y con mucho mejor desempeño.</li>
+</ul>
+<p>Conclusión: no comprar MicroSD ultra rápidas para una SBC; mejor un SSD M.2 para el sistema operativo.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> gastar miles de pesos en una MicroSD «ultra rápida» creyendo que es la única forma de acelerar la Raspberry Pi.</p></div>
+</details>
+
+<details class="section-block sec" id="c12-ruido"><summary><span class="stitle">4 · Ruido eléctrico: baterías, fibra óptica y jaula de Faraday</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Técnicas para alimentar y aislar un sistema de modo que el ruido de las fuentes conmutadas y del propio microcontrolador no contamine señales muy sensibles.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es querer oír un susurro en una fiesta: apagas la bocina (batería en vez de la red eléctrica), usas un tubo limpio para escuchar (fibra óptica) y te metes a un cuarto blindado (jaula de Faraday).<span class="rompe">Dónde deja de servir: las baterías se acaban y hay que recargarlas.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Tanto la Pico (1 y 2) como las Raspberry Pi grandes tienen ruido eléctrico propio que afecta las mediciones sensibles, y las fuentes de grado médico costaban miles de pesos. Su solución: alimentar con <strong>baterías de litio</strong> en lugar de una fuente de pared, y sacar los datos con un <strong>conversor de puerto serie a fibra óptica</strong> para aislar eléctricamente el equipo. Para un funcionamiento perfecto en entornos muy sensibles, dijo, la Pico tendría que ir dentro de una <strong>jaula de Faraday</strong>.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es clave en adquisición de datos analógicos e instrumentación biomédica.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> suponer que la alimentación o el ADC de la Pico entregan señales limpias sin filtrado ni aislamiento.</p></div>
+</details>
+
+<details class="section-block sec" id="c12-proyectos"><summary><span class="stitle">5 · Las notas borradas y la revisión de proyectos</span></summary>
+<p>Antes de entrar al salón, mientras borraba apuntes viejos en la sala de profesores, el profesor eliminó por error la nota que había preparado para esta clase. Aunque tiene respaldo, no lo tenía a la mano, así que se disculpó y pidió que quienes tuvieran listo su proyecto pasaran a mostrarlo para evaluarlo. El resto de la sesión fue revisión individual.</p>
+</details>
+
+<details class="section-block sec" id="c12-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Por qué considera excesivo usar una Orange Pi 5 u Orange Pi 6 para proyectos de estudio?</summary><p>Porque 8 o 12 núcleos son demasiado para programas pequeños o de enseñanza: es sobredimensionar el hardware.</p></details>
+<details class="qa"><summary>2. ¿Qué SBC barata recomendó y qué la hace útil?</summary><p>La Raspberry Pi Zero 2 W: corre un sistema operativo completo, cree que tiene 4 núcleos, es apenas más grande que una Pico 2, con MicroSD, USB-C y un USB para periféricos.</p></details>
+<details class="qa"><summary>3. ¿Qué instaló el profesor para acelerar su Raspberry Pi?</summary><p>Un SSD M.2 externo de 128 GB.</p></details>
+<details class="qa"><summary>4. Compara el costo de una MicroSD de 32 GB, una MicroSD ultra rápida y un SSD M.2.</summary><p>32 GB: $100–$200. Ultra rápida: $8,000–$10,000. SSD M.2 de 128 GB: una fracción de la ultra rápida y más rápido.</p></details>
+<details class="qa"><summary>5. ¿Qué problema tuvo al medir 40 bioseñales con una Raspberry Pi y cómo terminó?</summary><p>Ruido eléctrico. Terminó comprando un equipo portátil especializado a una empresa inglesa con 30 % de descuento.</p></details>
+<details class="qa"><summary>6. ¿Cómo aisló el ruido en sus mediciones?</summary><p>Con baterías de litio en vez de fuente de pared y un conversor de puerto serie a fibra óptica; para el caso extremo, la Pico iría en una jaula de Faraday.</p></details>
+<details class="qa"><summary>7. ¿Más núcleos resuelven una señal con ruido? ¿Por qué?</summary><p>No: el ruido entra por la alimentación y el cableado; se resuelve aislando y filtrando, no con más procesamiento.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c12-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li>La Orange Pi 5 que le regalaron sigue sin estrenar por falta de tiempo.</li>
+<li>Las MicroSD de $8,000–$10,000 las usan sobre todo reporteros y fotógrafos para video y ráfagas.</li>
+<li>Contó con pena cómo borró sus notas de la clase justo antes de entrar.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c12-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Proyectos:</strong> la sesión se usó para revisar a quienes ya tenían su proyecto listo.</li>
+<li><strong>Próximas clases:</strong> anunció revisiones detalladas sobre arquitectura de CPU y minicomputadoras.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Hardware a la medida: Pi Zero 2 W para proyectos chicos; 8–12 núcleos sobran.</li>
+<li>SSD M.2 de 128 GB acelera la Raspberry Pi y es mucho más barato que una MicroSD ultra rápida.</li>
+<li>Ruido: baterías de litio, serie a fibra óptica, jaula de Faraday.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

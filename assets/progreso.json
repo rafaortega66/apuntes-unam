@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-19T20:05:31+00:00",
+ "generatedAt": "2026-10-19T20:08:24+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -205,6 +205,13 @@
     "fecha": "2026-10-14",
     "resumen": "Tema 3 (continuación) — Desglose exacto de ciclos y retardos en una máquina de estado PIO (8 + 32 × 31 = 1000 ciclos por fase), cálculo de la frecuencia de destello, control desde MicroPython y ventajas de la PIO frente ",
     "url": "materias/organizacion-y-arquitectura-de-computadoras/clase-11.html",
+    "formato": "estudio"
+   },
+   {
+    "num": 12,
+    "fecha": "2026-10-19",
+    "resumen": "Sesión sin tema nuevo — El profesor borró por accidente sus notas del día: charla sobre minicomputadoras (SBC), almacenamiento MicroSD frente a SSD M.2 y aislamiento de ruido eléctrico, y luego revisión individual de pro",
+    "url": "materias/organizacion-y-arquitectura-de-computadoras/clase-12.html",
     "formato": "estudio"
    }
   ],
@@ -664,6 +671,11 @@
  },
  "gitlog": [
   {
+   "hash": "d86f0da",
+   "fecha": "2026-10-19T14:05:31-06:00",
+   "mensaje": "OAC: Clases 10 (12 oct, Taylor con FPU e interfaz PIO) y 11 (14 oct, cálculo de ciclos y frecuencia en máquinas de estado PIO) en formato de estudio desde NotebookLM"
+  },
+  {
    "hash": "bb9553e",
    "fecha": "2026-10-19T13:53:11-06:00",
    "mensaje": "FSE: Clases 12 (7 oct, bootstrap/RESET/BSP-AP/paginación) y 13 (12 oct, API y llamadas a sistema, procesos vs. tareas) en formato de estudio desde NotebookLM; Clase 14 = examen parcial"
@@ -957,11 +969,6 @@
    "hash": "3d2ccc2",
    "fecha": "2026-10-07T00:53:56-06:00",
    "mensaje": "Pendientes y entregas al 7 oct: Classroom verificado (ASI Kali, Lab FSE P5, Lab OAC reportes 1-2 entregados; fechas de ASI/MD corregidas; RP Práctica 3 agregada)"
-  },
-  {
-   "hash": "66b6189",
-   "fecha": "2026-10-06T17:18:34-06:00",
-   "mensaje": "horario.json: confirmar 15 sep (martes sin clase) y OAC 23 sep sin clase"
   }
  ]
 }
