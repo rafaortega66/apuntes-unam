@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-19T17:44:13+00:00",
+ "generatedAt": "2026-10-19T17:51:03+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -518,23 +518,30 @@
    },
    {
     "num": 11,
-    "fecha": "2026-10-08",
-    "resumen": "Tema 3 — Clasificación y etapas de un ataque; caso «SaludIntegral».",
+    "fecha": "2026-10-06",
+    "resumen": "Examen parcial (preguntas cerradas, Temas 1 a 3 hasta CVSS).",
     "url": "materias/seguridad-informatica-basica/clase-11.html",
-    "formato": "viejo"
+    "formato": "no-aplica"
    },
    {
     "num": 12,
-    "fecha": "2026-10-13",
-    "resumen": "Tema 3 — Perpetradores o atacantes y técnicas de intrusión.",
+    "fecha": "2026-10-08",
+    "resumen": "Tema 3 — Clasificación y etapas de un ataque; caso «SaludIntegral».",
     "url": "materias/seguridad-informatica-basica/clase-12.html",
     "formato": "viejo"
    },
    {
     "num": 13,
+    "fecha": "2026-10-13",
+    "resumen": "Tema 3 — Perpetradores o atacantes y técnicas de intrusión.",
+    "url": "materias/seguridad-informatica-basica/clase-13.html",
+    "formato": "viejo"
+   },
+   {
+    "num": 14,
     "fecha": "2026-10-15",
     "resumen": "Tema 3 — Intrusión por malware y física; mecanismos de seguridad.",
-    "url": "materias/seguridad-informatica-basica/clase-13.html",
+    "url": "materias/seguridad-informatica-basica/clase-14.html",
     "formato": "viejo"
    }
   ],
@@ -621,6 +628,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "b22c5d5",
+   "fecha": "2026-10-19T11:44:17-06:00",
+   "mensaje": "SIB: escaneos de ejercicios en clase — EC05 cuestionario de normatividad (Clase 04, calificado 3) y EC06 amenazas a la persona y a la casa (Clase 07, foto tapada)"
+  },
   {
    "hash": "22b62ab",
    "fecha": "2026-10-19T11:00:17-06:00",
@@ -915,11 +927,6 @@
    "hash": "977cb94",
    "fecha": "2026-10-05T10:02:17-06:00",
    "mensaje": "MD Clase 09 (1 oct) y RP Clase 11 (2 oct): Práctica 1 de clustering, reglas de asociación; revisión del primer parcial"
-  },
-  {
-   "hash": "a2ab746",
-   "fecha": "2026-10-05T15:17:38Z",
-   "mensaje": "Quitar el disclaimer \"Formato de estudio\" de las páginas de clase"
   }
  ]
 }

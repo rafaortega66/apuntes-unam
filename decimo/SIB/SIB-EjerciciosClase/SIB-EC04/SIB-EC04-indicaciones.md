@@ -1,6 +1,6 @@
-# SIB-EC04 — Clasificar mecanismos de seguridad, en parejas (Clase 13, 15 oct 2026) · indicaciones
+# SIB-EC04 — Clasificar mecanismos de seguridad, en parejas (Clase 14, 15 oct 2026) · indicaciones
 
-Fuente: apuntes de la Clase 13 (`decimo/SIB/SIB-Material/SIB-Apuntes-Clase13-2026-10-15.pdf`).
+Fuente: apuntes de la Clase 14 (`decimo/SIB/SIB-Material/SIB-Apuntes-Clase14-2026-10-15.pdf`).
 
 > Ejercicio de clase en parejas. Indique de qué tipo son los siguientes (considere las clasificaciones vistas), justifique brevemente su respuesta.
 

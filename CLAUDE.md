@@ -76,6 +76,18 @@ antes de preguntarle nada al usuario** — nunca le vuelvas a pedir el horario.
 Si cambia el horario o el usuario menciona un día sin clase, edita
 `horario.json` (y esta tabla).
 
+**Hoja `RegistroClases` (Google Sheets) — fuente de verdad del número de cada clase.**
+El usuario la actualiza cada vez que pasa una clase: una cuadrícula semana × día con
+«MATERIA - Clase N» (y marcas como «(Examen)», «no hubo clase», «(falté)», «X (Sin clases)»).
+ID `1wkIQeJXDS7vyLfWdTrhncrT2v06YHzbYq4weAaPVTwg`, pestaña `Calendario`
+(<https://docs.google.com/spreadsheets/d/1wkIQeJXDS7vyLfWdTrhncrT2v06YHzbYq4weAaPVTwg/edit>).
+**Al empezar cualquier sesión que toque clases, léela** (conector de Google Sheets) y cruza
+contra `horario.json` y las páginas `clase-NN.html`. El número de clase lo manda la hoja,
+no el nombre de un archivo del usuario ni la memoria (19 oct 2026: se renumeró SIB mal por
+un `.txt` que decía «clase 11» y la hoja dice que la 11 fue el examen del 6 oct). Los
+exámenes cuentan como clase (página con `<meta name="formato" content="no-aplica">`).
+Los audios de NotebookLM (`<SIGLA>-ClaseN.m4a`) usan la misma numeración.
+
 Si una fecha propuesta no cae en el día que le toca a esa materia según esta
 tabla, es un error — decirlo explícitamente y pedir confirmación antes de
 usarla. Recordar también los días sin clase por calendario oficial (asuetos,

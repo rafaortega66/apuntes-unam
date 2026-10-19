@@ -1,6 +1,6 @@
-# SIB-EC03 — Caso «SaludIntegral»: etapas de un ataque (Clase 11, 8 oct 2026) · indicaciones
+# SIB-EC03 — Caso «SaludIntegral»: etapas de un ataque (Clase 12, 8 oct 2026) · indicaciones
 
-Fuente: apuntes de la Clase 11 (`decimo/SIB/SIB-Material/SIB-Apuntes-Clase11-2026-10-08.pdf`), texto proyectado en clase.
+Fuente: apuntes de la Clase 12 (`decimo/SIB/SIB-Material/SIB-Apuntes-Clase12-2026-10-08.pdf`), texto proyectado en clase.
 
 > Analizar el siguiente texto con las etapas anteriores (preparación o planteamiento, activación y ejecución), concluir y dar recomendaciones.
 
