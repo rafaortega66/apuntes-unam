@@ -1,7 +1,28 @@
 {
- "generatedAt": "2026-10-19T06:19:06+00:00",
+ "generatedAt": "2026-10-19T06:51:52+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
+   {
+    "num": -2,
+    "fecha": "2026-08-17",
+    "resumen": "Tema 1 — Presentación del curso y conceptos básicos de reconocimiento de patrones: patrón, clase, característica, clasificación, entrenamiento, los tres problemas de diseño y la maldición de la dimensionalidad.",
+    "url": "materias/reconocimiento-de-patrones/clase-m02.html",
+    "formato": "estudio"
+   },
+   {
+    "num": -1,
+    "fecha": "2026-08-21",
+    "resumen": "Tema 2 — Extracción de características I: qué es, por qué menos características, qué se busca, características estadísticas (media, varianza, skewness, curtosis), ventanas locales con y sin traslape, cómo combinar ventan",
+    "url": "materias/reconocimiento-de-patrones/clase-m01.html",
+    "formato": "estudio"
+   },
+   {
+    "num": 0,
+    "fecha": "2026-08-24",
+    "resumen": "Tema 2 — Extracción de características II: momentos geométricos (espaciales, centrales, normalizados y de Hu) y textura con la matriz de co-ocurrencia de niveles de gris (GLCM) y sus descriptores.",
+    "url": "materias/reconocimiento-de-patrones/clase-00.html",
+    "formato": "estudio"
+   },
    {
     "num": 1,
     "fecha": "2026-08-28",
@@ -84,6 +105,27 @@
     "fecha": "2026-10-05",
     "resumen": "Tema 8 — Inicio del Segundo Parcial: repaso de clasificadores bayesianos (QDA, LDA, Naive Bayes y suavizado de Laplace), clustering por densidad con DBSCAN, clasificación por instancias con KNN y especificaciones de la P",
     "url": "materias/reconocimiento-de-patrones/clase-12.html",
+    "formato": "estudio"
+   },
+   {
+    "num": 13,
+    "fecha": "2026-10-09",
+    "resumen": "Tema 7 (cierre) — Exposición y evaluación de la Práctica 3: segmentación de imágenes por color con QDA y comparación QDA / LDA / Gaussian Naive Bayes en Breast Cancer Wisconsin; regularización de la covarianza, Mahalanob",
+    "url": "materias/reconocimiento-de-patrones/clase-13.html",
+    "formato": "estudio"
+   },
+   {
+    "num": 14,
+    "fecha": "2026-10-12",
+    "resumen": "Tema 8 — Regresión logística: por qué no sirve la regresión lineal para clasificar, sigmoide y x₀ = 1, entropía cruzada binaria, descenso por gradiente (lotes, minilotes, SGD), regularización L1/L2, multiclase (uno vs. r",
+    "url": "materias/reconocimiento-de-patrones/clase-14.html",
+    "formato": "estudio"
+   },
+   {
+    "num": 15,
+    "fecha": "2026-10-16",
+    "resumen": "Tema 8 — Máquinas de vectores de soporte (SVM): hiperplano, margen y vectores de soporte, maximización del margen, Lagrangiano y forma dual, margen suave con holgura y C, truco del kernel, kernels comunes, multiclase y c",
+    "url": "materias/reconocimiento-de-patrones/clase-15.html",
     "formato": "estudio"
    }
   ],
@@ -566,6 +608,11 @@
  },
  "gitlog": [
   {
+   "hash": "b05771f",
+   "fecha": "2026-10-19T00:18:45-06:00",
+   "mensaje": "RP: presentaciones Clase 11–13 (PDF de Classroom) en RP-Material; se quitan todos los .pptx del repo"
+  },
+  {
    "hash": "13551ff",
    "fecha": "2026-10-18T18:40:38-06:00",
    "mensaje": "CLAUDE.md: regla absoluta — Claude nunca envía correos, solo deja borradores"
@@ -859,11 +906,6 @@
    "hash": "c3a750d",
    "fecha": "2026-10-01T11:13:00-06:00",
    "mensaje": "RP Clase 02: formato de estudio"
-  },
-  {
-   "hash": "1f7f16c",
-   "fecha": "2026-10-01T11:10:27-06:00",
-   "mensaje": "OAC Clase 01: formato de estudio"
   }
  ]
 }

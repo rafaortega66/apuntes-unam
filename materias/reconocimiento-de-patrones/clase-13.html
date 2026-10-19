@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 13 — Reconocimiento de Patrones</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Reconocimiento de Patrones</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Clase 13 <span style="font-size:.6em;font-weight:400;color:var(--ink-soft)">(sesión 16 del curso)</span></h2>
+  <p class="prof">Ing. Rubén Omar Azuara Domínguez · 9 oct 2026 · Tema 7 (cierre) — Exposición y evaluación de la Práctica 3: segmentación de imágenes por color con QDA y comparación QDA / LDA / Gaussian Naive Bayes en Breast Cancer Wisconsin; regularización de la covarianza, Mahalanobis, recall en diagnóstico médico y clases no vistas.</p>
+  <p style="font-size:12px;color:var(--ink-soft);margin:2px 0 0">🔢 Sesión 16 del curso (cronología real) · sin diapositivas nuevas: sesión de exposición de la práctica. Fuente: audio RP-Clase13 procesado en NotebookLM.</p>
+</div>
+
+<details class="section-block sec" id="c13-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<p>Ojo: el profesor aclaró que la <strong>Práctica 3 no entra en el Segundo Parcial</strong> (corresponde a temas del primero). Aun así, los conceptos de abajo los preguntó a ambos equipos.</p>
+<ol class="examen-lista">
+<li><strong>Recall (sensibilidad) de la clase maligna por encima de la precisión en diagnóstico de cáncer</strong><span class="evid">Evidencia: lo preguntó explícitamente a los dos equipos; un falso negativo (enfermo clasificado como sano) es el error más costoso.</span></li>
+<li><strong>Regularizar la covarianza en QDA: Σ + λI (reg_param)</strong><span class="evid">Evidencia: preguntó a ambos expositores por qué sumaron una constante a la diagonal; la respuesta esperada: evitar que Σ sea singular (no invertible) con pocas muestras o canales colineales.</span></li>
+<li><strong>El término cuadrático (x − μ)ᵀ Σ⁻¹ (x − μ) es la distancia de Mahalanobis</strong><span class="evid">Evidencia: pidió señalar la línea exacta del código y qué representaba; corrigió y reafirmó que es Mahalanobis.</span></li>
+<li><strong>Por qué Gaussian Naive Bayes rinde menos con variables correlacionadas</strong><span class="evid">Evidencia: se discutió por qué GNB quedó por debajo de QDA/LDA en Breast Cancer; reiteró el supuesto de independencia condicional.</span></li>
+<li><strong>Qué hace un clasificador ante una clase que no vio en el entrenamiento</strong><span class="evid">Evidencia: el caso de la papa en la imagen de prueba 3 se discutió con los dos equipos.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c13-equipo1"><summary><span class="stitle">Exposición del equipo 1 (Jorge, Roberto y compañero)</span></summary>
+<p><strong>Parte 1 — clasificación de imágenes por color.</strong> Segmentación píxel a píxel con 4 imágenes de entrenamiento de 360,000 píxeles cada una (<strong>1,440,000 píxeles</strong> en total) y 3 imágenes de prueba. Para no dibujar las máscaras a mano usaron <strong>umbrales en HSV</strong> como etiquetado temporal:</p>
+<ul>
+<li><em>Plátano:</em> 15 ≤ H ≤ 38, S ≥ 75, V ≥ 75.</li>
+<li><em>Chile:</em> 35 ≤ H ≤ 95, S ≥ 75, V ≥ 45.</li>
+<li><em>Huevo:</em> blanco (umbrales específicos de saturación y valor).</li>
+<li><em>Fondo:</em> naranja, el complemento de las otras tres clases.</li>
+</ul>
+<p>El fondo fue <strong>1,103,000 píxeles (76.6 %)</strong>: fuerte desbalance. Con las etiquetas armaron un dataset de 4 columnas (R, G, B, clase) y entrenaron QDA. En las matrices de covarianza 3 × 3, los valores fuera de la diagonal (p. ej. covarianza verde–rojo de 524 para plátano y 601 para chile) mostraron dependencia clara entre canales, lo que justifica QDA. En las pruebas 1 y 2 la detección fue precisa; en la <strong>prueba 3 apareció una papa</strong> y el modelo la clasificó como plátano (por tono) y como huevo (por brillo).</p>
+<p><strong>Preguntas del profesor:</strong></p>
+<ul>
+<li><em>¿Por qué HSV y no dibujar a mano?</em> — Dibujar es más exacto pero consumía demasiado tiempo; estimaron el error de HSV y prefirieron automatizar el etiquetado de 1.44 M de píxeles.</li>
+<li><em>¿Cómo arreglar el error de la papa?</em> — Agregar una quinta clase «papa» con sus propias imágenes de entrenamiento.</li>
+<li><em>¿Qué parte de la ecuación absorbe las variaciones dentro de una clase (brillos en el chile, sombras en el plátano)?</em> — La <strong>matriz de covarianza</strong>.</li>
+</ul>
+<p><strong>Parte 2 — Breast Cancer Wisconsin.</strong> 569 observaciones, 30 características; 212 malignos (37.26 %) y 357 benignos (62.74 %). Split 80/20 con <code>stratify</code> y <code>random_state=42</code>, estandarización Z-score. QDA con <code>reg_param = 10⁻⁴</code>; LDA estándar; GNB con varianzas gaussianas. Resultados reportados: QDA y LDA empatados con 95.95 % de exactitud (38/42 malignos detectados: 4 FN y 1 FP); GNB 91.92 % (4 FN y 4 FP).</p>
+<p style="font-size:13px;color:var(--ink-soft)">⚠️ Cifras por verificar: con 114 muestras de prueba (20 % de 569), 5 errores dan 95.61 % y 8 errores dan 92.98 %, que son justamente las cifras de mi exposición. Los 95.95 % y 91.92 % del equipo 1 salen así del resumen de NotebookLM y no cuadran con su propia matriz de confusión.</p>
+<ul>
+<li><em>¿Qué es preferible aquí, más precisión o más recall?</em> — Más <strong>recall en la clase maligna</strong>, para no dejar pasar falsos negativos.</li>
+<li>El profesor les pidió explicar línea por línea la función de decisión de QDA; se aclaró que <code>(x - mu) @ inv(Sigma) @ (x - mu).T</code> es la <strong>distancia de Mahalanobis</strong> (al cuadrado).</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c13-equipo2"><summary><span class="stitle">Mi exposición (equipo 2, Rafael)</span></summary>
+<p><strong>Parte 1.</strong> Mismo flujo: 1,440,000 píxeles de entrenamiento, máscara automática temporal con HSV y QDA entrenado en <strong>RGB</strong>. Presenté los mapas de clasificación; como no había máscaras «ground truth» para las imágenes de prueba, aclaré que el análisis fue <strong>cualitativo</strong>. En el código mostré que sumé una constante regularizadora a la diagonal de la covarianza para asegurar que fuera invertible.</p>
+<p><strong>Parte 2.</strong> QDA y LDA: <strong>95.61 %</strong> de exactitud; GNB: <strong>92.98 %</strong>. Línea base trivial (predecir siempre «benigno»): <strong>62.74 %</strong>. Matriz de confusión: QDA/LDA detectaron 38/42 malignos con 4 FN y 1 FP; GNB tuvo 4 FN y 4 FP.</p>
+<p><strong>Preguntas del profesor:</strong></p>
+<ul>
+<li><em>¿Te habría ido mejor clasificando directamente en HSV en lugar de RGB?</em> — Respondí que el problema de la papa persiste en cualquier espacio de color si esa clase no existe en el entrenamiento.</li>
+<li><em>¿Para qué sirve la constante en la diagonal?</em> — Para evitar que la matriz sea singular y que el cálculo sea numéricamente estable.</li>
+<li><em>¿Para qué sirve <code>reg_param</code> en la librería?</em> — No recordé el detalle interno de la API («sé que es un parámetro que necesita, pero no quiero inventar información»). La respuesta es la misma idea de arriba: es el λ que regulariza Σ.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c13-qda"><summary><span class="stitle">Conceptos: QDA y regularización de la covarianza</span></summary>
+<span class="lbl">Qué es</span>
+<p><strong>QDA</strong> es un clasificador bayesiano supervisado que supone que cada clase sigue una normal multivariada con <strong>su propia matriz de covarianza</strong>. Su función discriminante:</p>
+<pre><code>gᵢ(x) = −½ (x − μᵢ)ᵀ Σᵢ⁻¹ (x − μᵢ) − ½ ln|Σᵢ| + ln P(ωᵢ)</code></pre>
+<p>El primer término es la <strong>distancia de Mahalanobis</strong> al cuadrado hasta la media de la clase; el segundo penaliza clases muy «infladas»; el tercero es la probabilidad a priori (con 76.6 % de fondo, el prior del fondo pesa mucho).</p>
+<p><strong>Regularización:</strong> <code>Σ_reg = Σ + λI</code>. Sumar una constante pequeña a la diagonal garantiza |Σ| &gt; 0 y que exista Σ⁻¹ cuando hay pocas muestras o características colineales. En la práctica se usó <code>reg_param = 10⁻⁴</code> o una constante equivalente.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Cada clase es una nube con forma de globo propio (estirado, inclinado); QDA mide qué tan lejos estás de cada globo según su forma. La regularización es ponerle un «grosor mínimo» al globo para que nunca quede aplastado en un plano.<span class="rompe">Dónde falla: con λ demasiado grande todas las nubes se vuelven esferas y se pierde lo que distinguía a QDA.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite fronteras cuadráticas; es la teoría de la <a href="clase-08.html">Clase 08</a> llevada a código.</p>
+<div class="errores"><p><strong>Error común:</strong> no regularizar y que el programa truene con una matriz no invertible.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c13-gnb"><summary><span class="stitle">Conceptos: Naive Bayes con datos correlacionados y clases no vistas</span></summary>
+<p><strong>Gaussian Naive Bayes</strong> supone independencia condicional entre características (covarianza diagonal): multiplica las probabilidades individuales sin términos cruzados. En Breast Cancer, donde las 30 mediciones del tumor están muy correlacionadas, ese supuesto tira información útil: más falsos positivos (4 vs. 1) y menor exactitud que QDA/LDA.</p>
+<p><strong>Clases no vistas (fuera de distribución).</strong> Un clasificador supervisado estándar siempre elige alguna de las clases que conoce: asigna cada píxel a la de menor distancia de Mahalanobis / mayor posterior. Por eso la papa salió como plátano y huevo. Soluciones mencionadas: agregar la clase al entrenamiento (o, en general, un umbral de rechazo).</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>GNB es juzgar el clima viendo temperatura y humedad como si no tuvieran nada que ver. Y un niño que solo conoce perros y gatos llamará «gato» a un conejo.<span class="rompe">Dónde falla: a veces GNB funciona sorprendentemente bien aunque haya correlación; aquí no fue el caso.</span></p></div>
+<div class="errores"><p><strong>Errores comunes:</strong> asumir que GNB siempre sirve sin revisar correlaciones; esperar que el clasificador diga «esto es nuevo» sin habérselo enseñado.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c13-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Por qué en cáncer de mama se prioriza el recall sobre la precisión?</summary><p>Porque un falso negativo (decirle sano a un paciente con tumor maligno) puede ser fatal; un falso positivo se descarta con estudios posteriores.</p></details>
+<details class="qa"><summary>2. ¿Qué calcula <code>(x - mu) @ inv(Sigma) @ (x - mu).T</code>?</summary><p>La distancia de Mahalanobis al cuadrado entre x y la media de la clase, ponderada por su covarianza.</p></details>
+<details class="qa"><summary>3. ¿Qué hace <code>reg_param</code> en QDA?</summary><p>Suma λ a la diagonal de cada Σ (Σ + λI) para que sea invertible y el cálculo sea estable.</p></details>
+<details class="qa"><summary>4. ¿Por qué GNB quedó por debajo de QDA/LDA en Breast Cancer?</summary><p>Porque asume independencia entre características (Σ diagonal) e ignora las fuertes correlaciones entre las 30 mediciones.</p></details>
+<details class="qa"><summary>5. ¿Por qué la papa salió como plátano y huevo?</summary><p>Porque no existía la clase «papa»: cada píxel se asignó a la clase conocida más cercana (tono → plátano, brillo → huevo).</p></details>
+<details class="qa"><summary>6. ¿Para qué sirve <code>stratify</code> en el split 80/20?</summary><p>Para conservar en entrenamiento y prueba la proporción original de malignos (~37 %) y benignos (~63 %).</p></details>
+<details class="qa"><summary>7. ¿Por qué la evaluación de la Parte 1 fue cualitativa?</summary><p>Porque no había máscaras de referencia (ground truth) de las imágenes de prueba para calcular métricas píxel a píxel.</p></details>
+<details class="qa"><summary>8. Con 114 muestras de prueba, 4 FN y 1 FP, ¿qué exactitud sale?</summary><p>109/114 ≈ 95.61 %.</p></details>
+</details>
+
+<details class="section-block sec" id="c13-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li>HSV se usó solo como atajo para etiquetar automáticamente los 1.44 M de píxeles; las características con que se entrenó QDA fueron los valores RGB originales.</li>
+<li>La evaluación visual de la segmentación fue inevitable por falta de máscaras reales en las imágenes de prueba.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c13-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Formato de las próximas exposiciones:</strong> 15 minutos por equipo (metodología, resultados y análisis, sin introducciones teóricas largas) + 5 minutos de preguntas individuales y revisión del código en la computadora.</li>
+<li><strong>Ritmo de teoría:</strong> un solo modelo por clase (regresión logística → SVM → Random Forest…), así que algunas sesiones serán más cortas.</li>
+<li><strong>Segundo Examen Parcial:</strong> últimas semanas de noviembre (≈ 2 semanas antes de terminar el semestre). Temario: desde DBSCAN y KNN (<a href="clase-12.html">Clase 12</a>) hasta el último tema antes del examen. La Práctica 3 <strong>no</strong> entra; las Prácticas 4 y 5 sí.</li>
+<li><strong>Proyecto final:</strong> se entrega la primera semana de exámenes finales (o antes si el grupo lo acuerda); el enunciado llega con 1 mes de anticipación (finales de octubre o inicios de noviembre). Reporte, código y exposición de 30 minutos por equipo.</li>
+<li><strong>Próxima clase (lunes 12 oct):</strong> regresión logística → <a href="clase-14.html">Clase 14</a>.</li>
+</ul>
+</details>
+
+<p class="empty" style="margin-top:28px">Estructurado seg&uacute;n el <a href="index.html#tema-7" style="color:var(--indigo)">Tema 7</a> del programa del profesor.</p>
+
+</div>
+</body>
+</html>

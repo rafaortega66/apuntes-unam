@@ -48,7 +48,9 @@ def formato(src):
 
 def clase_info(path, slug):
     src = open(path, encoding="utf-8").read()
-    num = int(re.search(r"clase-(\d+)\.html$", path).group(1))
+    # clase-m01.html = «Clase -1»: sesiones previas a la primera que asistí
+    mnum = re.search(r"clase-(m?)(\d+)\.html$", path)
+    num = -int(mnum.group(2)) if mnum.group(1) else int(mnum.group(2))
     head = re.search(r'<div class="detail-head".*?</div>', src, re.S)
     prof = re.search(r'<p class="prof">(.*?)</p>', head.group(0) if head else src, re.S)
     texto = strip_tags(prof.group(1)) if prof else ""
@@ -60,7 +62,7 @@ def clase_info(path, slug):
         "num": num,
         "fecha": fecha,
         "resumen": resumen[:220],
-        "url": f"materias/{slug}/clase-{num:02d}.html",
+        "url": f"materias/{slug}/{os.path.basename(path)}",
         "formato": formato(src),
     }
 

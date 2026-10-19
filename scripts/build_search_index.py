@@ -135,7 +135,7 @@ def extract_head(raw):
 def classify(filename):
     if filename == "index.html":
         return "index"
-    if re.match(r"clase-\d+\.html$", filename):
+    if re.match(r"clase-m?\d+\.html$", filename):
         return "clase"
     if filename == "evaluacion.html":
         return "evaluacion"

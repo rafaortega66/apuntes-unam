@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 15 — Reconocimiento de Patrones</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Reconocimiento de Patrones</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Clase 15 <span style="font-size:.6em;font-weight:400;color:var(--ink-soft)">(sesión 18 del curso)</span></h2>
+  <p class="prof">Ing. Rubén Omar Azuara Domínguez · 16 oct 2026 · Tema 8 — Máquinas de vectores de soporte (SVM): hiperplano, margen y vectores de soporte, maximización del margen, Lagrangiano y forma dual, margen suave con holgura y C, truco del kernel, kernels comunes, multiclase y comparación de kernels en Breast Cancer y German Credit.</p>
+  <p style="font-size:12px;color:var(--ink-soft);margin:2px 0 0">🔢 Sesión 18 del curso (cronología real) · diapositivas del profesor <a href="material.html" style="color:var(--indigo)">Clase 13</a> (SVM).</p>
+</div>
+
+<div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>⚠️ Sin audio de esta clase en NotebookLM</strong> (el cuaderno de RP llega hasta RP-Clase14, del 12 oct). Que el tema fue SVM lo anunció el profesor al final de la <a href="clase-14.html">Clase 14</a>. Todo lo de abajo sale de las <strong>diapositivas oficiales «Clase 13 SVM»</strong> (Classroom, publicadas el 18 oct). Si tienes el audio del 16 oct, súbelo a NotebookLM y se completa esta página con lo que se dijo en clase.</p></div>
+
+<div class="files"><a class="btn" href="../../decimo/RP/RP-Material/Clase-13-SVM.pdf" target="_blank">📄 Diapositivas Clase 13 (prof.)</a></div>
+
+<details class="section-block sec" id="c15-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<p>Entra al <strong>Segundo Parcial</strong> (todo desde DBSCAN/KNN). Sin audio, la prioridad sale de lo que el deck desarrolla con más detalle:</p>
+<ol class="examen-lista">
+<li><strong>Hiperplano, margen y vectores de soporte; restricción yᵢ(w·xᵢ + b) ≥ 1</strong><span class="evid">Evidencia: son las definiciones base del deck, con figura y planos + / −.</span></li>
+<li><strong>Derivar el ancho del margen M = 2/‖w‖ y el problema min ½‖w‖²</strong><span class="evid">Evidencia: el deck dedica tres diapositivas a la derivación paso a paso.</span></li>
+<li><strong>Margen suave: variables de holgura ξᵢ y el papel de C</strong><span class="evid">Evidencia: diapositiva explícita con la interpretación de C grande vs. pequeño.</span></li>
+<li><strong>Truco del kernel y los cuatro kernels (lineal, polinomial, RBF, sigmoide)</strong><span class="evid">Evidencia: fórmulas en el deck y comparación de kernels en dos datasets.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c15-intro"><summary><span class="stitle">Qué es SVM y conceptos base</span></summary>
+<span class="lbl">Qué es</span>
+<p><strong>SVM</strong> (<em>Support Vector Machine</em>) es un método de aprendizaje máquina <strong>supervisado</strong> para clasificación y regresión. Su objetivo es definir el <strong>hiperplano que mejor separa las clases maximizando el margen</strong> entre ellas.</p>
+<p>Recordatorio de clasificadores lineales: se definen por pesos w y bias b; según el signo de <code>w·x + b</code> (&gt; 0 → +1, &lt; 0 → −1) se clasifica el ejemplo. Pero hay infinitas rectas que separan los mismos datos: <strong>¿cuál es la más adecuada?</strong></p>
+<ul>
+<li><strong>Hiperplano:</strong> plano de decisión que separa objetos de distintas clases.</li>
+<li><strong>Margen:</strong> distancia entre el hiperplano y los vectores de soporte; idealmente esa franja no contiene puntos.</li>
+<li><strong>Vectores de soporte:</strong> los puntos de datos más cercanos al hiperplano.</li>
+</ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Entre dos grupos de casas hay que trazar una carretera lo más ancha posible; las casas que tocan la orilla de la carretera son los vectores de soporte, y solo ellas deciden dónde va.<span class="rompe">Dónde falla: en datos reales siempre hay alguna casa en medio del camino; para eso está el margen suave.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Retoma las funciones de decisión lineales del Tema 5 (<a href="clase-06.html">Clase 06</a>), pero elige la frontera con un criterio: el margen máximo.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c15-margen"><summary><span class="stitle">Maximizar el margen: derivación y problema de optimización</span></summary>
+<p>Se definen el <strong>plano positivo</strong> <code>w·x + b ≥ +1</code> y el <strong>plano negativo</strong> <code>w·x + b ≤ −1</code>. Con y = +1 para positivos y y = −1 para negativos, ambas condiciones se resumen en:</p>
+<pre><code>yᵢ (w·xᵢ + b) ≥ 1</code></pre>
+<p><strong>Ancho del margen en términos de w.</strong> Sean x⁺ y x⁻ puntos en el plano positivo y negativo, con <code>x⁺ = x⁻ + λw</code> (se llega de uno a otro en dirección perpendicular, w):</p>
+<pre><code>w·x⁺ + b = +1,   w·x⁻ + b = −1
+w·(x⁻ + λw) + b = 1  →  (w·x⁻ + b) + λ w·w = 1  →  −1 + λ w·w = 1
+λ = 2 / (w·w)
+M = |x⁺ − x⁻| = |λw| = λ‖w‖ = 2‖w‖ / (w·w) = 2 / ‖w‖</code></pre>
+<p><strong>Objetivo:</strong> (1) clasificar bien todos los datos de entrenamiento, <code>yᵢ(w·xᵢ + b) ≥ 1</code>; (2) maximizar <code>M = 2/‖w‖</code>, que equivale a minimizar <code>½‖w‖² = ½wᵀw</code>:</p>
+<pre><code>min  ½‖w‖²    sujeto a   yᵢ (w·xᵢ + b) ≥ 1</code></pre>
+<p><strong>Multiplicadores de Lagrange:</strong></p>
+<pre><code>ℒ(w, b, α) = ½‖w‖² − Σ αᵢ [ yᵢ (wᵀxᵢ + b) − 1 ]
+∂ℒ/∂w = 0  →  w = Σ αᵢ yᵢ xᵢ
+∂ℒ/∂b = 0  →  Σ αᵢ yᵢ = 0</code></pre>
+<p>Sustituyendo se obtiene la <strong>representación dual</strong>:</p>
+<pre><code>max_α  Σ αᵢ − ½ Σᵢ Σⱼ αᵢ αⱼ yᵢ yⱼ xᵢᵀxⱼ     sujeto a  αᵢ ≥ 0,  Σ αᵢ yᵢ = 0</code></pre>
+<p>Al terminar de entrenar se obtienen el hiperplano y los vectores de soporte (los puntos con αᵢ &gt; 0). Pero esto <strong>solo funciona si los datos son linealmente separables</strong>.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Un w «chico» significa una función que cambia despacio, y eso deja más espacio entre los planos +1 y −1: hacer w pequeño es ensanchar la carretera.<span class="rompe">Dónde falla: la intuición no muestra por qué en la forma dual solo aparecen productos punto xᵢᵀxⱼ, que es lo que permite el truco del kernel.</span></p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c15-suave"><summary><span class="stitle">Margen suave: holgura ξᵢ y el hiperparámetro C</span></summary>
+<p>Cuando hay solapamiento entre clases (lo que casi siempre pasa), se añade una <strong>variable de holgura ξᵢ</strong> por ejemplo que permite algunas clasificaciones incorrectas:</p>
+<pre><code>yᵢ (wᵀxᵢ + b) ≥ 1 − ξᵢ
+min  ½‖w‖² + C Σ ξᵢ</code></pre>
+<p>El hiperparámetro <strong>C</strong> controla cuánto se toleran los errores: <strong>C grande</strong> → pocos errores permitidos (margen más angosto); <strong>C pequeño</strong> → se toleran más errores (margen más ancho).</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>C es qué tan cara es la multa por cada casa que queda en medio de la carretera: multa alta → carretera angosta que esquiva todo; multa baja → carretera ancha aunque atropelle algunas.<span class="rompe">Dónde falla: un C muy alto en datos ruidosos sobreajusta.</span></p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c15-kernel"><summary><span class="stitle">Datos no linealmente separables: el truco del kernel</span></summary>
+<p>Con datos como un círculo dentro de un anillo, dos medias lunas o puntos rojos a ambos lados de unos azules sobre una recta, no hay función lineal que los separe. La propuesta: llevar los datos a una <strong>dimensionalidad mayor</strong> donde sí sean linealmente separables (en el ejemplo 1D del deck, añadir x² convierte la recta en una parábola que una línea puede cortar).</p>
+<p>El <strong>truco del kernel</strong> proyecta el espacio de entrada a uno de mayor dimensión. El <strong>kernel</strong> es una función que calcula el producto punto en ese espacio sin calcularlo explícitamente:</p>
+<pre><code>K(xᵢ, xⱼ) = φ(xᵢ)ᵀ φ(xⱼ)
+max_α  Σ αᵢ − ½ Σᵢ Σⱼ αᵢ αⱼ yᵢ yⱼ K(xᵢ, xⱼ)</code></pre>
+<p><strong>Kernels más usados:</strong></p>
+<pre><code>Lineal:                    K(xᵢ, xⱼ) = xᵢᵀxⱼ
+Polinomial:                K(xᵢ, xⱼ) = (1 + xᵢᵀxⱼ)ᵖ
+Función de base radial:    K(xᵢ, xⱼ) = exp(−‖xᵢ − xⱼ‖² / 2σ²)
+Sigmoide:                  K(xᵢ, xⱼ) = tanh(α xᵢᵀxⱼ + c)</code></pre>
+<p><strong>Multiclase:</strong> SVM es inherentemente binario; para varias clases se usa <strong>uno vs. el resto</strong> o <strong>uno vs. uno</strong>.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Canicas rojas y azules revueltas sobre una mesa: si golpeas la mesa y las azules saltan más alto, una hoja horizontal en el aire las separa. El kernel es saber a qué altura queda cada canica sin tener que lanzarlas.<span class="rompe">Dónde falla: elegir mal el kernel o sus hiperparámetros (p, σ) puede empeorar el resultado respecto al lineal.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la misma idea que el Kernel PCA del Tema 3 (<a href="clase-03.html">Clase 03</a>) y la estrategia multiclase de funciones de decisión (<a href="clase-06.html">Clase 06</a>).</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c15-ejemplos"><summary><span class="stitle">Ejemplos: Breast Cancer y German Credit</span></summary>
+<p><strong>Breast Cancer</strong> (fronteras de decisión en 2D para cada kernel):</p>
+<table>
+<tr><th>Kernel</th><th>Accuracy</th><th>Precision</th><th>Recall</th><th>F1</th></tr>
+<tr><td>Lineal</td><td>0.982</td><td>0.982</td><td>0.982</td><td>0.982</td></tr>
+<tr><td>Polinomial (grado 3)</td><td>0.895</td><td>0.910</td><td>0.895</td><td>0.890</td></tr>
+<tr><td>RBF (gamma = scale)</td><td>0.977</td><td>0.977</td><td>0.977</td><td>0.977</td></tr>
+<tr><td>Sigmoide</td><td>0.936</td><td>0.936</td><td>0.936</td><td>0.936</td></tr>
+</table>
+<p>Aquí el kernel <strong>lineal</strong> es el mejor: un kernel más complejo no siempre ayuda.</p>
+<p><strong>German Credit Data</strong> (detección de riesgo/fraude):</p>
+<table>
+<tr><th>Kernel</th><th>Accuracy</th><th>Precision</th><th>Recall</th><th>F1</th><th>Matriz [Bueno→Bueno, Bueno→Riesgo; Riesgo→Bueno, Riesgo→Riesgo]</th></tr>
+<tr><td>linear</td><td>74.0 %</td><td>79.6 %</td><td>84.6 %</td><td>0.820</td><td>[37, 38; 27, 148]</td></tr>
+<tr><td>rbf</td><td>70.4 %</td><td>70.3 %</td><td>100.0 %</td><td>0.825</td><td>[1, 74; 0, 175]</td></tr>
+<tr><td>poly</td><td>70.0 %</td><td>77.5 %</td><td>80.6 %</td><td>0.790</td><td>[34, 41; 34, 141]</td></tr>
+<tr><td>sigmoid</td><td>66.8 %</td><td>77.4 %</td><td>74.3 %</td><td>0.758</td><td>[37, 38; 45, 130]</td></tr>
+</table>
+<p>Ojo con el <strong>RBF</strong>: recall de 100 % (0 riesgos no detectados) pero porque clasifica casi todo como «riesgo» (solo 1 «bueno» acertado de 75). Su F1 es el más alto, pero es un modelo casi trivial: hay que leer la matriz de confusión, no solo una métrica. Riesgos no detectados por kernel: 27 (linear), 0 (rbf), 34 (poly), 45 (sigmoid).</p>
+</details>
+
+<details class="section-block sec" id="c15-consideraciones"><summary><span class="stitle">Ventajas y desventajas</span></summary>
+<table>
+<tr><th>Ventajas</th><th>Desventajas</th></tr>
+<tr><td>Muy efectivo en espacios de alta dimensionalidad</td><td>Lento en datasets muy grandes</td></tr>
+<tr><td>Funciona bien con pocos datos de entrenamiento</td><td>Sensible a la elección del kernel y sus hiperparámetros</td></tr>
+<tr><td>Robusto ante outliers: solo depende de los vectores de soporte</td><td>El escalamiento de los datos es crucial</td></tr>
+<tr><td>Modela relaciones no lineales y clasificación multiclase</td><td>Difícil de interpretar, más con kernels no lineales</td></tr>
+</table>
+<p>Los hiperparámetros a definir dependen de la implementación que se use.</p>
+</details>
+
+<details class="section-block sec" id="c15-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. Define hiperplano, margen y vectores de soporte.</summary><p>Hiperplano: plano de decisión que separa clases. Margen: distancia del hiperplano a los vectores de soporte. Vectores de soporte: los puntos más cercanos al hiperplano.</p></details>
+<details class="qa"><summary>2. ¿Qué condición única resume los planos + y −?</summary><p>yᵢ(w·xᵢ + b) ≥ 1.</p></details>
+<details class="qa"><summary>3. Deriva el ancho del margen.</summary><p>Con x⁺ = x⁻ + λw: −1 + λw·w = 1 ⇒ λ = 2/(w·w); M = λ‖w‖ = 2/‖w‖.</p></details>
+<details class="qa"><summary>4. ¿Por qué maximizar M equivale a minimizar ½‖w‖²?</summary><p>Porque M = 2/‖w‖ crece cuando ‖w‖ baja; minimizar ½‖w‖² es la forma diferenciable y convexa de hacerlo.</p></details>
+<details class="qa"><summary>5. ¿Qué se obtiene al derivar el Lagrangiano respecto a w y b?</summary><p>w = Σ αᵢyᵢxᵢ y Σ αᵢyᵢ = 0.</p></details>
+<details class="qa"><summary>6. ¿Qué hace C en el margen suave?</summary><p>Pondera la suma de holguras: C grande permite pocos errores; C pequeño tolera más errores con un margen más ancho.</p></details>
+<details class="qa"><summary>7. ¿Qué calcula un kernel?</summary><p>El producto punto φ(xᵢ)ᵀφ(xⱼ) en un espacio de mayor dimensión, sin calcular φ explícitamente.</p></details>
+<details class="qa"><summary>8. Escribe el kernel RBF.</summary><p>K(xᵢ, xⱼ) = exp(−‖xᵢ − xⱼ‖² / 2σ²).</p></details>
+<details class="qa"><summary>9. En German Credit, ¿por qué el RBF con recall 100 % no es el mejor modelo?</summary><p>Porque predice casi todo como «riesgo» (74 de 75 «buenos» mal clasificados); el recall alto es a costa de la precisión y de la utilidad del modelo.</p></details>
+</details>
+
+<details class="section-block sec" id="c15-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Próxima clase</strong> (según la última diapositiva): <strong>Decision Trees y Random Forest</strong>.</li>
+<li>Pendientes que se hayan dicho en clase el 16 oct: <strong>sin audio, por confirmar</strong>.</li>
+</ul>
+</details>
+
+<p class="empty" style="margin-top:28px">Estructurado seg&uacute;n el <a href="index.html#tema-8" style="color:var(--indigo)">Tema 8</a> del programa del profesor. Reconstruido de las diapositivas (sin audio).</p>
+
+</div>
+</body>
+</html>

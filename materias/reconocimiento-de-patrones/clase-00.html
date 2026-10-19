@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 0 — Reconocimiento de Patrones</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Reconocimiento de Patrones</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Clase 0 <span style="font-size:.6em;font-weight:400;color:var(--ink-soft)">(sesión 3 del curso)</span></h2>
+  <p class="prof">Ing. Rubén Omar Azuara Domínguez · 24 ago 2026 · Tema 2 — Extracción de características II: momentos geométricos (espaciales, centrales, normalizados y de Hu) y textura con la matriz de co-ocurrencia de niveles de gris (GLCM) y sus descriptores.</p>
+  <p style="font-size:12px;color:var(--ink-soft);margin:2px 0 0">🔢 Sesión 3 del curso (cronología real) · diapositivas del profesor <a href="material.html" style="color:var(--indigo)">Clase 3</a> (Extracción de características II).</p>
+</div>
+
+<div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>⚠️ No asistí a esta clase</strong> (me inscribí tarde). No hay audio: todo sale de las <strong>diapositivas oficiales «Clase 3. Extracción de características II»</strong> (Classroom, 27 ago). En el audio de mi <a href="clase-01.html">Clase 01</a> (28 ago) el profesor confirma que «la clase pasada» vieron los momentos geométricos, y en esa clase repasó Hu y GLCM. Los ejemplos 1, 2 y 4 del deck traen los espacios en blanco para resolver en clase: los resultados de abajo los calculé con las fórmulas de la propia diapositiva.</p></div>
+
+<div class="files"><a class="btn" href="../../decimo/RP/RP-Material/Clase-03-Extraccion-de-caracteristicas-II.pdf" target="_blank">📄 Diapositivas Clase 3 (prof.)</a> <a class="btn" href="../../decimo/RP/RP-Material/Ejercicios-Hu-y-GLCM-clase.pdf" target="_blank">📄 Ejercicios de Hu y GLCM (prof.)</a></div>
+
+<details class="section-block sec" id="c0-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Cadena completa de momentos: espaciales → centroide → centrales → normalizados → Hu (y escala logarítmica)</strong><span class="evid">Evidencia: fue el ejercicio 33 del Primer Parcial (10 puntos), ver <a href="clase-11.html">Clase 11</a>; además el profesor subió «Ejercicios de Hu y GLCM» resueltos.</span></li>
+<li><strong>Construir una GLCM: conteo por dirección, hacerla simétrica (sumar la transpuesta) y normalizar</strong><span class="evid">Evidencia: ejercicio 34 del Primer Parcial (10 puntos); el error recurrente que marcó fue olvidar la transpuesta o no dividir entre el total.</span></li>
+<li><strong>Descriptores de textura: contraste, ASM / energía, entropía, homogeneidad</strong><span class="evid">Evidencia: en el ejercicio 34 se pidieron ASM, energía y contraste.</span></li>
+<li><strong>Qué invarianza aporta cada tipo de momento</strong><span class="evid">Evidencia: el deck lo construye paso a paso (centrales → traslación, normalizados → escala, Hu → rotación).</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c0-momentos"><summary><span class="stitle">Momentos geométricos: espaciales, centrales y normalizados</span></summary>
+<p>La clase abre con «¿dudas de la clase anterior?» y la pregunta <strong>«¿estos descriptores son suficientes?»</strong>: las medidas geométricas simples son útiles, pero suelen ser insuficientes para describir formas complejas o para garantizar <strong>invariancia frente a traslación, escala o rotación</strong>.</p>
+<span class="lbl">Qué es</span>
+<p>Los <strong>momentos geométricos</strong> describen cómo están distribuidos espacialmente los píxeles de un objeto. Hay cuatro niveles: espaciales, centrales, normalizados y de Hu.</p>
+<p><strong>Momentos espaciales.</strong> Para una imagen <code>f(x, y)</code> (binaria o en grises):</p>
+<pre><code>M_pq = Σ_x Σ_y xᵖ yᵠ f(x, y),   p, q ≥ 0
+Área (imagen binaria) = M₀₀       Centroide (x̄, ȳ) = (M₁₀/M₀₀, M₀₁/M₀₀)</code></pre>
+<p><strong>Ejemplo 1</strong> (imagen 5 × 5 con un cuadrado de 2 × 2 en las posiciones (1,2), (1,3), (2,2), (2,3), con x = fila y y = columna como en la cuadrícula de coordenadas del deck):</p>
+<pre><code>M₀₀ = 4
+M₁₀ = Σx  = 1 + 1 + 2 + 2 = 6
+M₀₁ = Σy  = 2 + 3 + 2 + 3 = 10
+M₁₁ = Σxy = 2 + 3 + 4 + 6 = 15         Centroide = (6/4, 10/4) = (1.5, 2.5)</code></pre>
+<p><strong>Momentos centrales.</strong> Los espaciales dependen de la posición; para eliminar la traslación se mide respecto al centroide:</p>
+<pre><code>μ_pq = Σ_x Σ_y (x − x_c)ᵖ (y − y_c)ᵠ f(x, y)</code></pre>
+<p>Son invariantes a traslación y describen la forma alrededor de su centro, <strong>pero aún dependen de la escala</strong>. Relaciones de la diapositiva: μ₀₀ = M₀₀, μ₀₁ = 0, μ₁₀ = 0 y μ₁₁ = M₁₁ − x̄M₀₁ = M₁₁ − ȳM₁₀.</p>
+<p><strong>Ejemplo 2</strong> (misma imagen): μ₀₀ = 4, μ₁₀ = 0, μ₀₁ = 0, μ₁₁ = 15 − 1.5·10 = <strong>0</strong> (el cuadrado es simétrico respecto a su centro, no está «inclinado»).</p>
+<p><strong>Momentos normalizados.</strong> Invariantes a traslación <strong>y escala</strong>; se obtienen dividiendo los centrales entre una potencia del momento de orden cero:</p>
+<pre><code>η_ij = μ_ij / μ₀₀^(1 + (i+j)/2),   con i + j ≥ 2</code></pre>
+<p>Pero queda un problema: <strong>siguen variando con la rotación</strong>.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>M₀₀ es «cuánta tinta hay», el centroide es «dónde está el centro de gravedad» y los momentos de orden 2 dicen «qué tan estirada está la mancha y hacia dónde». Centrar quita «dónde está»; normalizar quita «qué tan grande es».<span class="rompe">Dónde falla: girar la mancha todavía cambia μ₂₀, μ₀₂ y μ₁₁; para eso están los de Hu.</span></p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c0-hu"><summary><span class="stitle">Momentos de Hu</span></summary>
+<span class="lbl">Qué es</span>
+<p>Son <strong>7 momentos</strong> invariantes a <strong>rotación, escala y traslación</strong>, calculados a partir de los momentos normalizados:</p>
+<pre><code>I₁ = η₂₀ + η₀₂
+I₂ = (η₂₀ − η₀₂)² + 4η₁₁²
+I₃ = (η₃₀ − 3η₁₂)² + (3η₂₁ − η₀₃)²
+I₄ = (η₃₀ + η₁₂)² + (η₂₁ + η₀₃)²
+I₅ = (η₃₀ − 3η₁₂)(η₃₀ + η₁₂)[(η₃₀ + η₁₂)² − 3(η₂₁ + η₀₃)²]
+     + (3η₂₁ − η₀₃)(η₂₁ + η₀₃)[3(η₃₀ + η₁₂)² − (η₂₁ + η₀₃)²]
+I₆ = (η₂₀ − η₀₂)[(η₃₀ + η₁₂)² − (η₂₁ + η₀₃)²] + 4η₁₁(η₃₀ + η₁₂)(η₂₁ + η₀₃)
+I₇ = (3η₂₁ − η₀₃)(η₃₀ + η₁₂)[(η₃₀ + η₁₂)² − 3(η₂₁ + η₀₃)²]
+     − (η₃₀ − 3η₁₂)(η₂₁ + η₀₃)[3(η₃₀ + η₁₂)² − (η₂₁ + η₀₃)²]</code></pre>
+<p><strong>Ejemplo 3 (imagen real).</strong> Foto de plátanos, chiles y huevos sobre fondo naranja → máscara binaria → se separan dos objetos: un <strong>plátano</strong> y un <strong>huevo</strong>. Para cada uno el deck muestra las matrices de momentos espaciales, centrales y normalizados (los η con i + j &lt; 2 aparecen como <code>nan</code> porque no se definen) y los 7 de Hu:</p>
+<table>
+<tr><th>Objeto</th><th>Hu₁</th><th>Hu₂</th><th>Hu₃</th><th>Hu₄</th><th>Hu₅</th><th>Hu₆</th><th>Hu₇</th></tr>
+<tr><td>Plátano</td><td>3.0317e-01</td><td>5.5314e-02</td><td>4.8097e-03</td><td>5.5395e-04</td><td>−6.3918e-07</td><td>−1.0667e-04</td><td>6.3958e-07</td></tr>
+<tr><td>Huevo</td><td>1.6259e-01</td><td>1.0805e-03</td><td>5.5727e-06</td><td>6.5154e-08</td><td>3.9205e-14</td><td>2.1417e-09</td><td>−2.0554e-15</td></tr>
+</table>
+<p>Como los valores abarcan muchos órdenes de magnitud, lo más común es aplicar una <strong>escala logarítmica</strong>. Por los números de la diapositiva, la transformación es <code>H = −signo(h) · log₁₀|h|</code> (p. ej. −log₁₀(0.30317) = 0.518):</p>
+<table>
+<tr><th>Objeto</th><th>Hu₁</th><th>Hu₂</th><th>Hu₃</th><th>Hu₄</th><th>Hu₅</th><th>Hu₆</th><th>Hu₇</th></tr>
+<tr><td>Plátano</td><td>0.518</td><td>1.257</td><td>2.318</td><td>3.257</td><td>−6.194</td><td>−3.972</td><td>6.194</td></tr>
+<tr><td>Huevo</td><td>0.789</td><td>2.966</td><td>5.254</td><td>7.186</td><td>13.407</td><td>8.669</td><td>−14.687</td></tr>
+</table>
+<p>Con la escala logarítmica los dos objetos se separan claramente en casi todas las componentes (el huevo, casi circular, tiene Hu₂ en adelante mucho más pequeños).</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es una «huella digital» de la forma: siete números que no cambian si mueves, agrandas o giras el objeto.<span class="rompe">Dónde falla: solo describen la silueta; dos objetos con la misma forma y distinta textura dan los mismos Hu.</span></p></div>
+<div class="errores"><p><strong>Error común:</strong> comparar los Hu sin escala logarítmica: los de orden alto son tan pequeños (e-07, e-15) que no pesan nada frente a Hu₁.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c0-glcm"><summary><span class="stitle">Textura: la matriz de co-ocurrencia (GLCM)</span></summary>
+<p>¿Pero qué pasa si…? Arena vs. pasto, o un jarrón rugoso vs. uno liso: lo que diferencia a las clases <strong>no es la geometría del objeto, sino cómo varía la intensidad dentro de él</strong>. Si la forma describe la silueta, la <strong>textura</strong> describe la organización interna de los niveles de gris.</p>
+<span class="lbl">Qué es</span>
+<p>La <strong>GLCM</strong> (<em>Gray Level Co-occurrence Matrix</em>) es una matriz definida sobre una imagen como la distribución de valores de píxel concurrentes en un desplazamiento dado: modela qué tan frecuentemente ciertos niveles de gris aparecen juntos. Para una imagen cuantizada con N niveles es una matriz N × N donde <code>P(i, j | d, θ)</code> indica cuántas veces un píxel de valor i aparece con uno de valor j, separados por una distancia d en la dirección θ. Parámetros: <strong>N</strong> (niveles), <strong>d</strong> (distancia), <strong>θ</strong> (dirección).</p>
+<p><strong>¿Cómo se calcula?</strong> (1) Se definen distancia y dirección; (2) se crea el arreglo N × N; (3) se cuentan las transiciones de un valor de intensidad a otro según d y θ.</p>
+<p><strong>Ejemplo 4</strong> (d = 1, θ = 0, de izquierda a derecha), imagen 4 × 4 con 4 niveles:</p>
+<pre><code>0 0 1 1
+0 0 1 1
+0 2 2 2
+2 2 3 3</code></pre>
+<p>Conteo oeste → este (fila = píxel de referencia, columna = vecino) y su transpuesta (este → oeste):</p>
+<pre><code>      O→E            E→O           Simétrica (suma)
+   0  1  2  3     0  1  2  3       0  1  2  3
+0  2  2  1  0     2  0  0  0    0  4  2  1  0
+1  0  2  0  0     2  2  0  0    1  2  4  0  0
+2  0  0  3  1     1  0  3  0    2  1  0  6  1
+3  0  0  0  1     0  0  1  1    3  0  0  1  2</code></pre>
+<p>Conviene que la matriz sea <strong>simétrica</strong> respecto a la diagonal (contar en ambos sentidos). «Pero aún falta algo…»: <strong>normalizar</strong> dividiendo entre el total (24):</p>
+<pre><code>      0      1      2      3
+0  0.166  0.083  0.042  0
+1  0.083  0.166  0      0
+2  0.042  0      0.250  0.042
+3  0      0      0.042  0.083</code></pre>
+<p>A partir de la matriz normalizada se calculan estadísticos que forman el <strong>vector de características</strong>:</p>
+<pre><code>Grupo de contraste
+  Contraste      = Σ P(i,j)·(i − j)²
+  Dissimilarity  = Σ P(i,j)·|i − j|
+  Homogeneity    = Σ P(i,j) / (1 + (i − j)²)
+Relacionadas al orden
+  ASM            = Σ P(i,j)²          Energy = √ASM
+  Entropy        = Σ P(i,j)·(−ln P(i,j))
+Estadística descriptiva
+  Media      μᵢ = Σ i·P(i,j)          μⱼ = Σ j·P(i,j)
+  Varianza   σᵢ² = Σ P(i,j)(i − μᵢ)²  σⱼ² = Σ P(i,j)(j − μⱼ)²
+  Correlación   = Σ P(i,j)·(i − μᵢ)(j − μⱼ) / √(σᵢ² σⱼ²)</code></pre>
+<p><strong>Aplicado al Ejemplo 4</strong> (cálculo propio con estas fórmulas; la diapositiva no trae los valores): contraste = 14/24 ≈ <strong>0.583</strong>; dissimilarity = 10/24 ≈ <strong>0.417</strong>; homogeneity ≈ 19.4/24 ≈ <strong>0.808</strong>; ASM = 84/576 ≈ <strong>0.146</strong> → energía ≈ <strong>0.382</strong>; entropía ≈ <strong>2.10</strong>; μᵢ = μⱼ = 31/24 ≈ <strong>1.29</strong>; σᵢ² = σⱼ² ≈ <strong>1.04</strong>; correlación ≈ <strong>0.72</strong>.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es contar, en toda la imagen, cuántas veces un tono de gris tiene a otro como vecino de la derecha. En una textura lisa casi siempre el vecino es igual (todo cae en la diagonal); en una rugosa hay saltos grandes (lejos de la diagonal, contraste alto).<span class="rompe">Dónde falla: el resultado depende de d y θ; una textura con rayas verticales se ve «lisa» si solo miras hacia abajo.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Se repasó en la <a href="clase-01.html">Clase 01</a> y fue el ejercicio 34 del Primer Parcial (dirección norte-sur, ASM, energía y contraste; ver <a href="clase-11.html">Clase 11</a>).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> olvidar sumar la transpuesta (matriz no simétrica) o calcular los descriptores con conteos sin normalizar (arruina ASM, energía y entropía).</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c0-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Qué invarianza agrega cada paso: centrales, normalizados, Hu?</summary><p>Centrales: traslación. Normalizados: + escala. Hu: + rotación.</p></details>
+<details class="qa"><summary>2. ¿Cómo se calcula el centroide a partir de momentos espaciales?</summary><p>(x̄, ȳ) = (M₁₀/M₀₀, M₀₁/M₀₀).</p></details>
+<details class="qa"><summary>3. Para un objeto de 3 píxeles en (0,0), (0,1), (1,0), calcula M₀₀, M₁₀, M₀₁ y el centroide.</summary><p>M₀₀ = 3; M₁₀ = 0 + 0 + 1 = 1; M₀₁ = 0 + 1 + 0 = 1; centroide (1/3, 1/3).</p></details>
+<details class="qa"><summary>4. Escribe η_ij y di para qué valores de i + j se usa.</summary><p>η_ij = μ_ij / μ₀₀^(1+(i+j)/2), con i + j ≥ 2.</p></details>
+<details class="qa"><summary>5. Escribe I₁ e I₂ de Hu.</summary><p>I₁ = η₂₀ + η₀₂; I₂ = (η₂₀ − η₀₂)² + 4η₁₁².</p></details>
+<details class="qa"><summary>6. ¿Por qué se aplica −signo(h)·log₁₀|h| a los momentos de Hu?</summary><p>Porque sus valores van de e-01 a e-15; el logaritmo los lleva a una escala comparable y conserva el signo.</p></details>
+<details class="qa"><summary>7. ¿Cuáles son los tres parámetros de una GLCM y qué tamaño tiene?</summary><p>Niveles de gris N, distancia d y dirección θ; es N × N.</p></details>
+<details class="qa"><summary>8. ¿Qué dos pasos se hacen después de contar las transiciones?</summary><p>Hacerla simétrica (sumar la transpuesta) y normalizar (dividir entre la suma total).</p></details>
+<details class="qa"><summary>9. Una GLCM normalizada tiene toda su masa en la diagonal. ¿Cuánto vale el contraste y qué dice de la textura?</summary><p>Contraste 0 (todos los (i − j)² de la diagonal son 0): textura totalmente homogénea, sin cambios entre vecinos.</p></details>
+</details>
+
+<details class="section-block sec" id="c0-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Próxima clase</strong> (según la última diapositiva): <strong>HOG y características para audio</strong> → <a href="clase-01.html">Clase 01</a> (28 ago), mi primera clase.</li>
+</ul>
+</details>
+
+<p class="empty" style="margin-top:28px">Estructurado seg&uacute;n el <a href="index.html#tema-2" style="color:var(--indigo)">Tema 2</a> del programa del profesor. Reconstruido de las diapositivas (sin audio).</p>
+
+</div>
+</body>
+</html>

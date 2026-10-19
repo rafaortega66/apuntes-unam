@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase -1 — Reconocimiento de Patrones</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Reconocimiento de Patrones</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Clase -1 <span style="font-size:.6em;font-weight:400;color:var(--ink-soft)">(sesión 2 del curso)</span></h2>
+  <p class="prof">Ing. Rubén Omar Azuara Domínguez · 21 ago 2026 · Tema 2 — Extracción de características I: qué es, por qué menos características, qué se busca, características estadísticas (media, varianza, skewness, curtosis), ventanas locales con y sin traslape, cómo combinar ventanas e histogramas como vector de características.</p>
+  <p style="font-size:12px;color:var(--ink-soft);margin:2px 0 0">🔢 Sesión 2 del curso (cronología real) · diapositivas del profesor <a href="material.html" style="color:var(--indigo)">Clase 2</a> (Extracción de características).</p>
+</div>
+
+<div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>⚠️ No asistí a esta clase</strong> (me inscribí tarde). No hay audio: todo sale de las <strong>diapositivas oficiales «Clase 2. Extracción de características»</strong> (Classroom, 21 ago). Los ejemplos numéricos los revisé con las fórmulas de la propia diapositiva; donde un número de la diapositiva no cuadra, lo marco.</p></div>
+
+<div class="files"><a class="btn" href="../../decimo/RP/RP-Material/Clase-02-Extraccion-de-caracteristicas-I.pdf" target="_blank">📄 Diapositivas Clase 2 (prof.)</a></div>
+
+<details class="section-block sec" id="cm1-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Qué se busca en un buen conjunto de características: discriminabilidad, compacidad, robustez y costo computacional</strong><span class="evid">Evidencia: fue la pregunta 8 del Primer Parcial (ver <a href="clase-11.html">Clase 11</a>).</span></li>
+<li><strong>Interpretar skewness y curtosis (signo → forma de la distribución)</strong><span class="evid">Evidencia: el deck dedica dos ejemplos completos a mostrar que señales con igual media y varianza se distinguen por skewness/curtosis. Sin pregunta conocida en el parcial.</span></li>
+<li><strong>Ventanas con y sin traslape y cómo combinarlas (concatenar, estadísticas sobre estadísticas, pooling)</strong><span class="evid">Evidencia: ejemplo numérico resuelto en el deck. Sin pregunta conocida en el parcial.</span></li>
+<li><strong>Ventajas y desventajas del histograma como característica</strong><span class="evid">Evidencia: tabla explícita en el deck y se retoma con HOG en la <a href="clase-01.html">Clase 01</a>.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="cm1-que-es"><summary><span class="stitle">¿Qué es la extracción de características?</span></summary>
+<span class="lbl">Qué es</span>
+<p>Es el proceso mediante el cual se transforma un conjunto de <strong>datos crudos</strong> (imágenes, audio, series de tiempo, etc.) en un <strong>vector de valores numéricos</strong> <code>x = (x₁, …, xₙ)ᵀ</code> que describe de manera compacta la información relevante del patrón. En otras palabras: <code>y ∈ ℝᴺ → x ∈ ℝᵈ</code> con <code>d ≪ N</code>. En lugar de trabajar con los datos originales —de alta dimensionalidad, ruidosos y redundantes— cada muestra se representa con un conjunto reducido de atributos que conserven la información <strong>discriminante</strong> para separar clases.</p>
+<p><strong>¿Por qué tener menos características?</strong></p>
+<ul>
+<li>Un tamaño de muestra finito (N muestras) limita la dimensionalidad n para la cual las estimaciones estadísticas son confiables.</li>
+<li>Tener características correlacionadas con otras puede degradar el desempeño.</li>
+<li>La complejidad del clasificador crece con el número n de características.</li>
+</ul>
+<p><strong>¿En qué consiste?</strong> (1) Analizar la naturaleza del dato (imagen, audio, señal…), (2) identificar propiedades relevantes del patrón, (3) calcular medidas cuantitativas que describan esas propiedades y (4) construir un vector de características comparable entre muestras.</p>
+<p><strong>Se busca:</strong> <strong>discriminabilidad</strong> (separar clases), <strong>compacidad</strong> (reducir dimensionalidad), <strong>robustez</strong> (ruido, variaciones intra-clase) y bajo <strong>costo computacional</strong>.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como describir a una persona para que alguien la encuentre en una multitud: no le mandas una foto de 12 megapíxeles, le das «alto, lentes, chamarra roja». Pocos datos, pero los que la distinguen.<span class="rompe">Dónde falla: aquí las «descripciones» tienen que ser números comparables entre todas las muestras, no palabras.</span></p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="cm1-estadisticas"><summary><span class="stitle">Características estadísticas: media, varianza, skewness y curtosis</span></summary>
+<p>Describen la <strong>distribución</strong> de los datos sin considerar explícitamente su estructura espacial o temporal. Hay medidas de primer y segundo orden y de orden superior:</p>
+<pre><code>μ  = (1/N) Σ xᵢ                       (media)
+σ² = (1/N) Σ (xᵢ − μ)²                (varianza)
+skewness        = (1/(N σ³)) Σ (xᵢ − μ)³
+excess kurtosis = (1/(N σ⁴)) Σ (xᵢ − μ)⁴ − 3</code></pre>
+<p style="font-size:13px;color:var(--ink-soft)">Nota: en la diapositiva la fórmula de la curtosis aparece con σ³ y potencia 3 (igual que la de skewness); la definición que corresponde a «curtosis en exceso» usa σ⁴ y potencia 4, que es la que dejo arriba.</p>
+<p><strong>Interpretación:</strong></p>
+<ul>
+<li><strong>Skewness</strong> &gt; 0: cola alargada a la derecha; = 0: simétrica; &lt; 0: cola alargada a la izquierda.</li>
+<li><strong>Curtosis</strong> &gt; 0: datos concentrados en la media, colas pesadas; = 0: como la normal (mesocúrtica); &lt; 0: datos más dispersos y colas más ligeras.</li>
+</ul>
+<p><strong>Ejemplo 1 (seis señales de 8 muestras).</strong> <code>x₁ = 4,5,5,5,6,5,5,4</code>; <code>x₂ = 5,5,4,5,5,6,5,5</code>; <code>x₃ = 5,4,5,6,5,5,4,6</code>; <code>x₄ = 1,9,2,8,3,7,2,8</code>; <code>x₅ = 0,10,1,9,2,8,1,9</code>; <code>x₆ = 2,8,1,9,3,7,2,8</code>. Medias: 4.8 (exacto 4.875), 5, 5, 5, 5, 5. Varianzas: 0.36, 0.25, 0.5, 9.5, 12, 8.75. Todas tienen casi la misma media, pero la <strong>varianza</strong> separa dos grupos: las que oscilan poco alrededor de 5 (x₁–x₃) y las que saltan entre extremos (x₄–x₆).</p>
+<p><strong>Ejemplo 2 (seis señales de 10 muestras).</strong> Aquí media y varianza son prácticamente iguales para todas (μ ≈ 11.5, σ² ≈ 1.62–1.68), así que <strong>no sirven para separarlas</strong>. Lo que las distingue es la forma:</p>
+<table>
+<tr><th>Señal</th><th>Skewness</th><th>Curtosis</th></tr>
+<tr><td>x₁ / x₂ / x₃</td><td>0.00 / 0.05 / −0.02</td><td>−1.20 / −1.18 / −1.22</td></tr>
+<tr><td>x₄ / x₅ / x₆</td><td>1.85 / 1.92 / 1.78</td><td>2.45 / 2.58 / 2.32</td></tr>
+</table>
+<p>Graficadas en el plano skewness–curtosis, x₁–x₃ quedan juntas cerca de (0, −1.2) y x₄–x₆ juntas cerca de (1.85, 2.45): dos grupos perfectamente separados. (x₄–x₆ tienen la mayoría de los valores cerca de 11–12 y dos valores grandes al final, 14–15.7: cola a la derecha.)</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Dos salones con el mismo promedio y la misma dispersión de calificaciones pueden ser distintos: en uno casi todos sacaron 7 y dos alumnos sacaron 10 (cola a la derecha); en el otro, las notas están repartidas parejo.<span class="rompe">Dónde falla: con pocas muestras (8 o 10) estos momentos de orden superior son muy sensibles a un solo valor raro.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Los descriptores estadísticos (media, desviación, máx., mín.) reaparecen al resumir los MFCC de audio en la <a href="clase-01.html">Clase 01</a>.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="cm1-ventanas"><summary><span class="stitle">Características locales: ventanas con y sin traslape</span></summary>
+<p>Lo anterior se aplica de forma <strong>global</strong> (a toda la señal), pero ¿qué tan bien funciona? También se puede hacer de forma <strong>local</strong>: se toma una señal de tamaño N y se divide en L ventanas (con o sin traslape). Las características locales capturan la <strong>estructura espacial o temporal</strong>.</p>
+<p>Señal de ejemplo: <code>x = 2,3,4,5,6,7,8,9,8,7,6,5,4,3,2,1</code> (sube y luego baja; su media global es 5 y no dice nada de esa forma).</p>
+<p><strong>Sin traslape</strong> (ventana L = 4, traslape 0 %): ω₁ = 2,3,4,5 · ω₂ = 6,7,8,9 · ω₃ = 8,7,6,5 · ω₄ = 4,3,2,1. Medias 3.5, 7.5, 6.5, 2.5; varianza 1.25 en todas.</p>
+<p><strong>Con traslape</strong> (L = 4, traslape 50 %, paso 2): ω₁ = 2,3,4,5 · ω₂ = 4,5,6,7 · ω₃ = 6,7,8,9 · ω₄ = 8,9,8,7 · ω₅ = 8,7,6,5 · ω₆ = 6,5,4,3 · ω₇ = 4,3,2,1. Medias 3.5, 5.5, 7.5, 8.0, 6.5, 4.5, 2.5; varianza 1.25 en todas salvo ω₄.</p>
+<p style="font-size:13px;color:var(--ink-soft)">Nota: la diapositiva da σ² = 0.25 para ω₄ = 8,9,8,7; con σ² = (1/N)Σ(x−μ)² sale (0+1+0+1)/4 = <strong>0.5</strong>.</p>
+<p><strong>¿Qué hago con todas estas ventanas?</strong></p>
+<ol>
+<li><strong>Concatenación directa</strong> <code>f = [f₁, f₂, f₃, …]</code>: sin traslape queda <code>(3.5, 1.25, 7.5, 1.25, 6.5, 1.25, 2.5, 1.25)</code> (8 valores); con traslape, 14 valores. Ventaja: conserva la información local. Desventaja: la dimensión crece rápido. <span style="font-size:13px;color:var(--ink-soft)">(En la diapositiva los vectores concatenados traen algunos valores distintos a los de las tablas, p. ej. 7.25 y 6.25; los de aquí salen de las tablas.)</span></li>
+<li><strong>Estadísticas sobre estadísticas:</strong> para cada característica, a lo largo de las ventanas, se calcula su media y su varianza (μ_μ, σ²_μ, μ_σ², σ²_σ², …). Sin traslape: media de las medias = 5.0 y varianza de las medias = 4.25. Con traslape: 5.42 y 3.60.</li>
+<li><strong>Pooling:</strong> quedarse con un resumen como el máximo, p. ej. <code>max_k σ²_k</code>.</li>
+</ol>
+<table>
+<tr><th>Enfoque</th><th>Captura</th></tr>
+<tr><td>Global</td><td>Tendencia general</td></tr>
+<tr><td>Local</td><td>Cambios y estructura</td></tr>
+<tr><td>Local + pooling</td><td>Estructura y robustez</td></tr>
+</table>
+<p><strong>¿Cuándo no vale la pena usar ventanas locales?</strong> Con señales estacionarias, con datos muy ruidosos, con ventanas demasiado pequeñas y en problemas donde la estructura local no es relevante.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>El promedio de temperatura del año no te dice que hubo invierno y verano; el promedio de cada mes, sí.<span class="rompe">Dónde falla: si cortas en ventanas de un día, el ruido (una tarde nublada) domina y pierdes la tendencia.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es exactamente lo que se hace con audio: se divide en tramas con traslape antes de calcular energía, ZCR o MFCC (<a href="clase-01.html">Clase 01</a>).</p>
+</div>
+</details>
+
+<details class="section-block sec" id="cm1-histograma"><summary><span class="stitle">El histograma como vector de características</span></summary>
+<p>Un <strong>histograma</strong> describe cómo se distribuyen los valores de una señal o dato, <strong>sin importar su posición exacta</strong>. En RP no se usa como gráfica sino como <strong>vector</strong>: por ejemplo, <code>h = (146, 870, 1159, 1394, 1348, 1334, 1289, …)</code>. Se puede aplicar a imágenes (en grises o por canal RGB; el ejemplo del deck es un husky sobre un arbusto amarillo) y también a audio y otras señales.</p>
+<table>
+<tr><th>Ventajas</th><th>Desventajas</th></tr>
+<tr><td>Simples · robustos al ruido · invariantes a permutaciones/traslaciones · dimensión controlable (número de bins) · funcionan bien con pocos datos</td><td>Pierden información espacial/temporal · sensibles al número de bins · no capturan relaciones entre valores vecinos</td></tr>
+</table>
+<p>«Para más adelante…»: <strong>HOG</strong>, un histograma de orientaciones de gradiente que sí conserva estructura local (<a href="clase-01.html">Clase 01</a>).</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es contar cuántas canicas hay de cada color en una bolsa, sin importar cómo están acomodadas.<span class="rompe">Dónde falla: una foto y la misma foto con los píxeles revueltos tienen el mismo histograma.</span></p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="cm1-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. Escribe la extracción de características como una transformación entre espacios.</summary><p><code>y ∈ ℝᴺ → x ∈ ℝᵈ</code>, con d ≪ N.</p></details>
+<details class="qa"><summary>2. Da tres razones para tener menos características.</summary><p>Con N muestras finitas, las estimaciones solo son confiables hasta cierta dimensión; las características correlacionadas degradan el desempeño; la complejidad del clasificador crece con n.</p></details>
+<details class="qa"><summary>3. ¿Qué cuatro propiedades se buscan en las características?</summary><p>Discriminabilidad, compacidad, robustez y bajo costo computacional.</p></details>
+<details class="qa"><summary>4. Una distribución tiene skewness −0.8. ¿Hacia dónde está su cola?</summary><p>Hacia la izquierda.</p></details>
+<details class="qa"><summary>5. Calcula media y varianza de la ventana 6, 7, 8, 9.</summary><p>μ = 7.5; σ² = (2.25 + 0.25 + 0.25 + 2.25)/4 = 1.25.</p></details>
+<details class="qa"><summary>6. Con N = 16, L = 4 y paso 2, ¿cuántas ventanas salen?</summary><p>(16 − 4)/2 + 1 = 7.</p></details>
+<details class="qa"><summary>7. ¿Ventaja y desventaja de concatenar las características de todas las ventanas?</summary><p>Conserva la información local; la dimensión crece rápido.</p></details>
+<details class="qa"><summary>8. ¿Por qué un histograma es «invariante a traslaciones»?</summary><p>Porque solo cuenta cuántos valores caen en cada bin, sin importar dónde están; mover el objeto no cambia los conteos.</p></details>
+</details>
+
+<details class="section-block sec" id="cm1-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Próxima clase</strong> (según la última diapositiva): <strong>Características geométricas y descriptores clásicos</strong> → <a href="clase-00.html">Clase 0</a> (24 ago).</li>
+</ul>
+</details>
+
+<p class="empty" style="margin-top:28px">Estructurado seg&uacute;n el <a href="index.html#tema-2" style="color:var(--indigo)">Tema 2</a> del programa del profesor. Reconstruido de las diapositivas (sin audio).</p>
+
+</div>
+</body>
+</html>

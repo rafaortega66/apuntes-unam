@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 14 — Reconocimiento de Patrones</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Reconocimiento de Patrones</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Clase 14 <span style="font-size:.6em;font-weight:400;color:var(--ink-soft)">(sesión 17 del curso)</span></h2>
+  <p class="prof">Ing. Rubén Omar Azuara Domínguez · 12 oct 2026 · Tema 8 — Regresión logística: por qué no sirve la regresión lineal para clasificar, sigmoide y x₀ = 1, entropía cruzada binaria, descenso por gradiente (lotes, minilotes, SGD), regularización L1/L2, multiclase (uno vs. resto y softmax) y pesado por clases.</p>
+  <p style="font-size:12px;color:var(--ink-soft);margin:2px 0 0">🔢 Sesión 17 del curso (cronología real) · diapositivas del profesor <a href="material.html" style="color:var(--indigo)">Clase 12</a> (Regresión Logística). Fuente: audio RP-Clase14 procesado en NotebookLM + diapositivas.</p>
+</div>
+
+<div class="files"><a class="btn" href="../../decimo/RP/RP-Material/Clase-12-Regresion-Logistica.pdf" target="_blank">📄 Diapositivas Clase 12 (prof.)</a></div>
+
+<details class="section-block sec" id="c14-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<p>Entra al <strong>Segundo Parcial</strong> (todo desde DBSCAN/KNN en adelante).</p>
+<ol class="examen-lista">
+<li><strong>El 1 al inicio del vector (x₀ = 1)</strong><span class="evid">Evidencia: lo enfatizó «enérgicamente»: si se omite o se pone al final, el algoritmo no converge o «da cosas raras», porque ese 1 multiplica a θ₀. También está en la diapositiva.</span></li>
+<li><strong>Por qué entropía cruzada binaria y no error cuadrático</strong><span class="evid">Evidencia: explicó que el error cuadrático con la sigmoide da un costo no convexo (mínimos locales) y resolvió en el pizarrón cuatro casos numéricos del costo.</span></li>
+<li><strong>Derivar la regla de actualización del descenso por gradiente</strong><span class="evid">Evidencia: la desarrolló paso a paso en el pizarrón: g′(z) = g(z)(1 − g(z)) hasta θⱼ := θⱼ − α(1/m)Σ(h − y)xⱼ.</span></li>
+<li><strong>Pesado por clases w_k = m / (K·m_k)</strong><span class="evid">Evidencia: resolvió en el pizarrón el ejercicio 950 vs. 50 (pesos 0.526 y 10).</span></li>
+<li><strong>L1 vs. L2</strong><span class="evid">Evidencia: remarcó que L1 manda pesos exactamente a 0 (selección) y L2 solo los encoge; advirtió que un λ enorme en L1 manda todos a 0.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c14-repaso"><summary><span class="stitle">Repaso inicial: DBSCAN y KNN</span></summary>
+<p>El profesor preguntó a Santiago y a Sebastián qué hacía DBSCAN y qué caracterizaba a KNN. Se repasó que <strong>DBSCAN</strong> agrupa por densidad, detecta ruido, no necesita fijar K y aprende fronteras no esféricas, pero falla con densidades variables. <strong>KNN</strong> es supervisado, no paramétrico y «perezoso»: no entrena una ecuación, memoriza el dataset; por eso predecir es lento (calcula la distancia del patrón nuevo a cada punto guardado y las ordena). Sirvió de transición hacia un modelo paramétrico que sí se optimiza: la regresión logística. Detalle en la <a href="clase-12.html">Clase 12</a>.</p>
+<div class="estudio-extra">
+<div class="errores"><p><strong>Error común:</strong> creer que KNN «aprende» algo en el entrenamiento; solo almacena los datos.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c14-lineal"><summary><span class="stitle">Regresión y por qué la regresión lineal no sirve para clasificar</span></summary>
+<span class="lbl">Qué es</span>
+<p><strong>Regresión:</strong> aprendizaje supervisado con <strong>salida continua</strong> (cuantitativa): temperaturas, precios de autos o casas. Ejemplo del deck: modelar el precio de una casa según su tamaño con una relación lineal <code>f_θ(x) = θ₀ + θ₁x</code>. ¿Qué tan bien se ajusta? Con una <strong>función de costo</strong>, p. ej. la suma de errores cuadrados <code>E(θ) = 1/(2n) Σ (f_θ(xᵢ) − yᵢ)²</code>; el objetivo es <code>θ̂ = argmin_θ E(θ)</code>.</p>
+<p><strong>¿Sirve para clasificación?</strong> Se podría ajustar una recta a etiquetas 0/1 y cortar en 0.5. El profesor mostró que si aparece un ejemplo de clase 1 muy alejado a la derecha, la recta de mínimos cuadrados se inclina y el umbral se corre, arruinando la clasificación de los puntos cercanos a la frontera. Además, la recta da valores fuera de [0, 1], que no se pueden leer como probabilidades.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es usar una rampa recta para decidir si una puerta abre (1) o cierra (0): basta con que llegue una persona gigante (un outlier) para que la rampa se incline y la puerta deje de funcionar para todos los demás.<span class="rompe">Dónde falla: la regresión logística también es sensible a outliers, solo que mucho menos que la lineal en clasificación.</span></p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c14-sigmoide"><summary><span class="stitle">La sigmoide, los odds y el término x₀ = 1</span></summary>
+<span class="lbl">Qué es</span>
+<p>La regresión logística estima la <strong>probabilidad</strong> de que una observación pertenezca a una categoría. Para acotar la salida a (0, 1) usa la <strong>función sigmoide (logística)</strong>. El profesor preguntó qué función conocían que acotara entre 0 y 1; un alumno dijo «signo», y él precisó que la buscada es la sigmoide:</p>
+<pre><code>g(z) = 1 / (1 + e^(−z))
+h_θ(x) = g(θᵀx) = 1 / (1 + e^(−θᵀx)) = P(y = 1 | x)
+P(y = 0 | x) = 1 − h_θ(x)
+Odds:      P(y=1|x) / P(y=0|x) = e^(θᵀx)
+Log-odds:  ln[P(y=1|x) / P(y=0|x)] = θᵀx = θ₀ + θ₁x₁ + … + θₖxₖ</code></pre>
+<p>El logit es lineal en x: por eso la frontera de decisión de la regresión logística es un <strong>hiperplano</strong>.</p>
+<p><strong>Datos:</strong> conjunto de entrenamiento {(x⁽¹⁾, y⁽¹⁾), …, (x⁽ᵐ⁾, y⁽ᵐ⁾)}, m ejemplos, <code>x = [x₀, x₁, …, xₙ]ᵀ</code> con <strong>x₀ = 1</strong> y y ∈ {0, 1}. El 1 inicial multiplica a θ₀ (la ordenada al origen / sesgo). Si se olvida o se pone al final, x y θ no cuadran y el programa falla o da resultados erróneos.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>La sigmoide es un regulador de luz con tope en apagado (0) y en encendido (1): por más que gires, no pasa de ahí. El x₀ = 1 es el tornillo que fija el regulador a la pared: sin él no puedes subirlo ni bajarlo (no hay desplazamiento θ₀).<span class="rompe">Dónde falla: la sigmoide nunca llega exactamente a 0 o 1, solo se acerca.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Une álgebra lineal (θᵀx) con probabilidad; la misma sigmoide aparece como activación en redes neuronales (Tema 9).</p>
+<div class="errores"><p><strong>Error común:</strong> no agregar la columna de unos a la matriz X, o ponerla al final.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c14-costo"><summary><span class="stitle">Función de costo: entropía cruzada binaria</span></summary>
+<p>Si se usa el error cuadrático <code>Cost = ½(h_θ(x) − y)²</code> con la sigmoide, la función de costo <strong>no es convexa</strong>: tiene muchos pozos (mínimos locales) donde el gradiente se atora. La solución es un costo por casos con logaritmo:</p>
+<pre><code>Cost(h, y) = −ln(h_θ(x))        si y = 1
+           = −ln(1 − h_θ(x))    si y = 0
+
+J(θ) = −(1/m) Σ [ y⁽ⁱ⁾ ln h_θ(x⁽ⁱ⁾) + (1 − y⁽ⁱ⁾) ln(1 − h_θ(x⁽ⁱ⁾)) ]</code></pre>
+<p>Es la <strong>entropía cruzada binaria</strong>, convexa (un solo mínimo global).</p>
+<p><strong>Ejemplo resuelto en clase:</strong></p>
+<table>
+<tr><th>Caso</th><th>y</th><th>h_θ(x)</th><th>Costo</th><th>Lectura</th></tr>
+<tr><td>1</td><td>1</td><td>0.90</td><td>−ln 0.90 ≈ 0.105</td><td>muy pequeño</td></tr>
+<tr><td>2</td><td>1</td><td>0.40</td><td>−ln 0.40 ≈ 0.916</td><td>elevado</td></tr>
+<tr><td>3</td><td>0</td><td>0.15</td><td>−ln 0.85 ≈ 0.162</td><td>muy pequeño</td></tr>
+<tr><td>4</td><td>0</td><td>0.80</td><td>−ln 0.20 ≈ 1.609</td><td>sumamente alto</td></tr>
+</table>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Un sistema de multas: si afirmas con 90 % de seguridad algo que es cierto, casi no pagas; si afirmas con 80 % algo que es falso, la multa se dispara para castigar la confianza equivocada.<span class="rompe">Dónde falla: si el modelo dice exactamente 0 o 1 y se equivoca, ln(0) es infinito; en la práctica se recorta la probabilidad.</span></p></div>
+<div class="errores"><p><strong>Error común:</strong> entrenar regresión logística con error cuadrático medio.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c14-gradiente"><summary><span class="stitle">Descenso por gradiente y modalidades de entrenamiento</span></summary>
+<span class="lbl">Qué es</span>
+<p>Se busca <code>min_θ J(θ)</code> con <strong>descenso por gradiente</strong>: mover θ en dirección opuesta al gradiente, <code>θⱼ := θⱼ − α ∂J/∂θⱼ</code>, con <strong>α</strong> la tasa de aprendizaje. El profesor preguntó qué indica el gradiente; un alumno dijo «la diferencia» y él aclaró: son las derivadas parciales, la dirección de mayor variación de la función.</p>
+<p><strong>Derivación (pizarrón):</strong></p>
+<pre><code>1) g′(z) = e^(−z) / (1 + e^(−z))² = g(z)(1 − g(z))
+2) ∂J/∂θⱼ = (1/m) Σ (h_θ(x⁽ⁱ⁾) − y⁽ⁱ⁾) xⱼ⁽ⁱ⁾
+3) θⱼ := θⱼ − α (1/m) Σ (h_θ(x⁽ⁱ⁾) − y⁽ⁱ⁾) xⱼ⁽ⁱ⁾</code></pre>
+<p>La actualización solo usa la diferencia entre predicción y etiqueta multiplicada por la característica; por eso x debe traer el 1 inicial para actualizar θ₀. Valores típicos de α: entre 0.1 y 0.5 en regresión logística; en redes neuronales, más pequeños (≈ 1 × 10⁻⁴).</p>
+<p><strong>Modalidades:</strong></p>
+<ul>
+<li><strong>Por lotes (batch):</strong> usa los m ejemplos antes de cada actualización. Preciso pero costoso; inviable con datasets masivos.</li>
+<li><strong>Por minilotes (mini-batch):</strong> actualiza al terminar cada bloque. Lo más usado en la industria.</li>
+<li><strong>Estocástico (SGD):</strong> actualiza tras cada ejemplo. Muy rápido, trayectoria ruidosa.</li>
+</ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Bajar una montaña con niebla dando pasos hacia donde más baja. Con pasos enormes (α grande) brincas el valle y acabas en la ladera de enfrente; con pasos diminutos tardas siglos. Batch es calificar todos los exámenes antes de ajustar el criterio; minilotes, de 10 en 10; SGD, ajustar después de cada examen.<span class="rompe">Dónde falla: aquí el costo es convexo, así que no hay «otros valles» donde atorarse, a diferencia de una montaña real.</span></p></div>
+<div class="errores"><p><strong>Errores comunes:</strong> α demasiado grande (diverge o se pasa del mínimo); usar batch con datos que no caben en memoria.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c14-regularizacion"><summary><span class="stitle">Regularización L1 (Lasso) y L2 (Ridge)</span></summary>
+<p>Problema: los pesos crecen demasiado (el profesor mencionó valores como θ = 5000 o 2,000,000) y el modelo memoriza el entrenamiento en lugar de generalizar. La regularización añade una penalización:</p>
+<pre><code>L2 (Ridge):  J(θ) = BCE + (λ/2m) Σ θⱼ²
+             θⱼ := θⱼ − α[ (1/m) Σ (h − y) xⱼ + (λ/m) θⱼ ]
+L1 (Lasso):  J(θ) = BCE + (λ/m) Σ |θⱼ|
+             θⱼ := θⱼ − α[ (1/m) Σ (h − y) xⱼ + (λ/m) sign(θⱼ) ]</code></pre>
+<p><strong>L2</strong> encoge todos los pesos sin volverlos cero. <strong>L1</strong> lleva los pesos de variables irrelevantes <strong>exactamente a 0</strong>: hace selección de características (los métodos embebidos de la <a href="clase-02.html">Clase 02</a>). Advertencia: con λ demasiado grande en L1, <strong>todos</strong> los θ se van a 0 (subajuste total).</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>L1 es un editor que borra frases enteras si no aportan; L2, uno que pide acortar todas pero sin borrar ninguna.<span class="rompe">Dónde falla: con características muy correlacionadas, L1 puede quedarse con una al azar y tirar las otras.</span></p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c14-multiclase"><summary><span class="stitle">Multiclase: uno vs. el resto y softmax</span></summary>
+<p><strong>Uno vs. el resto (OvR):</strong> se entrenan K clasificadores binarios (clase k contra todas las demás) y se asigna la clase cuyo clasificador da la probabilidad más alta.</p>
+<p><strong>Regresión logística multinomial (softmax):</strong> un solo modelo que produce una distribución de probabilidad sobre todas las clases:</p>
+<pre><code>z_k = w_kᵀx + b_k
+P(y = C_k | x) = e^(z_k) / Σⱼ e^(z_j)          Σ_k P(y = C_k | x) = 1
+J = −Σᵢ Σ_k y_ik ln P(y = C_k | xᵢ)            (entropía cruzada multiclase)
+ŷ = argmax_k P(y = C_k | x)</code></pre>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>OvR son tres votaciones separadas («¿es perro o no?», «¿es gato o no?», «¿es caballo o no?»); softmax es una sola encuesta donde repartes el 100 % entre perro, gato y caballo.<span class="rompe">Dónde falla: en OvR las tres probabilidades no tienen por qué sumar 1.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Softmax con entropía cruzada es la capa de salida estándar en redes neuronales de clasificación.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c14-pesos"><summary><span class="stitle">Clases desbalanceadas: pesado por clases</span></summary>
+<p>Se multiplica el costo de cada ejemplo por un peso de su clase para que el modelo atienda a la minoritaria:</p>
+<pre><code>w_k = m / (K · m_k)       m = total, K = número de clases, m_k = ejemplos de la clase k</code></pre>
+<p><strong>Ejercicio resuelto en clase:</strong> m = 1000, K = 2, clase 0 con 950 ejemplos y clase 1 con 50.</p>
+<pre><code>w₀ = 1000 / (2 × 950) = 1000 / 1900 ≈ 0.526
+w₁ = 1000 / (2 × 50)  = 1000 / 100  = 10</code></pre>
+<p>Un error en la clase minoritaria pesa ≈ 19 veces más (10 / 0.526) que uno en la mayoritaria. Es vital en detección de fraude (≈ 0.1 % de fraudes) o enfermedades raras.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>En un examen de 1000 preguntas con 950 sumas fáciles y 50 de cálculo, si todas valen igual apruebas estudiando solo sumas; si las de cálculo valen 20 veces más, ya no.<span class="rompe">Dónde falla: pesar de más a la minoritaria sube los falsos positivos.</span></p></div>
+<div class="errores"><p><strong>Error común:</strong> entrenar sin pesos con datos desbalanceados: el modelo predice siempre la mayoritaria y presume una «exactitud alta» engañosa.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c14-consideraciones"><summary><span class="stitle">Consideraciones finales</span></summary>
+<ul>
+<li><strong>Ventajas:</strong> inferencia rápida, salida interpretable como probabilidad, costo convexo (mínimo global), pocos hiperparámetros, funciona bien con pocos datos.</li>
+<li><strong>Limitaciones:</strong> solo aprende <strong>fronteras lineales</strong>; sensible a outliers y a multicolinealidad.</li>
+<li>Se mostró en Python una matriz de confusión con 91 verdaderos negativos, 36 verdaderos positivos, 22 falsos positivos y 5 falsos negativos.</li>
+<li>Recomendación: estandarizar las características antes de entrenar.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c14-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Por qué se agrega x₀ = 1 al inicio de x?</summary><p>Porque multiplica a θ₀ (el sesgo), lo que permite desplazar la frontera; sin él, x y θ no coinciden en dimensión y la actualización de θ₀ no ocurre.</p></details>
+<details class="qa"><summary>2. ¿Por qué no usar error cuadrático en regresión logística?</summary><p>Con la sigmoide da un costo no convexo con mínimos locales; la entropía cruzada binaria es convexa.</p></details>
+<details class="qa"><summary>3. Calcula el costo para y = 0 con h = 0.70.</summary><p>−ln(1 − 0.70) = −ln 0.30 ≈ 1.204.</p></details>
+<details class="qa"><summary>4. Escribe la regla de actualización de θⱼ.</summary><p>θⱼ := θⱼ − α (1/m) Σ (h_θ(x⁽ⁱ⁾) − y⁽ⁱ⁾) xⱼ⁽ⁱ⁾.</p></details>
+<details class="qa"><summary>5. ¿Cuánto vale g′(z) en términos de g(z)?</summary><p>g′(z) = g(z)(1 − g(z)).</p></details>
+<details class="qa"><summary>6. Con 900 ejemplos de clase 0 y 100 de clase 1, ¿qué pesos da w_k = m/(K·m_k)?</summary><p>w₀ = 1000/1800 ≈ 0.556; w₁ = 1000/200 = 5.</p></details>
+<details class="qa"><summary>7. ¿Qué diferencia práctica hay entre L1 y L2?</summary><p>L1 puede llevar pesos exactamente a 0 (selecciona características); L2 los encoge sin anularlos.</p></details>
+<details class="qa"><summary>8. ¿Qué pasa con λ enorme en L1?</summary><p>Todos los θ se van a 0: el modelo subajusta por completo.</p></details>
+<details class="qa"><summary>9. ¿En qué difieren batch y SGD?</summary><p>Batch usa los m ejemplos por cada actualización; SGD actualiza tras cada ejemplo.</p></details>
+<details class="qa"><summary>10. ¿Qué garantiza softmax que OvR no?</summary><p>Que las probabilidades de todas las clases sumen exactamente 1.</p></details>
+</details>
+
+<details class="section-block sec" id="c14-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li>El profesor llamó a la regresión logística el «caballo de batalla»: el modelo más usado en la industria (análisis de datos, banca, detección de fraude, ciencia de datos).</li>
+<li>Softmax es el bloque de salida de las redes neuronales artificiales.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c14-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Próxima clase (viernes 16 oct):</strong> Support Vector Machines (SVM) → <a href="clase-15.html">Clase 15</a>. Se sigue viendo un solo modelo por clase.</li>
+<li>NotebookLM menciona una entrega de práctica «el viernes de esa misma semana», pero la llama Práctica 3, que ya se expuso el 9 oct: <strong>por confirmar en Classroom</strong> de qué práctica se trata.</li>
+</ul>
+</details>
+
+<p class="empty" style="margin-top:28px">Estructurado seg&uacute;n el <a href="index.html#tema-8" style="color:var(--indigo)">Tema 8</a> del programa del profesor.</p>
+
+</div>
+</body>
+</html>

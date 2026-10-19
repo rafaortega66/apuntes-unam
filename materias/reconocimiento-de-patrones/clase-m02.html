@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase -2 — Reconocimiento de Patrones</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Reconocimiento de Patrones</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Clase -2 <span style="font-size:.6em;font-weight:400;color:var(--ink-soft)">(sesión 1 del curso)</span></h2>
+  <p class="prof">Ing. Rubén Omar Azuara Domínguez · 17 ago 2026 · Tema 1 — Presentación del curso y conceptos básicos de reconocimiento de patrones: patrón, clase, característica, clasificación, entrenamiento, los tres problemas de diseño y la maldición de la dimensionalidad.</p>
+  <p style="font-size:12px;color:var(--ink-soft);margin:2px 0 0">🔢 Sesión 1 del curso (cronología real) · diapositivas del profesor <a href="material.html" style="color:var(--indigo)">Clase 1</a> (Presentación del curso).</p>
+</div>
+
+<div class="section-block nota" style="border-left:3px solid #45B8A8"><p style="margin:0"><strong>⚠️ No asistí a esta clase</strong> (me inscribí tarde; mi primera clase fue la <a href="clase-01.html">Clase 01</a>, 28 ago). No hay audio: todo lo de esta página sale de las <strong>diapositivas oficiales del profesor «Clase 1. Presentación del curso»</strong> (Classroom, publicadas el 21 ago). La fecha es la que corresponde por cronología: cada deck termina con «Para la próxima clase…» apuntando al siguiente, y en el audio del 28 ago el profesor dice que «la clase pasada» vieron momentos geométricos (deck 3); contando hacia atrás, este deck cae el lunes 17 ago, primer día del semestre (el profesor anuncia 15 semanas y 28 sesiones, que cuadra con empezar ese día).</p></div>
+
+<div class="files"><a class="btn" href="../../decimo/RP/RP-Material/Clase-01-Presentacion-del-curso.pdf" target="_blank">📄 Diapositivas Clase 1 (prof.)</a></div>
+
+<details class="section-block sec" id="cm2-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Definiciones: patrón, clase, característica, clasificación y entrenamiento</strong><span class="evid">Evidencia: la pregunta 1 del Primer Parcial pidió la definición formal de patrón (ver <a href="clase-11.html">Clase 11</a>).</span></li>
+<li><strong>La estructura del sistema: patrón → mediciones → características → clasificador → clase</strong><span class="evid">Evidencia: la pregunta 2 del Primer Parcial pidió completar el diagrama de las etapas de un sistema de RP.</span></li>
+<li><strong>Maldición de la dimensionalidad: qué provoca y cuál es el «verdadero problema»</strong><span class="evid">Evidencia: la pregunta 6 del Primer Parcial pidió sus consecuencias (dispersión, cómputo, sobreajuste, distancias sin sentido…).</span></li>
+<li><strong>Los tres problemas fundamentales del diseño de un sistema de RP</strong><span class="evid">Evidencia: es el esquema que organiza todo el temario (representación → extracción/reducción → decisión). Sin pregunta directa conocida en el parcial.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="cm2-curso"><summary><span class="stitle">Presentación del curso: temario, evaluación y reglas</span></summary>
+<p>El profesor abrió con una ronda de presentaciones (quiénes son, carrera y semestre, qué esperan del curso y en qué esperan trabajar). Luego mostró <strong>dos temarios</strong>: el oficial de la Facultad (5 temas: conceptos básicos, funciones de decisión, clasificación por funciones de distancia, por funciones de similitud y reconocimiento de patrones sintácticos) y el suyo propio, de 10 temas, que es el que sigue en clase:</p>
+<ol>
+<li>Conceptos básicos de reconocimiento de patrones.</li>
+<li>Extracción de características.</li>
+<li>Selección y reducción de dimensionalidad.</li>
+<li>Evaluación de modelos.</li>
+<li>Funciones de decisión.</li>
+<li>Clasificación de patrones por medio de funciones de distancia.</li>
+<li>Clasificación de patrones por medio de funciones de similitud.</li>
+<li>Clasificadores de Aprendizaje Automático.</li>
+<li>Aprendizaje Profundo.</li>
+<li>Patrones Estructurales y Procesamiento de Lenguaje Natural.</li>
+</ol>
+<p><strong>Datos del curso:</strong> lunes y viernes de 07:00 a 08:30 en el salón S227 (conjunto sur); contacto <code>ruben.azuara@ingenieria.unam.edu</code>; <strong>15 semanas, 28 sesiones</strong>; días inhábiles: <strong>2 y 16 de noviembre</strong>. Lenguaje del curso: <strong>Python</strong>. Google Classroom: <code>tz6dpily</code>. Los oyentes son bienvenidos y se tratan como alumnos regulares.</p>
+<table>
+<tr><th>Rubro</th><th>Peso</th><th>Reglas</th></tr>
+<tr><td>Tareas</td><td>15 %</td><td>Individuales, con nombre y número de cuenta arriba. Se aceptan tarde con <strong>−10 % por día</strong> de retraso (hasta llegar a 0).</td></tr>
+<tr><td>Prácticas / Examen</td><td>45 %</td><td>Prácticas <strong>por equipos</strong>; se evalúan 3 componentes: implementación (código reproducible), reporte escrito en <strong>formato IEEE</strong> y presentación oral de todos los integrantes. <strong>No se aceptan tarde.</strong></td></tr>
+<tr><td>Proyecto final</td><td>40 %</td><td>Aplicación de alguna de las opciones propuestas de RP; mismos 3 componentes que las prácticas. Entrega tentativa: <strong>30 de noviembre</strong>. Todos los integrantes suben reporte y código a Classroom.</td></tr>
+</table>
+<p>Que una calificación mayor a .5 suba a la inmediata superior queda a criterio del profesor según el desempeño durante el semestre. Recursos recomendados (portadas en la diapositiva 8): <em>An Introduction to Pattern Recognition and Machine Learning</em> (Fieguth), <em>Fundamentals of Pattern Recognition and Machine Learning</em> (Braga-Neto), <em>Pattern Recognition and Classification</em> (Dougherty) y <em>Dive into Deep Learning</em> (Zhang, Lipton, Li y Smola). Cierre de la diapositiva: «la idea es que ¡aprendan los contenidos!».</p>
+</details>
+
+<details class="section-block sec" id="cm2-que-es"><summary><span class="stitle">¿Qué es el reconocimiento de patrones?</span></summary>
+<span class="lbl">Qué es</span>
+<p>Durante mucho tiempo se ha buscado hacer <strong>inferencias de una cantidad desconocida a partir de mediciones relacionadas</strong>. Si esa cantidad desconocida es <strong>continua</strong>, el problema pertenece a la <strong>teoría de la estimación</strong>; si es <strong>discreta</strong>, es <strong>reconocimiento de patrones</strong>. El RP se enfoca en determinar una identidad particular —la <strong>clase</strong> del patrón— a partir de información medida; el proceso que elige la clase se llama <strong>clasificador</strong>.</p>
+<p>La tarea central tiene <strong>dos partes</strong>: (1) <strong>extracción de características</strong> y (2) <strong>clasificación</strong>. Otra forma de decirlo, de las diapositivas: es el proceso mediante el cual las entradas se miden, analizan y luego se clasifican como pertenecientes a una de un conjunto de clases; es la categorización de la información de entrada en clases identificables extrayendo atributos significativos respecto del fondo o de los detalles irrelevantes.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Lo hacemos todo el tiempo sin darnos cuenta: qué tienes enfrente al caminar, si es seguro cruzar la calle, qué canción suena (conocida o no, género, artista), o si el olor de la casa es «la comida ya está» o «algo se quema». Desde la experiencia humana, RP es detectar una entrada sensorial, analizarla y reconocerla (clasificarla), consciente o inconscientemente.<span class="rompe">Dónde falla la analogía: una persona usa contexto y experiencia de forma implícita; un sistema de RP solo «ve» las características numéricas que le diste.</span></p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="cm2-terminos"><summary><span class="stitle">Términos básicos y estructura de un sistema de RP</span></summary>
+<ul>
+<li><strong>Patrón:</strong> cualquier objeto, proceso o evento que puede ser descrito y distinguido de otros.</li>
+<li><strong>Clase:</strong> categoría o etiqueta a la que pertenece un patrón; un conjunto de patrones con propiedades similares.</li>
+<li><strong>Característica:</strong> una medición individual que describe un aspecto del patrón.</li>
+<li><strong>Clasificación:</strong> asignar un patrón a una de varias clases predefinidas basándose en sus características.</li>
+<li><strong>Entrenamiento:</strong> proceso mediante el cual el sistema aprende a partir de ejemplos conocidos (datos de entrenamiento) para poder clasificar patrones nuevos.</li>
+</ul>
+<p><strong>Estructura conceptual:</strong> un patrón es detectado dando lugar a <strong>mediciones</strong>; de ellas se extraen <strong>características</strong> que se entregan a un <strong>clasificador</strong>, el cual selecciona la <strong>clase</strong> asociada al patrón. El ejemplo gráfico de la diapositiva: la entrada es la imagen en grises de un perro vista como vector de intensidades <code>x = [131, 126, 128, …]</code>; una función <code>f(x)</code> produce la salida <code>y = [y₁, …, y_k]</code>, que en el caso binario es <code>y = 0</code> (gato) o <code>y = 1</code> (perro).</p>
+<div class="estudio-extra">
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Esta cadena es el esqueleto del semestre: la extracción de características es el Tema 2 (<a href="clase-m01.html">Clase -1</a>, <a href="clase-00.html">Clase 0</a> y <a href="clase-01.html">Clase 01</a>), la reducción es el Tema 3 y el resto del curso son distintos clasificadores.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="cm2-problemas"><summary><span class="stitle">Los tres problemas fundamentales del diseño</span></summary>
+<p><strong>1. Representación de la información que puede medirse de los objetos.</strong> Cada cantidad medida describe una característica del patrón; el <strong>vector de características</strong> <code>x = (x₁, x₂, …, xₙ)ᵀ</code> contiene toda la información medida disponible. Pero… ¿tenemos suficiente información?</p>
+<ul>
+<li><em>Ejemplo 1 (peso → salud):</em> 50 kg «Unhealthy», 60 kg «Healthy», 70 kg «Healthy», 80 kg «Unhealthy». Con solo el peso no se puede separar con un umbral: la clase depende de algo que no se midió (por ejemplo, la estatura). No hay suficiente información.</li>
+<li><em>Ejemplo 2 (¿salmón o robalo?):</em> histogramas de las dos especies según la <strong>longitud</strong> (se traslapan mucho; un umbral deja muchos errores) y según la <strong>luminosidad</strong> (se separan bastante mejor, con un umbral <code>x*</code>). Elegir bien qué medir cambia todo.</li>
+</ul>
+<p><strong>2. Extracción de atributos característicos y reducción de dimensionalidad.</strong> ¿Qué pasa si hay demasiadas características?</p>
+<ul>
+<li><em>Selección (Breast Cancer Wisconsin Diagnostic):</em> 569 instancias (357 benignos, 212 malignos) descritas por 10 medidas —radio, textura, perímetro, área, suavidad, compacidad (perímetro²/área − 1), concavidad, puntos cóncavos, simetría y dimensión fractal—, lo que da un vector <code>x = (x₁, …, x₃₀)</code>. ¿Todas aportan? Con la correlación con la clase: área 0.82, textura 0.79, concavidad 0.85, simetría 0.12, dimensión fractal 0.05. Uno podría quedarse con <code>x = (x_área, x_textura, x_concavidad)</code>.</li>
+<li><em>Reducción (imagen de 3000 × 1800):</em> al aplanarla queda <code>x ∈ ℝ^5,400,000</code>; con reducción de dimensionalidad pasa a <code>z ∈ ℝ^500</code>.</li>
+</ul>
+<p><strong>3. Determinación de procedimientos de decisión óptimos</strong>, necesarios para la clasificación e identificación.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>(1) ¿Medí lo correcto? (2) ¿Medí de más? (3) Con lo que medí, ¿cómo decido?<span class="rompe">Dónde falla: en la práctica los tres se mezclan; elegir mal en (1) no lo arregla ningún clasificador en (3).</span></p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="cm2-maldicion"><summary><span class="stitle">La maldición de la dimensionalidad</span></summary>
+<span class="lbl">Qué es</span>
+<p>En análisis de datos y aprendizaje automático, las <strong>dimensiones</strong> son las características o atributos de los datos. A medida que se añaden dimensiones, el <strong>volumen del espacio crece exponencialmente</strong>. Esto provoca: dispersión de los datos, mayor cómputo, sobreajuste, que las distancias pierdan sentido, degradación del rendimiento y retos de visualización.</p>
+<p>Se manifiesta de dos formas: (1) la <strong>distancia media</strong> entre los datos aumenta con el número de dimensiones; (2) la <strong>variabilidad de la distancia disminuye exponencialmente</strong> con el número de dimensiones — <strong>éste es el verdadero problema</strong> (todos los puntos quedan casi a la misma distancia, y un clasificador por distancia ya no distingue vecinos cercanos de lejanos).</p>
+<p><strong>¿Cómo se resuelve?</strong> Con <strong>reducción de la dimensionalidad</strong>: reducir el número de variables aleatorias para obtener un conjunto de variables principales. Permite conservar la información más importante y descartar características redundantes o poco importantes; pero eliminar características <strong>inevitablemente implica pérdida de información</strong>.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Buscar a un amigo en una calle es fácil; en una ciudad (2D), más difícil; en un edificio de mil pisos por ciudad (3D), casi imposible. Con cada dimensión el espacio «se vacía» y los datos quedan aislados.<span class="rompe">Dónde falla: la analogía explica la dispersión, pero no el punto clave del profesor, que es que las distancias se vuelven casi todas iguales.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Justifica todo el Tema 3 (selección, PCA, LDA: <a href="clase-02.html">Clase 02</a> y <a href="clase-03.html">Clase 03</a>).</p>
+<div class="errores"><p><strong>Error común:</strong> pensar que más características siempre es mejor. El profesor lo deja claro: más dimensiones ≠ mejor.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="cm2-ejemplos"><summary><span class="stitle">Ejemplos de sistemas de RP</span></summary>
+<ul>
+<li><strong>Visión computacional:</strong> reconocimiento facial, diagnóstico médico por imagen, vehículos autónomos.</li>
+<li><strong>Procesamiento del lenguaje natural:</strong> asistentes virtuales, traducción automática.</li>
+<li><strong>Biometría:</strong> reconocimiento de huellas dactilares y de iris.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="cm2-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Cuándo una inferencia es «teoría de la estimación» y cuándo «reconocimiento de patrones»?</summary><p>Si la cantidad desconocida es continua, estimación; si es discreta (una clase), reconocimiento de patrones.</p></details>
+<details class="qa"><summary>2. Define patrón, clase y característica.</summary><p>Patrón: objeto, proceso o evento que puede describirse y distinguirse de otros. Clase: categoría o etiqueta; conjunto de patrones con propiedades similares. Característica: medición individual que describe un aspecto del patrón.</p></details>
+<details class="qa"><summary>3. Dibuja la cadena de un sistema de RP.</summary><p>Patrón → mediciones → extracción de características → clasificador → clase.</p></details>
+<details class="qa"><summary>4. En el ejemplo 50/60/70/80 kg → Unhealthy/Healthy/Healthy/Unhealthy, ¿por qué no basta el peso?</summary><p>Porque las clases no se separan con un solo umbral sobre el peso: los extremos son «Unhealthy» y el centro «Healthy». Falta información (otra característica) para decidir bien.</p></details>
+<details class="qa"><summary>5. ¿Cuáles son los tres problemas fundamentales del diseño?</summary><p>Representación de lo que se mide; extracción de características y reducción de dimensionalidad; determinación del procedimiento de decisión óptimo.</p></details>
+<details class="qa"><summary>6. ¿Cuál es el «verdadero problema» de la maldición de la dimensionalidad?</summary><p>Que la variabilidad de la distancia disminuye exponencialmente con las dimensiones: las distancias dejan de discriminar.</p></details>
+<details class="qa"><summary>7. En Breast Cancer, ¿con qué tres características te quedarías según las correlaciones de la diapositiva y por qué?</summary><p>Área (0.82), textura (0.79) y concavidad (0.85): son las más correlacionadas con la clase; simetría (0.12) y dimensión fractal (0.05) aportan poco.</p></details>
+<details class="qa"><summary>8. ¿Qué precio se paga al reducir dimensionalidad?</summary><p>Pérdida de información: al eliminar o combinar características siempre se pierde algo.</p></details>
+</details>
+
+<details class="section-block sec" id="cm2-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Próxima clase</strong> (según la última diapositiva): <strong>Extracción de características</strong> → <a href="clase-m01.html">Clase -1</a> (21 ago).</li>
+</ul>
+</details>
+
+<p class="empty" style="margin-top:28px">Estructurado seg&uacute;n el <a href="index.html#tema-1" style="color:var(--indigo)">Tema 1</a> del programa del profesor. Reconstruido de las diapositivas (sin audio).</p>
+
+</div>
+</body>
+</html>
