@@ -99,6 +99,16 @@ PAGINAS = [('tareas', 'Tareas', ('T', 'R', 'EC')), ('practicas', 'Prácticas', (
            ('proyectos', 'Proyectos', ('Proy', 'Exp')), ('examenes', 'Exámenes', ('E',))]
 
 
+def sprints_de(sigla):
+    """[(nombre, ruta)] de las carpetas decimo/<SIGLA>/<SIGLA>-Proyecto/<SIGLA>-SprintN, en orden."""
+    base = os.path.join(DEC, sigla, f'{sigla}-Proyecto')
+    if not os.path.isdir(base):
+        return []
+    ds = [d for d in os.listdir(base) if re.match(rf'^{sigla}-Sprint\d+$', d)]
+    ds.sort(key=lambda d: int(d.rsplit('Sprint', 1)[1]))
+    return [(d, os.path.join(base, d)) for d in ds]
+
+
 def tipo(code):
     return ENTREGA.match(code).group(2)
 
@@ -141,10 +151,20 @@ def md_html(texto):
         s = re.sub(r'\*\*([^*]+)\*\*', r'<strong>\1</strong>', s)
         s = re.sub(r'«([^»]+)»', r'«\1»', s)
         return re.sub(r'(https?://[^\s<)]+)', r'<a href="\1" target="_blank" rel="noopener">\1</a>', s)
-    out, lista = [], None
+    out, lista, tabla = [], None, False
     for linea in texto.splitlines():
         if linea.startswith('# '):
             continue  # el título ya está en la tarjeta
+        if linea.strip().startswith('|'):  # tabla: | a | b | (la fila |---| se salta)
+            celdas = [c.strip() for c in linea.strip().strip('|').split('|')]
+            if all(re.fullmatch(r':?-+:?', c) for c in celdas):
+                continue
+            if not tabla:
+                out.append('<table>'); tabla = True
+            out.append('<tr>' + ''.join(f'<td>{inline(c)}</td>' for c in celdas) + '</tr>')
+            continue
+        if tabla:
+            out.append('</table>'); tabla = False
         m = re.match(r'^\s*(?:[-*]|\d+\.)\s+(.*)', linea)
         if m:
             tag = 'ol' if re.match(r'^\s*\d+\.', linea) else 'ul'
@@ -162,6 +182,8 @@ def md_html(texto):
             out.append(f'<p>{inline(linea.strip())}</p>')
     if lista:
         out.append(f'</{lista}>')
+    if tabla:
+        out.append('</table>')
     return '\n'.join(out)
 
 
@@ -258,7 +280,18 @@ for slug, (sigla, nombre, color) in MATERIAS.items():
         if pag == 'practicas' and sigla in ('FSE', 'OAC'):
             lab = [s for s, v in LABS.items() if v[0] == sigla][0]
             partes.append(f'<div class="section-block nota"><p>Las prácticas de laboratorio están en <a href="../{lab}/entregas.html">la página del laboratorio</a>.</p></div>')
-        partes += [tarjeta(r, c, sigla) for r, c in sel]
+        sprints = sprints_de(sigla) if pag == 'proyectos' else []
+        if sprints:
+            # Proyecto por sprints (ASI): un encabezado por carpeta <SIGLA>-SprintN con su README y sus entregas
+            for nombre_sp, ruta_sp in sprints:
+                partes.append(f'<h3 id="{nombre_sp}" style="margin:22px 0 6px">{html.escape(nombre_sp.split("-", 1)[1].replace("Sprint", "Sprint "))}</h3>')
+                leeme = os.path.join(ruta_sp, 'README.md')
+                if os.path.exists(leeme):
+                    partes.append('<div class="section-block indicaciones">' + md_html(open(leeme, encoding='utf-8').read()) + '</div>')
+                partes += [tarjeta(r, c, sigla) for r, c in sel if f'/{nombre_sp}/' in f'/{r}/']
+            partes += [tarjeta(r, c, sigla) for r, c in sel if '-Sprint' not in r]
+        else:
+            partes += [tarjeta(r, c, sigla) for r, c in sel]
         if not sel and not partes:
             partes.append(f'<p class="empty">No hay {titulo.lower()} registradas todavía en <code>decimo/{sigla}/</code>.</p>')
         escribir(os.path.join(RAIZ, 'materias', slug, pag + '.html'), pagina(titulo, nombre, color, '\n'.join(partes), DESC))

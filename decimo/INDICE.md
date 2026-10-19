@@ -28,21 +28,36 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 - **ASI-Material**: 15 archivos (ASI/ASI-Material/)
 
 
-### ASI-Entregables
+### ASI-Practicas
 
 | Entrega | Indicaciones | Entregado | Adicionales |
 |---|---|---|---|
-| ASI-P01 | [ASI-P01-indicaciones.pdf](ASI/ASI-Entregables/ASI-P01/ASI-P01-indicaciones.pdf) | [ASI-P01-420054085.pdf](ASI/ASI-Entregables/ASI-P01/ASI-P01-entregables/ASI-P01-420054085.pdf) | — |
-| ASI-P02 | [ASI-P02-indicaciones.md](ASI/ASI-Entregables/ASI-P02/ASI-P02-indicaciones.md) | [P02-ASI-420054085.pdf](ASI/ASI-Entregables/ASI-P02/ASI-P02-entregables/P02-ASI-420054085.pdf) | — |
-| ASI-P03 | [ASI-P03-indicaciones.pdf](ASI/ASI-Entregables/ASI-P03/ASI-P03-indicaciones.pdf) | [P03-ASI-420054085.pdf](ASI/ASI-Entregables/ASI-P03/ASI-P03-entregables/P03-ASI-420054085.pdf) | 3 |
-| ASI-P04 | [ASI-P04-indicaciones.md](ASI/ASI-Entregables/ASI-P04/ASI-P04-indicaciones.md) | [P04-ASI-420054085.pdf](ASI/ASI-Entregables/ASI-P04/ASI-P04-entregables/P04-ASI-420054085.pdf) | — |
-| ASI-Proy01 | [ASI-Proy01-indicaciones.md](ASI/ASI-Entregables/ASI-Proy01/ASI-Proy01-indicaciones.md) | [Formatos_Scrum_Proyecto_Final_Equipo10.pdf](ASI/ASI-Entregables/ASI-Proy01/ASI-Proy01-entregables/Formatos_Scrum_Proyecto_Final_Equipo10.pdf) | 3 |
-| ASI-Proy02 | [ASI-Proy02-indicaciones.md](ASI/ASI-Entregables/ASI-Proy02/ASI-Proy02-indicaciones.md) | [Diagramas_UML_Infraestructura_Escolar_Equipo10.pdf](ASI/ASI-Entregables/ASI-Proy02/ASI-Proy02-entregables/Diagramas_UML_Infraestructura_Escolar_Equipo10.pdf) | — |
-| ASI-Proy03 | [ASI-Proy03-indicaciones.md](ASI/ASI-Entregables/ASI-Proy03/ASI-Proy03-indicaciones.md) | [Sprint1_Formatos_Scrum_Proyecto_Final_Equipo10.pdf](ASI/ASI-Entregables/ASI-Proy03/ASI-Proy03-entregables/Sprint1_Formatos_Scrum_Proyecto_Final_Equipo10.pdf) | — |
-| ASI-Proy04 | [ASI-Proy04-indicaciones.md](ASI/ASI-Entregables/ASI-Proy04/ASI-Proy04-indicaciones.md) | [Sprint2_Formatos_Scrum_Proyecto_Final_Equipo10.docx.pdf](ASI/ASI-Entregables/ASI-Proy04/ASI-Proy04-entregables/Sprint2_Formatos_Scrum_Proyecto_Final_Equipo10.docx.pdf) | — |
-| ASI-Proy05 | [ASI-Proy05-indicaciones.md](ASI/ASI-Entregables/ASI-Proy05/ASI-Proy05-indicaciones.md) | [Sprint_2_Equipo10_Formato_Final.pdf](ASI/ASI-Entregables/ASI-Proy05/ASI-Proy05-entregables/Sprint_2_Equipo10_Formato_Final.pdf) | — |
-| ASI-R01 | [ASI-R01-indicaciones.md](ASI/ASI-Entregables/ASI-R01/ASI-R01-indicaciones.md) | [Reposicion-ASI-420054085.pdf](ASI/ASI-Entregables/ASI-R01/ASI-R01-entregables/Reposicion-ASI-420054085.pdf) | 7 |
-| ASI-T01 | [ASI-T01-indicaciones.md](ASI/ASI-Entregables/ASI-T01/ASI-T01-indicaciones.md) | [ASI-ENOE-ENIGH-420054085.pbix](ASI/ASI-Entregables/ASI-T01/ASI-T01-entregables/ASI-ENOE-ENIGH-420054085.pbix)<br>[ASI-ENOE-ENIGH-420054085.pdf](ASI/ASI-Entregables/ASI-T01/ASI-T01-entregables/ASI-ENOE-ENIGH-420054085.pdf) | 24 |
+| ASI-P01 | [ASI-P01-indicaciones.pdf](ASI/ASI-Practicas/ASI-P01/ASI-P01-indicaciones.pdf) | [ASI-P01-420054085.pdf](ASI/ASI-Practicas/ASI-P01/ASI-P01-entregables/ASI-P01-420054085.pdf) | — |
+| ASI-P02 | [ASI-P02-indicaciones.md](ASI/ASI-Practicas/ASI-P02/ASI-P02-indicaciones.md) | [P02-ASI-420054085.pdf](ASI/ASI-Practicas/ASI-P02/ASI-P02-entregables/P02-ASI-420054085.pdf) | — |
+| ASI-P03 | [ASI-P03-indicaciones.pdf](ASI/ASI-Practicas/ASI-P03/ASI-P03-indicaciones.pdf) | [P03-ASI-420054085.pdf](ASI/ASI-Practicas/ASI-P03/ASI-P03-entregables/P03-ASI-420054085.pdf) | 3 |
+| ASI-P04 | [ASI-P04-indicaciones.md](ASI/ASI-Practicas/ASI-P04/ASI-P04-indicaciones.md) | [P04-ASI-420054085.pdf](ASI/ASI-Practicas/ASI-P04/ASI-P04-entregables/P04-ASI-420054085.pdf) | — |
+| ASI-R01 | [ASI-R01-indicaciones.md](ASI/ASI-Practicas/ASI-R01/ASI-R01-indicaciones.md) | [Reposicion-ASI-420054085.pdf](ASI/ASI-Practicas/ASI-R01/ASI-R01-entregables/Reposicion-ASI-420054085.pdf) | 7 |
+| ASI-T01 | [ASI-T01-indicaciones.md](ASI/ASI-Practicas/ASI-T01/ASI-T01-indicaciones.md) | [ASI-ENOE-ENIGH-420054085.pbix](ASI/ASI-Practicas/ASI-T01/ASI-T01-entregables/ASI-ENOE-ENIGH-420054085.pbix)<br>[ASI-ENOE-ENIGH-420054085.pdf](ASI/ASI-Practicas/ASI-T01/ASI-T01-entregables/ASI-ENOE-ENIGH-420054085.pdf) | 24 |
+
+### ASI-Sprint0
+
+| Entrega | Indicaciones | Entregado | Adicionales |
+|---|---|---|---|
+| ASI-Proy01 | [ASI-Proy01-indicaciones.md](ASI/ASI-Proyecto/ASI-Sprint0/ASI-Proy01/ASI-Proy01-indicaciones.md) | [Formatos_Scrum_Proyecto_Final_Equipo10.pdf](ASI/ASI-Proyecto/ASI-Sprint0/ASI-Proy01/ASI-Proy01-entregables/Formatos_Scrum_Proyecto_Final_Equipo10.pdf) | 3 |
+| ASI-Proy02 | [ASI-Proy02-indicaciones.md](ASI/ASI-Proyecto/ASI-Sprint0/ASI-Proy02/ASI-Proy02-indicaciones.md) | [ASI-Proy02-Diagramas-UML-Equipo10.pdf](ASI/ASI-Proyecto/ASI-Sprint0/ASI-Proy02/ASI-Proy02-entregables/ASI-Proy02-Diagramas-UML-Equipo10.pdf) | — |
+
+### ASI-Sprint1
+
+| Entrega | Indicaciones | Entregado | Adicionales |
+|---|---|---|---|
+| ASI-Proy03 | [ASI-Proy03-indicaciones.md](ASI/ASI-Proyecto/ASI-Sprint1/ASI-Proy03/ASI-Proy03-indicaciones.md) | [Sprint1_Formatos_Scrum_Proyecto_Final_Equipo10.pdf](ASI/ASI-Proyecto/ASI-Sprint1/ASI-Proy03/ASI-Proy03-entregables/Sprint1_Formatos_Scrum_Proyecto_Final_Equipo10.pdf) | — |
+
+### ASI-Sprint2
+
+| Entrega | Indicaciones | Entregado | Adicionales |
+|---|---|---|---|
+| ASI-Proy04 | [ASI-Proy04-indicaciones.md](ASI/ASI-Proyecto/ASI-Sprint2/ASI-Proy04/ASI-Proy04-indicaciones.md) | [Sprint2_Formatos_Scrum_Proyecto_Final_Equipo10.docx.pdf](ASI/ASI-Proyecto/ASI-Sprint2/ASI-Proy04/ASI-Proy04-entregables/Sprint2_Formatos_Scrum_Proyecto_Final_Equipo10.docx.pdf) | — |
+| ASI-Proy05 | [ASI-Proy05-indicaciones.md](ASI/ASI-Proyecto/ASI-Sprint2/ASI-Proy05/ASI-Proy05-indicaciones.md) | [Sprint_2_Equipo10_Formato_Final.pdf](ASI/ASI-Proyecto/ASI-Sprint2/ASI-Proy05/ASI-Proy05-entregables/Sprint_2_Equipo10_Formato_Final.pdf) | — |
 
 ## FSE — Fundamentos de Sistemas Embebidos (+ Lab)
 

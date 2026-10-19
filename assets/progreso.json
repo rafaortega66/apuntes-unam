@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-19T22:44:02+00:00",
+ "generatedAt": "2026-10-19T22:52:37+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -713,6 +713,11 @@
  },
  "gitlog": [
   {
+   "hash": "8178a50",
+   "fecha": "2026-10-19T16:44:02-06:00",
+   "mensaje": "SIB: Clases 12 (8 oct, clasificación y etapas de ataques), 13 (13 oct, atacantes e intrusión) y 14 (15 oct, malware, físicos y mecanismos) en formato de estudio desde NotebookLM, con enlace a los apuntes PDF; nota sobre el desfase de audios de SIB"
+  },
+  {
    "hash": "95e879d",
    "fecha": "2026-10-19T16:31:31-06:00",
    "mensaje": "ASI: Clase 12 (7 oct, examen) y Clase 13 (12 oct, examen de reposición en Teams) desde NotebookLM"
@@ -1006,11 +1011,6 @@
    "hash": "9444533",
    "fecha": "2026-10-07T09:48:34-06:00",
    "mensaje": "Guardar contexto de la tarea ASI ENOE/ENIGH para retomar en Windows (tutorial, gráficas de referencia, scripts)"
-  },
-  {
-   "hash": "7b638a0",
-   "fecha": "2026-10-07T09:36:44-06:00",
-   "mensaje": "ASI Clase 11 (5 oct): ENOE en Power BI y actividades ENOE/ENIGH; página de la tarea actualizada con instrucciones reales"
   }
  ]
 }

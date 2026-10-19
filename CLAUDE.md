@@ -135,7 +135,11 @@ decimo/<SIGLA>/<SIGLA>-<Categoría>/<SIGLA>-XNN/
 - Tipos: `T` tarea · `P` práctica/lab · `Proy` proyecto · `E` examen · `Exp` exposición · `EC` ejercicio de clase · `R` reposición.
   Numeración = la de Classroom. **Toda** entrega lleva las dos carpetas y su archivo de indicaciones.
 - Labs: Lab FSE en `FSE/FSE-Lab/` (mismo profesor); Lab OAC (L+) en `OAC/OAC-Lab/` con `OAC-Lab-Material/`.
-- **ASI**: una sola categoría, `ASI/ASI-Entregables/` (P01–P04, T01, R01, Proy01–Proy05), + `ASI-Material/`.
+- **ASI** (reorganizado el 19 oct 2026, pedido del usuario): dos carpetas. `ASI/ASI-Practicas/` (P01–P04, T01 ENOE/ENIGH, R01 reposición) y
+  `ASI/ASI-Proyecto/` = el proyecto final Scrum (Equipo 10) **por sprints**: `ASI-Sprint0/` (Proy01 Formato 1, Proy02 diagramas UML),
+  `ASI-Sprint1/` (Proy03), `ASI-Sprint2/` (Proy04, Proy05), `ASI-Sprint3/` (en curso: Samba, SSH, permisos)… Cada sprint lleva un `README.md`
+  y `ASI-Proyecto/README.md` tiene la tabla de sprints. Cada reporte semanal nuevo = siguiente `ASI-ProyNN` dentro de su sprint.
+  `proyectos.html` se genera agrupado por sprint. + `ASI-Material/`.
 - Si hay versiones distintas de un archivo, la entregada en Classroom es la buena
   (comparar tamaño/contenido); las otras van a `-adicionales/version-previa/`.
 - **Nunca** en el sitio: libros (repo privado `apuntes-unam-biblioteca`), INE,
@@ -338,7 +342,7 @@ El avance de cada asignación vive en el propio sitio, para que cualquier sesió
 **Al empezar una sesión:** revisa los ítems con `avance`/`progreso` (hoy ninguno) y retoma desde el primer paso sin marcar; no le preguntes al usuario qué faltaba.
 **Al avanzar o cerrar una sesión de trabajo en una tarea:** marca los pasos hechos, reescribe `donde` y `avance` con la fecha, corre `python3 scripts/build_tareas.py` y haz commit y push. Cuando la tarea se entregue, quita el ítem de `pendientes.json` (o ponle `oculto: true`) y bórrale el `progreso`.
 
-- La tarea ASI «Análisis de ENOE y ENIGH» ya se entregó (Classroom «Turned in», verificado el 12 oct 2026); sus materiales están en `decimo/ASI/ASI-Entregables/ASI-T01-tarea-enoe-enigh(-ad)/`.
+- La tarea ASI «Análisis de ENOE y ENIGH» ya se entregó (Classroom «Turned in», verificado el 12 oct 2026); sus materiales están en `decimo/ASI/ASI-Practicas/ASI-T01/`.
 
 ## Nueva estrategia de estudio (9 oct 2026) — reemplaza la automatización de clases
 

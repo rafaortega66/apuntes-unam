@@ -5,7 +5,7 @@ Un directorio por asignatura (sigla). Dentro:
 ```
 <SIGLA>/
 ├─ <SIGLA>-Material/              ← material independiente del profesor (presentaciones, temario, formatos generales)
-└─ <SIGLA>-<Categoría>/           ← Tareas, Practicas, Lab, Proyectos, Examenes… (ASI: una sola, ASI-Entregables)
+└─ <SIGLA>-<Categoría>/           ← Tareas, Practicas, Lab, Proyectos, Examenes… (ASI: ASI-Practicas y ASI-Proyecto/ASI-SprintN)
    └─ <SIGLA>-XNN/
       ├─ <SIGLA>-XNN-indicaciones.pdf|.md   ← enunciado del profesor; si no hubo archivo, lo que dijo Classroom
       │                                       (y NotebookLM cuando Classroom era vago), con la fuente indicada
