@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-19T22:28:31+00:00",
+ "generatedAt": "2026-10-19T22:31:31+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -392,6 +392,20 @@
     "resumen": "Arquitectura de datos (fuera del temario) — Análisis práctico de la ENOE (y primer vistazo a la ENIGH) del INEGI en Power BI Desktop: sueldos por edad, sexo, escolaridad, geografía y formalidad, con suma frente a recuent",
     "url": "materias/administracion-de-servicios-de-internet/clase-11.html",
     "formato": "estudio"
+   },
+   {
+    "num": 12,
+    "fecha": "2026-10-07",
+    "resumen": "Examen.",
+    "url": "materias/administracion-de-servicios-de-internet/clase-12.html",
+    "formato": "no-aplica"
+   },
+   {
+    "num": 13,
+    "fecha": "2026-10-12",
+    "resumen": "Arquitectura de datos (fuera del temario) — Examen de reposición individual en Teams: cinco archivos de datos, modelo de datos en la herramienta de BI que elijas (Power BI, Tableau o Looker Studio) y preguntas abiertas c",
+    "url": "materias/administracion-de-servicios-de-internet/clase-13.html",
+    "formato": "estudio"
    }
   ],
   "arquitectura-cliente-servidor": [
@@ -699,6 +713,11 @@
  },
  "gitlog": [
   {
+   "hash": "52bb840",
+   "fecha": "2026-10-19T16:28:31-06:00",
+   "mensaje": "ACS: Clases 13 (8 oct, Programa 05), 14 (13 oct, SO_REUSEADDR y búferes) y 15 (15 oct, servidor de PDF e indicaciones del parcial) en formato de estudio desde NotebookLM"
+  },
+  {
    "hash": "9233fe9",
    "fecha": "2026-10-19T14:22:25-06:00",
    "mensaje": "MD: Clases 11 (8 oct, clustering y regresión), 12 (13 oct, asociación y clasificación) y 13 (15 oct, clasificación a fondo) en formato de estudio desde NotebookLM; CLAUDE.md registra los cuadernos de NotebookLM"
@@ -992,11 +1011,6 @@
    "hash": "9abdf49",
    "fecha": "2026-10-07T08:48:28-06:00",
    "mensaje": "Página por asignación (tareas/<id>.html) con instrucciones exactas: ASI ENOE/ENIGH, FSE T06-T09, Labs FSE, MD, ACS, OAC; las tarjetas de Pendientes ahora enlazan ahí"
-  },
-  {
-   "hash": "24d79b5",
-   "fecha": "2026-10-07T08:22:35-06:00",
-   "mensaje": "Agregar OAC Clase 09, FSE Clase 11 (5 oct), ACS Clase 12 y MD Clase 10 (6 oct); pendientes actualizados al 7 oct"
   }
  ]
 }

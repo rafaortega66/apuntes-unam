@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 13 — Administración de Servicios de Internet</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Administración de Servicios de Internet</a>
+<div class="detail-head" style="border-color:#7C9CD6"><h2>Clase 13</h2>
+  <p class="prof">Mtro. Juan Ángel Calvillo Pérez · 12 oct 2026 · Arquitectura de datos (fuera del temario) — Examen de reposición individual en Teams: cinco archivos de datos, modelo de datos en la herramienta de BI que elijas (Power BI, Tableau o Looker Studio) y preguntas abiertas con justificación.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>ASI-Clase13.m4a</code>), 19 oct 2026. La entrega quedó registrada como <a href="tareas.html#ASI-R01">ASI-R01</a>.</p>
+</div>
+
+<details class="section-block sec" id="c13-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<p>Esta sesión fue la reposición misma. Lo que dejó claro para cualquier evaluación de este bloque:</p>
+<ol class="examen-lista">
+<li><strong>Armar bien el modelo de datos antes de contestar.</strong><span class="evid">Evidencia: «Si no hacen bien el modelo, las respuestas de las preguntas van a estar mal».</span></li>
+<li><strong>Justificar cada respuesta.</strong><span class="evid">Evidencia: «Todas las preguntas deben de tener su especificación»; no hay opción múltiple.</span></li>
+<li><strong>Revisar primero cómo se relacionan los archivos.</strong><span class="evid">Evidencia: «Yo primero abriría los archivos y leo uno para ver si está relacionado».</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c13-reposicion"><summary><span class="stitle">1 · El examen de reposición y el modelo de datos</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Una evaluación práctica e individual, en el apartado «reposición» de Teams, con cinco archivos de datos relacionados, para medir si sabes estructurar un modelo de datos y justificar tus respuestas.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un rompecabezas de 5 piezas, una por tabla: si unes mal dos piezas, todo cálculo que hagas sale mal.<span class="rompe">Dónde deja de servir: un rompecabezas encaja de una sola forma; en un modelo de datos tú decides las llaves y las cardinalidades según el negocio.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Se importan los cinco archivos a la herramienta de BI que prefieras (<strong>Power BI, Tableau o Looker Studio</strong>, «lo que ustedes quieran») y se construyen las relaciones entre tablas. Duración: <strong>una hora</strong>, más unos minutos de tolerancia para subir el archivo; trabajo <strong>individual</strong>; cada pregunta lleva su especificación (cómo se calculó). Según Classroom, los datos eran tasa de mortalidad infantil, esperanza de vida, países y población, y las preguntas pedían justificar dónde vivir, dónde es mejor tener hijos, dónde mueren más adolescentes y si hay correlación entre esperanza de vida y mortalidad infantil (ver <a href="tareas.html#ASI-R01">ASI-R01</a>).</p>
+<p><strong>Encabezados en inglés:</strong> varios archivos venían en inglés. «Si saben inglés pues no hay tema, pero si no… traducen o hacen esos a español los encabezados» (por ejemplo, en Power Query), para no relacionar columnas que no significan lo mismo.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Aplica lo visto de Data Warehouse, ETL y tableros en las <a href="clase-10.html">Clases 10</a> y <a href="clase-11.html">11</a>: sin un modelo integrado, los cálculos duplican sumas o mezclan registros que no corresponden.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> empezar a contestar sin revisar cómo se relacionan los 5 archivos; esperar que la herramienta cree sola las relaciones; no escribir la especificación de cada respuesta.</p></div>
+</details>
+
+<details class="section-block sec" id="c13-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Por qué el modelo de datos es lo primero en este tipo de examen?</summary><p>Porque si las relaciones entre tablas están mal, todas las respuestas que dependen de ellas salen mal.</p></details>
+<details class="qa"><summary>2. ¿Qué debe acompañar a cada respuesta?</summary><p>Su especificación: cómo se obtuvo el dato (cálculo, filtro, gráfica).</p></details>
+<details class="qa"><summary>3. ¿Qué harías antes de importar y relacionar los 5 archivos?</summary><p>Abrir cada uno, entender sus columnas (traducir encabezados si hace falta) e identificar los campos comunes que sirven de llave.</p></details>
+<details class="qa"><summary>4. Si una tabla de países trae el nombre en inglés y otra en español, ¿qué problema hay al relacionarlas?</summary><p>Las llaves no coinciden y la relación pierde registros; hay que homologar los nombres (o usar un código de país) antes de unirlas.</p></details>
+<details class="qa"><summary>5. ¿Cómo comprobarías si hay correlación entre esperanza de vida y mortalidad infantil?</summary><p>Con una gráfica de dispersión de ambas variables por país (y, si la herramienta lo permite, una línea de tendencia), justificando lo que se observa.</p></details>
+<details class="qa"><summary>6. ¿Qué herramientas permitía el profesor?</summary><p>Power BI, Tableau, Looker Studio o la que prefieras.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c13-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li>Sobre el examen anterior: «en el examen no les fue muy bien… el más alto lleva siete».</li>
+<li>Bromas con los alumnos sobre repetir el mismo examen («te podría dar exactamente el mismo examen…») y comentarios sarcásticos sobre llegar a décimo semestre.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c13-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Entrega de la reposición:</strong> NotebookLM entendió «antes de las 6:30 p. m.» del mismo día, pero Classroom marca entrega el 13 oct a las 03:00. Classroom es la fuente para fechas; ya está entregada (<a href="tareas.html#ASI-R01">ASI-R01</a>).</li>
+<li><strong>Siguiente:</strong> continuar con los reportes semanales del proyecto final y los manuales técnico y de usuario hacia el cierre del semestre.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Reposición individual de una hora en Teams con 5 archivos.</li>
+<li>Primero el modelo de datos (relaciones correctas), luego las preguntas.</li>
+<li>Cada respuesta con su especificación; herramienta de BI libre; traducir encabezados si hace falta.</li>
+</ul></div>
+
+</div>
+</body>
+</html>
