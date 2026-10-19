@@ -2,19 +2,164 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MD · Clase 11</title>
+<title>Clase 11 — Minería de Datos</title>
 <link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
 <script src="../../assets/app.js?v=20261012a" defer></script>
 </head>
 <body>
 <div class="wrap">
-<a class="back" href="index.html">← Volver a MD</a>
-<div class="detail-head" style="border-color:#A98BD1">
-  <h3>Clase 11</h3>
-  <p>Martes 8 de octubre · 15:00–17:00 · Salón A306</p>
+<a class="back" href="index.html">← Minería de Datos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 11</h2>
+  <p class="prof">M.C. José Concepción Roberto Olvera López · 8 oct 2026 · Tema 3 — Presentaciones de la Práctica 3.1 (clustering con K-Means, DBSCAN y jerárquico en Python y RapidMiner), datos para asociación frente a clustering, y regresión supervisada: lineal, múltiple, polinomial, Ridge, Lasso, SVR y Random Forest, con sus métricas y los tres niveles de validación.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>MD-Clase11.m4a</code>), 19 oct 2026.</p>
 </div>
-<p class="empty">Contenido por agregar.</p>
+
+<details class="section-block sec" id="c11-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Regresión frente a clasificación.</strong><span class="evid">Evidencia: se lo preguntó a la clase y lo señaló como concepto clave.</span></li>
+<li><strong>Ridge (L2) frente a Lasso (L1).</strong><span class="evid">Evidencia: explicó con detalle cómo cada una maneja la multicolinealidad y la selección de variables.</span></li>
+<li><strong>Qué hacer si las métricas de una regresión salen mal.</strong><span class="evid">Evidencia: fue la pregunta de debate principal de la clase; salieron 5 respuestas.</span></li>
+<li><strong>Los 3 niveles de validación de un proyecto de machine learning.</strong><span class="evid">Evidencia: lo remarcó como regla indispensable antes de producción, con una anécdota de FEMSA.</span></li>
+<li><strong>Datos para clustering (agregados por cliente) frente a asociación (transacciones crudas).</strong><span class="evid">Evidencia: lo aclaró ante la pregunta de un alumno sobre la Práctica 3.2.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c11-practica31"><summary><span class="stitle">1 · Presentaciones de la Práctica 3.1 (agrupación)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La exposición y retroalimentación del desarrollo en Python y RapidMiner para segmentar un historial de unas 58,900 transacciones de ventas.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es ordenar un clóset revuelto: en vez de ver prenda por prenda, juntas la ropa por tipo (deportiva, de frío, formal) para tratar cada grupo distinto.<span class="rompe">Dónde deja de servir: hay prendas (clientes) que caben en dos grupos a la vez.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Limpieza:</strong> textos a minúsculas, columnas 100 % nulas eliminadas y tratamiento de compras atípicas (por ejemplo, $6,000 pesos o 165 piezas de queso manchego).</p>
+<p><strong>Agregación por cliente:</strong> agrupando por <code>clave_cliente</code>, las ~58,900 transacciones se reducen a <strong>524 clientes</strong> con atributos como número de transacciones, monto total, recencia y frecuencia.</p>
+<p><strong>Escalado:</strong> <code>StandardScaler</code> para que las distancias euclidianas no se deformen al comparar montos de $6,000 con recencias de 2 días; y transformación logarítmica (<code>np.log1p</code>) de los montos para comprimir los picos y suavizar la distribución antes de K-Means.</p>
+<p><strong>Modelos:</strong> K-Means con K = 5 (o 4) por el método del codo, y PCA a 2 componentes para graficar; DBSCAN calibrado con la gráfica de k-distancia (2 clusters, o mucho traslape con 23.28 % de puntos de ruido); agrupación jerárquica con dendrogramas, con más mezcla visual. En RapidMiner (Altair AI Studio): <em>Read CSV</em> → <em>Set Role</em> (<code>clave_cliente</code> como id) → <em>Normalize</em> (Z-score) → <em>K-Means</em> (K = 5).</p>
+<p><strong>Perfiles de los 5 clusters:</strong></p>
+<ul>
+<li><strong>0 · Especialistas en quesos:</strong> compran poco seguido, ticket concentrado en quesos → promociones cruzadas con vinos o carnes.</li>
+<li><strong>1 · Mayoristas:</strong> compras masivas aisladas → trato VIP/B2B sin mezclar beneficios minoristas.</li>
+<li><strong>2 · Ocasionales:</strong> pocas compras e importe bajo → combos por volumen para subir el ticket.</li>
+<li><strong>3 · Fieles / VIP:</strong> frecuencia e importe altos, sostienen los ingresos → programa de lealtad.</li>
+<li><strong>4 · Compradores de carnes:</strong> alto gasto en carnes → promociones de rotación rápida.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Pasa de un marketing igual para todos a estrategias por segmento. Es la <a href="practicas.html">Práctica 3.1</a>.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> meter los importes sin estandarizar ni aplicar logaritmo: una sola variable con números grandes distorsiona todos los centroides.</p></div>
+</details>
+
+<details class="section-block sec" id="c11-asociacion-datos"><summary><span class="stitle">2 · Datos para asociación (Práctica 3.2) frente a clustering (3.1)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Una aclaración sobre la granularidad de los datos que necesita el análisis de reglas de asociación.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Clustering es ver el expediente acumulado de cada paciente; asociación es revisar cada receta para ver qué medicamentos se recetan juntos.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Un alumno preguntó si para la Práctica 3.2 se usaba la tabla de 524 clientes. El profesor aclaró que <strong>no</strong>: para asociación se usan las <strong>58,900+ transacciones crudas</strong>, a nivel ticket y producto, para ver qué productos aparecen juntos en cada compra.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Agregar por cliente destruiría la canasta de cada compra (Market Basket Analysis, <a href="clase-10.html">Clase 10</a>).</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> agrupar o filtrar por cliente antes de correr Apriori o FP-Growth.</p></div>
+</details>
+
+<details class="section-block sec" id="c11-regresion"><summary><span class="stitle">3 · Regresión supervisada</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un algoritmo de aprendizaje supervisado que modela la relación entre una variable objetivo <strong>continua</strong> (Y) y una o más variables explicativas (X₁, X₂, …), para entender su comportamiento y hacer predicciones numéricas confiables.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es trazar una línea de tendencia para predecir la estatura de alguien según su edad.<span class="rompe">Dónde deja de servir: al llegar a la adultez ya no se crece en línea recta.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Y es continua (ventas, precio, costo) y las X son variables independientes (superficie, edad, promociones). Tiene dos objetivos: entender el peso de cada X sobre Y, y predecir Y para observaciones nuevas.</p>
+<p><strong>Regresión frente a clasificación:</strong> la regresión predice un valor <strong>continuo</strong>; la clasificación predice una <strong>categoría</strong> discreta o binaria (sí/no, fraude/no fraude).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la base de la analítica predictiva en finanzas, pronóstico de demanda e inventarios.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> usar regresión lineal para predecir una variable binaria o categórica.</p></div>
+</details>
+
+<details class="section-block sec" id="c11-algoritmos"><summary><span class="stitle">4 · Algoritmos de regresión</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El catálogo de modelos supervisados de regresión que expuso el profesor, para distintas formas de datos.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es elegir regla: una rígida para rectas (lineal), una flexible para curvas (polinomial) o unas tijeras que recortan lo que sobra (Lasso).</p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>Lineal simple:</strong> <code>Y = β₀ + β₁X</code>. Ejemplo: precio de una casa según su superficie en m², con el modelo aprendido <code>Precio = 34 + 4.8X</code>. Para 90 m²: 34 + 4.8 × 90 = 34 + 432 = <strong>466</strong>.</li>
+<li><strong>Lineal múltiple:</strong> <code>Y = β₀ + β₁X₁ + β₂X₂ + … + βₙXₙ</code>, con varias variables (superficie, habitaciones, antigüedad, ubicación).</li>
+<li><strong>Polinomial:</strong> modela curvas agregando términos X², X³, …, X<sup>d</sup>.</li>
+<li><strong>Ridge (regularización L2):</strong> maneja la multicolinealidad penalizando los coeficientes grandes; <strong>no elimina</strong> variables, las suaviza para evitar sobreajuste.</li>
+<li><strong>Lasso (regularización L1):</strong> hace <strong>selección automática de variables</strong>: lleva a cero los coeficientes de las variables poco significativas y las elimina.</li>
+<li><strong>SVR (Support Vector Regression):</strong> ajusta las predicciones dentro de un margen o «tubo» de error (ε) alrededor de un hiperplano; ejemplo: consumo de energía eléctrica.</li>
+<li><strong>Random Forest Regressor:</strong> ensamble que promedia muchos árboles de decisión; muy robusto con datos complejos.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite elegir el modelo según si los datos son lineales, curvos o tienen muchas variables correlacionadas.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> usar regresión lineal simple con datos curvos, o modelos complejos sin regularizar que terminan sobreajustados.</p></div>
+</details>
+
+<details class="section-block sec" id="c11-metricas"><summary><span class="stitle">5 · Métricas, qué hacer si salen mal y los 3 niveles de validación</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Indicadores para medir qué tan preciso es un modelo de regresión, y el proceso para validarlo antes de llevarlo a producción.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es el examen de manejo: R² dice qué tan bien sigues la carretera y el MSE cuántas veces te saliste del carril.</p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>R² (coeficiente de determinación):</strong> proporción de la varianza de Y que explica el modelo; mientras más cerca de 1 (100 %), más confiable.</li>
+<li><strong>MSE (error cuadrático medio):</strong> promedio de los errores al cuadrado; castiga más los errores grandes.</li>
+<li><strong>RMSE:</strong> raíz del MSE, para regresar el error a las unidades de Y.</li>
+<li><strong>MAE (error absoluto medio):</strong> promedio de los errores en valor absoluto.</li>
+</ul>
+<p><strong>Debate en clase:</strong> «Si corren un modelo y las métricas no son buenas (por ejemplo, R² = 0.59), ¿qué hacen?». Respuestas: (1) Ramón: revisar la estandarización y la escala de las variables; (2) selección de variables para quitar ruido; (3) Elizabeth y Bárbara: limpiar datos, tratar outliers y eventos anómalos históricos; (4) el profesor: probar otros algoritmos (Lasso, SVR, Random Forest); (5) el profesor: si no hay relación real, descartar el modelo.</p>
+<p><strong>Tres niveles de validación:</strong> <strong>1)</strong> técnica (R², MSE, Silhouette, matriz de confusión); <strong>2)</strong> con el equipo de negocio y los operativos; <strong>3)</strong> estratégica, con la alta dirección.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Asegura que el modelo sea preciso <em>y</em> útil antes de invertir en desplegarlo.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> confiar solo en un R² alto sin revisar el sobreajuste, o no validar con la gente de negocio.</p></div>
+</details>
+
+<details class="section-block sec" id="c11-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Por qué estandarizar y aplicar logaritmo antes de K-Means en el dataset de ventas?</summary><p>Para que variables con magnitudes grandes (montos de $6,000) no dominen las distancias sobre las pequeñas (recencia de 2 días); el logaritmo comprime las distribuciones con picos.</p></details>
+<details class="qa"><summary>2. ¿La Práctica 3.2 usa la tabla de 524 clientes?</summary><p>No: usa las 58,900+ transacciones crudas a nivel ticket y producto.</p></details>
+<details class="qa"><summary>3. ¿En qué se diferencian regresión y clasificación?</summary><p>Regresión: Y continua (ventas, precio). Clasificación: Y categórica o binaria (sí/no).</p></details>
+<details class="qa"><summary>4. Con <code>Precio = 34 + 4.8X</code>, ¿cuánto vale una casa de 90 m²? ¿Y una de 120 m²?</summary><p>90 m²: 34 + 432 = 466. 120 m²: 34 + 576 = 610.</p></details>
+<details class="qa"><summary>5. ¿En qué se diferencian Ridge y Lasso?</summary><p>Ridge (L2) suaviza los coeficientes y conserva todas las variables; Lasso (L1) lleva a cero los coeficientes poco significativos y elimina esas variables.</p></details>
+<details class="qa"><summary>6. Menciona las 5 opciones si un modelo de regresión sale con R² o MSE malos.</summary><p>Revisar la estandarización; seleccionar variables; limpiar outliers y anomalías; probar otro algoritmo; descartar el modelo si no hay relación.</p></details>
+<details class="qa"><summary>7. ¿Cuáles son los 3 niveles de validación?</summary><p>Técnico (métricas), con negocio y operativos, y con la alta dirección.</p></details>
+<details class="qa"><summary>8. ¿Qué mide R²?</summary><p>La proporción de la varianza de Y que explican las variables del modelo.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c11-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>FEMSA y el director holandés:</strong> en un proyecto de segmentación pasaron la validación técnica y la operativa, pero al presentar los clusters el director general los interrumpió: «lo único que a mí me interesa es crecer un 50 % en tiendas a nivel nacional». Si no se alinea con la alta dirección (nivel 3), el proyecto se cae.</li>
+<li><strong>¿De dónde copiaron el código?</strong> Preguntó en broma si usaron ChatGPT; aclaró que no le importa usar código o bibliotecas hechas, siempre que entiendan qué hace cada parámetro y cada transformación.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c11-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Práctica 3.1 (agrupación):</strong> notebook de Python y presentación (PPT/PDF) con RapidMiner.</li>
+<li><strong>Práctica 3.2 (asociación, Apriori / FP-Growth):</strong> entrega y exposición el martes; la plataforma cierra a las 12:00.</li>
+<li><strong>Práctica 3.3 (regresión):</strong> se entrega el jueves siguiente.</li>
+<li><strong>Examen teórico:</strong> no hay uno nuevo. NotebookLM lo registró como «jueves 17 de octubre», pero al revisar los audios la frase «El examen es el 17» está en la Clase 3: fue el <strong>jueves 17 de septiembre</strong> (ya presentado, <a href="examenes.html">MD-E01</a>).</li>
+<li><strong>Próximos temas:</strong> clasificación (árboles de decisión, Random Forest, regresión logística, Naive Bayes, KNN, SVM) y series de tiempo.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Clustering: 58,900 transacciones → 524 clientes; StandardScaler + log; K = 5 por el codo; 5 perfiles de cliente.</li>
+<li>Asociación usa transacciones crudas, no la tabla de clientes.</li>
+<li>Regresión = Y continua; clasificación = Y categórica.</li>
+<li>Ridge (L2) suaviza; Lasso (L1) elimina variables; SVR usa un tubo ε; Random Forest promedia árboles.</li>
+<li>R², MSE, RMSE, MAE; validación técnica → negocio → alta dirección.</li>
+</ul></div>
+
 </div>
 </body>
 </html>

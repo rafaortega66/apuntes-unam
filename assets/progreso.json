@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-19T20:08:24+00:00",
+ "generatedAt": "2026-10-19T20:22:11+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -661,15 +661,34 @@
    },
    {
     "num": 11,
-    "fecha": null,
-    "resumen": "",
+    "fecha": "2026-10-08",
+    "resumen": "Tema 3 — Presentaciones de la Práctica 3.1 (clustering con K-Means, DBSCAN y jerárquico en Python y RapidMiner), datos para asociación frente a clustering, y regresión supervisada: lineal, múltiple, polinomial, Ridge, La",
     "url": "materias/mineria-de-datos/clase-11.html",
-    "formato": "viejo"
+    "formato": "estudio"
+   },
+   {
+    "num": 12,
+    "fecha": "2026-10-13",
+    "resumen": "Tema 3 — Presentaciones de la Práctica 3.2 (reglas de asociación con Apriori y FP-Growth, general y comidas preparadas), introducción a la clasificación supervisada (selección de variables, sesgos, discretización en bins",
+    "url": "materias/mineria-de-datos/clase-12.html",
+    "formato": "estudio"
+   },
+   {
+    "num": 13,
+    "fecha": "2026-10-15",
+    "resumen": "Tema 3 — Cierre de las exposiciones de la Práctica 3.2 (one-hot, agrupación por líneas, lift extremos y estrategia sobre el consecuente) y clase completa de clasificación: variables dominantes, bins, los 6 algoritmos con",
+    "url": "materias/mineria-de-datos/clase-13.html",
+    "formato": "estudio"
    }
   ],
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "6eb7350",
+   "fecha": "2026-10-19T14:08:24-06:00",
+   "mensaje": "OAC: Clase 12 (19 oct) desde NotebookLM — sesión sin tema nuevo: SBC, MicroSD vs. SSD M.2, ruido eléctrico y revisión de proyectos"
+  },
   {
    "hash": "d86f0da",
    "fecha": "2026-10-19T14:05:31-06:00",
@@ -964,11 +983,6 @@
    "hash": "a99f47b",
    "fecha": "2026-10-07T07:42:25-06:00",
    "mensaje": "SIB Clase 11 (6 oct): examen parcial"
-  },
-  {
-   "hash": "3d2ccc2",
-   "fecha": "2026-10-07T00:53:56-06:00",
-   "mensaje": "Pendientes y entregas al 7 oct: Classroom verificado (ASI Kali, Lab FSE P5, Lab OAC reportes 1-2 entregados; fechas de ASI/MD corregidas; RP Práctica 3 agregada)"
   }
  ]
 }

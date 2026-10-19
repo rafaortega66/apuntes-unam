@@ -223,6 +223,28 @@ Formato del 16 sep (prosa, sin las secciones de estudio) — secciones, en este 
 Los `id` en los `<details>` son importantes: el buscador global enlaza
 directo a ellos (ver más abajo).
 
+## Cuadernos de NotebookLM (Claude en Chrome, cuenta del usuario)
+
+Un cuaderno por materia en `https://notebook.google.com/notebook/<id>`; los audios se llaman
+`<SIGLA>-ClaseN.m4a` con la misma numeración que la hoja RegistroClases.
+
+| Materia | id |
+|---|---|
+| ACS | `bdd5e52d-db38-4b84-9e1f-4cfbb270f81f` |
+| ASI | `81cf0619-0f37-4cbb-961a-6c197b2f905e` |
+| FSE | `4afe7d57-33c8-4b5b-953d-57d9dd5dc4b2` |
+| MD | `c85f2f87-ed65-4a1e-bbb5-9277a9947e2b` |
+| OAC | `982261bd-c6d8-49fe-b677-8d501312a49a` |
+| OAC-LAB | `c0ed679e-0af4-47ce-b28a-5eeb2ff70a0f` |
+| RP | `6f1fb999-1898-4e8b-8845-445a383c84e2` |
+| SIB | `55b86dfb-9f67-4bdb-a24e-b1b6f4996d39` |
+
+Leer la respuesta: `get_page_text` falla por un panel de emojis; con `javascript_tool` copiar el
+`innerText` del último `.to-user-container` a un `<pre>` dentro de un `<main>` nuevo (sin
+`innerHTML`: la página exige TrustedHTML) y luego `get_page_text`. Recargar el cuaderno antes
+del siguiente prompt. **Revisar fechas y cálculos de NotebookLM**: el 19 oct 2026 inventó un
+«jueves 17 de octubre» (era el 17 sep, dicho en la Clase 3) y traía retardos PIO que no cuadraban.
+
 ## El buscador global — hay que mantenerlo actualizado
 
 El sitio tiene un buscador (botón 🔍 flotante, tecla `/`) que indexa las 9

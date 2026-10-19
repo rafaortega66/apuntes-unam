@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 12 — Minería de Datos</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Minería de Datos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 12</h2>
+  <p class="prof">M.C. José Concepción Roberto Olvera López · 13 oct 2026 · Tema 3 — Presentaciones de la Práctica 3.2 (reglas de asociación con Apriori y FP-Growth, general y comidas preparadas), introducción a la clasificación supervisada (selección de variables, sesgos, discretización en bins) y los 6 algoritmos de clasificación con sus métricas.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>MD-Clase12.m4a</code>), 19 oct 2026.</p>
+</div>
+
+<details class="section-block sec" id="c12-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Los 3 niveles de validación.</strong><span class="evid">Evidencia: lo dijo textual: «Recuerden que hay tres niveles de validación que tenemos que tener. Es pregunta de examen».</span></li>
+<li><strong>Clasificación frente a regresión.</strong><span class="evid">Evidencia: se lo preguntó otra vez a la clase (ya lo había hecho en la <a href="clase-11.html#c11-regresion">Clase 11</a>).</span></li>
+<li><strong>Interpretar el lift.</strong><span class="evid">Evidencia: lo explicó con detalle durante las exposiciones de asociación.</span></li>
+<li><strong>Matriz de confusión, con foco en falsos positivos y falsos negativos.</strong><span class="evid">Evidencia: la destacó como la herramienta clave de evaluación en clasificación.</span></li>
+<li><strong>Discretización (bins) de variables continuas.</strong><span class="evid">Evidencia: explicó el procedimiento con los ejemplos de glucosa, temperatura y humedad.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c12-practica32"><summary><span class="stitle">1 · Presentaciones de la Práctica 3.2 (reglas de asociación)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Las exposiciones del análisis de canasta (Market Basket Analysis) sobre <strong>11,344 tickets</strong>, comparando Apriori y FP-Growth en Python y RapidMiner para dos escenarios: Requerimiento A (catálogo general) y Requerimiento B (comidas preparadas).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es mirar los carritos del súper para ver qué productos se llevan juntos: si quien compra salchichas casi siempre lleva crema, los pones cerca o armas un paquete.<span class="rompe">Dónde deja de servir: si la gente compra esos productos en visitas o tiendas distintas, la regla no te dice nada.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Canastas:</strong> 11,344 tickets únicos, con transacción (id de la canasta), producto, descripción, cantidad, fecha y clave de cliente; cada producto cuenta una sola vez por ticket.</p>
+<p><strong>Requerimiento A (general):</strong> soporte mínimo de 1 % a 2 % (114 a 227 tickets), confianza de 30 % a 50 % y lift mayor a 1.1. Reglas dominantes: jamón / salchicha / queso fresco → crema dulce o queso amarillo, con lift de 2.19 y confianza de 57 % a 80 %.</p>
+<p><strong>Requerimiento B (comidas preparadas):</strong> se filtró a las 47–48 líneas de comida preparada (flautas, burritos, pechugas rellenas, pizzas) en 2,480 tickets; soporte de 0.5 % a 2 % (50 a 194 tickets), confianza mayor a 20–30 % y lift mayor a 1.5. Hallazgo: jamones, pastas o quesos funcionan como antecedente que detona la compra de burritos o flautas.</p>
+<p><strong>La gráfica de burritos:</strong> la barra de antecedente (azul) era mucho mayor que la de consecuente (naranja). El profesor preguntó por qué, y el equipo explicó que el burrito funciona sobre todo como <em>antecedente</em>: quien compra un burrito suele llevar otro o una bebida, pero casi ninguna otra compra lleva a comprar un burrito.</p>
+<p><strong>Apriori frente a FP-Growth:</strong> Apriori escanea la matriz de transacciones muchas veces; en datos pequeños fue más rápido, pero se degrada mucho con volumen. FP-Growth construye un árbol de patrones frecuentes (FP-Tree) en solo dos escaneos; cuesta más al inicio en datos chicos, pero escala mucho mejor.</p>
+<p><strong>Lift:</strong> mayor a 1 significa que antecedente y consecuente se compran juntos más de lo que se esperaría por azar; los equipos señalaron reglas con lift de 1.5–1.6 o más como especialmente útiles para estrategias comerciales.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>El valor está en encontrar asociaciones no obvias (productos nuevos, combinaciones raras) para venta cruzada, acomodo en pasillos y combos. Continúa la <a href="clase-10.html">Clase 10</a>.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> recomendar combinaciones obvias que ya se venden solas, o quedarse en categorías demasiado generales sin bajar a submarca o sabor.</p></div>
+</details>
+
+<details class="section-block sec" id="c12-clasificacion"><summary><span class="stitle">2 · Introducción a la clasificación supervisada</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Aprendizaje supervisado que predice una <strong>categoría, clase o etiqueta discreta</strong> a partir de datos históricos etiquetados.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es el filtro de spam: aprende de correos pasados a mandar cada mensaje a «spam» o «no spam».<span class="rompe">Dónde deja de servir: si llega un correo con palabras que nunca vio en su entrenamiento.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>A la pregunta «¿qué diferencia hay entre clasificación y regresión?», Martínez respondió que la complejidad y el tipo de salida; el profesor precisó: la regresión se acerca a un valor numérico continuo (precio, demanda) y la clasificación decide entre clases discretas o binarias (0/1, sí/no, aprobado/rechazado).</p>
+<p><strong>Estructura:</strong> Y es discreta (¿el cliente abandona?, ¿es fraude?, ¿el paciente tiene diabetes tipo 2?) y las X son atributos históricos (glucosa, edad, saldo, clics).</p>
+<p><strong>Selección de variables:</strong> eliminar las de varianza casi cero o con datos ruidosos o incompletos; descartar las que introducen sesgo (ejemplo del profesor: si se analiza una condición médica en hombres y mujeres juntos, se quita «embarazada», porque solo aplica a mujeres y distorsiona el modelo); y vigilar variables dominantes (si una sola, como la glucosa para diabetes, explica el 90 %, revisar si opaca a las demás y ajustar sus rangos).</p>
+<p><strong>Discretización en bins:</strong> las variables continuas se agrupan en rangos, por ejemplo glucosa &lt; 120 normal, 120–140 media, &gt; 140 alta; o humedad alta/baja. Así los algoritmos como los árboles de decisión trabajan más rápido y con más precisión.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la base de decisiones automáticas en créditos, fraudes, diagnósticos médicos y retención de clientes (<em>churn</em>).</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> usar clasificación para predecir una cantidad continua, o meter todas las variables sin quitar ruido ni sesgos.</p></div>
+</details>
+
+<details class="section-block sec" id="c12-algoritmos"><summary><span class="stitle">3 · Los 6 algoritmos de clasificación y sus métricas</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Los seis algoritmos fundamentales de clasificación supervisada que expuso el profesor, y cómo se validan.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Seis especialistas para diagnosticar: uno hace preguntas de sí/no (árbol), otro junta un comité (Random Forest), otro calcula probabilidades en una curva (logística), otro aplica probabilidad con supuestos simples (Naive Bayes), otro pregunta a los vecinos (KNN) y otro traza la frontera más ancha posible (SVM).</p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>Árboles de decisión:</strong> nodos, ramas y hojas; eligen los cortes con el índice Gini o la entropía. Ejemplos: ¿se juega golf? (clima, temperatura, humedad alta/normal, viento) y ¿se aprueba un préstamo? (ingresos, casa propia o rentada, estado civil). Riesgo: sobreajuste si el árbol crece demasiado; hay que limitar profundidad y hojas.</li>
+<li><strong>Random Forest:</strong> ensamble de muchos árboles entrenados con subconjuntos aleatorios de datos y variables (<em>bagging</em>), que votan la clase. Hiperparámetros: <code>n_estimators</code>, profundidad máxima, <code>random_state</code>.</li>
+<li><strong>Regresión logística:</strong> modela la probabilidad de la clase con una función sigmoide (salida entre 0 y 1). Ejemplo: churn bancario, ¿qué tan probable es que «Juan Pérez» se vaya según ahorros, edad e ingresos? Hiperparámetro: <code>max_iter</code>.</li>
+<li><strong>Naive Bayes:</strong> teorema de Bayes suponiendo independencia entre variables; muy usado en textos, spam y análisis de sentimiento (variantes gaussiana y multinomial).</li>
+<li><strong>KNN (K vecinos más cercanos):</strong> asigna la clase mayoritaria entre los K vecinos más cercanos; distancia euclidiana o Manhattan (esta última, según el profesor, cuando hay diferencias absolutas acumuladas o datos concentrados).</li>
+<li><strong>SVM / SVC:</strong> busca el hiperplano que maximiza la franja de separación entre los vectores de soporte de cada clase; se usa en imágenes, control de calidad y fraudes.</li>
+</ul>
+<p><strong>Métricas:</strong></p>
+<ul>
+<li><strong>Matriz de confusión:</strong> verdaderos positivos y negativos, falsos positivos y negativos. El profesor insiste en auditar los <strong>falsos positivos y falsos negativos</strong>: por qué se equivocó el modelo y qué impacto tiene ese error.</li>
+<li><strong>AUC-ROC:</strong> área bajo la curva ROC; mientras más cerca de 1 (100 %), mejor discrimina, comparado con un modelo al azar (50 %).</li>
+<li><strong>Validación cruzada (K-fold):</strong> dividir los datos en K bloques (5 o 10) alternando entrenamiento (por ejemplo 70 %) y prueba (30 %), para que el resultado sea estable y no haya sobreajuste.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Asegura que las predicciones sean confiables antes de llevarlas a producción; se completa con los 3 niveles de validación.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> evaluar solo con la exactitud (<em>accuracy</em>) sin ver la matriz de confusión, o no hacer validación cruzada y dejar que el modelo memorice los datos.</p></div>
+</details>
+
+<details class="section-block sec" id="c12-validacion"><summary><span class="stitle">4 · Los 3 niveles de validación («pregunta de examen»)</span></summary>
+<ol>
+<li><strong>Técnico:</strong> correr y validar las métricas del algoritmo (soporte, confianza, lift, matriz de confusión, R²).</li>
+<li><strong>Negocio y operativos:</strong> confirmar con la gente que trabaja el día a día que los hallazgos tienen sentido y resuelven la necesidad real.</li>
+<li><strong>Alta dirección:</strong> alinear los resultados con la visión estratégica de la empresa.</li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c12-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Cuáles son los 3 niveles de validación?</summary><p>Técnico (métricas), negocio y operativos, y alta dirección.</p></details>
+<details class="qa"><summary>2. ¿Por qué la barra de antecedente de los burritos era mucho mayor que la de consecuente?</summary><p>Porque el burrito detona otras compras (otro burrito o una bebida), pero casi nada detona la compra de un burrito.</p></details>
+<details class="qa"><summary>3. ¿Qué significa un lift mayor a 1?</summary><p>Que antecedente y consecuente se compran juntos más de lo que se esperaría si fueran independientes.</p></details>
+<details class="qa"><summary>4. ¿Qué diferencia a clasificación de regresión?</summary><p>Clasificación predice una clase discreta o binaria; regresión, un valor numérico continuo.</p></details>
+<details class="qa"><summary>5. ¿Por qué quitar «embarazada» en un modelo médico con hombres y mujeres?</summary><p>Porque solo aplica a mujeres y sesga el modelo para la población masculina.</p></details>
+<details class="qa"><summary>6. ¿Qué es discretizar en bins? Da un ejemplo.</summary><p>Agrupar una variable continua en rangos: glucosa &lt; 120 normal, 120–140 media, &gt; 140 alta.</p></details>
+<details class="qa"><summary>7. ¿En qué celdas de la matriz de confusión hay que poner atención?</summary><p>En los falsos positivos y falsos negativos.</p></details>
+<details class="qa"><summary>8. ¿Por qué FP-Growth escala mejor que Apriori?</summary><p>Porque construye el FP-Tree en dos escaneos, mientras que Apriori recorre las transacciones muchas veces.</p></details>
+<details class="qa"><summary>9. ¿Qué distancia de KNN prefiere el profesor con diferencias absolutas acumuladas?</summary><p>La distancia Manhattan.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c12-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>Proyecto de dengue:</strong> 6 meses de desarrollo y 1 año de seguimiento con la Secretaría de Salud. Cuatro módulos (diagnóstico, tratamiento, seguimiento, prevención) y síntomas como hemorragia, petequias, hepatitis, melena, edema y vómito. Con clasificación, regresión y asociación mostraron que las hemorragias se asocian fuerte con hepatitis y melena. Se desplegó en iPads para médicos de Chiapas, Tabasco, Guerrero y Oaxaca, cruzando con lluvia y temperatura.</li>
+<li><strong>El director general holandés:</strong> en esta clase NotebookLM lo ubica en un proyecto de asociación e inventarios para una cadena de tiendas en Monterrey y Guadalajara (en la Clase 11 lo atribuyó a FEMSA). El director interrumpió: su única prioridad era crecer 50 % en tiendas. Moraleja: sin el nivel 3 de validación, el proyecto no se implementa.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c12-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Práctica 3.2 (asociación):</strong> subir los archivos el sábado; exposición de los equipos el martes.</li>
+<li><strong>Práctica 3.3 (regresión):</strong> exposición y entrega el jueves siguiente.</li>
+<li><strong>Examen teórico:</strong> no hay uno nuevo. NotebookLM lo registró como «jueves 17 de octubre», pero al revisar los audios la frase «El examen es el 17» está en la Clase 3: fue el <strong>jueves 17 de septiembre</strong> (ya presentado, <a href="examenes.html">MD-E01</a>).</li>
+<li><strong>Después:</strong> código en Python de los 6 algoritmos de clasificación y luego series de tiempo (ARIMA y suavizado exponencial).</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Práctica 3.2: 11,344 tickets; reglas con lift 2.19 (jamón/salchicha/queso → crema o queso amarillo); en comidas preparadas el burrito es antecedente.</li>
+<li>Apriori: muchos escaneos; FP-Growth: FP-Tree en dos escaneos, escala mejor.</li>
+<li>Clasificación: Y discreta; quitar variables ruidosas o sesgadas; discretizar en bins.</li>
+<li>Árbol, Random Forest, logística, Naive Bayes, KNN, SVM.</li>
+<li>Matriz de confusión (FP y FN), AUC-ROC, validación cruzada K-fold; 3 niveles de validación.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

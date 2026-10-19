@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 13 — Minería de Datos</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Minería de Datos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 13</h2>
+  <p class="prof">M.C. José Concepción Roberto Olvera López · 15 oct 2026 · Tema 3 — Cierre de las exposiciones de la Práctica 3.2 (one-hot, agrupación por líneas, lift extremos y estrategia sobre el consecuente) y clase completa de clasificación: variables dominantes, bins, los 6 algoritmos con sus hiperparámetros y las métricas (precisión, recall, F1, AUC-ROC, K-fold).</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>MD-Clase13.m4a</code>), 19 oct 2026. Varias ideas se repiten de la <a href="clase-12.html">Clase 12</a>; aquí se detalla lo nuevo.</p>
+</div>
+
+<details class="section-block sec" id="c13-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Auditar la matriz de confusión (falsos positivos y negativos).</strong><span class="evid">Evidencia: dijo que será una de las preguntas principales al evaluar clasificación; en la Práctica 3.3 preguntará cómo interpretaron FP y FN.</span></li>
+<li><strong>Qué hacer con una variable dominante.</strong><span class="evid">Evidencia: lo dio como regla metodológica con el ejemplo de la glucosa en diabetes.</span></li>
+<li><strong>Discretizar en bins.</strong><span class="evid">Evidencia: explicó por qué los algoritmos se atascan con valores continuos y cómo definir rangos con conocimiento experto.</span></li>
+<li><strong>Lift y estrategia: descontar el consecuente, no el antecedente.</strong><span class="evid">Evidencia: fue el punto central de la retroalimentación de las exposiciones.</span></li>
+<li><strong>Validación cruzada K-fold.</strong><span class="evid">Evidencia: la presentó como procedimiento obligatorio contra el sobreajuste.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c13-practica32"><summary><span class="stitle">1 · Cierre de las exposiciones de la Práctica 3.2</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Las últimas presentaciones del análisis de canasta con Apriori y FP-Growth (Requerimiento A, catálogo general; Requerimiento B, comidas preparadas).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es encontrar qué productos funcionan como «gancho» para vender otros: si quien lleva chorizo y queso americano suele agregar crema, armas el combo o los pones en el mismo pasillo.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>One-hot encoding:</strong> las transacciones venían en varias filas por ticket; para correr Apriori y FP-Growth se convierten a una fila por ticket con columnas de 1/0 según si el producto está presente.</p>
+<p><strong>Agrupar por líneas:</strong> el equipo 5 explicó que con los 479 productos individuales la matriz quedaba demasiado dispersa y las reglas no llegaban al soporte mínimo; agruparon en <strong>62 líneas</strong> de producto y mejoró la detección.</p>
+<p><strong>Caso A (general):</strong> soporte mínimo de 1 % sobre 11,344 tickets y confianza de 30–50 %. Reglas: yogur griego de fresa → yogur griego de mora (confianza 70 %: 70 de cada 100 que llevan fresa llevan mora); chorizo + queso americano → crema dulce (soporte 2.8 %, confianza 44.8 %, lift 3.71).</p>
+<p><strong>Caso B (comidas preparadas):</strong> 2,480 tickets, soporte 0.5 %, confianza mayor a 15–20 % y lift mayor a 1.5; pastas y quesos como antecedente de burritos y flautas.</p>
+<p><strong>Lift extremos:</strong> reglas con lift de 82 y 136 en sabores específicos (yogur de pistache → vainilla; bebida de uva → ponche de 600 ml), y la «Regla 90» (soporte 0.05 %, confianza 90–92 %): quien lleva flautas, burritos, burrito de barbacoa y burrito de deshebrada con chipotle se lleva también burrito de deshebrada.</p>
+<p><strong>Estrategia:</strong> el promedio es de <strong>1.48 productos por ticket</strong>. La recomendación es <strong>no descontar el antecedente</strong> (el producto ancla que el cliente ya busca) y poner el incentivo en el <strong>consecuente</strong>, o armar combos de sabores, para subir la canasta hacia 2 productos.</p>
+<p><strong>Apriori frente a FP-Growth:</strong> generan exactamente los mismos conjuntos frecuentes y reglas; cambia el costo (muchos escaneos frente a un FP-Tree en dos escaneos).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Convierte las reglas en venta cruzada, acomodo de anaqueles y cupones medibles en pruebas piloto.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> descontar el producto fuerte (antecedente) y perder margen, o confundir antecedente con consecuente.</p></div>
+</details>
+
+<details class="section-block sec" id="c13-preparacion"><summary><span class="stitle">2 · Preparación de datos para clasificación</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La etapa de elegir y transformar las variables antes de entrenar un clasificador; según el profesor, la que más inteligencia y cuidado requiere.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es el médico que revisa los antecedentes de un paciente (edad, presión, análisis) para dar un diagnóstico: «sano» o «enfermo».<span class="rompe">Dónde deja de servir: ante una enfermedad nueva cuyos síntomas nunca se registraron.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Se eliminan variables con varianza casi cero o muy correlacionadas, y las sesgadas (otra vez el ejemplo de «embarazada» en una población mixta).</p>
+<p><strong>Variable dominante:</strong> si una sola variable explica el 90 % del resultado (la glucosa en diabetes), en esta clase el profesor indicó <strong>quitarla del entrenamiento</strong> para poder ver el peso real de las demás, que de otro modo quedan opacadas. (En la Clase 12 lo había planteado como revisar si opaca a las demás y ajustar sus rangos.)</p>
+<p><strong>Bins:</strong> las variables continuas (glucosa, edad, temperatura, ingresos) se convierten en rangos con base en conocimiento experto: edad &lt; 18, 18–25, … &gt; 50; glucosa baja / media / alta. Así el algoritmo no se atasca procesando infinitos valores con decimales.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Una buena selección de variables vale más que el algoritmo elegido: es lo que preguntará en la Práctica 3.3.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> meter variables continuas sin discretizar o conservar una variable dominante que vuelve trivial el modelo.</p></div>
+</details>
+
+<details class="section-block sec" id="c13-algoritmos"><summary><span class="stitle">3 · Los 6 algoritmos: hiperparámetros y detalles nuevos</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El repaso a fondo de los algoritmos presentados en la <a href="clase-12.html#c12-algoritmos">Clase 12</a>, con sus parámetros de ajuste.</p>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>Árbol de decisión:</strong> nodo raíz, nodos internos y hojas; cortes por Gini o entropía. Se controla con <code>max_depth</code> y el número máximo de hojas para evitar sobreajuste.</li>
+<li><strong>Random Forest:</strong> <code>n_estimators</code>, <code>max_depth</code> y <code>random_state</code>; cambiar la semilla sirve para comprobar que el modelo es estable.</li>
+<li><strong>Regresión logística:</strong> sigmoide entre 0 y 1; <code>max_iter</code>. Ejemplo de churn: identificar por nombre (por ejemplo, «Juan Pérez») a clientes con saldo menor a $3,000, de 18–25 años e ingresos de $20,000–$40,000 con alta probabilidad de irse, para lanzar campañas de retención a tiempo.</li>
+<li><strong>Naive Bayes:</strong> gaussiano para datos continuos o biológicos; multinomial para texto, spam y sentimiento.</li>
+<li><strong>KNN:</strong> euclidiana o Manhattan; esta última, con diferencias absolutas acumuladas o escalas separadas.</li>
+<li><strong>SVM / SVC:</strong> hiperplano con margen entre vectores de soporte; se ajusta con el parámetro de penalización <code>C</code> y el kernel (lineal o no lineal).</li>
+</ul>
+<p><strong>Métricas:</strong></p>
+<ul>
+<li><strong>Matriz de confusión:</strong> VP y VN son aciertos; FP y FN son errores. El profesor pide sacar la lista de casos que caen en FP y FN para auditar por qué falló (por ejemplo, decir que un paciente no tiene leucemia cuando sí la tiene, o que un cliente es leal cuando se va a ir).</li>
+<li><strong>Precisión</strong> = VP / (VP + FP). <strong>Recall (sensibilidad)</strong> = VP / (VP + FN). <strong>F1</strong> = media armónica de precisión y recall.</li>
+<li><strong>AUC-ROC:</strong> cerca de 1.0 discrimina muy bien; cerca de 0.5 no es mejor que el azar.</li>
+<li><strong>K-fold:</strong> K bloques; en cada vuelta se entrena con K − 1 y se prueba con 1, K veces. Así el resultado no depende de un corte afortunado.</li>
+</ul>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> confiar en una exactitud alta con datos desbalanceados sin ver la matriz de confusión, o no fijar <code>random_state</code> ni hacer validación cruzada.</p></div>
+</details>
+
+<details class="section-block sec" id="c13-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Por qué quitar una variable que explica el 90 % del resultado?</summary><p>Porque opaca a las demás y no deja ver el peso real del resto de las variables.</p></details>
+<details class="qa"><summary>2. ¿Qué son los bins y por qué se usan?</summary><p>Rangos discretos de una variable continua (glucosa baja / media / alta) para que el algoritmo no procese infinitos valores con decimales.</p></details>
+<details class="qa"><summary>3. Con 1.48 productos por ticket, ¿a qué producto de la regla le pones el descuento?</summary><p>Al consecuente, no al antecedente, que ya se vende solo; la meta es subir la canasta hacia 2 productos.</p></details>
+<details class="qa"><summary>4. ¿Por qué el equipo 5 agrupó 479 productos en 62 líneas?</summary><p>Porque la matriz quedaba demasiado dispersa y las reglas no alcanzaban el soporte mínimo.</p></details>
+<details class="qa"><summary>5. Si un modelo tiene VP = 40, FP = 10 y FN = 20, calcula precisión y recall.</summary><p>Precisión = 40 / 50 = 0.80. Recall = 40 / 60 ≈ 0.67.</p></details>
+<details class="qa"><summary>6. ¿Qué variante de Naive Bayes se usa para spam?</summary><p>La multinomial; la gaussiana es para datos continuos.</p></details>
+<details class="qa"><summary>7. ¿Qué indica un AUC-ROC de 0.5?</summary><p>Que el modelo no es mejor que elegir al azar.</p></details>
+<details class="qa"><summary>8. ¿Cómo funciona la validación cruzada K-fold?</summary><p>Divide en K bloques; entrena con K − 1 y prueba con 1, K veces, para que el resultado sea estable y no haya sobreajuste.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c13-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>Dengue en el sureste:</strong> en iPads, el personal médico capturaba unas 30 variables clínicas (fiebre, vómito, petequias, hemorragias) cruzadas con lluvia y temperatura, y el modelo indicaba si el paciente necesitaba hospitalización o podía irse a casa con tratamiento.</li>
+<li><strong>El director holandés:</strong> repitió la anécdota de los tres niveles de validación (la meta era crecer 50 % en tiendas).</li>
+<li><strong>«Flojos inteligentes»:</strong> recomendó no programar algoritmos desde cero, sino partir de proyectos resueltos en Kaggle o de borradores con ChatGPT, y dedicar el 80 % del esfuerzo a entender los datos, mover las «perillas» e interpretar el negocio.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c13-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Práctica 3.2 (asociación):</strong> subir notebook y presentación el sábado.</li>
+<li><strong>Práctica 3.3:</strong> en esta clase NotebookLM la describe como <strong>clasificación</strong> (los 6 algoritmos en Python), con entrega y exposición el jueves siguiente; en las Clases 11 y 12 la había descrito como regresión. Confírmalo en Classroom. El profesor hará 3 preguntas a cada equipo: cómo seleccionaron y limpiaron variables, cómo interpretaron FP y FN, y cuál es la propuesta de negocio.</li>
+<li><strong>Próximo tema:</strong> cerrar clasificación e iniciar series de tiempo (ARIMA y suavizado exponencial).</li>
+<li><strong>Examen:</strong> no hay examen nuevo anunciado; el «examen es el 17» se dijo en la Clase 3 y fue el 17 de septiembre.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>One-hot por ticket; agrupar 479 productos en 62 líneas; lift 3.71 en chorizo + queso americano → crema dulce.</li>
+<li>1.48 productos por ticket: descuento al consecuente, nunca al antecedente.</li>
+<li>Variable que explica 90 %: quitarla para ver las demás; continuas a bins.</li>
+<li>Precisión = VP/(VP+FP); recall = VP/(VP+FN); F1; AUC-ROC; K-fold.</li>
+</ul></div>
+
+</div>
+</body>
+</html>
