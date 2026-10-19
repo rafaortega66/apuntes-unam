@@ -137,6 +137,12 @@ decimo/<SIGLA>/<SIGLA>-<Categoría>/<SIGLA>-XNN/
   `python3 scripts/indice_decimo.py` tras cualquier cambio). Para preguntas tipo
   «enlista las tareas de MD», leer ese índice.
 
+**Sesiones antes de inscribirse (RP, 19 oct 2026):** el usuario entró tarde a RP; las
+sesiones 1–3 (17, 21 y 24 ago) son `clase-m02.html`, `clase-m01.html` y `clase-00.html`
+(«Clase -2, -1, 0», reconstruidas de los decks 1–3 del profesor). Su Clase 01 (28 ago) es la
+sesión 4: cada página de RP lleva «(sesión N del curso)» = número de clase + 3 y el deck del
+profesor que le corresponde. Los scripts aceptan `clase-mNN.html` como clase negativa.
+
 El `index.html` de cada materia
 tiene siempre estas tarjetas, en este orden: Evaluación (si existe) →
 Material → Entregas → (otras específicas de la materia, ej. Programas de ACS).
