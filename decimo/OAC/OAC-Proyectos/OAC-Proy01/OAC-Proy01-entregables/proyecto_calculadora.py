@@ -1,9 +1,11 @@
 # Proyecto: Calculadora con la FPU de la Raspberry Pi Pico 2 (RP2350)
-# Toda la aritmética se hace en ensamblador (MicroPython inline Thumb):
-#   - Suma, resta, multiplicación, división y raíz: instrucciones de la FPU
-#   - sen(x) y cos(x): series de Taylor, solo multiplicaciones (factoriales precalculados)
+# sen(x) y cos(x) por series de Taylor + operaciones basicas.
+# No corre en Pico 1 (sin FPU).
+# Toda la aritmetica se hace en ensamblador (MicroPython inline Thumb):
+#   - sen(x) y cos(x): series de Taylor evaluadas con Horner, solo multiplicaciones y sumas
+#   - Suma, resta, multiplicacion, division y raiz: instrucciones de la FPU
 #   - tan(x) = sen(x) / cos(x) con VDIV
-# Python solo maneja el menú, la lectura de datos y la impresión.
+# Python solo maneja el menu, la lectura de datos y la impresion.
 from array import array
 import math
 
@@ -38,66 +40,60 @@ def fpu(r0, r1):
     label(FIN)
     vstr(s2, [r0, 8])     # resultado
 
-# ---------------- sen(x) y cos(x) por Taylor ----------------
-# Recíprocos de factoriales: 1/0!, 1/2!, 1/3!, ..., 1/9!
-K = array('f', [1.0, 1 / 2, 1 / 6, 1 / 24, 1 / 120,
-                1 / 720, 1 / 5040, 1 / 40320, 1 / 362880])
+# ---------------- sen(x) y cos(x) por Taylor (metodo de Horner) ----------------
+# sen(x) = x(1 - u/3! + u^2/5! - u^3/7! + u^4/9!)        con u = x^2
+# cos(x) =    1 - u/2! + u^2/4! - u^3/6! + u^4/8!
+# Horner: el polinomio se evalua de adentro hacia afuera, t = t*u + c,
+# asi se usan 5 multiplicaciones por funcion en lugar de calcular cada potencia.
+# Coeficientes con signo = reciprocos de los factoriales (precalculados, sin dividir).
+K = array('f', [1.0, -1 / 6, 1 / 120, -1 / 5040, 1 / 362880,      # seno:   offsets 0..16
+                1.0, -1 / 2, 1 / 24, -1 / 720, 1 / 40320])        # coseno: offsets 20..36
 
 # r0 -> array('f',[x]), r1 -> array('f',[sen, cos]), r2 -> K
 @micropython.asm_thumb
 def taylor(r0, r1, r2):
     vldr(s0, [r0, 0])     # s0 = x
-    vmul(s1, s0, s0)      # x^2
-    vmul(s2, s1, s0)      # x^3
-    vmul(s3, s2, s0)      # x^4
-    vmul(s4, s3, s0)      # x^5
-    vmul(s5, s4, s0)      # x^6
-    vmul(s6, s5, s0)      # x^7
-    vmul(s7, s6, s0)      # x^8
-    vmul(s8, s7, s0)      # x^9
-    # sen(x) = x - x^3/3! + x^5/5! - x^7/7! + x^9/9!
-    vldr(s10, [r2, 8])
-    vmul(s11, s2, s10)
-    vsub(s20, s0, s11)
-    vldr(s10, [r2, 16])
-    vmul(s11, s4, s10)
-    vadd(s20, s20, s11)
-    vldr(s10, [r2, 24])
-    vmul(s11, s6, s10)
-    vsub(s20, s20, s11)
-    vldr(s10, [r2, 32])
-    vmul(s11, s8, s10)
-    vadd(s20, s20, s11)
-    vstr(s20, [r1, 0])
-    # cos(x) = 1 - x^2/2! + x^4/4! - x^6/6! + x^8/8!
-    vldr(s21, [r2, 0])
-    vldr(s10, [r2, 4])
-    vmul(s11, s1, s10)
-    vsub(s21, s21, s11)
-    vldr(s10, [r2, 12])
-    vmul(s11, s3, s10)
-    vadd(s21, s21, s11)
-    vldr(s10, [r2, 20])
-    vmul(s11, s5, s10)
-    vsub(s21, s21, s11)
-    vldr(s10, [r2, 28])
-    vmul(s11, s7, s10)
-    vadd(s21, s21, s11)
-    vstr(s21, [r1, 4])
+    vmul(s1, s0, s0)      # s1 = u = x^2
+    # ---- seno ----
+    vldr(s2, [r2, 16])    # t = 1/9!
+    vldr(s3, [r2, 12])
+    vmul(s2, s2, s1)
+    vadd(s2, s2, s3)      # t = t*u - 1/7!
+    vldr(s3, [r2, 8])
+    vmul(s2, s2, s1)
+    vadd(s2, s2, s3)      # t = t*u + 1/5!
+    vldr(s3, [r2, 4])
+    vmul(s2, s2, s1)
+    vadd(s2, s2, s3)      # t = t*u - 1/3!
+    vldr(s3, [r2, 0])
+    vmul(s2, s2, s1)
+    vadd(s2, s2, s3)      # t = t*u + 1
+    vmul(s2, s2, s0)      # sen = t*x
+    vstr(s2, [r1, 0])
+    # ---- coseno ----
+    vldr(s2, [r2, 36])    # t = 1/8!
+    vldr(s3, [r2, 32])
+    vmul(s2, s2, s1)
+    vadd(s2, s2, s3)      # t = t*u - 1/6!
+    vldr(s3, [r2, 28])
+    vmul(s2, s2, s1)
+    vadd(s2, s2, s3)      # t = t*u + 1/4!
+    vldr(s3, [r2, 24])
+    vmul(s2, s2, s1)
+    vadd(s2, s2, s3)      # t = t*u - 1/2!
+    vldr(s3, [r2, 20])
+    vmul(s2, s2, s1)
+    vadd(s2, s2, s3)      # cos = t*u + 1
+    vstr(s2, [r1, 4])
+
+MEDIO_PI = math.pi / 2
 
 def reducir(x):
-    # Lleva x a [-pi/2, pi/2], donde la serie con pocos términos es precisa.
-    x = math.fmod(x, 2 * math.pi)
-    if x > math.pi:
-        x -= 2 * math.pi
-    elif x < -math.pi:
-        x += 2 * math.pi
-    signo_cos = 1.0
-    if x > math.pi / 2:
-        x, signo_cos = math.pi - x, -1.0
-    elif x < -math.pi / 2:
-        x, signo_cos = -math.pi - x, -1.0
-    return x, signo_cos
+    # x = n*(pi/2) + r, con r en [-pi/4, pi/4]: ahi la serie es practicamente exacta.
+    # q = n mod 4 indica el cuadrante para acomodar sen y cos al final.
+    n = math.floor(x / MEDIO_PI + 0.5)
+    r = x - n * MEDIO_PI
+    return r, int(n) % 4
 
 # ---------------- Funciones de la calculadora ----------------
 _ab = array('f', [0.0, 0.0, 0.0])
@@ -111,10 +107,17 @@ def op(a, b, codigo):
     return _ab[2]
 
 def sen_cos(x):
-    xr, signo_cos = reducir(x)
-    _x[0] = xr
+    r, q = reducir(x)
+    _x[0] = r
     taylor(_x, _sc, K)
-    return _sc[0], signo_cos * _sc[1]
+    s, c = _sc[0], _sc[1]
+    if q == 1:
+        s, c = c, -s      # sen(r + 90) = cos(r),   cos(r + 90) = -sen(r)
+    elif q == 2:
+        s, c = -s, -c     # sen(r + 180) = -sen(r), cos(r + 180) = -cos(r)
+    elif q == 3:
+        s, c = -c, s      # sen(r + 270) = -cos(r), cos(r + 270) = sen(r)
+    return s + 0.0, c + 0.0   # + 0.0 evita imprimir "-0.0000000"
 
 def leer(msg):
     while True:
@@ -123,6 +126,40 @@ def leer(msg):
         except ValueError:
             print("  Escribe un numero (usa punto decimal)")
 
+# ---------------- Prueba clasica: sen(45) = cos(45) ----------------
+# A 45 grados (pi/4 rad) el triangulo rectangulo es isosceles: los dos catetos
+# miden lo mismo, asi que sen(45) = cos(45) = 1/raiz(2) = raiz(2)/2 = 0.7071068.
+# Todas las cuentas de esta prueba se hacen en la FPU (ensamblador).
+def prueba_clasica():
+    x = math.radians(45)
+    s, c = sen_cos(x)
+    r2_2 = op(op(2.0, 0.0, 4), 2.0, 3)              # raiz(2) / 2   (VSQRT y VDIV)
+    dif = op(s, c, 1)                                # sen - cos     (VSUB)
+    tan = op(s, c, 3)                                # sen / cos     (VDIV)
+    pit = op(op(s, s, 2), op(c, c, 2), 0)            # sen^2 + cos^2 (VMUL y VADD)
+    print()
+    print("=== Prueba clasica: sen(45) = cos(45) ===")
+    print("  45 grados = pi/4 rad = {:.7f} rad".format(x))
+    print("  sen(45)           = {:.7f}   (serie de Taylor, ensamblador)".format(s))
+    print("  cos(45)           = {:.7f}   (serie de Taylor, ensamblador)".format(c))
+    print("  raiz(2)/2         = {:.7f}   (valor exacto, VSQRT de la FPU)".format(r2_2))
+    print("  sen(45) - cos(45) = {:.1e}     (0 hasta la precision de 32 bits, ~1e-7)".format(abs(dif)))
+    print("  tan(45) = sen/cos = {:.6f}".format(tan))
+    print("  sen^2 + cos^2     = {:.6f}".format(pit))
+
+# ---------------- Prueba: tabla de sen y cos ----------------
+print("=== sen(x) y cos(x) por Taylor en ensamblador (FPU) ===")
+print("{:>6} {:>11} {:>11} {:>9} {:>11} {:>11} {:>9}".format(
+    "grados", "sen asm", "math.sin", "error", "cos asm", "math.cos", "error"))
+for g in (0, 30, 45, 60, 90, 120, 180, 225, 270, 330, 360, -45, -150):
+    x = math.radians(g)
+    s, c = sen_cos(x)
+    print("{:>6} {:>11.7f} {:>11.7f} {:>9.1e} {:>11.7f} {:>11.7f} {:>9.1e}".format(
+        g, s, math.sin(x), abs(s - math.sin(x)), c, math.cos(x), abs(c - math.cos(x))))
+
+prueba_clasica()
+
+# ---------------- Calculadora ----------------
 grados = True
 
 MENU = """
@@ -131,6 +168,7 @@ MENU = """
  4) Division    5) Raiz cuadrada
  6) sen(x)      7) cos(x)      8) tan(x)
  9) Cambiar unidades de angulo (actual: {})
+10) Prueba clasica: sen(45) = cos(45)
  0) Salir
 ========================================================="""
 
@@ -171,7 +209,10 @@ while True:
             if abs(c) < 1e-4:
                 print("  tan({}) = indefinida (cos = 0)".format(ang))
             else:
-                print("  tan({}) = {:.7f}".format(ang, op(s, c, 3)))
+                print("  tan({}) = {:.6f}".format(ang, op(s, c, 3)))
+
+    elif opcion == "10":
+        prueba_clasica()
 
     elif opcion == "9":
         grados = not grados
