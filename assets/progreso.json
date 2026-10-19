@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-19T19:53:07+00:00",
+ "generatedAt": "2026-10-19T20:05:31+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -191,6 +191,20 @@
     "fecha": "2026-10-05",
     "resumen": "Tema 3 (continuación) — Filtro digital IIR de segundo orden en ensamblador con la FPU de la Raspberry Pi Pico 2: de la ecuación en diferencias en Matlab a la subrutina @micropython.asm_thumb , conversión de H(s) a H(z) y",
     "url": "materias/organizacion-y-arquitectura-de-computadoras/clase-09.html",
+    "formato": "estudio"
+   },
+   {
+    "num": 10,
+    "fecha": "2026-10-12",
+    "resumen": "Tema 3 (continuación) — Seno y coseno por series de Taylor con la FPU de la Pico 2 (proyecto) y la interfaz PIO: máquinas de estado, juego de instrucciones del PIO Assembler, retardos por instrucción y cálculo de ciclos ",
+    "url": "materias/organizacion-y-arquitectura-de-computadoras/clase-10.html",
+    "formato": "estudio"
+   },
+   {
+    "num": 11,
+    "fecha": "2026-10-14",
+    "resumen": "Tema 3 (continuación) — Desglose exacto de ciclos y retardos en una máquina de estado PIO (8 + 32 × 31 = 1000 ciclos por fase), cálculo de la frecuencia de destello, control desde MicroPython y ventajas de la PIO frente ",
+    "url": "materias/organizacion-y-arquitectura-de-computadoras/clase-11.html",
     "formato": "estudio"
    }
   ],
@@ -650,6 +664,11 @@
  },
  "gitlog": [
   {
+   "hash": "bb9553e",
+   "fecha": "2026-10-19T13:53:11-06:00",
+   "mensaje": "FSE: Clases 12 (7 oct, bootstrap/RESET/BSP-AP/paginación) y 13 (12 oct, API y llamadas a sistema, procesos vs. tareas) en formato de estudio desde NotebookLM; Clase 14 = examen parcial"
+  },
+  {
    "hash": "990b68e",
    "fecha": "2026-10-19T13:31:26-06:00",
    "mensaje": "FSE-E01: primer examen parcial escaneado (14 oct 2026, calificación 101); pendiente del examen oculto"
@@ -943,11 +962,6 @@
    "hash": "66b6189",
    "fecha": "2026-10-06T17:18:34-06:00",
    "mensaje": "horario.json: confirmar 15 sep (martes sin clase) y OAC 23 sep sin clase"
-  },
-  {
-   "hash": "296dba8",
-   "fecha": "2026-10-05T10:50:53-06:00",
-   "mensaje": "Vista por defecto 'Por clase' en todos los dispositivos (clave nueva de localStorage)"
   }
  ]
 }

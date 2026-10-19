@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 11 — Organización y Arquitectura de Computadoras</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Organización y Arquitectura de Computadoras</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Clase 11</h2>
+  <p class="prof">M.I. José Antonio de Jesús Arredondo Garza · 14 oct 2026 · Tema 3 (continuación) — Desglose exacto de ciclos y retardos en una máquina de estado PIO (8 + 32 × 31 = 1000 ciclos por fase), cálculo de la frecuencia de destello, control desde MicroPython y ventajas de la PIO frente a la arquitectura Harvard de la CPU.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>OAC-Clase11.m4a</code>), 19 oct 2026. Clase breve: el profesor avisó que andaba con mucha carga de trabajo.</p>
+</div>
+
+<details class="section-block sec" id="c11-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Cálculo exacto de ciclos de un bucle de retardo PIO.</strong><span class="evid">Evidencia: resolvió en clase 8 + 32 × (30 + 1) = 1000 ciclos por fase y 2000 por periodo; es el mismo cálculo de la Clase 10, repetido paso a paso.</span></li>
+<li><strong><code>JMP</code> en 1 ciclo en la PIO frente a ~3 ciclos en la arquitectura Harvard.</strong><span class="evid">Evidencia: fue la comparación que más remarcó para justificar la PIO.</span></li>
+<li><strong>Frecuencia de destello a partir de <code>freq</code>.</strong><span class="evid">Evidencia: demostró que 2000 Hz ÷ 2000 ciclos da un periodo de 1 s (1 Hz).</span></li>
+<li><strong>Instrucciones efectivas y registros X, Y.</strong><span class="evid">Evidencia: aclaró que de las 9–10 instrucciones, 2 son para el manejo de pila/FIFO y quedan 7 efectivas para manejar pines.</span></li>
+<li><strong>Reloj del sistema y bootloader.</strong><span class="evid">Evidencia: dio los relojes de 125 MHz (Pico 1) y 150 MHz (Pico 2) y cómo el bootloader ajusta los divisores.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c11-pio-vs-cpu"><summary><span class="stitle">1 · PIO frente al ensamblador de la CPU y la FPU</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La comparación entre controlar pines con rutinas de una máquina de estado PIO y hacerlo con ensamblador directo en la CPU o en la FPU.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es dejarle el encendido de las luces a un temporizador automático en lugar de tener al ingeniero principal corriendo a apretar el interruptor cada segundo.<span class="rompe">Dónde deja de servir: el temporizador (PIO) solo entiende unas cuantas instrucciones de conmutación; no hace cálculos como la FPU.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Con las máquinas de estado se interactúa directamente con los pines sin escribir tantas instrucciones complejas como en el ensamblador de la CPU. La FPU en ensamblador sirve para programas matemáticos, pero es incómoda e ineficiente para acceder a los pines de entrada y salida.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Ayuda a elegir la herramienta: FPU para cálculo (proyecto de Taylor, <a href="clase-10.html#c10-taylor">Clase 10</a>) y PIO para pines y tiempos estrictos.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c11-retardos"><summary><span class="stitle">2 · Instrucciones de la máquina de estado, etiquetas y retardos</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La sintaxis del ensamblador PIO, en la que se puede agregar un retardo dentro de la misma instrucción.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es decirle a alguien en una sola frase «da un paso y quédate quieto 29 segundos antes del siguiente».<span class="rompe">Dónde deja de servir: el retardo tiene un tope fijo por el campo de bits de la instrucción (31–32 ciclos).</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Las etiquetas (como <code>label("delay")</code>) y los nombres de subrutina no son instrucciones que ejecute la máquina de estado, aunque el profesor dijo que se pueden contar como la «instrucción número 10».</p>
+<p><code>nop() [29]</code> dura 1 ciclo de la instrucción + 29 de retardo = <strong>30 ciclos</strong>. <code>jmp(x_dec, "delay")</code> decrementa X y salta a <code>delay</code> si X no era 0, todo en <strong>1 ciclo</strong>.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite retardos precisos sin encadenar muchos <code>NOP</code> en la memoria de instrucciones.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> olvidar sumar el ciclo de la instrucción al número escrito entre corchetes.</p></div>
+</details>
+
+<details class="section-block sec" id="c11-ciclos"><summary><span class="stitle">3 · Cálculo exacto de ciclos: fases de encendido y apagado</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La deducción completa de cuántos ciclos tarda la máquina de estado en encender y apagar el pin.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es el tiempo de preparar el temporizador más (vueltas de la cuenta regresiva × lo que dura cada vuelta).<span class="rompe">Dónde deja de servir: un solo ciclo de error desvía la frecuencia que exige un protocolo de comunicación.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Fase encendida:</strong></p>
+<ul>
+<li><code>set(pins, 1)</code>: 1 ciclo. <code>set(x, 31) [6]</code>: 1 + 6 = 7 ciclos. Preparación: <strong>8 ciclos</strong>.</li>
+<li>X empieza en 31 y el bucle corre hasta pasar por 0: <strong>X + 1 = 32 vueltas</strong>.</li>
+<li>Cada vuelta: <code>nop() [29]</code> (30) + <code>jmp(x_dec, "delay_high")</code> (1) = <strong>31 ciclos</strong>.</li>
+<li>Bucle: 32 × 31 = <strong>992 ciclos</strong>. Total encendido: 8 + 992 = <strong>1000 ciclos</strong>.</li>
+</ul>
+<p><strong>Fase apagada:</strong> es el espejo, con <code>set(pins, 0)</code> y la etiqueta <code>delay_low</code>: otros 8 + 992 = <strong>1000 ciclos</strong>.</p>
+<p><strong>Periodo completo:</strong> 1000 + 1000 = <strong>2000 ciclos</strong>.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Hace que la rutina sea un divisor exacto de la frecuencia que se le asigna a la máquina de estado.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> contar 31 vueltas en lugar de 32 (X + 1).</p></div>
+</details>
+
+<details class="section-block sec" id="c11-freq"><summary><span class="stitle">4 · Crear la máquina de estado en MicroPython y calcular la frecuencia de destello</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Declarar una máquina de estado con <code>rp2.StateMachine</code>, indicándole la rutina, su reloj y el pin.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es conectar un temporizador de 2000 pulsos por segundo al pin 25 para que el foco parpadee justo una vez por segundo.<span class="rompe">Dónde deja de servir: si cambias el reloj principal sin avisarle al temporizador, los pulsos se aceleran o se desfasan.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<pre><code>SM = rp2.StateMachine(1, LED, freq=2000, set_base=Pin(25))</code></pre>
+<p>Parámetros: <code>1</code> es el número de máquina de estado; <code>LED</code>, la rutina decorada con <code>@rp2.asm_pio</code>; <code>freq=2000</code>, el reloj local de la máquina (2000 Hz); <code>set_base=Pin(25)</code>, el pin de salida.</p>
+<p><strong>Periodo de destello = ciclos de la rutina ÷ <code>freq</code> = 2000 ÷ 2000 = 1 s</strong>, es decir, 1 Hz: 0.5 s encendido y 0.5 s apagado.</p>
+<p>El reloj principal es de 125 MHz en la Pico 1 y 150 MHz en la Pico 2; el bootloader ajusta los divisores para que la máquina trabaje a los 2000 Hz pedidos. Según dijo el profesor, si el reloj del sistema se llevara a 300 MHz, el pin destellaría cada medio segundo.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Da control de tiempos autónomo, independiente de lo que esté haciendo la CPU.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> confundir <code>freq=2000</code> (reloj de la máquina) con la frecuencia del parpadeo (1 Hz).</p></div>
+</details>
+
+<details class="section-block sec" id="c11-control"><summary><span class="stitle">5 · Control desde MicroPython: <code>active</code>, <code>time.sleep</code> y <code>while True</code></span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El código de Python que enciende, pausa o apaga la máquina de estado que corre en segundo plano.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es darle «play» a una canción, dejarla sonar 4 segundos y darle «stop».<span class="rompe">Dónde deja de servir: mientras «suena» (la máquina de estado trabaja), la CPU queda libre para otras cosas o para dormir.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<pre><code>while True:
+    SM.active(1)    # activa la máquina de estado
+    time.sleep(4)   # 4 s activa: 4 destellos
+    SM.active(0)    # la desactiva
+    time.sleep(4)   # 4 s con el LED apagado</code></pre>
+<p>Con la máquina activa 4 segundos se ven literalmente 4 destellos; al desactivarla el LED queda en 0 otros 4 segundos, y el <code>while True</code> lo repite sin fin. Si se manejan varias máquinas de estado, cada una debe tener su propia variable (<code>SM1</code>, <code>SM2</code>…).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite secuenciar eventos de hardware sin bloquear el procesador con esperas activas.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> reutilizar el mismo nombre de variable para varias máquinas de estado y perder el control de las anteriores.</p></div>
+</details>
+
+<details class="section-block sec" id="c11-harvard"><summary><span class="stitle">6 · Propiedades de la PIO frente a la arquitectura Harvard y paralelismo</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Las características de hardware que hacen a las máquinas de estado mejores que la CPU para emular periféricos rápidos.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>La PIO es una pista lisa donde cada obstáculo cuesta exactamente lo mismo; la CPU es una carretera donde cada cruce (salto) te retrasa varios segundos.<span class="rompe">Dónde deja de servir: la pista lisa no cabe un programa largo de miles de instrucciones.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>Salto en 1 ciclo:</strong> en la arquitectura Harvard de la CPU de la Pico, un salto consume como mínimo unos 3 ciclos; en la PIO, <code>JMP</code> dura siempre 1 ciclo, sea cual sea la condición.</li>
+<li><strong>Registros X y Y:</strong> dos registros de trabajo de 32 bits por máquina de estado; se pueden decrementar (<code>x_dec</code>, <code>y_dec</code>) o usar como condición.</li>
+<li><strong>Instrucciones efectivas:</strong> aunque se enuncian 9 o 10, según el profesor 2 están dedicadas a la pila/FIFO, y quedan 7 efectivas para manejar pines y periféricos.</li>
+<li><strong>Paralelismo y DMA:</strong> las máquinas de estado corren en paralelo entre sí y con los núcleos de la CPU, pueden contar eventos externos y comunicarse por DMA.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Explica cómo la PIO emula UART, SPI o video a varios MHz sin perder sincronía (<a href="clase-10.html#c10-pio">Clase 10</a>).</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> suponer que los saltos en la PIO pierden ciclos como en la CPU ARM.</p></div>
+</details>
+
+<details class="section-block sec" id="c11-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Cuántos ciclos dura un salto en la PIO y cuántos en la CPU (Harvard) de la Pico?</summary><p>PIO: 1 ciclo garantizado. CPU: como mínimo unos 3 ciclos.</p></details>
+<details class="qa"><summary>2. ¿Cuántos ciclos consume <code>nop() [29]</code>?</summary><p>30: 1 de la instrucción + 29 de retardo.</p></details>
+<details class="qa"><summary>3. Con <code>set(x, 31)</code>, ¿cuántas vueltas da el bucle con <code>jmp(x_dec, …)</code>?</summary><p>32 (X + 1).</p></details>
+<details class="qa"><summary>4. Calcula la fase encendida si la preparación toma 8 ciclos y el bucle da 32 vueltas de 31 ciclos.</summary><p>8 + 32 × 31 = 8 + 992 = 1000 ciclos.</p></details>
+<details class="qa"><summary>5. ¿Cuántos ciclos dura el periodo completo de parpadeo?</summary><p>2000: 1000 encendido + 1000 apagado.</p></details>
+<details class="qa"><summary>6. Con <code>freq=2000</code> y una rutina de 2000 ciclos, ¿cuál es el periodo? ¿Y si la rutina durara 1000 ciclos con la misma <code>freq</code>?</summary><p>1 s (1 Hz). Con 1000 ciclos, 0.5 s (2 Hz).</p></details>
+<details class="qa"><summary>7. ¿Cuántas instrucciones PIO son efectivas para manejar pines, según el profesor?</summary><p>7; de las 9–10 enunciadas, 2 se dedican a la pila/FIFO.</p></details>
+<details class="qa"><summary>8. En el <code>while True</code> de la clase, ¿cuántos destellos se ven mientras la máquina está activa?</summary><p>4: está activa 4 s y parpadea a 1 Hz.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c11-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li>Al cierre, el profesor se disculpó por dar una clase más corta: andaba «con el agua al cuello» con el informe final de un proyecto de investigación y un examen que estaba aplicando en el posgrado.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c11-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Próxima clase:</strong> caso práctico de un contador para medir frecuencia con máquinas de estado.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Preparación 8 ciclos + 32 vueltas × 31 ciclos = 1000 por fase; 2000 por periodo.</li>
+<li>X = 31 da 32 vueltas; <code>nop() [29]</code> = 30 ciclos; <code>JMP</code> = 1 ciclo.</li>
+<li>Periodo = ciclos ÷ <code>freq</code>: 2000 ÷ 2000 Hz = 1 s.</li>
+<li>Pico 1 a 125 MHz, Pico 2 a 150 MHz; el bootloader ajusta los divisores.</li>
+<li>PIO: saltos de 1 ciclo, registros X y Y, paralelismo con la CPU y DMA.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

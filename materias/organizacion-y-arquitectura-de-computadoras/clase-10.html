@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 10 — Organización y Arquitectura de Computadoras</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Organización y Arquitectura de Computadoras</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Clase 10</h2>
+  <p class="prof">M.I. José Antonio de Jesús Arredondo Garza · 12 oct 2026 · Tema 3 (continuación) — Seno y coseno por series de Taylor con la FPU de la Pico 2 (proyecto) y la interfaz PIO: máquinas de estado, juego de instrucciones del PIO Assembler, retardos por instrucción y cálculo de ciclos de un parpadeo a 1 Hz en MicroPython.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>OAC-Clase10.m4a</code>), 19 oct 2026.</p>
+</div>
+
+<details class="section-block sec" id="c10-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Cálculo de ciclos y frecuencia de una máquina de estado PIO.</strong><span class="evid">Evidencia: desglosó en el pizarrón los 2000 ciclos de la rutina de parpadeo para obtener 1 Hz con la máquina de estado a 2000 Hz.</span></li>
+<li><strong>Máquinas de estado en la Pico 1 frente a la Pico 2.</strong><span class="evid">Evidencia: lo comparó explícitamente: 8 (2 bloques PIO de 4) frente a 12 (3 bloques de 4).</span></li>
+<li><strong>El salto (<code>JMP</code>) de 1 ciclo en PIO frente a la CPU ARM.</strong><span class="evid">Evidencia: lo remarcó como la ventaja clave que hace a la PIO tan rápida para emular periféricos.</span></li>
+<li><strong>Instrucciones del PIO Assembler y retardo agregado a cada instrucción.</strong><span class="evid">Evidencia: escribió las instrucciones en el pizarrón y mostró cómo agregar ciclos de retardo a una misma instrucción.</span></li>
+<li><strong>Precalcular los factoriales en la serie de Taylor.</strong><span class="evid">Evidencia: fue su recomendación principal de diseño para el proyecto de punto flotante.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c10-taylor"><summary><span class="stitle">1 · Proyecto: seno y coseno por series de Taylor con la FPU de la Pico 2</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El proyecto de programar en ensamblador para la Pico 2 aproximaciones de seno y coseno con sus polinomios de Taylor.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Para dibujar una curva suave usando solo sumas y multiplicaciones, la serie de Taylor la parte en piezas sencillas.<span class="rompe">Dónde deja de servir: con infinitas piezas el resultado es perfecto en papel, pero en el microcontrolador el cálculo tardaría tanto que congelaría el programa.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>La Pico 2 no tiene instrucciones de hardware para seno o coseno, así que se calculan por software con Taylor:</p>
+<p><code>sen(x) = x − x³/3! + x⁵/5! − x⁷/7! + …</code><br><code>cos(x) = 1 − x²/2! + x⁴/4! − x⁶/6! + …</code></p>
+<p>La diferencia está en exponentes y factoriales: el seno usa los impares (3!, 5!, 7!) y el coseno los pares (2!, 4!, 6!). El profesor pidió no agregar demasiados términos: basta una aproximación funcional.</p>
+<p><strong>Optimización:</strong> las divisiones continuas hacen muy lento al procesador, así que los factoriales se precalculan y se usan como constantes de multiplicación (multiplicar por el recíproco); en la FPU de la Pico 2 (Cortex-M33) una multiplicación de punto flotante toma 1 ciclo. El programa solo corre en la Pico 2 por su FPU; en la Pico 1 habría que emularla por software en MicroPython y sería muy lento.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite cálculo científico rápido en un embebido sin bibliotecas emuladas. Continúa el trabajo con la FPU de las Clases 08 y 09; es el <a href="proyectos.html">Proyecto 1</a>.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> correr el código de FPU en una Pico 1, o dividir dentro del ciclo en vez de multiplicar por el recíproco precalculado.</p></div>
+</details>
+
+<details class="section-block sec" id="c10-pio"><summary><span class="stitle">2 · Arquitectura de la PIO (Programmable I/O) y sus máquinas de estado</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un periférico de la Raspberry Pi Pico formado por pequeños coprocesadores independientes («pseudo-FPGA») llamados <strong>máquinas de estado</strong>, diseñados para manejar pines de entrada y salida en paralelo, a velocidad de hardware.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Son asistentes junto al procesador: mientras la CPU hace los cálculos difíciles, ellos se encargan del trabajo repetitivo de mandar y recibir señales por los pines a velocidad extrema.<span class="rompe">Dónde deja de servir: los asistentes no ejecutan programas complejos, solo un juego muy pequeño de instrucciones de E/S.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Las máquinas de estado se comunican con el bus interno mediante memorias <strong>FIFO</strong> de entrada y salida, y soportan interrupciones y DMA. La <strong>Pico 1</strong> tiene <strong>8</strong> máquinas de estado (2 bloques PIO de 4) y la <strong>Pico 2</strong> tiene <strong>12</strong> (3 bloques de 4).</p>
+<p>Con ellas se emulan periféricos más rápidos que los de hardware: la UART de hardware de la Pico llega a 460 kbps, mientras que con PIO se emulan «super-UART» de hasta 12 MHz; el SPI tradicional llega a 7.8 MHz y con PIO a 24–32 MHz. También permite emular salidas de video como VGA, HDMI o DisplayPort (mencionó un generador de barras de color; un alumno precisó lo de «DisplayPort de uso libre»).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Libera a los núcleos de la CPU del control de tiempos estrictos en los pines y permite sintetizar periféricos a la medida.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> reprogramar la interfaz continuamente desde la CPU en lugar de dejar que la máquina de estado corra sola.</p></div>
+</details>
+
+<details class="section-block sec" id="c10-pioasm"><summary><span class="stitle">3 · Juego de instrucciones del PIO Assembler y registros</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El conjunto reducido de instrucciones en ensamblador con el que se programa directamente a las máquinas de estado.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es una caja con 9 herramientas; cada una hace una sola cosa (mover un dato, saltar, esperar), pero a cualquiera le puedes pegar un «cronómetro» para que espere exactamente los ciclos que necesitas.<span class="rompe">Dónde deja de servir: el retardo por instrucción tiene un límite; si te pasas, el ensamblador marca error.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Las 9 instrucciones principales (más <code>NOP</code> como auxiliar):</p>
+<ul>
+<li><code>PUSH</code> / <code>PULL</code>: meten o sacan datos de la FIFO.</li>
+<li><code>IRQ</code>: genera o maneja banderas de interrupción.</li>
+<li><code>IN</code>: pasa datos de los pines a los registros de corrimiento; <code>OUT</code>: de los registros de corrimiento a los pines.</li>
+<li><code>SET</code>: asigna valores directos a pines o registros.</li>
+<li><code>WAIT</code>: detiene la ejecución hasta una condición en un pin.</li>
+<li><code>MOV</code>: mueve datos entre registros.</li>
+<li><code>JMP</code>: salto condicional o incondicional.</li>
+<li><code>NOP</code>: no hace nada; sirve para ajustar tiempos.</li>
+</ul>
+<p>Cada máquina de estado tiene dos registros de trabajo de 32 bits, <strong>X</strong> y <strong>Y</strong> (<em>scratch</em>), además de los registros de corrimiento de entrada (ISR) y salida (OSR) y divisores de reloj.</p>
+<p><strong>Retardo por instrucción:</strong> cada instrucción dura 1 ciclo, pero se le puede anexar un retardo en la misma línea (el profesor habló de hasta 32 ciclos). Por ejemplo, un <code>MOV</code> con retardo 9 dura 1 + 9 = <strong>10 ciclos</strong>.</p>
+<p><strong>Salto en 1 ciclo:</strong> en la arquitectura Harvard de la CPU ARM un salto consume más de un ciclo; en la PIO, <code>JMP</code> dura exactamente 1 ciclo.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Da determinismo temporal perfecto para generar pulsos y frecuencias.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> confundir X y Y con los registros de la CPU ARM (R0–R15) o intentar usar instrucciones de la CPU dentro de un programa PIO.</p></div>
+</details>
+
+<details class="section-block sec" id="c10-blink"><summary><span class="stitle">4 · PIO en MicroPython: <code>@rp2.asm_pio</code> y parpadeo a 1 Hz</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La estructura de MicroPython para escribir una rutina PIO en ensamblador, crear la máquina de estado y darle su frecuencia de reloj.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es el molde donde escribes la receta de los pines y luego prendes el interruptor para que la máquina de estado la ejecute en segundo plano.<span class="rompe">Dónde deja de servir: la máquina de estado sigue corriendo aunque el script de Python termine o se duerma.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Se importan <code>rp2</code> y <code>machine</code>, y la rutina se marca con el decorador <code>@rp2.asm_pio</code>. La rutina de clase enciende el pin, espera, lo apaga y espera, usando X como contador:</p>
+<pre><code>import rp2
+from machine import Pin
+import time
+
+@rp2.asm_pio(set_init=rp2.PIO.OUT_LOW)
+def encender():
+    set(pins, 1)            # pin en 1
+    set(x, 31)   [6]        # X = 31, con retardo
+    label("delay_high")
+    nop()        [29]       # 1 + 29 = 30 ciclos
+    jmp(x_dec, "delay_high")  # 1 ciclo; repite mientras X != 0
+    set(pins, 0)            # pin en 0
+    set(x, 31)   [6]
+    label("delay_low")
+    nop()        [29]
+    jmp(x_dec, "delay_low")
+
+sm = rp2.StateMachine(1, encender, freq=2000, set_base=Pin(25))
+sm.active(1)     # el LED parpadea a 1 Hz
+time.sleep(4)    # 4 destellos
+sm.active(0)</code></pre>
+<p class="empty">Los retardos entre corchetes (<code>[6]</code> y <code>[29]</code>) son los que el profesor confirmó al repasar este cálculo en la <a href="clase-11.html#c11-ciclos">Clase 11</a>; la primera transcripción de NotebookLM traía otros valores que no cuadraban.</p>
+<p><strong>Desglose de ciclos (pizarrón):</strong></p>
+<ol>
+<li>Poner el pin y cargar X con su retardo: <strong>8 ciclos</strong> (1 + 7).</li>
+<li>Bucle con X = 31, que da 32 vueltas: 32 × (30 del <code>NOP</code> + 1 del <code>JMP</code>) = 32 × 31 = <strong>992 ciclos</strong>.</li>
+<li>Fase encendida: 8 + 992 = <strong>1000 ciclos</strong>; la fase apagada es simétrica: otros 1000.</li>
+<li>Periodo completo: <strong>2000 ciclos</strong>.</li>
+</ol>
+<p>El reloj del sistema es de 125 MHz en la Pico 1 y 150 MHz en la Pico 2; los divisores internos se ajustan solos para que la máquina de estado trabaje a los 2000 Hz pedidos. Si el periodo dura 2000 ciclos a 2000 Hz, el LED parpadea exactamente a <strong>1 Hz</strong>.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra que los retardos se programan con precisión matemática sin gastar tiempo de la CPU.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> creer que <code>freq</code> en <code>rp2.StateMachine</code> es la frecuencia del parpadeo; es la frecuencia a la que corren los ciclos de la PIO.</p></div>
+</details>
+
+<details class="section-block sec" id="c10-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿En qué se diferencian las series de Taylor del seno y del coseno?</summary><p>El seno usa potencias y factoriales impares (3!, 5!, 7!); el coseno, pares (2!, 4!, 6!).</p></details>
+<details class="qa"><summary>2. ¿Por qué precalcular los factoriales?</summary><p>Porque las divisiones continuas hacen lento al procesador; precalculados se usan como multiplicaciones, que en la FPU de la Pico 2 toman 1 ciclo.</p></details>
+<details class="qa"><summary>3. ¿Cuántas máquinas de estado tienen la Pico 1 y la Pico 2?</summary><p>Pico 1: 8 (2 bloques de 4). Pico 2: 12 (3 bloques de 4).</p></details>
+<details class="qa"><summary>4. ¿Cuántas instrucciones tiene el PIO Assembler?</summary><p>9: <code>PUSH</code>, <code>PULL</code>, <code>IRQ</code>, <code>IN</code>, <code>OUT</code>, <code>SET</code>, <code>WAIT</code>, <code>MOV</code>, <code>JMP</code>, más <code>NOP</code> como auxiliar.</p></details>
+<details class="qa"><summary>5. Un <code>MOV</code> con retardo 9, ¿cuántos ciclos dura?</summary><p>10: 1 de la instrucción + 9 de retardo.</p></details>
+<details class="qa"><summary>6. ¿Qué ventaja tiene <code>JMP</code> en la PIO frente a la CPU ARM?</summary><p>Dura exactamente 1 ciclo; en la arquitectura Harvard de la CPU un salto consume más de uno.</p></details>
+<details class="qa"><summary>7. ¿Cómo se llaman los registros de trabajo de una máquina de estado?</summary><p>X y Y, de 32 bits.</p></details>
+<details class="qa"><summary>8. Si la rutina dura 2000 ciclos y <code>freq=2000</code>, ¿a qué frecuencia parpadea el LED? ¿Y con <code>freq=4000</code>?</summary><p>A 1 Hz. Con 4000 Hz el periodo se recorre dos veces por segundo: 2 Hz.</p></details>
+<details class="qa"><summary>9. ¿Qué velocidad alcanza una UART emulada con PIO frente a la de hardware?</summary><p>Hasta 12 MHz, frente a 460 kbps de la UART de hardware.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c10-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>FPU externas:</strong> los primeros Pentium no traían la FPU integrada; al profesor le tocó trabajar con FPU externas y era «un rollo» conectarlas, echarlas a andar y comunicarse con ellas por software.</li>
+<li><strong>¿Por qué MicroPython y no el SDK en C?</strong> Porque cada compilación del SDK de Raspberry Pi en C/C++ genera un pequeño bootloader que obliga a recargar la memoria del microcontrolador, lo que le parece engorroso.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c10-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Proyecto de Taylor:</strong> fecha tentativa, dicha de forma ambigua («de este martes al otro… el lunes que viene el otro, no sé, 10»). Confírmala con el profesor.</li>
+<li><strong>Material:</strong> prometió entregar el miércoles un documento con los detalles de la interfaz PIO.</li>
+<li><strong>Próxima clase:</strong> fórmulas de tiempo de las máquinas de estado y un programa de contador/medidor de frecuencia.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Taylor: seno con impares, coseno con pares; factoriales precalculados para multiplicar en vez de dividir.</li>
+<li>PIO: Pico 1 = 8 máquinas de estado, Pico 2 = 12; FIFO, IRQ y DMA hacia el bus.</li>
+<li>9 instrucciones PIO + <code>NOP</code>; registros X y Y; retardo por instrucción; <code>JMP</code> en 1 ciclo.</li>
+<li>Ciclos de la rutina ÷ <code>freq</code> = periodo: 2000 ciclos a 2000 Hz = 1 Hz.</li>
+</ul></div>
+
+</div>
+</body>
+</html>
