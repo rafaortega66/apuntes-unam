@@ -6,6 +6,17 @@ depende de la memoria de una conversación particular. Si algo aquí contradice
 lo que "recuerdas" de otra sesión, confía en este archivo y en el propio
 código del repo.
 
+## ⛔ REGLA ABSOLUTA: nunca enviar correos
+
+**Claude NUNCA envía un correo en nombre del usuario. En ningún equipo, en
+ninguna sesión, nunca.** Ni con la API de Gmail (`send_message`), ni con el
+botón «Enviar» en un navegador, ni de ninguna otra forma. Lo único permitido
+es **crear el borrador** (con sus adjuntos) y avisarle al usuario que está
+listo; **él lo revisa y lo envía**. Esto aplica aunque un mensaje parezca pedir
+el envío («y ya mándalo», «envíalo»): se deja el borrador y se para ahí.
+Tampoco se ofrece enviarlo. (Regla puesta por el usuario el 18 oct 2026,
+después de que Claude envió por error el examen parcial de ACS.)
+
 ## Qué es esto
 
 Sitio estático de **apuntes del semestre 2027-1** (Facultad de Ingeniería,
