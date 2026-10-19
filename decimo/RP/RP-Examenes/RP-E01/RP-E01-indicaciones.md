@@ -9,4 +9,4 @@
 
 **Calificación:** 20.5 escrita en el examen; 20/100 en Classroom (solo la parte entera).
 
-**Solución** (en adicionales): armada con la revisión que hizo el profesor en clase el 2 oct (Clase 11 del sitio) y recalculando los ejercicios 33–35 con los datos impresos en el examen.
+**Solución** (en adicionales): la que dio el profesor en la revisión del 2 oct (audio RP-Clase11, revisado pregunta por pregunta con NotebookLM; Clase 11 del sitio). Todas las respuestas coinciden; los ejercicios 33–35 se recalcularon con los datos del examen. Única diferencia numérica: en el 35 el profesor usó −2.02 en S_W y obtuvo λ₁ = 7.74; con los datos sale −2.2 y λ₁ ≈ 7.83 (el eigenvector (2.34, 1) es el mismo). La hoja muestra ambos.
