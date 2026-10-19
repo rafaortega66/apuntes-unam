@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 13 — Fundamentos de Sistemas Embebidos</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Fundamentos de Sistemas Embebidos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 13</h2>
+  <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 12 oct 2026 · Tema 3 (3.1–3.2) — Arquitectura de Windows frente a Linux (HAL, capa ejecutiva, pantallas azules), multitarea, interfaz de aplicación y llamadas a sistema (los 6 pasos, <code>INT 0x80</code> y <code>sys_brk</code>), streams y tuberías, y la diferencia entre programa, proceso, hilo y tarea en GPOS y RTOS.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>FSE-Clase13.m4a</code> + diapositivas), 19 oct 2026. Lo marcado con <em>(material)</em> viene de las diapositivas y no del audio.</p>
+</div>
+
+<details class="section-block sec" id="c13-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<p>Es la primera clase de la Unidad 3, que entra en el segundo parcial. Cada punto lleva su evidencia de la clase.</p>
+<ol class="examen-lista">
+<li><strong>Los 6 pasos de una llamada a sistema.</strong><span class="evid">Evidencia: lo dijo textual: «Vamos a pasar por seis deliciosos pasos. Pregunta de examen».</span></li>
+<li><strong>Programa en disco vs. programa en ejecución vs. proceso.</strong><span class="evid">Evidencia: lo enfatizó con dureza: «Si no saben la diferencia entre programa, programación y proceso, no merecen estar haciendo nada en esta carrera».</span></li>
+<li><strong>Streams (STDIN, STDOUT, STDERR), redirección y tuberías.</strong><span class="evid">Evidencia: explicó <code>printf</code> como alias de <code>fprintf(stdout, …)</code>, los descriptores 0, 1 y 2, <code>/dev/null</code> y cómo <code>|</code> conecta procesos en RAM.</span></li>
+<li><strong>Procesos e hilos (GPOS) frente a tareas (RTOS).</strong><span class="evid">Evidencia: lo explicó con detalle usando FreeRTOS en ESP32 y RP2040: sin loader dinámico, tareas preenlazadas por el linker.</span></li>
+<li><strong>Windows vs. Linux: saltos de capa y pantallas azules.</strong><span class="evid">Evidencia: comparó 1 salto (Linux) contra 2 (Windows) y explicó por qué un driver de terceros sobre la HAL provoca una pantalla azul.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c13-windows-linux"><summary><span class="stitle">1 · Arquitectura interna: Windows frente a Linux</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La organización por capas de un sistema operativo, que determina cómo llegan las aplicaciones del usuario al hardware y a los privilegios del kernel.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es la burocracia de una empresa. En Linux el empleado (usuario) le entrega su carta directamente al gerente general (kernel). En Windows primero pasa por el subdirector (capa ejecutiva), que la traduce con un diccionario (la HAL), y luego llega al gerente.<span class="rompe">Dónde deja de servir: en la CPU, cada salto intermedio implica cambiar registros y conmutar el modo de ejecución del hardware, y eso cuesta rendimiento.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Windows:</strong> arriba están las aplicaciones de usuario y los subsistemas. Debajo, la <strong>capa ejecutiva</strong>, que agrupa el manejador de E/S, el monitor de referencias de seguridad, la comunicación entre procesos (LPC), el manejador de memoria virtual, el de objetos, Plug and Play, el de energía y el gestor de ventanas/GDI. Debajo está el <strong>microkernel</strong> y, en paralelo, los controladores de dispositivo de kernel y la <strong>HAL</strong> (<em>Hardware Abstraction Layer</em>).</p>
+<p>El profesor llamó a la HAL «una muleta para los tiempos antediluvianos» y la comparó con la Torre de Babel: es un diccionario para que dispositivos heterogéneos y propietarios se entiendan con el microkernel.</p>
+<p><strong>Saltos de privilegio:</strong> para ejecutar una aplicación, Linux hace <strong>1 salto</strong> (de usuario a kernel); Windows hace <strong>2</strong> (de usuario a ejecutivo y de ejecutivo a kernel). Por eso Linux es intrínsecamente más eficiente.</p>
+<p><strong>Pantallas azules:</strong> los controladores de terceros corren en paralelo, a nivel kernel, sobre la HAL. Si uno mal programado le manda a la HAL una instrucción inconsistente, el sistema no puede aislar el error y colapsa en una pantalla azul (BSOD).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Explica por qué Linux domina en sistemas embebidos e industriales: menos sobrecarga de CPU por saltos de capa y menos colapsos globales por drivers de terceros.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> creer que la HAL de Windows añade seguridad; en realidad es una capa de compatibilidad que duplica los saltos de estado en la CPU.</p></div>
+</details>
+
+<details class="section-block sec" id="c13-multitarea"><summary><span class="stitle">2 · Propósito del sistema operativo y multitarea</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El sistema operativo administra los recursos de hardware (procesador, memoria, periféricos) y da un acceso <strong>multiplexado</strong> a cada uno. La <strong>multitarea</strong> crea la ilusión de que el procesador ejecuta varios procesos a la vez <em>(material)</em>.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un malabarista que pasa tan rápido de una bola a otra que parece que todas flotan, aunque solo sostiene una a la vez.<span class="rompe">Dónde deja de servir: el malabarista tiene dos manos; el sistema operativo reparte miles de rebanadas de tiempo por segundo usando interrupciones de un temporizador.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El sistema operativo es «el programa de programas». Con un solo núcleo y varias aplicaciones pidiendo servicio, el kernel reparte el tiempo de CPU: el planificador interrumpe el proceso actual, guarda su contexto (registros, contador de programa, pila) y carga el del siguiente. Como la conmutación ocurre en milisegundos o microsegundos, el usuario percibe paralelismo, aunque es concurrencia multiplexada en el tiempo.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Se apoya en los temporizadores de hardware (el <em>system tick</em>) de la Unidad 2: son el «reloj de pared» que dispara las interrupciones para cambiar de tarea.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c13-api"><summary><span class="stitle">3 · Interfaz de aplicación (API) y llamadas a sistema</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El conjunto de interfaces y funciones con las que los programas de usuario y los operadores interactúan de forma segura con el kernel.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es la ventanilla de un banco: el cliente (programa) no puede entrar a la bóveda (hardware, RAM); llena una solicitud en la ventanilla (API / llamada a sistema) y el cajero autorizado (kernel) hace la operación por él.<span class="rompe">Dónde deja de servir: en la CPU no se firma un papel, se genera una interrupción de software (trampa) que cambia el nivel de privilegio del procesador.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Hay dos niveles. En la <strong>consola</strong>, comandos como <code>type</code>, <code>cat</code>, <code>sort</code> o <code>echo</code> le piden al kernel operaciones de E/S o de manejo de datos. En <strong>programación</strong> (C/C++), las bibliotecas estándar como <code>stdio.h</code> o <code>stdlib.h</code> ofrecen funciones como <code>printf</code>, <code>malloc</code>, <code>free</code> o <code>mkdir</code>, que son envolturas (<em>wrappers</em>) sobre las verdaderas llamadas al sistema.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Garantiza el aislamiento y la protección: ningún programa de usuario accede directamente a periféricos o a la RAM sin pasar por el kernel.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c13-streams"><summary><span class="stitle">4 · Streams, redirección y tuberías</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El modelo de Unix/Linux en el que todos los flujos de entrada y salida se tratan como archivos virtuales.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un sistema de mangueras: la salida de un programa sale por la manguera estándar (STDOUT); si le conectas una tubería (<code>|</code>), el agua entra directo a la entrada del siguiente programa (STDIN) sin tocar el suelo (el disco).<span class="rompe">Dónde deja de servir: una manguera pierde presión; una tubería de Linux opera a velocidad de RAM.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><code>printf("texto")</code> no escribe mágicamente en la pantalla: es un alias de <code>fprintf(stdout, "texto")</code>. Los descriptores estándar son <strong>STDIN = 0</strong> (entrada), <strong>STDOUT = 1</strong> (salida de datos válidos) y <strong>STDERR = 2</strong> (mensajes de error).</p>
+<p><code>/dev/null</code> es «el vacío infinito»: con <code>1&gt; /dev/null 2&gt;&amp;1</code> se mandan ahí tanto la salida como los errores y no se imprime nada. Con una tubería, por ejemplo <code>cat archivo.txt | grep "bus"</code>, el kernel conecta el STDOUT del primer proceso con el STDIN del segundo dentro de la RAM; la información nunca se escribe en disco, y por eso es tan rápido.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite componer programas pequeños (filosofía Unix) y ahorra E/S en sistemas embebidos con poca memoria Flash.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> suponer que <code>printf</code> siempre imprime en un monitor; si se redirige o no hay pantalla, la salida puede ir a un puerto serie (<code>/dev/ttyC0</code>) o a un archivo.</p></div>
+</details>
+
+<details class="section-block sec" id="c13-syscall"><summary><span class="stitle">5 · Los 6 pasos de una llamada a sistema (trampa, <code>INT 0x80</code> y <code>sys_brk</code>)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El proceso de seis etapas con el que una función de alto nivel se convierte en una interrupción de software que pasa el control al segmento protegido del kernel.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es pasar por la aduana: entregas tu pasaporte con un código (enmascaramiento), cruzas el torniquete (trampa), te sellan la entrada (cambio a modo kernel), haces tu trámite y regresas por el torniquete a la zona pública.<span class="rompe">Dónde deja de servir: en la CPU todo esto es manipular registros de segmento y la pila en nanosegundos.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ol>
+<li><strong>Enmascaramiento de la llamada:</strong> al compilar, la llamada (por ejemplo, <code>fprintf</code> o <code>malloc</code>) se enmascara; el <strong>linker</strong> resuelve las referencias entre los archivos objeto (<code>.o</code>) y las bibliotecas dinámicas (<code>.so</code>, glibc).</li>
+<li><strong>Identificador único retrocompatible:</strong> se asigna un identificador de 128 bits (64 para la versión de la biblioteca y 64 para la llamada), para que la aplicación siga encontrando su llamada aunque el sistema se actualice.</li>
+<li><strong>Trampa y pila:</strong> la llamada y sus argumentos se empujan (<code>PUSH</code>) a la pila y se activa la trampa.</li>
+<li><strong>Cambio a modo kernel:</strong> el procesador pasa del espacio de usuario al espacio protegido del kernel.</li>
+<li><strong>Desentrampar y ejecutar:</strong> el kernel lee el identificador de la pila, toma los argumentos y ejecuta el servicio con privilegios totales.</li>
+<li><strong>Retorno:</strong> el kernel deja los resultados en la pila o en registros, desinstala la trampa, restaura el espacio de usuario y devuelve el control.</li>
+</ol>
+<p><strong>Ejemplo con <code>malloc</code>:</strong> si el programa pide memoria y los <em>fast bins</em> del proceso están llenos, se invoca <code>sys_brk</code>: se carga el registro <strong>EAX con <code>0x2D</code></strong> (45 decimal) y se dispara <strong><code>INT 0x80</code></strong> en Linux x86 <em>(material)</em>. La interrupción consulta el vector de trampas y ejecuta <code>sys_brk</code> en el kernel para mover el límite del <em>heap</em>. Si la memoria está fragmentada, el kernel puede mover el proceso completo o mandar al <em>swap</em> páginas inactivas (otra vez el ejemplo de la sesión de Matlab olvidada).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Une ensamblador (<code>INT 0x80</code>, EAX), pila y administración de memoria (Clase 12).</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> creer que el compilador resuelve las llamadas al sistema; es el <strong>linker</strong> quien las vincula con las bibliotecas dinámicas.</p></div>
+</details>
+
+<details class="section-block sec" id="c13-proceso"><summary><span class="stitle">6 · Programa en disco, programa en ejecución y proceso</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p><strong>Programa en disco:</strong> secuencia pasiva, estática e inmodificable de instrucciones en un medio no volátil, con direcciones base cero. <strong>Programa en ejecución:</strong> secuencia activa y dinámica, relocalizada en RAM, cuyo estado cambia con el tiempo. <strong>Proceso:</strong> la estructura de datos completa que contiene al programa en ejecución con su encabezado de administración, contador de programa, pila, registros y variables.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>El programa en disco es la fotografía de una persona; el programa en ejecución es la persona caminando por la calle; el proceso es su expediente completo: la persona, sus signos vitales, su historial, su dirección y los edificios a los que puede entrar.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Un programa en disco se compila suponiendo que sus direcciones empiezan en cero, porque no sabe en qué página lo pondrá el sistema operativo. Al ejecutarlo, el <strong>cargador (loader)</strong> lee el archivo, separa código y datos, calcula los desplazamientos y relocaliza el 100 % de las direcciones y apuntadores. Si se comparan los bytes del programa en disco con su versión cargada en RAM, difieren alrededor de un <strong>20 %</strong>; el profesor lo contrastó con la diferencia genética entre dos personas, de apenas un 2 %.</p>
+<p>Para administrarlo, el kernel crea el <strong>proceso</strong>, que incluye: encabezado de administración (PID, privilegios, estado), contador de programa, pila (funciones llamadas, argumentos, variables locales), copia de los registros de la CPU para conmutar de tarea y sección de datos (globales, <em>heap</em>).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la base para entender cómo el planificador conmuta tareas y cómo la MMU aísla la memoria de cada proceso.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> usar «programa» y «proceso» como sinónimos. Un programa no «corre»: lo que se ejecuta y se planifica es el proceso.</p></div>
+</details>
+
+<details class="section-block sec" id="c13-gpos-rtos"><summary><span class="stitle">7 · Unidades de ejecución en GPOS y RTOS: procesos, hilos y tareas</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p><strong>GPOS</strong> (sistema operativo de propósito general: Linux, Windows, macOS) gestiona procesos e hilos. <strong>RTOS</strong> (sistema operativo de tiempo real, por ejemplo FreeRTOS) se centra en cumplir tiempos de respuesta estrictos mediante tareas.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>En un GPOS, los procesos son departamentos independientes de un edificio, cada uno con su personal (hilos). En un RTOS, todas las tareas conviven en una sala común compartiendo la memoria, para responder al instante sin burocracia de aislamiento.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>En un GPOS:</strong> se administran procesos e hilos; el <strong>hilo</strong> es la unidad mínima de ejecución. Todo proceso nace con un hilo principal, y los procesos forman jerarquías padre-hijo. En Linux, todo lo ejecutable es esencialmente un proceso con distintos atributos: si se puede ejecutar, el planificador lo pone en la lista.</p>
+<p><strong>En un RTOS</strong> (FreeRTOS en ESP32, RP2040, ARM Cortex-M): no hay procesos aislados ni hilos tradicionales; la unidad mínima es la <strong>tarea</strong>, que tiene un plazo estricto (<em>deadline</em>). FreeRTOS no tiene loader dinámico: el linker genera en la compilación el binario final con todas las tareas y sus direcciones fijas en Flash/RAM. Hay un superproceso raíz que contiene todas las tareas, y todas comparten el mismo espacio de memoria para ganar velocidad.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Ayuda a elegir el sistema adecuado: un RTOS para control barato y determinista, o un GPOS para memoria virtual y aplicaciones complejas.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> buscar un loader dinámico o bibliotecas <code>.so</code> en un RTOS ligero como FreeRTOS: ahí el ejecutable ya viene preenlazado desde la compilación.</p></div>
+</details>
+
+<details class="section-block sec" id="c13-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Cuáles son los 6 pasos de una llamada a sistema?</summary><p>1) Enmascaramiento por el linker. 2) Identificador único retrocompatible de 128 bits. 3) Trampa y argumentos a la pila. 4) Cambio a modo kernel. 5) Desentrampar y ejecutar con privilegios de kernel. 6) Retorno de resultados y desinstalación de la trampa.</p></details>
+<details class="qa"><summary>2. ¿Por qué se dice que <code>printf</code> no existe como llamada independiente?</summary><p>Porque es una envoltura de <code>fprintf(stdout, …)</code>: escribe en el archivo virtual de salida estándar (STDOUT, descriptor 1).</p></details>
+<details class="qa"><summary>3. <code>malloc()</code> pide 1 GB y los fast bins están llenos. ¿Qué registro se carga, con qué valor y qué interrupción se dispara?</summary><p>Se invoca <code>sys_brk</code>: EAX = <code>0x2D</code> (45) y se dispara <code>INT 0x80</code> <em>(material)</em>.</p></details>
+<details class="qa"><summary>4. Compara Windows y Linux en saltos de capa y en la causa de las pantallas azules.</summary><p>Linux: 1 salto (usuario → kernel). Windows: 2 (usuario → ejecutivo → kernel). En Windows los drivers de terceros corren a nivel kernel sobre la HAL; si uno falla, el sistema colapsa en pantalla azul.</p></details>
+<details class="qa"><summary>5. ¿Cuánto difieren los bytes de un programa en disco y su versión cargada en RAM, y por qué?</summary><p>Alrededor de un 20 %, porque el loader relocaliza todas las direcciones y apuntadores desde la base cero hacia las direcciones reales.</p></details>
+<details class="qa"><summary>6. ¿Qué unidad mínima de ejecución usa un GPOS y cuál un RTOS como FreeRTOS?</summary><p>GPOS: el hilo (dentro de procesos). RTOS: la tarea, que comparte memoria con las demás y viene preenlazada por el linker, sin loader dinámico.</p></details>
+<details class="qa"><summary>7. ¿Cómo funciona <code>|</code> a nivel de RAM y descriptores?</summary><p>El kernel conecta el STDOUT (1) del primer proceso con el STDIN (0) del segundo directamente en RAM, sin escribir nada en disco.</p></details>
+<details class="qa"><summary>8. ¿Qué hace <code>1&gt; /dev/null 2&gt;&amp;1</code>?</summary><p>Manda STDOUT y STDERR a <code>/dev/null</code>: se descarta todo y no se imprime nada.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c13-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>Fish and chips:</strong> al inicio habló de la comida típica inglesa: pescado empanizado y frito, papas, sal y vinagre en vez de catsup.</li>
+<li><strong>Microsoft en el Senado de EE. UU.:</strong> comentó un video en el que cuestionan a Microsoft por despedir a 6,000 empleados de IA alegando falta de dinero y luego pedir 9,000 visas H-1B.</li>
+<li><strong>Escuelas en Francia:</strong> anécdotas sobre plagas de ratas y la ironía de «el francés es el idioma del amor».</li>
+<li><strong>«Bro» vs. «sis»:</strong> broma sobre alumnas que se dicen «bro» en los pasillos.</li>
+<li><strong>Linus Torvalds, Rust e IA:</strong> si alguien manda código traducido a Rust con IA, Torvalds no lo revisará («si no te tomaste el tiempo de escribirlo, yo no me tomaré el tiempo de leerlo»); el código en C lleva décadas funcionando.</li>
+<li><strong>Páncreas e hígado:</strong> comparó confundir conceptos con un estudiante de medicina que confunde órganos.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c13-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Próxima clase:</strong> continuar con la interfaz de aplicación (API).</li>
+<li><strong>Laboratorio:</strong> desde la Práctica 5 y la 8 en adelante, la Raspberry Pi debe correr Linux en modo consola; el profesor no acepta el trabajo si ve interfaz gráfica.</li>
+<li><strong>Entregas:</strong> incluir el número de lista a dos dígitos en el nombre del archivo y enviar con 3 días de anticipación.</li>
+<li><strong>Primer examen parcial:</strong> miércoles 14 oct (Unidades 1 y 2) — ver <a href="examenes.html#FSE-E01">FSE-E01</a>.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Linux: 1 salto de privilegio; Windows: 2 (ejecutivo + kernel) y la HAL; driver malo sobre la HAL = pantalla azul.</li>
+<li>Llamada a sistema: enmascarar → identificador → trampa y pila → modo kernel → ejecutar → regresar.</li>
+<li><code>sys_brk</code>: EAX = <code>0x2D</code>, <code>INT 0x80</code>.</li>
+<li>STDIN 0, STDOUT 1, STDERR 2; <code>|</code> conecta procesos en RAM; <code>/dev/null</code> descarta.</li>
+<li>Programa (estático, base cero) ≠ programa en ejecución (relocalizado) ≠ proceso (estructura que lo contiene).</li>
+<li>GPOS: procesos e hilos; RTOS: tareas preenlazadas que comparten memoria.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-19T19:31:22+00:00",
+ "generatedAt": "2026-10-19T19:53:07+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -271,6 +271,27 @@
     "resumen": "Tema 2 (subtema 2.7) — Conectores USB de las tarjetas, temporización de la comunicación serie asíncrona (UART), control de flujo RTS/CTS vs. XON/XOFF, RS-485 frente a RS-232, y el protocolo One-Wire con alimentación pará",
     "url": "materias/fundamentos-de-sistemas-embebidos/clase-11.html",
     "formato": "estudio"
+   },
+   {
+    "num": 12,
+    "fecha": "2026-10-07",
+    "resumen": "Tema 2 (cierre) e inicio de la Unidad 3 — Secuencia de arranque (bootstrap), vectores de RESET, Hard vs. Soft RESET, arranque multiprocesador (BSP/AP), reglas del primer parcial e introducción a la administración de memo",
+    "url": "materias/fundamentos-de-sistemas-embebidos/clase-12.html",
+    "formato": "estudio"
+   },
+   {
+    "num": 13,
+    "fecha": "2026-10-12",
+    "resumen": "Tema 3 (3.1–3.2) — Arquitectura de Windows frente a Linux (HAL, capa ejecutiva, pantallas azules), multitarea, interfaz de aplicación y llamadas a sistema (los 6 pasos, INT 0x80 y sys_brk ), streams y tuberías, y la dife",
+    "url": "materias/fundamentos-de-sistemas-embebidos/clase-13.html",
+    "formato": "estudio"
+   },
+   {
+    "num": 14,
+    "fecha": "2026-10-14",
+    "resumen": "Primer examen parcial (Unidades 1 y 2).",
+    "url": "materias/fundamentos-de-sistemas-embebidos/clase-14.html",
+    "formato": "no-aplica"
    }
   ],
   "administracion-de-servicios-de-internet": [
@@ -629,6 +650,11 @@
  },
  "gitlog": [
   {
+   "hash": "990b68e",
+   "fecha": "2026-10-19T13:31:26-06:00",
+   "mensaje": "FSE-E01: primer examen parcial escaneado (14 oct 2026, calificación 101); pendiente del examen oculto"
+  },
+  {
    "hash": "330daf9",
    "fecha": "2026-10-19T11:51:07-06:00",
    "mensaje": "SIB: numeración corregida según la hoja RegistroClases (Clase 11 = examen 6 oct; 8, 13 y 15 oct = Clases 12, 13 y 14); CLAUDE.md registra la hoja como fuente de verdad"
@@ -922,11 +948,6 @@
    "hash": "296dba8",
    "fecha": "2026-10-05T10:50:53-06:00",
    "mensaje": "Vista por defecto 'Por clase' en todos los dispositivos (clave nueva de localStorage)"
-  },
-  {
-   "hash": "7190857",
-   "fecha": "2026-10-05T10:09:35-06:00",
-   "mensaje": "RP Clase 12 (5 oct): repaso Bayes/Laplace, DBSCAN, KNN y Práctica 3"
   }
  ]
 }

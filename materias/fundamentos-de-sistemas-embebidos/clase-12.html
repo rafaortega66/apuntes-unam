@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 12 — Fundamentos de Sistemas Embebidos</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Fundamentos de Sistemas Embebidos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 12</h2>
+  <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 7 oct 2026 · Tema 2 (cierre) e inicio de la Unidad 3 — Secuencia de arranque (bootstrap), vectores de RESET, Hard vs. Soft RESET, arranque multiprocesador (BSP/AP), reglas del primer parcial e introducción a la administración de memoria: paginación, pila y falla de segmento.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>FSE-Clase12.m4a</code> + diapositivas), 19 oct 2026. Lo marcado con <em>(material)</em> viene de las diapositivas y no del audio.</p>
+</div>
+
+<details class="section-block sec" id="c12-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<p>Esta fue la última clase antes del primer parcial (miércoles 14 oct), que abarca solo las Unidades 1 y 2. Cada punto lleva su evidencia de la clase.</p>
+<ol class="examen-lista">
+<li><strong>Orden general de las fases del bootstrap (no las 32 cajas).</strong><span class="evid">Evidencia: un alumno preguntó si había que memorizar las 32 cajas del diagrama de flujo y el profesor respondió explícitamente que no: se pide explicar el funcionamiento general y el orden lógico (estabilizar voltajes y reloj, fetch del vector de RESET, modo protegido, deshabilitar y rehabilitar cachés, paso de lista BSP/AP, cargar el SO).</span></li>
+<li><strong>Roles BSP y AP en el arranque multiprocesador.</strong><span class="evid">Evidencia: explicó con detalle el reinicio del LAPIC, la señal SIPI y la condición de carrera con semáforo; también viene en las diapositivas.</span></li>
+<li><strong>Hard RESET frente a Soft RESET y sus causas.</strong><span class="evid">Evidencia: detalló las causas del Soft RESET (línea de reset, Watchdog Timer, sobrecalentamiento, salida de suspensión ACPI) frente al Hard RESET por encendido (Power-On Reset).</span></li>
+<li><strong>Tecnicismos con terminología exacta (3 preguntas abiertas).</strong><span class="evid">Evidencia: lo dijo textual: «El examen tiene tres preguntas abiertas si mal no recuerdo… Aquí el que es ingeniero sabe los tecnicismos y contesta, pero si son de esos que me confunden BGA con HDMI, los puse fritos».</span></li>
+<li><strong>Paginación y falla de segmento.</strong><span class="evid">Evidencia: lo explicó como puente entre el hardware (Unidad 2) y el kernel (Unidad 3), pero aclaró que la Unidad 3 <em>no</em> entra en el primer parcial: es para el siguiente.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c12-bootstrap"><summary><span class="stitle">1 · Secuencia de arranque (bootstrap) y vectores de RESET</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es la secuencia ordenada de inicialización de hardware y software que ejecuta un procesador inmediatamente después de encenderse o de recibir una señal de reinicio, para pasar de un estado inactivo a la ejecución del kernel o del sistema operativo.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como el ritual de una persona al despertar: antes de salir a trabajar (ejecutar el sistema operativo) abre los ojos, verifica que sus extremidades respondan y se viste (estabiliza voltajes, prueba la memoria y configura la CPU).<span class="rompe">Dónde deja de servir: una persona puede improvisar el orden; el procesador sigue una secuencia rígida dictada por el silicio y el microcódigo.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El procesador empieza leyendo la dirección de su <strong>vector de RESET</strong>. Esa dirección depende de la arquitectura: en Intel es <code>0xFFFFFFF0</code>; en ARM Cortex-M/R es <code>0x00000000</code> o <code>0xFFFF0000</code>; en PowerPC, <code>0x00000100</code> o <code>0xFFF00100</code> <em>(material)</em>. Desde ahí se hace un salto (corto o largo) al código de la ROM o firmware.</p>
+<p>A continuación el procesador cambia a <strong>modo protegido</strong> (el profesor lo llamó «modo 286»), aplica los parches de actualización de microcódigo integrados en la CPU, <strong>deshabilita las cachés</strong>, inicializa y prueba la memoria DRAM, configura la pila en DRAM <em>(material)</em> y vuelve a <strong>habilitar las cachés</strong> con sus reglas definitivas. Solo entonces se puede cargar el BIOS/UEFI y, después, el sistema operativo.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Garantiza que el hardware pase de un estado desconocido a uno seguro y controlado antes de entregarle el control al software. Cierra la Unidad 2.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> intentar ejecutar el BIOS o el sistema operativo antes de que el controlador de DRAM y la pila estén inicializados: el procesador colapsa.</p></div>
+</details>
+
+<details class="section-block sec" id="c12-reset"><summary><span class="stitle">2 · Tipos de RESET: Hard RESET y Soft RESET</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p><strong>Hard RESET</strong> (Power-On Reset, POR): restablecimiento físico provocado por la entrada inicial de corriente eléctrica al sistema. <strong>Soft RESET</strong>: reinicio inducido por eventos de software, interrupciones o periféricos de control, sin cortar la alimentación principal.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Un Hard RESET es desenchufar y volver a enchufar un aparato. Un Soft RESET es apretar «reiniciar» en el menú: el aparato sigue con energía, pero su «mente» se reinicia.<span class="rompe">Dónde deja de servir: en un Soft RESET por suspensión ACPI no se pierde el contenido de la RAM, que sigue alimentada por un subsistema de bajo consumo.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>En un <strong>Hard RESET</strong>, la fuente entrega voltaje y un CPLD o circuito integrado espera a que las líneas nominales (±12 V, ±5 V, ±3.3 V) <em>(material)</em> y el reloj principal se estabilicen; una vez estables, se libera la línea de reset del hardware.</p>
+<p>En un <strong>Soft RESET</strong>, un evento interno activa la línea de reinicio de la CPU. Las cuatro causas que explicó:</p>
+<ul>
+<li><strong>Línea de reset dedicada:</strong> se presiona el botón de reset.</li>
+<li><strong>Desbordamiento del Watchdog Timer:</strong> un periférico contador vigila que el programa siga su flujo; si el programa se queda congelado en un segmento más tiempo del permitido (por ejemplo, 1 segundo), el watchdog desborda y dispara el reset.</li>
+<li><strong>Sobrecalentamiento (overheat):</strong> los sensores térmicos detectan una temperatura o un consumo crítico en un núcleo o periférico y disparan el reset para evitar daño físico.</li>
+<li><strong>Salida de suspensión ACPI:</strong> la CPU se apaga casi por completo y deja su estado en la RAM, que sigue refrescándose gracias a un microcontrolador externo de ultra bajo consumo. Al despertar pasa por el bootstrap, y el sistema operativo reconoce que sus datos ya están en memoria.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>El watchdog protege contra programas congelados y los sensores térmicos protegen el silicio; la suspensión ACPI acelera el encendido. Se conecta con los timers vistos en la Unidad 2.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> confundir Hard RESET con Soft RESET, o creer que salir de la suspensión ACPI obliga a cargar todo el sistema operativo desde el disco.</p></div>
+</details>
+
+<details class="section-block sec" id="c12-bsp"><summary><span class="stitle">3 · Arranque multiprocesador: roles BSP y AP</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Es el mecanismo con el que un sistema de varios núcleos decide cuál actuará como maestro (<strong>Bootstrap Processor, BSP</strong>) para inicializar el sistema y cómo se activan los núcleos secundarios (<strong>Application Processors, AP</strong>).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es el inicio de turno en una cocina con varios cocineros: el chef (BSP) llega primero, enciende las estufas y prepara todo; los demás (AP) esperan en el vestidor hasta que el chef les da la señal para entrar.<span class="rompe">Dónde deja de servir: quién es el BSP se decide en milisegundos con bits del controlador de interrupciones (LAPIC), y los AP se registran mediante una condición de carrera regulada por semáforo.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Al reiniciarse el hardware, todos los núcleos o hilos se tratan inicialmente como procesadores completos <em>(material)</em>. El controlador local de interrupciones de cada uno (<strong>LAPIC</strong>) se resetea, y su bit BSP queda en 1 para el Bootstrap Processor y en 0 para los Application Processors.</p>
+<p>El <strong>BSP</strong> hace el fetch del vector de RESET, carga el BIOS/UEFI e inicializa la APIC. Mientras tanto, los <strong>AP</strong> ejecutan su autoprueba interna y entran en el estado <strong>WAIT-for-SIPI</strong>. El BSP envía entonces la <strong>SIPI</strong> (<em>Startup Inter-Processor Interrupt</em>) a todos los AP, con una instrucción de carga que apunta a los primeros 4 KB de la RAM.</p>
+<p>Ahí empieza una <strong>condición de carrera regulada por semáforo</strong>: cada AP despierta, ejecuta su código de inicialización, registra su APIC ID en la tabla de procesadores del sistema, incrementa en 1 el contador global de procesadores, reinicia su vector de interrupciones y vuelve a esperar. Al final, el BSP cierra la tabla de procesadores, configura los periféricos PCI e inicia el kernel <em>(material)</em>. Con BIOS, el BSP hace la carga del sistema operativo él solo; con UEFI, los AP ayudan a inicializar periféricos y a cargar el kernel <em>(material)</em>.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Evita que varios núcleos ejecuten el BIOS o modifiquen la memoria al mismo tiempo, lo que provocaría colisiones en el bus.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> pensar que todos los núcleos leen el BIOS e inician el sistema operativo a la vez, sin coordinación.</p></div>
+</details>
+
+<details class="section-block sec" id="c12-examen-reglas"><summary><span class="stitle">4 · Estructura y reglas del primer examen parcial</span></summary>
+<p>El primer parcial evalúa las <strong>Unidades 1 y 2</strong>; la Unidad 3, que se empezó en esta misma clase, <strong>no entra</strong>. Tiene <strong>3 preguntas abiertas</strong> principales, más preguntas de tecnicismos en las que se exige la terminología exacta de ingeniería: el profesor advirtió que no acepta aproximaciones informales ni confusiones de siglas (su ejemplo: confundir BGA con HDMI, o confundir modos de direccionamiento). Para el bootstrap no hay que memorizar las 32 cajas del diagrama de flujo, sino explicar el orden y el funcionamiento general de sus fases.</p>
+<p class="empty">El examen se presentó el 14 oct 2026: ver <a href="examenes.html#FSE-E01">FSE-E01</a>.</p>
+</details>
+
+<details class="section-block sec" id="c12-unidad3"><summary><span class="stitle">5 · Introducción a la Unidad 3: sistemas operativos para plataformas embebidas</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La unidad analiza los componentes clave de un sistema operativo (kernel, llamadas a sistema y API, planificación de tareas, paginación) para seleccionar e implementar la plataforma adecuada en un sistema embebido.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es pasar de usar el microcontrolador como un circuito aislado (<em>bare metal</em>) a tener un administrador, el kernel, que reparte el tiempo y la memoria entre varios programas.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Se estudiarán tres capas: la <strong>interfaz de aplicación (API) y las llamadas a sistema</strong> (funciones como <code>printf</code>, <code>malloc</code> o <code>write</code>, con las que un programa de usuario le pide servicios al kernel); el <strong>planificador (scheduler)</strong>, que reparte el tiempo de CPU entre procesos; y la <strong>administración de memoria</strong>, con paginación y aislamiento entre el espacio virtual y el físico.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Conecta el desarrollo de firmware tradicional con Linux embebido y los sistemas operativos de tiempo real (RTOS).</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c12-paginacion"><summary><span class="stitle">6 · Administración de memoria: paginación, pila y falla de segmento</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p><strong>Paginación:</strong> división del espacio de memoria en bloques o páginas, gestionadas por la unidad de manejo de memoria (MMU) y el kernel, para aislar los procesos entre sí. <strong>Falla de segmento (segmentation fault):</strong> la excepción que se produce cuando un programa intenta leer o escribir en una dirección fuera de sus páginas asignadas o en la zona reservada al kernel.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un hotel: cada huésped (programa) tiene la llave de su cuarto. Si intenta meterse al cuarto de al lado o a la oficina del gerente (el kernel), seguridad (MMU y kernel) lo detiene y lo saca del hotel.<span class="rompe">Dónde deja de servir: el kernel sí puede entrar a cualquier cuarto en cualquier momento, sin pedir permiso.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>En programas de bajo nivel o en ensamblador, la pila apunta a la última localidad de memoria (el ejemplo del profesor: 64 KB). Si un programa ejecuta un retorno de subrutina con la pila ya al tope y luego hace un <code>POP</code> hacia otra localidad, puede sobrescribir su propio código o incluso borrar el kernel cargado en memoria.</p>
+<p>Para evitarlo, en un sistema operativo con paginación el kernel divide la RAM en páginas virtuales; cada proceso trabaja en su propio espacio de direcciones virtuales y no conoce la memoria física real. Si una instrucción intenta acceder fuera de sus páginas autorizadas (por ejemplo, escribir en <code>0x00000000</code> o encima del kernel), el hardware detecta la violación y genera una excepción; el kernel interrumpe el proceso y lo termina con <strong>Segmentation Fault</strong>.</p>
+<p><strong>Archivo de intercambio (swap):</strong> si la RAM se satura, el kernel copia al disco las páginas de procesos inactivos para liberar memoria para los activos. El ejemplo del profesor: una sesión de Matlab que lleva días sin usarse.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Impide que un programa mal hecho o malicioso destruya el kernel o lea la memoria de otros programas.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> escribir en punteros nulos o desbordar la pila creyendo que el programa tiene acceso ilimitado a toda la RAM física.</p></div>
+</details>
+
+<details class="section-block sec" id="c12-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Cuál es la dirección del vector de RESET en Intel?</summary><p><code>0xFFFFFFF0</code> <em>(material)</em>.</p></details>
+<details class="qa"><summary>2. ¿En qué se diferencia un Hard RESET de un Soft RESET?</summary><p>El Hard RESET (Power-On Reset) lo provoca la entrada de corriente y obliga a esperar a que se estabilicen los voltajes y el reloj. El Soft RESET lo provocan la línea de reset, el desbordamiento del Watchdog Timer, el sobrecalentamiento o la salida de suspensión ACPI, sin cortar la alimentación principal.</p></details>
+<details class="qa"><summary>3. ¿Hay que memorizar las 32 cajas del diagrama de bootstrap para el examen?</summary><p>No. El profesor pidió explicar el orden y el funcionamiento general: estabilizar voltajes y reloj, fetch del vector de RESET, modo protegido, deshabilitar y rehabilitar cachés, paso de lista BSP/AP y carga del SO.</p></details>
+<details class="qa"><summary>4. Compara los roles del BSP y de los AP durante el arranque.</summary><p>El BSP (bit BSP del LAPIC en 1) lee el vector de RESET, carga el BIOS/UEFI, inicializa la APIC y coordina la carga del SO. Los AP (bit en 0) hacen su autoprueba, esperan en WAIT-for-SIPI y, al recibir la SIPI, registran su APIC ID en la tabla, incrementan el contador y vuelven a esperar.</p></details>
+<details class="qa"><summary>5. Un sistema embebido se congela en un bucle infinito por más de 2 segundos. ¿Qué lo detecta y qué tipo de reset se dispara?</summary><p>El Watchdog Timer detecta que el programa lleva demasiado tiempo en la misma sección y dispara un Soft RESET.</p></details>
+<details class="qa"><summary>6. ¿Por qué ocurre una falla de segmento en un sistema con paginación?</summary><p>Porque el proceso intentó leer o escribir fuera de las páginas virtuales que le asignó el sistema operativo, o en la zona del kernel sin privilegios; el hardware lo detecta y el kernel termina el proceso.</p></details>
+<details class="qa"><summary>7. ¿Cómo está compuesto el primer parcial?</summary><p>3 preguntas abiertas más preguntas de tecnicismos y terminología exacta; abarca solo las Unidades 1 y 2.</p></details>
+<details class="qa"><summary>8. ¿Qué cambia en el papel del BSP entre un arranque con BIOS y uno con UEFI?</summary><p>Con BIOS, el BSP inicializa periféricos y carga el SO de forma secuencial y solo; con UEFI, los AP ayudan a inicializar periféricos y a cargar el kernel <em>(material)</em>.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c12-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>Crítica a cursos previos de sistemas operativos:</strong> bromeó con que en otras asignaturas se pasan «un semestre completo haciendo Round Robin o creando carpetas» en vez de ver cómo el código interactúa con el silicio y con las llamadas a sistema.</li>
+<li><strong>El «Doctor Agony»:</strong> para ilustrar la relocalización de memoria sin que el usuario se entere, contó la historia de un cirujano que opera sin anestesia, saca los órganos, los limpia, los vuelve a armar, y el paciente despierta preguntándose por qué tiene unas tijeras dentro.</li>
+<li><strong>La torta de salchicha y Netflix:</strong> comparó la actitud pasiva en clase con no reclamar cuando en la cafetería te dan otra torta, o con pagar Netflix y dejar que te pongan cualquier película.</li>
+<li><strong>«Hasta Lord Voldemort cabe ahí»:</strong> bromeó sobre el lenguaje inclusivo al leer los objetivos de la Unidad 3.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c12-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Próxima clase (lunes 12 oct):</strong> primer tema de la Unidad 3, interfaz de aplicación y llamadas a sistema (API / System Calls).</li>
+<li><strong>Primer examen parcial (miércoles 14 oct):</strong> solo Unidades 1 y 2; la Unidad 3 no entra.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Vector de RESET: Intel <code>0xFFFFFFF0</code>; ARM Cortex-M/R <code>0x00000000</code> o <code>0xFFFF0000</code>.</li>
+<li>Bootstrap: voltajes y reloj → vector de RESET → modo protegido → microcódigo → cachés off → DRAM y pila → cachés on → BIOS/UEFI → SO.</li>
+<li>Soft RESET: botón, watchdog, sobrecalentamiento, salida de ACPI. Hard RESET: Power-On Reset.</li>
+<li>BSP (bit 1 en LAPIC) arranca; AP esperan la SIPI, se registran por semáforo y vuelven a esperar.</li>
+<li>Paginación: cada proceso en su espacio virtual; salirse de él = Segmentation Fault; swap libera RAM copiando páginas inactivas al disco.</li>
+</ul></div>
+
+</div>
+</body>
+</html>
