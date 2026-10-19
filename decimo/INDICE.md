@@ -25,7 +25,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 
 ## ASI — Administración de Servicios de Internet
 
-- **ASI-Material**: 16 archivos (ASI/ASI-Material/)
+- **ASI-Material**: 15 archivos (ASI/ASI-Material/)
 
 
 ### ASI-Entregables
@@ -99,7 +99,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 | Entrega | Indicaciones | Entregado | Adicionales |
 |---|---|---|---|
 | MD-P03-1 | [MD-P03-1-indicaciones.pdf](MD/MD-Practicas/MD-P03-1/MD-P03-1-indicaciones.pdf) | [Equipo7_Practica3.1_Agrupacion.pdf](MD/MD-Practicas/MD-P03-1/MD-P03-1-entregables/Equipo7_Practica3.1_Agrupacion.pdf)<br>[Equipo_7_Practica_3.1_Agrupacion.ipynb](MD/MD-Practicas/MD-P03-1/MD-P03-1-entregables/Equipo_7_Practica_3.1_Agrupacion.ipynb) | 3 |
-| MD-P03-2 | [MD-P03-2-indicaciones.pdf](MD/MD-Practicas/MD-P03-2/MD-P03-2-indicaciones.pdf) | [Equipo 7 Practica 3.2 Asociacion.ipynb](MD/MD-Practicas/MD-P03-2/MD-P03-2-entregables/Equipo%207%20Practica%203.2%20Asociacion.ipynb)<br>[Equipo 7 Practica 3.2 Asociacion.pdf](MD/MD-Practicas/MD-P03-2/MD-P03-2-entregables/Equipo%207%20Practica%203.2%20Asociacion.pdf) | 5 |
+| MD-P03-2 | [MD-P03-2-indicaciones.pdf](MD/MD-Practicas/MD-P03-2/MD-P03-2-indicaciones.pdf) | [Equipo 7 Practica 3.2 Asociacion.ipynb](MD/MD-Practicas/MD-P03-2/MD-P03-2-entregables/Equipo%207%20Practica%203.2%20Asociacion.ipynb)<br>[Equipo 7 Practica 3.2 Asociacion.pdf](MD/MD-Practicas/MD-P03-2/MD-P03-2-entregables/Equipo%207%20Practica%203.2%20Asociacion.pdf) | 4 |
 
 ### MD-Proyectos
 
@@ -139,7 +139,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 
 ## RP — Reconocimiento de Patrones
 
-- **RP-Material**: 13 archivos (RP/RP-Material/)
+- **RP-Material**: 15 archivos (RP/RP-Material/)
 
 
 ### RP-Practicas
