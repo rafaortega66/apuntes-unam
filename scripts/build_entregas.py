@@ -59,6 +59,9 @@ TITULOS = {
     'SIB-T01': 'Tarea 1 — Perfiles de protección (Equipo 4)', 'SIB-T02': 'Tarea 2 — Línea del tiempo (Equipo 4)',
     'SIB-T03': 'Tarea 3 — Tipos de atacantes (Equipo 4)', 'SIB-Exp01': 'Exposición — Normatividad (Equipo 4)',
     'SIB-EC01': 'Ejercicio en clase — Video (curso de colisión)',
+    'SIB-EC02': 'Ejercicio en clase — Amenaza o vulnerabilidad, 20 reactivos (Clase 08)',
+    'SIB-EC03': 'Ejercicio en clase — Caso «SaludIntegral»: etapas de un ataque (Clase 11)',
+    'SIB-EC04': 'Ejercicio en clase — Clasificar mecanismos de seguridad, en parejas (Clase 13)',
     'ACS-E01': 'Examen parcial — cliente-servidor TCP (de casa)',
 }
 # Estado verificado en Google Classroom el 15 oct 2026 (las materias sin Classroom se marcan aparte).
@@ -76,6 +79,9 @@ ESTADO = {
     'ASI-R01': 'Entregada', 'ASI-Proy01': 'Entregada', 'ASI-Proy02': 'Entregada', 'ASI-Proy03': 'Entregada', 'ASI-Proy04': 'Entregada',
     'ASI-Proy05': 'Entregada',
     'ACS-E01': 'Entregada por correo (18 oct 2026, 18:34)',
+    'SIB-EC02': 'Resuelto en mis apuntes · sin confirmar si se entregó',
+    'SIB-EC03': 'Ejercicio de clase · sin confirmar si se entregó',
+    'SIB-EC04': 'Ejercicio de clase · sin confirmar si se entregó',
 }
 SIN_CLASSROOM = {'ACS': 'Entregada (por correo; ACS no usa Classroom)', 'SIB': 'Entregada (por correo, en equipo)',
                  'OAC': 'Entregada (OAC teoría no usa Classroom)'}

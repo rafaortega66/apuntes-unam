@@ -165,7 +165,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 
 ## SIB — Seguridad Informática Básica
 
-- **SIB-Material**: 1 archivos (SIB/SIB-Material/)
+- **SIB-Material**: 7 archivos (SIB/SIB-Material/)
 
 
 ### SIB-EjerciciosClase
@@ -173,6 +173,9 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 | Entrega | Indicaciones | Entregado | Adicionales |
 |---|---|---|---|
 | SIB-EC01 | [SIB-EC01-indicaciones.md](SIB/SIB-EjerciciosClase/SIB-EC01/SIB-EC01-indicaciones.md) | [Equipo4Video.pdf](SIB/SIB-EjerciciosClase/SIB-EC01/SIB-EC01-entregables/Equipo4Video.pdf) | — |
+| SIB-EC02 | [SIB-EC02-indicaciones.md](SIB/SIB-EjerciciosClase/SIB-EC02/SIB-EC02-indicaciones.md) | _(sin entrega aún)_ | — |
+| SIB-EC03 | [SIB-EC03-indicaciones.md](SIB/SIB-EjerciciosClase/SIB-EC03/SIB-EC03-indicaciones.md) | _(sin entrega aún)_ | — |
+| SIB-EC04 | [SIB-EC04-indicaciones.md](SIB/SIB-EjerciciosClase/SIB-EC04/SIB-EC04-indicaciones.md) | _(sin entrega aún)_ | — |
 
 ### SIB-Exposiciones
 

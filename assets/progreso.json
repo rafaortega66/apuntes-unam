@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-19T07:26:18+00:00",
+ "generatedAt": "2026-10-19T16:57:14+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -518,9 +518,23 @@
    },
    {
     "num": 11,
-    "fecha": null,
-    "resumen": "",
+    "fecha": "2026-10-08",
+    "resumen": "Tema 3 — Clasificación y etapas de un ataque; caso «SaludIntegral».",
     "url": "materias/seguridad-informatica-basica/clase-11.html",
+    "formato": "viejo"
+   },
+   {
+    "num": 12,
+    "fecha": "2026-10-13",
+    "resumen": "Tema 3 — Perpetradores o atacantes y técnicas de intrusión.",
+    "url": "materias/seguridad-informatica-basica/clase-12.html",
+    "formato": "viejo"
+   },
+   {
+    "num": 13,
+    "fecha": "2026-10-15",
+    "resumen": "Tema 3 — Intrusión por malware y física; mecanismos de seguridad.",
+    "url": "materias/seguridad-informatica-basica/clase-13.html",
     "formato": "viejo"
    }
   ],
@@ -607,6 +621,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "8ce824a",
+   "fecha": "2026-10-19T01:26:18-06:00",
+   "mensaje": "RP: correcciones anotadas (✏️) verificadas con los audios"
+  },
   {
    "hash": "80bb1af",
    "fecha": "2026-10-19T01:20:12-06:00",
@@ -901,11 +920,6 @@
    "hash": "3fa3f6e",
    "fecha": "2026-10-05T15:08:53Z",
    "mensaje": "Quitar __pycache__ del repo y agregarlo a .gitignore"
-  },
-  {
-   "hash": "cda1331",
-   "fecha": "2026-10-05T15:08:42Z",
-   "mensaje": "Colapsar secciones por defecto en todas las clases; stubs RP-11/12 y MD-09"
   }
  ]
 }
