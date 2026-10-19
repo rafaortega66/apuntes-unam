@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-19T07:20:12+00:00",
+ "generatedAt": "2026-10-19T07:26:18+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -608,6 +608,11 @@
  },
  "gitlog": [
   {
+   "hash": "80bb1af",
+   "fecha": "2026-10-19T01:20:12-06:00",
+   "mensaje": "RP-E01: solución validada contra la resolución del profesor (audio RP-Clase11) — puntajes, etapas del diagrama, aclaraciones y comparación del LDA (7.74 en clase vs 7.83 exacto)"
+  },
+  {
    "hash": "63c6c2f",
    "fecha": "2026-10-19T01:08:54-06:00",
    "mensaje": "RP-E01: examen escaneado (calificado 20.5) y solución completa en PDF; LDA de la Clase 11 corregido con los datos del examen"
@@ -901,11 +906,6 @@
    "hash": "cda1331",
    "fecha": "2026-10-05T15:08:42Z",
    "mensaje": "Colapsar secciones por defecto en todas las clases; stubs RP-11/12 y MD-09"
-  },
-  {
-   "hash": "1b97dec",
-   "fecha": "2026-10-02T01:19:37-06:00",
-   "mensaje": "Lab FSE: corregir descripción de la Práctica 5 (Kiosco multimedia, no 'Linux en modo consola')"
   }
  ]
 }
