@@ -142,6 +142,12 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 - **RP-Material**: 15 archivos (RP/RP-Material/)
 
 
+### RP-Examenes
+
+| Entrega | Indicaciones | Entregado | Adicionales |
+|---|---|---|---|
+| RP-E01 | [RP-E01-indicaciones.md](RP/RP-Examenes/RP-E01/RP-E01-indicaciones.md) | _(sin entrega aún)_ | — |
+
 ### RP-Practicas
 
 | Entrega | Indicaciones | Entregado | Adicionales |

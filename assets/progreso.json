@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-19T07:01:06+00:00",
+ "generatedAt": "2026-10-19T07:02:57+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -608,6 +608,11 @@
  },
  "gitlog": [
   {
+   "hash": "9963f48",
+   "fecha": "2026-10-19T01:01:06-06:00",
+   "mensaje": "RP: dudas resueltas con Classroom — P2 = «Algoritmos de clustering» (25 sep 7:00), P3 vence 9 oct 17:00, sin Práctica 4 publicada; ejercicios Hu/GLCM ligados a la Clase 01"
+  },
+  {
    "hash": "d286fe2",
    "fecha": "2026-10-19T00:53:53-06:00",
    "mensaje": "CLAUDE.md: convención de sesiones previas (clase-mNN) y sesión real en RP"
@@ -901,11 +906,6 @@
    "hash": "ccbc995",
    "fecha": "2026-10-01T12:07:30-06:00",
    "mensaje": "RP: resumen de la presentación «Clase 9» del profesor (distancia mínima, K-means, LBG, ISODATA)"
-  },
-  {
-   "hash": "604e8c2",
-   "fecha": "2026-10-01T11:17:55-06:00",
-   "mensaje": "SIB Clase 01: formato de estudio"
   }
  ]
 }

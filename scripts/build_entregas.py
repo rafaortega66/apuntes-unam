@@ -55,7 +55,7 @@ TITULOS = {
     'OAC-P04': 'Práctica 4 — Máquinas de estados con memorias',
     'RP-T01': 'Tarea 1 — Momentos de Hu, GLCM y LBP', 'RP-P00': 'Práctica 0 — Manejo básico de librerías',
     'RP-P01': 'Práctica 1 — Análisis de componentes principales', 'RP-P02': 'Práctica 2 — Algoritmos de clustering',
-    'RP-P03': 'Práctica 3 — Clasificadores bayesianos',
+    'RP-P03': 'Práctica 3 — Clasificadores bayesianos', 'RP-E01': 'Primer Examen Parcial (en papel, 28 sep)',
     'SIB-T01': 'Tarea 1 — Perfiles de protección (Equipo 4)', 'SIB-T02': 'Tarea 2 — Línea del tiempo (Equipo 4)',
     'SIB-T03': 'Tarea 3 — Tipos de atacantes (Equipo 4)', 'SIB-Exp01': 'Exposición — Normatividad (Equipo 4)',
     'SIB-EC01': 'Ejercicio en clase — Video (curso de colisión)',
@@ -64,6 +64,7 @@ TITULOS = {
 # Estado verificado en Google Classroom el 15 oct 2026 (las materias sin Classroom se marcan aparte).
 ESTADO = {
     'RP-T01': 'Entregada · 100/100', 'RP-P01': 'Entregada · 80/100', 'RP-P02': 'Entregada · 95/100', 'RP-P03': 'Entregada',
+    'RP-E01': 'Presentado en papel · 20/100 (Classroom solo registra la parte entera)',
     'RP-P00': 'Sin entrega (práctica de preparación)',
     'FSE-T01': 'Entregada tarde', 'FSE-T02': 'Entregada · 100/100', 'FSE-T03': 'Entregada · 100/100', 'FSE-T04': 'Entregada · 100/100',
     'FSE-T05': 'Entregada', 'FSE-T06': 'Entregada', 'FSE-T07': 'Entregada tarde',
@@ -79,7 +80,6 @@ ESTADO = {
 SIN_CLASSROOM = {'ACS': 'Entregada (por correo; ACS no usa Classroom)', 'SIB': 'Entregada (por correo, en equipo)',
                  'OAC': 'Entregada (OAC teoría no usa Classroom)'}
 NOTAS = {  # avisos que no tienen carpeta propia
-    ('RP', 'examenes'): 'Primer examen parcial: calificación <strong>20/100</strong> en Classroom (se aplicó en papel; no hay archivo).',
     ('FSE', 'tareas'): 'También se registró en Classroom «Ejemplos de sistemas embebidos» (completada, sin archivo).',
 }
 
