@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-18T22:56:41+00:00",
+ "generatedAt": "2026-10-19T00:31:40+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -566,6 +566,11 @@
  },
  "gitlog": [
   {
+   "hash": "f91bcf8",
+   "fecha": "2026-10-18T16:56:42-06:00",
+   "mensaje": "ACS-E01: código del examen (cliente y servidor) en entregables; faltan capturas"
+  },
+  {
    "hash": "f279dbf",
    "fecha": "2026-10-18T12:35:27-06:00",
    "mensaje": "ACS-E01: prompt para el proyecto ACS de Claude (en adicionales)"
@@ -859,11 +864,6 @@
    "hash": "ef309b6",
    "fecha": "2026-10-01T11:03:38-06:00",
    "mensaje": "ACS Clase 03: formato de estudio"
-  },
-  {
-   "hash": "1836990",
-   "fecha": "2026-10-01T11:00:50-06:00",
-   "mensaje": "SIB Clase 10 (1 oct): análisis de vulnerabilidades, CVE/CVSS, definición de ataque"
   }
  ]
 }

@@ -74,7 +74,7 @@ ESTADO = {
     'ASI-P01': 'Entregada tarde', 'ASI-P02': 'Entregada', 'ASI-P03': 'Entregada', 'ASI-P04': 'Entregada', 'ASI-T01': 'Entregada',
     'ASI-R01': 'Entregada', 'ASI-Proy01': 'Entregada', 'ASI-Proy02': 'Entregada', 'ASI-Proy03': 'Entregada', 'ASI-Proy04': 'Entregada',
     'ASI-Proy05': 'Entregada',
-    'ACS-E01': 'Código terminado (18 oct) · faltan capturas en el repo y confirmar envío por correo',
+    'ACS-E01': 'Completo (18 oct): código + PDF con capturas local y remota · falta confirmar envío por correo',
 }
 SIN_CLASSROOM = {'ACS': 'Entregada (por correo; ACS no usa Classroom)', 'SIB': 'Entregada (por correo, en equipo)',
                  'OAC': 'Entregada (OAC teoría no usa Classroom)'}
