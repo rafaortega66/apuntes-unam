@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-19T00:31:40+00:00",
+ "generatedAt": "2026-10-19T00:35:02+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -566,6 +566,11 @@
  },
  "gitlog": [
   {
+   "hash": "0ac711b",
+   "fecha": "2026-10-18T18:31:48-06:00",
+   "mensaje": "ACS-E01: PDF del examen con capturas (prueba local y remota con date) en entregables; estado actualizado"
+  },
+  {
    "hash": "f91bcf8",
    "fecha": "2026-10-18T16:56:42-06:00",
    "mensaje": "ACS-E01: código del examen (cliente y servidor) en entregables; faltan capturas"
@@ -859,11 +864,6 @@
    "hash": "9b28419",
    "fecha": "2026-10-01T11:05:41-06:00",
    "mensaje": "ASI Clase 02: formato de estudio"
-  },
-  {
-   "hash": "ef309b6",
-   "fecha": "2026-10-01T11:03:38-06:00",
-   "mensaje": "ACS Clase 03: formato de estudio"
   }
  ]
 }
