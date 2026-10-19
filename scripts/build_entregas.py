@@ -62,6 +62,8 @@ TITULOS = {
     'SIB-EC02': 'Ejercicio en clase — Amenaza o vulnerabilidad, 20 reactivos (Clase 08)',
     'SIB-EC03': 'Ejercicio en clase — Caso «SaludIntegral»: etapas de un ataque (Clase 11)',
     'SIB-EC04': 'Ejercicio en clase — Clasificar mecanismos de seguridad, en parejas (Clase 13)',
+    'SIB-EC05': 'Ejercicio en clase — Cuestionario de normatividad (Clase 04)',
+    'SIB-EC06': 'Ejercicio en clase — Amenazas a la persona y a la casa (Clase 07)',
     'ACS-E01': 'Examen parcial — cliente-servidor TCP (de casa)',
 }
 # Estado verificado en Google Classroom el 15 oct 2026 (las materias sin Classroom se marcan aparte).
@@ -82,6 +84,8 @@ ESTADO = {
     'SIB-EC02': 'Resuelto en mis apuntes · sin confirmar si se entregó',
     'SIB-EC03': 'Ejercicio de clase · sin confirmar si se entregó',
     'SIB-EC04': 'Ejercicio de clase · sin confirmar si se entregó',
+    'SIB-EC05': 'Calificado en clase · 3 aciertos',
+    'SIB-EC06': 'Entregada en clase (en papel)',
 }
 SIN_CLASSROOM = {'ACS': 'Entregada (por correo; ACS no usa Classroom)', 'SIB': 'Entregada (por correo, en equipo)',
                  'OAC': 'Entregada (OAC teoría no usa Classroom)'}

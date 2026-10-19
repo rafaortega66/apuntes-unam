@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-19T16:57:14+00:00",
+ "generatedAt": "2026-10-19T17:44:13+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -622,6 +622,16 @@
  },
  "gitlog": [
   {
+   "hash": "22b62ab",
+   "fecha": "2026-10-19T11:00:17-06:00",
+   "mensaje": "OAC-Proy01: proyecto_calculadora.py actualizado (Taylor con Horner, comentarios)"
+  },
+  {
+   "hash": "7c6007d",
+   "fecha": "2026-10-19T10:57:20-06:00",
+   "mensaje": "SIB: apuntes de las clases 07–13 en PDF (lo que presenta la profesora) enlazados en cada clase y en Material; clases 12 y 13; ejercicios de clase EC02–EC04"
+  },
+  {
    "hash": "8ce824a",
    "fecha": "2026-10-19T01:26:18-06:00",
    "mensaje": "RP: correcciones anotadas (✏️) verificadas con los audios"
@@ -910,16 +920,6 @@
    "hash": "a2ab746",
    "fecha": "2026-10-05T15:17:38Z",
    "mensaje": "Quitar el disclaimer \"Formato de estudio\" de las páginas de clase"
-  },
-  {
-   "hash": "57c5df7",
-   "fecha": "2026-10-05T15:12:40Z",
-   "mensaje": "SIB: convertir \"Puntos clave\" de div fijo a sección plegable"
-  },
-  {
-   "hash": "3fa3f6e",
-   "fecha": "2026-10-05T15:08:53Z",
-   "mensaje": "Quitar __pycache__ del repo y agregarlo a .gitignore"
   }
  ]
 }
