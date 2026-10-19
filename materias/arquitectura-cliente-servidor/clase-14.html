@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 14 — Arquitectura Cliente-Servidor</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Arquitectura Cliente-Servidor</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 14</h2>
+  <p class="prof">Mtro. Carlos Alberto Román Zamitiz · 13 oct 2026 · Tema 2 — <code>setsockopt</code> con <code>SO_REUSEADDR</code>, TCP frente a UDP, por qué hay que leer en bucle, cómo elegir el tamaño del búfer y medición de tiempos con <code>compara_tiempos_buffers.c</code>. Aviso del examen parcial.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>ACS-Clase14.m4a</code>), 19 oct 2026.</p>
+</div>
+
+<details class="section-block sec" id="c14-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Estructura de los Programas 04 y 05.</strong><span class="evid">Evidencia: «practiquen los programas 04, 05 y este de compara tiempos buffers… porque el examen es muy parecido a estos programas, al cuatro y al cinco».</span></li>
+<li><strong>Leer en bucle hasta que <code>read()</code> devuelva 0.</strong><span class="evid">Evidencia: «TCP no garantiza que se recibirán todos los datos de una sola vez… en esto fallan muchos».</span></li>
+<li><strong><code>setsockopt</code> con <code>SO_REUSEADDR</code>.</strong><span class="evid">Evidencia: lo presentó como indispensable al reiniciar el servidor durante las pruebas y en el proyecto final.</span></li>
+<li><strong>Por qué 4 KB es el tamaño de búfer recomendado.</strong><span class="evid">Evidencia: «4096 bytes… es el tamaño de una página de memoria en la mayoría de los sistemas».</span></li>
+<li><strong>Medir tiempo con <code>clock()</code> y <code>CLOCKS_PER_SEC</code>.</strong><span class="evid">Evidencia: explicó la fórmula al revisar <code>compara_tiempos_buffers.c</code>.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c14-setsockopt"><summary><span class="stitle">1 · <code>setsockopt</code> y <code>SO_REUSEADDR</code></span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p><code>setsockopt</code> (<em>set socket options</em>) establece opciones de configuración de un socket. Con <code>SO_REUSEADDR</code> el socket puede reutilizar la dirección local (IP y puerto) aunque esté en uso o en estado <code>TIME_WAIT</code>.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es pedirle a la central telefónica que libere tu número en cuanto cuelgas, para volver a marcar sin esperar.<span class="rompe">Dónde deja de servir: no permite que dos servidores escuchen a la vez en el mismo puerto mientras uno está activo.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Se llama después de <code>socket()</code> y antes de <code>bind()</code>, con 5 argumentos: el descriptor (<code>fd_s</code>); <code>SOL_SOCKET</code> (la opción es del nivel socket, no de TCP ni de <code>AF_INET</code>); <code>SO_REUSEADDR</code>; un apuntador a un entero con valor 1 para activarla; y el tamaño de ese entero.</p>
+<pre><code>int activado = 1;
+if (setsockopt(fd_s, SOL_SOCKET, SO_REUSEADDR, &amp;activado, sizeof(int)) == -1) {
+    perror("Error en setsockopt");
+    exit(1);
+}</code></pre>
+<p>En clase se corrió el servidor del Programa 05 en el puerto 4898 y Juan Carlos se conectó («hola», «soy Juan Carlos»); el profesor recordó que el chat es síncrono (petición 1, respuesta 1, …) y que los mensajes de más se quedan acumulados en el búfer. Al matar el servidor con Ctrl+C y relanzarlo de inmediato <em>sin</em> la opción, aparece <code>address already in use</code>.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Ahorra la espera de <code>TIME_WAIT</code> en cada prueba; útil para el proyecto final.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> no validar el retorno contra −1, u omitir la llamada y toparse con <code>address already in use</code>.</p></div>
+</details>
+
+<details class="section-block sec" id="c14-tcp-udp"><summary><span class="stitle">2 · TCP frente a UDP</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>TCP es un protocolo confiable que entrega un flujo de bytes en orden; UDP no garantiza ni la llegada ni el orden.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>TCP es paquetería certificada: si mandas 5 cajas (A–E) y se pierde la C, detiene D y E, pide reenviar C y entrega todo en orden. UDP es aventar volantes por la ventana.<span class="rompe">Dónde deja de servir: los datos no viajan «pegados» como un solo bloque; TCP los parte en paquetes.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>TCP fragmenta los mensajes largos. Si de A B C D E no llega C, retiene D y E, solicita la retransmisión de C y luego entrega el mensaje completo en orden. UDP no hace nada de esto.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> suponer que TCP entrega un mensaje largo en un solo bloque.</p></div>
+</details>
+
+<details class="section-block sec" id="c14-buffers"><summary><span class="stitle">3 · Qué limita una lectura y cómo elegir el búfer</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Los límites del kernel, de la red y del emisor que determinan cuántos bytes devuelve una sola llamada a <code>read()</code> o <code>recv()</code>.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es llenar una cubeta con una manguera: aunque la cubeta sea enorme (búfer gigante), el agua que entra depende de la llave (emisor), la manguera (red) y el embudo (búfer del kernel).<span class="rompe">Dónde deja de servir: agrandar la cubeta no hace que salga más agua de la llave.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El kernel guarda lo recibido en un búfer interno antes de que la aplicación lo lea; si en ese momento solo hay 4096 bytes disponibles, <code>read()</code> devuelve como mucho 4096, aunque pidas más. Para verlo en Linux:</p>
+<pre><code>cat /proc/sys/net/core/rmem_default
+cat /proc/sys/net/core/rmem_max</code></pre>
+<p>En clase ambos dieron <strong>212992 bytes</strong> (~212 KB).</p>
+<p><strong>Solución obligatoria:</strong> leer en bucle hasta que <code>read()</code> devuelva 0 (fin del flujo):</p>
+<pre><code>while ((n = read(fd, buffer, sizeof(buffer))) &gt; 0) {
+    /* procesar o acumular el bloque */
+}</code></pre>
+<p><strong>Tamaño del búfer:</strong> usar potencias de 2 (128, 256, 512, 1024, 4096, 8192, 16384). <strong>4 KB</strong> es la recomendación estándar porque es el tamaño de una página de memoria; 8–16 KB para tráfico web y transferencias grandes; 32 KB o más para redes muy rápidas. Un búfer gigantesco (por ejemplo, 100,000 bytes) no rinde más si el del kernel es menor y desperdicia RAM cuando hay muchas conexiones.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Evita perder o truncar respuestas grandes (HTML, PDF): el profesor dijo que muchos solo muestran los primeros bytes.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> confiar en que una sola llamada a <code>read()</code>/<code>recv()</code> trae todo el mensaje.</p></div>
+</details>
+
+<details class="section-block sec" id="c14-compara"><summary><span class="stitle">4 · Medir tiempos: <code>compara_tiempos_buffers.c</code></span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un programa en C que descarga una página web con distintos tamaños de búfer y mide cuánto tarda cada uno.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un experimento con cronómetro: descargas la página de Google con vasos de 1, 4, 8, 16 y 100 KB y comparas.<span class="rompe">Dónde deja de servir: la red cambia de un segundo a otro, así que los tiempos no bajan de forma perfecta.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ol>
+<li><code>main()</code> llama a <code>medir_tiempo(dominio, tam_buffer)</code> con el dominio de <code>argv</code> y búferes de 1024, 4096, 8192, 16384 y 100000 bytes.</li>
+<li><code>medir_tiempo()</code> crea el socket, obtiene la IP con <code>gethostbyname()</code> y se conecta al puerto 80 con <code>connect()</code>.</li>
+<li>Envía la petición <code>GET</code> de HTTP con <code>send()</code> o <code>write()</code>.</li>
+<li><code>inicio = clock();</code> → lee todo en un <code>while</code> hasta que <code>read()</code> devuelva 0 → <code>fin = clock();</code></li>
+<li><code>tiempo_total = (double)(fin - inicio) / CLOCKS_PER_SEC;</code></li>
+<li><code>free()</code> y se cierra el socket.</li>
+</ol>
+<p>Antes lo simuló a mano con <code>telnet www.google.com 80</code>: pegó la cabecera HTTP, dio Enter dos veces y recibió el HTML.</p>
+<p><strong>Resultados con www.google.com:</strong> la página pesó unos 90,000 bytes (90303, 90442, 90373, 90246 según la corrida). Tiempos de la primera corrida: 1 KB 0.0015 s; 4 KB 0.0013 s; 8 KB 0.0011 s; 16 KB 0.0011 s; 100 KB 0.0011 s; en una segunda corrida, 100 KB dio 0.0004 s. Víctor preguntó por qué cambia un poco el total de bytes; el profesor lo dejó para investigar.</p>
+<p class="empty">Ojo: <code>clock()</code> mide tiempo de CPU del proceso, no tiempo de reloj; mientras <code>read()</code> espera a la red, ese tiempo casi no cuenta. Por eso los números son tan pequeños.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra que, aunque la teoría diga 4 KB, en la práctica 8–16 KB pueden dar mejores tiempos.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> correr el programa sin pasar el dominio (o el servidor sin el puerto): acceder a un <code>argv</code> que no existe da segfault.</p></div>
+</details>
+
+<details class="section-block sec" id="c14-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Qué hace <code>SO_REUSEADDR</code> y cuándo lo necesitas?</summary><p>Permite reutilizar de inmediato una IP y puerto en uso o en <code>TIME_WAIT</code>; sirve al reiniciar un servidor tras Ctrl+C, para evitar <code>address already in use</code>.</p></details>
+<details class="qa"><summary>2. ¿Qué indica <code>SOL_SOCKET</code>?</summary><p>Que la opción pertenece al nivel del socket, no a TCP ni a la familia de direcciones.</p></details>
+<details class="qa"><summary>3. ¿Con qué comandos ves el búfer de recepción del kernel y cuánto dio en clase?</summary><p><code>cat /proc/sys/net/core/rmem_default</code> y <code>rmem_max</code>; ambos 212992 bytes.</p></details>
+<details class="qa"><summary>4. ¿Por qué una sola llamada a <code>read()</code> no basta en TCP?</summary><p>Porque TCP fragmenta y <code>read()</code> solo entrega lo que ya está en el búfer en ese momento; hay que repetir hasta recibir 0.</p></details>
+<details class="qa"><summary>5. ¿Por qué se recomiendan 4096 bytes?</summary><p>Porque es el tamaño de una página de memoria en la mayoría de los sistemas.</p></details>
+<details class="qa"><summary>6. ¿Por qué un búfer de 100,000 bytes no necesariamente mejora el rendimiento?</summary><p>Porque si el búfer del kernel es menor no se llena, y además desperdicia RAM con muchas conexiones.</p></details>
+<details class="qa"><summary>7. ¿Cómo se calcula el tiempo con <code>clock()</code>?</summary><p><code>(double)(fin - inicio) / CLOCKS_PER_SEC</code>.</p></details>
+<details class="qa"><summary>8. TCP envía A B C D E y se pierde C. ¿Qué pasa?</summary><p>Retiene D y E, pide reenviar C y entrega todo en orden.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c14-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li>Llamó en broma «la Biblia de la programación» a la teoría estándar de sockets.</li>
+<li>Recordó las páginas pesadas que muestran un cuadro gris con el texto alternativo cuando no termina de llegar una imagen.</li>
+<li>«Toco madera» para no sufrir robos con la laptop en el transporte, aunque las bancas del salón son de imitación.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c14-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Examen parcial:</strong> el jueves dará las especificaciones; no será escrito, sino un programa para hacer en casa, con todo el fin de semana y entrega por correo el lunes. Ver <a href="examenes.html">ACS-E01</a>.</li>
+<li><strong>Estudiar:</strong> Programa 04, Programa 05 y <code>compara_tiempos_buffers.c</code> («el examen es muy parecido al cuatro y al cinco»).</li>
+<li><strong>Pendiente del profesor:</strong> investigar por qué varía ligeramente el total de bytes recibidos entre corridas.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li><code>setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &amp;activado, sizeof(int))</code> antes de <code>bind()</code>.</li>
+<li>TCP fragmenta: leer en <code>while</code> hasta que <code>read()</code> devuelva 0.</li>
+<li>Búfer del kernel en clase: 212992 bytes; recomendado 4 KB (página de memoria), 8–16 KB para web.</li>
+<li>Tiempo = (fin − inicio) / <code>CLOCKS_PER_SEC</code>.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

@@ -2,19 +2,185 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ACS · Clase 13</title>
+<title>Clase 13 — Arquitectura Cliente-Servidor</title>
 <link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
 <script src="../../assets/app.js?v=20261012a" defer></script>
 </head>
 <body>
 <div class="wrap">
-<a class="back" href="index.html">← Volver a ACS</a>
-<div class="detail-head" style="border-color:#E8735C">
-  <h3>Clase 13</h3>
-  <p>Martes 8 de octubre · 07:00–08:30 · Salón A305</p>
+<a class="back" href="index.html">← Arquitectura Cliente-Servidor</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 13</h2>
+  <p class="prof">Mtro. Carlos Alberto Román Zamitiz · 8 oct 2026 · Tema 2 — Revisión de la Tarea 4 (<code>sk_acceptq_is_full</code>: por qué la cola acepta N + 1) y el Programa 05: chat bidireccional síncrono en C con validación de errores, <code>gethostbyaddr</code> sin segfault, <code>inet_ntoa</code> paso a paso, <code>fgets</code>, <code>memset</code> y el protocolo de salida con «adiós».</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>ACS-Clase13.m4a</code>), 19 oct 2026.</p>
 </div>
-<p class="empty">Contenido por agregar.</p>
+
+<details class="section-block sec" id="c13-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Validar cada función de sockets contra −1 y salir con <code>exit(1)</code>.</strong><span class="evid">Evidencia: «Si la función socket falló, no tiene caso continuar e intentar llamar a bind, a listen y accept… metan esta llamada en un if igualado a −1 y dentro de las llaves hagan un exit uno».</span></li>
+<li><strong>Leer <code>inet_ntoa</code> de adentro hacia afuera.</strong><span class="evid">Evidencia: preparó un PDF de una página para «desmembrar» la sentencia.</span></li>
+<li><strong>Validar <code>NULL</code> en <code>gethostbyaddr</code> para evitar un segfault.</strong><span class="evid">Evidencia: es la corrección explícita del Programa 04 al 05.</span></li>
+<li><strong><code>memset</code> para limpiar el búfer en cada vuelta.</strong><span class="evid">Evidencia: lo demostró en vivo comentando la línea: «esta sentencia es importantísima».</span></li>
+<li><strong>Por qué la cola de <code>listen()</code> acepta N + 1.</strong><span class="evid">Evidencia: lo explicó con la condición de <code>sk_acceptq_is_full</code> al revisar la Tarea 4.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c13-tarea4"><summary><span class="stitle">1 · Revisión de la Tarea 4: <code>sk_acceptq_is_full</code></span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La función interna del kernel de Linux que decide si la cola de aceptación de un socket en escucha ya está llena.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es la fila de un banco con «espacio para 1»: el guardia solo cierra la fila cuando hay <em>más</em> gente que el límite, así que en realidad caben 2 esperando.<span class="rompe">Dónde deja de servir: el número del backlog no cuenta a los clientes ya atendidos, solo a los que esperan ser aceptados.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>La condición compara con <strong>mayor que</strong> (<code>&gt;</code>), no con mayor o igual. Con <code>backlog = 1</code>:</p>
+<ol>
+<li>Cliente 1: la cola está en 0 y pasa.</li>
+<li>Cliente 2: ¿0 &gt; 1? No → entra a la cola (tamaño 1).</li>
+<li>Cliente 3: ¿1 &gt; 1? No → entra (tamaño 2).</li>
+<li>Cliente 4: ¿2 &gt; 1? Sí → rechazado.</li>
+</ol>
+<p>Comandos de la tarea (como root, con <code>sudo</code> o <code>sudo su</code>):</p>
+<pre><code>sudo sysctl -w net.ipv4.tcp_syncookies=0
+sudo sysctl -w net.ipv4.tcp_syn_retries=1</code></pre>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Explica el comportamiento real del backlog de <code>listen()</code> (<a href="clase-12.html">Clase 12</a>) y sirve para analizar inundaciones de SYN.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> suponer que el kernel usa <code>&gt;=</code>; usa <code>&gt;</code>, por eso siempre cabe una conexión más (N + 1).</p></div>
+</details>
+
+<details class="section-block sec" id="c13-programa05"><summary><span class="stitle">2 · Programa 05: chat bidireccional y <code>PF_INET</code></span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El par <code>programa_05_servidor_inet.c</code> y <code>programa_05_cliente_inet.c</code>: un chat en modo texto, síncrono, entre un servidor y un cliente.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un walkie-talkie: uno habla y tiene que esperar la respuesta para volver a hablar.<span class="rompe">Dónde deja de servir: no es WhatsApp; no puedes mandar 10 mensajes seguidos sin esperar.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El servidor usa a propósito <code>PF_INET</code> en lugar de <code>AF_INET</code>. En palabras del profesor: «AF es <em>address family</em> y PF es <em>protocol family</em>, es un sinónimo… si encuentran PF_INET no se desconcierten, es una macro equivalente».</p>
+<pre><code>socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);   /* IPPROTO_TCP equivale a poner 0 */</code></pre>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Evoluciona el Programa 04 (<a href="clase-11.html">Clase 11</a>); ver <a href="programas.html">Programas</a>.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c13-errores"><summary><span class="stitle">3 · Validar errores: <code>if (… == -1) exit(1)</code></span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Envolver cada llamada de sockets en un <code>if</code> que compare su retorno con −1 y termine el programa si falló.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es revisar que tienes la llave antes de abrir la puerta: si no se creó el socket (la llave), no tiene caso poner el cerrojo (<code>bind</code>) ni abrir (<code>accept</code>).</p></div>
+<span class="lbl">Cómo funciona</span>
+<pre><code>if ((fd_s = socket(PF_INET, SOCK_STREAM, 0)) == -1) {
+    perror("Error en socket");
+    exit(1);
+}</code></pre>
+<p>El profesor preguntó: «si socket fallara y devuelve −1, ¿tiene caso continuar con bind, listen y accept?». No: todas usan el descriptor que devuelve <code>socket()</code>, así que fallarían en cascada. <code>perror()</code> es opcional; <code>exit(1)</code> no.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> llamar las funciones «en plano», sin <code>if</code>, y dejar que el programa siga aunque el socket no exista.</p></div>
+</details>
+
+<details class="section-block sec" id="c13-gethostbyaddr"><summary><span class="stitle">4 · <code>gethostbyaddr</code> sin segfault</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La búsqueda del nombre del cliente a partir de su IP, que el servidor hace con <code>gethostbyaddr</code>.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es buscar un número en el directorio para saber de quién es: si no está, te regresa «nada» (<code>NULL</code>), y si intentas leer el nombre de una hoja en blanco, rompes la libreta (segfault).</p></div>
+<span class="lbl">Cómo funciona</span>
+<pre><code>info_cliente = gethostbyaddr((char *)&amp;cliente.sin_addr,
+                             sizeof(cliente.sin_addr), AF_INET);
+if (info_cliente == NULL) {
+    printf("Cliente conectado, pero no puedo obtener su origen\n");
+} else {
+    printf("Cliente conectado desde: %s\n", info_cliente-&gt;h_name);
+}</code></pre>
+<p>Si el DNS inverso no resuelve la IP, la función devuelve <code>NULL</code>, y hacer <code>NULL-&gt;h_name</code> es una violación de segmento. Es la mejora del Programa 05 frente al 04.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> usar <code>-&gt;h_name</code> sin validar antes contra <code>NULL</code>.</p></div>
+</details>
+
+<details class="section-block sec" id="c13-inet-ntoa"><summary><span class="stitle">5 · <code>inet_ntoa</code> leída de adentro hacia afuera</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La conversión de la IP guardada en binario (4 bytes) dentro de <code>hostent</code> a texto en notación decimal con puntos.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es traducir 4 bytes binarios a algo legible como <code>132.248.59.6</code>.</p></div>
+<span class="lbl">Cómo funciona</span>
+<pre><code>inet_ntoa(*((struct in_addr *)info_cliente-&gt;h_addr))</code></pre>
+<ol>
+<li><code>info_cliente-&gt;h_addr</code> (alias de <code>h_addr_list[0]</code>): un <code>char *</code> que apunta a los 4 bytes contiguos de la IP (cada uno de 0 a 255).</li>
+<li><strong>Casting</strong> <code>(struct in_addr *)</code>: le dice al compilador que no lo trate como texto, sino como apuntador a la estructura de red <code>in_addr</code>.</li>
+<li><strong>Desreferencia</strong> con el <code>*</code> de afuera: obtiene la estructura <code>in_addr</code> completa.</li>
+<li><code>inet_ntoa(…)</code>: la convierte a la cadena <code>"132.248.59.6"</code>.</li>
+</ol>
+<p><strong>Alternativa más sencilla</strong> vista en clase: usar directamente la estructura que llenó <code>accept()</code>, sin pasar por <code>hostent</code>: <code>inet_ntoa(cliente.sin_addr)</code>.</p>
+<p class="empty">NotebookLM escribió <code>h_addr_list</code> sin índice; aquí se usa <code>h_addr</code> (= <code>h_addr_list[0]</code>), que es la forma que compila. Compáralo con el PDF del profesor.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> olvidar el casting o el <code>*</code>: se le pasa un <code>char *</code> a una función que espera un <code>struct in_addr</code>.</p></div>
+</details>
+
+<details class="section-block sec" id="c13-chat"><summary><span class="stitle">6 · El chat: <code>fgets</code>, búferes y <code>memset</code></span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La estructura del chat síncrono: el servidor tiene un <code>while(1)</code> para atender un cliente tras otro y, dentro, un <code>do-while</code> para la conversación.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>El <code>while(1)</code> es el restaurante que limpia la mesa y recibe al siguiente cliente; el <code>do-while</code> es la plática plato por plato con el cliente actual.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Leer del teclado:</strong> <code>fgets(buff_respuesta, sizeof(buff_respuesta), stdin);</code>. <code>stdin</code> es la entrada estándar (el teclado, descriptor 0); <code>fgets</code> lee como máximo el tamaño del búfer e incluye el <code>'\n'</code> del Enter.</p>
+<p><strong>Búferes:</strong> <code>buff_peticion</code> y <code>buff_respuesta</code>, de 256 bytes. Orden de cada vuelta: el cliente hace <code>send</code> y luego <code>recv</code>; el servidor, <code>recv</code> y luego <code>send</code>.</p>
+<p><strong>Limpiar antes de cada mensaje:</strong> <code>memset(buff_peticion, 0, sizeof(buff_peticion));</code> al inicio del <code>do</code>. En vivo, el profesor comentó esa línea y pidió a Víctor mandar «Hola me llamo Victor» y luego «Taco»: el mensaje corto solo sobrescribió los primeros bytes y en pantalla quedó la «cola» del mensaje anterior (según NotebookLM, algo como «Tacome llamo Victor»).</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> no limpiar el búfer; los mensajes cortos arrastran basura de los largos.</p></div>
+</details>
+
+<details class="section-block sec" id="c13-adios"><summary><span class="stitle">7 · Quitar el <code>'\n'</code> y salir con «adiós»</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El truncado de la cadena recibida y el protocolo para terminar la sesión cuando alguien escribe «adiós».</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es colgar el teléfono: los dos tienen que escuchar el «adiós» antes de colgar.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p><code>recv</code> devuelve N, el número de bytes leídos, que incluye el salto de línea del Enter. Para limpiar la cadena: <code>buff_peticion[N-1] = '\0';</code>.</p>
+<p>Si el cliente envía «adiós», el servidor lo lee, sale de su ciclo y <strong>manda una respuesta automática</strong>. ¿Por qué? Porque en un esquema síncrono el cliente está bloqueado en <code>recv()</code>; si el servidor cerrara sin contestar, el cliente se quedaría colgado. Con la respuesta, el cliente se destraba, ve que su último mensaje fue «adiós», sale de su ciclo y cierra su socket limpio.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> cerrar el cliente justo después de mandar «adiós», sin hacer el último <code>recv()</code>.</p></div>
+</details>
+
+<details class="section-block sec" id="c13-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. Con <code>backlog = 1</code>, ¿cuántos clientes caben en la cola y por qué?</summary><p>2, porque <code>sk_acceptq_is_full</code> rechaza solo cuando el tamaño es <em>mayor</em> que el límite (2 &gt; 1).</p></details>
+<details class="qa"><summary>2. ¿Por qué hacer <code>exit(1)</code> si <code>socket()</code> devuelve −1?</summary><p>Porque <code>bind</code>, <code>listen</code> y <code>accept</code> usan ese descriptor; sin él fallarían en cascada.</p></details>
+<details class="qa"><summary>3. ¿Hay diferencia entre <code>AF_INET</code> y <code>PF_INET</code>?</summary><p>No en la práctica: son macros equivalentes (address family / protocol family).</p></details>
+<details class="qa"><summary>4. ¿Qué pasa si <code>gethostbyaddr</code> devuelve <code>NULL</code> y no se valida?</summary><p>Se desreferencia un apuntador nulo (<code>NULL-&gt;h_name</code>) y el programa truena con segfault.</p></details>
+<details class="qa"><summary>5. Explica los 4 pasos de <code>inet_ntoa(*((struct in_addr *)info_cliente-&gt;h_addr))</code>.</summary><p>Tomar el <code>char *</code> a los 4 bytes; castear a <code>struct in_addr *</code>; desreferenciar para obtener la estructura; convertirla a texto con <code>inet_ntoa</code>.</p></details>
+<details class="qa"><summary>6. ¿Qué es <code>stdin</code> en <code>fgets(buff, sizeof(buff), stdin)</code>?</summary><p>La entrada estándar, el teclado (descriptor 0).</p></details>
+<details class="qa"><summary>7. ¿Qué pasa si quitas el <code>memset</code> y mandas un mensaje corto después de uno largo?</summary><p>El corto solo sobrescribe los primeros bytes y queda la cola del mensaje anterior.</p></details>
+<details class="qa"><summary>8. Si el cliente escribe «hola» y Enter, ¿qué devuelve <code>recv</code> y en qué índice pones <code>'\0'</code>?</summary><p>N = 5 (4 letras + <code>'\n'</code>), así que <code>buff[4] = '\0'</code>, es decir N − 1. Con letras acentuadas, como «adiós», UTF-8 usa más bytes: confía en N − 1 en lugar de contar a mano.</p></details>
+<details class="qa"><summary>9. ¿Por qué el servidor responde automáticamente al «adiós»?</summary><p>Porque el cliente está bloqueado en <code>recv()</code>; la respuesta lo destraba para que salga y cierre su socket.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c13-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>Academia PC Puma:</strong> compartió un taller gratuito con constancia, el lunes 5 de octubre de 2:00 a 4:00 p. m. en el Auditorio Javier Barros Sierra.</li>
+<li><strong>¿Un ritual en latín?</strong> Durante la prueba en vivo contra su servidor (132.248.59.6), un alumno mandó texto de relleno; el profesor bromeó que parecía latín y que ya estaban haciendo un ritual. Era Lorem Ipsum.</li>
+<li><strong>Puntos extra:</strong> pidió que quienes participaron en las pruebas remotas se identificaran para anotarles participación, que al final puede subir la calificación (de 8 a 9, de 9 a 10).</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c13-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Tarea moral:</strong> probar el par del Programa 05 en dos terminales de tu máquina o de una máquina virtual.</li>
+<li><strong>Próxima clase:</strong> seguir con el comportamiento de los búferes y la transferencia de datos en sockets.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li><code>sk_acceptq_is_full</code> usa <code>&gt;</code>: con backlog N caben N + 1 en la cola.</li>
+<li>Cada función de sockets dentro de un <code>if (… == -1) exit(1)</code>.</li>
+<li>Validar <code>NULL</code> antes de <code>-&gt;h_name</code>.</li>
+<li><code>inet_ntoa(*((struct in_addr *)h-&gt;h_addr))</code>: casting, desreferencia, conversión; o simplemente <code>inet_ntoa(cliente.sin_addr)</code>.</li>
+<li><code>memset</code> al inicio de cada vuelta; <code>buff[N-1] = '\0'</code>; el servidor contesta al «adiós».</li>
+</ul></div>
+
 </div>
 </body>
 </html>

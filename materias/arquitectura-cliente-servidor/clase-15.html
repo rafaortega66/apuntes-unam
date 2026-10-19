@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 15 — Arquitectura Cliente-Servidor</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Arquitectura Cliente-Servidor</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 15</h2>
+  <p class="prof">Mtro. Carlos Alberto Román Zamitiz · 15 oct 2026 · Tema 2 — Por qué varía el total de bytes de una respuesta HTTP, el servidor que despacha un PDF (<code>programa_08_servidor_pdf.c</code>) y las indicaciones completas del examen parcial (base: Programa 04).</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>ACS-Clase15.m4a</code>), 19 oct 2026.</p>
+</div>
+
+<details class="section-block sec" id="c15-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<p>El examen parcial se asignó en esta clase (ya entregado: <a href="examenes.html">ACS-E01</a>). Para lo que sigue del curso:</p>
+<ol class="examen-lista">
+<li><strong>Enviar un archivo binario en bloques con <code>read</code> + <code>send</code> en un <code>while</code>.</strong><span class="evid">Evidencia: lo demostró con el servidor de PDF: «teniendo cliente-servidor pueden despachar cualquier tipo de recurso, de texto o binario».</span></li>
+<li><strong>Cabeceras HTTP: 200 OK con <code>application/pdf</code> frente a 404 con <code>text/plain</code>.</strong><span class="evid">Evidencia: lo explicó al revisar el código del servidor de PDF.</span></li>
+<li><strong>Puerto por línea de comandos con <code>htons</code>.</strong><span class="evid">Evidencia: lo prohibió en código duro para el examen.</span></li>
+<li><strong>Atender a varios clientes con un <code>while(1)</code> alrededor de <code>accept</code>.</strong><span class="evid">Evidencia: tuvo que relanzar su servidor de PDF a mano porque solo atendía a uno.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c15-bytes"><summary><span class="stitle">1 · Por qué varía el total de bytes (y el puerto 8080)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La respuesta a la duda de la <a href="clase-14.html#c14-compara">Clase 14</a>: por qué cada petición a www.google.com devolvía un total de bytes un poco distinto.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es pedir el mismo menú por correo dos días: el contenido es igual, pero el sello con la fecha en el sobre cambia un poco.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Las diferencias (91,351, 91,271, 90,508 bytes…) vienen de las <strong>cabeceras HTTP</strong>, que cambian ligeramente entre peticiones o entre direcciones IP; es muy raro que dos respuestas traigan exactamente los mismos metadatos. No es pérdida de paquetes.</p>
+<p>También explicó que servidores como Apache Tomcat usan el <strong>puerto 8080</strong> cuando corren sin privilegios de root, y el 80 en producción o con root; corrió el servidor del Programa 05 en el 8080 para mostrarlo.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> pensar que la variación de bytes es pérdida de paquetes TCP.</p></div>
+</details>
+
+<details class="section-block sec" id="c15-pdf"><summary><span class="stitle">2 · Servidor que despacha un PDF: <code>programa_08_servidor_pdf.c</code></span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un servidor TCP en C que lee un archivo binario (<code>holamundo.pdf</code>) del disco y lo manda por bloques a un cliente, por ejemplo un navegador.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es mandar un libro de 500 páginas por paquetería, 10 páginas por sobre; el receptor junta los sobres y arma el libro.</p></div>
+<span class="lbl">Cómo funciona</span>
+<ol>
+<li>Dos <code>sockaddr_in</code> (servidor y cliente) y dos descriptores (<code>fd_servidor</code>, <code>fd_cliente</code>).</li>
+<li><code>socket(AF_INET, SOCK_STREAM, 0)</code>, validando −1 y saliendo con <code>exit</code>; <code>setsockopt</code> con <code>SO_REUSEADDR</code>.</li>
+<li><code>memset</code> a la estructura, <code>sin_family = AF_INET</code>, <code>sin_addr.s_addr = INADDR_ANY</code>, puerto con <code>htons</code>, <code>bind</code>, <code>listen</code> y <code>accept</code>.</li>
+<li>Obtener la IP del cliente con <code>gethostbyaddr</code> (o <code>inet_ntoa(cliente.sin_addr)</code> como respaldo).</li>
+<li><strong>Descartar la petición del navegador:</strong> <code>recv</code> con la bandera <code>MSG_DONTWAIT</code> para vaciar el búfer de entrada sin quedarse bloqueado.</li>
+<li><code>open(PDF_PATH, O_RDONLY)</code>. Si devuelve −1: enviar <code>404 Not Found</code> con <code>Content-Type: text/plain</code> y un texto como «archivo no encontrado». Si abre: enviar <code>200 OK</code> con <code>Content-Type: application/pdf</code>.</li>
+<li><strong>Transferencia por bloques:</strong> <code>while ((r = read(fd_archivo, buffer, sizeof(buffer))) &gt; 0) send(fd_cliente, buffer, r, 0);</code> — se envían exactamente los <code>r</code> bytes leídos, hasta que <code>read</code> devuelve 0 (fin de archivo).</li>
+<li><code>close(fd_cliente)</code> y <code>close(fd_servidor)</code>.</li>
+</ol>
+<p><strong>En clase:</strong> lo corrió en 132.248.59.6, puerto 4898; los alumnos entraron desde el navegador y el primero recibió el PDF «Hola, mundo». El servidor imprimió «PDF enviado correctamente, cerrando conexión» y terminó; para atender a otro tuvo que relanzarlo. Para que atienda a varios clientes seguidos hace falta un <code>while(1)</code> alrededor de <code>accept</code>.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Para un socket TCP no hay diferencia entre texto y binario: todo es un flujo de bytes que se manda en bloques con un bucle (<a href="clase-14.html#c14-buffers">Clase 14</a>).</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> nombre de archivo equivocado (<code>hola mundo.pdf</code> o <code>hola-mundo.pdf</code> en lugar de <code>holamundo.pdf</code>) → <code>open</code> da −1 y responde 404; intentar mandar un archivo grande con un solo <code>send</code>; olvidar el <code>while(1)</code> si se quiere atender a varios clientes.</p></div>
+</details>
+
+<details class="section-block sec" id="c15-parcial"><summary><span class="stitle">3 · Indicaciones del examen parcial</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El examen parcial práctico, para hacer en casa, basado en el Programa 04 (<code>programa_04_servidor_inet.c</code> y <code>programa_04_cliente_inet.c</code>).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un registro de asistencia remoto: tu cliente captura tu nombre y lo entrega al servidor del profesor, que lo guarda con fecha, hora e IP y te devuelve un acuse.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Cambio de flujo:</strong> en el Programa 04 el servidor manda primero una frase fija («conexión exitosa»). En el examen se invierte: el <strong>cliente envía primero su nombre</strong>, el servidor lo recibe, lo imprime y responde con una confirmación; luego ambos terminan.</p>
+<p><strong>Servidor:</strong> el puerto se pasa por línea de comandos (nunca en código duro) y se convierte con <code>htons</code>; debe capturar e imprimir la IP del cliente.</p>
+<p><strong>Cliente:</strong> recibe la IP y el puerto del servidor por línea de comandos; el nombre se lee del teclado (por ejemplo con <code>fgets</code>), no en código duro, en el formato <strong>APELLIDO_PATERNO APELLIDO_MATERNO NOMBRE(S)</strong>.</p>
+<p><strong>Prueba local:</strong> dos terminales lado a lado; servidor con un puerto (4898, 5000, 8080…) y cliente apuntando a 127.0.0.1. Captura donde se vean el envío del nombre, su impresión en el servidor y la respuesta en el cliente.</p>
+<p><strong>Prueba remota:</strong> cliente contra el servidor del profesor (132.248.59.6, puerto 4898 o 4899), escribir el nombre, recibir la confirmación y, en la misma terminal, ejecutar <code>date</code>; captura de todo (revisar antes que la fecha y hora de la computadora estén bien). El servidor remoto guardaba IP, fecha, hora y nombre, y el profesor revisaría que no lleguen dos nombres distintos desde la misma IP.</p>
+<p><strong>Entrega:</strong> por correo, los <code>.c</code> de cliente y servidor y las capturas (PNG o un PDF con conclusiones), del jueves 15 hasta la noche del lunes. <strong>No enviar ejecutables</strong>: el correo los filtra como sospechosos.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> puerto o nombre en código duro, nombre en otro orden, mandar ejecutables, olvidar el <code>date</code>, o hacer el examen de dos personas desde la misma IP.</p></div>
+</details>
+
+<details class="section-block sec" id="c15-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Por qué varían los bytes totales entre peticiones HTTP iguales?</summary><p>Por los metadatos de las cabeceras HTTP, que cambian ligeramente en cada respuesta.</p></details>
+<details class="qa"><summary>2. ¿Para qué se usa <code>recv</code> con <code>MSG_DONTWAIT</code> en el servidor de PDF?</summary><p>Para vaciar la petición del navegador sin bloquear al servidor.</p></details>
+<details class="qa"><summary>3. ¿Qué responde el servidor si <code>open</code> devuelve −1?</summary><p><code>404 Not Found</code> con <code>Content-Type: text/plain</code> y un texto de error.</p></details>
+<details class="qa"><summary>4. ¿Qué <code>Content-Type</code> se manda para un PDF?</summary><p><code>application/pdf</code>, con <code>200 OK</code>.</p></details>
+<details class="qa"><summary>5. En el bucle de envío, ¿por qué se hace <code>send(fd, buffer, r, 0)</code> y no <code>sizeof(buffer)</code>?</summary><p>Porque el último bloque suele ser más pequeño: hay que mandar exactamente los <code>r</code> bytes que leyó <code>read</code>.</p></details>
+<details class="qa"><summary>6. ¿Qué le falta al servidor de PDF para atender a varios clientes?</summary><p>Un <code>while(1)</code> alrededor de <code>accept</code>.</p></details>
+<details class="qa"><summary>7. ¿En qué se diferencia el flujo del examen del Programa 04?</summary><p>En el 04 el servidor habla primero; en el examen, el cliente manda primero su nombre y el servidor responde.</p></details>
+<details class="qa"><summary>8. ¿Por qué el puerto se convierte con <code>htons</code>?</summary><p>Para pasarlo del orden de bytes del host al orden de red (big-endian) que espera <code>sin_port</code>.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c15-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>Cron:</strong> explicó las 5 columnas de crontab (minuto, hora, día del mes, mes, día de la semana) con la línea <code>30 8 15 10 *</code>, que lanzaba su servidor el 15 de octubre a las 8:30.</li>
+<li><strong>Su propio log:</strong> se rió al ver que en su servidor olvidó poner el <code>'\0'</code> y quedaban caracteres raros al final de los nombres, aunque se entendían.</li>
+<li><strong>Tomcat y el 8080:</strong> comentó lo popular que es Apache Tomcat en la universidad.</li>
+<li>Ofreció apoyo durante el fin de semana por mensaje para confirmar si el nombre llegó a su log.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c15-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Examen parcial:</strong> entrega por correo hasta la noche del lunes (ya entregado el 18 oct, ver <a href="examenes.html">ACS-E01</a>).</li>
+<li><strong>Próxima clase (martes):</strong> un servidor que transfiere un video corto para reproducirlo en el navegador, y clientes de escritorio en C con lectura iterativa.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>La variación de bytes viene de las cabeceras HTTP, no de pérdida de paquetes.</li>
+<li>Servidor de PDF: <code>open</code> → 200 <code>application/pdf</code> o 404 <code>text/plain</code> → <code>while (read &gt; 0) send(r)</code>.</li>
+<li>Un <code>while(1)</code> sobre <code>accept</code> para atender a varios clientes.</li>
+<li>Examen: cliente manda «APELLIDO_PATERNO APELLIDO_MATERNO NOMBRE(S)», puerto por <code>argv</code> + <code>htons</code>, prueba local y remota con <code>date</code>, sin ejecutables.</li>
+</ul></div>
+
+</div>
+</body>
+</html>
