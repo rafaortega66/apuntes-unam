@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-10-12",
+  "actualizado": "2026-10-19",
   "zona": "America/Mexico_City",
   "nota": "Solo tareas obligatorias. Cuando Classroom no muestra hora, se asume fin del día (23:59). Classroom manda sobre lo dicho en clase. Los ítems sin fecha exacta no se ocultan solos.",
   "items": [
@@ -24,7 +24,8 @@
       "hora_confirmada": true,
       "detalle": "Serie \"Código limpio\". PDF único: NL-CURP-T07.pdf.",
       "link": "decimo/FSE/FSE-Tareas/FSE-T07/FSE-T07-indicaciones.pdf",
-      "classroom": "https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzQ4Njk2NDEy/details"
+      "classroom": "https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzQ4Njk2NDEy/details",
+      "oculto": true
     },
     {
       "id": "fse-t08",
@@ -57,7 +58,8 @@
       "hora_confirmada": true,
       "detalle": "Vence 13 oct, 11:59 pm. Se hace con la Pico (manual 6b, LM35 → I²C → Raspberry Pi). El profesor avisó que se evalúa con criterio riguroso (FSE Clase 05). Entrega: PDF NL-CURP-L06.pdf.",
       "link": "decimo/FSE/FSE-Lab/FSE-P06/FSE-P06-indicaciones.pdf",
-      "classroom": "https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzcxNDM1NTYw/details"
+      "classroom": "https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzcxNDM1NTYw/details",
+      "oculto": true
     },
     {
       "id": "labfse-p7",
@@ -88,7 +90,8 @@
       "vence": "2026-10-18T23:59:00-06:00",
       "hora_confirmada": false,
       "detalle": "Domingo 18 oct (ajustada desde el viernes 16). Fecha dicha en clase (ASI Clase 05/06); confirmar en Classroom.",
-      "link": "materias/administracion-de-servicios-de-internet/index.html"
+      "link": "materias/administracion-de-servicios-de-internet/index.html",
+      "oculto": true
     },
     {
       "id": "asi-final",
@@ -130,7 +133,8 @@
       "vence": "2026-10-13T23:59:00-06:00",
       "hora_confirmada": true,
       "detalle": "Vence martes 13 oct, 11:59 pm (Classroom: «Reporte práctica 3»). Práctica 3 — ASM, tablas, mapas, código e implementación en FPGA (mostrar la carta ASM antes de programar).",
-      "link": "materias/lab-de-organizacion-y-arquitectura-de-computadoras/index.html"
+      "link": "materias/lab-de-organizacion-y-arquitectura-de-computadoras/index.html",
+      "oculto": true
     },
     {
       "id": "oac-raiz",
@@ -140,7 +144,8 @@
       "vence": "2026-10-14T09:00:00-06:00",
       "hora_confirmada": true,
       "detalle": "Asignada en la Clase 06 sin fecha límite. Ya tienes la Raspberry Pi Pico 2 (llegó el 6 oct): lista para hacerse. Entrega acordada: miércoles 14 oct, en la siguiente clase de OAC (09:00, A107).",
-      "link": "materias/organizacion-y-arquitectura-de-computadoras/clase-06.html"
+      "link": "materias/organizacion-y-arquitectura-de-computadoras/clase-06.html",
+      "oculto": true
     },
     {
       "id": "acs-parcial",
@@ -151,7 +156,8 @@
       "hora_confirmada": false,
       "detalle": "Anunciado el 24 y el 29 sep: «más o menos en dos semanas». Programar en C un cliente-servidor TCP (socket/bind/listen/accept/connect, sockaddr_in, htons, IP y puerto por argv). Reglas aún no dichas; el PDF de especificaciones existe en el sitio del profesor pero aún no lo publica.",
       "link": "materias/arquitectura-cliente-servidor/evaluacion.html#examen-parcial",
-      "fecha_texto": "≈ mediados de octubre (por confirmar)"
+      "fecha_texto": "≈ mediados de octubre (por confirmar)",
+      "oculto": true
     },
     {
       "id": "fse-parcial",
@@ -162,7 +168,8 @@
       "hora_confirmada": false,
       "detalle": "Dicho en la Clase 11 (5 oct): primer parcial proyectado tentativamente entre el 7 y el 10 de octubre. Fecha por confirmar.",
       "link": "materias/fundamentos-de-sistemas-embebidos/clase-11.html#c11-pendiente",
-      "fecha_texto": "Tentativo 7–10 oct (por confirmar)"
+      "fecha_texto": "Tentativo 7–10 oct (por confirmar)",
+      "oculto": true
     },
     {
       "id": "rp-final",
@@ -195,7 +202,8 @@
       "detalle": "En el cuaderno de OAC aparece en rojo (error al procesar). Sin ese audio no se puede armar la clase del 30 sep. Tampoco hay audio de la clase del 23 sep — ¿hubo clase ese día?",
       "link": "progreso.html",
       "fecha_texto": "Cuando puedas",
-      "sin_pagina": true
+      "sin_pagina": true,
+      "oculto": true
     },
     {
       "id": "md-p2",
@@ -205,7 +213,8 @@
       "vence": "2026-10-13T12:00:00-06:00",
       "hora_confirmada": true,
       "detalle": "Vence martes 13 oct, 12:00 pm (Classroom: «Mineria de Datos Practica 3.2 Asociacion»). Python (notebook paso por paso) y RapidMiner (PPT/PDF con capturas); comparar Apriori vs FP-Growth, soporte mínimo 0.01.",
-      "link": "materias/mineria-de-datos/clase-10.html#c10-pendiente"
+      "link": "materias/mineria-de-datos/clase-10.html#c10-pendiente",
+      "oculto": true
     },
     {
       "id": "oac-iir2",
@@ -215,7 +224,8 @@
       "vence": "2026-10-14T09:00:00-06:00",
       "hora_confirmada": true,
       "detalle": "Asignado en la Clase 9 (5 oct): modificar la plantilla filtro_iir2 (Ts=0.05 s, wn<62.8 rad/s, zeta<1). La grabación no menciona fecha ni medio de entrega; confirmar en Classroom/con el profesor. Entrega acordada: miércoles 14 oct, en la siguiente clase de OAC (09:00, A107).",
-      "link": "materias/organizacion-y-arquitectura-de-computadoras/clase-09.html#c9-pendiente"
+      "link": "materias/organizacion-y-arquitectura-de-computadoras/clase-09.html#c9-pendiente",
+      "oculto": true
     },
     {
       "id": "fse-examen",
@@ -239,7 +249,8 @@
       "vence": "2026-10-13T09:00:00-06:00",
       "hora_confirmada": true,
       "detalle": "Infografía numerada con nombre y descripción de 35 ataques informáticos, con imágenes. Archivo: EquipoXTarea3.pdf. Solo el representante del equipo la ve en Classroom; no se puede entregar después del vencimiento.",
-      "link": "tareas/sib-t3.html"
+      "link": "tareas/sib-t3.html",
+      "oculto": true
     },
     {
       "id": "asi-formato",
@@ -251,7 +262,116 @@
       "detalle": "Publicada el 9 sep, sigue «Assigned» sin fecha límite en Classroom (la distinta de «Formato 1», que ya está entregada). Confirmar qué se pide.",
       "fecha_texto": "Sin fecha en Classroom",
       "sin_pagina": true,
-      "link": "materias/administracion-de-servicios-de-internet/index.html"
+      "link": "materias/administracion-de-servicios-de-internet/index.html",
+      "oculto": true
+    },
+    {
+      "id": "laboac-previo1",
+      "materia": "Lab OAC",
+      "sigla": "Lab OAC",
+      "titulo": "Previo 1 (Práctica 5)",
+      "vence": "2026-10-20T23:59:00-06:00",
+      "hora_confirmada": true,
+      "detalle": "Seguir el documento anexo «previo_practica05.pdf» y la convención de nombres del primer día. No se acepta después de la fecha.",
+      "link": "decimo/OAC/OAC-Lab/OAC-P05/OAC-P05-indicaciones.md",
+      "color": "#7C9CD6",
+      "tipo": "tarea"
+    },
+    {
+      "id": "md-p34",
+      "materia": "MD",
+      "sigla": "MD",
+      "titulo": "Práctica 3.4 — Clasificación (Diabetes demo)",
+      "vence": "2026-10-22T13:00:00-06:00",
+      "hora_confirmada": true,
+      "detalle": "Responder los puntos del PDF anexo con «diabetes demo.csv»: .ipynb de Python + RapidMiner (opcional) + PPT con lo sobresaliente. Nombre: «Practica 3.4 Clasificacion Equipo #».",
+      "link": "materias/mineria-de-datos/practicas.html#MD-P03-4",
+      "color": "#A98BD1",
+      "tipo": "tarea"
+    },
+    {
+      "id": "rp-t2",
+      "materia": "RP",
+      "sigla": "RP",
+      "titulo": "Tarea 2",
+      "vence": "2026-10-23T07:00:00-06:00",
+      "hora_confirmada": true,
+      "detalle": "Enunciado en el adjunto «Tarea 2.pdf» de Classroom.",
+      "link": "materias/reconocimiento-de-patrones/tareas.html#RP-T02",
+      "color": "#45B8A8",
+      "tipo": "tarea"
+    },
+    {
+      "id": "laboac-p4",
+      "materia": "Lab OAC",
+      "sigla": "Lab OAC",
+      "titulo": "Reporte práctica 4",
+      "vence": "2026-10-23T23:59:00-06:00",
+      "hora_confirmada": true,
+      "detalle": "Seguir el documento anexo «practica04-reporte.pdf» y la convención de nombres. No se acepta después de la fecha.",
+      "link": "decimo/OAC/OAC-Lab/OAC-P04/OAC-P04-indicaciones.md",
+      "color": "#7C9CD6",
+      "tipo": "tarea"
+    },
+    {
+      "id": "asi-sprint3",
+      "materia": "ASI",
+      "sigla": "ASI",
+      "titulo": "Sprint 3 del proyecto final: Samba, SSH y permisos (reporte semanal)",
+      "vence": "2026-10-25T23:59:00-06:00",
+      "hora_confirmada": false,
+      "detalle": "HU04 Samba, HU05 SSH, HU06 grupos y permisos. El reporte semanal se entrega cada domingo en el formato Scrum + Git; la tarea aún no está publicada en Classroom (19 oct), fecha supuesta.",
+      "link": "materias/administracion-de-servicios-de-internet/proyectos.html#ASI-Sprint3",
+      "color": "#7C9CD6",
+      "tipo": "tarea"
+    },
+    {
+      "id": "oac-t01",
+      "materia": "OAC",
+      "sigla": "OAC",
+      "titulo": "Trabajo 1 — Raíz cuadrada en ensamblador",
+      "vence": null,
+      "hora_confirmada": false,
+      "detalle": "Código listo en decimo (OAC-T01). En clase no se dijo fecha ni forma de entrega; los proyectos se están mostrando al profesor en clase desde el 19 oct.",
+      "link": "materias/organizacion-y-arquitectura-de-computadoras/tareas.html#OAC-T01",
+      "color": "#45B8A8",
+      "tipo": "tarea"
+    },
+    {
+      "id": "oac-t02",
+      "materia": "OAC",
+      "sigla": "OAC",
+      "titulo": "Trabajo 2 — Producto punto en ensamblador (FPU)",
+      "vence": null,
+      "hora_confirmada": false,
+      "detalle": "Código listo en decimo (OAC-T02). Fecha y forma de entrega no especificadas en clase.",
+      "link": "materias/organizacion-y-arquitectura-de-computadoras/tareas.html#OAC-T02",
+      "color": "#45B8A8",
+      "tipo": "tarea"
+    },
+    {
+      "id": "oac-proy01",
+      "materia": "OAC",
+      "sigla": "OAC",
+      "titulo": "Proyecto 1 — Seno y coseno por series de Taylor (FPU, Pico 2)",
+      "vence": null,
+      "hora_confirmada": false,
+      "detalle": "Se entrega mostrándolo al profesor en clase (empezó a revisar el 19 oct). Plazo dicho en la Clase 10: «el lunes que viene el otro, no sé, 10». Código listo en decimo.",
+      "link": "materias/organizacion-y-arquitectura-de-computadoras/proyectos.html#OAC-Proy01",
+      "color": "#45B8A8",
+      "tipo": "tarea"
+    },
+    {
+      "id": "oac-proy02",
+      "materia": "OAC",
+      "sigla": "OAC",
+      "titulo": "Proyecto 2 — Filtro IIR de 2º orden subamortiguado (FPU, Pico 2)",
+      "vence": null,
+      "hora_confirmada": false,
+      "detalle": "Se entrega mostrándolo al profesor en clase. Asignado en la Clase 9 (5 oct): «tienen 15 días». Código listo en decimo.",
+      "link": "materias/organizacion-y-arquitectura-de-computadoras/proyectos.html#OAC-Proy02",
+      "color": "#45B8A8",
+      "tipo": "tarea"
     }
   ]
 }

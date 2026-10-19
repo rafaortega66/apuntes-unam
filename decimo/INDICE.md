@@ -115,6 +115,8 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 |---|---|---|---|
 | MD-P03-1 | [MD-P03-1-indicaciones.pdf](MD/MD-Practicas/MD-P03-1/MD-P03-1-indicaciones.pdf) | [Equipo7_Practica3.1_Agrupacion.pdf](MD/MD-Practicas/MD-P03-1/MD-P03-1-entregables/Equipo7_Practica3.1_Agrupacion.pdf)<br>[Equipo_7_Practica_3.1_Agrupacion.ipynb](MD/MD-Practicas/MD-P03-1/MD-P03-1-entregables/Equipo_7_Practica_3.1_Agrupacion.ipynb) | 3 |
 | MD-P03-2 | [MD-P03-2-indicaciones.pdf](MD/MD-Practicas/MD-P03-2/MD-P03-2-indicaciones.pdf) | [Equipo 7 Practica 3.2 Asociacion.ipynb](MD/MD-Practicas/MD-P03-2/MD-P03-2-entregables/Equipo%207%20Practica%203.2%20Asociacion.ipynb)<br>[Equipo 7 Practica 3.2 Asociacion.pdf](MD/MD-Practicas/MD-P03-2/MD-P03-2-entregables/Equipo%207%20Practica%203.2%20Asociacion.pdf) | 4 |
+| MD-P03-3 | [MD-P03-3-indicaciones.md](MD/MD-Practicas/MD-P03-3/MD-P03-3-indicaciones.md) | _(sin entrega aún)_ | — |
+| MD-P03-4 | [MD-P03-4-indicaciones.md](MD/MD-Practicas/MD-P03-4/MD-P03-4-indicaciones.md) | _(sin entrega aún)_ | — |
 
 ### MD-Proyectos
 
@@ -136,7 +138,8 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 | OAC-P01 | [OAC-P01-indicaciones.pdf](OAC/OAC-Lab/OAC-P01/OAC-P01-indicaciones.pdf) | [Practica-01-Pre-reporte.pdf](OAC/OAC-Lab/OAC-P01/OAC-P01-entregables/Practica-01-Pre-reporte.pdf)<br>[practica01_equipo07_OrtegaDeLaPaz.pdf](OAC/OAC-Lab/OAC-P01/OAC-P01-entregables/practica01_equipo07_OrtegaDeLaPaz.pdf) | 9 |
 | OAC-P02 | [OAC-P02-indicaciones.pdf](OAC/OAC-Lab/OAC-P02/OAC-P02-indicaciones.pdf) | [practica02_equipo07_Rea_OrtegaDeLaPaz.pdf](OAC/OAC-Lab/OAC-P02/OAC-P02-entregables/practica02_equipo07_Rea_OrtegaDeLaPaz.pdf) | 3 |
 | OAC-P03 | [OAC-P03-indicaciones.pdf](OAC/OAC-Lab/OAC-P03/OAC-P03-indicaciones.pdf) | [practica03_equipo07_Rea_Ortega.pdf](OAC/OAC-Lab/OAC-P03/OAC-P03-entregables/practica03_equipo07_Rea_Ortega.pdf) | 1 |
-| OAC-P04 | [OAC-P04-indicaciones.pdf](OAC/OAC-Lab/OAC-P04/OAC-P04-indicaciones.pdf) | _(sin entrega aún)_ | — |
+| OAC-P04 | [OAC-P04-indicaciones.md](OAC/OAC-Lab/OAC-P04/OAC-P04-indicaciones.md)<br>[OAC-P04-indicaciones.pdf](OAC/OAC-Lab/OAC-P04/OAC-P04-indicaciones.pdf) | _(sin entrega aún)_ | — |
+| OAC-P05 | [OAC-P05-indicaciones.md](OAC/OAC-Lab/OAC-P05/OAC-P05-indicaciones.md) | _(sin entrega aún)_ | — |
 
 ### OAC-Proyectos
 
@@ -177,6 +180,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 | Entrega | Indicaciones | Entregado | Adicionales |
 |---|---|---|---|
 | RP-T01 | [RP-T01-indicaciones.pdf](RP/RP-Tareas/RP-T01/RP-T01-indicaciones.pdf) | [RP-T01-420054085.pdf](RP/RP-Tareas/RP-T01/RP-T01-entregables/RP-T01-420054085.pdf) | 1 |
+| RP-T02 | [RP-T02-indicaciones.md](RP/RP-Tareas/RP-T02/RP-T02-indicaciones.md) | _(sin entrega aún)_ | — |
 
 ## SIB — Seguridad Informática Básica
 

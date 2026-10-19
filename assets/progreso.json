@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-19T22:52:37+00:00",
+ "generatedAt": "2026-10-19T22:59:32+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -713,6 +713,11 @@
  },
  "gitlog": [
   {
+   "hash": "b2b7201",
+   "fecha": "2026-10-19T16:52:37-06:00",
+   "mensaje": "ASI: dos carpetas — ASI-Practicas y ASI-Proyecto por sprints (Sprint0–Sprint3, con README de cada uno y Sprint 3 en curso: Samba, SSH, permisos); diagramas UML renombrados; proyectos.html agrupado por sprint. MD: Práctica 3.3 = Regresión y 3.4 = Clasificación (vence 22 oct), confirmado en Classroom"
+  },
+  {
    "hash": "8178a50",
    "fecha": "2026-10-19T16:44:02-06:00",
    "mensaje": "SIB: Clases 12 (8 oct, clasificación y etapas de ataques), 13 (13 oct, atacantes e intrusión) y 14 (15 oct, malware, físicos y mecanismos) en formato de estudio desde NotebookLM, con enlace a los apuntes PDF; nota sobre el desfase de audios de SIB"
@@ -1006,11 +1011,6 @@
    "hash": "5e87304",
    "fecha": "2026-10-07T09:50:42-06:00",
    "mensaje": "Estado de tareas en el sitio: «Dónde nos quedamos» por asignación, avance en la tarjeta y regla en CLAUDE.md"
-  },
-  {
-   "hash": "9444533",
-   "fecha": "2026-10-07T09:48:34-06:00",
-   "mensaje": "Guardar contexto de la tarea ASI ENOE/ENIGH para retomar en Windows (tutorial, gráficas de referencia, scripts)"
   }
  ]
 }
