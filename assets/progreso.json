@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-19T22:31:31+00:00",
+ "generatedAt": "2026-10-19T22:44:02+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -596,23 +596,23 @@
    {
     "num": 12,
     "fecha": "2026-10-08",
-    "resumen": "Tema 3 — Clasificación y etapas de un ataque; caso «SaludIntegral».",
+    "resumen": "Tema 3 (3.1.3–3.1.4) — Clasificación de los ataques (por intención, por lugar, por evidencia) y las etapas de un ataque intencionado (preparación, activación, ejecución) frente a uno no intencionado; ejercicio en equipo ",
     "url": "materias/seguridad-informatica-basica/clase-12.html",
-    "formato": "viejo"
+    "formato": "estudio"
    },
    {
     "num": 13,
     "fecha": "2026-10-13",
-    "resumen": "Tema 3 — Perpetradores o atacantes y técnicas de intrusión.",
+    "resumen": "Tema 3 — Perpetradores o atacantes (agente amenazante vs. atacante, internos y externos, tipos por acción, sombreros), Red Team y Blue Team, y técnicas de intrusión: hoax, ataques a redes, a software y de ingeniería soci",
     "url": "materias/seguridad-informatica-basica/clase-13.html",
-    "formato": "viejo"
+    "formato": "estudio"
    },
    {
     "num": 14,
     "fecha": "2026-10-15",
-    "resumen": "Tema 3 — Intrusión por malware y física; mecanismos de seguridad.",
+    "resumen": "Tema 3 — Intrusión por malware y ataques físicos con sus mitigaciones; mecanismos de seguridad: definición, relación con los servicios y sus cuatro clasificaciones (servicio, importancia, cobertura, acción); ejercicio en",
     "url": "materias/seguridad-informatica-basica/clase-14.html",
-    "formato": "viejo"
+    "formato": "estudio"
    }
   ],
   "lab-de-fundamentos-de-sistemas-embebidos": [],
@@ -712,6 +712,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "95e879d",
+   "fecha": "2026-10-19T16:31:31-06:00",
+   "mensaje": "ASI: Clase 12 (7 oct, examen) y Clase 13 (12 oct, examen de reposición en Teams) desde NotebookLM"
+  },
   {
    "hash": "52bb840",
    "fecha": "2026-10-19T16:28:31-06:00",
@@ -1006,11 +1011,6 @@
    "hash": "7b638a0",
    "fecha": "2026-10-07T09:36:44-06:00",
    "mensaje": "ASI Clase 11 (5 oct): ENOE en Power BI y actividades ENOE/ENIGH; página de la tarea actualizada con instrucciones reales"
-  },
-  {
-   "hash": "9abdf49",
-   "fecha": "2026-10-07T08:48:28-06:00",
-   "mensaje": "Página por asignación (tareas/<id>.html) con instrucciones exactas: ASI ENOE/ENIGH, FSE T06-T09, Labs FSE, MD, ACS, OAC; las tarjetas de Pendientes ahora enlazan ahí"
   }
  ]
 }

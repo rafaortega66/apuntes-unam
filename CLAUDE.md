@@ -86,7 +86,7 @@ contra `horario.json` y las páginas `clase-NN.html`. El número de clase lo man
 no el nombre de un archivo del usuario ni la memoria (19 oct 2026: se renumeró SIB mal por
 un `.txt` que decía «clase 11» y la hoja dice que la 11 fue el examen del 6 oct). Los
 exámenes cuentan como clase (página con `<meta name="formato" content="no-aplica">`).
-Los audios de NotebookLM (`<SIGLA>-ClaseN.m4a`) usan la misma numeración.
+Los audios de NotebookLM (`<SIGLA>-ClaseN.m4a`) usan la misma numeración **excepto en SIB**: ahí los audios no cuentan el examen del 6 oct (audio 11 = 8 oct = Clase 12; audios 12 y 13 = 13 oct = Clase 13; audio 14 = 15 oct = Clase 14). Ante la duda, cruza el contenido del audio con los apuntes fechados del usuario.
 
 Si una fecha propuesta no cae en el día que le toca a esa materia según esta
 tabla, es un error — decirlo explícitamente y pedir confirmación antes de
@@ -226,7 +226,7 @@ directo a ellos (ver más abajo).
 ## Cuadernos de NotebookLM (Claude en Chrome, cuenta del usuario)
 
 Un cuaderno por materia en `https://notebook.google.com/notebook/<id>`; los audios se llaman
-`<SIGLA>-ClaseN.m4a` con la misma numeración que la hoja RegistroClases.
+`<SIGLA>-ClaseN.m4a`, en general con la numeración de la hoja RegistroClases (SIB va desfasado: ver arriba).
 
 | Materia | id |
 |---|---|

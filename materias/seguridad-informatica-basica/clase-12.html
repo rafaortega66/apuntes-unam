@@ -2,9 +2,11 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SIB · Clase 12</title>
 <link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
 <script src="../../assets/app.js?v=20261012a" defer></script>
 </head>
 <body>
@@ -12,10 +14,123 @@
 <a class="back" href="index.html">← Volver a SIB</a>
 <div class="detail-head" style="border-color:#E8735C">
   <h3>Clase 12</h3>
-  <p class="prof">Dra. Cintia Quezada Reyes · 8 oct 2026 · Tema 3 — Clasificación y etapas de un ataque; caso «SaludIntegral».</p>
+  <p class="prof">Dra. Cintia Quezada Reyes · 8 oct 2026 · Tema 3 (3.1.3–3.1.4) — Clasificación de los ataques (por intención, por lugar, por evidencia) y las etapas de un ataque intencionado (preparación, activación, ejecución) frente a uno no intencionado; ejercicio en equipo «Incidente en SaludIntegral».</p>
   <p class="prof">📝 <a href="../../decimo/SIB/SIB-Material/SIB-Apuntes-Clase12-2026-10-08.pdf" target="_blank">Apuntes de la clase: lo que presentó la profesora (PDF)</a> · ✏️ <a href="tareas.html#SIB-EC03">Ejercicio de clase (SIB-EC03)</a></p>
+  <p class="prof">Fuente: NotebookLM, audio <code>SIB-Clase11.m4a</code> (en SIB los audios no cuentan el examen del 6 oct), 19 oct 2026.</p>
 </div>
-<p class="empty">Resumen por escribir. Temas según mis apuntes: clasificación de los ataques (por intención, lugar, evidencia y flujo del bien), las tres etapas de un ataque intencionado (preparación, activación, ejecución) y el caso «SaludIntegral».</p>
+
+<details class="section-block sec" id="c12-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>3 fases si es intencionado, 2 si no lo es.</strong><span class="evid">Evidencia: la profesora remarcó la diferencia como punto clave: el no intencionado no tiene preparación.</span></li>
+<li><strong>Pasivos frente a activos, y por qué el pasivo es más peligroso.</strong><span class="evid">Evidencia: «a veces los pasivos son más peligrosos… nunca me doy cuenta que se llevaron a cabo».</span></li>
+<li><strong>Todo ataque externo tiene que volverse interno.</strong><span class="evid">Evidencia: «Todos los ataques que son externos… tienen que seguir una ruta virtual o física para acercarse al bien y volverse interno; si no, no se hace daño».</span></li>
+<li><strong>Aplicar las 3 etapas a un caso (SaludIntegral).</strong><span class="evid">Evidencia: fue el ejercicio evaluado en equipo, entregado en hoja.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c12-intencion"><summary><span class="stitle">1 · Por intención: intencionados y no intencionados</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Clasificar el ataque según haya o no un objetivo planeado y la voluntad de causar daño.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Intencionado: un secuestro planeado durante semanas. No intencionado: que se te caiga el mole de la hojaldra en la playera.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Los <strong>intencionados</strong> llevan detrás una planeación cuidadosa (no se arman en 3 horas como en las series), con recursos humanos, vehículos, dinero o pagos a quienes los ejecutan. Los <strong>no intencionados</strong> vienen de descuidos, negligencia, falta de conocimiento o accidentes (apretar todos los botones de un aparato por curiosidad, mancharte la ropa al comer).</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> creer que un ataque intencionado complejo se improvisa.</p></div>
+</details>
+
+<details class="section-block sec" id="c12-lugar"><summary><span class="stitle">2 · Por lugar: internos y externos</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Clasificar según dónde se origina el ataque respecto al bien.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Interno: mancharte con la comida que tú mismo comes. Externo: un virus que surge en otro país y viaja de persona en persona hasta llegarte.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Los <strong>internos</strong> ocurren dentro del espacio físico o lógico del bien. Los <strong>externos</strong> se originan lejos, pero siempre tienen que seguir una ruta física o virtual para acercarse al bien y <strong>volverse internos</strong>; si no lo logran, no hacen daño. Ejemplos: el COVID-19, que surgió en China y se volvió un evento local en cada país por contagios; y las intrusiones a la UNAM en vacaciones de julio del año pasado, originadas en el extranjero.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> suponer que un ataque externo daña sin atravesar ningún canal de entrada.</p></div>
+</details>
+
+<details class="section-block sec" id="c12-evidencia"><summary><span class="stitle">3 · Por evidencia: pasivos y activos</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Clasificar según qué tan notorio es el ataque para la víctima.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Activo: que le peguen un tallón a tu coche. Pasivo: alguien en el metro viendo de reojo cómo desbloqueas tu celular.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Los <strong>pasivos</strong> solo observan, escuchan o leen, sin alterar nada: leer pantallas ajenas en el transporte, ver un patrón de desbloqueo, deducir gustos por la ropa (alguien vestido de morado, con escudo del Barça o de anime). Las redes sociales son peligrosas porque regalamos información que luego se usa en nuestra contra. Los <strong>activos</strong> son evidentes y alteran o destruyen de inmediato (un golpe, un choque, la caída de una reja, el atentado a las Torres Gemelas).</p>
+<p>Los pasivos pueden ser <strong>más peligrosos</strong>: como no se notan, pasan meses antes de reaccionar. Ejemplo: con IA generativa se pueden fabricar videos falsos de una persona (la profesora puso el de una figura pública bailando) a partir de las fotos que ella misma subió.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> pensar que si el sistema funciona bien, no ha sufrido un ataque.</p></div>
+</details>
+
+<details class="section-block sec" id="c12-etapas"><summary><span class="stitle">4 · Etapas de un ataque</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La secuencia que sigue un ataque desde que se concibe hasta que se evalúa.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Planear el asalto a un banco (preparación), apretar el botón que abre la bóveda (activación) y, ya en la guarida, revisar el botín y decidir si repiten (ejecución).<span class="rompe">Dónde deja de servir: si alguien entra al banco por accidente, no hubo plan.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Intencionado: 3 fases.</strong></p>
+<ol>
+<li><strong>Preparación o planteamiento (antes):</strong> la más larga. Seguridad tiene que pensar como el atacante (mencionó la fase de reconocimiento de MITRE ATT&amp;CK). Se define el objetivo (por ejemplo, secuestrar una base de datos con ransomware), se reclutan personas (incluso empleados internos engañados para sacarles horarios o historiales), se fijan fecha y hora, se trazan planes A, B… Z y se calcula la ganancia en el mercado negro. La defensa busca ponerle trabas de tiempo, dinero y esfuerzo (contraseñas que tarden «1000 años» en romperse).</li>
+<li><strong>Activación (durante):</strong> la acción que dispara el ataque: pagarle a alguien para pegar una hoja, correr un script, un troyano o una bomba de tiempo, un puerto 22 abierto, reglas de firewall mal ordenadas. Si cambian las condiciones (la víctima cambia de ruta o se va de viaje), el ataque nunca se activa.</li>
+<li><strong>Ejecución (después):</strong> <em>no</em> es el momento de atacar, sino el análisis de resultados. El atacante evalúa si le funcionó para repetirlo; la organización analiza sus fallas y decide (comprar software o hardware, reconfigurar, cambiar personal). La profesora citó los cambios en la dirección escolar de la UNAM tras las fallas de la empresa externa en los exámenes de admisión en línea.</li>
+</ol>
+<p><strong>No intencionado: 2 fases</strong> (activación y ejecución), porque no hay preparación. Ejemplo: te tiras el mole; en la ejecución aprendes a usar plato o mandil.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> confundir la activación (el disparo) con la ejecución (el análisis posterior).</p></div>
+</details>
+
+<details class="section-block sec" id="c12-saludintegral"><summary><span class="stitle">5 · Ejercicio: «Incidente en SaludIntegral»</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Caso práctico en equipo, entregado en hoja, para aplicar las 3 etapas a un incidente en una red de clínicas (<a href="tareas.html#SIB-EC03">SIB-EC03</a>; el enunciado está en tus apuntes).</p>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Escenario:</strong> lentitud del sistema de citas, accesos desde ubicaciones raras, cierres de sesión inesperados, correos con adjuntos extraños, accesos nocturnos a historiales con cuentas de médicos, tráfico a IPs externas, nombres de expedientes alterados y respaldos retrasados.</p>
+<p><strong>Lo que se presentó en clase:</strong></p>
+<ul>
+<li><strong>Preparación:</strong> objetivo de lucro (extorsión o venta de historiales clínicos), actores externos y personal sin capacitación que abrió archivos por error, durante varios días en horario laboral. Los equipos investigaron precios del mercado negro: un expediente médico se vende entre 60 y 300 dólares en venta selectiva, contra unos 17 dólares de una tarjeta de crédito; en bases masivas baja a unos 0.55–0.60 dólares por expediente.</li>
+<li><strong>Activación:</strong> correos con adjuntos en apariencia inofensivos (por ejemplo, PDF) que al abrirse o habilitar la edición instalaron software malicioso en segundo plano y abrieron puertos.</li>
+<li><strong>Ejecución:</strong> balance de pérdidas, afectación a pacientes y decisiones: monitoreo, aislamiento de la red y reestructurar los respaldos.</li>
+</ul>
+</div>
+<div class="errores"><p><strong>Error común:</strong> olvidar estimar recursos y ganancias en la fase de preparación.</p></div>
+</details>
+
+<details class="section-block sec" id="c12-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Cuántas fases tiene un ataque intencionado y cuántas uno no intencionado?</summary><p>3 (preparación, activación, ejecución) frente a 2 (activación y ejecución).</p></details>
+<details class="qa"><summary>2. ¿Qué es realmente la fase de ejecución?</summary><p>El análisis de resultados después del ataque, no el momento de lanzarlo (eso es la activación).</p></details>
+<details class="qa"><summary>3. ¿Por qué un ataque externo tiene que volverse interno?</summary><p>Porque necesita una ruta física o virtual hasta el bien; sin contacto con el bien no hay daño.</p></details>
+<details class="qa"><summary>4. ¿Por qué un ataque pasivo puede ser más peligroso que uno activo?</summary><p>Porque no altera nada y pasa desapercibido mucho tiempo antes de que la víctima reaccione.</p></details>
+<details class="qa"><summary>5. Da dos ejemplos de activación.</summary><p>Correr un script o troyano; un puerto 22 abierto o reglas de firewall mal ordenadas; pagarle a alguien para pegar una hoja.</p></details>
+<details class="qa"><summary>6. En SaludIntegral, ¿cuál fue el vector de activación?</summary><p>Correos con adjuntos (PDF) que al abrirse instalaban software malicioso y abrían puertos.</p></details>
+<details class="qa"><summary>7. ¿Cuánto vale un expediente médico en el mercado negro frente a una tarjeta de crédito, según lo investigado en clase?</summary><p>60–300 dólares en venta selectiva contra unos 17 dólares de una tarjeta.</p></details>
+<details class="qa"><summary>8. Clasifica «alguien lee tu pantalla en el metro»: ¿intencionado?, ¿interno o externo?, ¿pasivo o activo?</summary><p>Puede ser intencionado; ocurre junto al bien (interno); es pasivo, porque solo observa.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c12-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li>Al inicio, los alumnos comentaban sus calificaciones del parcial y que estudiaron horas o un día antes.</li>
+<li>Bromas sobre si el COVID empezó por una sopa de murciélago y sobre cómo retratan las series a los sicarios.</li>
+<li>Los equipos hicieron cuentas en vivo de cuánto ganaría alguien vendiendo 25,000 o 50,000 expedientes.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c12-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Siguiente clase:</strong> perpetradores o atacantes (sombreros, crackers, script kiddies, internos y externos), atacante frente a ataque, y técnicas de intrusión; se dejará una investigación sobre tipos de atacantes → <a href="clase-13.html">Clase 13</a>.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Por intención (sí/no), por lugar (interno/externo) y por evidencia (pasivo/activo).</li>
+<li>Todo ataque externo tiene que volverse interno para hacer daño.</li>
+<li>Intencionado: preparación → activación → ejecución (análisis). No intencionado: activación → ejecución.</li>
+<li>El pasivo puede ser el más peligroso porque no se nota.</li>
+</ul></div>
+
 </div>
 </body>
 </html>

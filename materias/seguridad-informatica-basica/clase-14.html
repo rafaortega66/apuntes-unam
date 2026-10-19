@@ -2,9 +2,11 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SIB · Clase 14</title>
 <link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
 <script src="../../assets/app.js?v=20261012a" defer></script>
 </head>
 <body>
@@ -12,10 +14,152 @@
 <a class="back" href="index.html">← Volver a SIB</a>
 <div class="detail-head" style="border-color:#E8735C">
   <h3>Clase 14</h3>
-  <p class="prof">Dra. Cintia Quezada Reyes · 15 oct 2026 · Tema 3 — Intrusión por malware y física; mecanismos de seguridad.</p>
+  <p class="prof">Dra. Cintia Quezada Reyes · 15 oct 2026 · Tema 3 — Intrusión por malware y ataques físicos con sus mitigaciones; mecanismos de seguridad: definición, relación con los servicios y sus cuatro clasificaciones (servicio, importancia, cobertura, acción); ejercicio en parejas.</p>
   <p class="prof">📝 <a href="../../decimo/SIB/SIB-Material/SIB-Apuntes-Clase14-2026-10-15.pdf" target="_blank">Apuntes de la clase: lo que presentó la profesora (PDF)</a> · ✏️ <a href="tareas.html#SIB-EC04">Ejercicio de clase (SIB-EC04)</a></p>
+  <p class="prof">Fuente: NotebookLM, audio <code>SIB-Clase14.m4a</code>, 19 oct 2026.</p>
 </div>
-<p class="empty">Resumen por escribir. Temas según mis apuntes: técnicas de intrusión basadas en malware y ataques físicos; mecanismos de seguridad (definición, relación servicios–mecanismos 1:1, 1:N, N:1, N:M) y sus cuatro clasificaciones; ejercicio en parejas.</p>
+
+<details class="section-block sec" id="c14-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Las 4 clasificaciones de los mecanismos de seguridad.</strong><span class="evid">Evidencia: son el marco de la clase y la base del ejercicio entregable.</span></li>
+<li><strong>Preventivo (vacuna) frente a correctivo (penicilina).</strong><span class="evid">Evidencia: fue el ejemplo central para distinguir las acciones.</span></li>
+<li><strong>Requeridos frente a discrecionales.</strong><span class="evid">Evidencia: lo explicó con la puerta y la chapa frente a chapas extra.</span></li>
+<li><strong>Generalizados frente a específicos (modelo OSI).</strong><span class="evid">Evidencia: es la única clasificación ligada a un estándar (arquitectura de seguridad OSI).</span></li>
+<li><strong>Un solo antivirus.</strong><span class="evid">Evidencia: lo dijo de forma rotunda: tener varios no protege más y consume recursos.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c14-malware"><summary><span class="stitle">1 · Ataques basados en malware</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Programas o código malicioso (<em>malicious software</em>) hechos para infiltrarse, alterar o comprometer equipos e infraestructura lógica.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Una manzana que por fuera se ve rica y por dentro trae gusano o veneno.</p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>Virus y gusanos:</strong> código infeccioso que se replica por la red o por archivos.</li>
+<li><strong>Troyanos:</strong> como el caballo de Troya, parecen un archivo legítimo (ejecutable, imagen, audio, video) y al abrirse hacen cosas ocultas: abrir puertos, escanear el equipo, capturar información.</li>
+<li><strong>Ransomware:</strong> secuestro: cifra los datos y pide un rescate a cambio de la clave (dinero u otras acciones).</li>
+<li><strong>Spyware:</strong> espía la actividad del usuario en segundo plano, a veces sin dejar rastro visible.</li>
+<li><strong>Rootkits:</strong> se ocultan en el sistema y dan privilegios totales al atacante; suelen llegar por pantallas falsas de usuario y contraseña o por ataques de diccionario y fuerza bruta contra credenciales débiles.</li>
+</ul>
+<p><strong>Mitigación:</strong> antivirus y antimalware (<strong>uno solo</strong>: varios a la vez chocan y consumen recursos hasta alentar o bloquear el equipo); listas blancas (lo autorizado) y listas negras (salir de una exige justificar formalmente); control de USB: bloquearlos por software y que TI los habilite solo con permiso. La tecnología va más rápido que los reglamentos: cuando salieron los celulares con cámara, los bancos les pegaban una etiqueta en la lente.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> dejar credenciales por defecto (admin/admin) o contraseñas iguales al usuario o «1234»; creer que más antivirus es más protección.</p></div>
+</details>
+
+<details class="section-block sec" id="c14-fisicos"><summary><span class="stitle">2 · Ataques físicos</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Amenazas a los equipos, edificios e infraestructura tangible, y sus controles.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Un cerrojo de acero y un guardia en la puerta del almacén.<span class="rompe">Dónde deja de servir: si el guardia se duerme o deja pasar a sus amigos sin identificarse.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Ataques:</strong> robo de dispositivos, keyloggers físicos en el teclado, hardware malicioso y el «robo hormiga» (cables, adaptadores, ratones o teclados que van desapareciendo y dejan inservibles los equipos).</p>
+<p><strong>Mitigación:</strong> control de acceso físico (bitácoras, torniquetes, guardias, arcos detectores, revisión de mochilas, cámaras), bloqueo automático de sesión por inactividad, cifrado de dispositivos, y políticas de uniforme o gafete visible (incluso con «viernes casual» se mantienen reglas para distinguir al personal de los visitantes).</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> cuidar mucho el servidor por software y dejar abierta la puerta del site.</p></div>
+</details>
+
+<details class="section-block sec" id="c14-accion"><summary><span class="stitle">3 · Medidas según su acción</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Clasificar las medidas según cuándo y cómo actúan frente al incidente.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Vacunarte contra la influenza es preventivo; tomar penicilina cuando ya tienes la infección es correctivo.<span class="rompe">Dónde deja de servir: vacunarte cuando ya estás grave no sirve.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>Preventivas:</strong> actúan antes, para evitar el daño.</li>
+<li><strong>Correctivas:</strong> durante o después, para resolver y reducir el impacto.</li>
+<li><strong>Detectoras:</strong> identifican anomalías.</li>
+<li><strong>Disuasivas:</strong> convencen de no hacer algo (campañas como «si tomas, no manejes»).</li>
+</ul>
+<p>El monitoreo debe ser continuo (diario, semanal, mensual), no solo cuando hay auditoría.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> decir en el examen que el ciclo PDCA se aplica «solo cuando hay auditorías»; es mejora continua.</p></div>
+</details>
+
+<details class="section-block sec" id="c14-mecanismos"><summary><span class="stitle">4 · Mecanismos de seguridad y su relación con los servicios</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un mecanismo de seguridad (herramienta o control) es cualquier aplicación, técnica, recomendación, actividad, consideración, objeto, animal o persona, o combinación de ellos, que se usa para implementar uno o varios servicios de seguridad. Responde a la tercera pregunta del esquema: <strong>¿cómo lo voy a proteger?</strong></p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Si la necesidad (servicio) es no tener sed, el mecanismo puede ser un vaso de agua, una limonada o un garrafón.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>No hay un mecanismo que dé todos los servicios. Las relaciones posibles:</p>
+<ul>
+<li><strong>1 servicio : 1 mecanismo</strong> — una puerta para el control de acceso.</li>
+<li><strong>1 : N</strong> — control de acceso con puerta, chapa, biométrico y guardia.</li>
+<li><strong>N : 1</strong> — un biométrico que da control de acceso y autenticación a la vez.</li>
+<li><strong>N : M</strong> — biométrico multifactor (huella + retina + rostro) para autenticación y control de acceso.</li>
+</ul>
+</div>
+<div class="errores"><p><strong>Error común:</strong> comprar herramientas caras sin analizar antes qué necesidad cubren.</p></div>
+</details>
+
+<details class="section-block sec" id="c14-clasificaciones"><summary><span class="stitle">5 · Las cuatro clasificaciones de los mecanismos</span></summary>
+<ol>
+<li><strong>Por el servicio que implementa:</strong> confidencialidad, integridad, disponibilidad, no repudio, autenticación, control de acceso.</li>
+<li><strong>Por su importancia:</strong> <strong>requeridos</strong> (mínimo indispensable: la puerta y su chapa) y <strong>discrecionales</strong> (complementarios: dos chapas extra).</li>
+<li><strong>Por su cobertura (arquitectura de seguridad OSI):</strong> <strong>generalizados</strong> (aplican a toda la organización, como un gafete para todos) y <strong>específicos</strong> (a una capa, protocolo o grupo, como un gafete solo para TI).</li>
+<li><strong>Por su acción:</strong> preventivos, correctivos, detectores y disuasivos.</li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c14-ejercicio"><summary><span class="stitle">6 · Ejercicio en parejas: clasificar 15 mecanismos</span></summary>
+<p>Respuestas que dieron las parejas en clase, según NotebookLM; no son una clave oficial, y en varias se aceptó más de una opción con su justificación (<a href="tareas.html#SIB-EC04">SIB-EC04</a>).</p>
+<table><thead><tr><th>Mecanismo</th><th>Servicio</th><th>Importancia</th><th>Cobertura</th><th>Acción</th></tr></thead><tbody>
+<tr><td>Firma digital</td><td>Autenticación / no repudio</td><td>Requerido</td><td>Específico</td><td>Preventivo</td></tr>
+<tr><td>Candado</td><td>Control de acceso</td><td>Requerido</td><td>General</td><td>Preventivo</td></tr>
+<tr><td>Chip en animales</td><td>Identificación / disponibilidad</td><td>Discrecional</td><td>General o específico</td><td>Detector</td></tr>
+<tr><td>Rejas en ventanas</td><td>Control de acceso</td><td>Discrecional</td><td>Específico</td><td>Preventivo / disuasivo</td></tr>
+<tr><td>Vacuna (sarampión)</td><td>Integridad (salud)</td><td>Requerido</td><td>Específico</td><td>Preventivo</td></tr>
+<tr><td>Reglamentos</td><td>Integridad / control de acceso</td><td>Requerido</td><td>General</td><td>Disuasivo / preventivo</td></tr>
+<tr><td>Lentes obscuros</td><td>Confidencialidad</td><td>Discrecional</td><td>General</td><td>Preventivo</td></tr>
+<tr><td>Alimentos con calcio</td><td>Integridad</td><td>Requerido</td><td>General</td><td>Preventivo</td></tr>
+<tr><td>Agua sin exceder el límite</td><td>Disponibilidad / integridad</td><td>Requerido</td><td>General</td><td>Preventivo</td></tr>
+<tr><td>Limitar carbohidratos</td><td>Integridad</td><td>Discrecional</td><td>General</td><td>Preventivo</td></tr>
+<tr><td>Contraseñas</td><td>Autenticación / control de acceso</td><td>Requerido</td><td>Específico</td><td>Preventivo</td></tr>
+<tr><td>Firewalls</td><td>Control de acceso / confidencialidad</td><td>Requerido</td><td>Específico</td><td>Preventivo / detector</td></tr>
+<tr><td>VPN</td><td>Confidencialidad / autenticación</td><td>Discrecional o requerido</td><td>Específico</td><td>Preventivo</td></tr>
+<tr><td>Cámaras de vigilancia</td><td>—</td><td>Discrecional</td><td>General</td><td>Detector / disuasivo</td></tr>
+<tr><td>Penicilina</td><td>Integridad (salud)</td><td>Requerido</td><td>Específico</td><td>Correctivo</td></tr>
+</tbody></table>
+</details>
+
+<details class="section-block sec" id="c14-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Por qué no tener dos antivirus?</summary><p>Porque chocan entre sí y consumen recursos hasta alentar o bloquear el equipo, sin proteger más.</p></details>
+<details class="qa"><summary>2. ¿Qué es un troyano y qué formas puede tomar?</summary><p>Código malicioso que parece legítimo (ejecutable, imagen, audio, video) y al abrirse abre puertos o roba información.</p></details>
+<details class="qa"><summary>3. Vacuna y penicilina: ¿qué tipo de acción es cada una?</summary><p>Vacuna: preventiva. Penicilina: correctiva.</p></details>
+<details class="qa"><summary>4. ¿Cuáles son las 4 relaciones entre servicios y mecanismos? Da un ejemplo de N : 1.</summary><p>1:1, 1:N, N:1 y N:M. N:1: un biométrico que da control de acceso y autenticación.</p></details>
+<details class="qa"><summary>5. ¿En qué estándar se basa la clasificación por cobertura?</summary><p>En la arquitectura de seguridad del modelo OSI.</p></details>
+<details class="qa"><summary>6. ¿Requerido o discrecional? Una segunda chapa en la puerta de tu casa.</summary><p>Discrecional: complementa la chapa básica, que es la requerida.</p></details>
+<details class="qa"><summary>7. Clasifica la firma digital en las 4 categorías.</summary><p>Autenticación / no repudio; requerida; específica; preventiva.</p></details>
+<details class="qa"><summary>8. ¿Por qué bloquear los USB y qué debe hacer quien necesite usar uno?</summary><p>Para evitar malware y fuga de datos; debe pedir permiso a TI para que lo habiliten.</p></details>
+<details class="qa"><summary>9. ¿Qué es el «robo hormiga» y por qué es un ataque físico?</summary><p>El robo poco a poco de cables, adaptadores o periféricos; deja los equipos inservibles y genera costos.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c14-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li>Bromeó con quienes le dicen «por favor» y «gracias» a ChatGPT, Gemini o Claude, «por si un día las máquinas dominan el mundo».</li>
+<li>Las fundas de celular con dibujo de Snoopy no protegen más contra caídas.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c14-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Ejercicio en parejas:</strong> <a href="tareas.html#SIB-EC04">SIB-EC04</a>.</li>
+<li><strong>Próxima sesión:</strong> según NotebookLM, servicios de seguridad, ejercicios de concientización y matrices de riesgo.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Malware: virus, gusanos, troyanos, ransomware, spyware, rootkits; un solo antivirus, listas blancas/negras, control de USB.</li>
+<li>Físicos: robo, keyloggers, hardware malicioso, robo hormiga; control de acceso, bloqueo de sesión, cifrado.</li>
+<li>Mecanismo = lo que implementa uno o varios servicios; responde «¿cómo lo voy a proteger?».</li>
+<li>Clasificaciones: servicio · requerido/discrecional · general/específico (OSI) · preventivo/correctivo/detector/disuasivo.</li>
+</ul></div>
+
 </div>
 </body>
 </html>

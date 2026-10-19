@@ -2,9 +2,11 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SIB · Clase 13</title>
 <link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
 <script src="../../assets/app.js?v=20261012a" defer></script>
 </head>
 <body>
@@ -12,10 +14,142 @@
 <a class="back" href="index.html">← Volver a SIB</a>
 <div class="detail-head" style="border-color:#E8735C">
   <h3>Clase 13</h3>
-  <p class="prof">Dra. Cintia Quezada Reyes · 13 oct 2026 · Tema 3 — Perpetradores o atacantes y técnicas de intrusión.</p>
+  <p class="prof">Dra. Cintia Quezada Reyes · 13 oct 2026 · Tema 3 — Perpetradores o atacantes (agente amenazante vs. atacante, internos y externos, tipos por acción, sombreros), Red Team y Blue Team, y técnicas de intrusión: hoax, ataques a redes, a software y de ingeniería social, con sus mitigaciones.</p>
   <p class="prof">📝 <a href="../../decimo/SIB/SIB-Material/SIB-Apuntes-Clase13-2026-10-13.pdf" target="_blank">Apuntes de la clase: lo que presentó la profesora (PDF)</a></p>
+  <p class="prof">Fuente: NotebookLM, audios <code>SIB-Clase12.m4a</code> y <code>SIB-Clase13.m4a</code> (cubren los mismos temas; en SIB la numeración de los audios no coincide con la hoja RegistroClases), 19 oct 2026.</p>
 </div>
-<p class="empty">Resumen por escribir. Temas según mis apuntes: perpetradores o atacantes (internos/externos; spammer, spoofer, ingeniero social, phisher, hacker, cracker, hacktivista) y técnicas de intrusión: ataques basados en redes, en software y sistemas, y en ingeniería social, con sus mitigaciones.</p>
+
+<details class="section-block sec" id="c13-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Agente amenazante ≠ atacante.</strong><span class="evid">Evidencia: «No confundamos con su cuadrito del contexto de la relación de seguridad que acaban de ver otra vez en el examen, donde los agentes amenazantes no es lo mismo que un atacante».</span></li>
+<li><strong>Hacker (sombreros) frente a cracker.</strong><span class="evid">Evidencia: corrigió el uso popular de «hacker» y desglosó las motivaciones de cada uno.</span></li>
+<li><strong>Internos (insiders) frente a externos (outsiders).</strong><span class="evid">Evidencia: «un outsider… puede ser un atacante muy exitoso gracias a los internos».</span></li>
+<li><strong>Técnicas de intrusión en redes y su mitigación.</strong><span class="evid">Evidencia: dictó cada técnica con su defensa (firewall, IDS/IPS, segmentación, bloqueo de IP).</span></li>
+<li><strong>Phishing, spear phishing y pretexting.</strong><span class="evid">Evidencia: los definió y los reforzó con ejemplos cotidianos.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c13-atacantes"><summary><span class="stitle">1 · Perpetradores o atacantes</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Los sujetos o entidades maliciosas que realizan o ya realizaron una actividad maliciosa o ilícita contra la organización o sus bienes. Otros nombres: ciberdelincuentes, atacantes informáticos, agentes atacantes, delincuentes informáticos.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>El atacante es quien de verdad entra a robar a la casa; el agente amenazante es el que pasa por la banqueta mirando la fachada.<span class="rompe">Dónde deja de servir: también hay atacantes sin intención (ver abajo).</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Un <strong>agente amenazante</strong> podría causar un daño pero puede quedarse latente. Cuando ejecuta una acción ilícita se convierte en <strong>atacante</strong>; al terminar esa acción, vuelve a quedar como agente amenazante en el entorno.</p>
+<p><strong>Intencionalidad:</strong> un ataque no siempre es premeditado. Ejemplo de la profesora: alguien lleva un café hirviendo, se tropieza, se agarra de donde puede y le echa el café encima a otra persona; causó un daño (una quemadura) sin intención.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Conecta con el diagrama del contexto de la seguridad visto antes del examen, y ayuda a evaluar la responsabilidad real tras un incidente.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> usar «agente amenazante» y «atacante» como sinónimos.</p></div>
+</details>
+
+<details class="section-block sec" id="c13-ubicacion"><summary><span class="stitle">2 · Internos (insiders) y externos (outsiders)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p><strong>Internos:</strong> atacantes dentro de la organización, junto al bien o con conocimiento íntimo del entorno. <strong>Externos:</strong> operan desde fuera del perímetro físico o lógico.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>El interno es el familiar que deja la puerta abierta o tira una jarra por descuido; el externo es alguien de otra ciudad que quiere entrar.<span class="rompe">Dónde deja de servir: cuando el familiar abre la puerta porque el extraño lo engañó por teléfono.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Los internos saben «de qué pata cojea» la empresa; muchos de sus ataques no son intencionales y vienen de ignorancia, descuido, negligencia, nepotismo o contrataciones por lástima. Ejemplos: el empleado de ventanilla mal capacitado que te pide requisitos innecesarios y te hace volver varias veces (pierdes tiempo y te cambia el ánimo: es un ataque hacia ti); y quien hace llamadas de broma al 911, que manda unidades a una falsa alarma y deja desatendidas emergencias reales.</p>
+<p>Un externo rara vez tiene éxito solo: casi siempre se apoya en un interno, por engaño, ingeniería social o «los seis grados de separación». Ejemplo: a alguien le preguntan «¿estudias en la Facultad de Ingeniería?» y suelta su rutina, horarios y vida personal sin que se lo pidan.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Conecta con las vulnerabilidades humanas: blindar solo el perímetro no sirve si el personal regala información.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> creer que el atacante externo entra «por magia», sin información de adentro.</p></div>
+</details>
+
+<details class="section-block sec" id="c13-tipos"><summary><span class="stitle">3 · Tipos de atacantes según su acción</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La clasificación de los atacantes por la técnica o acción que realizan. El atacante es el sujeto; el ataque, la acción.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Como a los deportistas: al que corre se le dice corredor y al que nada, nadador; el error es llamar «corredor» a todos.</p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>Spammer</strong> → spam (envío masivo de mensajes no deseados). <strong>Spoofer</strong> → spoofing (suplantación de IP, DNS, MAC o dispositivo). <strong>Ingeniero social</strong> → ingeniería social. <strong>Phisher</strong> → phishing.</li>
+<li><strong>Hacker:</strong> originalmente, quien se impone retos técnicos para demostrarse que es capaz, no por encargo ni por dinero. <strong>Sombrero blanco:</strong> hacking ético, busca vulnerabilidades para reportarlas y corregirlas. <strong>Sombrero negro:</strong> ataca con intención de dañar. <strong>Sombrero gris:</strong> cambia de postura según la necesidad. <strong>Sombrero azul:</strong> nombre que usan corporativos como Microsoft para sus evaluadores de seguridad.</li>
+<li><strong>Cracker:</strong> ataca a cambio de algo (dinero, reconocimiento, una computadora, fama).</li>
+<li><strong>Hacktivista:</strong> ataca por causas políticas, sociales o ideológicas.</li>
+<li><strong>Novato / lamer / script kiddie:</strong> corre scripts ajenos sin entenderlos; por su inexperiencia, muchas veces el primer infectado es él mismo.</li>
+</ul>
+</div>
+<div class="errores"><p><strong>Error común:</strong> suponer que todo hacker es malo o que todo ataque lo hace un hacker.</p></div>
+</details>
+
+<details class="section-block sec" id="c13-equipos"><summary><span class="stitle">4 · Red Team y Blue Team</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p><strong>Red Team:</strong> expertos con enfoque ofensivo, atacan los sistemas para evaluar sus defensas. <strong>Blue Team:</strong> enfoque defensivo y de recuperación.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Un simulacro militar: el equipo rojo prueba las murallas como invasor y el azul las defiende y repara las brechas.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El Red Team imita las tácticas de un atacante real para romper los controles; el Blue Team monitorea, bloquea intrusiones y ejecuta planes de respuesta. La misma persona o grupo puede tener distintos roles en momentos distintos, así que la organización no debe obsesionarse con ponerle nombre al atacante, sino mitigar y cerrar las vías de entrada.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c13-intrusion"><summary><span class="stitle">5 · Técnicas de intrusión y cómo mitigarlas</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Las metodologías y técnicas con que los perpetradores acceden, modifican o dañan bienes sin autorización. Seguridad las estudia para prevenirlas, corregirlas y monitorearlas, no para ejecutarlas.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Son las mañas de un cerrajero tramposo: si las conoces, pones candados que las resistan.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Hoax (alertas falsas):</strong> mensajes que asustan para que el usuario se dañe solo. Ejemplo: «verifica si tienes el archivo 138L.dll, es un virus poderosísimo, bórralo»; el usuario lo borra y daña su propio sistema, por corregir sin verificar.</p>
+<p><strong>1. Ataques a redes:</strong></p>
+<ul>
+<li><strong>Escaneo de puertos:</strong> buscar puertos abiertos para explotarlos → dejar abiertos solo los necesarios y filtrar en el firewall.</li>
+<li><strong>Man-in-the-Middle:</strong> interceptar tráfico en redes abiertas (PC Puma, redes de los semáforos) → IDS/IPS.</li>
+<li><strong>Sniffing (usmeo):</strong> escuchar la red en modo promiscuo para capturar credenciales → segmentar la red.</li>
+<li><strong>DoS/DDoS:</strong> peticiones falsas masivas que saturan un servidor → firewall que bloquee la IP con peticiones anormales. Ejemplo real: en las Salas A y B del laboratorio de cómputo, 50 a 100 alumnos de Fundamentos de Programación entraban a la vez a la misma página; el servidor del proveedor lo tomó como un DoS desde la IP pública de la Facultad y la bloqueó.</li>
+</ul>
+<p><strong>2. Ataques a software y sistemas:</strong> exploits que aprovechan fallas, sobre todo en sistemas que no se actualizan por falta de recursos o de servidores de prueba; ejemplos: desbordamiento de búfer e inyección SQL → parches periódicos y <em>sandboxing</em> (probar en un entorno aislado antes de producción).</p>
+<p><strong>3. Ingeniería social:</strong></p>
+<ul>
+<li><strong>Phishing:</strong> masivo e impersonal.</li>
+<li><strong>Spear phishing:</strong> dirigido, tras investigar a la víctima en redes (por ejemplo, llamarla diciendo la escuela y la hora de salida de su hijo para asustarla).</li>
+<li><strong>Pretexting:</strong> inventar un escenario para sacar información: fingir en la fila del cajero que a la víctima se le cayó un billete para ver dónde guarda la cartera o qué teclea; o «sé que tienes examen saliendo de esta clase, ¿te ayudo?». También la llamada del «primo de Estados Unidos» que necesita dinero.</li>
+</ul>
+<p>Mitigación: capacitación y concientización práctica, y autenticación multifactor.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> «corregir» a ciegas ante cualquier alerta de internet sin verificarla (caer en un hoax).</p></div>
+</details>
+
+<details class="section-block sec" id="c13-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Qué diferencia hay entre agente amenazante y atacante?</summary><p>El agente amenazante puede causar daño pero puede quedarse latente; el atacante ya ejecutó o está ejecutando la acción ilícita.</p></details>
+<details class="qa"><summary>2. ¿Un ataque siempre es intencional? Da el ejemplo de clase.</summary><p>No. El del café hirviendo: alguien tropieza, se agarra de donde puede y quema a otra persona sin querer.</p></details>
+<details class="qa"><summary>3. ¿Por qué los internos causan tantos incidentes?</summary><p>Porque conocen el entorno y sus debilidades, y muchos incidentes vienen de ignorancia, descuido, negligencia o nepotismo.</p></details>
+<details class="qa"><summary>4. ¿Cómo suele tener éxito un atacante externo?</summary><p>Apoyándose en un interno: engaño, ingeniería social, información que los empleados regalan sin darse cuenta.</p></details>
+<details class="qa"><summary>5. ¿Qué distingue al hacker del cracker?</summary><p>El hacker busca retos para demostrarse su capacidad; el cracker ataca a cambio de algo (dinero, fama, bienes).</p></details>
+<details class="qa"><summary>6. ¿Qué hace el Red Team y qué el Blue Team?</summary><p>Red: ataca para probar los controles. Blue: monitorea, frena intrusiones y recupera.</p></details>
+<details class="qa"><summary>7. ¿Qué es un hoax y qué daño puede causar?</summary><p>Una alerta falsa que lleva al usuario a borrar archivos del sistema creyendo que son virus.</p></details>
+<details class="qa"><summary>8. ¿Por qué se bloqueaba el acceso desde las Salas A y B?</summary><p>Porque 50–100 peticiones simultáneas desde la misma IP pública parecían un DoS para el servidor del proveedor.</p></details>
+<details class="qa"><summary>9. Phishing, spear phishing y pretexting: ¿en qué se diferencian?</summary><p>Phishing es masivo; spear phishing es dirigido tras investigar a la víctima; pretexting inventa un escenario para sacar información.</p></details>
+<details class="qa"><summary>10. Relaciona cada técnica de red con su mitigación.</summary><p>Escaneo de puertos → firewall y puertos mínimos; MITM → IDS/IPS; sniffing → segmentación; DoS → bloquear la IP con peticiones anormales.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c13-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li>Al inicio, los alumnos comentaban sus calificaciones del parcial y las distintas versiones del examen.</li>
+<li>La profesora contó que en unas vacaciones fuera de la Ciudad de México se encontró con un conocido en un restaurante: así de fácil es que te ubiquen sin saberlo.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c13-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Tarea de investigación:</strong> cuántos y qué tipos de atacantes o perpetradores existen → <a href="tareas.html#SIB-T03">SIB-T03</a> (ya entregada).</li>
+<li><strong>Próxima clase:</strong> terminar las clasificaciones de atacantes y técnicas de intrusión, ejercicios en el salón y tiempo para avanzar en la investigación.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Agente amenazante (potencial) ≠ atacante (acción); hay ataques no intencionales.</li>
+<li>Internos conocen el entorno; externos casi siempre necesitan a un interno.</li>
+<li>Hacker (blanco, negro, gris, azul) ≠ cracker (a cambio de algo); hacktivista; script kiddie.</li>
+<li>Red Team ataca, Blue Team defiende.</li>
+<li>Redes (puertos, MITM, sniffing, DoS), software (exploits, buffer overflow, SQLi), ingeniería social (phishing, spear phishing, pretexting) y cómo mitigar cada uno.</li>
+</ul></div>
+
 </div>
 </body>
 </html>

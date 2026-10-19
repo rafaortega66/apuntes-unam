@@ -2,4 +2,4 @@
 
 SIB no publica tareas en Classroom. Fuente: NotebookLM, cuaderno SIB (audios de clase).
 - Investigar **cuántos y qué tipos de atacantes o perpetradores** existen en ciberseguridad.
-- Se asignó al final de la Clase 12. Formato y fecha: no especificados (regla general: PDF por correo por equipo con portada formal).
+- Se asignó al final de la Clase 13 (13 oct 2026; audio de NotebookLM `SIB-Clase12.m4a`). Formato y fecha: no especificados (regla general: PDF por correo por equipo con portada formal).
