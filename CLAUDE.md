@@ -347,6 +347,22 @@ El avance de cada asignación vive en el propio sitio, para que cualquier sesió
 
 - La tarea ASI «Análisis de ENOE y ENIGH» ya se entregó (Classroom «Turned in», verificado el 12 oct 2026); sus materiales están en `decimo/ASI/ASI-Practicas/ASI-T01/`.
 
+### 📍 Dónde nos quedamos (sesión del 20 oct 2026, Mac → el usuario sigue en Linux)
+
+**Hecho:** clases del lunes 19 oct completas en el sitio (commit `4d46af3`): FSE 15, ASI 14 y RP 16
+desde NotebookLM (OAC 12 ya estaba). Revisión de todas las clases: hay página para cada clase de la
+hoja RegistroClases hasta el 19 oct en las 7 materias, y el contenido alcanza; **no** volver a
+generar clases en NotebookLM (el usuario lo descartó por costo de tokens).
+
+**Pendiente, en este orden:**
+1. **ASI — práctica de auditoría de BD (equipos de 3)**, dejada en la Clase 14: buscar en Classroom
+   su fecha y número de entrega y registrarla (`pendientes.json`, `decimo/ASI/ASI-Practicas/`, `build_entregas.py`). En clase no se dijo fecha.
+2. **RP — diapositivas de árboles de decisión / Random Forest** (Clase 16): no están en
+   `decimo/RP/RP-Material/` (lo último es `Clase-13-SVM.pdf`); buscarlas en Classroom (descargar pide permiso) y enlazarlas en `clase-16.html` y `material.html`.
+3. **Esperando respuesta del usuario:** migrar al formato de estudio las 4 páginas que siguen en formato
+   viejo (ASI 01, ACS 01, ACS 02, FSE 01) con `/migrar-clase` (no gasta NotebookLM). No hacerlo sin su sí.
+4. Próximas clases: la siguiente por meter es la del martes 20 oct (ACS, SIB, MD; Lab FSE va en FSE).
+
 ## Nueva estrategia de estudio (9 oct 2026) — reemplaza la automatización de clases
 
 El usuario **ya no quiere que Claude genere automáticamente las páginas de
