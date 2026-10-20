@@ -45,7 +45,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 |---|---|---|---|
 | ASI-Sprint0 | [ASI-Sprint0-indicaciones.md](ASI/ASI-Proyecto/ASI-Sprint0/ASI-Sprint0-indicaciones.md) | [Diagramas-UML-Equipo10.pdf](ASI/ASI-Proyecto/ASI-Sprint0/ASI-Sprint0-entregables/Diagramas-UML-Equipo10.pdf)<br>[Formatos_Scrum_Proyecto_Final_Equipo10.pdf](ASI/ASI-Proyecto/ASI-Sprint0/ASI-Sprint0-entregables/Formatos_Scrum_Proyecto_Final_Equipo10.pdf) | 3 |
 | ASI-Sprint1 | [ASI-Sprint1-indicaciones.md](ASI/ASI-Proyecto/ASI-Sprint1/ASI-Sprint1-indicaciones.md) | [Sprint1_Formatos_Scrum_Proyecto_Final_Equipo10.pdf](ASI/ASI-Proyecto/ASI-Sprint1/ASI-Sprint1-entregables/Sprint1_Formatos_Scrum_Proyecto_Final_Equipo10.pdf) | — |
-| ASI-Sprint2 | [ASI-Sprint2-indicaciones.md](ASI/ASI-Proyecto/ASI-Sprint2/ASI-Sprint2-indicaciones.md) | [Sprint2_Formatos_Scrum_Proyecto_Final_Equipo10.docx.pdf](ASI/ASI-Proyecto/ASI-Sprint2/ASI-Sprint2-entregables/Sprint2_Formatos_Scrum_Proyecto_Final_Equipo10.docx.pdf)<br>[Sprint_2_Equipo10_Formato_Final.pdf](ASI/ASI-Proyecto/ASI-Sprint2/ASI-Sprint2-entregables/Sprint_2_Equipo10_Formato_Final.pdf) | — |
+| ASI-Sprint2 | [ASI-Sprint2-indicaciones.md](ASI/ASI-Proyecto/ASI-Sprint2/ASI-Sprint2-indicaciones.md) | [ASI-Sprint2-semana1.pdf](ASI/ASI-Proyecto/ASI-Sprint2/ASI-Sprint2-entregables/ASI-Sprint2-semana1.pdf)<br>[ASI-Sprint2-semana2.pdf](ASI/ASI-Proyecto/ASI-Sprint2/ASI-Sprint2-entregables/ASI-Sprint2-semana2.pdf) | — |
 | ASI-Sprint3 | [ASI-Sprint3-indicaciones.md](ASI/ASI-Proyecto/ASI-Sprint3/ASI-Sprint3-indicaciones.md) | [Sprint 3 Equipo 10.pdf](ASI/ASI-Proyecto/ASI-Sprint3/ASI-Sprint3-entregables/Sprint%203%20Equipo%2010.pdf) | — |
 
 ## FSE — Fundamentos de Sistemas Embebidos (+ Lab)

@@ -1,8 +1,8 @@
 # ASI-Sprint2 — indicaciones
 
-Este sprint tuvo 2 entregas en Classroom; todo lo entregado está en `ASI-Sprint2-entregables/`.
+Este sprint duró **dos semanas**: un reporte por semana, en `ASI-Sprint2-entregables/` como `ASI-Sprint2-semana1.pdf` y `ASI-Sprint2-semana2.pdf`.
 
-**Entrega «Reporte Scrum»**
+**Semana 1 — entrega «Reporte Scrum»** → `ASI-Sprint2-semana1.pdf` (en Classroom: `Sprint2_Formatos_Scrum_Proyecto_Final_Equipo10.docx.pdf`)
 
 **Classroom** (publicada y con entrega el 5 oct 2026, 23:59 · 100 pts): sin descripción.
 
@@ -12,7 +12,7 @@ Este sprint tuvo 2 entregas en Classroom; todo lo entregado está en `ASI-Sprint
 - Sprint Backlog e historias de usuario actualizados; historial constante en Git.
 - ⚠️ NotebookLM menciona una fecha del 18 oct que **no coincide** con Classroom (5 oct); la de Classroom es la válida para esta entrega.
 
-**Entrega «Reporte de la semana de scrum»**
+**Semana 2 — entrega «Reporte de la semana de scrum»** → `ASI-Sprint2-semana2.pdf` (en Classroom: `Sprint_2_Equipo10_Formato_Final.pdf`)
 
 **Classroom** (publicada 12 oct 2026 · entrega 13 oct 2026, 03:00 · 100 pts): sin descripción.
 

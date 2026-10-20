@@ -140,7 +140,8 @@ decimo/<SIGLA>/<SIGLA>-<Categoría>/<SIGLA>-XNN/
   Cada `ASI-SprintN/` = `README.md` + `ASI-SprintN-indicaciones.md` (una sección por entrega de Classroom del sprint) +
   `ASI-SprintN-entregables/` (todos los PDFs entregados en el sprint) + `ASI-SprintN-adicionales/`. Sprint0 (Formato 1, diagramas UML),
   Sprint1 (Reporte de SCRUM 1), Sprint2 (Reporte Scrum, Reporte de la semana), Sprint3 («Reporte», 19 oct; Samba, SSH, permisos).
-  `ASI-Proyecto/README.md` tiene la tabla de sprints. Reporte nuevo = va a la carpeta de su sprint (o se crea `ASI-SprintN/`).
+  `ASI-Proyecto/README.md` tiene la tabla de sprints. Reporte nuevo = va a la carpeta de su sprint (o se crea `ASI-SprintN/`). **Sprint de varias semanas** (pedido del usuario, 20 oct 2026):
+  cada reporte semanal se renombra `ASI-SprintN-semana1.pdf`, `-semana2.pdf`… (anotar el nombre original de Classroom en las indicaciones); hoy solo el Sprint 2.
   `proyectos.html` se genera agrupado por sprint. + `ASI-Material/`.
 - Si hay versiones distintas de un archivo, la entregada en Classroom es la buena
   (comparar tamaño/contenido); las otras van a `-adicionales/version-previa/`.

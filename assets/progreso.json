@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-20T06:07:25+00:00",
+ "generatedAt": "2026-10-20T06:10:36+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -713,6 +713,11 @@
  },
  "gitlog": [
   {
+   "hash": "ee57f48",
+   "fecha": "2026-10-20T00:07:30-06:00",
+   "mensaje": "ASI-Proyecto: un solo proyecto, sin subcarpetas ASI-ProyNN — cada ASI-SprintN con su README, indicaciones, entregables y adicionales; proyectos.html con una tarjeta por sprint"
+  },
+  {
    "hash": "4580b75",
    "fecha": "2026-10-19T23:55:45-06:00",
    "mensaje": "ASI-Proy06: reporte del Sprint 3 entregado (Classroom «Reporte», 19 oct · Turned in); pendiente del Sprint 3 oculto"
@@ -1006,11 +1011,6 @@
    "hash": "65e2551",
    "fecha": "2026-10-07T23:49:23-06:00",
    "mensaje": "Actualizar pendientes: ACS Tarea 4 (15 oct) + info de OAC/ACS desde notebooks"
-  },
-  {
-   "hash": "917319a",
-   "fecha": "2026-10-07T23:39:35-06:00",
-   "mensaje": "Resolver conflictos de merge con contenido del remote"
   }
  ]
 }
