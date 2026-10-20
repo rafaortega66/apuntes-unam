@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 16 — Reconocimiento de Patrones</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Reconocimiento de Patrones</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Clase 16 <span style="font-size:.6em;font-weight:400;color:var(--ink-soft)">(sesión 19 del curso)</span></h2>
+  <p class="prof">Ing. Rubén Omar Azuara Domínguez · 19 oct 2026 · Tema 8 — Repaso de SVM; árboles de decisión (estructura, Gini y entropía, umbrales por punto medio, ejercicio completo de diagnóstico con 8 pacientes), sobreajuste y poda por costo-complejidad (α crítico), y Random Forest (bagging, demostración del 36.8 % fuera de la bolsa, subespacios aleatorios).</p>
+  <p style="font-size:12px;color:var(--ink-soft);margin:2px 0 0">🔢 Sesión 19 del curso (cronología real). Fuente: audio RP-Clase16 procesado en NotebookLM, 20 oct 2026. Las diapositivas de árboles y Random Forest todavía no están en <a href="material.html" style="color:var(--indigo)">Material</a> (lo más reciente es «Clase 13 SVM»).</p>
+</div>
+
+<details class="section-block sec" id="c16-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<p>Casi todo se trabajó con números en el pizarrón, como en el primer parcial. Cada punto lleva su evidencia de la clase.</p>
+<ol class="examen-lista">
+<li><strong>Calcular el Gini de un nodo y el Gini ponderado de un corte.</strong><span class="evid">Evidencia: resolvió varios ejercicios paso a paso (70/30 → 0.42; edad ≤ 35 → 0.466) y recalcó que en binario 0 es puro y 0.5 es la máxima impureza.</span></li>
+<li><strong>Construir un árbol a mano (ejercicio de los 8 pacientes).</strong><span class="evid">Evidencia: lo construyó completo, con empate entre atributos y conteo de hojas, y contestó dudas de los alumnos sobre él.</span></li>
+<li><strong>Poda: calcular α crítico y decidir si se poda.</strong><span class="evid">Evidencia: resolvió un ejercicio con R(T), R(t) y α global.</span></li>
+<li><strong>El 36.8 % fuera de la bolsa (OOB) en bagging.</strong><span class="evid">Evidencia: hizo la demostración formal del límite (1 − 1/N)<sup>N</sup> → e<sup>−1</sup> en el pizarrón.</span></li>
+<li><strong>Umbrales por punto medio en atributos continuos.</strong><span class="evid">Evidencia: preguntó directamente a la clase cómo elegir umbrales sin probar infinitos valores.</span></li>
+<li><strong>Por qué Random Forest supera a un árbol (varianza).</strong><span class="evid">Evidencia: mostró la comparación 0.91 (un árbol) frente a 0.95 (40 árboles). Evidencia más débil: fue un resultado mostrado, no un ejercicio.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c16-svm"><summary><span class="stitle">1 · Repaso inicial: SVM</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El clasificador que busca el hiperplano de separación que <strong>maximiza el margen</strong>: la distancia mínima a los puntos más cercanos, los vectores de soporte. Es el tema de la <a href="clase-15.html">Clase 15</a> (a la que no asistí).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Trazar la autopista más ancha posible entre las porras de dos equipos rivales; las vallas de cada lado son los vectores de soporte.<span class="rompe">Dónde deja de servir: si las porras están revueltas en espiral, ninguna autopista recta las separa.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Preguntó qué optimiza una SVM y repasó que la versión básica supone datos <strong>linealmente separables</strong>. Para datos que no lo son hay dos recursos: las <strong>variables de holgura</strong> ξ<sub>i</sub> con el parámetro <strong>C</strong>, que permiten cierta cantidad de violaciones al margen; y el <strong>truco del kernel</strong>, que proyecta implícitamente los datos a un espacio de mayor dimensión donde sí son separables. Para varias clases se usa uno contra uno o uno contra el resto.</p>
+<span class="lbl">Errores comunes</span>
+<p>Usar la SVM estándar en datos no lineales sin kernel ni holgura.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c16-arbol"><summary><span class="stitle">2 · Árbol de decisión: qué es y cómo está hecho</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un método supervisado <strong>no paramétrico</strong> que divide el espacio de características de forma jerárquica con reglas «si… entonces…».</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es «Adivina Quién»: haces preguntas seguidas («¿tiene lentes?», «¿pelo negro?») y vas descartando hasta llegar a la respuesta.<span class="rompe">Dónde deja de servir: si las preguntas son tan específicas que solo sirven para los personajes de tu tablero, con un tablero nuevo fallan (sobreajuste).</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>Nodo raíz:</strong> la primera pregunta, sobre el atributo más informativo.</li>
+<li><strong>Nodos internos:</strong> donde se evalúa una condición sobre una característica.</li>
+<li><strong>Nodos hoja (terminales):</strong> contienen la clase predicha.</li>
+<li><strong>Rama:</strong> el camino desde la raíz hasta una hoja.</li>
+</ul>
+<p>Cada corte es perpendicular a un eje, así que el espacio queda partido en regiones <strong>hiperrectangulares</strong>.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>A diferencia de la SVM o la regresión logística (<a href="clase-14.html">Clase 14</a>), no calcula combinaciones lineales ni distancias, por eso no necesita estandarizar los datos.</p>
+<span class="lbl">Errores comunes</span>
+<p>Confundir un nodo interno (donde se decide) con una hoja (donde está la respuesta).</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c16-gini"><summary><span class="stitle">3 · Impureza: índice de Gini y entropía</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p><strong>Gini:</strong> la probabilidad de clasificar mal un elemento elegido al azar si se etiquetara al azar según la distribución de clases del nodo:</p>
+<p style="text-align:center"><strong>Gini(t) = 1 − Σ<sub>i=1</sub><sup>C</sup> p<sub>i</sub><sup>2</sup></strong></p>
+<p>con p<sub>i</sub> la proporción de la clase i en el nodo. <strong>Entropía:</strong> la alternativa de teoría de la información, <strong>H(t) = −Σ p<sub>i</sub> log<sub>2</sub> p<sub>i</sub></strong>.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Una bolsa de canicas: si todas son rojas, es pura (Gini = 0); mitad rojas y mitad azules es la máxima confusión (Gini = 0.5 con 2 clases).</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>En clasificación binaria, <strong>Gini = 0</strong> es un nodo 100 % puro y <strong>Gini = 0.5</strong> es la máxima impureza (50/50).</p>
+<p><strong>Ejemplo de clase:</strong> un nodo con 10 ejemplos, 7 de A y 3 de B: p<sub>A</sub> = 0.7, p<sub>B</sub> = 0.3, y Gini = 1 − 0.49 − 0.09 = <strong>0.42</strong>.</p>
+<p>Un alumno preguntó si 70/30 ya era «aceptable». El profesor: 0.42 todavía es mucha impureza; el algoritmo busca acercarse a 0 (proporciones como 95/5 o 100/0).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es lo que minimiza el algoritmo voraz (<em>greedy</em>) en cada corte para decidir qué atributo preguntar.</p>
+<span class="lbl">Errores comunes</span>
+<p>Pensar que el máximo de Gini en binario es 1. Es 0.5; la entropía sí llega a 1.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c16-umbrales"><summary><span class="stitle">4 · Umbrales en atributos continuos y categóricos</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Cómo se eligen los cortes que se prueban en cada característica.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Para separar personas por estatura no pruebas cada milímetro: las ordenas y pruebas justo a la mitad entre cada par de personas consecutivas.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Continuos:</strong> se ordenan los valores observados y se prueban los puntos medios entre consecutivos:</p>
+<p style="text-align:center"><strong>T<sub>i</sub> = (x<sub>i</sub> + x<sub>i+1</sub>) / 2</strong></p>
+<p><strong>Ejemplo de clase</strong> (5 personas, ¿compran o no?, corte en edad 35):</p>
+<ul>
+<li>Izquierda (edad ≤ 35): 2 ejemplos, 1 compra y 1 no → Gini = 1 − 0.25 − 0.25 = <strong>0.5</strong>.</li>
+<li>Derecha (edad &gt; 35): 3 ejemplos, 1 compra y 2 no → Gini = 1 − (1/3)² − (2/3)² = 1 − 0.111 − 0.444 = <strong>0.444</strong>.</li>
+<li>Gini ponderado = (2/5)(0.5) + (3/5)(0.444) = 0.2 + 0.266 = <strong>0.466</strong>.</li>
+</ul>
+<p><strong>Categóricos:</strong> el árbol los acepta directamente, sin one-hot obligatorio. Si un atributo tiene muchos valores (por ejemplo, colores), se evalúan las particiones binarias en subconjuntos.</p>
+<span class="lbl">Errores comunes</span>
+<p>Probar valores arbitrarios en lugar de solo los puntos medios de los datos observados.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c16-ejercicio"><summary><span class="stitle">5 · Ejercicio completo: diagnóstico con 8 pacientes</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Construir a mano un árbol de decisión, nivel por nivel, con un conjunto de 8 pacientes (4 enfermos, 4 sanos) y tres atributos: fiebre, tos y dolor de cabeza.</p>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Raíz:</strong> Gini<sub>0</sub> = 1 − (4/8)² − (4/8)² = <strong>0.5</strong>.</p>
+<p><strong>Candidato fiebre (alta/baja):</strong></p>
+<ul>
+<li>Fiebre alta: 4 pacientes (3 sí, 1 no) → 1 − (3/4)² − (1/4)² = 0.375.</li>
+<li>Fiebre baja: 4 pacientes (1 sí, 3 no) → 0.375.</li>
+<li>Ponderado = (4/8)(0.375) + (4/8)(0.375) = <strong>0.375</strong>; reducción = 0.5 − 0.375 = <strong>0.125</strong>.</li>
+</ul>
+<p><strong>Tos</strong> y <strong>dolor de cabeza</strong> dieron exactamente lo mismo (ponderado 0.375, reducción 0.125). <strong>Regla de desempate</strong> que explicó el profesor: se queda la primera característica evaluada → <strong>fiebre</strong> en la raíz.</p>
+<p><strong>Segundo nivel</strong> (se evalúa tos):</p>
+<ul>
+<li>Fiebre alta + tos: 2 pacientes, ambos enfermos → Gini 0, <strong>hoja «enfermo»</strong>. Fiebre alta sin tos: 1 y 1 → Gini 0.5.</li>
+<li>Fiebre baja sin tos: 2 pacientes, ambos sanos → Gini 0, <strong>hoja «sano»</strong>. Fiebre baja con tos: 1 y 1 → Gini 0.5.</li>
+</ul>
+<p><strong>Tercer nivel:</strong> dolor de cabeza separa cada par mixto en dos hojas puras de un paciente cada una.</p>
+<p><strong>Resultado: 6 hojas.</strong> Un alumno preguntó por qué se cuentan 6 si algunas están más arriba; el profesor: en cuanto un nodo llega a Gini = 0 se vuelve hoja y ya no se expande.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra el algoritmo completo: partir hasta que no quede incertidumbre. También deja ver el problema: hojas de un solo paciente son memoria, no aprendizaje (siguiente sección).</p>
+<span class="lbl">Errores comunes</span>
+<p>Seguir dividiendo un nodo que ya es puro.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c16-poda"><summary><span class="stitle">6 · Sobreajuste y poda por costo-complejidad (α crítico)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p><strong>Sobreajuste:</strong> el árbol crece sin control y memoriza hojas de 1 o 2 ejemplos: 100 % de exactitud en entrenamiento y se desploma en prueba. <strong>Poda:</strong> recortar las ramas que no reducen de forma significativa el error.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>El estudiante de medicina que se aprende de memoria el nombre y la edad de los 8 pacientes del libro en vez de los síntomas. Podar es borrar las reglas absurdas («si se llama Juan y tiene 23 años») y quedarse con los síntomas.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Pre-poda:</strong> limitar al construir: <code>max_depth</code>, <code>min_samples_split</code>, <code>min_samples_leaf</code>. <strong>Post-poda (costo-complejidad):</strong> construir el árbol completo y recortar usando el parámetro α:</p>
+<p style="text-align:center"><strong>α<sub>crítico</sub> = [R(t) − R(T)] / (|T<sub>t</sub>| − 1)</strong></p>
+<p>R(T) es el error del subárbol, R(t) el error si se colapsa a una sola hoja y |T<sub>t</sub>| el número de hojas del subárbol.</p>
+<p><strong>Ejercicio de clase</strong> (N = 40 en total; subárbol con 2 hojas):</p>
+<ul>
+<li>Hoja 1: 10 ejemplos (8 A, 2 B) → error 2/10 = 0.2. Hoja 2: 10 ejemplos (7 A, 3 B) → error 3/10 = 0.3.</li>
+<li>R(T) = (10/40)(0.2) + (10/40)(0.3) = 0.05 + 0.075 = <strong>0.125</strong>.</li>
+<li>Colapsado: 20 ejemplos (15 A, 5 B), predice A y falla 5 → R(t) = 5/40 = <strong>0.125</strong>.</li>
+<li>α<sub>crítico</sub> = (0.125 − 0.125) / (2 − 1) = <strong>0</strong>.</li>
+</ul>
+<p><strong>Decisión:</strong> como α<sub>crítico</sub> = 0 es menor que el α global (por ejemplo 0.1), la rama no reduce el error frente al nodo colapsado: <strong>se poda</strong>.</p>
+<span class="lbl">Errores comunes</span>
+<p>Evaluar el árbol solo con el conjunto de entrenamiento, sin validación ni prueba.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c16-rf"><summary><span class="stitle">7 · Random Forest: bagging, 36.8 % OOB y subespacios aleatorios</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un método de <strong>ensamble</strong>: muchos árboles entrenados de forma independiente que deciden por voto mayoritario (clasificación) o promedio (regresión).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>La sabiduría de la multitud: en vez de confiar en un solo médico, le preguntas a 100 y te quedas con lo que diga la mayoría.<span class="rompe">Dónde deja de servir: si los 100 médicos estudiaron exactamente lo mismo, opinan igual; por eso el bosque obliga a que cada árbol vea datos y atributos distintos.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>1. Bagging (bootstrap aggregating):</strong> cada árbol se entrena con una muestra de tamaño N tomada <strong>con reemplazo</strong> del conjunto original. La demostración del pizarrón:</p>
+<ul>
+<li>Probabilidad de elegir una muestra concreta en una extracción: 1/N.</li>
+<li>De <em>no</em> elegirla en una extracción: 1 − 1/N.</li>
+<li>De no elegirla en N extracciones independientes: (1 − 1/N)<sup>N</sup>.</li>
+<li>lim<sub>N→∞</sub> (1 − 1/N)<sup>N</sup> = e<sup>−1</sup> ≈ <strong>0.368</strong>.</li>
+</ul>
+<p>Así, cada árbol se entrena con ≈ <strong>63.2 %</strong> de los datos distintos y ≈ <strong>36.8 %</strong> queda fuera: las muestras <strong>OOB</strong> (<em>out-of-bag</em>), que sirven de validación interna.</p>
+<p><strong>2. Subespacios aleatorios:</strong> en cada corte de cada nodo solo se evalúa un subconjunto aleatorio de m ≪ D características (por ejemplo, m = √D).</p>
+<p><strong>Resultado mostrado en clase:</strong> un árbol (CART) tuvo exactitud de <strong>0.91</strong>; un Random Forest de 40 árboles, <strong>0.95</strong>, por la reducción de varianza.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Ataca justo el punto débil del árbol individual: la alta varianza (sección 6). El costo es la interpretabilidad (ver Contexto).</p>
+<span class="lbl">Errores comunes</span>
+<p>Entrenar todos los árboles con el conjunto completo, sin bootstrap: salen árboles idénticos.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c16-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Qué forma tienen las regiones de decisión de un árbol?</summary><p>Hiperrectángulos: cada corte es perpendicular a un eje de característica.</p></details>
+<details class="qa"><summary>2. Un nodo tiene 70 % de A y 30 % de B. ¿Cuánto vale su Gini? ¿Es «puro»?</summary><p>1 − 0.49 − 0.09 = 0.42. No: sigue siendo bastante impuro; el máximo binario es 0.5.</p></details>
+<details class="qa"><summary>3. Aplica: un corte deja a la izquierda 4 ejemplos (4 sí, 0 no) y a la derecha 6 (2 sí, 4 no). ¿Gini ponderado?</summary><p>Izquierda: 0. Derecha: 1 − (1/3)² − (2/3)² = 0.444. Ponderado = (4/10)(0) + (6/10)(0.444) = 0.267.</p></details>
+<details class="qa"><summary>4. ¿Qué umbrales se prueban para una característica continua con valores 20, 30 y 50?</summary><p>Los puntos medios entre consecutivos ordenados: 25 y 40.</p></details>
+<details class="qa"><summary>5. Tres atributos dan la misma reducción de impureza. ¿Cuál se elige?</summary><p>El primero que se evaluó (por eso en el ejercicio la raíz fue fiebre).</p></details>
+<details class="qa"><summary>6. Aplica la poda: R(T) = 0.10 con 3 hojas, R(t) = 0.16, α global = 0.05. ¿Se poda?</summary><p>α crítico = (0.16 − 0.10)/(3 − 1) = 0.03. Como 0.03 &lt; 0.05, se poda (con el mismo criterio que usó el profesor: si α crítico es menor que el global, la rama no compensa).</p></details>
+<details class="qa"><summary>7. ¿Qué demuestra (1 − 1/N)<sup>N</sup> → e<sup>−1</sup> en bagging?</summary><p>Que con muestreo con reemplazo cerca de 36.8 % de los datos queda fuera de cada árbol (OOB) y cerca de 63.2 % entra.</p></details>
+<details class="qa"><summary>8. ¿Cuáles son las dos fuentes de aleatoriedad de Random Forest?</summary><p>El bootstrap de las observaciones (bagging) y el subconjunto aleatorio de características en cada corte.</p></details>
+<details class="qa"><summary>9. Compara: ¿por qué un árbol no necesita estandarizar los datos y una SVM sí?</summary><p>El árbol solo ordena valores y compara contra umbrales en una característica a la vez; la SVM calcula productos punto y distancias, que dependen de la escala.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c16-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>Categóricos nativos:</strong> destacó que los árboles son de los pocos modelos que procesan directamente variables como «enfermo/sano» o «rojo/azul» sin convertirlas a números.</li>
+<li><strong>Interpretabilidad:</strong> Random Forest sube de 91 % a 95 %, pero ya no se puede explicar el modelo: es prácticamente imposible inspeccionar decenas o cientos de árboles.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c16-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Tarea:</strong> la anunció en esta clase: «se la subo hoy y me la entregarían para el viernes», por Classroom. Es la <a href="tareas.html#RP-T02">Tarea 2</a> (vence el viernes 23 oct a las 7:00 según Classroom): DBSCAN a mano (núcleo, frontera y ruido con ε y min_samples dados), Bayes ingenuo con variables discretas (asistencia, tareas y horas de estudio → aprueba/reprueba, clasificar 2 alumnos nuevos) y Bayes gaussiano con variables continuas (horas de sueño y promedio anterior; clasificar a un alumno con 6 h de sueño y 7.5 de promedio).</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Gini = 1 − Σp²; binario: 0 puro, 0.5 máximo. Entropía máxima binaria = 1.</li>
+<li>Continuos: umbrales en puntos medios; Gini ponderado = Σ (n<sub>hijo</sub>/n)·Gini<sub>hijo</sub>.</li>
+<li>Empate de atributos: gana el primero evaluado. Nodo con Gini 0 = hoja.</li>
+<li>Poda: α crítico = [R(t) − R(T)]/(|T<sub>t</sub>| − 1); si es menor que α global, se poda.</li>
+<li>Bagging: (1 − 1/N)<sup>N</sup> → e<sup>−1</sup> ≈ 36.8 % OOB; Random Forest agrega subespacios aleatorios (m ≈ √D). Un árbol 0.91 vs. 40 árboles 0.95.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

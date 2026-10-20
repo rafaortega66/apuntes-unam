@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 15 — Fundamentos de Sistemas Embebidos</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Fundamentos de Sistemas Embebidos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 15</h2>
+  <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 19 oct 2026 · Tema 3 (3.2–3.3) — Instanciación de un proceso y lectura del encabezado del ejecutable, ciclo de vida (WAIT → READY → RUNNING) y la regla de que un proceso bloqueado nunca vuelve directo a RUNNING, estados extendidos (PENDING, DELAYED, SUSPENDED, STOPPING, STOPPED), procesos e hilos (GPOS) frente a tareas (RTOS) y tipos de tareas de tiempo real (periódicas, aperiódicas, esporádicas).</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>FSE-Clase15.m4a</code>), 20 oct 2026. Al inicio se devolvieron los exámenes del primer parcial (<a href="examenes.html#FSE-E01">FSE-E01</a>).</p>
+</div>
+
+<details class="section-block sec" id="c15-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<p>Es la segunda clase de la Unidad 3, que entra en el segundo parcial. Cada punto lleva su evidencia de la clase.</p>
+<ol class="examen-lista">
+<li><strong>Los 3 estados base (WAIT, READY, RUNNING) y la regla de retorno.</strong><span class="evid">Evidencia: dibujó el diagrama de estados completo y enfatizó que, al desbloquearse (por ejemplo, después de un <code>scanf()</code>), el proceso <em>nunca</em> pasa de WAIT a RUNNING: siempre vuelve a READY.</span></li>
+<li><strong>Cómo se instancia un proceso y por qué se lee primero el encabezado.</strong><span class="evid">Evidencia: explicó el procedimiento paso a paso: estructura vacía, inspección del encabezado (16/32/64 bits, shebang, una imagen GIF…) y luego la reserva de memoria.</span></li>
+<li><strong>Hilos en GPOS frente a tareas en RTOS.</strong><span class="evid">Evidencia: lo retomó de la Clase 13 y lo amplió con el «superproceso raíz» del RTOS, la memoria compartida verificada en compilación y el deadline.</span></li>
+<li><strong>Tareas periódicas, aperiódicas y esporádicas.</strong><span class="evid">Evidencia: las definió junto con el bucle de control (sensado → filtrado → ley de control → actuación) y dijo que las periódicas son la base del análisis de tiempo real. Es el tema con el que se sigue la próxima clase.</span></li>
+<li><strong>Estados extendidos.</strong><span class="evid">Evidencia: dio un ejemplo para cada uno (cron para PENDING, respaldo que cede ante una consulta para DELAYED, Ctrl+Z para SUSPENDED, liberar la cámara al cerrar para STOPPING). Evidencia más débil que la de los anteriores.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c15-instanciacion"><summary><span class="stitle">1 · Instanciación de un proceso y verificación del encabezado</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La instanciación es la carga del identificador y de la estructura de administración del programa en la RAM, la hace el sistema operativo antes de poder ejecutarlo.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es la recepción de un hotel: antes de darle la llave al huésped (asignarle RAM), revisan su identificación y su reserva (el encabezado del archivo) para saber si es válida y qué tamaño de habitación necesita.<span class="rompe">Dónde deja de servir: en el hotel se llena un registro en papel; el sistema operativo lee los primeros bytes del archivo en nanosegundos, precisamente para no ejecutar algo que no es un programa.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Para cargar y ejecutar un programa, el sistema operativo primero crea en memoria una <strong>estructura de proceso tipo, vacía</strong>, con espacio para el identificador (PID), banderas y campos de administración. Antes de reservar el bloque de memoria final, <strong>lee el encabezado</strong> del archivo en disco. Lo hace por seguridad: no sabe de antemano si el archivo es un ejecutable para ese sistema operativo, un script con <em>shebang</em> (<code>#!/bin/bash</code>), una clase compilada de Java, un binario de otra arquitectura o simplemente un archivo multimedia, como una imagen GIF.</p>
+<p>Si el encabezado confirma que es un ejecutable válido para la plataforma, de ahí se lee si es un programa de <strong>16, 32 o 64 bits</strong>. Con ese dato y con lo que pide el encabezado, el sistema operativo dimensiona la estructura del proceso, solicita el espacio inicial de RAM y arma el <strong>pool de memoria</strong> (heap y variables) que el programa necesita.</p>
+<p>El profesor lo resumió con humor: el sistema operativo es como una «patrona» que construye la casa a la medida, la amuebla completa y la deja lista para cuando llega el programa.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Evita que el sistema intente interpretar datos (una imagen, un texto) como instrucciones de CPU. Continúa directamente la Clase 13 (programa en disco vs. programa en ejecución vs. proceso, y el loader que relocaliza direcciones).</p>
+<span class="lbl">Errores comunes</span>
+<p>Pensar que el sistema operativo copia el ejecutable completo a la RAM «a ciegas», sin revisar primero el encabezado.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c15-estados"><summary><span class="stitle">2 · Ciclo de vida: los 3 estados base (WAIT, READY, RUNNING)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La secuencia de estados por la que pasa todo proceso desde que se instancia hasta que se ejecuta en un núcleo del procesador.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es la fila de un juego mecánico (o de las tortillas): primero vas llegando y todavía no estás formado (WAIT); luego te formas en la fila (READY); finalmente te subes al carrito (RUNNING).<span class="rompe">Dónde deja de servir: en la tortillería puede haber dos despachadores; en un núcleo de un solo hilo, solo un proceso puede estar en RUNNING a la vez.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Durante la carga, el hilo principal de la estructura recién creada empieza en <strong>WAIT</strong>, porque el programa todavía se está copiando del disco a la memoria reservada y el sistema operativo está registrando sus páginas en las tablas internas.</p>
+<p>Cuando termina la copia y la verificación, el sistema lo cambia a <strong>READY</strong>: está completamente cargado y listo, pero <em>todavía no</em> está en el núcleo. Queda formado en la cola de planificación (por ejemplo, la cola de Round Robin).</p>
+<p>Cuando el scheduler le da turno pasa a <strong>RUNNING</strong>. Solo puede haber un proceso en RUNNING por núcleo al mismo tiempo. Si mientras se ejecuta el hilo principal llama a una función para bifurcarse (como <code>fork</code>), el sistema duplica los segmentos en un subproceso, crea una segunda entrada en la tabla de procesos con un PID propio y pone al hijo en READY.</p>
+<p>Cuando se agota su <strong>cuanto de tiempo</strong> (<em>time slice</em>), una interrupción del temporizador despierta al sistema operativo, que suspende la ejecución, regresa el proceso de RUNNING a READY y lo vuelve a formar para su siguiente turno.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Se conecta con el temporizador del sistema (<em>system tick</em>) y con las interrupciones de la Unidad 2: así se logra la multitarea que se vio en la Clase 13.</p>
+<span class="lbl">Errores comunes</span>
+<p>Creer que en READY el proceso ya está ejecutando código. READY solo significa que está formado esperando turno.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c15-bloqueo"><summary><span class="stitle">3 · Bloqueo por E/S y la regla de retorno (WAIT → READY, nunca → RUNNING)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El mecanismo por el que un proceso que se está ejecutando cede el CPU y pasa a espera (WAIT o BLOCKED) cuando pide datos a un dispositivo de E/S o a otro proceso.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es el consultorio del médico: si te piden un análisis de laboratorio, no te quedas parado en la puerta estorbando; te vas a la sala de espera. Cuando llegan los resultados, no entras a la fuerza al consultorio: te anuncias en recepción para que te vuelvan a poner en la lista.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Cuando un proceso en RUNNING ejecuta algo que necesita datos de un periférico (por ejemplo, <code>scanf()</code> leyendo el teclado, o una lectura del puerto serie o de la red), no puede seguir de inmediato. Para no gastar ciclos haciendo sondeo activo (<em>polling</em>) en un bucle, el sistema operativo lo pasa de RUNNING a <strong>WAIT/BLOCKED</strong>. Mientras está ahí no consume CPU y el scheduler le da el núcleo a otro proceso que esté en READY.</p>
+<p><strong>La regla:</strong> cuando el periférico entrega los datos (con una interrupción de hardware), la espera termina, pero el proceso <strong>nunca</strong> pasa directo de WAIT a RUNNING. El sistema operativo lo mueve obligatoriamente a <strong>READY</strong> y lo vuelve a formar en la cola para que espere su turno.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Maximiza el aprovechamiento del procesador: nadie se queda «esperando activamente» durante una operación de E/S lenta.</p>
+<span class="lbl">Errores comunes</span>
+<p>Suponer que, al presionar Enter en un <code>scanf()</code>, el programa salta de inmediato a ejecutarse. En realidad pasa a READY y espera turno.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c15-extendidos"><summary><span class="stitle">4 · Estados extendidos: PENDING, DELAYED, SUSPENDED, STOPPING, STOPPED</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Estados adicionales a los tres base que usan los sistemas operativos para manejar prioridades, tareas programadas, suspensión manual y cierre ordenado de procesos.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Son los estados de un coche: con hora reservada para salir a pista (PENDING), cediendo el paso a una ambulancia (DELAYED), en neutral con freno de mano sin gastar gasolina (SUSPENDED), apagando motor y luces y cerrando con seguro antes de irte (STOPPING).</p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>PENDING:</strong> el proceso ya está cargado, pero todavía no le toca pasar a READY porque está programado para un momento dado. Ejemplo: scripts administrados con <code>cron</code>/<code>crontab</code> en Linux para tareas de mantenimiento (respaldos, <code>apt update</code> en horas de poco tráfico).</li>
+<li><strong>DELAYED:</strong> estaba listo, pero se pospone porque llegó un proceso de mayor prioridad. Ejemplo: un respaldo que se retrasa cuando entra una consulta activa a la base de datos.</li>
+<li><strong>SUSPENDED:</strong> el usuario o el sistema lo congela (señal <code>SIGSTOP</code>, Ctrl+Z, pausar un reproductor como VLC). Consume <strong>0 %</strong> de CPU.</li>
+<li><strong>STOPPING:</strong> estado de transición al cerrar una aplicación. El sistema ejecuta las rutinas de limpieza (<em>clean up</em>) y los destructores, cierra conexiones de red y libera periféricos (la cámara web, el puerto serie) antes de destruir la estructura.</li>
+<li><strong>STOPPED / KILLED:</strong> el proceso terminó su ciclo de vida y sus recursos se liberan por completo de la RAM.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite administrar recursos con precisión, automatizar con cron y liberar el hardware de forma limpia.</p>
+<span class="lbl">Errores comunes</span>
+<p>Confundir suspender un proceso (0 % de CPU) con minimizar una ventana, que sigue ejecutándose en segundo plano.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c15-gpos-rtos"><summary><span class="stitle">5 · Procesos e hilos (GPOS) frente a tareas (RTOS)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p><strong>Proceso:</strong> estructura de datos completa y aislada que administra la ejecución de un programa. <strong>Hilo (thread):</strong> unidad mínima de ejecución dentro de un proceso en un sistema operativo de propósito general (GPOS). <strong>Tarea (task):</strong> unidad mínima de ejecución en un sistema operativo de tiempo real (RTOS).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>En un GPOS, los procesos son departamentos de un edificio corporativo: cada uno tiene sus empleados (hilos) que comparten oficina, pero no entran a otros departamentos sin permiso. En un RTOS, todas las tareas trabajan en una misma nave industrial con un supervisor central, para reaccionar al instante sin burocracia de puertas.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>En un GPOS (Linux, Windows):</strong> el hilo es la unidad mínima de ejecución; todo proceso nace con un hilo principal. Los hilos de un mismo proceso comparten su espacio de memoria virtual, su sección de datos y sus privilegios: son «procesos ligeros». A la MMU le importa el aislamiento entre procesos; al scheduler, los hilos son unidades que se forman para recibir tiempo de CPU.</p>
+<p><strong>En un RTOS (FreeRTOS, VxWorks):</strong> la unidad mínima es la tarea. No hay procesos aislados dinámicos ni loader dinámico. Todas las tareas viven dentro de una estructura única, el <strong>superproceso raíz</strong> (<em>RT process</em>); comparten la memoria o tienen sus accesos verificados en la compilación por el linker. Cada tarea tiene una <strong>prioridad fija</strong> y un tiempo límite estricto: el <strong>deadline</strong>.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Define cuándo usar cada plataforma: GPOS para aplicaciones complejas con memoria virtual; RTOS para microcontroladores que deben responder en microsegundos sin la sobrecarga de administración. Amplía lo que se vio al final de la <a href="clase-13.html#c13-gpos-rtos">Clase 13</a>.</p>
+<span class="lbl">Errores comunes</span>
+<p>Buscar un loader dinámico en un RTOS: ahí el ejecutable ya viene enlazado por completo desde la compilación.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c15-tiempo-real"><summary><span class="stitle">6 · RTOS: bucle de control y tipos de tareas (periódicas, aperiódicas, esporádicas)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La clasificación de las tareas de un RTOS según cómo ocurren en el tiempo y qué restricción de plazo (deadline) tienen.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Una tarea periódica es como el latido del corazón: ocurre cada cierto tiempo, sin falta. Una aperiódica es como el freno o la bolsa de aire de un coche: no sabes cuándo se va a necesitar, pero cuando se necesita tiene que actuar antes de que sea tarde.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>En tiempo real se descarta el Round Robin del GPOS porque no da garantías deterministas. La ejecución suele seguir el <strong>bucle clásico de control</strong>:</p>
+<p style="text-align:center"><strong>Sensado → Filtrado → Ley de control → Actuación</strong></p>
+<p>Ninguna etapa puede ejecutarse sin que la anterior haya terminado correctamente sus datos. Hay tres tipos de tareas:</p>
+<ul>
+<li><strong>Periódicas:</strong> se repiten a intervalos fijos y conocidos (periodo T), con su tiempo de ejecución y un deadline estricto. Son la base del análisis matemático de planificabilidad (<em>schedulability</em>) que garantiza que el sistema nunca pierda un plazo.</li>
+<li><strong>Aperiódicas:</strong> no tienen periodo fijo, pero cuando ocurren tienen un deadline obligatorio e inflexible. Ejemplo: el cálculo de frenado o el disparo de las bolsas de aire en un vehículo autónomo.</li>
+<li><strong>Esporádicas:</strong> una variante de las aperiódicas: ocurren en momentos no determinados, pero con un <strong>tiempo mínimo garantizado</strong> entre una ocurrencia y la siguiente.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la base para diseñar sistemas críticos (automotrices, aeronáuticos, médicos), donde fallar en el tiempo equivale a un fallo del sistema físico. Lleva al subtema 3.3 (tipos de scheduling), que es lo que sigue.</p>
+<span class="lbl">Errores comunes</span>
+<p>Creer que «tiempo real» significa «muy rápido». Significa <strong>determinismo</strong>: cumplir los plazos siempre.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c15-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Por qué el sistema operativo lee el encabezado del archivo antes de terminar de instanciar el proceso?</summary><p>Para confirmar que es un ejecutable válido para esa plataforma (y si es de 16, 32 o 64 bits) y no un script con shebang, una clase de Java, un binario de otra arquitectura o una imagen. Así no intenta ejecutar datos como si fueran código, y sabe cuánta memoria reservar.</p></details>
+<details class="qa"><summary>2. Un proceso hace <code>scanf()</code> y pasa a WAIT. Llega el dato. ¿A qué estado pasa y por qué?</summary><p>A READY, nunca directo a RUNNING. Tiene que volver a formarse en la cola del scheduler para que el tiempo de CPU se reparta entre todos los procesos listos.</p></details>
+<details class="qa"><summary>3. ¿En qué estado está un proceso mientras se copia del disco a la RAM, y cuándo pasa a READY?</summary><p>En WAIT. Pasa a READY cuando termina la copia y el sistema registró sus páginas en las tablas.</p></details>
+<details class="qa"><summary>4. Quieres congelar un respaldo pesado para que use 0 % de CPU mientras juegas. ¿A qué estado lo mandas y cómo?</summary><p>A SUSPENDED, con la señal <code>SIGSTOP</code> (o Ctrl+Z en la terminal).</p></details>
+<details class="qa"><summary>5. ¿Qué herramienta de Linux deja un proceso en PENDING para ejecutarse a una hora dada?</summary><p><code>cron</code>, configurado con <code>crontab</code>.</p></details>
+<details class="qa"><summary>6. ¿Qué pasa durante STOPPING cuando cierras una aplicación que usaba la cámara web?</summary><p>Se ejecutan las rutinas de limpieza y los destructores, se cierran las conexiones de red y se liberan los periféricos (la cámara) antes de destruir la estructura del proceso.</p></details>
+<details class="qa"><summary>7. Compara cómo se organiza la memoria entre hilos en un GPOS y tareas en FreeRTOS.</summary><p>GPOS: los hilos comparten el espacio de su proceso, y los procesos están aislados entre sí (MMU). RTOS: no hay procesos dinámicos; todas las tareas cuelgan de un superproceso raíz, comparten memoria verificada en la compilación y se rigen por prioridad fija y deadline.</p></details>
+<details class="qa"><summary>8. ¿Por qué no se usa Round Robin en el bucle sensado → filtrado → ley de control → actuación?</summary><p>Porque no ofrece garantías deterministas de tiempo, y cada etapa depende del resultado de la anterior y tiene que cumplir un deadline rígido.</p></details>
+<details class="qa"><summary>9. ¿Qué distingue a una tarea esporádica de una aperiódica?</summary><p>Ambas ocurren en momentos no determinados, pero la esporádica tiene un tiempo mínimo garantizado entre ocurrencias sucesivas.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c15-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>Entrega de exámenes:</strong> al inicio devolvió el primer parcial entre bromas sobre nombres y acentos. Contó que le pidió a Gemini generar un examen de 50 preguntas para probar la herramienta.</li>
+<li><strong>No memorizar microcontroladores:</strong> explicó que no pide memorizar hojas de datos porque en la industria el ingeniero compara alternativas en los datasheets y presenta un reporte; con los años se olvidan los detalles, salvo los de los chips con los que sufriste (mencionó el PIC18F4550 y el PIC18F452).</li>
+<li><strong>Analogías del día:</strong> la cola de las tortillas y los juegos de Six Flags para READY; la sala de espera del médico para el bloqueo por <code>scanf()</code>.</li>
+<li><strong>Don Gato y su pandilla:</strong> comentó que el doblaje latinoamericano mejoró la caricatura respecto a la versión original en inglés.</li>
+<li><strong>Plan de estudios:</strong> bromeó sobre quitar materias de física y hardware para terminar enseñando «Python 1 y Python 2».</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c15-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Próxima clase:</strong> seguir con las tareas de tiempo real (periódicas, aperiódicas, esporádicas) y la planificación determinista en RTOS (subtema 3.3, tipos de scheduling).</li>
+<li><strong>Laboratorio:</strong> sigue en pie que la Raspberry Pi debe correr Linux en modo consola para las prácticas avanzadas (lo dijo en la <a href="clase-13.html#c13-pendiente">Clase 13</a>).</li>
+<li>No se asignó tarea nueva en esta sesión.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Instanciar = estructura vacía → leer encabezado (¿ejecutable? ¿16/32/64 bits?) → reservar memoria y pool.</li>
+<li>WAIT (cargando) → READY (formado) → RUNNING (en el núcleo); al acabarse el cuanto vuelve a READY.</li>
+<li>Bloqueado por E/S: RUNNING → WAIT → <strong>READY</strong>, nunca directo a RUNNING.</li>
+<li>Extendidos: PENDING (cron), DELAYED (prioridad), SUSPENDED (SIGSTOP, 0 % CPU), STOPPING (limpieza), STOPPED.</li>
+<li>GPOS: procesos e hilos; RTOS: tareas en un superproceso raíz, prioridad fija y deadline.</li>
+<li>Tareas de tiempo real: periódicas (base del análisis), aperiódicas (deadline inflexible), esporádicas (separación mínima garantizada).</li>
+</ul></div>
+
+</div>
+</body>
+</html>

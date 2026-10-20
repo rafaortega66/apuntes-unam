@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 14 — Administración de Servicios de Internet</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Administración de Servicios de Internet</a>
+<div class="detail-head" style="border-color:#7C9CD6"><h2>Clase 14</h2>
+  <p class="prof">Mtro. Juan Ángel Calvillo Pérez · 19 oct 2026 · Servidor de bases de datos (fuera del temario) — Seguridad y auditoría en Oracle: usuario → rol → privilegios, <code>UNLIMITED TABLESPACE</code> directo al usuario, DATE frente a TIMESTAMP con <code>SYSDATE</code>, acceso <code>usuario.tabla</code> y <code>COMMIT</code>, disparadores de auditoría con <code>:OLD</code>/<code>:NEW</code> y conexión de SQL Developer a Oracle en la nube.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>ASI-Clase14.m4a</code>), 20 oct 2026. Todo fue demostración en vivo con <code>sqlplus</code> y SQL Developer; los comandos son los que escribió el profesor.</p>
+</div>
+
+<details class="section-block sec" id="c14-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<p>Más que examen, esto es lo que pide la práctica de auditoría que dejó (ver Pendiente). Cada punto lleva su evidencia de la clase.</p>
+<ol class="examen-lista">
+<li><strong>Disparadores de auditoría para INSERT, UPDATE y DELETE con <code>:OLD</code> y <code>:NEW</code>.</strong><span class="evid">Evidencia: es el requisito central de la práctica: «en resultados tendrán que completar que su disparador funcione con update y con delete… van a tener que utilizar dos variables: :OLD y :NEW».</span></li>
+<li><strong>El orden correcto: usuario → rol → privilegios.</strong><span class="evid">Evidencia: lo preguntó directamente a la clase («¿cuál es la manera correcta?») y lo aclaró.</span></li>
+<li><strong>Por qué <code>UNLIMITED TABLESPACE</code> se da directo al usuario.</strong><span class="evid">Evidencia: fue un error en vivo (<code>ORA-01950</code>) y lo usó para explicar que hay privilegios que no pueden ir en un rol.</span></li>
+<li><strong><code>usuario.tabla</code> y la necesidad del <code>COMMIT</code>.</strong><span class="evid">Evidencia: otra cuenta no veía la tabla (<code>ORA-00942</code>) y luego la veía vacía; lo resolvió en el pizarrón con los table spaces como carpetas.</span></li>
+<li><strong>DATE frente a TIMESTAMP para auditar.</strong><span class="evid">Evidencia: preguntó «¿para qué me sirve tanta precisión en un servidor de base de datos?» y discutió la respuesta con los alumnos.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c14-usuarios"><summary><span class="stitle">1 · Usuarios, roles y privilegios (y el error ORA-65096)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La forma estándar de dar permisos en un gestor de bases de datos: los privilegios se agrupan en un <strong>rol</strong> y el rol se le asigna al usuario, en lugar de darle permisos sueltos a cada cuenta.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es el gafete de una empresa: en vez de registrar la huella de cada empleado en cada puerta, haces un gafete de «Becario» con sus accesos ya programados y se lo das a quien entre como becario.<span class="rompe">Dónde deja de servir: un gafete se presta sin dejar rastro; en la base de datos cada sesión queda ligada a un usuario autenticado con contraseña.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El profesor entró a Oracle como administrador (<code>SYSTEM</code>) desde la consola <code>sqlplus</code> y creó un usuario:</p>
+<pre><code>CREATE USER Rafa IDENTIFIED BY 123;</code></pre>
+<p>En Oracle Enterprise esto puede dar <code>ORA-65096: invalid common user or role name</code>. Para corregirlo, primero se altera la sesión:</p>
+<pre><code>ALTER SESSION SET "_ORACLE_SCRIPT" = TRUE;</code></pre>
+<p>y se vuelve a ejecutar el <code>CREATE USER</code>, que ya funciona.</p>
+<p>Luego preguntó: <em>«¿Cuál es la manera correcta de hacer un usuario conforme al manejo de privilegios?»</em>. Un alumno contestó que se definía un contenedor con los privilegios, y el profesor lo aclaró: <strong>«Hago un usuario, luego serían los roles y al último los privilegios»</strong>. Se crea el rol, se le dan los permisos y se le asigna al usuario:</p>
+<pre><code>CREATE ROLE becario;
+GRANT CREATE SESSION   TO becario;
+GRANT CREATE TABLE     TO becario;
+GRANT INSERT ANY TABLE TO becario;
+GRANT SELECT ANY TABLE TO becario;
+GRANT CREATE TRIGGER   TO becario;
+GRANT becario TO Rafa;</code></pre>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es como se segmentan las cuentas en un servidor real: nadie trabaja como administrador general. Se liga con la administración de cuentas que ya se ve en el proyecto Scrum (permisos en Samba y SSH del <a href="proyectos.html">Sprint 3</a>).</p>
+<span class="lbl">Errores comunes</span>
+<p>Crear el usuario sin habilitar <code>_ORACLE_SCRIPT</code> (sale ORA-65096), o darle los privilegios directamente al usuario en lugar de empaquetarlos en un rol.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c14-tablespace"><summary><span class="stitle">2 · Almacenamiento: el privilegio <code>UNLIMITED TABLESPACE</code></span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La cuota de almacenamiento dentro del <strong>table space</strong> (los archivos donde Oracle guarda físicamente los datos) que necesita un usuario para poder guardar filas.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es el casillero del gimnasio: la membresía te deja entrar (conectarte, crear la tabla), pero hasta que no te dan un casillero no puedes dejar nada guardado.<span class="rompe">Dónde deja de servir: el casillero tiene un tamaño fijo; con <code>UNLIMITED TABLESPACE</code> el espacio crece según el disco del servidor.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Ya conectado como <code>Rafa</code>, el profesor creó una tabla de prueba (funcionó, porque el rol tiene <code>CREATE TABLE</code>):</p>
+<pre><code>CREATE TABLE reprobaditos (
+  id             NUMBER(3),
+  fecha_completa TIMESTAMP,
+  fecha_corta    DATE,
+  nombre         VARCHAR2(20)
+);</code></pre>
+<p>Pero el primer <code>INSERT</code> falló:</p>
+<pre><code>INSERT INTO reprobaditos VALUES (1, SYSDATE, SYSDATE, 'Axel');
+-- ORA-01950: no privileges on tablespace 'USERS'</code></pre>
+<p>Explicación del profesor: <em>«Hay privilegios, y más cuando son de sistema operativo, que les debes asignar directamente al usuario. Hay unos que no pueden ir en rol»</em>. Aunque el rol tenga <code>INSERT ANY TABLE</code>, lo que toca el almacenamiento físico no se hereda por el rol. Se arregla entrando otra vez como administrador:</p>
+<pre><code>GRANT UNLIMITED TABLESPACE TO Rafa;</code></pre>
+<p>Con eso la inserción ya se guarda.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>En producción, quedarse sin cuota en el table space detiene las aplicaciones conectadas a la base.</p>
+<span class="lbl">Errores comunes</span>
+<p>Creer que con <code>INSERT</code> o con un rol completo ya hay espacio para guardar.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c14-fechas"><summary><span class="stitle">3 · DATE frente a TIMESTAMP con <code>SYSDATE</code></span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Los dos tipos de dato de tiempo de Oracle que se compararon: <code>DATE</code> y <code>TIMESTAMP</code> (con fracciones de segundo), llenados con la función del sistema <code>SYSDATE</code>.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>DATE, como se mostró en clase, es el calendario de pared: el día. TIMESTAMP es el cronómetro de carreras: hora, minuto, segundo y fracciones.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Con la inserción de arriba (<code>SYSDATE</code> en las dos columnas) y un <code>SELECT * FROM reprobaditos;</code>, la consola mostró la columna DATE solo como <code>19-OCT-26</code> y la TIMESTAMP con fecha, hora y fracciones de segundo.</p>
+<p>Pregunta del profesor: <em>«¿Para qué me sirve en un servidor de base de datos? ¿Creen que sirva tanta precisión?»</em>. Respuesta de la clase: si los datos cambian dentro del mismo segundo, o se pierde información de un segundo a otro, hay que poder rastrearla.</p>
+<p>Un alumno preguntó si <code>SYSDATE</code> depende de la máquina local o se puede configurar de forma global. El profesor: se puede, pero no se recomienda centralizarlo en la base de datos; se basa en la zona horaria del lugar (en México la de referencia es la de Ciudad de México; México tiene tres zonas, Brasil dos o tres, Estados Unidos tres o cuatro) y centralizar hace perder esa información.</p>
+<p class="nota" style="font-size:13px;color:var(--ink-soft)"><strong>Nota (documentación de Oracle, no se dijo en clase):</strong> un <code>DATE</code> de Oracle sí guarda hora, minuto y segundo; lo que se vio en consola es solo el formato de despliegue por defecto. La diferencia real es que <code>TIMESTAMP</code> agrega fracciones de segundo (6 dígitos por defecto). En clase se habló de «nanosegundos».</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>La auditoría necesita saber el orden exacto de transacciones casi simultáneas: por eso la tabla de auditoría usa <code>TIMESTAMP</code>.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c14-commit"><summary><span class="stitle">4 · Table spaces, acceso <code>usuario.tabla</code> y <code>COMMIT</code></span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Cada usuario de Oracle tiene su propio esquema (el profesor lo dibujó como una carpeta por usuario). Para usar la tabla de otro hay que nombrarla con su dueño, y los cambios de datos solo los ven los demás después de un <code>COMMIT</code>.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un documento en tu carpeta: tu compañero solo lo encuentra si busca en <em>tu</em> carpeta, y solo ve tus cambios cuando le das «Guardar y publicar».<span class="rompe">Dónde deja de servir: un documento en la nube se sincroniza tecla por tecla; en la base de datos la transacción queda aislada hasta que la confirmas a propósito.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Se creó una segunda cuenta (<code>CREATE USER Emilio IDENTIFIED BY 123;</code>) con privilegios básicos. Desde ella:</p>
+<pre><code>SELECT * FROM reprobaditos;
+-- ORA-00942: table or view does not exist</code></pre>
+<p>La tabla no es de esa cuenta, es de <code>Rafa</code>. Con el nombre calificado ya la encuentra:</p>
+<pre><code>SELECT * FROM Rafa.reprobaditos;
+-- no hay filas seleccionadas</code></pre>
+<p>…pero sale vacía aunque Rafa ya había insertado. El motivo: los comandos <strong>DML</strong> (<code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>) quedan en una transacción privada hasta que quien los hizo ejecuta <code>COMMIT;</code>. En palabras del profesor: «si no está publicado, no lo puedo ver».</p>
+<p>En cambio, con <strong>DDL</strong> no hace falta: creó otra tabla (<code>CREATE TABLE condicion (nombre VARCHAR2(30), sueldo NUMBER(6,2));</code>) y mostró que <code>DROP TABLE reprobaditos;</code> tiene efecto inmediato sin <code>COMMIT</code>.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Evita inconsistencias cuando varios usuarios o aplicaciones trabajan sobre la misma base.</p>
+<span class="lbl">Errores comunes</span>
+<p>Olvidar el <code>COMMIT</code> y creer que los datos ya están guardados para todos; consultar la tabla de otro usuario sin el prefijo <code>usuario.</code>.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c14-triggers"><summary><span class="stitle">5 · Auditoría con disparadores (triggers), <code>:OLD</code> y <code>:NEW</code></span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un disparador es un bloque PL/SQL guardado en el servidor que se ejecuta <strong>automáticamente</strong> antes o después de un <code>INSERT</code>, <code>UPDATE</code> o <code>DELETE</code> sobre una tabla. Para auditar se usa para registrar <strong>quién, cómo y cuándo</strong> se modificaron los datos.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es una cámara con sensor de movimiento sobre una caja fuerte: nadie la enciende; en cuanto alguien la abre, graba quién fue y a qué hora.<span class="rompe">Dónde deja de servir: la cámara solo ve desde afuera; el disparador además conoce el valor que había antes (<code>:OLD</code>) y el que se está guardando (<code>:NEW</code>).</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Preguntó la diferencia entre procedimiento almacenado y disparador. Un alumno: «el trigger se activa con una acción; el procedimiento lo tienes que llamar tú». El profesor: <em>«El disparador es automático y funciona antes o después de tres cosas: INSERT, UPDATE o DELETE. Se aterriza para auditar en el servidor: quién, cómo y cuándo lo hizo»</em>.</p>
+<p>Primero la tabla de bitácora:</p>
+<pre><code>CREATE TABLE auditoria (
+  usuario    VARCHAR2(30),
+  movimiento VARCHAR2(30),
+  fecha      TIMESTAMP
+);</code></pre>
+<p>Luego el disparador sobre la tabla de trabajo, una vez por fila modificada:</p>
+<pre><code>CREATE OR REPLACE TRIGGER i_condicion
+AFTER INSERT ON Rafa.condicion
+FOR EACH ROW
+BEGIN
+  INSERT INTO auditoria VALUES (USER, 'inserto', SYSDATE);
+END;
+/</code></pre>
+<p><code>USER</code> devuelve el nombre de la cuenta conectada que provocó el evento, sin pasarlo como parámetro. Se hicieron inserciones desde varias cuentas con nombres y «sueldos deseados» de los alumnos, y <code>SELECT * FROM auditoria;</code> mostró qué usuario hizo cada inserción y su sello de tiempo.</p>
+<p><strong>Para la práctica:</strong> el mismo disparador debe cubrir <code>UPDATE</code> y <code>DELETE</code>, usando los predicados <code>INSERTING</code>, <code>UPDATING</code> y <code>DELETING</code> y las variables de fila:</p>
+<ul>
+<li><code>:NEW.campo</code> — el valor que entra (en <code>INSERT</code> y <code>UPDATE</code>).</li>
+<li><code>:OLD.campo</code> — el valor que había antes y que se reemplaza o se borra (en <code>UPDATE</code> y <code>DELETE</code>).</li>
+</ul>
+<p>La tabla de auditoría tiene que ampliarse para guardar el dato anterior y el nuevo.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la base de la trazabilidad y de la prevención de fraudes en bases de datos empresariales; retoma la parte de seguridad que se vio con Kali (<a href="clase-08.html">Clases 08</a> y <a href="clase-09.html">09</a>).</p>
+<span class="lbl">Errores comunes</span>
+<p>Escribir <code>SHOW USER</code> dentro del disparador en vez de la palabra reservada <code>USER</code>; olvidar <code>FOR EACH ROW</code> cuando se quiere una entrada por cada fila.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c14-nube"><summary><span class="stitle">6 · SQL Developer local conectado a Oracle en la nube (Free SQL / Live SQL)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Una conexión cliente-servidor por TCP/IP entre la herramienta gráfica local (SQL Developer) y una base de datos Oracle alojada en la nube, sin instalar el motor completo en tu máquina.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como una app de mensajería de escritorio: el programa corre en tu laptop, pero los datos viven en los servidores en internet.</p></div>
+<span class="lbl">Cómo funciona</span>
+<ol>
+<li>En la consola web de Free SQL / Live SQL, ir a la configuración de conexión.</li>
+<li>Copiar los parámetros: <strong>Host name</strong>, <strong>puerto</strong> (1521; o 2484 si es la conexión cifrada), <strong>nombre de servicio</strong>, <strong>usuario</strong> y la contraseña (botón «Regenerar password»).</li>
+<li>En SQL Developer: «Nueva conexión», capturar host y puerto, cambiar el tipo a <strong>Nombre de servicio</strong> (no SID) y poner usuario y contraseña.</li>
+<li><strong>Probar</strong> y, si pasa, <strong>Conectar</strong>.</li>
+</ol>
+<p>Desde SQL Developer local ejecutó <code>CREATE TABLE pruebita (id NUMBER);</code> y, al refrescar la consola en el navegador, la tabla ya aparecía en el servidor en la nube.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Administrar infraestructura de datos remota sin consumir recursos locales; es parte del desarrollo que pide la práctica.</p>
+<span class="lbl">Errores comunes</span>
+<p>Elegir «SID» en lugar de «Nombre de servicio».</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c14-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿En qué orden se configura correctamente la seguridad de acceso?</summary><p>Usuario → rol (con sus privilegios) → asignar el rol al usuario. «Hago un usuario, luego serían los roles y al último los privilegios».</p></details>
+<details class="qa"><summary>2. El rol tiene <code>INSERT ANY TABLE</code> y aun así sale <code>ORA-01950</code>. ¿Por qué y cómo se arregla?</summary><p>Porque la cuota de almacenamiento en el table space no se hereda por un rol; hay que darla directo al usuario: <code>GRANT UNLIMITED TABLESPACE TO Rafa;</code>.</p></details>
+<details class="qa"><summary>3. Otra cuenta hace <code>SELECT * FROM reprobaditos;</code> y sale «la tabla no existe». ¿Qué dos cosas hay que corregir?</summary><p>Calificar con el dueño (<code>SELECT * FROM Rafa.reprobaditos;</code>) y que el dueño haga <code>COMMIT</code> para que sus inserciones sean visibles.</p></details>
+<details class="qa"><summary>4. ¿Qué comando mostró el profesor que no necesita <code>COMMIT</code>, y por qué?</summary><p><code>DROP TABLE</code>: es DDL y tiene efecto inmediato.</p></details>
+<details class="qa"><summary>5. Quieres auditar cambios de sueldo en <code>empleados</code> guardando el valor viejo y el nuevo. ¿Cómo armas el disparador?</summary><p><code>AFTER UPDATE ON empleados FOR EACH ROW</code>, insertando en la tabla de auditoría <code>USER</code>, la fecha, <code>:OLD.sueldo</code> y <code>:NEW.sueldo</code> (con columnas para ambos).</p></details>
+<details class="qa"><summary>6. ¿Disparador o procedimiento almacenado: cuál se ejecuta solo?</summary><p>El disparador, automáticamente ante <code>INSERT</code>/<code>UPDATE</code>/<code>DELETE</code>. El procedimiento hay que llamarlo explícitamente.</p></details>
+<details class="qa"><summary>7. ¿Por qué la tabla de auditoría usa TIMESTAMP y no DATE?</summary><p>Para distinguir y ordenar transacciones que ocurren dentro del mismo segundo; TIMESTAMP guarda fracciones de segundo.</p></details>
+<details class="qa"><summary>8. ¿Qué datos necesitas para conectar SQL Developer a Free SQL?</summary><p>Host name, puerto (1521, o 2484 cifrado), nombre de servicio, usuario y contraseña regenerada; tipo de conexión «Nombre de servicio».</p></details>
+<details class="qa"><summary>9. ¿Cómo se arregla <code>ORA-65096</code> al crear un usuario?</summary><p>Con <code>ALTER SESSION SET "_ORACLE_SCRIPT" = TRUE;</code> y repitiendo el <code>CREATE USER</code>.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c14-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>Post-its con contraseñas:</strong> ironizó sobre los profesionales que pegan su contraseña en la pantalla.</li>
+<li><strong>«Mis lacayitos»:</strong> así llamó a las cuentas de prueba al explicar la jerarquía (un «lacayo senior» y un «lacayo junior»).</li>
+<li><strong>Sueldos deseados:</strong> para llenar la tabla <code>condicion</code> pidió a cada alumno su sueldo soñado (de 15 000 a 500 000) y bromeó con cada uno.</li>
+<li><strong>Privacidad:</strong> comentario sobre quien se preocupa por los datos del gestor cuando su hijo «tiene Facebook e Instagram desde que nació».</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c14-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Práctica de auditoría de bases de datos (equipos de 3):</strong>
+<ul>
+<li><em>Introducción:</em> qué es un servidor de bases de datos y qué es la auditoría en una base de datos.</li>
+<li><em>Desarrollo:</em> creación de usuarios, roles, permisos, tablas, inserciones y la conexión remota a la nube.</li>
+<li><em>Resultados:</em> el disparador funcionando también con <code>UPDATE</code> y <code>DELETE</code>, con <code>:OLD</code> y <code>:NEW</code>, y la tabla de auditoría modificada para guardar el valor anterior y el nuevo.</li>
+</ul>
+NotebookLM no reporta fecha de entrega dicha en clase: revisar Classroom.</li>
+<li><strong>Opcional:</strong> quien no tenga Oracle local puede bajar la máquina virtual oficial de Oracle (<code>.ova</code>) desde la página de Oracle.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Usuario → rol → privilegios; <code>ORA-65096</code> se evita con <code>_ORACLE_SCRIPT = TRUE</code>.</li>
+<li><code>UNLIMITED TABLESPACE</code> va directo al usuario (no se hereda por rol): si falta, <code>ORA-01950</code>.</li>
+<li>Tabla de otro: <code>usuario.tabla</code>; datos de otro: solo después de su <code>COMMIT</code>. DDL no necesita <code>COMMIT</code>.</li>
+<li>Disparador = automático, antes/después de INSERT/UPDATE/DELETE; auditoría con <code>USER</code>, TIMESTAMP, <code>:OLD</code> y <code>:NEW</code>.</li>
+<li>SQL Developer ↔ nube: host, puerto 1521, nombre de servicio, usuario y contraseña.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

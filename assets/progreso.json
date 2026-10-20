@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-20T06:15:03+00:00",
+ "generatedAt": "2026-10-20T06:30:19+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -126,6 +126,13 @@
     "fecha": "2026-10-16",
     "resumen": "Tema 8 — Máquinas de vectores de soporte (SVM): hiperplano, margen y vectores de soporte, maximización del margen, Lagrangiano y forma dual, margen suave con holgura y C, truco del kernel, kernels comunes, multiclase y c",
     "url": "materias/reconocimiento-de-patrones/clase-15.html",
+    "formato": "estudio"
+   },
+   {
+    "num": 16,
+    "fecha": "2026-10-19",
+    "resumen": "Tema 8 — Repaso de SVM; árboles de decisión (estructura, Gini y entropía, umbrales por punto medio, ejercicio completo de diagnóstico con 8 pacientes), sobreajuste y poda por costo-complejidad (α crítico), y Random Fores",
+    "url": "materias/reconocimiento-de-patrones/clase-16.html",
     "formato": "estudio"
    }
   ],
@@ -313,6 +320,13 @@
     "resumen": "Primer examen parcial (Unidades 1 y 2).",
     "url": "materias/fundamentos-de-sistemas-embebidos/clase-14.html",
     "formato": "no-aplica"
+   },
+   {
+    "num": 15,
+    "fecha": "2026-10-19",
+    "resumen": "Tema 3 (3.2–3.3) — Instanciación de un proceso y lectura del encabezado del ejecutable, ciclo de vida (WAIT → READY → RUNNING) y la regla de que un proceso bloqueado nunca vuelve directo a RUNNING, estados extendidos (PE",
+    "url": "materias/fundamentos-de-sistemas-embebidos/clase-15.html",
+    "formato": "estudio"
    }
   ],
   "administracion-de-servicios-de-internet": [
@@ -405,6 +419,13 @@
     "fecha": "2026-10-12",
     "resumen": "Arquitectura de datos (fuera del temario) — Examen de reposición individual en Teams: cinco archivos de datos, modelo de datos en la herramienta de BI que elijas (Power BI, Tableau o Looker Studio) y preguntas abiertas c",
     "url": "materias/administracion-de-servicios-de-internet/clase-13.html",
+    "formato": "estudio"
+   },
+   {
+    "num": 14,
+    "fecha": "2026-10-19",
+    "resumen": "Servidor de bases de datos (fuera del temario) — Seguridad y auditoría en Oracle: usuario → rol → privilegios, UNLIMITED TABLESPACE directo al usuario, DATE frente a TIMESTAMP con SYSDATE , acceso usuario.tabla y COMMIT ",
+    "url": "materias/administracion-de-servicios-de-internet/clase-14.html",
     "formato": "estudio"
    }
   ],
@@ -713,6 +734,11 @@
  },
  "gitlog": [
   {
+   "hash": "05f0470",
+   "fecha": "2026-10-20T00:15:07-06:00",
+   "mensaje": "ASI-Sprint3: revisión del reporte (19 oct) — HU03 finalizada y fuera de la sección 3 (corregido), Daily 14 y 16 oct solo cambió de redacción"
+  },
+  {
    "hash": "ab426f5",
    "fecha": "2026-10-20T00:10:41-06:00",
    "mensaje": "ASI-Sprint2 (dos semanas): reportes renombrados ASI-Sprint2-semana1.pdf y -semana2.pdf; regla para sprints de varias semanas en CLAUDE.md"
@@ -1006,11 +1032,6 @@
    "hash": "9381ddb",
    "fecha": "2026-10-08T10:05:33-06:00",
    "mensaje": "ASI: agregar sección Prácticas"
-  },
-  {
-   "hash": "adab58e",
-   "fecha": "2026-10-08T10:03:17-06:00",
-   "mensaje": "Actualizar estructura: agregar secciones Evaluación, Tareas, Exámenes, Proyectos en todas las 7 asignaturas; botón Prácticas en FSE y OAC"
   }
  ]
 }
