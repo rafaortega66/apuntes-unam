@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-20T18:44:54+00:00",
+ "generatedAt": "2026-10-20T20:16:05+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -734,6 +734,11 @@
  },
  "gitlog": [
   {
+   "hash": "6f4f0e7",
+   "fecha": "2026-10-20T12:44:54-06:00",
+   "mensaje": "ACS Clase 01: formato de estudio — ya no quedan clases en formato viejo"
+  },
+  {
    "hash": "3614101",
    "fecha": "2026-10-20T12:41:52-06:00",
    "mensaje": "FSE Clase 01: formato de estudio"
@@ -1027,11 +1032,6 @@
    "hash": "935f074",
    "fecha": "2026-10-12T16:02:20-06:00",
    "mensaje": "SIB: agregar Tarea 3 (infografía de 35 ataques, vence 13 oct 9:00)"
-  },
-  {
-   "hash": "f2daf42",
-   "fecha": "2026-10-09T18:03:32Z",
-   "mensaje": "Examen de FSE: mover al 14 oct"
   }
  ]
 }

@@ -104,7 +104,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 |---|---|---|---|
 | MD-P03-1 | [MD-P03-1-indicaciones.pdf](MD/MD-Practicas/MD-P03-1/MD-P03-1-indicaciones.pdf) | [Equipo7_Practica3.1_Agrupacion.pdf](MD/MD-Practicas/MD-P03-1/MD-P03-1-entregables/Equipo7_Practica3.1_Agrupacion.pdf)<br>[Equipo_7_Practica_3.1_Agrupacion.ipynb](MD/MD-Practicas/MD-P03-1/MD-P03-1-entregables/Equipo_7_Practica_3.1_Agrupacion.ipynb) | 3 |
 | MD-P03-2 | [MD-P03-2-indicaciones.pdf](MD/MD-Practicas/MD-P03-2/MD-P03-2-indicaciones.pdf) | [Equipo 7 Practica 3.2 Asociacion.ipynb](MD/MD-Practicas/MD-P03-2/MD-P03-2-entregables/Equipo%207%20Practica%203.2%20Asociacion.ipynb)<br>[Equipo 7 Practica 3.2 Asociacion.pdf](MD/MD-Practicas/MD-P03-2/MD-P03-2-entregables/Equipo%207%20Practica%203.2%20Asociacion.pdf) | 4 |
-| MD-P03-3 | [MD-P03-3-indicaciones.md](MD/MD-Practicas/MD-P03-3/MD-P03-3-indicaciones.md) | _(sin entrega aún)_ | — |
+| MD-P03-3 | [MD-P03-3-indicaciones.md](MD/MD-Practicas/MD-P03-3/MD-P03-3-indicaciones.md) | [Equipo 7 Practica 3.3 Regresion.ipynb](MD/MD-Practicas/MD-P03-3/MD-P03-3-entregables/Equipo%207%20Practica%203.3%20Regresion.ipynb)<br>[Equipo_7_Practica_3.3_Regresion_Presentación.pdf](MD/MD-Practicas/MD-P03-3/MD-P03-3-entregables/Equipo_7_Practica_3.3_Regresion_Presentación.pdf) | — |
 | MD-P03-4 | [MD-P03-4-indicaciones.md](MD/MD-Practicas/MD-P03-4/MD-P03-4-indicaciones.md)<br>[MD-P03-4-indicaciones.pdf](MD/MD-Practicas/MD-P03-4/MD-P03-4-indicaciones.pdf) | _(sin entrega aún)_ | 1 |
 
 ### MD-Proyectos
