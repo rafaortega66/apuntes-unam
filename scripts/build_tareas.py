@@ -24,7 +24,7 @@ MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', '
 
 
 def descargar(u):
-    """Archivos que no son PDF ni páginas se descargan al abrirlos (pedido del usuario, 20 oct 2026; hoy solo MD 3.1–3.3,
+    """Archivos que no son PDF ni páginas llevan un botón «⬇ descargar» junto al enlace (pedido del usuario, 20 oct 2026; hoy solo MD 3.1–3.3,
     igual que DESCARGA en build_entregas.py)."""
     return re.search(r'MD-P03-[123]/', u) is not None and not re.search(r'\.(pdf|html?)(#.*)?$', u, re.I)
 
@@ -96,8 +96,9 @@ def pagina(it, det):
             enlaces.append({'t': 'Ir a la sección de la materia donde se explica', 'u': u})
     if enlaces:
         cuerpo += seccion('enlaces', '🔗 Enlaces',
-                          '<ul>%s</ul>' % ''.join('<li><a href="%s"%s>%s</a></li>' % (
-                              e(x['u']), ' target="_blank" rel="noopener"' if x['u'].startswith('http') else (' download' if descargar(x['u']) else ''), e(x['t']))
+                          '<ul>%s</ul>' % ''.join('<li><a href="%s"%s>%s</a>%s</li>' % (
+                              e(x['u']), ' target="_blank" rel="noopener"' if x['u'].startswith('http') else '', e(x['t']),
+                              ' <a class="btn-descarga" href="%s" download>⬇ descargar</a>' % e(x['u']) if descargar(x['u']) else '')
                               for x in enlaces))
     partes.append(cuerpo)
     if det.get('fuente'):

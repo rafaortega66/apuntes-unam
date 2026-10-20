@@ -14,7 +14,7 @@ from urllib.parse import quote
 
 RAIZ = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 DEC = os.path.join(RAIZ, 'decimo')
-V = '20261012a'  # cache-busting de assets, igual que el resto del sitio
+V = '20261020a'  # cache-busting de assets, igual que el resto del sitio
 
 MATERIAS = {  # slug: (sigla, nombre, color)
     'administracion-de-servicios-de-internet': ('ASI', 'Administración de Servicios de Internet', '#7C9CD6'),
@@ -199,15 +199,16 @@ def md_html(texto):
     return '\n'.join(out)
 
 
-# Entregas cuyos archivos que no son PDF se descargan al abrirlos (atributo download) en vez de verse como texto.
+# Entregas cuyos archivos que no son PDF llevan, junto al enlace normal, un botón «⬇ descargar» (atributo download).
 # Pedido del usuario el 20 oct 2026, empezando por estas; agregar aquí las demás.
 DESCARGA = {'MD-P03-1', 'MD-P03-2', 'MD-P03-3'}
 
 
 def link(rel, f, descargar=False):
+    a = f'<a href="{url(rel)}" target="_blank">{html.escape(f)}</a>'
     if descargar and not f.lower().endswith('.pdf'):
-        return f'<a href="{url(rel)}" download="{html.escape(os.path.basename(f))}">{html.escape(f)}</a>'
-    return f'<a href="{url(rel)}" target="_blank">{html.escape(f)}</a>'
+        a += f' <a class="btn-descarga" href="{url(rel)}" download="{html.escape(os.path.basename(f))}">⬇ descargar</a>'
+    return a
 
 
 def lista_links(base_rel, fs, descargar=False):

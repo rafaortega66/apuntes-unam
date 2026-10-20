@@ -523,3 +523,7 @@ details.qa p { font-size: 14px; }
 .tarea-progreso { list-style: none; padding: 0; margin: 8px 0 0; line-height: 1.8; }
 .tarea-progreso li.falta { color: var(--ink); }
 .tarea-progreso li.hecho { color: var(--ink-soft); }
+
+/* Botón «descargar» junto a archivos que no son PDF (ipynb, csv, rmp…) — 20 oct 2026 */
+.btn-descarga { font-size: 12px; font-weight: 600; text-decoration: none; padding: 1px 8px; margin-left: 4px; border-radius: 999px; border: 1px solid currentColor; opacity: .8; white-space: nowrap; }
+.btn-descarga:hover { opacity: 1; }
