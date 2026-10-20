@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-20T06:30:19+00:00",
+ "generatedAt": "2026-10-20T18:06:06+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -734,6 +734,16 @@
  },
  "gitlog": [
   {
+   "hash": "f82baa9",
+   "fecha": "2026-10-20T05:52:36-06:00",
+   "mensaje": "CLAUDE.md: dónde nos quedamos (20 oct) — clases del 19 oct completas; pendientes: práctica de auditoría ASI en Classroom, deck de árboles RP, migración de 4 páginas en formato viejo"
+  },
+  {
+   "hash": "4d46af3",
+   "fecha": "2026-10-20T00:30:20-06:00",
+   "mensaje": "FSE Clase 15, ASI Clase 14 y RP Clase 16 (19 oct) en formato de estudio desde NotebookLM: estados de un proceso y tareas de tiempo real; seguridad y auditoría en Oracle con triggers; árboles de decisión, poda y Random Forest"
+  },
+  {
    "hash": "05f0470",
    "fecha": "2026-10-20T00:15:07-06:00",
    "mensaje": "ASI-Sprint3: revisión del reporte (19 oct) — HU03 finalizada y fuera de la sección 3 (corregido), Daily 14 y 16 oct solo cambió de redacción"
@@ -1022,16 +1032,6 @@
    "hash": "46af508",
    "fecha": "2026-10-08T20:02:27-06:00",
    "mensaje": "ACS Tarea 4: corregir fecha de entrega (8 oct, no 15 oct) - vencida hoy"
-  },
-  {
-   "hash": "03af35a",
-   "fecha": "2026-10-08T17:18:08-06:00",
-   "mensaje": "Agregar páginas de clase 8 octubre: ACS-Clase13, SIB-Clase11, MD-Clase11"
-  },
-  {
-   "hash": "9381ddb",
-   "fecha": "2026-10-08T10:05:33-06:00",
-   "mensaje": "ASI: agregar sección Prácticas"
   }
  ]
 }

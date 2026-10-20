@@ -152,6 +152,7 @@ decimo/<SIGLA>/<SIGLA>-<Categoría>/<SIGLA>-XNN/
 - Las páginas `tareas/practicas/proyectos/examenes/entregas.html` de cada materia (y `entregas.html`
   de los labs) se **generan** desde `decimo/` con `python3 scripts/build_entregas.py` — no editarlas a mano;
   el estado de Classroom y los títulos viven en ese script (`ESTADO`, `TITULOS`).
+- `decimo/MAPEO-ENTREGAS.md` = mapeo Classroom ↔ archivos del 15 oct 2026; se conserva como plantilla para volver a hacer un mapeo.
 - `decimo/INDICE.md` lista cada entrega con sus archivos (regenerar con
   `python3 scripts/indice_decimo.py` tras cualquier cambio). Para preguntas tipo
   «enlista las tareas de MD», leer ese índice.
@@ -361,7 +362,10 @@ generar clases en NotebookLM (el usuario lo descartó por costo de tokens).
    `decimo/RP/RP-Material/` (lo último es `Clase-13-SVM.pdf`); buscarlas en Classroom (descargar pide permiso) y enlazarlas en `clase-16.html` y `material.html`.
 3. **Esperando respuesta del usuario:** migrar al formato de estudio las 4 páginas que siguen en formato
    viejo (ASI 01, ACS 01, ACS 02, FSE 01) con `/migrar-clase` (no gasta NotebookLM). No hacerlo sin su sí.
-4. Próximas clases: la siguiente por meter es la del martes 20 oct (ACS, SIB, MD; Lab FSE va en FSE).
+4. **Clases del martes 20 oct:** **ACS Clase 16 aún no está** — el usuario la va a procesar en un momento con el
+   workflow del extracto del audio (NotebookLM). **SIB no tuvo clase** (la profesora fue a la entrega de diplomas
+   del Diplomado en Ciberseguridad): dejó el ejercicio **SIB-EC07** (investigación del Equipo 4, ya entregado; al
+   usuario le tocaron los puntos 10 y 11) y el día va en `horario.json` como sin clase de SIB. Falta MD (y Lab FSE va en FSE).
 
 ## Nueva estrategia de estudio (9 oct 2026) — reemplaza la automatización de clases
 
