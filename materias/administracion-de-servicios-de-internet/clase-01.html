@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 01 — Administración de Servicios de Internet</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
 <script src="../../assets/app.js?v=20261012a" defer></script>
 </head>
@@ -15,13 +16,38 @@
   <p class="prof">Mtro. Juan Ángel Calvillo Pérez · 26 ago 2026 · Tema 1 — De la Máquina de Turing a la arquitectura Von Neumann/Harvard, jerarquía de directorios de Linux (FHS), criterios para elegir distribución, y arranque de la Práctica 0 en terminal (procesos, archivos y permisos).</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #7C9CD6"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c1-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Arquitectura Harvard/RISC y la segmentación de instrucciones (pipelining)</strong><span class="evid">Evidencia: Lo explicó extensamente en el pizarrón calculando porcentajes de uso de la ALU (33% y 20%) y detalló las 4 etapas del pipeline (fetch, decode, execute, writeback).</span></li>
+<li><strong>Estructura y significado de la cadena de permisos en Linux (rwx para usuario, grupo y otros) y notación octal (chmod/mkdir -m)</strong><span class="evid">Evidencia: Lo explicó en diapositivas y con ejemplos en vivo en la terminal (mkdir -m 700, peligro del permiso 777).</span></li>
+<li><strong>Creación de árboles de directorios con mkdir -p</strong><span class="evid">Evidencia: Lo demostró en vivo resolviendo un error intencional donde olvidó el parámetro -p al intentar crear subdirectorios anidados.</span></li>
+<li><strong>Comprobación de procesos sin terminal asociada mediante ps aux (ps ax)</strong><span class="evid">Evidencia: Lo recalcó explícitamente en la terminal indicando que la opción x muestra procesos sin terminal asociada, clave en ciberseguridad ante virus o ataques.</span></li>
+<li><strong>Concatenación y redirección de archivos de texto con cat (cat archivo1 archivo2 &gt; todito.txt)</strong><span class="evid">Evidencia: Lo ejecutó paso a paso en vivo con archivo1.txt y archivo2.txt para generar todito.txt y demostró que el orden de los argumentos altera el resultado.</span></li>
+</ol>
+</details>
+
 <details class="section-block sec" id="c1-turing"><summary><span class="stitle">El procesador como Máquina de Turing</span></summary>
 <p>El profesor abrió el curso definiendo el <strong>procesador</strong> como el elemento central de la computadora, encargado de ejecutar los programas cargados en memoria. Explicó que este mecanismo electrónico no es más que la abstracción física de un modelo matemático mucho más antiguo: la <strong>Máquina de Turing</strong> propuesta por Alan Turing, formalizada como un autómata de doble pila con un lenguaje finito de operaciones. Su importancia histórica es que representa la demostración matemática de que un sistema autómata simple puede, en principio, computar cualquier cosa computable — es la base teórica de la que parte toda la arquitectura de computadoras que se vería después.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como una cinta de papel infinitamente larga con casillas donde un mecanismo lee, escribe y se mueve a la izquierda o derecha según un conjunto de reglas fijas.<span class="rompe">Dónde falla la analogía: La analogía deja de servir porque en los procesadores reales no hay partes mecánicas ni engranes, ya que estos se calientan y son muy lentos; se usan circuitos electrónicos.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Demuestra que cualquier algoritmo computable puede resolverse mediante una secuencia de operaciones elementales.</p>
+</div>
 </details>
 
 <details class="section-block sec" id="c1-von-neumann"><summary><span class="stitle">Arquitectura de Von Neumann y su cuello de botella</span></summary>
 <p>Para pasar del modelo abstracto de Turing a una implementación física real con componentes electrónicos, surge la <strong>arquitectura de Von Neumann</strong>, compuesta por: el <strong>controlador</strong> (genera las señales de activación internas), el <strong>registro de estado</strong> (guarda banderas y el estado del procesamiento), el <strong>registro de propósito general</strong> (datos de trabajo temporales), el <strong>contador de programa</strong> (apunta a la siguiente instrucción), la <strong>ALU</strong> (operaciones aritméticas y lógicas), una <strong>unidad de almacenamiento única</strong> que contiene en el mismo espacio de direccionamiento el programa, los datos y la pila, y el <strong>mapeo de entradas/salidas</strong>.</p>
 <p>El problema central de este diseño es el llamado <strong>cuello de botella de Von Neumann</strong>: al compartir un solo bus y un solo espacio de memoria entre instrucciones y datos, el ciclo de ejecución (<strong>Fetch → Decode → Execute → Write Back</strong>) tiene que correr en serie, y durante cada fase la mayoría de los demás componentes están inactivos — mientras se lee la instrucción (Fetch), la ALU y el decodificador no hacen nada; durante Decode, el bus y la ALU están ociosos; durante Execute, el bus de memoria y el decodificador tampoco trabajan. Para ilustrarlo, se analizó un ejemplo comparativo ejecutando un ciclo <code>for (int i = 0; i &lt; n; i++)</code> en ensamblador sobre una arquitectura CISC tradicional: se mostró que solo entre un <strong>20% y un 33%</strong> del tiempo la ALU está haciendo cómputo real, y el resto — entre un <strong>66% y un 80%</strong> del tiempo — se pierde en accesos a memoria e inactividad de componentes.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como una cocina con un solo cocinero y una sola barra para las recetas y los ingredientes, donde el cocinero camina a la alacena para cada paso dejando la estufa apagada mientras busca la comida.<span class="rompe">Dónde falla la analogía: En una cocina real se pueden preparar ingredientes en paralelo con ayuda, pero en el modelo puro de Von Neumann el procesador ejecuta estrictamente un paso a la vez sobre el mismo bus de memoria.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Explica el cuello de botella: la mayor parte del tiempo el procesador hace accesos a memoria y no realiza cálculos en la ALU (desperdiciando del 66% al 80% del tiempo).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Asumir que el procesador está haciendo cálculos en la ALU todo el tiempo, cuando en realidad la mayor parte del tiempo la ALU y el decodificador están inactivos esperando datos de la memoria.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c1-harvard-pipeline"><summary><span class="stitle">Arquitectura Harvard/RISC y segmentación de instrucciones (pipelining)</span></summary>
@@ -35,6 +61,13 @@
 <tr><td>T5+</td><td>I5</td><td>I4</td><td>I3</td><td>I2</td></tr>
 </tbody></table>
 <p>Tras la latencia inicial de llenado del "tubo" (4 ciclos), el procesador logra completar <strong>una instrucción por cada ciclo de reloj</strong>, en vez de una instrucción cada 4 ciclos — de ahí el salto de eficiencia frente a Von Neumann.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un túnel de lavado de autos por etapas: mientras un auto se seca, el siguiente se enjabona y el tercero se enjuaga de forma simultánea.<span class="rompe">Dónde falla la analogía: La analogía deja de servir cuando una instrucción posterior necesita el resultado de la anterior que todavía no se ha terminado de escribir, generando una dependencia de datos.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite ejecutar teóricamente una instrucción por ciclo de reloj al separar la memoria de instrucciones de la de datos y solapar las etapas de ejecución.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Creer que la segmentación de instrucciones pierde la equivalencia con el modelo de Turing, cuando Patterson demostró que es cien por ciento equivalente.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c1-fhs"><summary><span class="stitle">Jerarquía de directorios del sistema operativo Linux (FHS)</span></summary>
@@ -53,6 +86,13 @@
 <tr><td><code>/opt</code></td><td>—</td><td>Software adicional y aplicaciones de terceros instaladas opcionalmente.</td></tr>
 </tbody></table>
 <p>A propósito de <code>/tmp</code> y la memoria RAM, el profesor aclaró la diferencia entre <strong>rutas relativas</strong> (cortas, respecto al directorio actual) y <strong>rutas absolutas</strong> (completas, desde la raíz), y explicó que al reiniciar un equipo la RAM se desenergiza, liberando esas direcciones de memoria — por eso lo que está en <code>/tmp</code> desaparece.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un edificio de oficinas con áreas designadas: la recepción para empleados, el cuarto de máquinas para el arranque, el archivo de expedientes y el taller de herramientas.<span class="rompe">Dónde falla la analogía: En un edificio físico se pueden mover herramientas a cualquier cuarto sin arruinar la estructura, pero en Linux mover o borrar carpetas como /bin o /etc rompe el sistema operativo, equivalente a borrar System32 en Windows.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Establece el estándar jerárquico de Linux para que el sistema operativo y las aplicaciones sepan exactamente dónde buscar ejecutables, librerías estáticas y configuraciones.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir /usr con la carpeta de archivos personales de los usuarios (es para programas y archivos estáticos del sistema) o confundir /bin con /boot.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c1-distros"><summary><span class="stitle">Criterios de selección de distribuciones de Linux</span></summary>
@@ -67,6 +107,13 @@
 <tr><td>Linux Mint</td><td>Migración empresarial</td><td>Interfaz casi idéntica a Windows; ideal para transición de usuarios.</td></tr>
 <tr><td>Kali Linux</td><td>Ciberseguridad</td><td>Distribución especializada 100% en pruebas de penetración y auditoría.</td></tr>
 </tbody></table>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como elegir un vehículo según el trabajo: un auto compacto fácil de manejar para aprender, un camión blindado para carga industrial o un auto de carreras que debes armar pieza por pieza.<span class="rompe">Dónde falla la analogía: Todos los vehículos de la analogía comparten el mismo motor en el fondo (el kernel de Linux), por lo que con suficiente configuración manual podrías realizar las mismas tareas en cualquiera.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite seleccionar la distribución correcta según el objetivo técnico, distinguiendo entre estabilidad para servidores (Debian/AlmaLinux), desarrollo (Fedora), uso final (Ubuntu/Mint) o ciberseguridad (Kali).</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Usar Ubuntu para servidores de producción pese a sus cambios constantes de versiones y parches, o instalar Arch Linux con instaladores automáticos sin hacer la configuración manual.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c1-terminal-procesos"><summary><span class="stitle">Terminal: localización de comandos y monitoreo de procesos</span></summary>
@@ -79,17 +126,38 @@
 <li><code>x</code> — muestra procesos que no tienen una terminal (TTY) asociada.</li>
 </ul>
 <p><strong>Aplicación en ciberseguridad:</strong> la bandera <code>x</code> es la primera que se revisa ante sospecha de malware, porque los procesos maliciosos suelen correr sin terminal asociada, escondidos en segundo plano. Complementando esto, <code>top</code> monitoriza en tiempo real los procesos en ejecución y el consumo dinámico de recursos del sistema.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como usar un directorio telefónico especializado para encontrar dónde vive cada herramienta del sistema y un monitor de signos vitales para revisar cada órgano en tiempo real.<span class="rompe">Dónde falla la analogía: Matar un proceso desde la terminal detiene de golpe su ejecución en memoria sin guardar estados intermedios, a diferencia de cerrar amigablemente una ventana.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite auditar la actividad del servidor, localizar binarios para migraciones y detectar procesos maliciosos sin terminal asociada mediante ps aux.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir which con whereis esperando que which devuelva toda la carpeta del paquete cuando solo entrega el ejecutable puntual, o llamar «auxiliar» a ps aux sin entender los parámetros a, u y x.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c1-terminal-archivos"><summary><span class="stitle">Manipulación de archivos de texto y concatenación</span></summary>
 <p>Se trabajó la creación y manipulación de archivos planos: <code>nano &lt;archivo&gt;</code> abre el editor de texto en terminal (se guarda y sale con <kbd>Ctrl+X</kbd>, confirmando la escritura); <code>cat &lt;archivo&gt;</code> despliega el contenido en pantalla, y <code>cat -n &lt;archivo&gt;</code> hace lo mismo pero numerando las líneas — útil para trabajo colaborativo o depuración de código.</p>
 <p>Sobre concatenación y redirección con <code>cat</code>: ejecutar <code>cat archivo1.txt archivo2.txt</code> imprime consecutivamente el contenido de ambos archivos en pantalla. Usando el operador de redirección se pueden fusionar en un archivo nuevo: <code>cat archivo1.txt archivo2.txt &gt; todito.txt</code> crea un archivo con el contenido combinado en el orden especificado. El profesor enfatizó un detalle que parece obvio pero se presta a errores: <strong>alterar el orden de los factores cambia el resultado</strong> — <code>cat archivo2.txt archivo1.txt &gt; todito2.txt</code> da un archivo distinto al anterior, con el contenido en el orden inverso.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como pegar varias páginas impresas una debajo de la otra para formar un único expediente continuo dentro de un folder nuevo.<span class="rompe">Dónde falla la analogía: El operador de redirección &gt; sobrescribe por completo el archivo de destino o crea uno nuevo, en lugar de permitir editar fragmentos intermedios.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Facilita consolidar reportes, inspeccionar archivos con líneas numeradas (cat -n) y crear archivos combinados sin salir de la terminal.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Pensar que cat solo sirve para visualizar archivos en pantalla, ignorando su función principal de concatenación y redirección.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c1-ls-permisos"><summary><span class="stitle">Listado detallado de archivos y sistema de permisos</span></summary>
 <p>Se analizaron las banderas del comando <code>ls</code>: <code>ls -l</code> muestra el formato largo (permisos, propietario, grupo, tamaño en bytes, fecha y nombre); <code>ls -a</code> muestra todos los archivos incluyendo los ocultos (los que empiezan con punto) y las referencias <code>.</code> (directorio actual) y <code>..</code> (directorio anterior); <code>ls -s</code> y <code>ls -h</code> muestran el tamaño en kilobytes o en formato legible. Las banderas se pueden combinar libremente: <code>ls -la</code>, <code>ls -lsa</code>, etc.</p>
 <p><strong>Estructura octal de permisos:</strong> la primera columna de <code>ls -l</code> expone los permisos como una cadena de 10 caracteres (por ejemplo <code>drwxrwxrwx</code>), dividida en 4 bloques: el primer carácter indica el tipo de elemento (<code>-</code> archivo plano, <code>d</code> directorio); las posiciones 2–4 son los permisos del propietario (<em>Owner</em>); las posiciones 5–7 son los del grupo (<em>Group</em>); las posiciones 8–10 son los de otros/invitados (<em>Others</em>). Los valores numéricos son: Read = 4, Write = 2, Execute = 1 — se suman para formar cada dígito octal.</p>
 <p>El profesor advirtió con firmeza que <strong>nunca se debe usar la asignación 777</strong> (acceso total a todos), porque permite que cualquier usuario o proceso no autorizado escriba o ejecute contenido en ese archivo o carpeta — un riesgo de seguridad grave e innecesario en la inmensa mayoría de los casos.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un candado con tres juegos de llaves: la llave del dueño de la casa, la llave para la familia y la puerta para los visitantes de la calle.<span class="rompe">Dónde falla la analogía: Una llave física se puede copiar sin control, pero el kernel de Linux valida los permisos de forma estricta en cada intento de acceso.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Mantiene la seguridad del servidor impidiendo que usuarios no autorizados lean, modifiquen o ejecuten archivos, previniendo la propagación de virus.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Asignar el permiso 777 por flojera para resolver un acceso denegado, otorgando control total a cualquiera, o dejar el permiso de ejecución activado para otros usuarios en carpetas públicas.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c1-mkdir"><summary><span class="stitle">Creación avanzada de directorios (mkdir)</span></summary>
@@ -99,6 +167,25 @@
 <li><code>mkdir -m &lt;octal&gt; &lt;nombre&gt;</code> — asigna explícitamente la máscara de permisos al crear el directorio. Ejemplo usado en clase: <code>mkdir -m 700 reprobados21</code>, que otorga acceso exclusivo al propietario.</li>
 <li><code>mkdir -p &lt;ruta_completa&gt;</code> — crea de forma recursiva un árbol completo de directorios y subdirectorios en un solo comando. Ejemplo: <code>mkdir -p reprobados/271/ads</code>.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como comprar un archivero y armar en un solo movimiento todas las carpetas, subcarpetas y pestañas internas antes de guardar expedientes.<span class="rompe">Dónde falla la analogía: Si se comete un error en la ruta al usar la opción de árbol, se crea una estructura equivocada en el disco que hay que borrar para corregirla.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite estructurar rápidamente la jerarquía de directorios de un proyecto y asignar permisos en octal desde el momento de su creación.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Intentar crear rutas de subdirectorios anidados inexistentes sin el parámetro -p, lo que provoca un error en la terminal.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c1-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Qué significan las opciones a, u y x al ejecutar ps aux en Linux según la clase?</summary><p>La «a» muestra los procesos de todos los usuarios, la «u» muestra los detalles de uso de memoria y CPU, y la «x» incluye los procesos que no tienen una terminal asociada.</p></details>
+<details class="qa"><summary>2. Explica por qué ocurre el cuello de botella en la arquitectura de Von Neumann.</summary><p>Porque los programas y los datos comparten la misma memoria y bus; mientras el procesador lee una instrucción o escribe un resultado en memoria, la ALU y el decodificador permanecen inactivos.</p></details>
+<details class="qa"><summary>3. Si datos1.txt contiene «Hola» y datos2.txt contiene «Mundo», ¿cuál es el comando para unirlos en ese orden en saludo.txt y qué pasa si inviertes los argumentos?</summary><p>cat datos1.txt datos2.txt &gt; saludo.txt. Si se invierten (cat datos2.txt datos1.txt &gt; saludo2.txt), el resultado tendrá primero «Mundo» y después «Hola»: el orden de los parámetros determina el orden de concatenación.</p></details>
+<details class="qa"><summary>4. ¿Cuál es la diferencia entre whereis y which al buscar herramientas en Linux?</summary><p>whereis devuelve las ubicaciones de binarios, manuales y fuentes del paquete, mientras que which devuelve únicamente la ruta del ejecutable puntual.</p></details>
+<details class="qa"><summary>5. Escribe el comando de mkdir para crear de un solo golpe proyecto/2026/fase1 con permisos 700 desde su creación.</summary><p>mkdir -m 700 -p proyecto/2026/fase1</p></details>
+<details class="qa"><summary>6. ¿Qué diferencia hay entre Debian y Ubuntu según los criterios de selección para servidores que dio el profesor?</summary><p>Debian se recomienda para servidores por su alta estabilidad; Ubuntu está orientada a principiantes y usuario final y no es tan recomendable para servidores por sus cambios constantes de versión y parches.</p></details>
+<details class="qa"><summary>7. ¿Qué representan las tres ternas de la cadena de permisos de 10 caracteres que muestra ls -l?</summary><p>Después del primer carácter (tipo de archivo), la primera terna son los permisos del propietario, la segunda los del grupo y la tercera los de todos los demás usuarios.</p></details>
+<details class="qa"><summary>8. ¿Por qué la arquitectura Harvard con pipelining logra teóricamente una instrucción por ciclo de reloj, a diferencia de Von Neumann?</summary><p>Porque al separar la memoria de instrucciones de la de datos permite solapar las etapas (fetch, decode, execute, writeback): mientras se escribe el resultado de una instrucción, otra se ejecuta, otra se decodifica y la siguiente se lee de memoria al mismo tiempo.</p></details>
 </details>
 
 <details class="section-block sec" id="c1-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>
