@@ -15,3 +15,6 @@ historia de usuario detallada, Sprint Backlog con tareas y responsables, Daily S
 (mínimo 2 registros por semana).
 
 **Entregado:** Classroom «Reporte» (publicada y con vencimiento el 19 oct 2026, 23:59), «Turned in» con `Sprint 3 Equipo 10.pdf` (en `ASI-Sprint3-entregables/`).
+
+**Mi revisión del reporte** (19 oct, antes de entregarlo): HU03 en «Pendiente de validación», HU03 repetida en la sección 3 y el Daily del 14 y 16 oct «por registrar».
+Las dos primeras quedaron corregidas en el PDF; la tercera solo cambió de redacción. Detalle en `ASI-Sprint3-adicionales/revision-del-reporte-19oct.md`.

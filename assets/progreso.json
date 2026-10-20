@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-20T06:10:36+00:00",
+ "generatedAt": "2026-10-20T06:15:03+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -713,6 +713,11 @@
  },
  "gitlog": [
   {
+   "hash": "ab426f5",
+   "fecha": "2026-10-20T00:10:41-06:00",
+   "mensaje": "ASI-Sprint2 (dos semanas): reportes renombrados ASI-Sprint2-semana1.pdf y -semana2.pdf; regla para sprints de varias semanas en CLAUDE.md"
+  },
+  {
    "hash": "ee57f48",
    "fecha": "2026-10-20T00:07:30-06:00",
    "mensaje": "ASI-Proyecto: un solo proyecto, sin subcarpetas ASI-ProyNN — cada ASI-SprintN con su README, indicaciones, entregables y adicionales; proyectos.html con una tarjeta por sprint"
@@ -1006,11 +1011,6 @@
    "hash": "adab58e",
    "fecha": "2026-10-08T10:03:17-06:00",
    "mensaje": "Actualizar estructura: agregar secciones Evaluación, Tareas, Exámenes, Proyectos en todas las 7 asignaturas; botón Prácticas en FSE y OAC"
-  },
-  {
-   "hash": "65e2551",
-   "fecha": "2026-10-07T23:49:23-06:00",
-   "mensaje": "Actualizar pendientes: ACS Tarea 4 (15 oct) + info de OAC/ACS desde notebooks"
   }
  ]
 }
