@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 01 — Arquitectura Cliente-Servidor</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
 <script src="../../assets/app.js?v=20261012a" defer></script>
 </head>
@@ -15,8 +16,25 @@
   <p class="prof">Mtro. Carlos Alberto Román Zamitiz · 25 ago 2026 · Tema 1 — Linux y procesos: imagen de un proceso, segmentos de memoria, PCB, comandos de análisis (size, pmap, ps, top), árbol PID/PPID, time-sharing, race condition y deadlock.</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c1-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Diferencia entre las secciones estáticas y dinámicas de la imagen de un proceso</strong><span class="evid">Evidencia: El profesor lo resolvió en vivo con el programa servidor sencillo en C analizando las salidas de size y pmap, y explicó por qué Heap y Stack no aparecen en size.</span></li>
+<li><strong>Función e inspección de memoria con size y pmap</strong><span class="evid">Evidencia: Explicó explícitamente que size hace un análisis estático del ejecutable en disco, mientras que pmap consulta las estructuras del kernel para desplegar el mapa dinámico en múltiplos de páginas de 4 KB.</span></li>
+<li><strong>Jerarquía del árbol de procesos y relación entre PID y PPID</strong><span class="evid">Evidencia: Repitió que todo proceso tiene un PID propio y el PPID de su padre, y lo demostró en vivo con ps -e -o pid,ppid: el PPID de un comando ejecutado coincide con el PID de su terminal bash.</span></li>
+<li><strong>Comportamiento de top y de ls -ltr</strong><span class="evid">Evidencia: Mostró en vivo la salida dinámica de top para explicar el tiempo compartido en Linux, y recomendó ls -ltr para ciberseguridad porque deja el archivo modificado más recientemente pegado al prompt.</span></li>
+</ol>
+</details>
+
 <details class="section-block sec" id="clase-1-linux-y-procesos-la-imagen-de-un"><summary><span class="stitle">Clase 1 — Linux y procesos: la imagen de un proceso</span></summary>
-<p><strong>Encuadre:</strong> la primera parte de la materia es "una continuación de sistemas operativos": primero procesos, después desarrollo de servidores. El curso se enfoca en <strong>un solo procesador</strong> (uniprocesador): no se ve programación multiprocesador ni multinúcleo. "Distribuido" aquí significa servidor en un host y cliente en otro, conectados por red.</p></details>
+<p><strong>Encuadre:</strong> la primera parte de la materia es "una continuación de sistemas operativos": primero procesos, después desarrollo de servidores. El curso se enfoca en <strong>un solo procesador</strong> (uniprocesador): no se ve programación multiprocesador ni multinúcleo. "Distribuido" aquí significa servidor en un host y cliente en otro, conectados por red.</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como la diferencia entre la receta de un pastel guardada en un libro y el pastel preparándose en la cocina con el horno encendido.<span class="rompe">Dónde falla la analogía: Deja de servir en cuanto el programa termina o muere: la cocina se apaga y el proceso desaparece de la memoria.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es el primer tema de la materia para comprender cómo el sistema operativo carga, administra y ejecuta programas binarios en memoria.</p>
+</div>
+</details>
 
 <details class="section-block sec" id="entorno-de-trabajo-del-curso"><summary><span class="stitle">Entorno de trabajo del curso</span></summary><ul>
 <li>Códigos del semestre → repositorio <strong>GitHub público</strong> (se puede hacer fork o rama en tu cuenta).</li>
@@ -25,11 +43,25 @@
 <li>En equipo propio: cualquier distro de Linux sirve. En Windows → <strong>WSL</strong> (Linux dentro de Windows) o <strong>SSH</strong> a un servidor Linux remoto.</li>
 <li>Red UNAM: los rangos públicos <code>132.247.*.*</code> y <code>132.248.*.*</code> son de la UNAM a nivel mundial. Las IP privadas (p. ej. <code>192.168.x.x</code>) son internas y aisladas. El profesor se conectó por SSH a <code>132.248.77.168</code> <em>[inaudible: también se transcribe como 132.247.248.7.168]</em>.</li>
 <li>Documentación formal de funciones C en Linux: <strong>The Open Group</strong>. Buscar <code>"Open Group &lt;función&gt;"</code> (ej. <code>Open Group getpid</code>).</li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como tener un taller de herramientas virtual en la nube al que te conectas desde cualquier lugar, sin instalar nada pesado en tu computadora.<span class="rompe">Dónde falla la analogía: Deja de servir si borras todo por accidente con un comando destructivo, aunque puedes volver a iniciar un espacio nuevo y limpio.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Da a todos los alumnos un entorno Linux uniforme con permisos de root mediante GitHub Codespaces, WSL o conexiones SSH a servidores.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Ejecutar comandos destructivos como rm -rf dentro del contenedor sin precaución, lo que obliga a destruir el espacio y crear uno nuevo.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="imagen-de-un-proceso"><summary><span class="stitle">Imagen de un proceso</span></summary>
 <p>Definición del profesor: <em>"una fotografía o instantánea"</em>. Un ejecutable en ejecución crea un proceso que vive mientras la ejecución esté viva; al terminar o cerrar, el proceso muere.</p>
-<p><strong>Procesos en segundo plano</strong> (background) o <strong>demonios</strong> (daemon): no son visibles ni interactúas con ellos en la terminal. Cerrar la interfaz gráfica de un programa no siempre mata su proceso.</p></details>
+<p><strong>Procesos en segundo plano</strong> (background) o <strong>demonios</strong> (daemon): no son visibles ni interactúas con ellos en la terminal. Cerrar la interfaz gráfica de un programa no siempre mata su proceso.</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es la fotografía instantánea de todo lo que necesita un programa para funcionar en la memoria RAM en un momento determinado.<span class="rompe">Dónde falla la analogía: Deja de servir en cuanto la memoria cambia o el proceso cambia de estado: la fotografía ya no refleja la memoria modificada.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite diferenciar el espacio de direcciones independiente de cada ejecutable respecto al bloque de control de procesos del sistema operativo.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir el ejecutable almacenado en disco con la imagen del proceso viva cargada en memoria.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="segmentos-de-la-imagen-en-memoria"><summary><span class="stitle">Segmentos de la imagen en memoria</span></summary>
 <p>Al ejecutar un binario, el SO carga en una zona de memoria independiente (espacio de direcciones propio) las áreas de código y datos.</p>
@@ -47,7 +79,14 @@
 </ul>
 <p><strong>Scope (ámbito)</strong> de una variable local = los límites de su función.</p>
 <p>Tarea futura (todavía no): investigar <strong>file descriptors</strong> y la <strong>asignación dinámica de memoria</strong> (<code>malloc</code>).</p>
-<p><strong>⚠️ Examen — BCP / PCB</strong> (<em>Process Control Block</em>, "bloque de control de proceso"): estructura administrativa del kernel donde se guardan los metadatos del proceso. El profesor lo marcó como muy importante.</p></details>
+<p><strong>⚠️ Examen — BCP / PCB</strong> (<em>Process Control Block</em>, "bloque de control de proceso"): estructura administrativa del kernel donde se guardan los metadatos del proceso. El profesor lo marcó como muy importante.</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como una mochila con compartimentos separados: uno para instrucciones fijas, otro para datos guardados, otro para hojas en blanco y otro de espacio expansible.<span class="rompe">Dónde falla la analogía: Deja de servir si el espacio expansible del Heap o del Stack sobrepasa los límites de memoria asignados al proceso.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Clasifica el código en Text, las variables globales inicializadas en Data, las no inicializadas en BSS, la memoria dinámica (malloc) en Heap y las variables locales en Stack.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Creer que las variables no inicializadas se guardan en Data, cuando van al segmento BSS.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="ejercicio-servidor-sencillo-en-c-dos-ter"><summary><span class="stitle">Ejercicio: servidor sencillo en C (dos terminales)</span></summary><ul>
 <li>Objetivo: entender la estructura de la imagen (código, datos inicializados, BSS, montículo y pila) y diferenciarla del contexto del SO.</li>
@@ -55,7 +94,13 @@
 <li><strong>Terminal 1:</strong> corre el servidor; usa <code>getchar()</code> para pausar y que el proceso no muera al instante — libera la memoria y muere hasta que pulsas Enter.</li>
 <li><strong>Terminal 2:</strong> monitorea el proceso en RAM.</li>
 <li>Ubicación de las variables: global inicializada → <code>data</code>; global no inicializada → <code>BSS</code>; local → <code>stack</code>; reservada con <code>malloc</code> → <code>heap</code>; strings literales de <code>printf</code> → <code>text</code>.</li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como dejar un auto con el motor encendido en la cochera mientras usas una segunda ventana para inspeccionar el motor sin apagarlo.<span class="rompe">Dónde falla la analogía: Deja de servir en cuanto presionas Enter en la primera terminal: el programa libera la memoria y finaliza.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Mantener un proceso pausado con getchar() en una terminal permite analizar su mapa de memoria en tiempo real desde otra terminal.</p>
+</div>
+</details>
 
 <details class="section-block sec" id="comandos-de-analisis-de-procesos"><summary><span class="stitle">Comandos de análisis de procesos</span></summary>
 <p><strong><code>size servidor</code></strong> — <strong>análisis estático</strong> (mira el archivo en disco). Columnas: <code>text</code>, <code>data</code>, <code>bss</code>, <code>dec</code> (suma en decimal), <code>hex</code> (suma en hexadecimal), <code>filename</code>. Ejemplo: <code>1767 + 592 + 8 = 2367</code> dec = <code>0x93F</code> <em>[inaudible: la transcripción decía "3F"]</em>.</p>
@@ -65,13 +110,27 @@
 <li>Los valores de <code>pmap</code> no cuadran con <code>size</code> porque el SO asigna memoria por <strong>páginas de 4 KB</strong>; toda sección se redondea a página completa → todos los valores son múltiplos de 4.</li>
 <li><strong>⚠️ Seguridad:</strong> las zonas dinámicas (stack, heap) tienen permisos <code>R</code> / <code>RW</code> pero <strong>nunca <code>X</code></strong> — para que no se pueda inyectar ni ejecutar código malicioso en el proceso.</li>
 </ul>
-<p><strong><code>cat /proc/&lt;PID&gt;/maps</code></strong> — mientras el proceso vive, el SO mantiene el directorio <code>/proc/&lt;PID&gt;/</code>; el archivo <code>maps</code> muestra direcciones hexadecimales, permisos de cada segmento y librerías dinámicas cargadas (información del PCB). Al pulsar Enter en la Terminal 1 termina <code>getchar()</code>, se libera el heap y el proceso muere.</p></details>
+<p><strong><code>cat /proc/&lt;PID&gt;/maps</code></strong> — mientras el proceso vive, el SO mantiene el directorio <code>/proc/&lt;PID&gt;/</code>; el archivo <code>maps</code> muestra direcciones hexadecimales, permisos de cada segmento y librerías dinámicas cargadas (información del PCB). Al pulsar Enter en la Terminal 1 termina <code>getchar()</code>, se libera el heap y el proceso muere.</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como pesar una caja cerrada en una báscula y luego usar un escáner de rayos X para ver cada objeto dentro de ella.<span class="rompe">Dónde falla la analogía: Deja de servir si intentas comparar directamente los bytes de size con pmap, porque pmap maneja la memoria en páginas múltiplos de 4 KB.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>size muestra las secciones estáticas Text, Data y BSS; pmap consulta al kernel para mostrar el mapa dinámico y verificar que las zonas dinámicas no tengan permiso de ejecución.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Esperar que size muestre el tamaño del Heap o del Stack, que solo existen y crecen durante la ejecución.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="arbol-de-procesos-pid-y-ppid"><summary><span class="stitle">Árbol de procesos · PID y PPID</span></summary><ul>
 <li>Todos los procesos forman un <strong>árbol jerárquico</strong>. La raíz tiene <strong>PID = 1</strong>: <code>init</code> en Unix clásico / distros viejas, <code>systemd</code> en distros modernas. De la raíz se derivan todos los demás procesos.</li>
 <li><strong>PID</strong> = identificador único del proceso. <strong>PPID</strong> = PID del proceso padre.</li>
 <li>Principio: <strong>todo comando lanzado en una terminal tiene como padre al proceso de esa terminal</strong> (<code>bash</code>). El PID de <code>bash</code> no cambia mientras sea la misma terminal; el de <code>ps</code> cambia cada vez, porque nace y muere en el instante.</li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un árbol genealógico donde cada persona tiene su propio número de identificación y guarda también el de su padre.<span class="rompe">Dónde falla la analogía: En una familia no hay un ancestro único, pero en Linux todos los procesos descienden de una raíz: el proceso con PID 1.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Establece la jerarquía del sistema desde el proceso inicial con PID 1 (init o systemd); todo comando ejecutado tiene como PPID el PID de su terminal bash.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Asumir que el PID de un comando será el mismo en cada corrida o entre terminales distintas.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="monitoreo-top-y-ps"><summary><span class="stitle">Monitoreo: top y ps</span></summary>
 <p><strong><code>top</code></strong> — dinámico, se actualiza en pantalla; se sale con <code>q</code>.</p>
@@ -83,27 +142,65 @@
 <li><code>VSZ</code> = <em>Virtual Memory Size</em>, <code>RSS</code> = <em>Resident Set Size</em> (el profesor lo aclarará la próxima clase).</li>
 </ul>
 <p><strong><code>ps -e -o pid,ppid,user,stat,cmd</code></strong> — <code>-e</code> lista todos los procesos; <code>-o</code> elige las columnas a mostrar.</p>
-<p><strong>⚠️ Examen — sintaxis:</strong> las columnas tras <code>-o</code> van <strong>separadas por comas y SIN espacios</strong>; un espacio hace que la terminal devuelva error de sintaxis. Los estados de la columna <code>STAT</code> (<code>S</code>, <code>R</code>, <code>R+</code>, <code>Ss</code>…) se ven en clases posteriores.</p></details>
+<p><strong>⚠️ Examen — sintaxis:</strong> las columnas tras <code>-o</code> van <strong>separadas por comas y SIN espacios</strong>; un espacio hace que la terminal devuelva error de sintaxis. Los estados de la columna <code>STAT</code> (<code>S</code>, <code>R</code>, <code>R+</code>, <code>Ss</code>…) se ven en clases posteriores.</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>top es como una transmisión en vivo que cambia cada segundo; ps es una fotografía fija tomada en un instante.<span class="rompe">Dónde falla la analogía: Deja de servir si se piensa que dos procesos ocupan el procesador exactamente al mismo tiempo en un solo núcleo: es tiempo compartido.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra la ilusión de paralelismo del planificador de tiempo compartido de Linux y permite personalizar columnas con ps -e -o pid,ppid.</p>
+</div>
+</details>
 
 <details class="section-block sec" id="el-comando-ls-para-administracion-y-segu"><summary><span class="stitle">El comando ls para administración y seguridad</span></summary><ul>
 <li><code>ls</code> a secas no da información útil. <code>ls -l</code> = formato largo (permisos, tamaño, dueño, fecha). <code>ls -la</code> = incluye archivos ocultos (los que empiezan con <code>.</code>).</li>
 <li>Recomendado: <strong><code>ls -ltr</code></strong> — <code>l</code> largo, <code>t</code> ordena por fecha de modificación (más reciente arriba), <code>r</code> invierte el orden (más reciente <strong>abajo</strong>, junto al prompt).</li>
 <li>Uso en seguridad: en un incidente de intrusión ves de inmediato el último archivo creado o modificado por un atacante, sin hacer scroll en un directorio con cientos de archivos.</li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como ordenar un archivero poniendo hasta abajo, a la mano, la hoja que se modificó hace un segundo.<span class="rompe">Dónde falla la analogía: Deja de servir si en un directorio enorme no inviertes el orden de tiempo con la «r»: lo reciente queda arriba y fuera de la vista.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>ls -ltr ordena los archivos por fecha de modificación en orden inverso, dejando la modificación más reciente pegada al prompt.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Usar ls sin opciones durante un incidente de seguridad y perder tiempo al no identificar los archivos alterados recientemente.</p></div>
+</div>
+</details>
 
 <details class="section-block sec contexto" id="contexto-origen-de-tty"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — origen de "TTY"</span></summary><p><code>TTY</code> viene de los <strong>teletipos</strong> (teletype) de los años 1940-50: máquina de escribir mecánica + transmisión de datos a una computadora. Con los sistemas de tiempo compartido de los 60, las terminales lógicas (pantallas, ventanas) heredaron las siglas. Dato histórico que remarcó el profesor: <strong>las primeras programadoras fueron mujeres</strong>.</p></details>
 
 <details class="section-block sec" id="sincronizacion-race-condition-y-deadlock"><summary><span class="stitle">Sincronización: race condition y deadlock</span></summary><ul>
 <li>Los procesos compiten de forma concurrente por la CPU → <strong>condición de carrera</strong> (race condition).</li>
 <li><strong>Deadlock</strong> (bloqueo mutuo / "candado mortal"): "el proceso 1 dice: para continuar necesito que termine el proceso 2; y el proceso 2 dice: para continuar necesito que termine el proceso 1". No se debe estructurar un programa donde dos procesos dependen circularmente uno del otro.</li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como dos personas frente a una puerta estrecha donde cada una dice «no paso hasta que tú pases», y ambas se quedan congeladas.<span class="rompe">Dónde falla la analogía: Deja de servir si alguien de fuera interrumpe la espera (por ejemplo, el usuario mata uno de los procesos) y rompe el bloqueo.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Explica la condición de carrera que produce el planificador de tiempo compartido y la necesidad de evitar bloqueos mutuos entre procesos.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Diseñar dos procesos de modo que cada uno dependa de que el otro termine primero.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="para-repasar-tarea-moral-de-la-clase-1"><summary><span class="stitle">Para repasar (tarea moral de la Clase 1)</span></summary><ul>
 <li>No hay tarea para entregar. <strong>Tarea moral:</strong> repasar el sitio web del curso y el <strong>PDF 2 del Tema 1</strong> ("ID de procesos") — es extenso, no verlo todo de golpe.</li>
 <li>La próxima clase: teoría de <code>fork()</code> en C para crear procesos.</li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como ensayar en casa los pasos de baile después de la clase para que no se te olviden antes de la siguiente sesión.<span class="rompe">Dónde falla la analogía: Deja de servir si solo lees las notas sin compilar ni ejecutar tú mismo los programas en la terminal.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Asegura el repaso individual del PDF del Tema 1 y la ejecución práctica de los programas de prueba antes de la siguiente clase.</p>
+</div>
+</details>
 
 <p class="empty" style="margin-top:28px">Teoría general de procesos, ejemplos en C y los <a href="programas.html" style="color:var(--indigo)">programas del profesor</a> están en el <a href="index.html#tema-1" style="color:var(--indigo)">Tema 1</a>.</p>
+
+<details class="section-block sec" id="c1-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuál es el proceso raíz de Linux con PID 1, en distribuciones antiguas y modernas?</summary><p>En las antiguas se llamaba init y en las modernas se llama systemd.</p></details>
+<details class="qa"><summary>2. Explica con tus palabras la diferencia entre analizar un proceso con size y con pmap.</summary><p>size hace un análisis estático del ejecutable y muestra Text, Data y BSS; pmap consulta las estructuras del kernel y despliega el mapa dinámico de memoria en tiempo de ejecución.</p></details>
+<details class="qa"><summary>3. Si un programa en C tiene una variable global inicializada int x = 50; y una no inicializada int y;, ¿a qué segmentos se asignan?</summary><p>x va al segmento Data y y va al segmento BSS.</p></details>
+<details class="qa"><summary>4. Compara la salida de top y de ps.</summary><p>top se actualiza continuamente en tiempo real; ps genera una fotografía instantánea de los procesos en el momento en que se ejecuta.</p></details>
+<details class="qa"><summary>5. ¿Por qué los segmentos dinámicos que muestra pmap no tienen permiso de ejecución?</summary><p>Para evitar que el proceso ejecute código malicioso inyectado en memoria durante su ejecución.</p></details>
+<details class="qa"><summary>6. ¿Por qué ls -ltr es especialmente útil en administración de sistemas y ciberseguridad?</summary><p>Porque -t ordena por fecha y -r invierte la lista, dejando el archivo modificado más recientemente pegado al prompt para identificarlo rápido.</p></details>
+<details class="qa"><summary>7. Si ejecutas un programa desde una terminal bash cuyo PID es 8452, ¿cuál será el PPID del proceso creado?</summary><p>8452, porque la terminal bash que lo lanzó es su proceso padre.</p></details>
+<details class="qa"><summary>8. Compara race condition y deadlock según la clase.</summary><p>Race condition es la competencia entre procesos por los turnos de CPU que asigna el planificador; deadlock es el bloqueo mutuo donde dos procesos se quedan esperando a que el otro termine para continuar.</p></details>
+</details>
 
 </div>
 </body>

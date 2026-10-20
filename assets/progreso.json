@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-20T18:41:51+00:00",
+ "generatedAt": "2026-10-20T18:44:54+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -435,7 +435,7 @@
     "fecha": "2026-08-25",
     "resumen": "Tema 1 — Linux y procesos: imagen de un proceso, segmentos de memoria, PCB, comandos de análisis (size, pmap, ps, top), árbol PID/PPID, time-sharing, race condition y deadlock.",
     "url": "materias/arquitectura-cliente-servidor/clase-01.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 2,
@@ -734,6 +734,11 @@
  },
  "gitlog": [
   {
+   "hash": "3614101",
+   "fecha": "2026-10-20T12:41:52-06:00",
+   "mensaje": "FSE Clase 01: formato de estudio"
+  },
+  {
    "hash": "edc55e0",
    "fecha": "2026-10-20T12:37:00-06:00",
    "mensaje": "ASI Clase 01: formato de estudio"
@@ -1027,11 +1032,6 @@
    "hash": "f2daf42",
    "fecha": "2026-10-09T18:03:32Z",
    "mensaje": "Examen de FSE: mover al 14 oct"
-  },
-  {
-   "hash": "9aec770",
-   "fecha": "2026-10-09T17:49:57Z",
-   "mensaje": "Pendientes: examen de FSE (15 oct) y cuenta regresiva en cada tarjeta"
   }
  ]
 }
