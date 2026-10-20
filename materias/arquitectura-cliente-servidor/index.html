@@ -576,12 +576,12 @@ Pista: spawn() crea un proceso hijo con fork() y reemplaza ese hijo con el progr
 </details>
 </div></details>
 
-<details class="section-block tema" id="tema-2" open><summary><span class="stitle">Tema 2 — Creación de socket servidor y cliente</span> <span class="thrs">· Clases 07–15</span></summary><div class="tema-body">
+<details class="section-block tema" id="tema-2" open><summary><span class="stitle">Tema 2 — Creación de socket servidor y cliente</span> <span class="thrs">· Clases 07–16</span></summary><div class="tema-body">
 <p class="empty">Introducido en la <a href="clase-07.html">Clase 07</a> y la <a href="clase-08.html">Clase 08</a> (22 sep 2026): concepto de socket y puerto lógico, modelo cliente-servidor a nivel de software, comunicación síncrona/asíncrona, familias de direcciones (AF_INET, AF_INET6, AF_UNIX, AF_NETLINK, AF_BLUETOOTH, AF_PACKET), descriptores de archivo (0/1/2 reservados, sockets desde el 3) y las estructuras <code>sockaddr_in</code> y <code>hostent</code> en C. La <a href="clase-09.html">Clase 09</a> (24 sep 2026) sigui&oacute; con <code>gethostbyname()</code> y <code>struct hostent</code>, <code>inet_ntoa</code>/<code>inet_aton</code>, alta disponibilidad y clústers, los rangos de puertos de la IANA y el ciclo de vida socket–bind–listen–accept/connect. La <a href="clase-10.html">Clase 10</a> (29 sep 2026) analiz&oacute; el lado servidor en C: <code>socket()</code>, <code>struct sockaddr_in</code> (<code>INADDR_ANY</code>, <code>htons</code>), <code>bind()</code>, <code>listen()</code> y <code>accept()</code>, y los dos sockets del servidor. La <a href="clase-11.html">Clase 11</a> (1 oct 2026) cerr&oacute; el ciclo con el cliente (<code>gethostbyname()</code>, <code>memcpy</code>, <code>connect()</code>), <code>send()</code>/<code>recv()</code>, la tabla ASCII y <code>write(1, buffer, N)</code>. Falta el servidor/cliente eco completo (2.1.1/2.1.2); tampoco se ha visto UDP, hilos o daemons.</p>
 <ul class="subtemas">
 <li><span class="sn">2.1</span> Socket en TCP.</li>
 <ul>
-<li><span class="sn">2.1.1</span> <a href="clase-11.html">Servidor eco.</a> <span class="seen">Clases 10, 11, 13–15</span></li>
+<li><span class="sn">2.1.1</span> <a href="clase-11.html">Servidor eco.</a> <span class="seen">Clases 10, 11, 13–16</span></li>
 <li><span class="sn">2.1.2</span> <a href="clase-11.html">Cliente eco.</a> <span class="seen">Clases 11, 13</span></li>
 </ul>
 <li><span class="sn">2.2</span> Socket en UDP.</li>
@@ -591,7 +591,7 @@ Pista: spawn() crea un proceso hijo con fork() y reemplaza ese hijo con el progr
 </ul>
 <li><span class="sn">2.3</span> Concepto de hilos.</li>
 <ul>
-<li><span class="sn">2.3.1</span> Creación de servidor concurrente.</li>
+<li><span class="sn">2.3.1</span> <a href="clase-16.html#c16-concurrente">Creación de servidor concurrente.</a> <span class="seen">Clase 16 (con <code>fork()</code>)</span></li>
 </ul>
 <li><span class="sn">2.4</span> Definición de DAEMON.</li>
 </ul>
@@ -698,6 +698,7 @@ Pista: spawn() crea un proceso hijo con fork() y reemplaza ese hijo con el progr
 <a class="clase-link" href="clase-13.html"><span class="cl-n">Clase 13</span><span class="cl-t">8 oct 2026 · Tema 2</span><span class="cl-d">Tarea 4 (sk_acceptq_is_full: backlog N acepta N + 1) y Programa 05, chat bidireccional síncrono: validar con exit(1), gethostbyaddr sin segfault, inet_ntoa paso a paso, fgets, memset y salida con «adiós».</span></a>
 <a class="clase-link" href="clase-14.html"><span class="cl-n">Clase 14</span><span class="cl-t">13 oct 2026 · Tema 2</span><span class="cl-d">setsockopt con SO_REUSEADDR, TCP vs. UDP, leer en bucle hasta 0, tamaño del búfer (4 KB, rmem 212992) y compara_tiempos_buffers.c con clock()/CLOCKS_PER_SEC. Aviso del examen parcial.</span></a>
 <a class="clase-link" href="clase-15.html"><span class="cl-n">Clase 15</span><span class="cl-t">15 oct 2026 · Tema 2</span><span class="cl-d">Por qué varían los bytes (cabeceras HTTP), servidor que despacha un PDF por bloques (200 application/pdf o 404) y las indicaciones del examen parcial basado en el Programa 04.</span></a>
+<a class="clase-link" href="clase-16.html"><span class="cl-n">Clase 16</span><span class="cl-t">20 oct 2026 · Tema 2</span><span class="cl-d">Programa 06: servidor de clientes concurrentes con fork() (el hijo cierra fd_s, el padre cierra fd_c, buffers en el hijo), arquitecturas reales (balanceo, DRP, regla 3-2-1) y el log del examen parcial (buffer sin truncar, bots y fuerza bruta SSH).</span></a>
 </div>
 
 </div>

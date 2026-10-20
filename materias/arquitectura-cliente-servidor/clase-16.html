@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 16 — Arquitectura Cliente-Servidor</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Arquitectura Cliente-Servidor</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 16</h2>
+  <p class="prof">Mtro. Carlos Alberto Román Zamitiz · 20 oct 2026 · Tema 2 — Del servidor secuencial (Programa 05) al servidor de clientes concurrentes con <code>fork()</code> (Programa 06), arquitecturas cliente-servidor reales y la revisión del log del examen parcial.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>ACS-Clase16.m4a</code>), 20 oct 2026.</p>
+</div>
+
+<details class="section-block sec" id="c16-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Cierre cruzado de descriptores tras <code>fork()</code>: el hijo cierra <code>fd_s</code> y el padre cierra <code>fd_c</code>.</strong><span class="evid">Evidencia: lo explicó con detalle sobre el código del Programa 06; es la regla que hace funcionar la concurrencia.</span></li>
+<li><strong>Servidor concurrente: un proceso hijo con <code>fork()</code> por cada cliente aceptado.</strong><span class="evid">Evidencia: lo repitió toda la sesión como la evolución del Programa 05 para que los clientes no se queden en la cola de <code>listen</code>.</span></li>
+<li><strong>Buffers declarados dentro del bloque del hijo (<code>if (pid == 0)</code>).</strong><span class="evid">Evidencia: mostró explícitamente que <code>buff_peticion</code> y <code>buff_respuesta</code> se movieron al hijo para no gastar memoria en el padre.</span></li>
+<li><strong>Respuesta automática al recibir «adiós».</strong><span class="evid">Evidencia: analizó el <code>if</code> que llena el buffer con una respuesta predeterminada y la manda con <code>send()</code> sin teclear nada.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c16-programa05"><summary><span class="stitle">1 · Repaso: Programa 05, servidor de clientes secuenciales</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un servidor TCP que atiende a los clientes <strong>de uno en uno</strong>, en estricto orden de llegada, mientras los demás esperan en la cola de <code>listen</code> (visto en la <a href="clase-13.html">Clase 13</a>).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es la ventanilla de un banco con un solo cajero: atiende a una persona a la vez y las demás hacen fila afuera. <em>Dónde deja de servir:</em> el cajero no puede hablar con varias personas de la fila al mismo tiempo, y el servidor tampoco.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El servidor corre un <code>while(1)</code> externo con <code>accept()</code>. Al aceptar a un cliente entra a un <code>do-while</code> interno de conversación síncrona: recibe la petición con <code>recv()</code>, pide la respuesta por teclado (<code>stdin</code>) y la manda con <code>send()</code>. Es decir, cada respuesta requiere que alguien la escriba del lado del servidor.</p>
+<p>La excepción es la palabra clave <strong>«adiós»</strong>: cuando el cliente la manda, un bloque <code>if</code> carga en el buffer una respuesta predeterminada y la envía automáticamente con <code>send()</code>, sin entrada de teclado. Entonces el servidor sale del <code>do-while</code>, cierra el socket de ese cliente con <code>close(fd_c)</code> y, como sigue dentro del <code>while(1)</code>, vuelve a <code>accept()</code> para atender al siguiente de la cola (el <em>backlog</em> de <code>listen</code>).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Retoma el Programa 05 y la Tarea 4 sobre el llenado de la cola de conexiones (<code>sk_acceptq_is_full</code>, <a href="clase-13.html">Clase 13</a>): mientras un cliente conversa, los demás no avanzan. Eso es lo que resuelve el Programa 06.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> pensar que la respuesta a «adiós» la tiene que teclear el operador del servidor; es automática.</p></div>
+</details>
+
+<details class="section-block sec" id="c16-concurrente"><summary><span class="stitle">2 · Programa 06: servidor de clientes concurrentes con <code>fork()</code></span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un servidor TCP que atiende a <strong>varios clientes al mismo tiempo</strong> creando, con <code>fork()</code>, un proceso hijo independiente por cada conexión aceptada. Archivos: <code>programa_06_servidor_inet.c</code> y <code>programa_06_cliente_inet.c</code>.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un restaurante donde el gerente (padre) se queda en la puerta recibiendo clientes y, cada vez que llega uno, le asigna un mesero (hijo) que atiende esa mesa de principio a fin, mientras el gerente vuelve a la puerta. <em>Dónde deja de servir:</em> si el gerente se pone a atender mesas, deja de recibir gente, que es justo lo que pasaba en el Programa 05.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El padre crea su socket (<code>fd_s</code>), hace <code>bind()</code> y <code>listen()</code>, y entra al <code>while(1)</code> bloqueado en <code>accept()</code>. Cuando llega un cliente, <code>accept()</code> devuelve el descriptor del socket cliente (<code>fd_c</code>) e inmediatamente el padre llama a <code>fork()</code>, que duplica el proceso y devuelve al padre el PID del hijo (un entero mayor que 0) y al hijo un 0 (lo de la <a href="clase-02.html">Clase 02</a> y la <a href="clase-04.html">Clase 04</a>).</p>
+<p><strong>En el hijo</strong> (bloque <code>if (pid == 0)</code>):</p>
+<ol>
+<li>Declara localmente <code>buff_peticion</code> y <code>buff_respuesta</code>, para no gastar memoria en el padre.</li>
+<li>Ejecuta <code>close(fd_s)</code>: cierra su copia del socket servidor, porque el hijo nunca va a aceptar conexiones.</li>
+<li>Entra al bucle de conversación: limpia los buffers con <code>memset</code>, lee con <code>recv()</code>, imprime la petición, toma la respuesta de <code>stdin</code> (o la automática si recibió «adiós») y la manda con <code>send()</code>.</li>
+<li>Al recibir «adiós» cierra el socket cliente con <code>close(fd_c)</code> y termina con <code>exit(0)</code>.</li>
+</ol>
+<p><strong>En el padre</strong> (fuera del bloque del hijo):</p>
+<ol>
+<li>Ejecuta <code>close(fd_c)</code>: cierra su copia del socket cliente y se desentiende de esa conversación.</li>
+<li>Regresa de inmediato al <code>while(1)</code> y se vuelve a bloquear en <code>accept()</code> esperando al siguiente cliente.</li>
+</ol>
+<p>Con esta arquitectura el tamaño del backlog de <code>listen</code> deja de ser una limitante crítica: las conexiones ya no se acumulan esperando a que termine la conversación anterior.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Une la teoría de procesos del Tema 1 (<code>fork()</code>, PID y PPID) con la programación de sockets del Tema 2, y corresponde al subtema 2.3.1 del temario, «Creación de servidor concurrente» (aquí con procesos; el temario lo pone bajo hilos).</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> olvidar <code>close(fd_s)</code> en el hijo o <code>close(fd_c)</code> en el padre: los descriptores se quedan abiertos (fuga de descriptores) y los sockets no se liberan bien.</p></div>
+</details>
+
+<details class="section-block sec" id="c16-arquitecturas"><summary><span class="stitle">3 · Arquitecturas cliente-servidor reales y escalabilidad</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Cómo se diseñan los sistemas distribuidos grandes: capas separadas de <em>frontend</em>, <em>backend</em> y clústeres de bases de datos de alta disponibilidad.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es una cadena de comida rápida: la app es la caja (frontend), la cocina son los servidores de aplicaciones (backend) y la bodega central es la base de datos. <em>Dónde deja de servir:</em> si la bodega central se incendia y no hay bodegas de respaldo, toda la cadena se detiene; por eso existen los respaldos y la replicación.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>En producción, las peticiones del frontend (móvil o web) llegan a un balanceador de carga o servidor web frontal que reparte el tráfico entre un clúster de servidores de aplicaciones. El reparto puede ser por <strong>Round Robin</strong> (petición 1 al backend 1, petición 2 al backend 2…) o por métricas de uso de CPU/memoria (mandar tráfico a un servidor secundario cuando el principal llega al 90&nbsp;% de capacidad). Los backends se conectan a clústeres de bases de datos.</p>
+<p>Un alumno compartió la infraestructura de su empresa: varios frontends (móvil y web) y backends conectados por SSH, con bases de datos separadas (transaccionales y de usuarios) en el mismo centro de datos. Respaldan las transaccionales cada 2 o 3 horas (porque involucran dinero), las de usuarios cada semana y los datos generales cada mes.</p>
+<p>Para prevenir desastres se usa un <strong>DRP</strong> (<em>Disaster Recovery Plan</em>) y la <strong>regla 3-2-1</strong> de respaldos: 3 copias de los datos, en al menos 2 medios o ubicaciones distintas, con 1 fuera de la sede principal, en lugares con riesgos ambientales diferentes (zona sísmica como la CDMX, costas con huracanes, montaña).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra el salto de los ejemplos del curso, con un solo socket, a la infraestructura empresarial real.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> montar un clúster de servidores web potente conectado a una sola base de datos central: se vuelve el cuello de botella y el sistema colapsa con tráfico masivo (el ejemplo que se mencionó fue la publicación de resultados de admisión de la UNAM).</p></div>
+</details>
+
+<details class="section-block sec" id="c16-log-examen"><summary><span class="stitle">4 · Revisión del log del examen parcial y los intentos de intrusión</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La revisión del archivo de registro (<em>log</em>) que generó el servidor del profesor (132.248.59.6, puertos 4898/4899) con los exámenes recibidos entre el 15 y el 19 de octubre (ver las indicaciones en la <a href="clase-15.html#c15-parcial">Clase 15</a>).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es revisar el libro de visitas de un edificio para ver quién se registró y a qué hora, y descubrir si alguien de fuera intentó forzar las cerraduras. <em>Dónde deja de servir:</em> en el libro de visitas firma una persona; en el log también aparecen programas automáticos (bots) que nadie invitó.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>El error del profesor:</strong> en su servidor declaró en código duro un buffer de 50 bytes para la cadena con fecha, hora, IP y nombre. La cadena real ocupaba 38 o 39 bytes y no limpió el buffer con <code>memset</code> ni puso el terminador <code>'\0'</code>, así que los 11 bytes sobrantes salieron como caracteres basura en el archivo.</p>
+<p><strong>Intrusiones:</strong> como es una IP pública, el log mostró conexiones de bots que escanean puertos expuestos en internet. Los días 15 y 16 de octubre, a las 19:10 y 19:11, un escáner automatizado llamado <strong>Infrawatch</strong> (de Londres, Inglaterra) mandó peticiones de prueba con cabeceras HTTP para identificar el servicio. También hubo intentos de conexión por fuerza bruta al puerto 22 (SSH).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Refuerza la importancia de truncar y limpiar los buffers (Clases <a href="clase-13.html">13</a> y <a href="clase-14.html">14</a>) y muestra que cualquier servicio expuesto con IP pública recibe escaneos en cuestión de horas.</p>
+</div>
+<div class="errores"><p><strong>Error común:</strong> escribir un buffer a un archivo sin limpiarlo con <code>memset</code> ni truncarlo: aparecen caracteres basura al final de cada registro.</p></div>
+</details>
+
+<details class="section-block sec" id="c16-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. En el Programa 06, ¿por qué el hijo llama a <code>close(fd_s)</code> justo después del <code>fork()</code>?</summary><p>Porque hereda una copia del socket servidor, pero su única función es hablar con su cliente por <code>fd_c</code>; nunca va a aceptar conexiones.</p></details>
+<details class="qa"><summary>2. ¿Y por qué el padre llama a <code>close(fd_c)</code>?</summary><p>Porque le delega la conversación al hijo; al cerrar su copia libera ese descriptor y regresa de inmediato a <code>accept()</code>.</p></details>
+<details class="qa"><summary>3. Explica con tus palabras la diferencia entre el Programa 05 y el Programa 06.</summary><p>El 05 atiende a un cliente a la vez y los demás esperan en la cola de <code>listen</code>; el 06 crea un hijo con <code>fork()</code> por cada cliente, así que atiende a varios al mismo tiempo.</p></details>
+<details class="qa"><summary>4. Un servidor concurrente tiene <code>fd_s = 3</code> y <code>accept()</code> devuelve 4, 5 y 6 para tres clientes. ¿Qué descriptores de socket quedan abiertos en el padre y en el hijo que atiende al segundo cliente?</summary><p>En el padre solo el 3 (cierra 4, 5 y 6 después de cada <code>fork()</code>). En el segundo hijo solo el 5: cierra el 3 y nunca tuvo el 4 abierto (el padre ya lo había cerrado) ni el 6.</p></details>
+<details class="qa"><summary>5. ¿Dónde se declaran <code>buff_peticion</code> y <code>buff_respuesta</code> en el 05 y en el 06, y por qué cambia?</summary><p>En el 05 al inicio de <code>main()</code>, porque hay un solo proceso; en el 06 dentro del <code>if (pid == 0)</code>, para que solo los tenga el hijo y no se gaste memoria en el padre.</p></details>
+<details class="qa"><summary>6. ¿Qué pasa cuando el cliente manda «adiós»?</summary><p>El servidor responde automáticamente con una respuesta predeterminada (sin teclado), sale del bucle de conversación y cierra <code>fd_c</code>; en el 06 el hijo además termina con <code>exit(0)</code>.</p></details>
+<details class="qa"><summary>7. ¿Por qué salieron caracteres basura en el log del examen?</summary><p>Porque el buffer era de 50 bytes en código duro para una cadena de 38–39 bytes, y no se limpió con <code>memset</code> ni se puso <code>'\0'</code> antes de escribirlo.</p></details>
+<details class="qa"><summary>8. ¿En qué consiste la regla 3-2-1 de respaldos?</summary><p>3 copias de los datos, en al menos 2 medios o ubicaciones distintas, con 1 fuera de la sede principal, en lugares con riesgos ambientales diferentes.</p></details>
+<details class="qa"><summary>9. Compara Round Robin con el reparto por métricas en un balanceador de carga.</summary><p>Round Robin reparte en turno fijo (1 al backend 1, 2 al backend 2…); por métricas manda el tráfico según el uso de CPU o memoria, por ejemplo a un secundario cuando el principal llega al 90&nbsp;%.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c16-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>Su propio error:</strong> el profesor se rió de sí mismo al enseñar el log con caracteres raros; dijo que por la prisa dejó el buffer fijo sin truncar y que decidió no reiniciar el servidor para no interrumpir a nadie durante el examen.</li>
+<li><strong>Ataques desde Londres:</strong> mostró con sorpresa cómo el bot Infrawatch y los intentos de fuerza bruta por SSH llegaron a su servidor desatendido durante el fin de semana.</li>
+<li><strong>Experiencia de un compañero:</strong> en su empresa manejan dinero real, por eso respaldan las bases transaccionales cada 2 o 3 horas.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c16-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Tarea:</strong> no se dejó tarea para entregar.</li>
+<li><strong>Tarea moral:</strong> compilar y probar el Programa 06 (<code>programa_06_servidor_inet.c</code> y <code>programa_06_cliente_inet.c</code>) abriendo varias terminales cliente para ver que atiende a todos a la vez.</li>
+<li><strong>Examen parcial (<a href="examenes.html">ACS-E01</a>):</strong> el profesor confirmó que recibió las entregas registradas en su log; si a alguien no le apareció la confirmación de registro en su cliente, que lo busque para revisar su caso.</li>
+<li><strong>Próxima clase:</strong> prueba en vivo del Programa 06 con varios clientes.</li>
+</ul>
+</details>
+
+</div>
+</body>
+</html>

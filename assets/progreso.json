@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-20T20:16:05+00:00",
+ "generatedAt": "2026-10-20T20:19:55+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -534,6 +534,13 @@
     "resumen": "Tema 2 — Por qué varía el total de bytes de una respuesta HTTP, el servidor que despacha un PDF ( programa_08_servidor_pdf.c ) y las indicaciones completas del examen parcial (base: Programa 04).",
     "url": "materias/arquitectura-cliente-servidor/clase-15.html",
     "formato": "estudio"
+   },
+   {
+    "num": 16,
+    "fecha": "2026-10-20",
+    "resumen": "Tema 2 — Del servidor secuencial (Programa 05) al servidor de clientes concurrentes con fork() (Programa 06), arquitecturas cliente-servidor reales y la revisión del log del examen parcial.",
+    "url": "materias/arquitectura-cliente-servidor/clase-16.html",
+    "formato": "estudio"
    }
   ],
   "seguridad-informatica-basica": [
@@ -733,6 +740,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "5b7764d",
+   "fecha": "2026-10-20T14:16:05-06:00",
+   "mensaje": "MD-P03-3: entregables de la Práctica 3.3 Regresión (notebook y presentación del Equipo 7)"
+  },
   {
    "hash": "6f4f0e7",
    "fecha": "2026-10-20T12:44:54-06:00",
@@ -1027,11 +1039,6 @@
    "hash": "0531e5a",
    "fecha": "2026-10-12T16:02:39-06:00",
    "mensaje": "Regenerar buscador y progreso"
-  },
-  {
-   "hash": "935f074",
-   "fecha": "2026-10-12T16:02:20-06:00",
-   "mensaje": "SIB: agregar Tarea 3 (infografía de 35 ataques, vence 13 oct 9:00)"
   }
  ]
 }
