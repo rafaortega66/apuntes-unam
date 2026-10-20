@@ -1,6 +1,6 @@
 # Sprint 3 · Samba, SSH y permisos — reporte entregado (19 oct 2026)
 
-Lo que el reporte final del Sprint 2 (`../ASI-Sprint2/ASI-Proy05/`) dejó para este sprint:
+Lo que el reporte final del Sprint 2 (`../ASI-Sprint2/`) dejó para este sprint:
 
 | ID | Historia | Prioridad | Pts |
 |---|---|---|---|
@@ -14,4 +14,4 @@ Base técnica: red 192.168.10.0/24, servidor 192.168.10.10, DHCP + DNS (Bind9) d
 historia de usuario detallada, Sprint Backlog con tareas y responsables, Daily Scrum, impedimentos y Sprint Review), con respaldo en Git
 (mínimo 2 registros por semana).
 
-**Entregado:** `ASI-Proy06/` — Classroom «Reporte» (publicada y con vencimiento el 19 oct 2026, 23:59), «Turned in» con `Sprint 3 Equipo 10.pdf`.
+**Entregado:** Classroom «Reporte» (publicada y con vencimiento el 19 oct 2026, 23:59), «Turned in» con `Sprint 3 Equipo 10.pdf` (en `ASI-Sprint3-entregables/`).

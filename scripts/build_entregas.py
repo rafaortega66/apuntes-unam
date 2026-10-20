@@ -36,10 +36,9 @@ TITULOS = {
     'ASI-P01': 'Práctica 1 — Entorno (uso básico de Linux)', 'ASI-P02': 'Práctica 2 — Servicio en la nube',
     'ASI-P03': 'Práctica 3 — Servidor DHCP', 'ASI-P04': 'Práctica 4 — Kali Linux',
     'ASI-T01': 'Tarea — Análisis de ENOE y ENIGH', 'ASI-R01': 'Reposición',
-    'ASI-Proy01': 'Proyecto final — Formato 1 (Scrum)', 'ASI-Proy02': 'Proyecto final — Diagramas UML',
-    'ASI-Proy03': 'Proyecto final — Reporte de Scrum 1', 'ASI-Proy04': 'Proyecto final — Reporte Scrum (Sprint 2)',
-    'ASI-Proy05': 'Proyecto final — Reporte de la semana de Scrum',
-    'ASI-Proy06': 'Proyecto final — Reporte (Sprint 3)',
+    'ASI-Sprint0': 'Preparación — «Formato 1» y «Diagramas UML»', 'ASI-Sprint1': 'DHCP y DNS — «Reporte de SCRUM 1»',
+    'ASI-Sprint2': 'Apache — «Reporte Scrum» y «Reporte de la semana de scrum»',
+    'ASI-Sprint3': 'Samba, SSH y permisos — «Reporte»',
     'FSE-T01': 'Tarea 01 — Plagio', 'FSE-T02': 'Tarea 02 — Código limpio', 'FSE-T03': 'Tarea 03 — Nombres con sentido',
     'FSE-T04': 'Tarea 04 — Funciones limpias', 'FSE-T05': 'Tarea 05 — Comentarios', 'FSE-T06': 'Tarea 06 — Formato',
     'FSE-T07': 'Tarea 07 — Límites claros', 'FSE-T08': 'Tarea 08', 'FSE-T09': 'Tarea 09',
@@ -81,8 +80,9 @@ ESTADO = {
     'OAC-P01': 'Entregada', 'OAC-P02': 'Entregada', 'OAC-P03': 'Entregada',
     'MD-P03-1': 'Entregada', 'MD-P03-2': 'Entregada', 'MD-Proy01': 'Entregada tarde', 'MD-Proy02': 'Entregada tarde', 'MD-E01': 'Entregada',
     'ASI-P01': 'Entregada tarde', 'ASI-P02': 'Entregada', 'ASI-P03': 'Entregada', 'ASI-P04': 'Entregada', 'ASI-T01': 'Entregada',
-    'ASI-R01': 'Entregada', 'ASI-Proy01': 'Entregada', 'ASI-Proy02': 'Entregada', 'ASI-Proy03': 'Entregada', 'ASI-Proy04': 'Entregada',
-    'ASI-Proy05': 'Entregada', 'ASI-Proy06': 'Entregada',
+    'ASI-R01': 'Entregada',
+    'ASI-Sprint0': 'Entregadas (20 y 21 sep)', 'ASI-Sprint1': 'Entregada (28 sep)', 'ASI-Sprint2': 'Entregadas (5 y 13 oct)',
+    'ASI-Sprint3': 'Entregada (19 oct)',
     'ACS-E01': 'Entregada por correo (18 oct 2026, 18:34)',
     'FSE-E01': 'Presentado en papel (14 oct 2026) · 101 (36 + 65, incluye punto extra)',
     'SIB-EC02': 'Resuelto en mis apuntes · sin confirmar si se entregó',
@@ -104,9 +104,9 @@ NOTAS = {  # avisos que no tienen carpeta propia
     ('FSE', 'tareas'): 'También se registró en Classroom «Ejemplos de sistemas embebidos» (completada, sin archivo).',
 }
 
-ENTREGA = re.compile(r'^(ACS|ASI|FSE|MD|OAC|RP|SIB)-(T|P|Proy|E|Exp|EC|R)(\d[\d-]*|Final)$')
+ENTREGA = re.compile(r'^(ACS|ASI|FSE|MD|OAC|RP|SIB)-(T|P|Proy|E|Exp|EC|R|Sprint)(\d[\d-]*|Final)$')
 PAGINAS = [('tareas', 'Tareas', ('T', 'R', 'EC')), ('practicas', 'Prácticas', ('P',)),
-           ('proyectos', 'Proyectos', ('Proy', 'Exp')), ('examenes', 'Exámenes', ('E',))]
+           ('proyectos', 'Proyectos', ('Proy', 'Exp', 'Sprint')), ('examenes', 'Exámenes', ('E',))]
 
 
 def sprints_de(sigla):
@@ -201,7 +201,7 @@ def lista_links(base_rel, fs):
     return ' · '.join(f'<a href="{url(base_rel + "/" + f)}" target="_blank">{html.escape(f)}</a>' for f in fs)
 
 
-def tarjeta(rel, code, sigla):
+def tarjeta(rel, code, sigla, leeme=None):
     d = os.path.join(DEC, rel)
     titulo = TITULOS.get(code, code)
     estado = ESTADO.get(code) or SIN_CLASSROOM.get(sigla) or ''
@@ -214,6 +214,8 @@ def tarjeta(rel, code, sigla):
          f'<h4>{code} · {html.escape(titulo)}</h4>']
     if estado:
         h.append(f'<p class="estado">{html.escape(estado)}</p>')
+    if leeme:  # README.md del sprint (ASI): qué historias cubre
+        h.append('<div class="indicaciones">' + md_html(open(leeme, encoding='utf-8').read()) + '</div>')
     h.append('<h5>Indicaciones</h5>')
     for f in ind:
         if f.endswith('.md'):
@@ -292,13 +294,17 @@ for slug, (sigla, nombre, color) in MATERIAS.items():
             partes.append(f'<div class="section-block nota"><p>Las prácticas de laboratorio están en <a href="../{lab}/entregas.html">la página del laboratorio</a>.</p></div>')
         sprints = sprints_de(sigla) if pag == 'proyectos' else []
         if sprints:
-            # Proyecto por sprints (ASI): un encabezado por carpeta <SIGLA>-SprintN con su README y sus entregas
+            # Proyecto por sprints (ASI): cada carpeta <SIGLA>-SprintN es UNA entrega (todo lo del sprint junto) + su README
+            leeme_general = os.path.join(DEC, sigla, f'{sigla}-Proyecto', 'README.md')
+            if os.path.exists(leeme_general):
+                partes.append('<div class="section-block indicaciones">' + md_html(open(leeme_general, encoding='utf-8').read()) + '</div>')
             for nombre_sp, ruta_sp in sprints:
-                partes.append(f'<h3 id="{nombre_sp}" style="margin:22px 0 6px">{html.escape(nombre_sp.split("-", 1)[1].replace("Sprint", "Sprint "))}</h3>')
                 leeme = os.path.join(ruta_sp, 'README.md')
-                if os.path.exists(leeme):
-                    partes.append('<div class="section-block indicaciones">' + md_html(open(leeme, encoding='utf-8').read()) + '</div>')
-                partes += [tarjeta(r, c, sigla) for r, c in sel if f'/{nombre_sp}/' in f'/{r}/']
+                if ENTREGA.match(nombre_sp) and os.path.exists(os.path.join(ruta_sp, nombre_sp + '-entregables')):
+                    partes.append(tarjeta(os.path.relpath(ruta_sp, DEC), nombre_sp, sigla, leeme if os.path.exists(leeme) else None))
+                elif os.path.exists(leeme):  # sprint sin carpetas de entrega todavía
+                    partes.append(f'<div class="section-block entrega" id="{nombre_sp}"><h4>{nombre_sp}</h4>'
+                                  f'<div class="indicaciones">{md_html(open(leeme, encoding="utf-8").read())}</div></div>')
             partes += [tarjeta(r, c, sigla) for r, c in sel if '-Sprint' not in r]
         else:
             partes += [tarjeta(r, c, sigla) for r, c in sel]

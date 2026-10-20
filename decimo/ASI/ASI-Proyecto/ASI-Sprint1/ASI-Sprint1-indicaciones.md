@@ -1,4 +1,6 @@
-# ASI-Proy03 — Reporte de SCRUM 1 · indicaciones
+# ASI-Sprint1 — indicaciones
+
+**Entrega «Reporte de SCRUM 1»**
 
 **Classroom** (publicada y con entrega el 28 sep 2026, 23:59 · 100 pts): sin descripción.
 

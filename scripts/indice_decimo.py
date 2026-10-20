@@ -11,7 +11,7 @@ NOMBRES = {'ACS': 'Arquitectura Cliente-Servidor', 'ASI': 'Administración de Se
            'FSE': 'Fundamentos de Sistemas Embebidos (+ Lab)', 'MD': 'Minería de Datos',
            'OAC': 'Organización y Arquitectura de Computadoras (+ Lab L+)', 'RP': 'Reconocimiento de Patrones',
            'SIB': 'Seguridad Informática Básica', 'docs': 'Documentos académicos'}
-ENTREGA = re.compile(r'^(ACS|ASI|FSE|MD|OAC|RP|SIB)-(T|P|Proy|E|Exp|EC|R)(\d[\d-]*|Final)$')
+ENTREGA = re.compile(r'^(ACS|ASI|FSE|MD|OAC|RP|SIB)-(T|P|Proy|E|Exp|EC|R|Sprint)(\d[\d-]*|Final)$')
 
 
 def archivos(d):

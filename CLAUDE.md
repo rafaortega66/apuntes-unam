@@ -136,9 +136,11 @@ decimo/<SIGLA>/<SIGLA>-<Categoría>/<SIGLA>-XNN/
   Numeración = la de Classroom. **Toda** entrega lleva las dos carpetas y su archivo de indicaciones.
 - Labs: Lab FSE en `FSE/FSE-Lab/` (mismo profesor); Lab OAC (L+) en `OAC/OAC-Lab/` con `OAC-Lab-Material/`.
 - **ASI** (reorganizado el 19 oct 2026, pedido del usuario): dos carpetas. `ASI/ASI-Practicas/` (P01–P04, T01 ENOE/ENIGH, R01 reposición) y
-  `ASI/ASI-Proyecto/` = el proyecto final Scrum (Equipo 10) **por sprints**: `ASI-Sprint0/` (Proy01 Formato 1, Proy02 diagramas UML),
-  `ASI-Sprint1/` (Proy03), `ASI-Sprint2/` (Proy04, Proy05), `ASI-Sprint3/` (Proy06; Samba, SSH, permisos)… Cada sprint lleva un `README.md`
-  y `ASI-Proyecto/README.md` tiene la tabla de sprints. Cada reporte semanal nuevo = siguiente `ASI-ProyNN` dentro de su sprint.
+  `ASI/ASI-Proyecto/` = el proyecto final Scrum (Equipo 10) **por sprints**, y es UN solo proyecto: **nada de subcarpetas `ASI-ProyNN`** (el usuario lo pidió el 20 oct 2026).
+  Cada `ASI-SprintN/` = `README.md` + `ASI-SprintN-indicaciones.md` (una sección por entrega de Classroom del sprint) +
+  `ASI-SprintN-entregables/` (todos los PDFs entregados en el sprint) + `ASI-SprintN-adicionales/`. Sprint0 (Formato 1, diagramas UML),
+  Sprint1 (Reporte de SCRUM 1), Sprint2 (Reporte Scrum, Reporte de la semana), Sprint3 («Reporte», 19 oct; Samba, SSH, permisos).
+  `ASI-Proyecto/README.md` tiene la tabla de sprints. Reporte nuevo = va a la carpeta de su sprint (o se crea `ASI-SprintN/`).
   `proyectos.html` se genera agrupado por sprint. + `ASI-Material/`.
 - Si hay versiones distintas de un archivo, la entregada en Classroom es la buena
   (comparar tamaño/contenido); las otras van a `-adicionales/version-previa/`.

@@ -5,7 +5,7 @@ Un directorio por asignatura (sigla). Dentro:
 ```
 <SIGLA>/
 ├─ <SIGLA>-Material/              ← material independiente del profesor (presentaciones, temario, formatos generales)
-└─ <SIGLA>-<Categoría>/           ← Tareas, Practicas, Lab, Proyectos, Examenes… (ASI: ASI-Practicas y ASI-Proyecto/ASI-SprintN)
+└─ <SIGLA>-<Categoría>/           ← Tareas, Practicas, Lab, Proyectos, Examenes… (ASI: ASI-Practicas y ASI-Proyecto/ASI-SprintN, sin subcarpetas por entrega)
    └─ <SIGLA>-XNN/
       ├─ <SIGLA>-XNN-indicaciones.pdf|.md   ← enunciado del profesor; si no hubo archivo, lo que dijo Classroom
       │                                       (y NotebookLM cuando Classroom era vago), con la fuente indicada
@@ -14,6 +14,6 @@ Un directorio por asignatura (sigla). Dentro:
                                                datos-del-profesor/, version-previa/, otras-versiones-del-guion/
 ```
 
-Códigos: `T` tarea · `P` práctica/lab · `Proy` proyecto · `E` examen · `Exp` exposición · `EC` ejercicio de clase · `R` reposición.
+Códigos: `T` tarea · `P` práctica/lab · `Proy` proyecto · `E` examen · `Exp` exposición · `EC` ejercicio de clase · `R` reposición · `Sprint` sprint del proyecto de ASI (todo lo del sprint en una carpeta).
 Números de dos dígitos, iguales a los de Classroom. Labs: FSE en `FSE/FSE-Lab/`, OAC (L+) en `OAC/OAC-Lab/` (con su `OAC-Lab-Material`).
 Los libros no van aquí (repo privado `apuntes-unam-biblioteca`). Índice de todo: `INDICE.md` (`python3 scripts/indice_decimo.py`).
