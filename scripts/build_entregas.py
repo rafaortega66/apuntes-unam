@@ -199,8 +199,19 @@ def md_html(texto):
     return '\n'.join(out)
 
 
-def lista_links(base_rel, fs):
-    return ' · '.join(f'<a href="{url(base_rel + "/" + f)}" target="_blank">{html.escape(f)}</a>' for f in fs)
+# Entregas cuyos archivos que no son PDF se descargan al abrirlos (atributo download) en vez de verse como texto.
+# Pedido del usuario el 20 oct 2026, empezando por estas; agregar aquí las demás.
+DESCARGA = {'MD-P03-1', 'MD-P03-2', 'MD-P03-3'}
+
+
+def link(rel, f, descargar=False):
+    if descargar and not f.lower().endswith('.pdf'):
+        return f'<a href="{url(rel)}" download="{html.escape(os.path.basename(f))}">{html.escape(f)}</a>'
+    return f'<a href="{url(rel)}" target="_blank">{html.escape(f)}</a>'
+
+
+def lista_links(base_rel, fs, descargar=False):
+    return ' · '.join(link(base_rel + "/" + f, f, descargar) for f in fs)
 
 
 def tarjeta(rel, code, sigla, leeme=None):
@@ -227,9 +238,9 @@ def tarjeta(rel, code, sigla, leeme=None):
     if not ind:
         h.append('<p>—</p>')
     h.append('<h5>Entregado</h5>')
-    h.append(f'<p>{lista_links(rel + "/" + code + "-entregables", ent)}</p>' if ent else '<p>— (sin archivo entregado)</p>')
+    h.append(f'<p>{lista_links(rel + "/" + code + "-entregables", ent, code in DESCARGA)}</p>' if ent else '<p>— (sin archivo entregado)</p>')
     if ad:
-        h.append(f'<details><summary>Adicionales ({len(ad)})</summary><p>{lista_links(rel + "/" + code + "-adicionales", ad)}</p></details>')
+        h.append(f'<details><summary>Adicionales ({len(ad)})</summary><p>{lista_links(rel + "/" + code + "-adicionales", ad, code in DESCARGA)}</p></details>')
     h.append('</div>')
     return '\n'.join(h)
 

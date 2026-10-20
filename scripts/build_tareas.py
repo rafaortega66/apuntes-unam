@@ -11,6 +11,7 @@ Uso: python3 scripts/build_tareas.py
 import json
 import os
 import html
+import re
 from datetime import datetime
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,6 +21,12 @@ SIN_PAGINA = {'oac-c8-audio'}  # pendientes que no son tareas (se quedan con su 
 DIAS = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo']
 MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic']
 
+
+
+def descargar(u):
+    """Archivos que no son PDF ni páginas se descargan al abrirlos (pedido del usuario, 20 oct 2026; hoy solo MD 3.1–3.3,
+    igual que DESCARGA en build_entregas.py)."""
+    return re.search(r'MD-P03-[123]/', u) is not None and not re.search(r'\.(pdf|html?)(#.*)?$', u, re.I)
 
 def cuando(it):
     v = it.get('vence')
@@ -90,7 +97,7 @@ def pagina(it, det):
     if enlaces:
         cuerpo += seccion('enlaces', '🔗 Enlaces',
                           '<ul>%s</ul>' % ''.join('<li><a href="%s"%s>%s</a></li>' % (
-                              e(x['u']), ' target="_blank" rel="noopener"' if x['u'].startswith('http') else '', e(x['t']))
+                              e(x['u']), ' target="_blank" rel="noopener"' if x['u'].startswith('http') else (' download' if descargar(x['u']) else ''), e(x['t']))
                               for x in enlaces))
     partes.append(cuerpo)
     if det.get('fuente'):

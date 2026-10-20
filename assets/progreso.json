@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-20T20:19:55+00:00",
+ "generatedAt": "2026-10-20T20:22:52+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -741,6 +741,11 @@
  },
  "gitlog": [
   {
+   "hash": "a6c4de2",
+   "fecha": "2026-10-20T14:19:56-06:00",
+   "mensaje": "ACS: agregar Clase 16 (20 oct) — servidor de clientes concurrentes con fork() (Programa 06), arquitecturas reales y log del examen parcial"
+  },
+  {
    "hash": "5b7764d",
    "fecha": "2026-10-20T14:16:05-06:00",
    "mensaje": "MD-P03-3: entregables de la Práctica 3.3 Regresión (notebook y presentación del Equipo 7)"
@@ -1034,11 +1039,6 @@
    "hash": "a1974ed",
    "fecha": "2026-10-12T16:09:05-06:00",
    "mensaje": "Cruzar Classroom (12 oct): restaurar pendientes con ids/enlaces, registrar entregas (ASI ENOE/ENIGH+Reporte Scrum, RP P3, MD 3.1, FSE T06), fechas 3.2 y Reporte lab OAC 3"
-  },
-  {
-   "hash": "0531e5a",
-   "fecha": "2026-10-12T16:02:39-06:00",
-   "mensaje": "Regenerar buscador y progreso"
   }
  ]
 }
