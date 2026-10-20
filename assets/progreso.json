@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-20T18:06:06+00:00",
+ "generatedAt": "2026-10-20T18:33:50+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -442,7 +442,7 @@
     "fecha": "2026-08-27",
     "resumen": "Tema 1 — Permisos UGO y chmod decimal, bit SetUID (chmod 4xxx), /etc/passwd, ID real vs. efectivo, Tarea 2, y fork() (retorno pid_t, PID del hijo al padre / 0 al hijo, deadlock).",
     "url": "materias/arquitectura-cliente-servidor/clase-02.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 3,
@@ -733,6 +733,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "962ed71",
+   "fecha": "2026-10-20T12:06:11-06:00",
+   "mensaje": "SIB-EC07: investigación de ataques del Equipo 4 (20 oct, sin clase; puntos 10 y 11 míos), PDF renombrado; 20 oct sin clase de SIB en horario.json; ACS Clase 16 pendiente en CLAUDE.md; MAPEO-ENTREGAS.md guardado en decimo/ como plantilla"
+  },
   {
    "hash": "f82baa9",
    "fecha": "2026-10-20T05:52:36-06:00",
@@ -1027,11 +1032,6 @@
    "hash": "a6fcbeb",
    "fecha": "2026-10-08T20:05:15-06:00",
    "mensaje": "Merge remote changes"
-  },
-  {
-   "hash": "46af508",
-   "fecha": "2026-10-08T20:02:27-06:00",
-   "mensaje": "ACS Tarea 4: corregir fecha de entrega (8 oct, no 15 oct) - vencida hoy"
   }
  ]
 }

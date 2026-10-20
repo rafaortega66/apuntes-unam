@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 02 — Arquitectura Cliente-Servidor</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
 <script src="../../assets/app.js?v=20261012a" defer></script>
 </head>
@@ -15,7 +16,25 @@
   <p class="prof">Mtro. Carlos Alberto Román Zamitiz · 27 ago 2026 · Tema 1 — Permisos UGO y chmod decimal, bit SetUID (chmod 4xxx), /etc/passwd, ID real vs. efectivo, Tarea 2, y fork() (retorno pid_t, PID del hijo al padre / 0 al hijo, deadlock).</p>
 </div>
 
+<div class="section-block nota" style="border-left:3px solid #E8735C"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c2-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Diferencia entre usuario real (UID) y usuario efectivo (eUID) mediante el bit SetUID</strong><span class="evid">Evidencia: El profesor lo ligó directamente a la Tarea 2, explicó en detalle las funciones getuid() y geteuid(), y resolvió el ejemplo práctico de programa_02_ids.c en vivo.</span></li>
+<li><strong>Comportamiento y valores de retorno de la función fork()</strong><span class="evid">Evidencia: Explicó explícitamente que fork() devuelve el PID del proceso hijo al padre y 0 al hijo, enfatizando que el hijo es una copia exacta del padre excepto en PID y PPID.</span></li>
+<li><strong>Permisos UGO y notación decimal de chmod con 4 dígitos</strong><span class="evid">Evidencia: Repitió cómo se forman los valores 1, 2 y 4 para ejecución, escritura y lectura, y cómo el cuarto dígito a la izquierda (4 para usuario) activa el bit SetUID.</span></li>
+<li><strong>Jerarquía de procesos y lectura de getpid() y getppid()</strong><span class="evid">Evidencia: Resolvió en vivo el programa05_fork_v2.c mostrando cómo el PPID del hijo coincide con el PID del padre, y el PPID del padre coincide con el PID de la terminal o shell.</span></li>
+</ol>
+</details>
+
 <details class="section-block sec" id="clase-2-permisos-bit-setuid-etc-passwd-y"><summary><span class="stitle">Clase 2 — permisos, bit setuid, /etc/passwd y fork()</span></summary>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como una credencial de visitante en un edificio de oficinas: normalmente tu pase solo te permite andar por el vestíbulo, pero si te asignan un permiso especial grabado en la tarjeta, puedes actuar temporalmente como administrador mientras realizas una tarea específica.<span class="rompe">Dónde falla la analogía: Deja de servir en cuanto termina la ejecución del programa o sales de la aplicación, momento en el cual pierdes los privilegios especiales y vuelves automáticamente a tu identidad común.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Conecta la administración de seguridad de Linux con la programación de procesos en C, demostrando cómo los programas pueden elevar privilegios de forma temporal para acceder a archivos protegidos del sistema.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir las siglas del modelo de permisos UGO pensando que la letra «O» corresponde a «owner» (dueño) en lugar de «others» (otros usuarios del sistema).</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="permisos-ugo-y-chmod-notacion-decimal"><summary><span class="stitle">Permisos UGO y chmod (notación decimal)</span></summary>
@@ -26,7 +45,14 @@
 <li><code>chmod 777 archivo</code> — todos los permisos para u, g y o.</li>
 <li><code>chmod 644 archivo</code> — archivo editable no ejecutable: dueño <code>rw</code> (6), grupo y otros <code>r</code> (4).</li>
 <li><code>chmod 755 archivo</code> — ejecutable típico: dueño <code>rwx</code> (7), grupo y otros <code>r-x</code> (5).</li>
-</ul></details>
+</ul><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un tablero con tres conjuntos de interruptores para el dueño, el grupo y el resto de las personas, donde la luz de lectura vale 4 puntos, la de escritura 2 puntos y la de ejecución 1 punto, sumando sus valores para encender los permisos deseados.<span class="rompe">Dónde falla la analogía: Deja de servir si intentas otorgar permiso de ejecución a un archivo de texto o documento que no contiene código ejecutable, ya que el sistema operativo no podrá correrlo como programa.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite establecer el control de acceso a archivos y ejecutables mediante comandos octales en la terminal como chmod 755 o chmod 644 antes de desplegar servicios de red.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Olvidar que para poder ejecutar un archivo ejecutable binario en Linux es indispensable contar también con el permiso de lectura activado.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="bit-setuid-chmod-con-4-digitos"><summary><span class="stitle">Bit SetUID (chmod con 4 dígitos)</span></summary>
 <p>Al ejecutar un binario, el proceso normalmente pertenece a quien lo ejecuta. Con el <strong>bit SetUID</strong> activo, quien lo ejecuta <strong>toma temporalmente los privilegios del dueño del archivo</strong> mientras dura la ejecución.</p>
@@ -35,7 +61,14 @@
 2 = SetGID   (bloque de grupo)
 1 = sticky   (bloque de otros)
 ej.  chmod 4511 archivo</code></pre>
-<p><strong>⚠️ Riesgo de seguridad:</strong> si <code>root</code> pone SetUID a un ejecutable, cualquier usuario sin privilegios se vuelve <code>root</code> durante esa ejecución. Manejar con extrema precaución.</p></details>
+<p><strong>⚠️ Riesgo de seguridad:</strong> si <code>root</code> pone SetUID a un ejecutable, cualquier usuario sin privilegios se vuelve <code>root</code> durante esa ejecución. Manejar con extrema precaución.</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como agregar una cuarta palanca maestra al tablero que le dice a la puerta: sin importar quién introduzca la llave para girarla, dale acceso con todos los derechos del dueño de la casa durante esa visita.<span class="rompe">Dónde falla la analogía: Deja de servir si el programa ejecutado contiene fallas de seguridad o código malicioso, ya que permitiría a cualquier usuario común tomar control total del sistema como root.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Se representa con una letra «s» en el lugar del permiso de ejecución del usuario (r-s) al utilizar un comando de 4 dígitos como chmod 4511.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Pensar que el bit SetUID modifica de forma permanente la cuenta de usuario en el sistema operativo, cuando únicamente afecta la duración del proceso en ejecución.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="usuarios-en-linux-etc-passwd-id-real-vs-"><summary><span class="stitle">Usuarios en Linux · /etc/passwd · ID real vs. efectivo</span></summary>
 <ul>
@@ -47,7 +80,13 @@ ej.  chmod 4511 archivo</code></pre>
    |       |    |     |        |            |          |
  el 1º   contraseña  id    id de     GECOS (si no    dir.   tipo de
  es root  oculta   usuario  grupo    se puso, =user) home   shell</code></pre>
-<p>Usuarios de sistema con shell <code>nologin</code>: no pueden iniciar sesión interactiva (seguridad). <em>[inaudible: la ruta se oye como "etc/al passworden"]</em></p></details>
+<p>Usuarios de sistema con shell <code>nologin</code>: no pueden iniciar sesión interactiva (seguridad). <em>[inaudible: la ruta se oye como "etc/al passworden"]</em></p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>El ID real es tu número de pasaporte oficial registrado en el registro civil, mientras que el ID efectivo es la identificación temporal o disfraz de trabajo que te pones para entrar a una zona restringida.<span class="rompe">Dónde falla la analogía: Deja de servir en cuanto la ejecución del programa finaliza, porque el disfraz no altera tu número de registro civil permanente en el sistema.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra cómo funciones en C como getuid() y geteuid() consultan los datos de usuario registrados en /etc/passwd para validar el control de acceso y la elevación de privilegios.</p>
+</div>
+</details>
 
 <details class="section-block sec" id="tarea-2-probar-el-bit-setuid"><summary><span class="stitle">Tarea 2 — probar el bit SetUID</span></summary>
 <p>Metodología: <strong>dos terminales</strong> (una como <code>root</code>, otra como usuario sin privilegios). Las instrucciones de pantalla dividida en Codespaces están en la carpeta del <strong>Tema 3</strong> del repo, aunque se usan desde el Tema 1. <code>whoami</code> muestra el usuario activo.</p>
@@ -71,7 +110,14 @@ chmod 755 /sbin/fdisk        # (o los permisos que tuviera antes)</code></pre>
 <p><em>[inaudible: la ruta se dicta rápido como "diagonal se bin diagonal fis" → /sbin/fdisk]</em></p>
 <p><strong>Actividad 2:</strong> programa en C (<a href="../../decimo/ACS/ACS-Material/programas/tema1/programa02_ids.c" download style="color:var(--indigo)">programa02_ids.c</a> en el repo) que imprime <code>getuid()</code> y <code>geteuid()</code>. Compilar <code>gcc programa02_ids.c -o programa02_ids</code>. Ejecutado normal → ID real == ID efectivo. Aplicando <code>chmod 4511</code> al binario y ejecutándolo con <strong>otro usuario</strong> → salen distintos.</p>
 <p><strong>⚠️ Para sacar 10:</strong> las capturas deben mostrar <strong>ID real ≠ ID efectivo</strong>.</p>
-<p><strong>⚠️ No entregar la Tarea 2 todavía</strong> — el profesor no pudo hacer la demo en el laboratorio; reactivará la fecha de entrega después. (Recomienda clonar el repo localmente con git en vez de usar Codespaces.)</p></details>
+<p><strong>⚠️ No entregar la Tarea 2 todavía</strong> — el profesor no pudo hacer la demo en el laboratorio; reactivará la fecha de entrega después. (Recomienda clonar el repo localmente con git en vez de usar Codespaces.)</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un experimento donde intentas abrir una caja fuerte de laboratorio como visitante y te da error, pero después el dueño le pone una etiqueta especial y logras abrirla temporalmente como si fueras el dueño.<span class="rompe">Dónde falla la analogía: Deja de servir si no cuentas con una cuenta root o privilegios de administrador para ejecutar el comando chown y modificar los permisos del ejecutable.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite verificar de manera práctica cómo al aplicar chmod 4511 a un ejecutable perteneciente a root, un usuario común obtiene un ID efectivo igual a 0 durante la ejecución.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Realizar la prueba desde la misma cuenta de root que es dueña del archivo, provocando que tanto el ID real como el efectivo salgan iguales a 0 sin apreciar el cambio.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="fork-creacion-de-procesos"><summary><span class="stitle">fork() — creación de procesos</span></summary>
 <ul>
@@ -90,7 +136,14 @@ al HIJO   ->  0</code></pre>
     // código exclusivo del hijo
 }</code></pre>
 <p>Sin <code>if</code>, todo lo que va después de <code>fork()</code> se ejecuta en ambos → sale <strong>duplicado</strong>. En <a href="../../decimo/ACS/ACS-Material/programas/tema1/programa05_fork_v1.c" download style="color:var(--indigo)">programa05_fork_v1.c</a>: la línea de antes del <code>fork()</code> se imprime una vez; las dos de después, dos veces cada una.</p>
-<p><em>Nota semántica del profesor: antes del <code>fork()</code> lo llama "proceso main / principal"; "padre" solo cuando ya hay hijo.</em></p></details>
+<p><em>Nota semántica del profesor: antes del <code>fork()</code> lo llama "proceso main / principal"; "padre" solo cuando ya hay hijo.</em></p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como una máquina de clonación instantánea que duplica a una persona junto con todo lo que lleva en las manos en ese instante, dejando que ambas sigan caminando hacia adelante de forma independiente.<span class="rompe">Dónde falla la analogía: Deja de servir si se piensa que las dos personas clonadas comparten la misma mente o memoria física en tiempo real, ya que en el kernel los procesos operan en espacios separados.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la llamada al sistema fundamental en sistemas Unix/Linux para la creación de procesos, devolviendo al padre el PID del hijo y al hijo un valor de 0.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Asumir que el proceso padre y el proceso hijo se ejecutan en un orden secuencial estricto y predecible, olvidando que corren de forma asíncrona bajo una condición de carrera.</p></div>
+</div>
+</details>
 
 <details class="section-block sec" id="deadlock-candado-abrazo-mortal"><summary><span class="chip chip-examen">examen</span><span class="stitle">⚠️ Deadlock (candado / abrazo mortal)</span></summary><p>Si el padre espera a que termine el hijo para continuar y a la vez el hijo espera a que termine el padre → bloqueo indefinido. Única salida: <code>Ctrl + C</code>.</p></details>
 
@@ -102,11 +155,36 @@ al HIJO   ->  0</code></pre>
 <tr><td><code>getpid()</code> en el hijo</td><td><code>30406</code></td></tr>
 <tr><td><code>getppid()</code> en el padre</td><td>PID de la shell (<code>bash</code>) que lanzó el programa</td></tr>
 <tr><td><code>getppid()</code> en el hijo</td><td><code>30405</code> (su creador es el padre)</td></tr>
-</tbody></table><p>El <code>if</code> puede ser <code>!= 0</code> (padre primero) o <code>== 0</code> (hijo primero), a gusto del programador.</p></details>
+</tbody></table><p>El <code>if</code> puede ser <code>!= 0</code> (padre primero) o <code>== 0</code> (hijo primero), a gusto del programador.</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como llegar a un cruce de caminos con una instrucción clara: si tu número asignado es mayor a cero toma el camino de la derecha; si tu número asignado es cero toma el de la izquierda.<span class="rompe">Dónde falla la analogía: Deja de servir si se omite la evaluación condicional con if/else, haciendo que ambos caminantes recorran ambos senderos e impriman los mismos mensajes por duplicado.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra cómo evaluar la variable que guarda el retorno de fork() mediante if (id_hijo != 0) para separar la lógica de código del padre respecto a la del hijo usando getpid() y getppid().</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Tratar de adivinar cuál de los dos procesos terminará primero su salida en la terminal, ya que el planificador de tiempo compartido del sistema asigna turnos dinámicamente.</p></div>
+</div>
+</details>
 
-<details class="section-block sec" id="para-repasar-clase-2"><summary><span class="stitle">Para repasar (Clase 2)</span></summary><p>Tarea moral (sin entrega): leer con calma el <strong>PDF 2 del Tema 1</strong> (procesos).</p></details>
+<details class="section-block sec" id="para-repasar-clase-2"><summary><span class="stitle">Para repasar (Clase 2)</span></summary><p>Tarea moral (sin entrega): leer con calma el <strong>PDF 2 del Tema 1</strong> (procesos).</p><div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como repasar la lista de verificación antes de encender un automóvil, asegurándote de comprender cómo funcionan las palancas de permisos y el duplicador de procesos.<span class="rompe">Dónde falla la analogía: Deja de servir si solo memorizas los nombres de las funciones sin compilar ni probar personalmente los programas en la terminal de Linux.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Garantiza la asimilación práctica de la creación de procesos con fork(), la gestión de identificadores PID/PPID y la seguridad con SetUID, bases para los temas de sockets.</p>
+</div>
+</details>
 
 <p class="empty" style="margin-top:28px">Teoría general de procesos, ejemplos en C y los <a href="programas.html" style="color:var(--indigo)">programas del profesor</a> están en el <a href="index.html#tema-1" style="color:var(--indigo)">Tema 1</a>.</p>
+
+<details class="section-block sec" id="c2-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Qué valor de retorno entrega la función fork() al proceso padre y cuál al proceso hijo en Linux?</summary><p>Al proceso padre le devuelve el identificador de proceso (PID) del hijo recién creado, mientras que al proceso hijo le devuelve exactamente el valor 0.</p></details>
+<details class="qa"><summary>2. Explica con tus palabras qué diferencia existe entre el ID real de usuario y el ID efectivo de usuario.</summary><p>El ID real identifica al usuario dueño legítimo de la cuenta registrado en /etc/passwd, mientras que el ID efectivo es el identificador de privilegios que el proceso asume temporalmente durante su ejecución.</p></details>
+<details class="qa"><summary>3. Si un archivo ejecutable tiene permisos iniciales 755 y aplicas el comando chmod 4755 sobre él, ¿qué permisos resultantes tendrá y en qué terna se activa la «s»?</summary><p>Tendrá permisos rwsr-xr-x (notación octal 4755), activando el bit SetUID representado con una letra «s» en la terna correspondiente al usuario dueño del archivo.</p></details>
+<details class="qa"><summary>4. Compara los permisos en notación decimal 644 y 755 indicando para qué tipo de archivo se recomienda cada uno.</summary><p>El permiso 644 otorga lectura y escritura al dueño y solo lectura a grupo y otros, ideal para archivos de texto editables; el 755 otorga además permiso de ejecución a las tres ternas, ideal para ejecutables.</p></details>
+<details class="qa"><summary>5. ¿Cuáles son los dos únicos atributos en los que un proceso hijo difiere de su proceso padre tras llamar a la función fork()?</summary><p>Difiere únicamente en su propio identificador de proceso (PID) y en el identificador de su proceso padre (PPID).</p></details>
+<details class="qa"><summary>6. Explica qué sucede si dentro de un programa en C que llama a fork() no se incluye una estructura condicional if/else para evaluar el valor devuelto.</summary><p>Tanto el proceso padre como el proceso hijo continuarán ejecutando de forma independiente y duplicada todo el código fuente situado después de la llamada a fork().</p></details>
+<details class="qa"><summary>7. Si el proceso padre tiene un PID de 30405 y llama a fork(), ¿qué valores devolverán getpid() y getppid() dentro del bloque de ejecución del hijo?</summary><p>La función getpid() dentro del hijo devolverá su propio identificador (por ejemplo, 30406) y la función getppid() devolverá 30405, que corresponde al PID de su padre.</p></details>
+<details class="qa"><summary>8. Compara la salida en pantalla al ejecutar el programa de prueba del bit SetUID antes y después de aplicar chmod 4511 con un usuario no-root.</summary><p>Antes de aplicar chmod 4511 el programa muestra el mismo valor numérico para el usuario real y el efectivo (ej. 1000 y 1000); después de aplicarlo muestra usuario real 1000 y usuario efectivo 0 (root).</p></details>
+</details>
 
 </div>
 </body>
