@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="formato" content="estudio">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clase 01 — Fundamentos de Sistemas Embebidos</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<link rel="stylesheet" href="../../assets/style.css?v=20261001c">
 <script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
 <script src="../../assets/app.js?v=20261012a" defer></script>
 </head>
@@ -14,6 +15,17 @@
 <div class="detail-head" style="border-color:#A98BD1"><h2>Clase 01</h2>
   <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 26 ago 2026 · Tema 1 — Delimitación conceptual del sistema embebido frente a lo mecánico/analógico, docenas de ejemplos clasificados en vivo, electromecánica de motores, propiedades científicas de los materiales, y definición formal de computadora.</p>
 </div>
+
+<div class="section-block nota" style="border-left:3px solid #A98BD1"><p style="margin:0"><strong>Formato de estudio.</strong> Arriba, lo que probablemente viene en el examen y por qué. En cada tema, la explicación completa de la clase y, al final, el concepto explicado en simple, por qué importa y los errores comunes. Al final, preguntas para ponerte a prueba. Lo nuevo sale del audio de la clase procesado en NotebookLM.</p></div>
+
+<details class="section-block sec" id="c1-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>La definición formal de sistema embebido como el «ínfimo» (máxima cota inferior) de características de hardware y software respecto a una PC</strong><span class="evid">Evidencia: Lo dijo explícitamente el profesor al inicio de la sesión al definir la materia.</span></li>
+<li><strong>La diferencia entre un dispositivo electromecánico/analógico y un sistema embebido real</strong><span class="evid">Evidencia: Lo repitió durante toda la dinámica de análisis de ejemplos con los alumnos.</span></li>
+<li><strong>La definición de computadora (elementos de entrada, salida, procesador central y memoria)</strong><span class="evid">Evidencia: Lo explicó explícitamente al cierre de la clase en el pizarrón para introducir la Unidad 2.</span></li>
+<li><strong>El principio de funcionamiento electromecánico y el mantenimiento de las escobillas de carbón en motores</strong><span class="evid">Evidencia: Lo explicó en vivo con detalle al cuestionar el conocimiento técnico del grupo sobre herramientas eléctricas.</span></li>
+</ol>
+</details>
 
 <details class="section-block sec" id="c1-definicion-infimo"><summary><span class="stitle">Definición inicial: el sistema embebido como "ínfimo"</span></summary>
 <p>El profesor abrió la asignatura planteando el problema de definir con rigor qué es un sistema embebido. Para construirla desde una base técnica, recurrió a un concepto de las matemáticas puras: el <strong>ínfimo</strong>, que define textualmente como "la máxima cota inferior". Con esto estableció que un sistema embebido representa la cota mínima e indispensable de hardware y software necesaria para resolver una tarea específica — ni más ni menos de lo que la tarea exige.</p>
@@ -25,6 +37,13 @@
 <li><strong>Marcapasos:</strong> distinción tajante — los marcapasos digitales sí son sistemas embebidos; los modelos puramente mecánicos antiguos, no.</li>
 <li><strong>Reloj Casio:</strong> incorpora un sistema de control digital integrado diseñado específicamente para gobernar la pantalla — sí es un sistema embebido.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un traje a la medida que tiene exactamente la tela y los botones indispensables para la persona, sin adornos ni tela sobrante.<span class="rompe">Dónde falla la analogía: Un traje un poco más grande sigue sirviendo, pero si a un sistema le agregas elementos de cómputo innecesarios deja de ser el ínfimo para esa tarea acotada.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Establece el criterio fundamental del curso: diseñar sistemas con el mínimo de recursos de hardware y software que requiere una función dedicada.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir un circuito electrónico simple o de control directo sin procesador con un sistema embebido.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c1-debate-ejemplos"><summary><span class="stitle">Dinámica de clasificación: propuestas de los estudiantes</span></summary>
@@ -36,11 +55,25 @@
 <li><strong>Alarma contra incendios analógica:</strong> el profesor demostró en el pizarrón que no se requiere una computadora para hacer una alarma funcional: un sensor de humo conectado directamente a la base de un transistor; la línea de colector se conecta a la alimentación, y el emisor en serie con una resistencia y un zumbador (buzzer) hacia tierra. Al detectar humo, el sensor envía una corriente mínima a la base, el transistor entra en saturación y permite que la corriente fluya directo hacia el zumbador, cerrando el circuito a tierra y haciéndolo chillar.</li>
 <li><strong>Tamagotchi y calculadora:</strong> el Tamagotchi es "una computadora con un poquito"; la calculadora electrónica es una computadora digital dedicada.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como una dinámica en el salón donde el profesor pregunta por varios objetos comunes para decidir si tienen un «cerebro» digital o no.<span class="rompe">Dónde falla la analogía: En un juego de adivinanzas te fijas en cómo se ve el objeto por fuera; aquí la clasificación depende de su arquitectura interna.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Enseña a analizar si un dispositivo requiere procesamiento de datos antes de clasificarlo como sistema embebido.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Asumir que todo aparato automático o moderno contiene una computadora interna.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c1-medidor-cfe"><summary><span class="stitle">Caso de estudio: el medidor de consumo eléctrico de la CFE</span></summary>
 <p>El <strong>medidor electromecánico antiguo</strong> funcionaba con un inductor por el que circulaba la corriente de la vivienda, generando un campo magnético que hacía girar un disco. Ese giro se transmitía a un tren de engranajes suaves que movían físicamente los contadores numéricos. El lastre de este sistema era su propia <strong>fricción mecánica</strong>: si el consumo de la casa era mínimo (del orden de un nanoamperio), el torque generado por el campo magnético era insuficiente para vencer la fricción de los engranes, y ese consumo simplemente no se registraba.</p>
 <p>En un <strong>medidor digital</strong>, cada transistor tiene una corriente de activación específica; si esa corriente de activación es mayor que el consumo real del hogar, el medidor tampoco se "despierta" ni registra la lectura. El profesor conectó esto con el fenómeno del <strong>consumo fantasma</strong>: los aparatos modernos conectados continuamente en modo de espera (standby) generan un consumo mínimo cada uno. Aunque cada consumo individual sea infinitesimal, matemáticamente la suma de infinitos consumos diminutos no es cero, sino que tiende a un valor significativo — el profesor lo explicó apoyándose en la idea de una sumatoria/límite matemático. Para capturar ese cobro que antes se perdía, la CFE implementó nuevos medidores digitales con corrientes de activación mucho más bajas, capaces de registrar cualquier flujo mínimo de corriente de los aparatos conectados.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como un molino donde el agua que pasa mueve una rueda y esa rueda hace girar unas manecillas que cuentan cuánta agua pasó.<span class="rompe">Dónde falla la analogía: El medidor no usa un flujo material: la inducción magnética de la corriente eléctrica hace girar un disco de aluminio conectado a engranes mecánicos.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Demuestra que se pueden resolver problemas de medición física continua con soluciones electromecánicas, sin chips ni código.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Creer que el medidor electromecánico tradicional de la CFE es un sistema embebido o tiene un microcontrolador.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c1-mas-ejemplos"><summary><span class="stitle">Más ejemplos: oxímetro, planchadora de tarjetas, termostato bimetálico, semáforo</span></summary>
@@ -50,11 +83,25 @@
 <li><strong>Termostato analógico bimetálico:</strong> formado por una tira bimetálica (como nitinol, o aleaciones de níquel y titanio) enrollada. Al cambiar la temperatura, un metal se dilata más rápido que el otro, generando una torsión mecánica. El profesor aclaró que no se puede usar aluminio con hierro porque el aluminio se dilata demasiado y el par se rompería. Para evitar requerir temperaturas extremas para lograr una vuelta completa, se agregan engranes reductores ("granitos") de modo que 1/8 de vuelta física se transforme en 1/2 vuelta de ajuste sobre una llave de bola — regulando la temperatura de forma completamente mecánica.</li>
 <li><strong>Semáforo electromecánico tradicional</strong> (creados a finales del siglo XIX): funcionan mediante un plato de madera o metal con agujeros o láminas de cobre, girado a velocidad constante sincronizada con la frecuencia de la red eléctrica. Al girar, las láminas de cobre tocan físicamente tres escobillas correspondientes a las luces verde, amarilla y roja.</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como una regla que se dobla con el calor y, al doblarse, activa algo sin necesidad de botones ni pantallas.<span class="rompe">Dónde falla la analogía: Una regla doblada no vuelve a hacer nada útil por sí sola, mientras que mecanismos como el termostato bimetálico o el semáforo de plato funcionan en ciclos continuos.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra alternativas físicas y térmicas robustas para controlar algo sin software ni componentes electrónicos costosos.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Confundir semáforos mecánicos antiguos de plato o termostatos bimetálicos con sistemas digitales programados.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c1-electromecanica"><summary><span class="stitle">Electromecánica de motores y por qué se usa carbón</span></summary>
 <p>Al detectar que los estudiantes de Ingeniería en Computación desconocían el funcionamiento de herramientas eléctricas básicas, el profesor explicó el <strong>taladro de corriente alterna</strong>: no contiene imanes permanentes, sino bobinas tanto en el estator como en el rotor. En el eje del rotor hay un conjunto de escobillas que hacen contacto físico con bloques de carbón (el conmutador). Al aplicar corriente se generan polos Norte y Sur magnéticos en estator y rotor, provocando el giro. Para evitar que el motor se detenga cuando los polos opuestos se alinean (Norte con Sur), el propio conmutador invierte la polaridad mecánicamente en cada media vuelta, manteniendo el giro continuo.</p>
 <p>¿Por qué carbón? El contacto entre las escobillas y el conmutador genera fricción intensa; si se usara metal contra cobre, la fricción destruiría las piezas. Se necesita un material suave, conductor de electricidad, que además funcione como lubricante sólido: el carbón cumple las tres condiciones. Se desgasta paulatinamente hasta que el resorte ya no logra empujarlo contra el conmutador, momento en el que el motor se detiene. En vez de desechar la herramienta, el profesor recomendó reemplazar los carbones por unos cuantos pesos en tiendas de refacciones (mencionó la calle República de Uruguay como ejemplo), extendiendo la vida útil del motor de forma muy económica.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como la goma de un lápiz que se va desgastando para proteger el papel: cuando se acaba le pones otra en lugar de tirar el lápiz.<span class="rompe">Dónde falla la analogía: La goma solo borra, mientras que el carbón además conduce electricidad hacia el rotor y lubrica mientras se desgasta por fricción.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Enfatiza que el ingeniero conozca la física de materiales y el mantenimiento electromecánico en lugar de reemplazar aparatos completos.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Pensar que un taladro o una licuadora que dejó de funcionar tiene el motor quemado, cuando muchas veces solo se agotaron las escobillas de carbón.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c1-propiedades-materiales"><summary><span class="stitle">Definiciones científicas de propiedades de los materiales</span></summary>
@@ -63,6 +110,13 @@
 <li><strong>Tenacidad o extensibilidad:</strong> el acero, bajo la definición científica estricta, no es "duro" (se raya si se le talla con algo más duro), pero tiene la capacidad de deformarse o doblarse sin romperse, lo que lo hace ideal para estructuras.</li>
 <li><strong>Ductilidad:</strong> capacidad de un material de estirarse significativamente en hilos o láminas sin fracturarse. El oro es sumamente dúctil y extensible, pero blando (carece de dureza).</li>
 </ul>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como pegar una tira de papel con una de plástico: al mojar el papel, se estira y toda la tira se dobla hacia un lado.<span class="rompe">Dónde falla la analogía: El papel se deshace con el agua, mientras que metales como el níquel y el titanio se dilatan con el calor de forma reversible.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Explica cómo la ciencia de materiales permite construir sensores térmicos pasivos sin electrónica ni algoritmos.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Combinar metales sin evaluar su dilatación: el profesor aclaró que no se puede usar aluminio con hierro porque el aluminio se dilata demasiado y el par se rompería.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c1-tabla-final"><summary><span class="stitle">Clasificación exhaustiva del resto de ejemplos propuestos</span></summary>
@@ -93,10 +147,36 @@
 <tr><td>Walkie-talkie de los 80, aire acondicionado analógico, lector de cinta magnética, tornamesa</td><td>Analógicos / mecánicos</td><td>Basados en RF analógica, circuitos de refrigeración analógicos y cabezales magnéticos convencionales.</td></tr>
 </tbody></table>
 <p>Al concluir la revisión, el profesor señaló a la clase que quienes clasificaron ejemplos analógicos o mecánicos como "sistemas embebidos" cometieron el error conceptual central que la clase buscaba corregir.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como separar juguetes en dos cajas: los de cuerda o pilas directas, y los que tienen un chip programado adentro.<span class="rompe">Dónde falla la analogía: Separar juguetes no tiene consecuencias; en ingeniería la clasificación decide si hay que desarrollar firmware y lógica digital o circuitos analógicos.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Ejercita el criterio para identificar la presencia de procesador y memoria en dispositivos comerciales reales.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Clasificar circuitos analógicos con transistores, como la alarma con sensor de humo, como sistemas embebidos.</p></div>
+</div>
 </details>
 
 <details class="section-block sec" id="c1-computadora"><summary><span class="stitle">Definición formal de computadora y procesadores</span></summary>
 <p>Para cerrar la sesión e iniciar formalmente el estudio de los procesadores, el profesor definió una computadora como: <em>"una máquina que consta de elementos de entrada, elementos de salida, procesador central y memoria"</em>.</p>
+<div class="estudio-extra">
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como una oficina con una puerta para recibir documentos, un archivo para guardarlos, un contador que hace los cálculos y una ventanilla para entregar resultados.<span class="rompe">Dónde falla la analogía: La oficina trabaja a ritmo humano, mientras que la computadora procesa instrucciones a millones de ciclos por segundo.</span></p></div>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Define la arquitectura de entrada, salida, procesador central y memoria que sirve de base para el resto del curso.</p>
+<div class="errores"><p><strong>Errores comunes:</strong> Olvidar que para ser computadora (y sistema embebido) el dispositivo necesita procesador, memoria y periféricos.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c1-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<p>Intenta contestar cada pregunta antes de abrirla. Recordar por tu cuenta es lo que fija la información; releer no la fija.</p>
+<details class="qa"><summary>1. ¿Cuál es la definición de computadora que dio el profesor al final de la clase?</summary><p>Una máquina con elementos de entrada, elementos de salida, un procesador central y memoria para realizar cálculos.</p></details>
+<details class="qa"><summary>2. Explica con tus palabras por qué el profesor usó el término matemático «ínfimo» para definir un sistema embebido.</summary><p>Porque un sistema embebido es la máxima cota inferior de recursos de hardware y software: lo mínimo indispensable de cómputo para cumplir su función específica, sin excesos.</p></details>
+<details class="qa"><summary>3. Una alarma usa un sensor de humo conectado a la base de un transistor que activa un zumbador, sin microcontrolador. ¿Qué habría que cambiar para que fuera un verdadero sistema embebido?</summary><p>Incorporar un microcontrolador con memoria que lea la señal del sensor por un puerto de entrada y, con software, decida activar la alarma por un puerto de salida.</p></details>
+<details class="qa"><summary>4. ¿En qué se diferencia un semáforo mecánico de plato giratorio de un semáforo digital moderno?</summary><p>El mecánico usa un plato de madera o metal con láminas de cobre que gira a velocidad constante sincronizada con la frecuencia de la red eléctrica y toca escobillas para cada luz; el digital usa un microcontrolador con temporizadores y memoria de programa.</p></details>
+<details class="qa"><summary>5. ¿Por qué los motores de taladros o licuadoras usan escobillas de carbón y qué mantenimiento requieren cuando se detienen?</summary><p>El carbón es suave, conduce electricidad y funciona como lubricante sólido, así que se desgasta él y no el metal del motor; cuando se agota, basta con reemplazar las escobillas.</p></details>
+<details class="qa"><summary>6. Explica cómo opera un termostato bimetálico sin electricidad ni procesamiento digital.</summary><p>Une dos metales que se dilatan distinto con el calor (como níquel y titanio); al cambiar la temperatura, uno se dilata más que el otro y genera una torsión mecánica que acciona el mecanismo.</p></details>
+<details class="qa"><summary>7. Si alguien propone clasificar el medidor de luz electromecánico de disco de la CFE como sistema embebido, ¿cuál es el veredicto según la clase y por qué?</summary><p>No lo es: es un dispositivo electromecánico puro donde la corriente induce el giro de un disco de aluminio conectado a engranes, sin procesador, memoria ni software.</p></details>
+<details class="qa"><summary>8. Compara una serie navideña simple con un control remoto de televisión.</summary><p>La serie navideña es un circuito eléctrico directo sin lógica programable ni procesamiento; el control remoto es un sistema embebido con un microcontrolador especializado cuya única función es generar el tren de pulsos.</p></details>
 </details>
 
 <details class="section-block sec" id="c1-contexto"><summary><span class="stitle">Contexto — no examen</span></summary>

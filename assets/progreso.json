@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-20T18:37:00+00:00",
+ "generatedAt": "2026-10-20T18:41:51+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -228,7 +228,7 @@
     "fecha": "2026-08-26",
     "resumen": "Tema 1 — Delimitación conceptual del sistema embebido frente a lo mecánico/analógico, docenas de ejemplos clasificados en vivo, electromecánica de motores, propiedades científicas de los materiales, y definición formal d",
     "url": "materias/fundamentos-de-sistemas-embebidos/clase-01.html",
-    "formato": "prosa"
+    "formato": "estudio"
    },
    {
     "num": 2,
@@ -734,6 +734,11 @@
  },
  "gitlog": [
   {
+   "hash": "edc55e0",
+   "fecha": "2026-10-20T12:37:00-06:00",
+   "mensaje": "ASI Clase 01: formato de estudio"
+  },
+  {
    "hash": "c7d53c5",
    "fecha": "2026-10-20T12:33:50-06:00",
    "mensaje": "ACS Clase 02: formato de estudio"
@@ -1027,11 +1032,6 @@
    "hash": "9aec770",
    "fecha": "2026-10-09T17:49:57Z",
    "mensaje": "Pendientes: examen de FSE (15 oct) y cuenta regresiva en cada tarjeta"
-  },
-  {
-   "hash": "c89b6f4",
-   "fecha": "2026-10-08T20:18:21-06:00",
-   "mensaje": "Agregar pendientes.json con tareas visibles en home - ACS Tarea 4 incluida"
   }
  ]
 }
