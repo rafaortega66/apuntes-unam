@@ -137,7 +137,7 @@ decimo/<SIGLA>/<SIGLA>-<Categoría>/<SIGLA>-XNN/
 - Labs: Lab FSE en `FSE/FSE-Lab/` (mismo profesor); Lab OAC (L+) en `OAC/OAC-Lab/` con `OAC-Lab-Material/`.
 - **ASI** (reorganizado el 19 oct 2026, pedido del usuario): dos carpetas. `ASI/ASI-Practicas/` (P01–P04, T01 ENOE/ENIGH, R01 reposición) y
   `ASI/ASI-Proyecto/` = el proyecto final Scrum (Equipo 10) **por sprints**: `ASI-Sprint0/` (Proy01 Formato 1, Proy02 diagramas UML),
-  `ASI-Sprint1/` (Proy03), `ASI-Sprint2/` (Proy04, Proy05), `ASI-Sprint3/` (en curso: Samba, SSH, permisos)… Cada sprint lleva un `README.md`
+  `ASI-Sprint1/` (Proy03), `ASI-Sprint2/` (Proy04, Proy05), `ASI-Sprint3/` (Proy06; Samba, SSH, permisos)… Cada sprint lleva un `README.md`
   y `ASI-Proyecto/README.md` tiene la tabla de sprints. Cada reporte semanal nuevo = siguiente `ASI-ProyNN` dentro de su sprint.
   `proyectos.html` se genera agrupado por sprint. + `ASI-Material/`.
 - Si hay versiones distintas de un archivo, la entregada en Classroom es la buena

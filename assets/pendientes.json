@@ -323,7 +323,8 @@
       "detalle": "HU04 Samba, HU05 SSH, HU06 grupos y permisos. El reporte semanal se entrega cada domingo en el formato Scrum + Git; la tarea aún no está publicada en Classroom (19 oct), fecha supuesta.",
       "link": "materias/administracion-de-servicios-de-internet/proyectos.html#ASI-Sprint3",
       "color": "#7C9CD6",
-      "tipo": "tarea"
+      "tipo": "tarea",
+      "oculto": true
     },
     {
       "id": "oac-t01",

@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-19T23:09:30+00:00",
+ "generatedAt": "2026-10-20T05:55:41+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -713,6 +713,11 @@
  },
  "gitlog": [
   {
+   "hash": "7b68119",
+   "fecha": "2026-10-19T17:09:30-06:00",
+   "mensaje": "Indicaciones de Classroom descargadas (MD 3.4 + diabetes demo.csv, RP Tarea 2, Lab OAC previo P5 y reporte P4); OAC Trabajos 1–2 y Proyectos 1–2 mostrados en clase, faltan evidencias"
+  },
+  {
    "hash": "ae5b0af",
    "fecha": "2026-10-19T16:59:37-06:00",
    "mensaje": "Pendientes al 19 oct (verificado en Classroom, sin entregas atrasadas): MD 3.4, RP Tarea 2, Lab OAC Previo 1 y Reporte P4, Sprint 3 de ASI; OAC Trabajos 1–2 y Proyectos 1–2 como pendientes de revisión en clase; MD 3.3 registrada; se ocultan los ya entregados"
@@ -1006,11 +1011,6 @@
    "hash": "a774382",
    "fecha": "2026-10-07T23:39:20-06:00",
    "mensaje": "Pendientes actualizados al 7 oct + índice de búsqueda regenerado"
-  },
-  {
-   "hash": "2e5bbb0",
-   "fecha": "2026-10-07T23:39:08-06:00",
-   "mensaje": "Stubs de clases faltantes (5-6 oct)"
   }
  ]
 }
