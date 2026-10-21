@@ -360,8 +360,7 @@ generar clases en NotebookLM (el usuario lo descartó por costo de tokens).
 **Pendiente, en este orden:**
 1. **ASI — práctica de auditoría de BD (equipos de 3)**, dejada en la Clase 14: buscar en Classroom
    su fecha y número de entrega y registrarla (`pendientes.json`, `decimo/ASI/ASI-Practicas/`, `build_entregas.py`). En clase no se dijo fecha.
-2. **RP — diapositivas de árboles de decisión / Random Forest** (Clase 16): no están en
-   `decimo/RP/RP-Material/` (lo último es `Clase-13-SVM.pdf`); buscarlas en Classroom (descargar pide permiso) y enlazarlas en `clase-16.html` y `material.html`.
+2. ~~RP — diapositivas de árboles de decisión / Random Forest~~ **hecho el 21 oct 2026**: `Clase-14-CART-y-Random-Forest.pdf` (deck 14 del profesor) en `RP-Material/`, enlazado en `clase-16.html` y `material.html`.
 3. ~~Migrar las 4 páginas en formato viejo~~ **hecho el 20 oct 2026** (ACS 02, ASI 01, FSE 01, ACS 01, desde NotebookLM): ya no queda ninguna clase en formato viejo.
 4. **Clases del martes 20 oct:** **ACS Clase 16 hecha** (20 oct, desde NotebookLM). **SIB no tuvo clase** (la profesora fue a la entrega de diplomas
    del Diplomado en Ciberseguridad): dejó el ejercicio **SIB-EC07** (investigación del Equipo 4, ya entregado; al
