@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-21T16:53:45+00:00",
+ "generatedAt": "2026-10-21T17:25:36+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -755,6 +755,11 @@
  },
  "gitlog": [
   {
+   "hash": "0ec5cd6",
+   "fecha": "2026-10-21T10:53:48-06:00",
+   "mensaje": "MD Clase 14 (20 oct) y OAC Clase 13 (21 oct) en formato de estudio desde NotebookLM: regresión en vino y series de tiempo; Orange Pi, Raspberry Pi 5, VNC/WinSCP y Pico 2"
+  },
+  {
    "hash": "023472c",
    "fecha": "2026-10-20T23:34:18-06:00",
    "mensaje": "Pendientes: quitar los avisos de lo ya entregado"
@@ -1048,11 +1053,6 @@
    "hash": "7500c92",
    "fecha": "2026-10-12T16:47:14-06:00",
    "mensaje": "FSE: agregar diapositivas Clase 07 y 08 (U2) del Classroom"
-  },
-  {
-   "hash": "4750b13",
-   "fecha": "2026-10-12T16:36:31-06:00",
-   "mensaje": "Lab FSE: «Manuales» en vez de guiones, nombres de las 8 prácticas con estatus de Classroom, P6 con Pico (manual 6b)"
   }
  ]
 }

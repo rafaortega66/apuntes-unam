@@ -134,54 +134,6 @@
       "link": "decimo/OAC/OAC-Lab/OAC-P04/OAC-P04-indicaciones.md",
       "color": "#7C9CD6",
       "tipo": "tarea"
-    },
-    {
-      "id": "oac-t01",
-      "materia": "OAC",
-      "sigla": "OAC",
-      "titulo": "Evidencias: Trabajo 1 — Raíz cuadrada en ensamblador",
-      "vence": null,
-      "hora_confirmada": false,
-      "detalle": "Ya se mostró al profesor en clase (confirmado por el usuario el 19 oct). Falta volver a correrlo y mandar las evidencias (capturas/salida). Código en decimo/OAC.",
-      "link": "materias/organizacion-y-arquitectura-de-computadoras/tareas.html#OAC-T01",
-      "color": "#45B8A8",
-      "tipo": "tarea"
-    },
-    {
-      "id": "oac-t02",
-      "materia": "OAC",
-      "sigla": "OAC",
-      "titulo": "Evidencias: Trabajo 2 — Producto punto en ensamblador (FPU)",
-      "vence": null,
-      "hora_confirmada": false,
-      "detalle": "Ya se mostró al profesor en clase (confirmado por el usuario el 19 oct). Falta volver a correrlo y mandar las evidencias (capturas/salida). Código en decimo/OAC.",
-      "link": "materias/organizacion-y-arquitectura-de-computadoras/tareas.html#OAC-T02",
-      "color": "#45B8A8",
-      "tipo": "tarea"
-    },
-    {
-      "id": "oac-proy01",
-      "materia": "OAC",
-      "sigla": "OAC",
-      "titulo": "Evidencias: Proyecto 1 — Seno y coseno por series de Taylor (FPU, Pico 2)",
-      "vence": null,
-      "hora_confirmada": false,
-      "detalle": "Ya se mostró al profesor en clase (confirmado por el usuario el 19 oct). Falta volver a correrlo y mandar las evidencias (capturas/salida). Código en decimo/OAC.",
-      "link": "materias/organizacion-y-arquitectura-de-computadoras/proyectos.html#OAC-Proy01",
-      "color": "#45B8A8",
-      "tipo": "tarea"
-    },
-    {
-      "id": "oac-proy02",
-      "materia": "OAC",
-      "sigla": "OAC",
-      "titulo": "Evidencias: Proyecto 2 — Filtro IIR de 2º orden subamortiguado (FPU, Pico 2)",
-      "vence": null,
-      "hora_confirmada": false,
-      "detalle": "Ya se mostró al profesor en clase (confirmado por el usuario el 19 oct). Falta volver a correrlo y mandar las evidencias (capturas/salida). Código en decimo/OAC.",
-      "link": "materias/organizacion-y-arquitectura-de-computadoras/proyectos.html#OAC-Proy02",
-      "color": "#45B8A8",
-      "tipo": "tarea"
     }
   ]
 }
