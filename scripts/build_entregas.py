@@ -89,7 +89,7 @@ ESTADO = {
     'SIB-EC02': 'Resuelto en mis apuntes · sin confirmar si se entregó',
     'MD-P03-3': 'Entregada (Classroom; la subió una compañera del Equipo 7)',
     'MD-P03-4': 'Pendiente · vence jueves 22 oct, 13:00', 'RP-T02': 'Pendiente · vence viernes 23 oct, 07:00',
-    'OAC-P04': 'Reporte pendiente · vence viernes 23 oct, 23:59', 'OAC-P05': 'Previo pendiente · vence martes 20 oct, 23:59',
+    'OAC-P04': 'Reporte pendiente · vence viernes 23 oct, 23:59', 'OAC-P05': 'Entregada (20 oct 2026, antes de las 23:59)',
     'OAC-T01': 'Mostrada al profesor en clase · falta enviar evidencias (volver a correrla)',
     'OAC-T02': 'Mostrada al profesor en clase · falta enviar evidencias (volver a correrla)',
     'OAC-Proy01': 'Mostrado al profesor en clase · falta enviar evidencias (volver a correrlo)',

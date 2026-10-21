@@ -275,7 +275,8 @@
       "detalle": "Individual, 1–2 páginas sin portada: direccionamiento implícito (VF, INCREMENTA/CARGA, formato Prueba-VF-Liga-Salidas, 2^n × m, variante con µPC). No se acepta tarde.",
       "link": "decimo/OAC/OAC-Lab/OAC-P05/OAC-P05-indicaciones.md",
       "color": "#7C9CD6",
-      "tipo": "tarea"
+      "tipo": "tarea",
+      "oculto": true
     },
     {
       "id": "md-p34",
