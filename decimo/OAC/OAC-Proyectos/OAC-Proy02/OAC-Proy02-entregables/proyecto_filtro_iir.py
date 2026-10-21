@@ -11,7 +11,7 @@ import time
 TS = 0.05            # tiempo de muestreo [s]  -> fs = 20 Hz, Nyquist = 10 Hz
 F0 = 1.0             # frecuencia de corte [Hz] (debe ser < 10 Hz)
 ZETA = 0.707         # amortiguamiento (0.707 = Butterworth)
-MEDIO_PERIODO = 40   # muestras por semiciclo de la onda cuadrada (2 s)
+MEDIO_PERIODO = 20   # muestras por semiciclo de la onda cuadrada (1 s)
 RUIDO = False        # True: agrega ruido a la entrada para ver el filtrado
 
 assert F0 < 1 / (2 * TS), "F0 debe ser menor que la frecuencia de Nyquist"
