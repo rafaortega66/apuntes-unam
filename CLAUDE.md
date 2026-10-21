@@ -316,8 +316,10 @@ donde se presentó (si fue una exposición en vivo, no un PDF).
 ## Labs (decisión del usuario, 30 sep 2026)
 
 Los labs (Lab FSE, Lab OAC) **no tienen páginas `clase-NN` propias**: lo que
-se vea en el lab se documenta dentro de la página de teoría de su materia
-(FSE u OAC) del día correspondiente. Sus `index/material/entregas` se mantienen.
+se vea en el lab de FSE se documenta dentro de la página de teoría de FSE del día
+correspondiente. **Lab OAC no se documenta en ningún lado** (el usuario lo usa solo
+para hacer las prácticas como las pide el ing. Ricardo; corrección del 21 oct 2026).
+Sus `index/material/entregas` se mantienen.
 
 ## Sección global "Pendientes" — oculta (29 sep 2026)
 

@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-21T17:25:36+00:00",
+ "generatedAt": "2026-10-21T21:52:21+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -333,6 +333,13 @@
     "fecha": "2026-10-19",
     "resumen": "Tema 3 (3.2–3.3) — Instanciación de un proceso y lectura del encabezado del ejecutable, ciclo de vida (WAIT → READY → RUNNING) y la regla de que un proceso bloqueado nunca vuelve directo a RUNNING, estados extendidos (PE",
     "url": "materias/fundamentos-de-sistemas-embebidos/clase-15.html",
+    "formato": "estudio"
+   },
+   {
+    "num": 16,
+    "fecha": "2026-10-21",
+    "resumen": "Tema 3 (3.9, Linux embebido) — Cambio de orden del temario («salto cuántico»): cómo elegir la versión del kernel de Linux para un sistema embebido, el árbol de directorios con la raíz / , las familias de distribuciones y",
+    "url": "materias/fundamentos-de-sistemas-embebidos/clase-16.html",
     "formato": "estudio"
    }
   ],
@@ -755,6 +762,16 @@
  },
  "gitlog": [
   {
+   "hash": "d9525f5",
+   "fecha": "2026-10-21T11:25:42-06:00",
+   "mensaje": "OAC: subir los 4 reportes en PDF entregados (T01, T02, Proy01, Proy02) y la versión enviada del filtro IIR"
+  },
+  {
+   "hash": "a7d18ef",
+   "fecha": "2026-10-21T11:25:36-06:00",
+   "mensaje": "OAC: registrar la entrega por correo (21 oct) de Tareas 1 y 2 y Proyectos 1 y 2 al Mtro. Arredondo; quitar sus pendientes"
+  },
+  {
    "hash": "0ec5cd6",
    "fecha": "2026-10-21T10:53:48-06:00",
    "mensaje": "MD Clase 14 (20 oct) y OAC Clase 13 (21 oct) en formato de estudio desde NotebookLM: regresión en vino y series de tiempo; Orange Pi, Raspberry Pi 5, VNC/WinSCP y Pico 2"
@@ -1043,16 +1060,6 @@
    "hash": "66942df",
    "fecha": "2026-10-12T17:16:28-06:00",
    "mensaje": "FSE Clase 11: apuntes tipo libro (NotebookLM) como fuente en apuntes-fuente/"
-  },
-  {
-   "hash": "79bf9b2",
-   "fecha": "2026-10-12T17:06:38-06:00",
-   "mensaje": "Prompts de NotebookLM para apuntes tipo libro de FSE (U1 y U2 prioridad)"
-  },
-  {
-   "hash": "7500c92",
-   "fecha": "2026-10-12T16:47:14-06:00",
-   "mensaje": "FSE: agregar diapositivas Clase 07 y 08 (U2) del Classroom"
   }
  ]
 }

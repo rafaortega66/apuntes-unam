@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 16 — Fundamentos de Sistemas Embebidos</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Fundamentos de Sistemas Embebidos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 16</h2>
+  <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 21 oct 2026 · Tema 3 (3.9, Linux embebido) — Cambio de orden del temario («salto cuántico»): cómo elegir la versión del kernel de Linux para un sistema embebido, el árbol de directorios con la raíz <code>/</code>, las familias de distribuciones y las reglas para compilar el kernel en la Práctica 8.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>FSE-Clase16.m4a</code>), 21 oct 2026. Lo que NotebookLM pudo mezclar o inventar se marca en el texto. No es la sesión de lab (el Lab FSE es los martes); las indicaciones de la Práctica 8 se dieron en esta clase.</p>
+</div>
+
+<details class="section-block sec" id="c16-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Criterios para elegir el kernel de Linux de un sistema embebido: uno maduro y estable (LTS), no el más reciente.</strong><span class="evid">Evidencia: lo detalló con insistencia; solo se justifica una versión reciente si un hardware específico la exige.</span></li>
+<li><strong>Por qué un sistema de escritorio es mala idea en un equipo embebido (seguridad).</strong><span class="evid">Evidencia: lo ilustró con quioscos de comida rápida que acaban corriendo Doom o dan acceso al sistema por dejar habilitados el administrador de ventanas y atajos como Alt+Tab o Alt+F4.</span></li>
+<li><strong>Árbol de directorios con raíz <code>/</code> y puntos de montaje.</strong><span class="evid">Evidencia: lo explicó en el pizarrón y comparó macOS (<code>/Volumes</code>) con Linux (<code>/media</code>, <code>/mnt</code>). Evidencia media: no dijo que se evaluara.</span></li>
+<li><strong>Mantenimiento: suscribirse a la lista de kernel.org y evaluar cada parche.</strong><span class="evid">Evidencia: contrastó una rama estable (muy pocos correos) con una rama en desarrollo (decenas de correos al día). Evidencia débil como pregunta de examen.</span></li>
+<li><strong>Reglas de la Práctica 8: la primera compilación del kernel se hace en casa.</strong><span class="evid">Evidencia: lo marcó como obligatorio y prohibió compilar por primera vez en las computadoras del laboratorio. Es para la práctica, no para el examen.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c16-temario"><summary><span class="stitle">1 · Cambio de orden del temario («salto cuántico»)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Una reorganización que decidió el profesor: ver primero la selección de Linux y la compilación del kernel y dejar para después los algoritmos de planificación de propósito general (como Round Robin) y las frecuencias del <em>scheduler</em>.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es saltarte unos capítulos del manual del auto para aprender a cambiar las bujías porque esa semana tienes la práctica en el taller.<span class="rompe">Dónde deja de servir: la teoría de planificación omitida sigue haciendo falta para ajustar tiempos de respuesta.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El profesor reconoció que se había saltado esa explicación y, para no retrasar las prácticas, propuso adelantarse («un salto cuántico al futuro»). Preguntó si alguien se oponía y nadie lo hizo, así que reestructuró la agenda para que se entienda primero la compilación de Linux.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Liga la teoría de sistemas operativos del <a href="clase-15.html">Tema 3</a> con el trabajo en las tarjetas Raspberry Pi del laboratorio.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> pensar que planificación y <em>scheduler</em> de propósito general se eliminaron del curso; solo se pospusieron.</p></div>
+</details>
+
+<details class="section-block sec" id="c16-kernel"><summary><span class="stitle">2 · Cómo elegir el kernel de Linux para un sistema embebido</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El criterio de ingeniería para decidir sobre qué versión del kernel (de kernel.org) se construye la imagen del sistema embebido.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es elegir el motor de un camión de trabajo: no le pones uno de carreras recién salido que falla seguido, sino uno probado por años, con fallas y refacciones ya conocidas.<span class="rompe">Dónde deja de servir: un motor no recibe parches digitales; un kernel sí, y hay que vigilarlos.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Regla:</strong> en un sistema embebido se elige un kernel estable, maduro y probado (versiones de soporte largo, LTS). Una versión reciente solo se justifica si un componente de hardware de última generación tiene su controlador únicamente ahí.</p>
+<p><strong>Monitoreo:</strong> hay que suscribirse a la lista de notificaciones de kernel.org. Con una versión madura (el ejemplo fue un kernel 4.x) llegan muy pocos correos, alrededor de 2 al año. Con una rama en desarrollo activo (el ejemplo fue el 6.11) llegan hasta unos 30 al día, con reportes de errores que nadie ha probado. El profesor contó el caso de un alumno de otra generación que se suscribió a la rama equivocada y se llenó la bandeja.</p>
+<p><strong>Parches:</strong> cada vez que sale uno, se evalúa si corrige un error que afecta tu sistema (y se integra) o si rompe la estabilidad de otros controladores.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Evita retrasos en el desarrollo y vulnerabilidades en el producto final. Es la base de la compilación del kernel de la Práctica 8.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> elegir siempre la versión más reciente por parecer «la mejor», o no vigilar los parches de seguridad de la versión elegida. <em>(NotebookLM escribió «versiones LTS o “I like to fork”»; lo segundo suena a un chiste del profesor y no es un tipo de kernel.)</em></p></div>
+</details>
+
+<details class="section-block sec" id="c16-escritorio"><summary><span class="stitle">3 · Por qué no usar un sistema de escritorio en un equipo embebido</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El riesgo de poner un sistema operativo de escritorio (con administrador de ventanas y atajos) como base de un equipo de propósito específico, como un quiosco o terminal pública.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es dejar la caja registradora con la puerta de la bodega abierta: el cliente solo debía ver el menú, pero con un atajo llega a donde no debe.<span class="rompe">Dónde deja de servir: no todo equipo con escritorio es inseguro; depende de cómo se configure.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Ejemplo del profesor: terminales de autoservicio de cadenas de comida rápida que, por tener un escritorio mal protegido, terminan corriendo Doom. Con un atajo como Alt+Tab o Alt+F4 se puede cerrar la aplicación principal y llegar al sistema, incluso al usuario con privilegios. Es una falla grave de seguridad y, además, de desorden del sistema.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Justifica usar un Linux mínimo en modo consola, como pide el laboratorio (ver la <a href="clase-13.html#c13-pendiente">Clase 13</a>).</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> dejar habilitados el administrador de ventanas y los atajos de teclado en un equipo de uso público.</p></div>
+</details>
+
+<details class="section-block sec" id="c16-raiz"><summary><span class="stitle">4 · Árbol de directorios, raíz <code>/</code> y familias de distribuciones</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>En sistemas tipo UNIX/POSIX hay una sola jerarquía: todo directorio, archivo, partición y dispositivo cuelga de un nodo origen, la raíz <code>/</code>. No existen letras de unidad como <code>C:</code> o <code>D:</code>.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un árbol genealógico con un solo tronco: todas las ramas nacen de la raíz y no hay otros troncos flotando al lado.<span class="rompe">Dónde deja de servir: las ramas de un árbol no se desprenden y se pegan en otro sitio, pero en Linux un USB sí se monta en la rama que elijas.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Puntos de montaje:</strong> en macOS los dispositivos externos aparecen bajo <code>/Volumes</code>; en Linux moderno, bajo <code>/media</code>; y en Linux tradicional o con montaje manual, bajo <code>/mnt</code>.</p>
+<p><strong>Árbol de familias:</strong> de UNIX derivan Linux, Minix y BSD (de BSD salen macOS y FreeBSD). En Linux hay tres familias principales:</p>
+<ul>
+<li><strong>Debian:</strong> Ubuntu, Linux Mint y Raspberry Pi OS; usan el gestor <code>apt</code>.</li>
+<li><strong>Red Hat:</strong> Fedora y SUSE; usan paquetes RPM con <code>dnf</code> o <code>yum</code>. <em>(NotebookLM mete a SUSE aquí; SUSE usa RPM pero no es de la rama Red Hat, así que conviene confirmarlo con tus apuntes.)</em></li>
+<li><strong>Independientes:</strong> como Arch.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la base para construir el sistema de archivos raíz (RootFS) de una distribución embebida y ubicar binarios, librerías e intérpretes (<code>bash</code>, <code>sh</code>).</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> buscar letras de unidad al estilo Windows en Linux, o intentar construir una distribución sin estructurar bien la partición raíz.</p></div>
+</details>
+
+<details class="section-block sec" id="c16-p8"><summary><span class="stitle">5 · Laboratorio: reglas para la Práctica 8 (compilar el kernel)</span></summary>
+<div class="concepto">
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>Primera compilación en casa, antes del laboratorio.</strong> Es obligatorio.</li>
+<li><strong>Tiempos estimados:</strong> unos 45 minutos en un equipo potente (SSD, procesador de 12 núcleos y 32 GB de RAM); entre 4 y 6 horas en equipos modestos o con disco duro mecánico.</li>
+<li><strong>Recomendación:</strong> dejar la máquina compilando la noche anterior.</li>
+<li><strong>Prohibido</strong> descargar o compilar el kernel por primera vez en las computadoras del laboratorio: no hay tiempo, los equipos no son potentes y no se tienen permisos elevados. Al laboratorio se llega con la primera compilación lista para hacer pruebas y modificaciones.</li>
+</ul>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> llegar al laboratorio sin la primera compilación hecha.</p></div>
+</details>
+
+<details class="section-block sec" id="c16-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿A qué se refiere el «salto cuántico» del profesor?</summary><p>A adelantar la selección y compilación del kernel de Linux, dejando para después la planificación de propósito general (Round Robin).</p></details>
+<details class="qa"><summary>2. ¿Por qué no usar la versión más reciente del kernel en un sistema embebido?</summary><p>Porque recibe reportes de errores y cambios a diario que pueden desestabilizar el sistema; conviene una versión madura (LTS) de la que ya se conozcan los parches.</p></details>
+<details class="qa"><summary>3. Un chip WiFi nuevo solo tiene controlador en una versión reciente del kernel. ¿Qué haces?</summary><p>Solo en ese caso se justifica adoptar esa versión, pero hay que suscribirse a la lista de correo de esa rama y vigilar los errores y parches.</p></details>
+<details class="qa"><summary>4. ¿Dónde se monta un USB en macOS y en Linux?</summary><p>En macOS bajo <code>/Volumes</code>; en Linux bajo <code>/media</code> o, manualmente, en <code>/mnt</code>.</p></details>
+<details class="qa"><summary>5. ¿De qué distribución se basa Raspberry Pi OS y qué gestor de paquetes usa?</summary><p>De Debian; usa <code>apt</code>.</p></details>
+<details class="qa"><summary>6. ¿Por qué no es conveniente un escritorio completo en un quiosco público?</summary><p>Porque el administrador de ventanas y atajos como Alt+Tab o Alt+F4 permiten cerrar la aplicación y llegar al sistema o a privilegios de administrador.</p></details>
+<details class="qa"><summary>7. ¿Por qué no compilar el kernel por primera vez en el laboratorio?</summary><p>Puede tardar de 45 minutos a 6 horas, el laboratorio no tiene tiempo ni equipos potentes y no hay permisos de compilación elevados.</p></details>
+<details class="qa"><summary>8. ¿Qué gestor de paquetes usan la familia Debian y la familia Red Hat?</summary><p>Debian: <code>apt</code>. Red Hat: RPM, con <code>dnf</code> o <code>yum</code>.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c16-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>Chistes de «madurez»:</strong> bromeó con que «nos gustan maduros» los kernels y que cambiar de kernel a cada rato es como andar cuidando niños caprichosos; también hizo una referencia histórica antigua para criticar el desorden de Windows 10 IoT y se disculpó por ella.</li>
+<li><strong>Doom en los quioscos:</strong> le divierte ver terminales de autoservicio corriendo Doom.</li>
+<li><strong>Fortnite:</strong> bromeó con que compilar el kernel es fácil y que para que alcance el tiempo basta con «renunciar al Fortnite».</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c16-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Práctica 8 (Linux/kernel):</strong> hacer la primera compilación del kernel en casa antes de la sesión de laboratorio (ver arriba).</li>
+<li><strong>Próxima clase:</strong> según NotebookLM, seguir con los componentes del sistema operativo y la preparación de herramientas; sin confirmar. En la <a href="clase-15.html#c15-pendiente">Clase 15</a> había quedado pendiente seguir con tareas de tiempo real y planificación (subtema 3.3), que ahora se pospone.</li>
+<li><strong>Tareas:</strong> no se asignó ninguna nueva en esta sesión, según NotebookLM.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Kernel embebido: estable y maduro (LTS); solo uno reciente si el hardware lo exige; vigilar parches en kernel.org.</li>
+<li>Escritorio en equipos públicos = riesgo (Alt+Tab, Alt+F4, acceso al sistema).</li>
+<li>Raíz <code>/</code> única; <code>/Volumes</code> (macOS), <code>/media</code> y <code>/mnt</code> (Linux); Raspberry Pi OS es Debian (<code>apt</code>).</li>
+<li>Práctica 8: la primera compilación del kernel se hace en casa (45 min a 6 h).</li>
+</ul></div>
+
+</div>
+</body>
+</html>
