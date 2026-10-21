@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 13 — Organización y Arquitectura de Computadoras</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Organización y Arquitectura de Computadoras</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Clase 13</h2>
+  <p class="prof">M.I. José Antonio de Jesús Arredondo Garza · 21 oct 2026 · Sin tema nuevo del temario — Segunda sesión sobre minicomputadoras (SBC): Orange Pi 5 y 6 frente a Raspberry Pi 5, herramientas de trabajo remoto (VNC, WinSCP, BalenaEtcher), las tarjetas de gama baja (Pi Zero 2 W y Orange Pi Zero 3 W) y por qué la Pico 2 no corre un sistema operativo completo.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>OAC-Clase13.m4a</code>), 21 oct 2026. No hubo código ni ejercicios numéricos. Las cifras dudosas de NotebookLM se marcan en el texto; continúa lo que se vio en la <a href="clase-12.html">Clase 12</a>.</p>
+</div>
+
+<details class="section-block sec" id="c13-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Por qué una Raspberry Pi grande corre un sistema operativo completo y la Pico 2 no.</strong><span class="evid">Evidencia: el profesor lo explicó de forma expresa: la Pi grande trae un módulo de RAM dinámica externo en la placa y la Pico 2 solo tiene su memoria interna.</span></li>
+<li><strong>Expansión de memoria de la Pico 2 con un módulo de 16 MB por SPI.</strong><span class="evid">Evidencia: planteó que con ese módulo y un SO mínimo sería técnicamente posible; fue su hipótesis, no algo que haya probado.</span></li>
+<li><strong>Diferencias de arquitectura: Orange Pi 5 (RK3588, 8 núcleos) frente a Raspberry Pi 5 (4 núcleos Cortex-A76).</strong><span class="evid">Evidencia: proyectó y comparó las especificaciones de ambas.</span></li>
+<li><strong>Para qué sirven VNC, WinSCP y BalenaEtcher.</strong><span class="evid">Evidencia: preguntó a los alumnos si las conocían (la mayoría no) y explicó la función de cada una. Evidencia débil como pregunta de examen: es más práctica que teoría.</span></li>
+<li><strong>Elegir una tarjeta de gama baja con Linux y Ethernet.</strong><span class="evid">Evidencia: comparó la Pi Zero 2 W (unos $500) con su HAT Ethernet frente a la Orange Pi Zero 3 W. Evidencia débil: no dijo que se evaluaría.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c13-orangepi"><summary><span class="stitle">1 · Orange Pi 5 y Orange Pi 6</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Una tarjeta monoplaca (SBC, <em>Single Board Computer</em>) de alto desempeño con un procesador ARM personalizado de 8 núcleos de 64 bits, el <strong>RK3588</strong>.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es ponerle a una camioneta de trabajo un motor de 8 cilindros: da una potencia enorme para procesar datos o varias cámaras sin una computadora de escritorio.<span class="rompe">Dónde deja de servir: para controlar unos pines resulta excesiva en costo, consumo y complejidad de configuración.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El profesor proyectó el esquema de la Orange Pi 5. El RK3588 integra <strong>8 núcleos: 4 Cortex-A76 (alto rendimiento) y 4 Cortex-A55 (eficiencia)</strong>, a 2.4 GHz de frecuencia base (se puede subir con overclock). Se vende con 4, 8, 16 y 32 GB de RAM y mide unos 10 cm × 6.2 cm.</p>
+<ul>
+<li><strong>Almacenamiento:</strong> ranura para SSD M.2 y ranura MicroSD (TF).</li>
+<li><strong>Puertos:</strong> HDMI, Ethernet RJ45, USB 2.0, USB 3.0 y USB tipo C para la alimentación.</li>
+<li><strong>WiFi:</strong> no trae módulo soldado, pero sí una ranura para insertar la tarjeta WiFi.</li>
+<li><strong>Cámaras:</strong> interfaces para hasta 3 cámaras a la vez, útil en visión e inteligencia artificial. NotebookLM añade «8 GB de memoria de video dedicada»; <em>no está confirmado y suena a confusión con la RAM total</em>.</li>
+</ul>
+<p>Mencionó la <strong>Orange Pi 6</strong>, más reciente, con un procesador de 12 núcleos (lanzada hacia noviembre o diciembre, según NotebookLM).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite procesamiento paralelo (visión artificial con varias cámaras) que rebasa a las tarjetas tradicionales de 4 núcleos.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> grabar en la Orange Pi la imagen de Linux hecha para Raspberry Pi: la Orange Pi 5 necesita su propia imagen para la arquitectura RK3588.</p></div>
+</details>
+
+<details class="section-block sec" id="c13-rpi5"><summary><span class="stitle">2 · Raspberry Pi 5 y disipación de calor</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La quinta generación de las minicomputadoras Raspberry Pi: CPU de 4 núcleos Cortex-A76 a 2.4 GHz, conector de 40 pines GPIO y WiFi integrado en la placa.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es una «computadora de bolsillo» estándar a la que se le pueden armar «pisos» adicionales (módulos HAT), por ejemplo uno para un disco SSD.<span class="rompe">Dónde deja de servir: en procesamiento paralelo extremo, sus 4 núcleos quedan por debajo de los 8 de la Orange Pi 5.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Se vende con distintas cantidades de RAM (NotebookLM lista 2, 4, 8, 16 y 32 GB; <em>los 32 GB no están confirmados</em>). A diferencia de modelos anteriores, tiene un conector para un módulo superior, el <strong>HAT M.2</strong>, donde se inserta directo un SSD M.2.</p>
+<p><strong>Disipación:</strong> el profesor remarcó que tanto la Pi 5 como la Orange Pi 5, a 2.4 GHz y con procesamiento intensivo, requieren disipador de calor (pasivo o con ventilador) sobre el circuito integrado para no sobrecalentarse.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite sistemas embebidos rápidos con almacenamiento masivo en SSD. Ya se había comparado el SSD M.2 con la MicroSD en la <a href="clase-12.html">Clase 12</a>.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> cargar la CPU de forma intensiva sin haber instalado un disipador.</p></div>
+</details>
+
+<details class="section-block sec" id="c13-herramientas"><summary><span class="stitle">3 · Herramientas de trabajo remoto: VNC, WinSCP y BalenaEtcher</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Tres programas de uso libre para grabar, administrar y controlar una minicomputadora desde la PC, sin llevar monitor ni teclado al laboratorio.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>VNC es una «pantalla transparente» para manejar la tarjeta desde la laptop; WinSCP es un explorador con dos carpetas abiertas (tu PC a la izquierda, la tarjeta a la derecha); BalenaEtcher es el «grabador de discos» que copia el sistema operativo a la tarjeta SD.<span class="rompe">Dónde deja de servir: VNC y WinSCP exigen que la tarjeta y la PC estén en la misma red.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>VNC</strong> (<em>Virtual Network Computing</em>; NotebookLM lo escribió «BNC» en algunos lados, es un error de transcripción): con la IP de la tarjeta, por Ethernet o WiFi, se ve y se opera su interfaz gráfica completa desde la PC.</li>
+<li><strong>WinSCP:</strong> muestra lado a lado el sistema de archivos de la PC y el de la tarjeta, para transferir, crear y editar archivos de código en la tarjeta de forma gráfica.</li>
+<li><strong>BalenaEtcher:</strong> graba (flashea) la imagen del sistema operativo Linux en una MicroSD o un SSD M.2.</li>
+</ul>
+<p>Las tarjetas se pueden programar en Python, en C e incluso hay opciones para BASIC. El profesor preguntó si habían usado VNC o WinSCP en Sistemas Embebidos y la mayoría no los conocía.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Acelera el desarrollo embebido al quitar la dependencia de pantallas y periféricos dedicados.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> editar archivos con un editor de consola cuando WinSCP permite editarlos gráficamente desde la PC.</p></div>
+</details>
+
+<details class="section-block sec" id="c13-gamabaja"><summary><span class="stitle">4 · Gama baja: Raspberry Pi Zero 2 W y Orange Pi Zero 3 W</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>SBC diminutas y baratas que corren un Linux completo con presupuesto mínimo.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Una tarjeta apenas más grande que la Pico 2 con el «cerebro» de una computadora Linux por unos $500 pesos.<span class="rompe">Dónde deja de servir: su RAM y su capacidad de cómputo son menores que las de una Pi 5.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>Raspberry Pi Zero 2 W:</strong> unos $500 MXN, tamaño apenas mayor al de la Pico 2, con conector de 40 pines; se le puede acoplar un HAT que añade un puerto Ethernet RJ45 y conectores de E/S.</li>
+<li><strong>Orange Pi Zero 3 W:</strong> su competidora directa, de fabricantes chinos, en precio y tamaño.</li>
+<li><strong>Precios:</strong> la gama baja ronda los $500; las grandes (Pi 3, 4, 5 y Orange Pi 5) van de $1,000 a $4,000 MXN.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la opción más económica para proyectos escolares que necesitan Linux completo.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> confundir la Pi Zero 2 W (SBC con Linux) con la Pico 2 (microcontrolador que ejecuta código nativo o MicroPython).</p></div>
+</details>
+
+<details class="section-block sec" id="c13-pico2"><summary><span class="stitle">5 · Pi grande frente a Pico 2: la RAM y la expansión de 16 MB por SPI</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La razón arquitectónica por la que una Raspberry Pi grande ejecuta un sistema operativo completo y la Pico 2 no, y la alternativa de ampliar la memoria de la Pico.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>La Pi grande tiene una «memoria de trabajo» enorme montada afuera del chip; la Pico 2 solo trae una libreta interna pequeña. Si le conectas por un cable rápido (SPI) una libreta externa de 16 MB, en teoría podría correr un sistema chiquito.<span class="rompe">Dónde deja de servir: la memoria por SPI es mucho más lenta que la RAM dinámica integrada en la placa de la Pi grande.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Por qué la Pi grande sí:</strong> las Pi 3, 4 y 5 tienen un módulo de <strong>RAM dinámica externa</strong> en la placa. <strong>Por qué la Pico 2 no:</strong> según NotebookLM, el profesor dijo que la Pico 2 tiene 4 MB de memoria Flash y unos 2 MB de RAM de trabajo, justo en el límite para alojar la estructura de un SO. <em>Dudoso: la hoja de datos de la RP2350 indica 520 KB de SRAM, no 2 MB; conviene verificar si el profesor se refería a otra cosa.</em></p>
+<p><strong>Expansión:</strong> existe un módulo comercial de 16 MB para la Pico y la Pico 2 que se comunica por el puerto <strong>SPI</strong>. Hipótesis del profesor: con esa expansión y la versión más básica de un sistema operativo, sí sería técnicamente posible correrlo en la Pico 2.</p>
+<p><strong>DMA:</strong> mencionó que usar el controlador DMA en las Picos pide más rigor de programación que en las Pi grandes, por la cantidad de parámetros que se configuran a mano.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Marca la frontera entre microcontroladores y microprocesadores con memoria dinámica, y se liga con la PIO y la FPU de la Pico 2 vistas en las <a href="clase-10.html">Clases 10</a> y <a href="clase-11.html">11</a>.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que basta ampliar la Flash (almacenamiento) para correr un SO, ignorando que hace falta RAM de trabajo.</p></div>
+</details>
+
+<details class="section-block sec" id="c13-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Qué núcleos integra el RK3588 de la Orange Pi 5 y cuántos de cada uno?</summary><p>8 en total: 4 Cortex-A76 y 4 Cortex-A55.</p></details>
+<details class="qa"><summary>2. ¿Por qué una Raspberry Pi 5 corre Linux y la Pico 2 no?</summary><p>La Pi grande tiene un módulo de RAM dinámica externo en la placa; la Pico 2 solo tiene su memoria interna, insuficiente para un SO completo.</p></details>
+<details class="qa"><summary>3. Necesitas Linux y Ethernet por cable con $500. ¿Qué eligió el profesor?</summary><p>La Raspberry Pi Zero 2 W (unos $500) con el HAT que le agrega el puerto Ethernet.</p></details>
+<details class="qa"><summary>4. ¿Qué diferencia hay en WiFi entre la Orange Pi 5 y la Raspberry Pi 5?</summary><p>La Pi 5 trae WiFi integrado; la Orange Pi 5 no, pero tiene una ranura para añadir el módulo.</p></details>
+<details class="qa"><summary>5. ¿Qué problema resuelve VNC en el laboratorio?</summary><p>Permite ver y controlar la interfaz gráfica de la tarjeta desde la PC, por red, sin monitor ni teclado físicos.</p></details>
+<details class="qa"><summary>6. ¿Qué hace WinSCP?</summary><p>Muestra lado a lado los archivos de la PC y de la tarjeta, para transferirlos y editar código directamente en la tarjeta.</p></details>
+<details class="qa"><summary>7. ¿Qué requisito de hardware es obligatorio con uso intensivo de CPU en una Pi 5 u Orange Pi 5?</summary><p>Un disipador de calor, por las frecuencias de 2.4 GHz.</p></details>
+<details class="qa"><summary>8. ¿Por qué interfaz se conecta el módulo de 16 MB de la Pico 2 y qué permitiría?</summary><p>Por SPI; en teoría permitiría explorar un sistema operativo mínimo en la Pico 2.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c13-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>La Orange Pi 5 regalada:</strong> le regalaron una, solo la ha encendido. Comentó que en sitios como Alibaba ahora cobran cerca de 30 % de impuestos en envíos a México.</li>
+<li><strong>Chips y geopolítica:</strong> al hablar de la Orange Pi 6 se desvió al mercado negro de chips y a la guerra, con la frase de que un misil sin inteligencia artificial es como una bala de cañón.</li>
+<li><strong>El nombre «sistemas embebidos»:</strong> contó la historia de la Raspberry Pi en Inglaterra y dijo que no le gusta el término, con un juego de palabras sobre «bebidos».</li>
+<li><strong>Clúster:</strong> vio un proyecto que unía varias Raspberry Pi 4 como un pseudo servidor y propuso armar uno con Orange Pi 6.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c13-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Próxima clase:</strong> el profesor propuso una sesión práctica con la PC para mostrar VNC y WinSCP con tarjetas Raspberry Pi.</li>
+<li><strong>Tareas:</strong> no se asignaron nuevas tareas ni fechas de entrega en esta sesión.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Orange Pi 5: RK3588, 8 núcleos (4 A76 + 4 A55); Raspberry Pi 5: 4 núcleos A76 a 2.4 GHz; ambas necesitan disipador.</li>
+<li>VNC = pantalla remota; WinSCP = archivos PC ↔ tarjeta; BalenaEtcher = grabar la imagen del SO.</li>
+<li>Pi Zero 2 W (~$500) + HAT Ethernet para Linux barato.</li>
+<li>La Pico 2 no corre un SO completo por su falta de RAM dinámica; un módulo de 16 MB por SPI lo haría teóricamente posible.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

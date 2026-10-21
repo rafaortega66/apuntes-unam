@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 14 — Minería de Datos</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Minería de Datos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 14</h2>
+  <p class="prof">M.C. José Concepción Roberto Olvera López · 20 oct 2026 · Tema 3 — Retroalimentación de la práctica de regresión (porcentaje de alcohol en vino: Regresión Lineal, Lasso, Árbol de Decisión y Random Forest) e introducción a las series de tiempo: sus 4 componentes, suavizado exponencial simple, doble y triple (Holt-Winters), ARIMA (p, d, q) y la métrica MAPE.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>MD-Clase14.m4a</code>), 21 oct 2026. Varias cifras salen de NotebookLM y no se pudieron contrastar con el audio; las dudosas se marcan en el texto.</p>
+</div>
+
+<details class="section-block sec" id="c14-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Los 4 componentes de una serie de tiempo: tendencia, ciclicidad, estacionalidad e irregular/ruido.</strong><span class="evid">Evidencia: dedicó la segunda mitad de la clase a desglosar cada uno, cómo identificarlo en la gráfica y cómo influye en el pronóstico.</span></li>
+<li><strong>Qué significan p, d y q en ARIMA.</strong><span class="evid">Evidencia: los presentó como las «perillas» del modelo: p (autorregresivo, valores pasados), d (diferenciación para volver estacionaria la serie) y q (media móvil sobre errores pasados).</span></li>
+<li><strong>Sobreajuste: comparar entrenamiento contra prueba y usar validación cruzada.</strong><span class="evid">Evidencia: cuestionó a los equipos cuando la R² de entrenamiento era muy alta y en prueba caía (un Árbol de Decisión bajó a 0.29) y pidió K-fold para estabilizar la evaluación.</span></li>
+<li><strong>Selección de variables: el modelo reducido de 5 variables.</strong><span class="evid">Evidencia: se analizó el ejercicio donde pasar de 12 a 5 variables solo costó entre 0.03 y 0.04 de R².</span></li>
+<li><strong>MAPE como métrica de pronóstico.</strong><span class="evid">Evidencia: la destacó como la métrica porcentual más popular e intuitiva en series de tiempo. Evidencia débil: solo se nombró, no se calculó en clase.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c14-regresion"><summary><span class="stitle">1 · Retroalimentación de la práctica de regresión (alcohol en vino)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Las presentaciones de los equipos de la práctica de regresión supervisada (en Classroom, la Práctica 3.3): predecir el <strong>porcentaje de alcohol</strong> (variable continua) de un vino a partir de 12 variables fisicoquímicas de 178 muestras, con Regresión Lineal Múltiple, Lasso, Árbol de Decisión y Random Forest, en Python y en RapidMiner.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es adivinar la graduación alcohólica de una botella viendo su color, su prolina y su acidez, sin pagar un análisis de laboratorio.<span class="rompe">Dónde deja de servir: si el vino fue adulterado con químicos que distorsionan las relaciones naturales entre variables.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Objetivo de negocio:</strong> el alcohol se mueve entre 12 % y 14 % (media cercana a 13 %). Estimarlo sirve para informar al cliente, calcular cargas fiscales (a mayor graduación, más impuesto) y controlar la calidad y el sabor durante la fermentación.</p>
+<p><strong>Limpieza y estandarización:</strong> se detectaron valores atípicos en 7 de las 12 variables (por ejemplo, ácido málico y ceniza), pero no se eliminaron porque son variaciones químicas reales y no errores de captura. Se aplicó <code>StandardScaler</code> porque variables como la prolina o el magnesio tienen rangos enormes frente al matiz o los flavonoides, que son decimales.</p>
+<p><strong>Variables más influyentes:</strong> el <strong>color intenso</strong> (44.15 % de importancia en Random Forest) y la <strong>prolina</strong> (19.94 %) empujan el alcohol hacia arriba: más prolina y color más oscuro, más alcohol. La <strong>ceniza alcalina</strong> (coeficiente de −0.33 en la regresión) y las protocianinas tienen efecto inverso: a más ceniza alcalina, menos alcohol.</p>
+<p><strong>Comparación de modelos:</strong></p>
+<ul>
+<li><strong>Regresión Lineal:</strong> R² de 0.434 en RapidMiner y 0.68 en otra corrida, con error entre 0.17 y 0.628. <em>(Dudoso: las dos R² y el rango de error vienen de equipos distintos; NotebookLM no dice cuál es de Python y cuál de RapidMiner.)</em></li>
+<li><strong>Árbol de Decisión:</strong> mucha dispersión y sobreajuste; en prueba la R² cayó a 0.29.</li>
+<li><strong>Random Forest:</strong> el modelo ganador, con R² entre 0.75 y 0.77 y el menor error (0.12–0.13); es más robusto ante atípicos y relaciones no lineales.</li>
+</ul>
+<p><strong>Modelo reducido:</strong> se entrenó solo con las 5 variables más significativas (color intenso, prolina, protocianinas, flavonoides y ceniza alcalina). Frente al modelo de 12 variables se perdieron únicamente entre 0.03 y 0.04 de R²: cinco variables concentran casi todo el poder predictivo.</p>
+<p><strong>Entrenamiento contra prueba:</strong> cuando la R² de entrenamiento era alta y la de prueba caía mucho (el 0.29), el profesor preguntó por qué. Su explicación: la muestra de prueba no fue representativa o quedó sesgada, y por eso se debe usar <strong>validación cruzada K-fold</strong>, que rota los estratos y estabiliza la evaluación.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Ahorra equipos y pruebas de laboratorio: permite estimar el alcohol en tiempo real durante la cosecha y la fermentación. Se conecta con el K-fold de la <a href="clase-13.html#c13-algoritmos">Clase 13</a> y con las métricas de regresión (R², MSE, RMSE, MAE) de la <a href="clase-11.html#c11-regresion">Clase 11</a>.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> fiarse de una R² alta en entrenamiento sin auditar la muestra de prueba, o dejar las 12 variables sin revisar si un subconjunto más simple rinde igual.</p></div>
+</details>
+
+<details class="section-block sec" id="c14-series"><summary><span class="stitle">2 · Introducción a las series de tiempo</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un conjunto secuencial de valores de una variable registrados a intervalos de tiempo espaciados regularmente (días, semanas, meses, años). El eje X es siempre el tiempo y el eje Y es la variable de interés: ventas, costos, inventario, demanda de energía, tráfico, temperatura.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es anotar la temperatura de una persona cada hora para ver si la fiebre sube, baja o se repite a cierta hora.<span class="rompe">Dónde deja de servir: si las mediciones se toman en lapsos irregulares (una a los 5 minutos y la siguiente a los 3 días).</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Para qué se usan:</strong> pronosticar valores futuros (por ejemplo, de 3 a 5 meses hacia adelante), detectar patrones (tendencias y estacionalidades) y detectar anomalías (picos o caídas atípicas que delatan un fraude o una falla).</p>
+<p><strong>Alcance del pronóstico:</strong> aunque el algoritmo pueda calcular 12 meses, la confiabilidad baja mucho conforme se aleja el horizonte. Los algoritmos pesan más lo ocurrido en los últimos 2 o 3 años que lo de hace 15 o 18.</p>
+<p><strong>Los 4 componentes:</strong></p>
+<ul>
+<li><strong>Tendencia:</strong> movimiento de largo plazo, ascendente o descendente.</li>
+<li><strong>Ciclicidad:</strong> fluctuaciones de largo plazo que abarcan varios años.</li>
+<li><strong>Estacionalidad:</strong> patrones que se repiten en un periodo fijo, normalmente un año (picos a mitad de año o en diciembre).</li>
+<li><strong>Irregular / ruido / anomalías:</strong> variaciones impredecibles por eventos extraordinarios (una pandemia, ciclones, noches de remate).</li>
+</ul>
+<p><strong>Atípicos:</strong> los picos extraordinarios se analizan y se filtran (se eliminan los mayores a cierto umbral) para que no deformen la curva del pronóstico.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la base de la planeación de inventarios, presupuestos y logística, y de evitar desabasto. Retoma el manejo de atípicos que ya se vio con regresión y clustering.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> pronosticar a 12 meses o más esperando la precisión de un pronóstico corto, o dejar los eventos atípicos sin filtrar y deformar la estacionalidad real.</p></div>
+</details>
+
+<details class="section-block sec" id="c14-modelos"><summary><span class="stitle">3 · Modelos de series de tiempo: suavizado exponencial, ARIMA y métricas</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Los modelos matemáticos con que se modela y extrapola el comportamiento de una serie temporal.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es ajustar el lente de una cámara: el suavizado simple borra las arrugas pequeñas (ruido); el doble dibuja hacia dónde camina la persona (tendencia); el triple recuerda en qué meses se pone abrigo (estacionalidad); y ARIMA usa los pasos y los tropezones anteriores para predecir el siguiente paso.<span class="rompe">Dónde deja de servir: la analogía no explica la diferenciación ni los parámetros p, d, q.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Suavizado exponencial:</strong></p>
+<ul>
+<li><strong>Simple:</strong> para datos sin tendencia ni estacionalidad clara; suaviza las variaciones.</li>
+<li><strong>Doble (Holt):</strong> añade la tendencia, creciente o decreciente.</li>
+<li><strong>Triple (Holt-Winters):</strong> añade tendencia, estacionalidad y componente irregular.</li>
+</ul>
+<p><strong>ARIMA (AutoRegressive Integrated Moving Average) y SARIMA:</strong> para series complejas no estacionarias que hay que transformar en una versión estacionaria. Sus tres «perillas»:</p>
+<ul>
+<li><strong>p (AR, autorregresivo):</strong> cuántas observaciones pasadas (rezagos) influyen en el valor actual.</li>
+<li><strong>d (I, integrado):</strong> el grado de diferenciación necesario para volver estacionaria la serie, es decir, quitarle la tendencia.</li>
+<li><strong>q (MA, media móvil):</strong> el tamaño de la ventana de rezago sobre los errores o residuos de pronósticos pasados para corregir el modelo.</li>
+</ul>
+<p><strong>Métricas:</strong> <strong>MAPE</strong> (error porcentual absoluto medio), la más popular porque expresa el error en porcentaje; <strong>MAE</strong>, promedio de los errores absolutos en las unidades de la variable; y <strong>RMSE / MSE</strong>, que penalizan más las desviaciones grandes.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite elegir la técnica según el patrón de los datos: estable, con tendencia, con estacionalidad o irregular. MAE, MSE y RMSE ya aparecieron en la evaluación de regresión de la Clase 11.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> usar suavizado simple en una serie con fuerte tendencia o estacionalidad, o no ajustar bien p, d y q en ARIMA.</p></div>
+</details>
+
+<details class="section-block sec" id="c14-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Qué dos variables tuvieron mayor impacto positivo sobre el % de alcohol?</summary><p>El color intenso (44.15 % de importancia) y la prolina (19.94 %).</p></details>
+<details class="qa"><summary>2. ¿Por qué la ceniza alcalina tiene coeficiente negativo?</summary><p>Porque su relación con el alcohol es inversa: a más ceniza alcalina, menor porcentaje de alcohol (coeficiente de −0.33).</p></details>
+<details class="qa"><summary>3. ¿Qué demostró el modelo reducido de 5 variables frente al de 12?</summary><p>Que cinco variables (color intenso, prolina, protocianinas, flavonoides y ceniza alcalina) conservan casi todo el poder predictivo: solo se perdieron 0.03–0.04 de R².</p></details>
+<details class="qa"><summary>4. Un árbol de decisión tiene R² alta en entrenamiento y 0.29 en prueba. ¿Qué pasa y qué haces?</summary><p>Hay sobreajuste, o una muestra de prueba no representativa. Se audita la partición y se usa validación cruzada K-fold.</p></details>
+<details class="qa"><summary>5. ¿Qué diferencia hay entre el suavizado exponencial doble y el triple?</summary><p>El doble solo considera la tendencia; el triple (Holt-Winters) considera tendencia, estacionalidad y componente irregular.</p></details>
+<details class="qa"><summary>6. ¿Qué significan p, d y q en ARIMA?</summary><p>p: términos autorregresivos (valores pasados); d: grado de diferenciación para hacer estacionaria la serie; q: términos de media móvil (errores pasados).</p></details>
+<details class="qa"><summary>7. ¿Cuál es la diferencia entre estacionalidad y ciclicidad?</summary><p>La estacionalidad se repite en un periodo fijo, normalmente un año; la ciclicidad son fluctuaciones de largo plazo que abarcan varios años.</p></details>
+<details class="qa"><summary>8. ¿Por qué filtrar los picos atípicos antes de pronosticar?</summary><p>Porque eventos extraordinarios (una pandemia, un huracán) generan picos aislados que distorsionan la curva del pronóstico y la estacionalidad real.</p></details>
+<details class="qa"><summary>9. ¿Qué mide el MAPE?</summary><p>El error porcentual absoluto medio: qué tan lejos queda el pronóstico de lo real, expresado en porcentaje.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c14-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>El estacionamiento:</strong> al inicio, el profesor bromeó con un alumno contando que al pagar el estacionamiento lo reconocieron y le preguntaron si era hermano de un compañero de primaria.</li>
+<li><strong>Prórroga de la práctica de clasificación:</strong> los alumnos pidieron más tiempo. El profesor lo sometió a votación en tono de broma («pregunta con truco») y explicó que el curso concluye hacia el 13 de noviembre, así que postergar entregas apretaría series de tiempo y redes neuronales.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c14-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Práctica de clasificación (6 algoritmos en Python):</strong> NotebookLM la llama «Práctica 3.3», pero en Classroom la 3.3 es Regresión (la de esta clase) y la <strong>3.4 es Clasificación</strong>, que vence el <strong>jueves 22 oct a la 1:00 p. m.</strong> (ver <a href="clase-13.html#c13-pendiente">Clase 13</a>). El profesor aclaró que pueden enfocarse en Python sin obligar RapidMiner si quieren optimizar tiempo.</li>
+<li><strong>Series de tiempo:</strong> NotebookLM menciona una «Práctica 3.4 / Series de Tiempo» que se asignaría después; no hay fecha ni número confirmados en Classroom, así que queda sin confirmar.</li>
+<li><strong>Cierre del semestre:</strong> el profesor dijo que clases y evaluaciones concluyen hacia el 13 de noviembre (según NotebookLM; sin contrastar con el audio).</li>
+<li><strong>Próximo tema:</strong> profundizar en series de tiempo (ARIMA, SARIMA) y después redes neuronales.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Vino: color intenso (44.15 %) y prolina (19.94 %) suben el alcohol; Random Forest ganó con R² de 0.75–0.77; 5 variables bastan (−0.03 a −0.04 de R²).</li>
+<li>R² alta en entrenamiento y 0.29 en prueba = sobreajuste: validación cruzada.</li>
+<li>Series de tiempo = tendencia + ciclicidad + estacionalidad + irregular.</li>
+<li>Suavizado simple, doble (Holt) y triple (Holt-Winters); ARIMA(p, d, q); MAPE.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-21T05:34:18+00:00",
+ "generatedAt": "2026-10-21T16:53:45+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -219,6 +219,13 @@
     "fecha": "2026-10-19",
     "resumen": "Sesión sin tema nuevo — El profesor borró por accidente sus notas del día: charla sobre minicomputadoras (SBC), almacenamiento MicroSD frente a SSD M.2 y aislamiento de ruido eléctrico, y luego revisión individual de pro",
     "url": "materias/organizacion-y-arquitectura-de-computadoras/clase-12.html",
+    "formato": "estudio"
+   },
+   {
+    "num": 13,
+    "fecha": "2026-10-21",
+    "resumen": "Sin tema nuevo del temario — Segunda sesión sobre minicomputadoras (SBC): Orange Pi 5 y 6 frente a Raspberry Pi 5, herramientas de trabajo remoto (VNC, WinSCP, BalenaEtcher), las tarjetas de gama baja (Pi Zero 2 W y Oran",
+    "url": "materias/organizacion-y-arquitectura-de-computadoras/clase-13.html",
     "formato": "estudio"
    }
   ],
@@ -735,11 +742,23 @@
     "resumen": "Tema 3 — Cierre de las exposiciones de la Práctica 3.2 (one-hot, agrupación por líneas, lift extremos y estrategia sobre el consecuente) y clase completa de clasificación: variables dominantes, bins, los 6 algoritmos con",
     "url": "materias/mineria-de-datos/clase-13.html",
     "formato": "estudio"
+   },
+   {
+    "num": 14,
+    "fecha": "2026-10-20",
+    "resumen": "Tema 3 — Retroalimentación de la práctica de regresión (porcentaje de alcohol en vino: Regresión Lineal, Lasso, Árbol de Decisión y Random Forest) e introducción a las series de tiempo: sus 4 componentes, suavizado expon",
+    "url": "materias/mineria-de-datos/clase-14.html",
+    "formato": "estudio"
    }
   ],
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "023472c",
+   "fecha": "2026-10-20T23:34:18-06:00",
+   "mensaje": "Pendientes: quitar los avisos de lo ya entregado"
+  },
   {
    "hash": "b7dfdf1",
    "fecha": "2026-10-20T23:32:18-06:00",
@@ -1034,11 +1053,6 @@
    "hash": "4750b13",
    "fecha": "2026-10-12T16:36:31-06:00",
    "mensaje": "Lab FSE: «Manuales» en vez de guiones, nombres de las 8 prácticas con estatus de Classroom, P6 con Pico (manual 6b)"
-  },
-  {
-   "hash": "b79bf2a",
-   "fecha": "2026-10-12T16:21:20-06:00",
-   "mensaje": "Barra «Apuntes.» en todas las páginas (app.js en las 29 que no lo cargaban) y cache-busting global para ver el home nuevo"
   }
  ]
 }
