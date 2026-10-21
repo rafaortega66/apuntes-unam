@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-21T22:05:10+00:00",
+ "generatedAt": "2026-10-21T22:22:10+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -762,6 +762,11 @@
  },
  "gitlog": [
   {
+   "hash": "158444e",
+   "fecha": "2026-10-21T16:05:10-06:00",
+   "mensaje": "FSE: registrar la entrega de la Tarea 08 (21 oct) — 19-OEPR-T08.pdf; quitar su pendiente"
+  },
+  {
    "hash": "64f8758",
    "fecha": "2026-10-21T15:52:21-06:00",
    "mensaje": "FSE: agregar Clase 16 (21 oct) — elección del kernel de Linux embebido, raíz / y distribuciones, reglas de la Práctica 8; Lab OAC no se documenta (CLAUDE.md)"
@@ -1055,11 +1060,6 @@
    "hash": "6ffaa3c",
    "fecha": "2026-10-15T19:57:31-06:00",
    "mensaje": "noveno/: todos los archivos del semestre clasificados por materia y entrega"
-  },
-  {
-   "hash": "bcdf039",
-   "fecha": "2026-10-15T19:44:57-06:00",
-   "mensaje": "noveno/: esqueleto de carpetas por asignatura (validado con NotebookLM)"
   }
  ]
 }
