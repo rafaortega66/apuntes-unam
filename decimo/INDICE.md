@@ -84,7 +84,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 | FSE-T05 | [FSE-T05-indicaciones.pdf](FSE/FSE-Tareas/FSE-T05/FSE-T05-indicaciones.pdf) | [19-OEPR-T05.pdf](FSE/FSE-Tareas/FSE-T05/FSE-T05-entregables/19-OEPR-T05.pdf) | — |
 | FSE-T06 | [FSE-T06-indicaciones.pdf](FSE/FSE-Tareas/FSE-T06/FSE-T06-indicaciones.pdf) | [19-OEPR-T06.pdf](FSE/FSE-Tareas/FSE-T06/FSE-T06-entregables/19-OEPR-T06.pdf) | — |
 | FSE-T07 | [FSE-T07-indicaciones.pdf](FSE/FSE-Tareas/FSE-T07/FSE-T07-indicaciones.pdf) | [19-OEPR-T07.pdf](FSE/FSE-Tareas/FSE-T07/FSE-T07-entregables/19-OEPR-T07.pdf) | — |
-| FSE-T08 | [FSE-T08-indicaciones.pdf](FSE/FSE-Tareas/FSE-T08/FSE-T08-indicaciones.pdf) | _(sin entrega aún)_ | — |
+| FSE-T08 | [FSE-T08-indicaciones.pdf](FSE/FSE-Tareas/FSE-T08/FSE-T08-indicaciones.pdf) | [19-OEPR-T08.pdf](FSE/FSE-Tareas/FSE-T08/FSE-T08-entregables/19-OEPR-T08.pdf) | — |
 | FSE-T09 | [FSE-T09-indicaciones.pdf](FSE/FSE-Tareas/FSE-T09/FSE-T09-indicaciones.pdf) | _(sin entrega aún)_ | — |
 
 ## MD — Minería de Datos
@@ -134,15 +134,15 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 
 | Entrega | Indicaciones | Entregado | Adicionales |
 |---|---|---|---|
-| OAC-Proy01 | [OAC-Proy01-indicaciones.md](OAC/OAC-Proyectos/OAC-Proy01/OAC-Proy01-indicaciones.md) | [proyecto_calculadora.py](OAC/OAC-Proyectos/OAC-Proy01/OAC-Proy01-entregables/proyecto_calculadora.py)<br>[proyecto_taylor.py](OAC/OAC-Proyectos/OAC-Proy01/OAC-Proy01-entregables/proyecto_taylor.py) | 1 |
-| OAC-Proy02 | [OAC-Proy02-indicaciones.md](OAC/OAC-Proyectos/OAC-Proy02/OAC-Proy02-indicaciones.md) | [proyecto_filtro_iir.py](OAC/OAC-Proyectos/OAC-Proy02/OAC-Proy02-entregables/proyecto_filtro_iir.py) | 1 |
+| OAC-Proy01 | [OAC-Proy01-indicaciones.md](OAC/OAC-Proyectos/OAC-Proy01/OAC-Proy01-indicaciones.md) | [proyecto01_CalculadoraTaylor_OrtegaDeLaPaz.pdf](OAC/OAC-Proyectos/OAC-Proy01/OAC-Proy01-entregables/proyecto01_CalculadoraTaylor_OrtegaDeLaPaz.pdf)<br>[proyecto_calculadora.py](OAC/OAC-Proyectos/OAC-Proy01/OAC-Proy01-entregables/proyecto_calculadora.py)<br>[proyecto_taylor.py](OAC/OAC-Proyectos/OAC-Proy01/OAC-Proy01-entregables/proyecto_taylor.py) | 1 |
+| OAC-Proy02 | [OAC-Proy02-indicaciones.md](OAC/OAC-Proyectos/OAC-Proy02/OAC-Proy02-indicaciones.md) | [proyecto02_FiltroIIR_OrtegaDeLaPaz.pdf](OAC/OAC-Proyectos/OAC-Proy02/OAC-Proy02-entregables/proyecto02_FiltroIIR_OrtegaDeLaPaz.pdf)<br>[proyecto_filtro_iir.py](OAC/OAC-Proyectos/OAC-Proy02/OAC-Proy02-entregables/proyecto_filtro_iir.py) | 1 |
 
 ### OAC-Tareas
 
 | Entrega | Indicaciones | Entregado | Adicionales |
 |---|---|---|---|
-| OAC-T01 | [OAC-T01-indicaciones.md](OAC/OAC-Tareas/OAC-T01/OAC-T01-indicaciones.md) | [tarea_raiz_cuadrada.py](OAC/OAC-Tareas/OAC-T01/OAC-T01-entregables/tarea_raiz_cuadrada.py) | 1 |
-| OAC-T02 | [OAC-T02-indicaciones.md](OAC/OAC-Tareas/OAC-T02/OAC-T02-indicaciones.md) | [tarea_producto_punto.py](OAC/OAC-Tareas/OAC-T02/OAC-T02-entregables/tarea_producto_punto.py) | 1 |
+| OAC-T01 | [OAC-T01-indicaciones.md](OAC/OAC-Tareas/OAC-T01/OAC-T01-indicaciones.md) | [tarea01_RaizCuadrada_OrtegaDeLaPaz.pdf](OAC/OAC-Tareas/OAC-T01/OAC-T01-entregables/tarea01_RaizCuadrada_OrtegaDeLaPaz.pdf)<br>[tarea_raiz_cuadrada.py](OAC/OAC-Tareas/OAC-T01/OAC-T01-entregables/tarea_raiz_cuadrada.py) | 1 |
+| OAC-T02 | [OAC-T02-indicaciones.md](OAC/OAC-Tareas/OAC-T02/OAC-T02-indicaciones.md) | [tarea02_ProductoPunto_OrtegaDeLaPaz.pdf](OAC/OAC-Tareas/OAC-T02/OAC-T02-entregables/tarea02_ProductoPunto_OrtegaDeLaPaz.pdf)<br>[tarea_producto_punto.py](OAC/OAC-Tareas/OAC-T02/OAC-T02-entregables/tarea_producto_punto.py) | 1 |
 
 ## RP — Reconocimiento de Patrones
 

@@ -4,17 +4,6 @@
   "nota": "Solo tareas obligatorias. Cuando Classroom no muestra hora, se asume fin del día (23:59). Classroom manda sobre lo dicho en clase. Los ítems sin fecha exacta no se ocultan solos.",
   "items": [
     {
-      "id": "fse-t08",
-      "materia": "FSE",
-      "color": "#A98BD1",
-      "titulo": "Tarea 08: Cuando algo huele raro",
-      "vence": "2026-10-21T23:59:00-06:00",
-      "hora_confirmada": true,
-      "detalle": "Serie \"Código limpio\". PDF único: NL-CURP-T08.pdf.",
-      "link": "decimo/FSE/FSE-Tareas/FSE-T08/FSE-T08-indicaciones.pdf",
-      "classroom": "https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzQ3MDM4OTYy/details"
-    },
-    {
       "id": "fse-t09",
       "materia": "FSE",
       "color": "#A98BD1",
