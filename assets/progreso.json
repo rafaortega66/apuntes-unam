@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-26T17:29:22+00:00",
+ "generatedAt": "2026-10-26T17:33:21+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -690,6 +690,13 @@
     "resumen": "Tema 3 — Intrusión por malware y ataques físicos con sus mitigaciones; mecanismos de seguridad: definición, relación con los servicios y sus cuatro clasificaciones (servicio, importancia, cobertura, acción); ejercicio en",
     "url": "materias/seguridad-informatica-basica/clase-14.html",
     "formato": "estudio"
+   },
+   {
+    "num": 15,
+    "fecha": "2026-10-22",
+    "resumen": "Tema 4 — Políticas de seguridad: qué son, políticas organizacionales contra las de seguridad informática, cuándo se actualizan, a quién aplican, sanciones y los seis principios para redactarlas.",
+    "url": "materias/seguridad-informatica-basica/clase-15.html",
+    "formato": "estudio"
    }
   ],
   "lab-de-fundamentos-de-sistemas-embebidos": [],
@@ -803,6 +810,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "fe43596",
+   "fecha": "2026-10-26T11:29:22-06:00",
+   "mensaje": "ACS: agregar Clase 17 (22 oct) — Programa 06 en vivo, puertos efímeros, struct tm y select() para chat grupal"
+  },
   {
    "hash": "503d0f5",
    "fecha": "2026-10-26T11:26:19-06:00",
@@ -1097,11 +1109,6 @@
    "hash": "5fd9f97",
    "fecha": "2026-10-18T12:21:29-06:00",
    "mensaje": "CLAUDE.md: el sitio es solo de consulta; tareas y exámenes se hacen en Claude Projects. ACS: archivos por correo"
-  },
-  {
-   "hash": "5b56d66",
-   "fecha": "2026-10-18T11:58:43-06:00",
-   "mensaje": "ACS-E01: PDF oficial del examen (correo del profesor) como indicaciones; puerto 4898 y date después del cliente"
   }
  ]
 }
