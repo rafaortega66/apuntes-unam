@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-26T17:26:19+00:00",
+ "generatedAt": "2026-10-26T17:29:22+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -583,6 +583,13 @@
     "resumen": "Tema 2 — Del servidor secuencial (Programa 05) al servidor de clientes concurrentes con fork() (Programa 06), arquitecturas cliente-servidor reales y la revisión del log del examen parcial.",
     "url": "materias/arquitectura-cliente-servidor/clase-16.html",
     "formato": "estudio"
+   },
+   {
+    "num": 17,
+    "fecha": "2026-10-22",
+    "resumen": "Tema 2 — Prueba en vivo del servidor concurrente (Programa 06), cierre cruzado de descriptores, bitácora con struct tm , puertos efímeros y, como solución para un chat grupal, multiplexación con select() (Programa 07).",
+    "url": "materias/arquitectura-cliente-servidor/clase-17.html",
+    "formato": "estudio"
    }
   ],
   "seguridad-informatica-basica": [
@@ -796,6 +803,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "503d0f5",
+   "fecha": "2026-10-26T11:26:19-06:00",
+   "mensaje": "ASI: agregar Clase 15 (21 oct) — transformación digital, IA y prompts, habilidades y tarea en equipos de 3"
+  },
   {
    "hash": "33c6bde",
    "fecha": "2026-10-26T11:13:58-06:00",
@@ -1090,11 +1102,6 @@
    "hash": "5b56d66",
    "fecha": "2026-10-18T11:58:43-06:00",
    "mensaje": "ACS-E01: PDF oficial del examen (correo del profesor) como indicaciones; puerto 4898 y date después del cliente"
-  },
-  {
-   "hash": "82b46f8",
-   "fecha": "2026-10-18T11:56:52-06:00",
-   "mensaje": "ACS: examen parcial (ACS-E01) con indicaciones de NotebookLM, vence lun 19 oct; ASI sin clase el 14 oct"
   }
  ]
 }

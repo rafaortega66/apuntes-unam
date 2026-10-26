@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 17 — Arquitectura Cliente-Servidor</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Arquitectura Cliente-Servidor</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 17</h2>
+  <p class="prof">Mtro. Carlos Alberto Román Zamitiz · 22 oct 2026 · Tema 2 — Prueba en vivo del servidor concurrente (Programa 06), cierre cruzado de descriptores, bitácora con <code>struct tm</code>, puertos efímeros y, como solución para un chat grupal, multiplexación con <code>select()</code> (Programa 07).</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>ACS-Clase17.m4a</code>), 26 oct 2026. Lo que NotebookLM reconstruyó y no pudo contrastar con el audio se marca como dudoso. Continúa lo visto en la <a href="clase-16.html">Clase 16</a>.</p>
+</div>
+
+<details class="section-block sec" id="c17-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Distinguir a simple vista el código de un cliente y el de un servidor.</strong><span class="evid">Evidencia: lo planteó como pregunta de examen teórico al poner los dos códigos lado a lado: el servidor tiene dos estructuras y el cliente solo una.</span></li>
+<li><strong>Cierre cruzado de descriptores tras <code>fork()</code>: el hijo cierra <code>fd_s</code> y el padre cierra <code>fd_c</code>.</strong><span class="evid">Evidencia: dibujó el diagrama en el pizarrón y lo repitió varias veces.</span></li>
+<li><strong><code>time()</code>, <code>localtime()</code> y <code>struct tm</code> (con <code>tm_mon + 1</code> y <code>tm_year + 1900</code>).</strong><span class="evid">Evidencia: desglosó el bloque en el código; es el mecanismo de la bitácora de su servidor remoto del examen parcial.</span></li>
+<li><strong>Puertos efímeros: varios clientes con la misma IP pública y distinto puerto de origen.</strong><span class="evid">Evidencia: lo comprobó en vivo con <code>ss</code> viendo conexiones de la misma IP con puertos distintos.</span></li>
+<li><strong>Por qué <code>fork()</code> no sirve para un chat grupal y cómo lo resuelve <code>select()</code>.</strong><span class="evid">Evidencia: explicó el aislamiento de memoria entre procesos hijos y presentó <code>fd_set</code> con sus cuatro macros. Evidencia más débil: el Programa 07 se probará hasta la siguiente clase.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c17-cliente-servidor"><summary><span class="stitle">1 · Cliente contra servidor en el código y <code>LINE_MAX</code></span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Una forma visual de distinguir los programas de sockets por el número de estructuras <code>sockaddr_in</code> que declaran, y el uso de la macro <code>LINE_MAX</code> para reservar buffers de texto leído por línea.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>La recepción de un hotel lleva dos registros (el libro general y la ficha del huésped que entra); el huésped solo lleva su propia identificación.<span class="rompe">Dónde deja de servir: si el cliente intentara administrar las reservaciones de todo el hotel.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El servidor declara siempre dos <code>struct sockaddr_in</code>: una propia (IP y puerto de escucha) y otra para guardar los datos del cliente aceptado. El cliente declara una sola, con la IP y el puerto del servidor al que se conecta. <code>LINE_MAX</code> define el tamaño de los buffers de texto leídos del teclado hasta el Enter, en lugar de fijar un número a mano entre corchetes.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite revisar rápido el código de una aplicación distribuida y evita desbordar o desperdiciar memoria al leer cadenas.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> confundir qué estructura es de cada extremo, o usar <code>LINE_MAX</code> para datos binarios (solo sirve para texto terminado en salto de línea).</p></div>
+</details>
+
+<details class="section-block sec" id="c17-buffers"><summary><span class="stitle">2 · Buffers dentro del hijo y copia de la IP con <code>memcpy</code></span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Declarar los buffers de comunicación solo dentro del bloque del proceso hijo, y copiar la dirección IP binaria con <code>memcpy</code>.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es darle la bandeja de platillos solo al mesero que atenderá la mesa, no al gerente que recibe a los clientes en la puerta.<span class="rompe">Dónde deja de servir: el mesero sí necesita su bandeja; el buffer no puede faltarle al hijo.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>En el Programa 06, <code>buff_peticion</code> y <code>buff_respuesta</code> no se declaran al inicio de <code>main()</code> sino dentro de <code>if (pid == 0)</code>, que solo ejecuta el hijo. Así el padre, que únicamente acepta conexiones, no reserva memoria que no usa y no la duplica en cada <code>fork()</code>.</p>
+<p>Para tomar la IP del servidor desde la estructura <code>hostent</code> que devuelve <code>gethostbyname</code>, se copian los 4 bytes de la dirección IPv4 a <code>sin_addr</code> con <code>memcpy</code> y la longitud <code>h_length</code> (4 para IPv4). NotebookLM transcribió la llamada como <code>memcpy(&amp;servidor.sin_addr, SP-&gt;h_addr_list, SP-&gt;h_length)</code>. <em>(Dudoso: <code>h_addr_list</code> es un arreglo de punteros; normalmente se copia <code>h_addr_list[0]</code> o <code>h_addr</code>. Revisar el código del profesor.)</em></p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Ahorra memoria al crear procesos con <code>fork()</code> y se conecta con la conversión de direcciones a binario de clases anteriores.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> declarar buffers grandes en <code>main()</code> del padre, de modo que cada <code>fork()</code> duplica memoria que no se usa.</p></div>
+</details>
+
+<details class="section-block sec" id="c17-bitacora"><summary><span class="stitle">3 · Bitácora de fecha, hora e IP con <code>struct tm</code></span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El bloque de código que, justo después de <code>accept()</code>, captura el instante exacto y la IP del cliente para imprimirlos o guardarlos.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es la libreta del guardia de un edificio: anota la hora, el día y quién cruzó la puerta.<span class="rompe">Dónde deja de servir: si el reloj del guardia está mal, toda la libreta es incorrecta.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ol>
+<li>Se declara un <code>time_t t</code> y se llama <code>time(&amp;t)</code> para obtener los segundos desde la época Unix.</li>
+<li>Se pasa a <code>localtime(&amp;t)</code>, que devuelve un puntero a <code>struct tm</code>.</li>
+<li>Se leen sus campos: <code>tm_mday</code> (día), <code>tm_mon + 1</code> (mes: la estructura cuenta desde 0), <code>tm_year + 1900</code> (año: cuenta los años desde 1900), y <code>tm_hour</code>, <code>tm_min</code>, <code>tm_sec</code>.</li>
+<li>Se imprime o guarda algo como «día/mes/año hora:minuto:segundo, cliente conectado desde [IP]».</li>
+</ol>
+<p>Es la lógica que usó en su servidor remoto (132.248.59.6) para auditar las entregas del examen parcial. Con octubre de 2026, <code>tm_mon</code> da 9 y <code>tm_year</code> da 126; corregidos, 10 y 2026.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Conecta con la revisión del log del examen que se vio en la <a href="clase-16.html">Clase 16</a>.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> olvidar el +1 al mes o el +1900 al año y mostrar «mes 9» o «año 126».</p></div>
+</details>
+
+<details class="section-block sec" id="c17-descriptores"><summary><span class="stitle">4 · Cierre cruzado de descriptores (<code>fd_s</code> y <code>fd_c</code>) con <code>fork()</code></span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La regla de que, justo después de <code>fork()</code>, el hijo cierra el socket servidor (<code>fd_s</code>) y el padre cierra el socket del cliente (<code>fd_c</code>).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es una central telefónica: el conmutador pasa la llamada a una extensión y cuelga su copia para volver a escuchar la línea principal; la extensión cuelga su acceso al conmutador para hablar a solas con el usuario.<span class="rompe">Dónde deja de servir: si la extensión contestara llamadas del conmutador, o el conmutador se quedara escuchando la conversación privada.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><code>accept()</code> devuelve un descriptor nuevo para el cliente (<code>fd_c</code>) y deja intacto el de escucha (<code>fd_s</code>). Luego <code>fork()</code> clona el proceso y duplica la tabla de descriptores: padre e hijo tienen abiertos los dos. Por eso:</p>
+<ul>
+<li><strong>Hijo (<code>pid == 0</code>):</strong> hace <code>close(fd_s)</code> porque no aceptará conexiones; usa <code>fd_c</code> con <code>recv</code> y <code>send</code>; al recibir la palabra «adiós» cierra <code>fd_c</code> y termina con <code>exit(0)</code>.</li>
+<li><strong>Padre (<code>else</code>):</strong> hace <code>close(fd_c)</code> porque no conversa con el cliente; conserva <code>fd_s</code> y regresa al <code>accept()</code> dentro del <code>while(1)</code>.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la base técnica del Programa 06 y resuelve la limitación del servidor secuencial del Programa 05.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> olvidar el <code>close(fd_s)</code> en el hijo o el <code>close(fd_c)</code> en el padre, dejando sockets abiertos hasta agotar el límite de descriptores del sistema.</p></div>
+</details>
+
+<details class="section-block sec" id="c17-efimeros"><summary><span class="stitle">5 · Demostración del Programa 06 y puertos efímeros</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La ejecución en vivo del servidor concurrente en el puerto 4898 con varios clientes a la vez, y el puerto de origen que el sistema operativo del cliente asigna a cada conexión (puerto efímero).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es una oficina de correos a la que escribe toda una colonia: todas las cartas llevan el mismo remitente (la IP pública), pero cada persona pone un número de buzón temporal distinto para que la respuesta llegue a la persona correcta.<span class="rompe">Dónde deja de servir: el número de buzón no lo elige la persona; lo asigna el sistema.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El profesor compiló y ejecutó el servidor en 132.248.59.6 con <code>./programa_06_servidor_inet 4898</code>. Se conectaron alumnos desde terminales, navegadores y hasta un teléfono con datos móviles. Con <code>ss -atnp</code> se vio que varios alumnos de la red de la facultad salían con la misma IP pública (132.247.100.226) y puertos de origen distintos: 49802, 48469 y 49808. Cada conexión queda definida por la tupla (IP origen, puerto efímero, IP destino, puerto destino), así que no chocan. <em>(Dudoso: NotebookLM dice que el rango efímero es 49152–65535, pero uno de los puertos vistos, 48469, queda fuera; en Linux el rango por defecto es otro. No es una cifra para memorizar.)</em></p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Retoma la clasificación de puertos (sistema, usuario y dinámicos) de la <a href="clase-09.html">Clase 9</a> y muestra concurrencia real del Programa 06.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> forzar el mismo puerto de origen en dos conexiones desde una misma máquina en vez de dejar que el sistema asigne un puerto efímero.</p></div>
+</details>
+
+<details class="section-block sec" id="c17-select"><summary><span class="stitle">6 · De <code>fork()</code> a <code>select()</code>: chat grupal (Programa 07)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El problema de usar <code>fork()</code> para un chat de grupo y su solución con multiplexación de entrada/salida mediante <code>select()</code>.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Con <code>fork()</code>, cada participante está en una cabina insonorizada conectada a un operador propio: el operador no puede gritarle a las otras cabinas. Con <code>select()</code> todos están en la misma sala con un solo operador de «superoído» que escucha quién habla y lo repite a los demás.<span class="rompe">Dónde deja de servir: el operador único es un solo proceso; si se bloquea, se bloquea toda la sala.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Cada hijo de <code>fork()</code> tiene su propio espacio de memoria: si el cliente 1 escribe «hola a todos», el hijo 1 lo recibe pero no puede pasárselo directamente a los hijos 2 y 3. Comunicarlos con tuberías o memoria compartida complicaría mucho el código.</p>
+<p>La solución es volver a un solo proceso servidor, sin <code>fork()</code>, que vigile varios descriptores a la vez. El tipo <code>fd_set</code> es una «bolsa» de descriptores que se maneja con cuatro macros:</p>
+<ul>
+<li><code>FD_ZERO(&amp;readfds)</code>: vacía el conjunto.</li>
+<li><code>FD_SET(fd, &amp;readfds)</code>: agrega un descriptor (el socket servidor o el de un cliente).</li>
+<li><code>FD_CLR(fd, &amp;readfds)</code>: lo quita (por ejemplo, cuando un cliente se va).</li>
+<li><code>FD_ISSET(fd, &amp;readfds)</code>: dice si ese descriptor tiene actividad de lectura lista.</li>
+</ul>
+<p>Lógica del <code>programa_07_servidor_select.c</code> según NotebookLM: un arreglo <code>client_socket[max_clients]</code> en ceros lleva la cuenta de clientes; <code>select(max_fd + 1, &amp;readfds, NULL, NULL, NULL)</code> se bloquea hasta que algún socket registrado tenga actividad. Si es el socket servidor, hay una conexión nueva: <code>accept()</code> y se guarda el nuevo socket en el arreglo. Si es un cliente, <code>recv()</code> lee el mensaje y el servidor recorre el arreglo haciendo <code>send()</code> a los demás clientes. <em>(Dudoso: el detalle del código es reconstrucción de NotebookLM; contrastar con el archivo del profesor.)</em></p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la arquitectura típica de servidores de mensajería y de red de alta eficiencia en C.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> no llamar a <code>FD_ZERO</code> antes de volver a llenar el conjunto en cada ciclo, o no actualizar <code>max_fd</code> al agregar o quitar descriptores.</p></div>
+</details>
+
+<details class="section-block sec" id="c17-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Cuál es la diferencia clave entre el código de un cliente y el de un servidor?</summary><p>El servidor declara dos <code>sockaddr_in</code> (la propia y la del cliente aceptado); el cliente declara una (la del servidor).</p></details>
+<details class="qa"><summary>2. ¿Por qué el hijo hace <code>close(fd_s)</code>?</summary><p>Porque hereda una copia del socket de escucha y su única tarea es conversar con su cliente por <code>fd_c</code>; no debe interferir con las nuevas conexiones.</p></details>
+<details class="qa"><summary>3. ¿Por qué el padre hace <code>close(fd_c)</code>?</summary><p>Porque delega la conversación al hijo; así libera ese descriptor y puede volver a <code>accept()</code>.</p></details>
+<details class="qa"><summary>4. En octubre de 2026, ¿qué devuelven <code>tm_mon</code> y <code>tm_year</code> y cómo se corrigen?</summary><p><code>tm_mon</code> = 9, se suma 1 y da 10. <code>tm_year</code> = 126, se suma 1900 y da 2026.</p></details>
+<details class="qa"><summary>5. Tres clientes de la misma red salen con la misma IP pública. ¿Qué los distingue?</summary><p>El puerto efímero de origen, distinto para cada conexión; la tupla completa de la conexión es única.</p></details>
+<details class="qa"><summary>6. Compara <code>fork()</code> y <code>select()</code> para un chat grupal.</summary><p><code>fork()</code> aísla a cada cliente en un proceso con memoria propia y no permite retransmitir entre clientes; <code>select()</code> usa un solo proceso que vigila varios sockets y puede reenviar el mensaje a todos.</p></details>
+<details class="qa"><summary>7. ¿Qué hace <code>FD_ISSET</code>?</summary><p>Indica si un descriptor del conjunto tiene actividad de lectura lista.</p></details>
+<details class="qa"><summary>8. ¿Qué pasa cuando un cliente envía «adiós»?</summary><p>El hijo confirma, hace <code>close(fd_c)</code> y termina con <code>exit(0)</code>.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c17-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>Un cliente desde el celular:</strong> durante la prueba se conectó un alumno con datos móviles; el profesor consultó el origen de la IP y la red resultó ser de un operador móvil.</li>
+<li><strong>Navegadores como clientes:</strong> varios alumnos escribieron la IP y el puerto en el navegador del teléfono; el servidor imprimió las cabeceras HTTP, incluido el <em>User-Agent</em> de Android, y el profesor aprovechó para recordar que Android usa el kernel de Linux.</li>
+<li><strong>Logs del examen:</strong> mostró cómo los registros del fin de semana le permitieron verificar la IP, la fecha y la hora de cada alumno que presentó el examen parcial remoto.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c17-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Tarea:</strong> no hay entrega obligatoria para la siguiente sesión.</li>
+<li><strong>Tarea moral:</strong> descargar y probar localmente <code>programa_06_servidor_inet.c</code> y <code>programa_06_cliente_inet.c</code> con varias terminales, y revisar el <code>programa_07_servidor_select.c</code> con las macros de <code>fd_set</code>.</li>
+<li><strong>Próxima clase (martes):</strong> prueba en vivo del Programa 07 (chat grupal con <code>select()</code>); el profesor pidió que se conecten más de 10 alumnos a la vez para probar el arreglo de clientes y la cola de conexiones (<code>listen</code>).</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Servidor: dos <code>sockaddr_in</code>; cliente: una.</li>
+<li>Tras <code>fork()</code>: hijo <code>close(fd_s)</code>, padre <code>close(fd_c)</code>.</li>
+<li><code>localtime</code>: mes + 1 y año + 1900.</li>
+<li>Misma IP pública, distinto puerto efímero: no hay colisión.</li>
+<li>Chat grupal: un solo proceso con <code>select()</code> y <code>fd_set</code> (FD_ZERO, FD_SET, FD_CLR, FD_ISSET).</li>
+</ul></div>
+
+</div>
+</body>
+</html>
