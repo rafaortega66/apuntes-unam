@@ -89,18 +89,6 @@
       "link": "materias/lab-de-fundamentos-de-sistemas-embebidos/material.html"
     },
     {
-      "id": "md-p34",
-      "materia": "MD",
-      "sigla": "MD",
-      "titulo": "Práctica 3.4 — Clasificación (Diabetes demo)",
-      "vence": "2026-10-22T13:00:00-06:00",
-      "hora_confirmada": true,
-      "detalle": "Caso diabetes: variable objetivo binaria, EDA, split 70/30, mínimo 3 clasificadores en Python, variables más influyentes, matriz de confusión (identificar a las personas en FP y FN), métricas y conclusión de negocio. .ipynb + RapidMiner opcional + PPT. Nombre: «Practica 3.4 Clasificacion Equipo #».",
-      "link": "materias/mineria-de-datos/practicas.html#MD-P03-4",
-      "color": "#A98BD1",
-      "tipo": "tarea"
-    },
-    {
       "id": "rp-t2",
       "materia": "RP",
       "sigla": "RP",

@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-26T18:11:37+00:00",
+ "generatedAt": "2026-10-26T18:22:14+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -811,6 +811,11 @@
  },
  "gitlog": [
   {
+   "hash": "a5145cc",
+   "fecha": "2026-10-26T12:11:37-06:00",
+   "mensaje": "SIB: audios verificados contra el cuaderno nuevo (ids y nombres alineados con la hoja); fuente de audio en las Clases 1-15; tarea de atacantes ligada a SIB-Clase13; CLAUDE.md sin la excepción de desfase"
+  },
+  {
    "hash": "fa37348",
    "fecha": "2026-10-26T11:33:21-06:00",
    "mensaje": "SIB: agregar Clase 15 (22 oct) — inicio del Tema 4: políticas de seguridad y seis principios de redacción"
@@ -1104,11 +1109,6 @@
    "hash": "f91bcf8",
    "fecha": "2026-10-18T16:56:42-06:00",
    "mensaje": "ACS-E01: código del examen (cliente y servidor) en entregables; faltan capturas"
-  },
-  {
-   "hash": "f279dbf",
-   "fecha": "2026-10-18T12:35:27-06:00",
-   "mensaje": "ACS-E01: prompt para el proyecto ACS de Claude (en adicionales)"
   }
  ]
 }

@@ -88,7 +88,7 @@ ESTADO = {
     'FSE-E01': 'Presentado en papel (14 oct 2026) · 101 (36 + 65, incluye punto extra)',
     'SIB-EC02': 'Resuelto en mis apuntes · sin confirmar si se entregó',
     'MD-P03-3': 'Entregada (Classroom; la subió una compañera del Equipo 7)',
-    'MD-P03-4': 'Pendiente · vence jueves 22 oct, 13:00', 'RP-T02': 'Pendiente · vence viernes 23 oct, 07:00',
+    'MD-P03-4': 'Entregada tarde (Classroom: «Turned in late»; vencía el jueves 22 oct, 13:00)', 'RP-T02': 'Pendiente · vence viernes 23 oct, 07:00',
     'OAC-P04': 'Reporte pendiente · vence viernes 23 oct, 23:59', 'OAC-P05': 'Entregada (20 oct 2026, antes de las 23:59)',
     'OAC-T01': 'Entregada por correo al profesor (21 oct 2026, Entrega_OAC_OrtegaDeLaPaz.zip)',
     'OAC-T02': 'Entregada por correo al profesor (21 oct 2026, Entrega_OAC_OrtegaDeLaPaz.zip)',
@@ -201,7 +201,7 @@ def md_html(texto):
 
 # Entregas cuyos archivos que no son PDF llevan, junto al enlace normal, un botón «⬇ descargar» (atributo download).
 # Pedido del usuario el 20 oct 2026, empezando por estas; agregar aquí las demás.
-DESCARGA = {'MD-P03-1', 'MD-P03-2', 'MD-P03-3'}
+DESCARGA = {'MD-P03-1', 'MD-P03-2', 'MD-P03-3', 'MD-P03-4'}
 
 
 def link(rel, f, descargar=False):
