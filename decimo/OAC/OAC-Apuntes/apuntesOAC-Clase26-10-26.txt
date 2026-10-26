@@ -1,0 +1,36 @@
+Proyecto Final
+- Usar la infraestructura assembles y diseñar un proyecto
+o bien:
+- Usar "mem32" pra gemerar un proyecto
+o bien:
+- Red Neuronal Micropython (pi pico)
+
+Para usar en micropython:
+1) Debe estar en memoria flash el archivo "microMPL.py"
+2) Llamar librerias en el archivo objetivo:
+	from microMPL import MicroMPL
+
+Programa Ejemplo "xor.py"
+- Solución de una "or exclusiva"
+
+Construcción
+mpl=MicroMLP.Create(neuronsByLayers=[2,2,1], activationFuncName = MicroMLP.ACTFUNC_GAUSIAN, layersAutoConnectFUnction = MicroMLP.LayersFullConnect)
+
+#Def. de Edos:
+nnFalse = MicroMLP.NNValue.FromBool(False)
+nnTrue = MicroMLP.NNValue.FromBool(True)
+...
+input 1 y 2 en xor a out
+0 0 -> 0
+0 1 -> 1
+1 0 -> 1
+1 1 -> 0
+
+#Tabla de verdad
+mpl.AddExample([nnFalse,nnFalse],[nnFalse])
+mpl.AddExample([nnTrue,nnTrue],[nnTrue])
+
+#Contador de Aprox.
+learnCount = mpl.LearnExamples()
+#Imprimir aprox
+print(" =False xor False %s" mlp.Predict([nnFalse, nnFalse])[0].AsBool)

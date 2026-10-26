@@ -1,0 +1,57 @@
+Apuntes SIB clase 11 08/10/26
+
+
+--Pizarron-
+Clasificación de los ataques
+a) Por el objetivo o la intención
+	1.-Intencionado
+	2.-No intencionado
+b) Con base en el lugar donde se presentan
+	1.-Internos
+	2.-Externo
+c)Por lo evidente que son
+	1.-Pasivos -> (observación, lectura y escucha)
+	2.-Activos
+d) Por el flujo del bien
+	1.-Modificación
+	2.-Interrupción
+	3.-Interacción
+	4.-Suplantación/Falsificación
+
+
+---Proyector---
+Estapas o fases de un ataque
+Un ataque intencionado contempla tres etapas o fases principales:
+
+1.-Preparación o planteamiento: el método de ataque se plantea u otras preparaciones se realizan.
+Esta etapa se lleva a cabo ANTES de que se presente el ataque.
+Es en ella donde:
+a) Se identifican objetivos
+b) Se establecen los recursos humanos que participarán en el ataque
+c) Se decide hora, fecha y lugar para llevarlo a cabo
+d) Se diseña uno o varios planes alternativos por si el planteamiento prinicipal no sale como se esperaba
+e) Se consideran los recursos monetarios para auspiciar dicho ataque
+f) Se analizan otros recursos que intervendrán en el ataque (tiempo, medios de transporte, medios de comunicación, otros bienes como de cómputo, discos duros, usb, credenciales, vestuario etc.)
+g) Se define lo que se ganará con el ataque o lo que se perderá en caso de no ser exitoso
+
+2.-Activación: en esta etapa se realizan actividades que activan o disparan el ataque y por ende causan algún tipo de pérdida.
+Dichas actividades pueden ser muy significaticas o insignificativas aparentemente, sin embargo, pueden causar que se generen daños de manera encadenada.
+Esta etapa se lleva a cabo DURANTE el ataque.
+
+3.- Ejecución: en esta etapa se observan los resultados de llevar a cabo el ataque. 
+En esta etapa se lleva a cabo DESPUÉS del ataque.
+
+Un ataque no intencionado solo tiene 2 fases: activación y ejecución.
+
+Analizar el siguiente texto con las etapas anteriores, concluir y dar recomendaciones.
+Incidente en "SaludIntegral"
+-Red privada de clínicas y hospitales que gestiona expedientes médicos electrónicos, citas, y durante varios días, el sistema de citas presenta lentitud intermitente y acceso desde ubicaciones inusuales.
+-Personal médico reporta cierres de sesión inesperados y archivos que tardan en abrir.
+-Algunos equipos muestran actividad extraña después de revisar correos adjuntos.
+-Se detectan accesos a historiales clínicos en horarios no habituales con cuentas legítimas.
+Los servidores comienzan a intercambiar información de forma poco común.
+-Aparece tráfico constante hacia direcciones externas desconocidas.
+-Algunos expedientes presentan errores o cambios en sus nombres.
+-Los respaldos se retrasan sin explicación clara.
+-registros de actividad aparecen incompletos o desaparecen.
+-Finalmente, sistemas críticos se vuelven inestables y afectan la intención a paciente. 

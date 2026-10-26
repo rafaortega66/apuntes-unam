@@ -45,6 +45,12 @@ for a, b in casos:
 
 # ---------- Modo interactivo ----------
 print()
+def leer_vector(t):
+    # acepta 1,2,3  (1,2,3)  [1, 2, 3]  o separados por espacios
+    for c in "()[]":
+        t = t.replace(c, " ")
+    return [float(v) for v in t.replace(",", " ").split()]
+
 print("=== Modo interactivo (Enter vacio para salir) ===")
 while True:
     t1 = input("Vector 1 (ej. 1,2,3): ").strip()
@@ -52,8 +58,8 @@ while True:
         break
     t2 = input("Vector 2 (misma dimension): ").strip()
     try:
-        va = array('f', [float(v) for v in t1.split(',')])
-        vb = array('f', [float(v) for v in t2.split(',')])
+        va = array('f', leer_vector(t1))
+        vb = array('f', leer_vector(t2))
         print("  Producto punto (asm) = {:.4f}".format(punto(va, vb)))
     except ValueError as e:
         print("  Error:", e)

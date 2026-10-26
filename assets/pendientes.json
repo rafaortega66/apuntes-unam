@@ -99,18 +99,6 @@
       "link": "materias/reconocimiento-de-patrones/tareas.html#RP-T02",
       "color": "#45B8A8",
       "tipo": "tarea"
-    },
-    {
-      "id": "laboac-p4",
-      "materia": "Lab OAC",
-      "sigla": "Lab OAC",
-      "titulo": "Reporte práctica 4",
-      "vence": "2026-10-23T23:59:00-06:00",
-      "hora_confirmada": true,
-      "detalle": "Carta ASM entrada-estado en VHDL (DE10-Lite): memoria o Karnaugh justificado, liga a video en la FPGA, VHDL explicado, conclusión individual. Ambos integrantes suben el PDF. No se acepta tarde.",
-      "link": "decimo/OAC/OAC-Lab/OAC-P04/OAC-P04-indicaciones.md",
-      "color": "#7C9CD6",
-      "tipo": "tarea"
     }
   ]
 }

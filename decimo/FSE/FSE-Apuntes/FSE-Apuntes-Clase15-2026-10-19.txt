@@ -1,0 +1,78 @@
+19-10-26
+Proceso, tareas e hilos
+
+1.-Instanciación de proceso.
+El sistema operativo inicia la carga de un programa en memoria, instanciando primero un nuevo proceso. 
+#/usr/bin/env (bash|python)
+Super Chad ¡no! Super Stacy (Chiste de patriarcado)
+
+2.-Carga de programa en main thread puesto en wait.
+
+3.-Main thread cambia a ready.
+
+4.-Main thread comienza ejecución y cambia a running.
+
+5.-Main thread inicia un secondary thread
+
+6.-OS suspende main thread que cambia a ready
+
+
+Se definen 3 estados base:
+<-> en ejecución (running) -> en espera (waiting) -> listo (ready) <->
+
+¿Y... qué es el tiempo real?
+
+Definición: Un sistema es de tiempo real cuando toda salida yt = f(x de t) es producida (i.e. computada) antes del arribo de la entrada x de t+1.
+
+Tiempo real -> La salida ...
+
+
+3.3 Schedulers de Tiempo Real
+
+Tipos de tiempo real
+
+-Tiempo real duro (hard real time)
+	-Ejecución crítica
+		-El sistema se desetabiliza si el cómputo no se realiza a tiempo y puede no ser reestabilizable.
+		-Retrasos en el cómputo pueden tener consecuencias catastróficas (para todo el sistema o para otros).
+	-Todos los plazos deben cumplirse
+
+-Tiempo real flexible (soft real time)
+	-Ejecución no crítica
+		-El sistema podría desestabilizarse si el cómputo no se realiza a tiempo, pero puede reencausarse.
+		-Los retrasos en el cómputo son inconvenientes, pero no tienen consecuencias graves.
+	-La ejecución de las tareas debería cumplirse dentro del plazo.
+
+Ejemplos de sistemas de tiempo real
+Tiempo real duro				Tiempo real flexible
+-Control						-QoS de dispositivo
+	-Frenos del automovil			-Llamadas
+	-Estabilizador (avión,			-Videollamadas
+		helicóptero, etc.)			-Transferencias de datos
+	-Planta nuclear					-Enrutador (router)
+	-Acelerador de partículas		-Balanceador de carga 
+	-Colisionador de hadrones		 de cómputo distribuido
+
+Distinción
+-En RT no se habla de procesos sino de tareas.
+-Las tareas son repetitivas y (normalmente) se ejecutan a completitud.
+-Todas las tareas dependen del proceso principal o raíz
+	-No hay procesos independientes
+	-El proceso raíz administra el acceso al espacio de memoria compartida.
+
+Tipos de tareas en sistemas RT
+-Periódica (P)
+	-Tiene deadline
+	-Ocurre periódicamente (a intervalos de tiempo previamente conocidos)
+-Aperiódica (A)
+	-Tienen deadline.
+	-Ocurre de forma espontánea.
+	-Se considera con anticipación para la planificabilidad del sistema.
+-Esporádicas (S)
+
+¡OJO!
+Algunos autores invierten la notación para tareas aperiódicas.
+
+Planificabilidad
+-Lo más importante durante el diseño de un sistema RT es definir si el sistema es planificable
+-La planificabilidad depende de las tareas que se consideren, su consumo, periodo, y el tipo de scheduling.

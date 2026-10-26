@@ -89,7 +89,7 @@ ESTADO = {
     'SIB-EC02': 'Resuelto en mis apuntes · sin confirmar si se entregó',
     'MD-P03-3': 'Entregada (Classroom; la subió una compañera del Equipo 7)',
     'MD-P03-4': 'Entregada tarde (Classroom: «Turned in late»; vencía el jueves 22 oct, 13:00)', 'RP-T02': 'Pendiente · vence viernes 23 oct, 07:00',
-    'OAC-P04': 'Reporte pendiente · vence viernes 23 oct, 23:59', 'OAC-P05': 'Entregada (20 oct 2026, antes de las 23:59)',
+    'OAC-P04': 'Entregada (Classroom: «Completed»; el plazo se amplió al 28 oct, 23:59)', 'OAC-P05': 'Entregada (20 oct 2026, antes de las 23:59)',
     'OAC-T01': 'Entregada por correo al profesor (21 oct 2026, Entrega_OAC_OrtegaDeLaPaz.zip)',
     'OAC-T02': 'Entregada por correo al profesor (21 oct 2026, Entrega_OAC_OrtegaDeLaPaz.zip)',
     'OAC-Proy01': 'Entregada por correo al profesor (21 oct 2026, Entrega_OAC_OrtegaDeLaPaz.zip)',

@@ -65,7 +65,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 |---|---|---|---|
 | FSE-P01 | [FSE-P01-indicaciones.pdf](FSE/FSE-Lab/FSE-P01/FSE-P01-indicaciones.pdf) | [p01-FSE-420054085.pdf.pdf](FSE/FSE-Lab/FSE-P01/FSE-P01-entregables/p01-FSE-420054085.pdf.pdf) | 3 |
 | FSE-P02 | [FSE-P02-indicaciones.pdf](FSE/FSE-Lab/FSE-P02/FSE-P02-indicaciones.pdf) | [p02-FSE-420054085.pdf](FSE/FSE-Lab/FSE-P02/FSE-P02-entregables/p02-FSE-420054085.pdf) | 5 |
-| FSE-P03 | [FSE-P03-indicaciones.pdf](FSE/FSE-Lab/FSE-P03/FSE-P03-indicaciones.pdf) | [19-OEPR-L03.pdf](FSE/FSE-Lab/FSE-P03/FSE-P03-entregables/19-OEPR-L03.pdf) | 7 |
+| FSE-P03 | [FSE-P03-indicaciones.pdf](FSE/FSE-Lab/FSE-P03/FSE-P03-indicaciones.pdf) | [19-OEPR-L03.pdf](FSE/FSE-Lab/FSE-P03/FSE-P03-entregables/19-OEPR-L03.pdf) | 8 |
 | FSE-P04 | [FSE-P04-indicaciones.pdf](FSE/FSE-Lab/FSE-P04/FSE-P04-indicaciones.pdf) | [19-OEPR-L04.pdf](FSE/FSE-Lab/FSE-P04/FSE-P04-entregables/19-OEPR-L04.pdf) | 3 |
 | FSE-P05 | [FSE-P05-indicaciones.pdf](FSE/FSE-Lab/FSE-P05/FSE-P05-indicaciones.pdf) | [19-OEPR-L05-adicionales.zip](FSE/FSE-Lab/FSE-P05/FSE-P05-entregables/19-OEPR-L05-adicionales.zip)<br>[19-OEPR-L05.pdf](FSE/FSE-Lab/FSE-P05/FSE-P05-entregables/19-OEPR-L05.pdf) | 1 |
 | FSE-P06 | [FSE-P06-indicaciones.pdf](FSE/FSE-Lab/FSE-P06/FSE-P06-indicaciones.pdf) | [19-OEPR-L06-adicionales.zip](FSE/FSE-Lab/FSE-P06/FSE-P06-entregables/19-OEPR-L06-adicionales.zip)<br>[19-OEPR-L06.pdf](FSE/FSE-Lab/FSE-P06/FSE-P06-entregables/19-OEPR-L06.pdf) | 10 |
@@ -103,7 +103,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 | Entrega | Indicaciones | Entregado | Adicionales |
 |---|---|---|---|
 | MD-P03-1 | [MD-P03-1-indicaciones.pdf](MD/MD-Practicas/MD-P03-1/MD-P03-1-indicaciones.pdf) | [Equipo7_Practica3.1_Agrupacion.pdf](MD/MD-Practicas/MD-P03-1/MD-P03-1-entregables/Equipo7_Practica3.1_Agrupacion.pdf)<br>[Equipo_7_Practica_3.1_Agrupacion.ipynb](MD/MD-Practicas/MD-P03-1/MD-P03-1-entregables/Equipo_7_Practica_3.1_Agrupacion.ipynb) | 3 |
-| MD-P03-2 | [MD-P03-2-indicaciones.pdf](MD/MD-Practicas/MD-P03-2/MD-P03-2-indicaciones.pdf) | [Equipo 7 Practica 3.2 Asociacion.ipynb](MD/MD-Practicas/MD-P03-2/MD-P03-2-entregables/Equipo%207%20Practica%203.2%20Asociacion.ipynb)<br>[Equipo 7 Practica 3.2 Asociacion.pdf](MD/MD-Practicas/MD-P03-2/MD-P03-2-entregables/Equipo%207%20Practica%203.2%20Asociacion.pdf) | 4 |
+| MD-P03-2 | [MD-P03-2-indicaciones.pdf](MD/MD-Practicas/MD-P03-2/MD-P03-2-indicaciones.pdf) | [Equipo 7 Practica 3.2 Asociacion.ipynb](MD/MD-Practicas/MD-P03-2/MD-P03-2-entregables/Equipo%207%20Practica%203.2%20Asociacion.ipynb)<br>[Equipo 7 Practica 3.2 Asociacion.pdf](MD/MD-Practicas/MD-P03-2/MD-P03-2-entregables/Equipo%207%20Practica%203.2%20Asociacion.pdf)<br>[Equipo 7 Practica 3.2 Asociacion.pptx](MD/MD-Practicas/MD-P03-2/MD-P03-2-entregables/Equipo%207%20Practica%203.2%20Asociacion.pptx) | 4 |
 | MD-P03-3 | [MD-P03-3-indicaciones.md](MD/MD-Practicas/MD-P03-3/MD-P03-3-indicaciones.md) | [Equipo 7 Practica 3.3 Regresion.ipynb](MD/MD-Practicas/MD-P03-3/MD-P03-3-entregables/Equipo%207%20Practica%203.3%20Regresion.ipynb)<br>[Equipo_7_Practica_3.3_Regresion_Presentación.pdf](MD/MD-Practicas/MD-P03-3/MD-P03-3-entregables/Equipo_7_Practica_3.3_Regresion_Presentación.pdf) | — |
 | MD-P03-4 | [MD-P03-4-indicaciones.md](MD/MD-Practicas/MD-P03-4/MD-P03-4-indicaciones.md)<br>[MD-P03-4-indicaciones.pdf](MD/MD-Practicas/MD-P03-4/MD-P03-4-indicaciones.pdf) | [Practica 3.4 Clasificacion Equipo 7.ipynb](MD/MD-Practicas/MD-P03-4/MD-P03-4-entregables/Practica%203.4%20Clasificacion%20Equipo%207.ipynb)<br>[Práctica 3.4 Clasificación.pdf](MD/MD-Practicas/MD-P03-4/MD-P03-4-entregables/Práctica%203.4%20Clasificación.pdf) | 7 |
 
@@ -117,7 +117,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 ## OAC — Organización y Arquitectura de Computadoras (+ Lab L+)
 
 - **OAC-Material**: 0 archivos (OAC/OAC-Material/)
-- **OAC-Lab-Material**: 3 archivos (OAC/OAC-Lab/OAC-Lab-Material/)
+- **OAC-Lab-Material**: 5 archivos (OAC/OAC-Lab/OAC-Lab-Material/)
 
 
 ### OAC-Lab
@@ -127,22 +127,22 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 | OAC-P01 | [OAC-P01-indicaciones.pdf](OAC/OAC-Lab/OAC-P01/OAC-P01-indicaciones.pdf) | [Practica-01-Pre-reporte.pdf](OAC/OAC-Lab/OAC-P01/OAC-P01-entregables/Practica-01-Pre-reporte.pdf)<br>[practica01_equipo07_OrtegaDeLaPaz.pdf](OAC/OAC-Lab/OAC-P01/OAC-P01-entregables/practica01_equipo07_OrtegaDeLaPaz.pdf) | 9 |
 | OAC-P02 | [OAC-P02-indicaciones.pdf](OAC/OAC-Lab/OAC-P02/OAC-P02-indicaciones.pdf) | [practica02_equipo07_Rea_OrtegaDeLaPaz.pdf](OAC/OAC-Lab/OAC-P02/OAC-P02-entregables/practica02_equipo07_Rea_OrtegaDeLaPaz.pdf) | 3 |
 | OAC-P03 | [OAC-P03-indicaciones.pdf](OAC/OAC-Lab/OAC-P03/OAC-P03-indicaciones.pdf) | [practica03_equipo07_Rea_Ortega.pdf](OAC/OAC-Lab/OAC-P03/OAC-P03-entregables/practica03_equipo07_Rea_Ortega.pdf) | 1 |
-| OAC-P04 | [OAC-P04-indicaciones-reporte.pdf](OAC/OAC-Lab/OAC-P04/OAC-P04-indicaciones-reporte.pdf)<br>[OAC-P04-indicaciones.md](OAC/OAC-Lab/OAC-P04/OAC-P04-indicaciones.md)<br>[OAC-P04-indicaciones.pdf](OAC/OAC-Lab/OAC-P04/OAC-P04-indicaciones.pdf) | _(sin entrega aún)_ | — |
-| OAC-P05 | [OAC-P05-indicaciones.md](OAC/OAC-Lab/OAC-P05/OAC-P05-indicaciones.md)<br>[OAC-P05-indicaciones.pdf](OAC/OAC-Lab/OAC-P05/OAC-P05-indicaciones.pdf) | [previo1_grupo3_Ortega_delaPaz_Rafael.pdf](OAC/OAC-Lab/OAC-P05/OAC-P05-entregables/previo1_grupo3_Ortega_delaPaz_Rafael.pdf) | — |
+| OAC-P04 | [OAC-P04-indicaciones-reporte.pdf](OAC/OAC-Lab/OAC-P04/OAC-P04-indicaciones-reporte.pdf)<br>[OAC-P04-indicaciones.md](OAC/OAC-Lab/OAC-P04/OAC-P04-indicaciones.md)<br>[OAC-P04-indicaciones.pdf](OAC/OAC-Lab/OAC-P04/OAC-P04-indicaciones.pdf) | [practica04_equipo07_Rea_Ortega.pdf](OAC/OAC-Lab/OAC-P04/OAC-P04-entregables/practica04_equipo07_Rea_Ortega.pdf) | 14 |
+| OAC-P05 | [OAC-P05-indicaciones.md](OAC/OAC-Lab/OAC-P05/OAC-P05-indicaciones.md)<br>[OAC-P05-indicaciones.pdf](OAC/OAC-Lab/OAC-P05/OAC-P05-indicaciones.pdf) | [previo1_grupo3_Ortega_delaPaz_Rafael.pdf](OAC/OAC-Lab/OAC-P05/OAC-P05-entregables/previo1_grupo3_Ortega_delaPaz_Rafael.pdf) | 2 |
 
 ### OAC-Proyectos
 
 | Entrega | Indicaciones | Entregado | Adicionales |
 |---|---|---|---|
-| OAC-Proy01 | [OAC-Proy01-indicaciones.md](OAC/OAC-Proyectos/OAC-Proy01/OAC-Proy01-indicaciones.md) | [proyecto01_CalculadoraTaylor_OrtegaDeLaPaz.pdf](OAC/OAC-Proyectos/OAC-Proy01/OAC-Proy01-entregables/proyecto01_CalculadoraTaylor_OrtegaDeLaPaz.pdf)<br>[proyecto_calculadora.py](OAC/OAC-Proyectos/OAC-Proy01/OAC-Proy01-entregables/proyecto_calculadora.py)<br>[proyecto_taylor.py](OAC/OAC-Proyectos/OAC-Proy01/OAC-Proy01-entregables/proyecto_taylor.py) | 1 |
-| OAC-Proy02 | [OAC-Proy02-indicaciones.md](OAC/OAC-Proyectos/OAC-Proy02/OAC-Proy02-indicaciones.md) | [proyecto02_FiltroIIR_OrtegaDeLaPaz.pdf](OAC/OAC-Proyectos/OAC-Proy02/OAC-Proy02-entregables/proyecto02_FiltroIIR_OrtegaDeLaPaz.pdf)<br>[proyecto_filtro_iir.py](OAC/OAC-Proyectos/OAC-Proy02/OAC-Proy02-entregables/proyecto_filtro_iir.py) | 1 |
+| OAC-Proy01 | [OAC-Proy01-indicaciones.md](OAC/OAC-Proyectos/OAC-Proy01/OAC-Proy01-indicaciones.md) | [proyecto01_CalculadoraTaylor_OrtegaDeLaPaz.pdf](OAC/OAC-Proyectos/OAC-Proy01/OAC-Proy01-entregables/proyecto01_CalculadoraTaylor_OrtegaDeLaPaz.pdf)<br>[proyecto_calculadora.py](OAC/OAC-Proyectos/OAC-Proy01/OAC-Proy01-entregables/proyecto_calculadora.py)<br>[proyecto_taylor.py](OAC/OAC-Proyectos/OAC-Proy01/OAC-Proy01-entregables/proyecto_taylor.py) | 2 |
+| OAC-Proy02 | [OAC-Proy02-indicaciones.md](OAC/OAC-Proyectos/OAC-Proy02/OAC-Proy02-indicaciones.md) | [proyecto02_FiltroIIR_OrtegaDeLaPaz.pdf](OAC/OAC-Proyectos/OAC-Proy02/OAC-Proy02-entregables/proyecto02_FiltroIIR_OrtegaDeLaPaz.pdf)<br>[proyecto_filtro_iir.py](OAC/OAC-Proyectos/OAC-Proy02/OAC-Proy02-entregables/proyecto_filtro_iir.py) | 2 |
 
 ### OAC-Tareas
 
 | Entrega | Indicaciones | Entregado | Adicionales |
 |---|---|---|---|
 | OAC-T01 | [OAC-T01-indicaciones.md](OAC/OAC-Tareas/OAC-T01/OAC-T01-indicaciones.md) | [tarea01_RaizCuadrada_OrtegaDeLaPaz.pdf](OAC/OAC-Tareas/OAC-T01/OAC-T01-entregables/tarea01_RaizCuadrada_OrtegaDeLaPaz.pdf)<br>[tarea_raiz_cuadrada.py](OAC/OAC-Tareas/OAC-T01/OAC-T01-entregables/tarea_raiz_cuadrada.py) | 1 |
-| OAC-T02 | [OAC-T02-indicaciones.md](OAC/OAC-Tareas/OAC-T02/OAC-T02-indicaciones.md) | [tarea02_ProductoPunto_OrtegaDeLaPaz.pdf](OAC/OAC-Tareas/OAC-T02/OAC-T02-entregables/tarea02_ProductoPunto_OrtegaDeLaPaz.pdf)<br>[tarea_producto_punto.py](OAC/OAC-Tareas/OAC-T02/OAC-T02-entregables/tarea_producto_punto.py) | 1 |
+| OAC-T02 | [OAC-T02-indicaciones.md](OAC/OAC-Tareas/OAC-T02/OAC-T02-indicaciones.md) | [tarea02_ProductoPunto_OrtegaDeLaPaz.pdf](OAC/OAC-Tareas/OAC-T02/OAC-T02-entregables/tarea02_ProductoPunto_OrtegaDeLaPaz.pdf)<br>[tarea_producto_punto.py](OAC/OAC-Tareas/OAC-T02/OAC-T02-entregables/tarea_producto_punto.py) | 2 |
 
 ## RP — Reconocimiento de Patrones
 
@@ -173,7 +173,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 
 ## SIB — Seguridad Informática Básica
 
-- **SIB-Material**: 7 archivos (SIB/SIB-Material/)
+- **SIB-Material**: 8 archivos (SIB/SIB-Material/)
 
 
 ### SIB-EjerciciosClase
