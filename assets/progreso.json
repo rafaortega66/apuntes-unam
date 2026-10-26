@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-26T17:33:21+00:00",
+ "generatedAt": "2026-10-26T18:11:37+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -811,6 +811,11 @@
  },
  "gitlog": [
   {
+   "hash": "fa37348",
+   "fecha": "2026-10-26T11:33:21-06:00",
+   "mensaje": "SIB: agregar Clase 15 (22 oct) — inicio del Tema 4: políticas de seguridad y seis principios de redacción"
+  },
+  {
    "hash": "fe43596",
    "fecha": "2026-10-26T11:29:22-06:00",
    "mensaje": "ACS: agregar Clase 17 (22 oct) — Programa 06 en vivo, puertos efímeros, struct tm y select() para chat grupal"
@@ -1104,11 +1109,6 @@
    "hash": "f279dbf",
    "fecha": "2026-10-18T12:35:27-06:00",
    "mensaje": "ACS-E01: prompt para el proyecto ACS de Claude (en adicionales)"
-  },
-  {
-   "hash": "5fd9f97",
-   "fecha": "2026-10-18T12:21:29-06:00",
-   "mensaje": "CLAUDE.md: el sitio es solo de consulta; tareas y exámenes se hacen en Claude Projects. ACS: archivos por correo"
   }
  ]
 }
