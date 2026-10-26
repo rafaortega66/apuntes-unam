@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 18 — Reconocimiento de Patrones</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Reconocimiento de Patrones</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Clase 18 <span style="font-size:.6em;font-weight:400;color:var(--ink-soft)">(sesión 21 del curso)</span></h2>
+  <p class="prof">Ing. Rubén Omar Azuara Domínguez · 26 oct 2026 · Tema 9 — Redes neuronales: del perceptrón al perceptrón multicapa, activaciones, entrenamiento con SGD, retropropagación, desvanecimiento y explosión del gradiente, y regularización.</p>
+  <p style="font-size:12px;color:var(--ink-soft);margin:2px 0 0">🔢 Sesión 21 del curso (cronología real). Fuente: audio RP-Clase18 procesado en NotebookLM, 26 oct 2026. Las fechas y entregas del final salen de NotebookLM y no se han contrastado con Classroom.</p>
+</div>
+
+<details class="section-block sec" id="c18-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Por qué un perceptrón simple no resuelve XOR y cómo lo resuelve el perceptrón multicapa (MLP).</strong><span class="evid">Evidencia: lo explicó con detalle histórico y conceptual (Minsky y Papert, 1969) para justificar las capas ocultas y la no linealidad.</span></li>
+<li><strong>Las activaciones de las capas ocultas deben ser no lineales.</strong><span class="evid">Evidencia: remarcó que con activaciones lineales toda la red colapsa a una sola combinación lineal.</span></li>
+<li><strong>Los 4 pasos del entrenamiento: forward, pérdida, backward y actualización de pesos.</strong><span class="evid">Evidencia: los desglosó en orden y escribió la regla W_nuevo = W_viejo − α·∇L.</span></li>
+<li><strong>Desvanecimiento y explosión del gradiente, con sus soluciones.</strong><span class="evid">Evidencia: explicó causas y remedios (ReLU y variantes, conexiones residuales, inicialización He/Xavier, gradient clipping, Batch Normalization).</span></li>
+<li><strong>Épocas, minilotes y aleatorización.</strong><span class="evid">Evidencia: explicó el protocolo de SGD con minilotes de tamaño B y por qué se revuelven en cada época.</span></li>
+<li><strong>Salida y pérdida según la tarea (regresión, binaria, multiclase).</strong><span class="evid">Evidencia: la asoció de forma explícita (lineal+MSE, sigmoide+entropía cruzada binaria, softmax+entropía cruzada). Evidencia más débil: no la marcó como pregunta de examen.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c18-repaso"><summary><span class="stitle">1 · Repaso: Gradient Boosting y sus límites</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Gradient Boosting es un ensamble secuencial donde cada modelo corrige los residuos del anterior con descenso de gradiente en el espacio de funciones (ver <a href="clase-17.html">Clase 17</a>).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es una carrera de relevos en la que cada corredor compensa el tiempo que perdió el anterior.<span class="rompe">Dónde deja de servir: no ve la cancha completa de un vistazo, que es lo que hace falta con imágenes y señales.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El profesor recordó que Boosting no modela dos tipos de dependencia: la secuencial o temporal (audio, series de tiempo) y la espacial (vecindad entre píxeles de una imagen).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Esa limitación justifica pasar a las redes neuronales profundas.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> aplicar Boosting directo a píxeles o audio crudo sin extraer características.</p></div>
+</details>
+
+<details class="section-block sec" id="c18-historia"><summary><span class="stitle">2 · Historia y estructura de una neurona</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Modelos computacionales inspirados en la organización de las neuronas del cerebro.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un circuito de interruptores conectados que ajustan su sensibilidad con los estímulos hasta reconocer un patrón.<span class="rompe">Dónde deja de servir: la neurona biológica usa dinámicas químicas complejas que aquí se reducen a multiplicaciones de matrices.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Historia.</strong> No es una tecnología nueva. El perceptrón lo diseñó Frank Rosenblatt en 1957 y lo publicó en 1958. En 1969 Marvin Minsky y Seymour Papert demostraron que una sola neurona no aprende problemas no lineales como XOR, y el área se frenó por años. El resurgimiento actual se debe al cómputo en paralelo y a las GPU.</p>
+<p><strong>Biológica contra artificial.</strong> Biológica: dendritas (reciben), núcleo (procesa) y axón con su terminal (transmite). Artificial: entradas X, pesos W, suma ponderada con sesgo b, función de activación φ y salida Y.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Los modelos profundos actuales usan matemáticas de hace décadas que hoy son viables por el hardware.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> pensar que las redes son un invento reciente o que simulan el cerebro completo.</p></div>
+</details>
+
+<details class="section-block sec" id="c18-perceptron"><summary><span class="stitle">3 · El perceptrón simple y la compuerta AND</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La unidad básica: combina linealmente entradas y pesos, suma un sesgo y aplica una función de activación: Y = φ(Σ wᵢxᵢ + b) = φ(WᵀX + b).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un filtro que pondera la importancia de cada ingrediente antes de decir sí o no.<span class="rompe">Dónde deja de servir: solo traza una línea recta para separar las clases.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Ejemplo resuelto en vivo, compuerta AND: entradas x₁, x₂ ∈ {0, 1}; pesos w₁ = 1 y w₂ = 1; sesgo b = −1.5; activación escalón (φ(z) = 1 si z ≥ 0, y 0 si z &lt; 0).</p>
+<ul>
+<li>(0, 0): 0 + 0 − 1.5 = −1.5 → salida 0.</li>
+<li>(1, 0): 1 + 0 − 1.5 = −0.5 → salida 0.</li>
+<li>(0, 1): 0 + 1 − 1.5 = −0.5 → salida 0.</li>
+<li>(1, 1): 1 + 1 − 1.5 = +0.5 → salida 1.</li>
+</ul>
+<p>Limitación: solo aprende clasificadores lineales (AND, OR); no puede con XOR.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es el bloque con el que se construyen todas las arquitecturas densas.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> intentar resolver un problema no lineal con una sola capa sin capas ocultas.</p></div>
+</details>
+
+<details class="section-block sec" id="c18-mlp"><summary><span class="stitle">4 · Perceptrón multicapa y funciones de activación</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Una arquitectura con capa de entrada, una o más capas ocultas y capa de salida, conectadas en secuencia y capaz de aprender funciones no lineales.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es una fábrica por etapas: la primera detecta detalles, las intermedias los combinan en figuras y la última decide.<span class="rompe">Dónde deja de servir: en la red nadie programa qué detecta cada etapa; lo aprende sola.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>La capa de entrada recibe las características crudas; las ocultas extraen representaciones cada vez más abstractas; la de salida da la decisión. Las ocultas <strong>deben</strong> tener activación no lineal (sigmoide, tanh, ReLU): si fuera lineal, toda la red equivaldría a una sola combinación lineal.</p>
+<p>Configuración de la salida según la tarea:</p>
+<ul>
+<li><strong>Regresión:</strong> activación lineal y pérdida de error cuadrático medio (MSE).</li>
+<li><strong>Clasificación binaria:</strong> sigmoide (acotada entre 0 y 1) y entropía cruzada binaria.</li>
+<li><strong>Multiclase:</strong> K neuronas con softmax (las probabilidades suman 1) y entropía cruzada multiclase.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite resolver XOR y fronteras de decisión arbitrariamente complejas.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> activaciones lineales en capas ocultas o salida inadecuada para la tarea (sigmoide en una regresión no acotada).</p></div>
+</details>
+
+<details class="section-block sec" id="c18-entrenamiento"><summary><span class="stitle">5 · Entrenamiento: pérdida, SGD, minilotes y épocas</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un procedimiento iterativo que ajusta pesos y sesgos para minimizar una función de pérdida sobre una superficie no convexa.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es bajar una montaña a ciegas en una tormenta: tanteas el suelo y das el paso hacia donde más cae.<span class="rompe">Dónde deja de servir: la montaña real tiene tres dimensiones; la superficie de pérdida tiene miles o millones.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Por las no linealidades y las capas, la superficie tiene mínimos locales y puntos silla (derivada cero pero no mínimo). Los cuatro pasos:</p>
+<ol>
+<li><strong>Forward pass:</strong> las entradas pasan por pesos, sesgos y activaciones hasta dar la predicción.</li>
+<li><strong>Pérdida:</strong> se compara la predicción con la etiqueta real.</li>
+<li><strong>Backward pass / retropropagación:</strong> se calculan las derivadas de la pérdida respecto a cada peso con la regla de la cadena, de la salida hacia la entrada.</li>
+<li><strong>Actualización:</strong> W_nuevo = W_viejo − α·∇L, con tasa de aprendizaje α.</li>
+</ol>
+<p>Procesar todo el conjunto de una vez es inviable, así que se divide en minilotes de tamaño B (SGD). Una <strong>época</strong> es una pasada completa por todos los minilotes, y en cada época se revuelven los datos para que la red no memorice el orden.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es el motor que permite aprender directo de datos crudos, sin extraer características a mano.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> no aleatorizar entre épocas, o un minilote tan grande que desborda la memoria de la GPU.</p></div>
+</details>
+
+<details class="section-block sec" id="c18-backprop"><summary><span class="stitle">6 · Retropropagación, paso a paso</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El algoritmo que calcula de forma eficiente el gradiente de la pérdida respecto a cada peso, aplicando la regla de la cadena recursivamente desde la salida.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es repartir culpas: si el producto sale defectuoso, se mide cuánto falló el empaque, el ensamblador y el proveedor para corregir a cada uno.<span class="rompe">Dónde deja de servir: aquí la «culpa» es una derivada exacta, no una opinión.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Con una red de entrada X₁, peso W₁₁⁽¹⁾, sesgo b₁⁽¹⁾, activación A₁, peso de salida W₁₁⁽²⁾ y pérdida L = ½(ŷ − y)²:</p>
+<ul>
+<li>Respecto a la salida: ∂L/∂ŷ = (ŷ − y).</li>
+<li>Última capa: ∂L/∂W₁₁⁽²⁾ = ∂L/∂ŷ · ∂ŷ/∂W₁₁⁽²⁾.</li>
+<li>Capa más profunda: ∂L/∂W₁₁⁽¹⁾ = ∂L/∂ŷ · ∂ŷ/∂A₁ · ∂A₁/∂z₁ · ∂z₁/∂W₁₁⁽¹⁾.</li>
+</ul>
+<p>Los términos ya calculados para la capa posterior (∂L/∂ŷ · ∂ŷ/∂A₁) se reutilizan para las capas anteriores en lugar de recalcularse.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Reutilizar los cálculos intermedios es lo que hace viable entrenar redes grandes.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> derivar cada capa por separado sin reutilizar la cadena de gradientes.</p></div>
+</details>
+
+<details class="section-block sec" id="c18-universal"><summary><span class="stitle">7 · Aproximación universal: ancho contra profundidad</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El teorema que dice que un MLP con una sola capa oculta y suficientes neuronas puede aproximar cualquier función continua.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Con suficientes ladrillos pequeños se arma cualquier escultura; aun así conviene construir por pisos y columnas.<span class="rompe">Dónde deja de servir: el teorema asegura que existe la red, no que sea fácil de entrenar ni de tamaño razonable.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El <em>ancho</em> es el número de neuronas de una capa; la <em>profundidad</em>, el número de capas sucesivas. En teoría basta una capa infinitamente ancha, pero en la práctica es inviable. Apilar capas (22, 50, 100 o más) reduce los parámetros necesarios y permite aprender jerarquías de características.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Fundamenta el paso del aprendizaje máquina tradicional al aprendizaje profundo.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que más neuronas en una sola capa siempre supera a añadir capas.</p></div>
+</details>
+
+<details class="section-block sec" id="c18-gradiente"><summary><span class="stitle">8 · Desvanecimiento y explosión del gradiente</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Inestabilidad numérica de la retropropagación en redes muy profundas, por multiplicar muchos gradientes intermedios.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es susurrar un mensaje a lo largo de una fila de 100 personas: llega como murmullo inaudible (desvanecimiento) o como grito distorsionado (explosión).<span class="rompe">Dónde deja de servir: en la red el efecto no es ruido aleatorio sino un producto de derivadas.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Desvanecimiento:</strong> con activaciones saturadas (sigmoide, tanh) cuyas derivadas son casi cero en los extremos, el producto en cadena tiende a cero y las primeras capas dejan de aprender. <strong>Explosión:</strong> cuando derivadas o pesos son grandes, el producto crece exponencialmente y desestabiliza las actualizaciones.</p>
+<p>Soluciones que presentó:</p>
+<ul>
+<li>Activaciones no saturadas: ReLU, LeakyReLU, SiLU, Softplus.</li>
+<li>Conexiones residuales (ResNet): se suma la entrada a la salida del bloque, f(x) + x, y el gradiente fluye por el atajo.</li>
+<li>Normalización por lotes (Batch Normalization).</li>
+<li>Recorte de gradientes (gradient clipping).</li>
+<li>Inicialización adecuada (He o Xavier).</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Son las innovaciones que permitieron entrenar redes de cientos de capas (ResNet, Transformers).</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> usar sigmoide o tanh en capas ocultas de una red muy profunda sin conexiones residuales ni Batch Normalization.</p></div>
+</details>
+
+<details class="section-block sec" id="c18-regularizacion"><summary><span class="stitle">9 · Sobreajuste, subajuste y regularización</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Estrategias para que la red generalice a datos nuevos en vez de memorizar el entrenamiento.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Sobreajustar es aprenderse de memoria los ejercicios del libro; subajustar es no haber leído ni el primer capítulo; regularizar son los exámenes sorpresa que obligan a entender la regla.<span class="rompe">Dónde deja de servir: una red no «estudia», solo minimiza una pérdida.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Síntomas en las curvas:</strong> sobreajuste = la pérdida de entrenamiento sigue bajando pero la de validación empieza a subir; subajuste = ambas se quedan altas y estáticas.</p>
+<ul>
+<li><strong>Paro temprano:</strong> detener el entrenamiento en el punto óptimo de la pérdida de validación.</li>
+<li><strong>L1 y L2 (weight decay):</strong> penalizar la función de costo para que los pesos no crezcan sin control.</li>
+<li><strong>Dropout:</strong> apagar al azar una proporción de neuronas en cada iteración.</li>
+<li><strong>Aumento de datos:</strong> rotaciones, volteos, recortes, cambios de color o escala.</li>
+<li><strong>Suavizado de etiquetas:</strong> no exigir probabilidades absolutas de 1.0 en las etiquetas.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Garantiza que la red sirva en el mundo real y no solo con los datos de entrenamiento.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> entrenar demasiadas épocas sin vigilar la validación ni usar Dropout o aumento de datos.</p></div>
+</details>
+
+<details class="section-block sec" id="c18-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Quién diseñó el perceptrón y quiénes demostraron su límite en 1969?</summary><p>Frank Rosenblatt (diseño en 1957, publicación en 1958). Marvin Minsky y Seymour Papert demostraron en 1969 que no resuelve XOR.</p></details>
+<details class="qa"><summary>2. ¿Por qué las capas ocultas necesitan activación no lineal?</summary><p>Con activaciones lineales la multiplicación de matrices se reduce a una sola combinación lineal: la red profunda colapsa a un modelo lineal.</p></details>
+<details class="qa"><summary>3. Pesos 1 y 1, sesgo −1.5 y escalón: ¿qué salida dan (1, 0) y (1, 1)?</summary><p>(1, 0): 1 − 1.5 = −0.5 → 0. (1, 1): 2 − 1.5 = +0.5 → 1.</p></details>
+<details class="qa"><summary>4. ¿Qué salida y qué pérdida usas en regresión y en clasificación binaria?</summary><p>Regresión: activación lineal y MSE. Binaria: sigmoide y entropía cruzada binaria.</p></details>
+<details class="qa"><summary>5. ¿Cuáles son los 4 pasos del ciclo de entrenamiento?</summary><p>Forward pass, cálculo de la pérdida, backward pass (retropropagación) y actualización de pesos.</p></details>
+<details class="qa"><summary>6. ¿Qué es una época y por qué se revuelven los minilotes?</summary><p>Una pasada completa por todos los minilotes. Se revuelven para que la red no memorice el orden de presentación.</p></details>
+<details class="qa"><summary>7. ¿Qué es una conexión residual y qué resuelve?</summary><p>Sumar la entrada de un bloque a su salida, f(x) + x. Da un atajo al gradiente y combate el desvanecimiento.</p></details>
+<details class="qa"><summary>8. Compara Dropout y aumento de datos.</summary><p>Dropout actúa sobre la arquitectura apagando neuronas al azar; el aumento de datos actúa sobre las muestras modificándolas. Ambos reducen el sobreajuste.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c18-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>Hardware, no teoría:</strong> el profesor destacó que las redes estuvieron estancadas décadas por falta de hardware; las GPU y el cómputo en paralelo las hicieron posibles.</li>
+<li><strong>La crisis del XOR en 1969:</strong> la demostración de Minsky y Papert congeló la investigación varios años, hasta que las capas ocultas y la retropropagación revivieron el campo.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c18-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Práctica 4 (KNN y regresión logística):</strong> según NotebookLM, se sube a Classroom «este viernes» (lo que sería el 30 oct) y la exposición presencial es el viernes siguiente, con 15 a 20 minutos por equipo enfocados en código y resultados, sin teoría. <em>(Dudoso: sin contrastar con Classroom; ver la <a href="clase-17.html#c17-pendiente">Clase 17</a>, donde NotebookLM puso las mismas fechas.)</em></li>
+<li><strong>Sin clase presencial el viernes:</strong> el profesor avisó que no podría asistir por cuestiones personales. <em>(Dudoso: confirmar con el audio y con el calendario.)</em></li>
+<li><strong>Proyecto final:</strong> entrega el último viernes del semestre, 27 de noviembre de 2026; 30 % reporte y código, 20 % exposición oral y demostración, 50 % metodología. <em>(Dudoso: el pendiente del sitio dice tentativo 30 nov y 40 %; confirmar en Classroom.)</em> Opciones, una por equipo: emociones en imágenes (FER2013 o RAF-DB; si eligen RAF-DB el profesor lo proporciona porque no es del todo público), emociones en audio (RAVDESS, 8 clases) o comandos de voz (Speech Commands, 35 clases); en los tres casos se prueba con fotos o audios de los integrantes.</li>
+<li><strong>Próxima sesión:</strong> continúan las redes neuronales y después arranca procesamiento de lenguaje natural con Transformers.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Una neurona solo separa linealmente; el MLP con capas ocultas no lineales resuelve XOR.</li>
+<li>Entrenar = forward, pérdida, backward (regla de la cadena) y W ← W − α·∇L.</li>
+<li>Salida y pérdida: lineal+MSE, sigmoide+entropía binaria, softmax+entropía multiclase.</li>
+<li>Gradiente que se desvanece o explota: ReLU, residuales, BatchNorm, clipping, He/Xavier.</li>
+<li>Regularizar: paro temprano, L1/L2, Dropout, aumento de datos.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

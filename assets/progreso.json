@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-26T17:06:30+00:00",
+ "generatedAt": "2026-10-26T17:11:19+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -140,6 +140,13 @@
     "fecha": "2026-10-23",
     "resumen": "Tema 8 — Repaso de CART y Random Forest; Boosting y Gradient Boosting (descenso de gradiente en el espacio de funciones, pseudo-residuos), ejercicio binario resuelto con γ y sigmoide, caso multiclase con softmax, limitac",
     "url": "materias/reconocimiento-de-patrones/clase-17.html",
+    "formato": "estudio"
+   },
+   {
+    "num": 18,
+    "fecha": "2026-10-26",
+    "resumen": "Tema 9 — Redes neuronales: del perceptrón al perceptrón multicapa, activaciones, entrenamiento con SGD, retropropagación, desvanecimiento y explosión del gradiente, y regularización.",
+    "url": "materias/reconocimiento-de-patrones/clase-18.html",
     "formato": "estudio"
    }
   ],
@@ -776,6 +783,11 @@
  },
  "gitlog": [
   {
+   "hash": "26cdcb0",
+   "fecha": "2026-10-26T11:06:30-06:00",
+   "mensaje": "RP: agregar Clase 17 (23 oct) — Boosting, Gradient Boosting, ejercicio binario y multiclase con softmax, XGBoost"
+  },
+  {
    "hash": "8f5a26f",
    "fecha": "2026-10-26T11:03:07-06:00",
    "mensaje": "MD: agregar Clase 15 (22 oct) — exposiciones de la Práctica 3.4 (diabetes) y series de tiempo (ARIMA, ruido blanco, elección de modelo)"
@@ -1069,11 +1081,6 @@
    "hash": "84f1d83",
    "fecha": "2026-10-15T20:28:55-06:00",
    "mensaje": "decimo/: indicaciones en cada entrega (Classroom + NotebookLM), material faltante del profesor (UML 9-13, MD P3.2, formatos Scrum), README/CLAUDE.md/índice al día"
-  },
-  {
-   "hash": "eb5b61a",
-   "fecha": "2026-10-15T20:19:54-06:00",
-   "mensaje": "decimo/: cada entrega X-NN con X-NN-entregables, X-NN-adicionales y X-NN-indicaciones; X-Material solo para material independiente"
   }
  ]
 }
