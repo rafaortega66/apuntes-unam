@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-21T22:22:10+00:00",
+ "generatedAt": "2026-10-26T17:03:04+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -756,11 +756,28 @@
     "resumen": "Tema 3 — Retroalimentación de la práctica de regresión (porcentaje de alcohol en vino: Regresión Lineal, Lasso, Árbol de Decisión y Random Forest) e introducción a las series de tiempo: sus 4 componentes, suavizado expon",
     "url": "materias/mineria-de-datos/clase-14.html",
     "formato": "estudio"
+   },
+   {
+    "num": 15,
+    "fecha": "2026-10-22",
+    "resumen": "Tema 3 — Exposiciones de la Práctica 3.4 (clasificación de diabetes) y series de tiempo: componentes, ARIMA y elección del modelo",
+    "url": "materias/mineria-de-datos/clase-15.html",
+    "formato": "estudio"
    }
   ],
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "5dc378e",
+   "fecha": "2026-10-21T16:22:23-06:00",
+   "mensaje": "CLAUDE.md: RP deck de la Clase 16 ya está en el sitio"
+  },
+  {
+   "hash": "ed0ecb4",
+   "fecha": "2026-10-21T16:22:10-06:00",
+   "mensaje": "RP: agregar las diapositivas de la Clase 14 del profesor (CART y Random Forest, Classroom 19 oct) y enlazarlas en la Clase 16 y en material.html"
+  },
   {
    "hash": "158444e",
    "fecha": "2026-10-21T16:05:10-06:00",
@@ -1050,16 +1067,6 @@
    "hash": "54e6a04",
    "fecha": "2026-10-15T20:06:02-06:00",
    "mensaje": "decimo/ASI: quitar carpetas vacías (todo vive en ASI-Entregables)"
-  },
-  {
-   "hash": "dddee60",
-   "fecha": "2026-10-15T20:05:22-06:00",
-   "mensaje": "Renombrar noveno/ -> decimo/ (es décimo semestre)"
-  },
-  {
-   "hash": "6ffaa3c",
-   "fecha": "2026-10-15T19:57:31-06:00",
-   "mensaje": "noveno/: todos los archivos del semestre clasificados por materia y entrega"
   }
  ]
 }

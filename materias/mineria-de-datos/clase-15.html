@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 15 — Minería de Datos</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Minería de Datos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 15</h2>
+  <p class="prof">M.C. José Concepción Roberto Olvera López · 22 oct 2026 · Tema 3 — Exposiciones de la Práctica 3.4 (clasificación de diabetes) y series de tiempo: componentes, ARIMA y elección del modelo</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>MD-Clase15.m4a</code>), 26 oct 2026. Las cifras de las exposiciones cambian de un equipo a otro; las que NotebookLM mezcló o no pudo contrastar con el audio se marcan como dudosas.</p>
+</div>
+
+<details class="section-block sec" id="c15-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Falso positivo contra falso negativo en la matriz de confusión médica.</strong><span class="evid">Evidencia: interrogó a cada equipo sobre lo que implica confundir uno con otro y dijo que el falso negativo es el error más grave («no detectar a tiempo a las personas que están enfermas»).</span></li>
+<li><strong>Identificar en una lámina cuáles gráficas muestran tendencia, estacionariedad o estacionalidad.</strong><span class="evid">Evidencia: mostró una lámina con gráficas de la A a la I y dijo textualmente que era pregunta de examen y que la visualizaran.</span></li>
+<li><strong>Elegir el algoritmo de series de tiempo según el negocio (ARIMA, SARIMA, Holt-Winters).</strong><span class="evid">Evidencia: al final hizo una ronda rápida preguntando cuál aplicar en e-commerce, bolsa, energía, manufactura y turismo.</span></li>
+<li><strong>La «variable trampa»: el identificador del registro se descarta.</strong><span class="evid">Evidencia: planteó el acertijo a toda la clase («hay una variable que está de más… ¿cuál es?») y la respuesta fue la columna de persona/ID.</span></li>
+<li><strong>Los ceros en glucosa, presión arterial o IMC son datos faltantes, no mediciones.</strong><span class="evid">Evidencia: lo evaluó en todas las presentaciones: «una glucosa de cero no puede ser cierta en una persona que está viva».</span></li>
+<li><strong>Ruido blanco: media cero, varianza constante y residuales sin correlación.</strong><span class="evid">Evidencia: lo explicó como la prueba de que ARIMA ya extrajo todo lo predecible. Evidencia más débil que las anteriores: no lo marcó como pregunta de examen.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c15-clasificacion"><summary><span class="stitle">1 · Práctica 3.4: clasificación de diabetes (exposiciones de los equipos)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La aplicación de algoritmos de clasificación supervisada (regresión logística, árboles de decisión, Random Forest, SVM, Naive Bayes y KNN) a un conjunto de datos clínicos para predecir una variable binaria: si el paciente tiene diabetes (1) o no (0). Es la Práctica 3.4 de Classroom (<a href="../../decimo/MD/MD-Practicas/MD-P03-4/MD-P03-4-indicaciones.pdf" target="_blank">enunciado del profesor</a>), con el conjunto «diabetes demo».</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es el filtro de seguridad de un aeropuerto: un escáner rápido separa a quienes pasan sin problema de quienes requieren una segunda inspección, pero no sustituye al oficial (el médico).<span class="rompe">Dónde deja de servir: si el escáner deja pasar un riesgo (falso negativo), el costo no es una maleta olvidada sino complicaciones de salud que avanzan con el tiempo.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Perfil de los datos.</strong> Los equipos trabajaron con entre 829 y 899 pacientes y de 12 a 13 columnas (según el equipo). Las clases están desbalanceadas: alrededor del 64.8 % (537 personas) sin diabetes y 35.2 % (292) con diabetes.</p>
+<p><strong>Ceros que en realidad son faltantes.</strong> En glucosa, presión arterial, grosor de piel, insulina e IMC los ceros no son mediciones reales sino datos no registrados. El profesor lo dijo así: una persona viva no puede tener glucosa ni presión arterial de cero. Por eso hay que imputarlos o eliminarlos; un equipo imputó con la media del conjunto para no reducir el tamaño de la muestra.</p>
+<p><strong>Variables descartadas.</strong> Se quitó la insulina (más de 50 % de valores faltantes) y el grosor de piel (entre 30 % y 50 % de ceros). Otro equipo eliminó urea e hipoproteína porque su área bajo la curva (AUC) univariada era cercana a 0.5, es decir, no separan las clases. Y la variable trampa: la columna de identificador de la persona se descarta siempre, porque si entra al entrenamiento vicia el modelo.</p>
+<p><strong>Variables importantes.</strong> La glucosa domina (correlación de 0.43–0.44 y 35.4 % de importancia en los árboles), seguida de la edad (18.3 %) y el IMC (cerca de 10 %). Los embarazos tienen un efecto positivo secundario.</p>
+<p><strong>División y modelos.</strong> Partición 70 % entrenamiento y 30 % prueba, con escalado (StandardScaler); un equipo habló de 60/30, lo cual no suma 100 % y queda como dudoso. La prueba tuvo entre 239 y 249 registros. Resultados reportados:</p>
+<ul>
+<li><strong>Regresión logística:</strong> razón de momios de 2.53 para la glucosa (por cada unidad que sube, el riesgo se multiplica por 2.53); 24 falsos negativos y 46 falsos positivos.</li>
+<li><strong>Árbol de decisión:</strong> regla de glucosa alrededor de 142.5 mg/dL; por encima, el riesgo sube a 62 %. Con 22 falsos negativos y 51 falsos positivos. <em>(Dudoso: NotebookLM también menciona 242.5 en un subgrupo, probablemente un error.)</em></li>
+<li><strong>Random Forest:</strong> el mejor global, con exactitud entre 70 % y 77 % y mayor ROC-AUC; 21 falsos negativos y 42 falsos positivos. <em>(Dudoso: otro modelo se citó con 38 FN y 20 FP; no queda claro de qué equipo.)</em></li>
+<li><strong>SVM:</strong> la mayor área bajo la curva ROC según uno de los equipos.</li>
+</ul>
+<p><strong>Ajuste del umbral.</strong> Con el umbral estándar de 0.5 un modelo daba entre 21 y 38 falsos negativos. Al bajar el umbral a 0.35 (equivalente a unos 135 mg/dL de glucosa) los falsos negativos pasaron de 38 a 19. Los 19 que quedaron son jóvenes con glucosa aún normal pero con fuerte antecedente familiar; los falsos positivos son sobre todo personas con obesidad e hiperglucemia que todavía no desarrollan la enfermedad (prediabetes).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Sirve para triaje automático y prevención primaria sin pagar estudios de laboratorio masivos. Se conecta con las métricas de precisión, recall y F1 y con la validación cruzada de la <a href="clase-13.html#c13-algoritmos">Clase 13</a>.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> entrenar con el identificador incluido; tomar los ceros como mediciones reales; juzgar solo por exactitud sin mirar la matriz de confusión ni la sensibilidad (recall); dejar el umbral en 0.5 cuando un falso negativo cuesta mucho más que un falso positivo.</p></div>
+</details>
+
+<details class="section-block sec" id="c15-series"><summary><span class="stitle">2 · Series de tiempo: componentes, ARIMA y elección del modelo</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El análisis y pronóstico de una variable continua observada en intervalos regulares de tiempo, descomponiéndola en tendencia, estacionalidad, ciclicidad y residuales (ver <a href="clase-14.html#c14-series">Clase 14</a>).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es leer un electrocardiograma: cada latido tiene un ritmo esperado; si el nivel sube de forma sostenida hay tendencia, y si un patrón se repite en cada estación hay estacionalidad, y con eso se anticipa lo que sigue.<span class="rompe">Dónde deja de servir: el ritmo fisiológico sano es constante, mientras que en ventas o finanzas la media y la varianza cambian todo el tiempo.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Los parámetros de ARIMA (p, d, q).</strong> <em>p</em> (autorregresivo, AR) es cuántas observaciones pasadas se usan para predecir la actual; <em>d</em> (integrado, I) es cuántas veces se diferencia la serie (restar el valor en t menos el de t−1) para volverla estacionaria; <em>q</em> (media móvil, MA) es el tamaño de la ventana de errores pasados que entra al modelo.</p>
+<p><strong>Ruido blanco.</strong> Un ARIMA bien ajustado deja residuales que parecen ruido blanco: valores aleatorios, sin correlación entre sí, de media cero y varianza constante. Para decidir cuántos rezagos usar se revisan las funciones de autocorrelación (ACF) y autocorrelación parcial (PACF).</p>
+<p><strong>La pregunta de examen de las gráficas.</strong> En la lámina, las gráficas A, E e I mostraban tendencia clara; la B era estacionaria (media y varianza estables); y la G y la H mostraban estacionalidad (picos que se repiten año tras año). El profesor insistió en que la visualizaran porque entra al examen.</p>
+<p><strong>Qué modelo para qué negocio.</strong> Ronda rápida del final de la clase:</p>
+<ul>
+<li><strong>E-commerce:</strong> SARIMA o triple exponencial (Holt-Winters), por la estacionalidad en fechas festivas.</li>
+<li><strong>Bolsa / volatilidad financiera:</strong> ARIMA, por las relaciones AR/MA de corto plazo; también se mencionaron modelos tipo ARCH/GARCH.</li>
+<li><strong>Energía / consumo eléctrico por hora:</strong> SARIMA o Holt-Winters, por el patrón diario con picos de día y caídas de noche.</li>
+<li><strong>Manufactura / demanda:</strong> ARIMA o Holt-Winters.</li>
+<li><strong>Turismo / ocupación hotelera:</strong> SARIMA o Holt-Winters, por las temporadas vacacionales.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Alimenta la planeación de personal, inventarios, presupuestos y logística, y puede integrarse a sistemas ERP. Continúa lo visto en la <a href="clase-14.html#c14-modelos">Clase 14</a> (suavizado exponencial, ARIMA y MAPE).</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> aplicar ARIMA a una serie no estacionaria sin diferenciar (d); confundir estacionaria (sin tendencia ni cambio de varianza) con estacional (patrón que se repite); usar suavizado exponencial simple cuando hay tendencia y estacionalidad a la vez.</p></div>
+</details>
+
+<details class="section-block sec" id="c15-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Qué representan p, d y q en ARIMA?</summary><p>p: observaciones pasadas (autorregresivo); d: número de diferenciaciones para lograr estacionariedad; q: ventana de errores de predicción pasados (media móvil).</p></details>
+<details class="qa"><summary>2. ¿Por qué en un modelo médico de diabetes un falso negativo es peor que un falso positivo?</summary><p>El falso positivo manda a una persona sana a más pruebas (estrés y costo); el falso negativo deja a un paciente enfermo sin diagnóstico ni tratamiento y con complicaciones a largo plazo.</p></details>
+<details class="qa"><summary>3. Con umbral 0.5 un modelo daba 38 falsos negativos. ¿Qué ajuste hizo el equipo y con qué resultado?</summary><p>Bajó el umbral a 0.35 (unos 135 mg/dL de glucosa) y los falsos negativos bajaron de 38 a 19.</p></details>
+<details class="qa"><summary>4. ¿Qué diferencia hay entre una serie estacionaria y una estacional?</summary><p>La estacionaria mantiene media y varianza constantes y sin tendencia; la estacional repite picos en periodos regulares (por ejemplo, cada diciembre).</p></details>
+<details class="qa"><summary>5. ¿Qué algoritmo usarías para el consumo eléctrico por hora y cuál para la volatilidad de acciones?</summary><p>Consumo eléctrico: SARIMA o Holt-Winters, por la estacionalidad horaria. Acciones: ARIMA (o ARCH/GARCH), por la dependencia de corto plazo.</p></details>
+<details class="qa"><summary>6. ¿Por qué los ceros en glucosa, presión arterial o IMC se tratan aparte?</summary><p>Porque una persona viva no puede tener esos valores en cero: son datos faltantes que se imputan o se eliminan.</p></details>
+<details class="qa"><summary>7. ¿Qué significa que los residuales sean ruido blanco?</summary><p>Que son aleatorios, sin autocorrelación, con media cero y varianza constante: el modelo extrajo todo el patrón predecible.</p></details>
+<details class="qa"><summary>8. ¿Cuál era la variable trampa del conjunto de diabetes?</summary><p>La columna identificadora de la persona o registro (ID); debe descartarse antes de entrenar.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c15-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>Regla de los 7 minutos:</strong> el profesor exigió que cada equipo expusiera en 7 minutos, sin leer las librerías y yendo directo a la variable objetivo y los hallazgos.</li>
+<li><strong>Antes de empezar:</strong> una alumna pidió ir al baño y el profesor bromeó preguntando si pasaban al regresar.</li>
+<li><strong>Retroalimentación:</strong> al Equipo 5 le señaló que le faltaron tres puntos esenciales (quiénes son las personas en la matriz y los rangos exactos). Reconoció el tono ejecutivo y conversacional de otro equipo, que no leyó las láminas.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c15-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Examen:</strong> NotebookLM dice «jueves 13 de noviembre» y lo marcó como inferido. <em>(Dudoso: el 13 de noviembre de 2026 cae en viernes; confirmar la fecha con el audio o con el profesor.)</em></li>
+<li><strong>Próximo tema:</strong> redes neuronales, con práctica o evaluación individual, y lo que falta de teoría y prácticas de series de tiempo.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Falso negativo = el error crítico en diagnóstico; bajar el umbral (0.5 → 0.35) lo reduce.</li>
+<li>Descartar el ID y tratar los ceros clínicos como datos faltantes.</li>
+<li>ARIMA(p, d, q); residuales = ruido blanco.</li>
+<li>Pregunta de examen: reconocer tendencia, estacionariedad y estacionalidad en gráficas.</li>
+<li>Estacionalidad marcada: SARIMA o Holt-Winters; volatilidad financiera: ARIMA/GARCH.</li>
+</ul></div>
+
+</div>
+</body>
+</html>
