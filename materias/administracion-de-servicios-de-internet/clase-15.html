@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 15 — Administración de Servicios de Internet</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Administración de Servicios de Internet</a>
+<div class="detail-head" style="border-color:#7C9CD6"><h2>Clase 15</h2>
+  <p class="prof">Mtro. Juan Ángel Calvillo Pérez · 21 oct 2026 · Nuevas tecnologías (fuera del temario) — Transformación digital y sus tres niveles (caso Netflix), IA, prompts y algoritmia, empleo y automatización, supervisión humana, habilidades técnicas y humanas, y la tarea en equipos de 3 sobre el impacto tecnológico en una profesión.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>ASI-Clase15.m4a</code>), 26 oct 2026. Fue una clase conceptual: no hubo comandos ni rutas en vivo. Las cifras dudosas de NotebookLM se marcan en el texto; continúa lo visto en la <a href="clase-14.html">Clase 14</a>.</p>
+</div>
+
+<details class="section-block sec" id="c15-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Los tres niveles de la transformación digital: digitalizar, digitalizar procesos y transformar.</strong><span class="evid">Evidencia: los desglosó uno por uno y los ilustró con la evolución de Netflix.</span></li>
+<li><strong>Un prompt es un algoritmo, y la IA es una herramienta de apoyo.</strong><span class="evid">Evidencia: lo dijo de forma explícita: «lo único que te están enseñando en los prompts es escribir un algoritmo»; quien sepa algoritmia es quien manejará la IA.</span></li>
+<li><strong>Qué hace que Ciencias de la Computación permanezca frente a otras carreras.</strong><span class="evid">Evidencia: lo razonó con la teoría algorítmica, la demostración y el diseño de nuevos lenguajes. Evidencia más débil: surgió de una pregunta a un alumno, no como tema formal.</span></li>
+<li><strong>Habilidades técnicas contra habilidades humanas, y decisiones basadas en datos.</strong><span class="evid">Evidencia: preguntó «¿dónde flaquean todos ustedes?» y enumeró pensamiento crítico, creatividad, trabajo en equipo y toma de decisiones con datos.</span></li>
+<li><strong>Riesgos de automatizar al 100 % sin supervisión humana.</strong><span class="evid">Evidencia: usó Chernóbil como ejemplo y preguntó si debemos confiar totalmente en una herramienta («al menos hasta ahorita todavía no»).</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c15-plan"><summary><span class="stitle">1 · La unidad de «nuevas tecnologías» y el perfil del ingeniero en computación</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Una unidad flexible del programa que se actualiza para incluir la tecnología emergente del momento: la recolección masiva de datos y la ciencia de datos tras la pandemia de 2020, y la inteligencia artificial en los últimos años.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es el «platillo de temporada» de un menú: cambia para que la carta no quede obsoleta.<span class="rompe">Dónde deja de servir: en tecnología el cambio no es de gusto del chef; si el temario no se actualiza, la carrera queda rezagada frente al mercado.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El profesor explicó que el temario tradicional de la materia quedó rebasado cuando los servicios pasaron a la nube, y por eso se añadió esta unidad. Preguntó qué hace un ingeniero en computación y un alumno respondió que es el puente entre el electrónico y el licenciado en informática, con más entendimiento de bajo nivel en hardware y software. El profesor aclaró que ese perfil técnico servía para traducir requerimientos entre ambos lados, y que la informática tradicional tiende a desaparecer, mientras que Ciencias de la Computación permanece porque se centra en la teoría algorítmica, la demostración matemática y en diseñar nuevos lenguajes (hacer un Java o un Python, no solo usarlos).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Tiene que ver con la empleabilidad y con capacitarse en tres áreas: ciencia de datos, inteligencia artificial y ciberseguridad.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> pensar que el ingeniero en computación solo programa aplicaciones, o no distinguirlo de Ciencias de la Computación.</p></div>
+</details>
+
+<details class="section-block sec" id="c15-transformacion"><summary><span class="stitle">2 · Transformación digital: tres niveles y el caso Netflix</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Integrar tecnologías digitales en una organización para cambiar su forma de trabajar. Tiene tres niveles: <strong>digitalizar</strong> (convertir información analógica en digital), <strong>digitalizar procesos</strong> (usar herramientas ejecutables para hacer mejor una tarea) y <strong>transformar</strong> (rediseñar la forma de ofrecer un servicio o negocio).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Con una receta: fotografiar la receta escrita a mano es digitalizar; una app que calcula las proporciones según los comensales y manda la lista de compras es digitalizar el proceso; un restaurante de suscripción que cocina y entrega menús según tus gustos es transformar.<span class="rompe">Dónde deja de servir: transformar no es solo tecnología, cambia la cultura de la organización, las habilidades y las decisiones.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>Digitalizar:</strong> por ejemplo, escanear documentos en papel.</li>
+<li><strong>Digitalizar procesos:</strong> por ejemplo, la facturación electrónica o un software contable o ERP como SAP.</li>
+<li><strong>Transformar:</strong> por ejemplo, vender y atender en línea de forma integral.</li>
+</ul>
+<p><strong>Caso Netflix.</strong> Primero rentaba películas en DVD por correo. Luego creó su plataforma de streaming con infraestructura propia y pagando derechos a las productoras, bajo la lógica de «yo lo hago todo». En la tercera fase delegó el almacenamiento y la infraestructura pesada a la nube (el profesor comentó que cuando se cae un proveedor grande de nube se cae Netflix; <em>dudoso: NotebookLM no precisó a qué proveedores se refería</em>) y se enfocó en su verdadero activo, los datos sobre las preferencias de los usuarios. Con eso dejó de depender de terceros y empezó a producir contenido propio: películas, series y eventos en vivo.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Se conecta con la arquitectura de servicios en la nube y el análisis de grandes volúmenes de datos.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que la transformación digital es comprar tecnología o escanear papeles, sin cambiar procesos, cultura ni competencias.</p></div>
+</details>
+
+<details class="section-block sec" id="c15-empleo"><summary><span class="stitle">3 · Reemplazo tecnológico, empleo e innovación</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La idea de que la tecnología elimina tareas repetitivas pero crea nuevas fuentes de trabajo, y que el valor está en innovar para resolver una necesidad, no en imitar lo que ya existe.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Con el automóvil desaparecieron los cocheros, pero aparecieron mecánicos, choferes, gasolineras y agentes de tránsito.<span class="rompe">Dónde deja de servir: hoy el cambio es tan rápido que la reconversión de habilidades tiene que ser continua.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El profesor desmintió que la tecnología solo destruya empleo: surgieron puestos como community manager, influencer, podcaster, analista de datos, técnico en robótica y especialista en ciberseguridad. Contó el caso de una empresa (Avante) que recortó un departamento de 28 personas dejando 9 <em>(dudoso: NotebookLM también menciona 19 despedidos)</em>, no para sustituirlas por robots, sino para conservar a quienes sabían usar herramientas de IA para hacer el trabajo de los demás.</p>
+<p>Sobre innovación: el NFC y los códigos QR no son nuevos (existen desde 2012); su valor depende de resolver una necesidad o una regulación, como las reformas económicas de 2026 que exigen digitalizar las transacciones financieras <em>(dudoso: sin contrastar con el audio)</em>. Criticó los proyectos escolares que quieren ser «el nuevo Uber» o copiar a creadores de contenido en vez de atender un problema real.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Se conecta con la formulación de proyectos, el desarrollo de software y la ingeniería de requerimientos.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> innovar por imitación de modelos maduros en vez de atender nichos con una necesidad real.</p></div>
+</details>
+
+<details class="section-block sec" id="c15-ia"><summary><span class="stitle">4 · Inteligencia artificial, prompts y algoritmia</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La IA como herramienta de apoyo, basada en modelos probabilísticos, cuyos resultados dependen de cómo se redacte el prompt, y un prompt bien hecho es un algoritmo.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Decirle a un repartidor «tráeme de comer» es dejar que elija; un buen prompt es la receta exacta: ve al restaurante X, pide dos tacos sin cebolla, pide ticket y trae el cambio en monedas.<span class="rompe">Dónde deja de servir: un repartidor humano pregunta si tiene dudas; la IA, si no sabe, inventa una respuesta.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El profesor explicó que la IA funciona asignando porcentajes a la respuesta que el usuario espera recibir, con un esquema de recompensa si acierta y sin sanción si se equivoca; por eso, cuando no conoce un dato, alucina en lugar de decir que no sabe. Además es subjetiva: ajusta sus resultados al perfil, historial y búsquedas previas del usuario. En 2026 su clasificación va más allá de machine learning y deep learning e incluye ramas como la IA generativa y la semántica.</p>
+<p>Sobre los cursos comerciales de <em>prompt engineering</em>: dijo que son una simplificación de la algoritmia. Escribir un prompt eficiente es definir inicio, variables, contexto, restricciones y salida (por ejemplo, «un reporte de ventas, del mes tal, de la tienda tal, con el formato tal»). De ahí su conclusión: quien domine la algoritmia dominará la IA. Como mal uso citó trabajos entregados con frases automáticas de la herramienta, incluso con el nombre del profesor dentro del texto.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Se conecta con algoritmos y estructuras de datos, la verificación de software y la ética profesional.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> delegar el 100 % de una tarea a la IA sin supervisión, asumir que es objetiva o entregar su texto sin revisarlo.</p></div>
+</details>
+
+<details class="section-block sec" id="c15-supervision"><summary><span class="stitle">5 · Nuevas áreas y supervisión humana</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Las disciplinas emergentes (IA, robótica, IoT, nube, realidad virtual y aumentada, Big Data, impresión 3D y ciberseguridad), donde la automatización reduce la intervención directa pero exige especialistas para monitorear y dar mantenimiento.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un avión con piloto automático: vuela solo casi todo el trayecto, pero hace falta el piloto en la cabina para reaccionar ante una falla.<span class="rompe">Dónde deja de servir: un avión sigue rutas fijas; los sistemas de TI enfrentan ataques y datos impredecibles.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>Salud:</strong> análisis digital de imágenes y radiografías.</li>
+<li><strong>Educación:</strong> plataformas y asistentes virtuales.</li>
+<li><strong>Agricultura:</strong> sensores de humedad y drones para riego y plagas.</li>
+<li><strong>Comercio y logística:</strong> rastreo de paquetes, planeación de rutas y detección de anomalías financieras.</li>
+</ul>
+<p>Sobre la supervisión humana usó Chernóbil: según explicó, ocurrió porque quienes vigilaban las pantallas no leyeron a tiempo la temperatura. Concluyó que por muy automatizado que esté un entorno, se necesita personal capacitado para imprevistos como fallas de energía, cambios a plantas de emergencia o caídas de red.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Se conecta con la administración de servidores, la ciberseguridad y el mantenimiento de infraestructura.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que automatizar un proceso elimina el mantenimiento, el análisis y la intervención humana.</p></div>
+</details>
+
+<details class="section-block sec" id="c15-habilidades"><summary><span class="stitle">6 · Habilidades técnicas contra habilidades humanas</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El perfil integral que combina dominio de herramientas técnicas con competencias humanas: pensamiento crítico, creatividad, adaptación, empatía, trabajo en equipo y toma de decisiones basada en datos.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Las habilidades técnicas son la caja de herramientas; las humanas son el criterio del maestro de obra para saber qué pared derribar sin que se caiga el techo.<span class="rompe">Dónde deja de servir: las herramientas físicas no cambian solas, pero el software queda obsoleto si no hay autoaprendizaje continuo.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El profesor señaló dónde flaquean los estudiantes de ingeniería:</p>
+<ul>
+<li><strong>Pensamiento crítico y creatividad:</strong> se adaptan bien, pero con libertad total de diseño muestran poca creatividad en comparación con cuando reciben requerimientos cerrados.</li>
+<li><strong>Trabajo en equipo y comunicación:</strong> se crean muchos grupos de mensajería, pero no hay coordinación ni empatía reales.</li>
+<li><strong>Decisiones responsables:</strong> deben apoyarse en datos y análisis cuantitativo, no en corazonadas.</li>
+<li><strong>Autocapacitación:</strong> hay que aprender por cuenta propia las tecnologías que pide el mercado (revisar convocatorias de AWS, Azure, Google Cloud, Oracle) y no esperar a que la empresa envíe a cursos.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Se conecta con la dirección de proyectos de TI, el liderazgo de equipos y la consultoría tecnológica.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> justificar la falta de coordinación, decidir por intuición y esperar a ser contratado para empezar a capacitarse.</p></div>
+</details>
+
+<details class="section-block sec" id="c15-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿En qué tres áreas dijo el profesor que hay que capacitarse?</summary><p>Ciencia de datos, inteligencia artificial y ciberseguridad.</p></details>
+<details class="qa"><summary>2. Explica los tres niveles de la transformación digital.</summary><p>Digitalizar: pasar información analógica a digital (escanear). Digitalizar procesos: usar herramientas que ejecutan mejor una tarea (facturación electrónica). Transformar: rediseñar cómo se ofrece el servicio o negocio (vender y atender en línea con análisis de datos).</p></details>
+<details class="qa"><summary>3. Un reporte entregado conserva la frase «¿Deseas que te apoye con otro mundo?». ¿Qué error cometió el alumno?</summary><p>Usó la IA como reemplazo total, sin supervisión ni pensamiento crítico, y entregó el resultado sin revisarlo.</p></details>
+<details class="qa"><summary>4. ¿Por qué no desaparecería Ciencias de la Computación?</summary><p>Porque se enfoca en la teoría algorítmica, la demostración matemática y el diseño de nuevos lenguajes, no solo en usar herramientas existentes.</p></details>
+<details class="qa"><summary>5. ¿Por qué se dice que el <em>prompt engineering</em> es algoritmia?</summary><p>Porque un buen prompt define inicio, contexto, variables, restricciones y salida, igual que un algoritmo.</p></details>
+<details class="qa"><summary>6. ¿Por qué el valor del NFC o del QR no dependió de ser nuevos?</summary><p>Existían desde años antes; su adopción se debió a que resolvían una necesidad o cumplían una regulación de transacciones digitales.</p></details>
+<details class="qa"><summary>7. ¿Cómo evolucionó Netflix en infraestructura?</summary><p>De infraestructura propia y derechos pagados a terceros, a delegar el almacenamiento a la nube y centrarse en los datos de los usuarios para producir contenido propio.</p></details>
+<details class="qa"><summary>8. ¿En qué deben basarse las decisiones responsables?</summary><p>En datos y análisis, no en corazonadas.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c15-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>Titulación y sueldo:</strong> el profesor contó que terminó la carrera en 4.5 años por la situación económica, mientras un amigo tardó 7.5 y aun así entró ganando bien porque su papá trabajaba en el SAT.</li>
+<li><strong>Franco Escamilla:</strong> lo usó como ejemplo de innovación y ciencia de datos por conectar con el perfil del hombre promedio mexicano.</li>
+<li><strong>Dinámica con redes sociales:</strong> comentó el caso de una madre que fue a quejarse porque un profesor pidió las redes sociales de los alumnos para una dinámica.</li>
+<li><strong>Consecuencias no deseadas:</strong> hizo un paralelo político con lo que ocurrió en Sinaloa tras la captura de un capo y con la situación de Venezuela.</li>
+<li><strong>Consejos personales:</strong> no cargar el celular en el bolsillo delantero del pantalón (según él, por la radiación) y viajar a Europa antes de los 30. <em>(Dato de salud sin respaldo; solo anécdota del profesor.)</em></li>
+<li><strong>Su consultora:</strong> tiene una consultora de bases de datos y capacitación en TI; comentó que un curso de Excel le genera lo mismo que un proyecto grande de base de datos de seis meses.</li>
+<li><strong>Un script de Python en la prepa:</strong> en su servicio social programó un script que armaba las carpetas que una encargada hacía a mano y ahorró un día entero de trabajo.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c15-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Tarea en equipos de exactamente 3 integrantes (ni 4 ni 5):</strong> analizar el impacto tecnológico en una profesión (docente, contador, médico, cajero, mecánico, instructor, diseñador, conductor, vendedor, auxiliar administrativo u otra).
+<ul>
+<li>Integrante 1: analiza la labor tradicional de la profesión.</li>
+<li>Integrante 2: identifica las herramientas tecnológicas que se están trabajando en esa área.</li>
+<li>Integrante 3: evalúa los efectos y riesgos de implementarlas.</li>
+</ul></li>
+<li><strong>Preguntas que los tres resuelven juntos:</strong> ¿qué tareas cambiarían?, ¿cuáles requieren criterio humano insustituible?, ¿qué habilidades nuevas necesitarían esas personas?, ¿cuál es el principal riesgo y cómo reducirlo?</li>
+<li><strong>Evaluación:</strong> se presenta y debate en la siguiente sesión; el equipo que mejor presente gana +1 punto sobre su calificación final y el que peor presente pierde 1 punto. <em>(Sin contrastar con Classroom; no se dio fecha concreta. La práctica de auditoría de base de datos que dejó la <a href="clase-14.html">Clase 14</a> es otra tarea.)</em></li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Transformación digital: digitalizar → digitalizar procesos → transformar (Netflix).</li>
+<li>IA = herramienta de apoyo probabilística que alucina; prompt = algoritmo.</li>
+<li>La tecnología elimina tareas pero crea empleos; innovar es resolver una necesidad, no imitar.</li>
+<li>Automatizar no elimina la supervisión humana (Chernóbil).</li>
+<li>Decidir con datos; reforzar pensamiento crítico, creatividad y trabajo en equipo.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

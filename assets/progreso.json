@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-26T17:13:58+00:00",
+ "generatedAt": "2026-10-26T17:26:19+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -462,6 +462,13 @@
     "resumen": "Servidor de bases de datos (fuera del temario) — Seguridad y auditoría en Oracle: usuario → rol → privilegios, UNLIMITED TABLESPACE directo al usuario, DATE frente a TIMESTAMP con SYSDATE , acceso usuario.tabla y COMMIT ",
     "url": "materias/administracion-de-servicios-de-internet/clase-14.html",
     "formato": "estudio"
+   },
+   {
+    "num": 15,
+    "fecha": "2026-10-21",
+    "resumen": "Nuevas tecnologías (fuera del temario) — Transformación digital y sus tres niveles (caso Netflix), IA, prompts y algoritmia, empleo y automatización, supervisión humana, habilidades técnicas y humanas, y la tarea en equi",
+    "url": "materias/administracion-de-servicios-de-internet/clase-15.html",
+    "formato": "estudio"
    }
   ],
   "arquitectura-cliente-servidor": [
@@ -790,6 +797,11 @@
  },
  "gitlog": [
   {
+   "hash": "33c6bde",
+   "fecha": "2026-10-26T11:13:58-06:00",
+   "mensaje": "OAC: agregar Clase 14 (26 oct) — proyecto final (asm o mem32), red neuronal XOR en MicroPython y entrega el 25 nov"
+  },
+  {
    "hash": "ddf9b3f",
    "fecha": "2026-10-26T11:11:19-06:00",
    "mensaje": "RP: agregar Clase 18 (26 oct) — redes neuronales, perceptrón multicapa, retropropagación y regularización; avisar de anuncios repetidos en Clase 17"
@@ -1083,11 +1095,6 @@
    "hash": "82b46f8",
    "fecha": "2026-10-18T11:56:52-06:00",
    "mensaje": "ACS: examen parcial (ACS-E01) con indicaciones de NotebookLM, vence lun 19 oct; ASI sin clase el 14 oct"
-  },
-  {
-   "hash": "da38c78",
-   "fecha": "2026-10-15T20:45:59-06:00",
-   "mensaje": "Páginas de tareas/prácticas/proyectos/exámenes/entregas generadas desde decimo/ (scripts/build_entregas.py)"
   }
  ]
 }
