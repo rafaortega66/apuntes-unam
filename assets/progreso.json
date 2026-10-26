@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-26T17:11:19+00:00",
+ "generatedAt": "2026-10-26T17:13:58+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -240,6 +240,13 @@
     "fecha": "2026-10-21",
     "resumen": "Sin tema nuevo del temario — Segunda sesión sobre minicomputadoras (SBC): Orange Pi 5 y 6 frente a Raspberry Pi 5, herramientas de trabajo remoto (VNC, WinSCP, BalenaEtcher), las tarjetas de gama baja (Pi Zero 2 W y Oran",
     "url": "materias/organizacion-y-arquitectura-de-computadoras/clase-13.html",
+    "formato": "estudio"
+   },
+   {
+    "num": 14,
+    "fecha": "2026-10-26",
+    "resumen": "Sin tema nuevo del temario — Opciones para el proyecto final (ensamblador o mem32 ), una red neuronal de perceptrón multicapa en MicroPython en la Raspberry Pi Pico (ejemplo de la compuerta XOR) y fecha de entrega del pr",
+    "url": "materias/organizacion-y-arquitectura-de-computadoras/clase-14.html",
     "formato": "estudio"
    }
   ],
@@ -783,6 +790,11 @@
  },
  "gitlog": [
   {
+   "hash": "ddf9b3f",
+   "fecha": "2026-10-26T11:11:19-06:00",
+   "mensaje": "RP: agregar Clase 18 (26 oct) — redes neuronales, perceptrón multicapa, retropropagación y regularización; avisar de anuncios repetidos en Clase 17"
+  },
+  {
    "hash": "26cdcb0",
    "fecha": "2026-10-26T11:06:30-06:00",
    "mensaje": "RP: agregar Clase 17 (23 oct) — Boosting, Gradient Boosting, ejercicio binario y multiclase con softmax, XGBoost"
@@ -1076,11 +1088,6 @@
    "hash": "da38c78",
    "fecha": "2026-10-15T20:45:59-06:00",
    "mensaje": "Páginas de tareas/prácticas/proyectos/exámenes/entregas generadas desde decimo/ (scripts/build_entregas.py)"
-  },
-  {
-   "hash": "84f1d83",
-   "fecha": "2026-10-15T20:28:55-06:00",
-   "mensaje": "decimo/: indicaciones en cada entrega (Classroom + NotebookLM), material faltante del profesor (UML 9-13, MD P3.2, formatos Scrum), README/CLAUDE.md/índice al día"
   }
  ]
 }

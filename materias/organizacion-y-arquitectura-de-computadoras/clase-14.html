@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 14 — Organización y Arquitectura de Computadoras</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Organización y Arquitectura de Computadoras</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Clase 14</h2>
+  <p class="prof">M.I. José Antonio de Jesús Arredondo Garza · 26 oct 2026 · Sin tema nuevo del temario — Opciones para el proyecto final (ensamblador o <code>mem32</code>), una red neuronal de perceptrón multicapa en MicroPython en la Raspberry Pi Pico (ejemplo de la compuerta XOR) y fecha de entrega del proyecto.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>OAC-Clase14.m4a</code>), 26 oct 2026. El código que muestra NotebookLM es una reconstrucción suya, no una copia verificada: nombres de librería y funciones se marcan como dudosos. Continúa lo visto en la <a href="clase-13.html">Clase 13</a>.</p>
+</div>
+
+<details class="section-block sec" id="c14-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Ensamblador contra <code>mem32</code> para el proyecto final.</strong><span class="evid">Evidencia: planteó las dos vías como los pilares del proyecto y explicó ventajas y desventajas de cada una.</span></li>
+<li><strong>La topología (2, 2, 1) de una red para la compuerta XOR.</strong><span class="evid">Evidencia: la desglosó paso a paso en el pizarrón: 2 neuronas de entrada, 2 ocultas y 1 de salida.</span></li>
+<li><strong>Por qué XOR necesita una red con activación no lineal y AND u OR no.</strong><span class="evid">Evidencia: contrastó de forma explícita las compuertas con solución lineal directa con la XOR, que no se separa linealmente.</span></li>
+<li><strong>Fecha de entrega del proyecto final: miércoles 25 de noviembre de 2026.</strong><span class="evid">Evidencia: la dictó de forma explícita como anuncio formal y la justificó con el calendario. No es contenido de examen sino logística, pero es la fecha que importa.</span></li>
+</ol>
+<p class="empty">Evidencia débil en el resto: no hubo ejercicios numéricos de ciclos ni de instrucciones en esta clase.</p>
+</details>
+
+<details class="section-block sec" id="c14-proyecto"><summary><span class="stitle">1 · Proyecto final: ensamblador o <code>mem32</code></span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Las dos opciones técnicas que propuso el profesor para desarrollar el proyecto final en la Raspberry Pi Pico 2.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>El ensamblador es construir una casa poniendo ladrillo por ladrillo (control total, mucho esfuerzo); <code>mem32</code> es instalar bloques prefabricados y conectar los tubos directo a la pared (acceso rápido a registros con menos código).<span class="rompe">Dónde deja de servir: si el proyecto es de cálculo con decimales, los «bloques prefabricados» no sustituyen las herramientas de precisión, que son la FPU en ensamblador.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>Ensamblador nativo:</strong> bueno para el procesamiento numérico y para aprovechar la unidad de punto flotante (FPU) de la Pico 2, pero muy laborioso para direccionar periféricos, porque hay que escribir instrucción por instrucción.</li>
+<li><strong><code>mem32</code> (<code>machine.mem32</code>):</strong> permite leer y escribir directamente los registros de memoria del hardware desde MicroPython, sin redactar rutinas completas en ensamblador.</li>
+</ul>
+<p>El profesor pidió elegir la vía que mejor se acomode al diseño: si el proyecto es de cálculo o punto flotante, conviene ensamblador; si es de control de hardware, conviene direccionar registros directamente.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es una decisión de diseño de software embebido: velocidad de cómputo en la FPU contra facilidad de acceso a los periféricos.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> querer manejar todos los periféricos con rutinas largas en ensamblador cuando se puede apoyar en el acceso directo a memoria.</p></div>
+</details>
+
+<details class="section-block sec" id="c14-red"><summary><span class="stitle">2 · Red neuronal (perceptrón multicapa) en MicroPython: la compuerta XOR</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un paquete ligero de redes neuronales de perceptrón multicapa que se ejecuta en MicroPython sobre la Pico. En clase lo usó para que la red «aprenda» la compuerta XOR a partir de ejemplos, sin darle la fórmula.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es enseñarle a un niño a reconocer frutas con tarjetas: al principio adivina mal, pero tras ver muchas ajusta su criterio hasta acertar con cualquier tarjeta.<span class="rompe">Dónde deja de servir: en la Pico el «criterio» son iteraciones matemáticas de funciones gaussianas, limitadas por la memoria del microcontrolador.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Archivos.</strong> La librería va en un archivo (<code>micro.py</code> o <code>m.py</code>, según NotebookLM) grabado en la memoria flash de la Pico. <em>(Dudoso: NotebookLM transcribió el encabezado como <code>from micro mps import MP</code> y no pudo confirmar el nombre real del módulo; revisar el archivo que dio el profesor.)</em></p>
+<p><strong>Topología (2, 2, 1).</strong> Capa de entrada con 2 neuronas (las dos entradas), una capa oculta con 2 neuronas (combinaciones no lineales) y una de salida con 1 neurona (la respuesta aproximada). La activación es gaussiana.</p>
+<p><strong>Por qué una red para XOR.</strong> AND y OR tienen solución directa y son linealmente separables. La XOR (OR exclusiva) no se separa con una recta, así que necesita una red con capa oculta y activación no lineal.</p>
+<p><strong>Tabla de verdad de XOR que se le da como ejemplos:</strong></p>
+<ul>
+<li>(0, 0) → 0 (falso)</li>
+<li>(0, 1) → 1 (verdadero)</li>
+<li>(1, 0) → 1 (verdadero)</li>
+<li>(1, 1) → 0 (falso)</li>
+</ul>
+<p>El flujo del programa de ejemplo, según NotebookLM, es: crear la red, definir las capas (2, 2, 1), elegir la activación gaussiana, definir los estados lógicos falso y verdadero, agregar los cuatro ejemplos con <code>add_example</code>, ejecutar el aprendizaje (<code>learn</code>) y comprobar las respuestas con <code>predict</code>. <em>(Dudoso: los nombres exactos de clases y funciones y la salida «porcentaje de aprendizaje» son reconstrucciones de NotebookLM; no se copian aquí como código para no inventar sintaxis.)</em></p>
+<p><strong>Otras ideas de proyecto que dio.</strong> Un convertidor de °C a °F donde solo se entrenan 5 puntos de Celsius y la red predice los grados Fahrenheit intermedios sin conocer la ecuación; y resolver una tabla de verdad grande con estados independientes sin usar álgebra booleana tradicional.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra cómo correr inteligencia artificial en un microcontrolador, sin servidores externos. Se conecta con las <a href="clase-13.html">SBC y la Pico 2 de la clase anterior</a> y con las redes neuronales que se ven en Reconocimiento de Patrones.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> usar una red neuronal para problemas lineales directos (AND, OR) o hacerla tan grande que no quepa en la memoria de la Pico.</p></div>
+</details>
+
+<details class="section-block sec" id="c14-calendario"><summary><span class="stitle">3 · Calendario de cierre y fecha del proyecto</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El ajuste de fechas de evaluación final que anunció el profesor.</p>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li>Fin oficial de clases: sábado 28 de noviembre de 2026.</li>
+<li>Días inhábiles que mencionó: lunes 2 de noviembre y lunes 16 de noviembre.</li>
+<li>Clases efectivas restantes: 6.</li>
+<li><strong>Presentación del proyecto final: miércoles 25 de noviembre de 2026.</strong></li>
+</ul>
+<p>El profesor explicó que adelanta la revisión de proyectos por una cita médica programada durante el periodo escolar, para evaluar y liberar las calificaciones a tiempo.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> suponer que la entrega es hasta el sábado 28 y no el miércoles 25.</p></div>
+</details>
+
+<details class="section-block sec" id="c14-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Cuáles son las dos vías técnicas para el proyecto final?</summary><p>Ensamblador nativo, aprovechando la FPU, o acceso directo a registros con <code>mem32</code> (<code>machine.mem32</code>).</p></details>
+<details class="qa"><summary>2. ¿Por qué XOR necesita una red neuronal y AND u OR no?</summary><p>AND y OR son linealmente separables; XOR no, así que requiere capa oculta y activación no lineal.</p></details>
+<details class="qa"><summary>3. ¿Qué significa la topología (2, 2, 1)?</summary><p>2 neuronas de entrada, 2 en la capa oculta y 1 de salida.</p></details>
+<details class="qa"><summary>4. ¿Qué ventaja tiene el ensamblador sobre <code>mem32</code> en cálculo complejo?</summary><p>Permite usar directamente la FPU para punto flotante; <code>mem32</code> sirve sobre todo para acceder rápido a registros de periféricos.</p></details>
+<details class="qa"><summary>5. Escribe la tabla de verdad de XOR.</summary><p>(0,0)→0, (0,1)→1, (1,0)→1, (1,1)→0.</p></details>
+<details class="qa"><summary>6. En el convertidor °C a °F entrenado con 5 puntos, ¿qué hace la red con un valor intermedio?</summary><p>Predice (interpola) el valor aproximado a partir de la curva que aprendió.</p></details>
+<details class="qa"><summary>7. ¿Cuándo es la entrega del proyecto final?</summary><p>El miércoles 25 de noviembre de 2026.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c14-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>«Eppur si muove»:</strong> el profesor contó que en la maestría le dejaron un problema de álgebra booleana y simplificación de funciones lógicas; en vez de resolverlo a mano hizo un programa en Visual Studio que daba el resultado correcto. Al profesor de entonces no le gustó que funcionara sin sus fórmulas, y él respondió con la frase de Galileo, «y sin embargo, se mueve».</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c14-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Proyecto final:</strong> preparar la propuesta (redes neuronales, ensamblador con FPU o <code>mem32</code>) para presentarla el miércoles 25 de noviembre de 2026. <em>(Sin contrastar con Classroom.)</em></li>
+<li><strong>Próxima sesión:</strong> según NotebookLM, una clase para revisar herramientas de software de sistemas embebidos que no se pudieron ver en pandemia (entornos de Raspberry Pi grande y simuladores). <em>(Dudoso: sin confirmar con el audio.)</em></li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Proyecto: ensamblador (FPU, cálculo) o <code>mem32</code> (registros de hardware).</li>
+<li>XOR no es linealmente separable: red (2, 2, 1) con activación gaussiana.</li>
+<li>La red aprende de ejemplos (tabla de verdad) y luego predice.</li>
+<li>Entrega del proyecto final: miércoles 25 de noviembre de 2026.</li>
+</ul></div>
+
+</div>
+</body>
+</html>
