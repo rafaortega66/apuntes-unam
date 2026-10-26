@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-26T17:03:04+00:00",
+ "generatedAt": "2026-10-26T17:06:30+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -133,6 +133,13 @@
     "fecha": "2026-10-19",
     "resumen": "Tema 8 — Repaso de SVM; árboles de decisión (estructura, Gini y entropía, umbrales por punto medio, ejercicio completo de diagnóstico con 8 pacientes), sobreajuste y poda por costo-complejidad (α crítico), y Random Fores",
     "url": "materias/reconocimiento-de-patrones/clase-16.html",
+    "formato": "estudio"
+   },
+   {
+    "num": 17,
+    "fecha": "2026-10-23",
+    "resumen": "Tema 8 — Repaso de CART y Random Forest; Boosting y Gradient Boosting (descenso de gradiente en el espacio de funciones, pseudo-residuos), ejercicio binario resuelto con γ y sigmoide, caso multiclase con softmax, limitac",
+    "url": "materias/reconocimiento-de-patrones/clase-17.html",
     "formato": "estudio"
    }
   ],
@@ -769,6 +776,11 @@
  },
  "gitlog": [
   {
+   "hash": "8f5a26f",
+   "fecha": "2026-10-26T11:03:07-06:00",
+   "mensaje": "MD: agregar Clase 15 (22 oct) — exposiciones de la Práctica 3.4 (diabetes) y series de tiempo (ARIMA, ruido blanco, elección de modelo)"
+  },
+  {
    "hash": "5dc378e",
    "fecha": "2026-10-21T16:22:23-06:00",
    "mensaje": "CLAUDE.md: RP deck de la Clase 16 ya está en el sitio"
@@ -1062,11 +1074,6 @@
    "hash": "eb5b61a",
    "fecha": "2026-10-15T20:19:54-06:00",
    "mensaje": "decimo/: cada entrega X-NN con X-NN-entregables, X-NN-adicionales y X-NN-indicaciones; X-Material solo para material independiente"
-  },
-  {
-   "hash": "54e6a04",
-   "fecha": "2026-10-15T20:06:02-06:00",
-   "mensaje": "decimo/ASI: quitar carpetas vacías (todo vive en ASI-Entregables)"
   }
  ]
 }

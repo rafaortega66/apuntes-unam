@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 17 — Reconocimiento de Patrones</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Reconocimiento de Patrones</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Clase 17 <span style="font-size:.6em;font-weight:400;color:var(--ink-soft)">(sesión 20 del curso)</span></h2>
+  <p class="prof">Ing. Rubén Omar Azuara Domínguez · 23 oct 2026 · Tema 8 — Repaso de CART y Random Forest; Boosting y Gradient Boosting (descenso de gradiente en el espacio de funciones, pseudo-residuos), ejercicio binario resuelto con γ y sigmoide, caso multiclase con softmax, limitaciones y XGBoost.</p>
+  <p style="font-size:12px;color:var(--ink-soft);margin:2px 0 0">🔢 Sesión 20 del curso (cronología real). Fuente: audio RP-Clase17 procesado en NotebookLM, 26 oct 2026. Las fechas y entregas del final salen de NotebookLM y no se han contrastado con Classroom; las dudosas se marcan.</p>
+</div>
+
+<details class="section-block sec" id="c17-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Bagging (Random Forest) contra Boosting.</strong><span class="evid">Evidencia: dedicó varios minutos a contrastar cómo se entrenan los modelos base: en paralelo con muestras bootstrap y voto o promedio (Bagging), o en secuencia corrigiendo los residuos del anterior (Boosting).</span></li>
+<li><strong>Descenso de gradiente en el espacio de funciones.</strong><span class="evid">Evidencia: lo enfatizó frente a regresión logística y redes neuronales: aquí no se optimizan pesos sino la función de decisión f(x), agregando funciones base.</span></li>
+<li><strong>El residuo es el negativo del gradiente con pérdida cuadrática.</strong><span class="evid">Evidencia: lo demostró algebraicamente en el pizarrón: −∂L/∂f(xᵢ) = yᵢ − f₍m−1₎(xᵢ).</span></li>
+<li><strong>Calcular el valor de hoja γ y pasar log-odds a probabilidad con la sigmoide.</strong><span class="evid">Evidencia: resolvió el ejercicio completo en vivo, paso a paso, con números (γ = ±2, ν = 0.5, f = ±1, p = 0.27 y 0.73).</span></li>
+<li><strong>Softmax para clasificación multiclase.</strong><span class="evid">Evidencia: lo calculó con tres salidas (2, 1 y 0.5) y obtuvo 0.63, 0.23 y 0.14.</span></li>
+<li><strong>Limitaciones de Boosting.</strong><span class="evid">Evidencia: señaló que no captura estructura espacial (imágenes) ni temporal (audio, series), pide muchos datos y es lento por ser secuencial. Evidencia más débil que las anteriores: lo presentó como motivación para la siguiente unidad, no como pregunta.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c17-cart-rf"><summary><span class="stitle">1 · Repaso de CART, Random Forest y Bagging</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un árbol CART (Classification and Regression Trees) es un modelo supervisado que divide el espacio de características con reglas binarias (nodo izquierdo y derecho) para minimizar una impureza como Gini o entropía. Random Forest es un ensamble de muchos árboles que combina sus respuestas por voto de la mayoría. Ver <a href="clase-16.html">Clase 16</a>.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>El árbol es un juego de preguntas de sí o no para adivinar una categoría; el bosque es un comité de expertos que vio cada uno una muestra distinta y decide por mayoría.<span class="rompe">Dónde deja de servir: si todos los miembros leen el mismo informe, todos cometen el mismo error; por eso la muestra distinta es esencial.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El árbol tiene una raíz (la que más información aporta al inicio), nodos internos que evalúan umbrales de una característica y hojas con la predicción final según la proporción de clases; los caminos de la raíz a las hojas son las ramas. El crecimiento se controla con hiperparámetros como la profundidad máxima (<code>max_depth</code>), el mínimo de muestras para dividir un nodo y la cantidad de características exploradas.</p>
+<p>Para que los árboles del bosque sean distintos se usa Bagging (Bootstrap Aggregating): se muestrea el conjunto de tamaño N al azar, de forma uniforme y con reemplazo. La probabilidad de no elegir una muestra concreta en N extracciones tiende a (1 − 1/N)<sup>N</sup> → e<sup>−1</sup> ≈ 0.368. Así cada árbol se entrena con cerca del 63.2 % de los datos y el 36.8 % restante queda como datos Out-of-Bag (OOB) para evaluarlo.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Reduce la varianza de los árboles individuales y es la base para entender el ensamble secuencial (Boosting).</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> no muestrear con reemplazo o no limitar las características por nodo: todos los árboles saldrían iguales.</p></div>
+</details>
+
+<details class="section-block sec" id="c17-boosting"><summary><span class="stitle">2 · Boosting: ensamble secuencial</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Una técnica de ensamble donde los modelos base (aprendices débiles, normalmente árboles poco profundos) se entrenan uno tras otro y cada uno se concentra en corregir los errores o residuos de los anteriores.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un equipo de tutores: el primero enseña lo básico, el segundo repasa solo las preguntas que el alumno falló y el tercero corrige lo que aún quedó mal.<span class="rompe">Dónde deja de servir: si el primer tutor se equivoca de forma grave, distorsiona todo el aprendizaje posterior.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ol>
+<li>Se entrena un primer modelo base h₀(x) con los datos originales.</li>
+<li>Se identifican las muestras mal clasificadas y se calcula el error o residuo.</li>
+<li>Se da más peso a los ejemplos donde el modelo anterior falló.</li>
+<li>Se entrena un nuevo modelo h₁(x) para predecir esos errores.</li>
+<li>Se repite M veces, hasta converger o llegar al máximo de árboles.</li>
+<li>La predicción final es la suma ponderada de todas las predicciones secuenciales.</li>
+</ol>
+<p><strong>Pregunta en vivo.</strong> Una alumna preguntó quién identifica los errores antes de pasar al segundo modelo. El profesor respondió que no hace falta revisión humana: el código calcula solo la diferencia entre la etiqueta real y la predicción f₍m−1₎(xᵢ) (si y = 1 y se predijo 0.4, el error es 0.6) y ese residuo numérico se entrega como objetivo al siguiente modelo.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>A diferencia de Bagging (paralelo) y de Stacking (un metamodelo combina predicciones en dos niveles), Boosting reduce el error de forma iterativa.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que los árboles de Boosting pueden entrenarse en paralelo como los de Random Forest.</p></div>
+</details>
+
+<details class="section-block sec" id="c17-gradient"><summary><span class="stitle">3 · Gradient Boosting: pérdida, pseudo-residuos y tasa de aprendizaje</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La formalización de Boosting como optimización por descenso de gradiente en el espacio de funciones: en vez de ajustar pesos de parámetros, se agregan árboles que predicen el gradiente negativo de la función de pérdida.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Cada árbol da un pasito en la dirección que más rápido reduce el error, como girar la perilla de la regadera un poco menos cada vez según qué tan lejos estás de la temperatura buscada.<span class="rompe">Dónde deja de servir: la regadera tiene una sola perilla; aquí el «paso» es un árbol completo.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Con un conjunto {(xᵢ, yᵢ)} la predicción es una expansión aditiva: f<sub>M</sub>(x) = Σ<sub>m=0..M</sub> β<sub>m</sub> h<sub>m</sub>(x), donde h<sub>m</sub> es el árbol de la iteración m y β<sub>m</sub> su peso. En cada iteración: f<sub>m</sub>(x) = f<sub>m−1</sub>(x) + β<sub>m</sub> h<sub>m</sub>(x), y se busca que β<sub>m</sub> h<sub>m</sub>(xᵢ) = yᵢ − f<sub>m−1</sub>(xᵢ).</p>
+<p>Con la pérdida de error cuadrático L(y, f(x)) = ½ (y − f(x))², al derivar respecto a f(xᵢ) resulta −∂L/∂f(xᵢ) = yᵢ − f(xᵢ): <strong>el residuo es exactamente el negativo del gradiente</strong>. Jerome Friedman mostró que para cualquier pérdida diferenciable ese gradiente negativo es un «pseudo-residuo» r<sub>im</sub> al que se ajusta un árbol por mínimos cuadrados.</p>
+<p>Para evitar el sobreajuste se agrega una tasa de aprendizaje ν con 0 &lt; ν ≤ 1: f<sub>m</sub>(x) = f<sub>m−1</sub>(x) + ν · Σ<sub>j=1..Jm</sub> γ<sub>jm</sub> · I(x ∈ R<sub>jm</sub>), donde γ<sub>jm</sub> es el valor óptimo de la hoja j del árbol m y R<sub>jm</sub> su región.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite usar Boosting con cualquier pérdida diferenciable (clasificación binaria, multiclase o regresión). Contrasta con regresión logística y redes neuronales, donde el descenso de gradiente actualiza los pesos del modelo.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> confundir el descenso de gradiente en el espacio de pesos con el descenso en el espacio de funciones.</p></div>
+</details>
+
+<details class="section-block sec" id="c17-binario"><summary><span class="stitle">4 · Ejercicio resuelto: clasificación binaria (compra según la edad)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un ejemplo numérico para predecir si un cliente compra (y = 1) o no (y = 0) según su edad, que recorre la inicialización, los residuos, el valor de hoja γ, la actualización en log-odds y la conversión a probabilidad con la sigmoide.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es ver a mano cómo la computadora pasa de la duda total (50 % y 50 %) a separar compradores de no compradores, un paso a la vez.<span class="rompe">Dónde deja de servir: aquí es una sola iteración con seis ejemplos; en la práctica se repite decenas o cientos de veces.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ol>
+<li><strong>Inicialización:</strong> p₀ = 0.5 para todos, es decir, log-odds f₀(x) = 0.</li>
+<li><strong>Residuos iniciales:</strong> los que sí compraron: 1 − 0.5 = +0.5; los que no: 0 − 0.5 = −0.5.</li>
+<li><strong>Árbol 1:</strong> regla Edad &lt; 32. La hoja izquierda (ejemplos 1, 4 y 6) recibe residuos de −0.5; la derecha, de +0.5.</li>
+<li><strong>Valor de hoja:</strong> γ = Σ residuos / Σ pᵢ(1 − pᵢ). Hoja izquierda: numerador (−0.5)+(−0.5)+(−0.5) = −1.5; denominador 0.25+0.25+0.25 = 0.75; γ = −1.5 / 0.75 = <strong>−2</strong>. Hoja derecha: +1.5 / 0.75 = <strong>+2</strong>.</li>
+<li><strong>Actualización con ν = 0.5:</strong> izquierda f₁ = 0 + 0.5 × (−2) = −1; derecha f₁ = 0 + 0.5 × 2 = +1.</li>
+<li><strong>Sigmoide:</strong> σ(z) = 1 / (1 + e<sup>−z</sup>). σ(−1) ≈ 0.27 (empujado hacia 0) y σ(+1) ≈ 0.73 (empujado hacia 1).</li>
+<li><strong>Nuevos residuos:</strong> para y = 0: 0 − 0.27 = −0.27; para y = 1: 1 − 0.73 = +0.27. Bajaron de ±0.5 a ±0.27: el algoritmo converge.</li>
+</ol>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la mecánica interna de librerías como <code>GradientBoostingClassifier</code> o XGBoost.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> olvidar que γ está en escala de log-odds y que hay que pasarlo por la sigmoide para obtener probabilidades.</p></div>
+</details>
+
+<details class="section-block sec" id="c17-multiclase"><summary><span class="stitle">5 · Clasificación multiclase y softmax</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La adaptación de Gradient Boosting a K &gt; 2 clases: se construyen K secuencias de árboles (una por clase, uno contra el resto) y los log-odds resultantes se convierten en probabilidades con softmax.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Son tres árbitros (gatos, perros y caballos) que dan puntajes sin límite; softmax los convierte en porcentajes que suman 100 %.<span class="rompe">Dónde deja de servir: los puntajes de los árbitros no son probabilidades por sí solos; sin softmax no suman 1.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>One-hot:</strong> la variable objetivo pasa a K columnas binarias. Con tres animales y seis ejemplos (dos por clase) hay una columna para Gato, una para Perro y una para Caballo.</p>
+<p><strong>Inicialización:</strong> f₀,k(x) = ln(2/6) = −1.099 para las tres clases, que equivale a una probabilidad de 1/3 ≈ 0.333 cada una. <strong>Residuos iniciales:</strong> para la clase correcta 1 − 0.333 = +0.667; para las otras dos 0 − 0.333 = −0.333. En cada paso m se entrenan tres árboles, uno por columna de residuos.</p>
+<p><strong>Softmax:</strong> P(Y = k | x) = e<sup>f<sub>k</sub>(x)</sup> / Σ<sub>j=1..K</sub> e<sup>f<sub>j</sub>(x)</sup>. Ejemplo de clase con log-odds 2, 1 y 0.5: e² ≈ 7.389, e¹ ≈ 2.718 y e<sup>0.5</sup> ≈ 1.6487; suma ≈ 11.756. Entonces P(A) = 7.389 / 11.756 ≈ 0.63, P(B) ≈ 0.23 y P(C) ≈ 0.14, que suman 1.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la misma capa de salida de las redes neuronales profundas para clasificación multiclase.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> sumar las salidas de las K secuencias esperando que den 1 sin pasar por softmax.</p></div>
+</details>
+
+<details class="section-block sec" id="c17-xgboost"><summary><span class="stitle">6 · Ventajas, limitaciones y XGBoost</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La evaluación crítica de Boosting y la introducción de XGBoost (Extreme Gradient Boosting), una versión optimizada con regularización y cómputo más rápido.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Gradient Boosting es muy preciso pero lento y rígido; XGBoost le pone motor turbo y frenos automáticos para manejar datos masivos sin desbocarse.<span class="rompe">Dónde deja de servir: la analogía no explica la regularización L1/L2 ni la poda.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>Ventajas:</strong> excelente rendimiento en datos tabulares (domina competencias como Kaggle y se usa en Hugging Face) y buena interpretabilidad: se pueden ver los árboles y la importancia de cada característica.</li>
+<li><strong>Secuencialidad:</strong> cada árbol espera al anterior, así que no escala bien a datos masivos sin optimizaciones.</li>
+<li><strong>Sin estructura espacial ni temporal:</strong> no captura la vecindad entre píxeles de una imagen ni la dependencia temporal de audio o series de tiempo.</li>
+<li><strong>Datos:</strong> necesita volúmenes relativamente grandes para converger, a diferencia de Naive Bayes o SVM.</li>
+<li><strong>XGBoost:</strong> procesamiento eficiente, poda inteligente y términos de regularización L1 y L2 en la función de pérdida.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Justifica pasar a redes convolucionales (imágenes) y Transformers (audio y lenguaje), que vienen en las clases siguientes.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> usar Gradient Boosting directamente sobre píxeles o audio crudo en vez de una red neuronal.</p></div>
+</details>
+
+<details class="section-block sec" id="c17-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Qué diferencia hay entre entrenar Random Forest y Gradient Boosting?</summary><p>Random Forest entrena árboles en paralelo con subconjuntos bootstrap (con reemplazo); Gradient Boosting los entrena en secuencia, cada uno sobre los residuos del anterior.</p></details>
+<details class="qa"><summary>2. ¿Por qué se dice que el descenso de gradiente ocurre en el espacio de funciones?</summary><p>Porque no se optimizan los parámetros internos de los árboles sino la función de decisión global f(x), sumando funciones base h<sub>m</sub>(x) en la dirección del gradiente negativo de la pérdida.</p></details>
+<details class="qa"><summary>3. Para un ejemplo positivo con p = 0.5, ¿cuánto vale el residuo? ¿Y si p pasa a 0.73?</summary><p>1 − 0.5 = +0.5 al inicio y 1 − 0.73 = +0.27 después.</p></details>
+<details class="qa"><summary>4. Una hoja tiene 3 muestras con residuo −0.5 cada una y p = 0.5. ¿Cuánto vale γ?</summary><p>Numerador: −1.5. Denominador: 3 × 0.5 × 0.5 = 0.75. γ = −1.5 / 0.75 = −2.</p></details>
+<details class="qa"><summary>5. ¿Qué función de salida se usa en binaria y cuál en multiclase?</summary><p>Binaria: una sola secuencia de árboles y sigmoide. Multiclase: K secuencias y softmax, para que las K probabilidades sumen 1.</p></details>
+<details class="qa"><summary>6. ¿Qué porcentaje de los datos queda fuera de cada árbol en Bagging y cómo se llama?</summary><p>Alrededor de 36.8 %: son las muestras Out-of-Bag (OOB).</p></details>
+<details class="qa"><summary>7. ¿Por qué Boosting no sirve directo sobre imágenes o audio crudo?</summary><p>Porque no captura la estructura espacial (píxeles vecinos) ni la temporal (muestras adyacentes de una señal).</p></details>
+<details class="qa"><summary>8. Con log-odds 2, 1 y 0.5, ¿cuánto vale la probabilidad softmax de la clase 1?</summary><p>e² / (e² + e¹ + e<sup>0.5</sup>) = 7.389 / 11.756 ≈ 0.63 (62.9 %).</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c17-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>Diapositivas a propósito llenas de texto:</strong> al empezar la matemática de Gradient Boosting advirtió entre risas que era «un ejemplo de lo que NO hay que hacer en presentaciones»: las llenó de texto para que, al consultarlas después, el contenido ya estuviera digerido y no se viera tan matemático como en los libros.</li>
+<li><strong>Kaggle y Hugging Face:</strong> comentó que Boosting, y en particular XGBoost, ha dominado los retos de datos tabulares en esas plataformas.</li>
+<li><strong>Ausencia:</strong> según NotebookLM mencionó que «este viernes» no podría asistir por cuestiones personales, sin sesión en el aula pero con la entrega en Classroom intacta. <em>(Dudoso: la clase se dio el viernes 23 oct y la hoja registra además la Clase 18 el lunes 26; no queda claro a qué viernes se refiere. Contrastar con el audio.)</em></li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c17-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Práctica 4 (penúltima): KNN y regresión logística.</strong> <em>(Sin contrastar con Classroom.)</em> Parte KNN: clase con <code>fit</code> y <code>predict</code> y distancia de Minkowski con parámetro p; experimentos con distintos k (graficar), datos sin normalizar contra normalizados e impacto de p. Parte regresión logística: clase con <code>fit</code>, <code>predict</code> y <code>predict_proba</code>; experimento con el conjunto Breast Cancer (curva de pérdida y tabla de 6 predicciones), regularización L1 y L2, y comparación de los tres modelos (sin regularización, L1 y L2) con matriz de confusión, exactitud, precisión, recall, F1, tabla de pesos θ y gráfica de θ contra iteraciones. Se sube a Classroom «el próximo viernes» y en la exposición presencial del viernes siguiente basta con metodología, código y resultados, sin teoría. <em>(Dudoso: las fechas exactas no se confirmaron; revisar Classroom.)</em></li>
+<li><strong>Proyecto final:</strong> según NotebookLM, entrega el último viernes del semestre, 27 de noviembre de 2026; pesa 30 % reporte y código, 20 % exposición oral y 50 % metodología (justificación del modelo, matrices de confusión y análisis de métricas). <em>(Dudoso: el pendiente actual del sitio dice tentativo 30 nov y 40 %; confirmar en Classroom.)</em> Opciones, una por equipo: emociones en imágenes (FER2013 o RAF-DB, probando con una foto de cada integrante), emociones en audio (RAVDESS, 8 clases; resolver dilemas como triste contra neutro; audios del equipo) o comandos de voz (Speech Commands, 35 clases; audios del equipo).</li>
+<li><strong>Siguiente tema:</strong> Boosting cierra los clasificadores tradicionales. Sigue el último bloque: redes neuronales (arquitecturas, propagación hacia adelante, retropropagación, funciones de activación) y después procesamiento de lenguaje natural con Transformers.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Bagging = paralelo + varianza; Boosting = secuencial + corrige residuos.</li>
+<li>Gradient Boosting optimiza f(x), no pesos; residuo = −gradiente con pérdida cuadrática.</li>
+<li>γ = Σ residuos / Σ p(1 − p); f = f₀ + ν·γ; probabilidad = sigmoide(f).</li>
+<li>Multiclase: K secuencias + softmax (2, 1, 0.5 → 0.63, 0.23, 0.14).</li>
+<li>Boosting domina datos tabulares; no sirve directo en imágenes ni audio.</li>
+</ul></div>
+
+</div>
+</body>
+</html>
