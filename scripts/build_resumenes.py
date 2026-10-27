@@ -192,7 +192,114 @@ def build(md: Path):
     return pdf
 
 
+# ---------------------------------------------------------------- páginas índice
+MATERIAS = {  # sigla: (slug, nombre, color)
+    "ACS": ("arquitectura-cliente-servidor", "Arquitectura Cliente-Servidor", "#E8735C"),
+    "ASI": ("administracion-de-servicios-de-internet", "Administración de Servicios de Internet", "#7C9CD6"),
+    "FSE": ("fundamentos-de-sistemas-embebidos", "Fundamentos de Sistemas Embebidos", "#A98BD1"),
+    "MD": ("mineria-de-datos", "Minería de Datos", "#A98BD1"),
+    "OAC": ("organizacion-y-arquitectura-de-computadoras", "Organización y Arquitectura de Computadoras", "#45B8A8"),
+    "RP": ("reconocimiento-de-patrones", "Reconocimiento de Patrones", "#45B8A8"),
+    "SIB": ("seguridad-informatica-basica", "Seguridad Informática Básica", "#E8735C"),
+}
+# Exámenes: stem de la clase donde ocurrió -> (descripción, desde qué clase se estudia el siguiente)
+EXAMENES = {
+    "MD": {"MD-Clase05": ("1.er parcial · 17 sep · Temas 1 y 2", "MD-Clase06")},
+    "RP": {"RP-Clase10": ("1.er parcial · 28 sep · calificación 20.5 · la Clase 11 es la revisión del examen", "RP-Clase11")},
+    "SIB": {"SIB-Clase11": ("1.er parcial · 6 oct · Temas 1 a 3 hasta CVSS", "SIB-Clase12")},
+    "ASI": {"ASI-Clase12": ("1.er parcial · 7 oct · reposición el 12 oct (Clase 13)", "ASI-Clase14")},
+    "FSE": {"FSE-Clase14": ("1.er parcial · 14 oct · Unidades 1 y 2 · calificación 101", "FSE-Clase15")},
+    "ACS": {"ACS-Clase15": ("1.er parcial de casa · asignado el 15 oct, entregado el 18 oct", "ACS-Clase16")},
+    "OAC": {},
+}
+MESES = {"ago": 8, "sep": 9, "oct": 10, "nov": 11}
+
+
+def _label(stem):
+    n = stem.split("Clase")[1]
+    return f"Clase −{int(n[1:])}" if n.startswith("m") else f"Clase {int(n)}"
+
+
+def _meta(md):
+    meta = {}
+    for ln in md.read_text(encoding="utf-8").splitlines():
+        m = re.match(r"% (\w+): (.*)", ln)
+        if not m:
+            break
+        meta[m.group(1)] = m.group(2).strip()
+    d = re.search(r"(\d{1,2}) (ago|sep|oct|nov) 2026", meta.get("subtitulo", ""))
+    meta["fecha"] = (MESES[d.group(2)], int(d.group(1)))
+    meta["fecha_txt"] = f"{d.group(1)} {d.group(2)}" if d else ""
+    meta["tit"] = re.sub(r"^Clase [−\d]+ · ", "", meta.get("titulo", ""))
+    return meta
+
+
+def build_indices():
+    for sigla, (slug, nombre, color) in MATERIAS.items():
+        carpeta = DECIMO / sigla / f"{sigla}-Resumenes"
+        filas = []
+        for md in (carpeta / "fuente").glob("*.md"):
+            if (carpeta / f"{md.stem}-resumen.pdf").exists():
+                filas.append((md.stem, _meta(md)))
+        filas.sort(key=lambda f: (f[1]["fecha"], f[0]))
+        ex = EXAMENES.get(sigla, {})
+        cuerpo = []
+        if ex:
+            for _, (_, desde) in ex.items():
+                d = dict(filas)[desde]
+                cuerpo.append(f'<div class="section-block" style="border-left:4px solid {color}">'
+                              f'<strong>Para el 2.º examen, estudia desde la {_label(desde)}</strong> '
+                              f'({d["fecha_txt"]} · {html.escape(d["tit"])}).</div>')
+        else:
+            cuerpo.append('<div class="section-block">Todavía no hay un examen registrado en esta materia: '
+                          'los resúmenes van de corrido por clase.</div>')
+        cuerpo.append('<table><thead><tr><th>Clase</th><th>Fecha</th><th>Tema</th><th>Guía (PDF)</th></tr></thead><tbody>')
+        for stem, m in filas:
+            pdf = f"../../decimo/{sigla}/{sigla}-Resumenes/{stem}-resumen.pdf"
+            cuerpo.append(f'<tr><td>{_label(stem)}</td><td>{m["fecha_txt"]}</td>'
+                          f'<td>{html.escape(m["tit"])}</td>'
+                          f'<td><a href="{pdf}" target="_blank">📄 Resumen</a></td></tr>')
+            if stem in ex:
+                desc, desde = ex[stem]
+                cuerpo.append(f'<tr style="background:{color}22"><td colspan="4"><strong>📝 EXAMEN — {html.escape(desc)}</strong>'
+                              f'<br>↓ Lo que sigue entra al <strong>2.º examen</strong> (desde la {_label(desde)}).</td></tr>')
+        cuerpo.append("</tbody></table>")
+        pag = f"""<!-- Generado por scripts/build_resumenes.py --indices. No editar a mano. -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guías de estudio — {nombre}</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261020a">
+<script src="../../assets/app.js?v=20261020a" defer></script>
+</head>
+<body style="--c:{color}">
+<div class="wrap">
+<a class="back" href="index.html">← {nombre}</a>
+<div class="detail-head" style="border-color:{color}"><h2>Guías de estudio por clase</h2>
+  <p class="prof">Un PDF por clase: apuntes completos y resumen para estudiar. Los exámenes aparecen marcados en su fecha.</p>
+</div>
+{chr(10).join(cuerpo)}
+</div>
+</body>
+</html>
+"""
+        (ROOT / "materias" / slug / "resumenes.html").write_text(pag, encoding="utf-8")
+        idx = ROOT / "materias" / slug / "index.html"
+        t = idx.read_text(encoding="utf-8")
+        if "resumenes.html" not in t:
+            card = (f'  <a class="card" style="--c:{color}" href="resumenes.html"><h3>Guías de estudio</h3>'
+                    f'<p>Un PDF por clase y marca de dónde cae cada examen</p></a>\n')
+            t = re.sub(r'(  <a class="card"[^\n]*href="material\.html"[^\n]*\n)', lambda m: m.group(1) + card, t, count=1)
+            idx.write_text(t, encoding="utf-8")
+        print("página", slug, len(filas), "clases")
+
+
 def main(args):
+    if "--indices" in args:
+        build_indices()
+        return
     srcs = sorted(DECIMO.glob("*/*-Resumenes/fuente/*.md"))
     todos = "--todos" in args
     nombres = [a for a in args if not a.startswith("--")]

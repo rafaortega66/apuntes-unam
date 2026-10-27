@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-26T18:32:16+00:00",
+ "generatedAt": "2026-10-27T15:24:15+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -811,6 +811,51 @@
  },
  "gitlog": [
   {
+   "hash": "c0b46f0",
+   "fecha": "2026-10-27T09:21:08-06:00",
+   "mensaje": "Resumen de ASI Clase 8: hoja mínima que remite a la página de la clase"
+  },
+  {
+   "hash": "e96ab7c",
+   "fecha": "2026-10-27T09:17:47-06:00",
+   "mensaje": "Resúmenes de SIB: se agregan mis apuntes de clase (7, 8, 10, 12, 13, 14, 15) como Parte 3 de cada PDF"
+  },
+  {
+   "hash": "9b6ba5f",
+   "fecha": "2026-10-27T08:48:31-06:00",
+   "mensaje": "Resúmenes en PDF: sesiones previas de RP (0, −1, −2) y días de examen (RP 10, FSE 14, ASI 12, SIB 11, MD 5); el script acepta \\| en celdas y separa tablas pegadas"
+  },
+  {
+   "hash": "94ac758",
+   "fecha": "2026-10-27T08:45:23-06:00",
+   "mensaje": "Resúmenes en PDF por clase: del 31 al 25 ago (11 clases más)"
+  },
+  {
+   "hash": "72fcda5",
+   "fecha": "2026-10-27T08:41:02-06:00",
+   "mensaje": "Resúmenes en PDF por clase: del 7 al 1 sep (12 clases más)"
+  },
+  {
+   "hash": "bcb7a5e",
+   "fecha": "2026-10-27T08:36:49-06:00",
+   "mensaje": "Resúmenes en PDF por clase: del 21 al 8 sep (27 clases más)"
+  },
+  {
+   "hash": "636a897",
+   "fecha": "2026-10-27T08:02:46-06:00",
+   "mensaje": "Resúmenes en PDF por clase: avance hasta el 22 sep (58 clases)"
+  },
+  {
+   "hash": "ddf2660",
+   "fecha": "2026-10-27T07:47:37-06:00",
+   "mensaje": "Resúmenes en PDF por clase (estilo del resumen de FSE U1–U2): clases del 1 al 26 oct, con su fuente .md y scripts/build_resumenes.py"
+  },
+  {
+   "hash": "b7b3c97",
+   "fecha": "2026-10-26T12:32:16-06:00",
+   "mensaje": "Pasar al repo lo que seguía suelto en el escritorio: apuntes de clase (SIB 7–15 + PDF Clase 15, OAC 14, FSE 15), Lab OAC P4 (reporte y proyecto Quartus) y P5, material de Lab OAC, versión enviada de OAC-T02, presentación de MD 3.2, p03p01.py; Lab OAC P4 entregada"
+  },
+  {
    "hash": "5975c3d",
    "fecha": "2026-10-26T12:22:22-06:00",
    "mensaje": "MD: Práctica 3.4 (Clasificación, Equipo 7) entregada — versión final del notebook tomada de Drive (la copia local del 21 oct pasa a version-previa), presentación PDF, guías, resumen y guion; pendiente quitado; SIB-T03 apunta a SIB-Clase13"
@@ -1064,51 +1109,6 @@
    "hash": "80bb1af",
    "fecha": "2026-10-19T01:20:12-06:00",
    "mensaje": "RP-E01: solución validada contra la resolución del profesor (audio RP-Clase11) — puntajes, etapas del diagrama, aclaraciones y comparación del LDA (7.74 en clase vs 7.83 exacto)"
-  },
-  {
-   "hash": "63c6c2f",
-   "fecha": "2026-10-19T01:08:54-06:00",
-   "mensaje": "RP-E01: examen escaneado (calificado 20.5) y solución completa en PDF; LDA de la Clase 11 corregido con los datos del examen"
-  },
-  {
-   "hash": "b7dd70c",
-   "fecha": "2026-10-19T01:02:58-06:00",
-   "mensaje": "RP-E01: Primer Parcial registrado en Exámenes (en papel, 28 sep · 20/100 en Classroom)"
-  },
-  {
-   "hash": "9963f48",
-   "fecha": "2026-10-19T01:01:06-06:00",
-   "mensaje": "RP: dudas resueltas con Classroom — P2 = «Algoritmos de clustering» (25 sep 7:00), P3 vence 9 oct 17:00, sin Práctica 4 publicada; ejercicios Hu/GLCM ligados a la Clase 01"
-  },
-  {
-   "hash": "d286fe2",
-   "fecha": "2026-10-19T00:53:53-06:00",
-   "mensaje": "CLAUDE.md: convención de sesiones previas (clase-mNN) y sesión real en RP"
-  },
-  {
-   "hash": "a8ab342",
-   "fecha": "2026-10-19T00:52:04-06:00",
-   "mensaje": "RP: cronología real de sesiones (entré en la sesión 4) — Clases -2, -1 y 0 reconstruidas de las diapositivas, Clases 13–15 nuevas y sesión real en todas las páginas"
-  },
-  {
-   "hash": "b05771f",
-   "fecha": "2026-10-19T00:18:45-06:00",
-   "mensaje": "RP: presentaciones Clase 11–13 (PDF de Classroom) en RP-Material; se quitan todos los .pptx del repo"
-  },
-  {
-   "hash": "13551ff",
-   "fecha": "2026-10-18T18:40:38-06:00",
-   "mensaje": "CLAUDE.md: regla absoluta — Claude nunca envía correos, solo deja borradores"
-  },
-  {
-   "hash": "ff46268",
-   "fecha": "2026-10-18T18:35:15-06:00",
-   "mensaje": "ACS-E01: entregado por correo al profesor (18 oct 2026); pendiente oculto"
-  },
-  {
-   "hash": "0ac711b",
-   "fecha": "2026-10-18T18:31:48-06:00",
-   "mensaje": "ACS-E01: PDF del examen con capturas (prueba local y remota con date) en entregables; estado actualizado"
   }
  ]
 }
