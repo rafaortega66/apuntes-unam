@@ -25,7 +25,7 @@ Grupos donde los elementos se parecen más entre sí que a los de otros grupos; 
 | Coseno | Ángulo, sin importar magnitud |
 | Pearson | Relación lineal; selección de características |
 | Jaccard | Conjuntos binarios, categóricos, texto |
-| Minkowski | (Σ|xi − yi|^P)^(1/P): P = 1 Manhattan, P = 2 Euclidiana, P → ∞ Chebyshev |
+| Minkowski | (Σ\|xi − yi\|^P)^(1/P): P = 1 Manhattan, P = 2 Euclidiana, P → ∞ Chebyshev |
 
 ## 3. K-Means
 Divide en K grupos minimizando la **inercia** (suma de distancias cuadradas al centro).

@@ -107,10 +107,19 @@ def render_lines(lines):
             i = j
             continue
         if st.startswith("|"):
+            # \| dentro de una celda es una barra literal; una fila |---| después de
+            # la segunda fila empieza otra tabla (dos tablas pegadas sin línea vacía)
             rows = []
             while i < n and lines[i].strip().startswith("|"):
-                cells = [c.strip() for c in lines[i].strip().strip("|").split("|")]
-                if not all(re.fullmatch(r":?-{2,}:?", c) for c in cells):
+                raw = lines[i].strip().strip("|")
+                cells = [c.strip().replace("\x00", "|")
+                         for c in raw.replace("\\|", "\x00").split("|")]
+                if all(re.fullmatch(r":?-{2,}:?", c) for c in cells):
+                    if len(rows) > 1:
+                        i -= 1
+                        rows.pop()
+                        break
+                else:
                     rows.append(cells)
                 i += 1
             t = "<table><tr>" + "".join(f"<th>{inline(c)}</th>" for c in rows[0]) + "</tr>"

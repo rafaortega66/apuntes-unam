@@ -53,7 +53,7 @@ Matriz N×N: P(i, j | d, θ) = cuántas veces el nivel i aparece junto a j a dis
 **Espectrales** (FFT; supone señal **estacionaria**): con {100, 500, 1000, 2000} Hz y {0.1, 0.5, 0.3, 0.1}:
 | Descriptor | Resultado |
 |---|---|
-| Centroide Σf|X|/Σ|X| | (10 + 250 + 300 + 200)/1.0 = **760 Hz** |
+| Centroide Σf\|X\|/Σ\|X\| | (10 + 250 + 300 + 200)/1.0 = **760 Hz** |
 | Ancho de banda | ≈ **498.4 Hz** |
 | Roll-off (85 %) | Bin 3 (la página da 150 Hz en un bloque y 1500 Hz en otro: verificar) |
 | Flux [0.2,0.5,0.3] → [0.3,0.4,0.8] | 0.01 + 0.01 + 0.25 = **0.27** |
