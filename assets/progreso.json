@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-27T15:28:44+00:00",
+ "generatedAt": "2026-10-27T15:45:20+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -362,6 +362,13 @@
     "resumen": "Tema 3 (3.9, Linux embebido) — Cambio de orden del temario («salto cuántico»): cómo elegir la versión del kernel de Linux para un sistema embebido, el árbol de directorios con la raíz / , las familias de distribuciones y",
     "url": "materias/fundamentos-de-sistemas-embebidos/clase-16.html",
     "formato": "estudio"
+   },
+   {
+    "num": 17,
+    "fecha": "2026-10-26",
+    "resumen": "Tema 3 (3.3, planificación de tareas) — Algoritmos de planificación (FIFO simple, Shortest Job First , prioridades, Round Robin y su versión con prioridad y preventiva), frecuencia del scheduler y cuánto de tiempo, y el ",
+    "url": "materias/fundamentos-de-sistemas-embebidos/clase-17.html",
+    "formato": "estudio"
    }
   ],
   "administracion-de-servicios-de-internet": [
@@ -468,6 +475,13 @@
     "fecha": "2026-10-21",
     "resumen": "Nuevas tecnologías (fuera del temario) — Transformación digital y sus tres niveles (caso Netflix), IA, prompts y algoritmia, empleo y automatización, supervisión humana, habilidades técnicas y humanas, y la tarea en equi",
     "url": "materias/administracion-de-servicios-de-internet/clase-15.html",
+    "formato": "estudio"
+   },
+   {
+    "num": 16,
+    "fecha": "2026-10-26",
+    "resumen": "Nuevas tecnologías (fuera del temario) — Exposiciones y debate de la «Actividad 1: el empleo del futuro»: impacto de la tecnología en el contador, el agricultor, el conductor y el médico; supervisión humana, responsabili",
+    "url": "materias/administracion-de-servicios-de-internet/clase-16.html",
     "formato": "estudio"
    }
   ],
@@ -811,6 +825,11 @@
  },
  "gitlog": [
   {
+   "hash": "c7c453a",
+   "fecha": "2026-10-27T09:28:44-06:00",
+   "mensaje": "Botón 'Guía de estudio (PDF)' al inicio de cada página de clase (113)"
+  },
+  {
    "hash": "b9d5cc0",
    "fecha": "2026-10-27T09:24:15-06:00",
    "mensaje": "Páginas 'Guías de estudio' por materia: un PDF por clase, exámenes marcados en su fecha y desde qué clase estudiar para el 2.º parcial"
@@ -1104,11 +1123,6 @@
    "hash": "7c6007d",
    "fecha": "2026-10-19T10:57:20-06:00",
    "mensaje": "SIB: apuntes de las clases 07–13 en PDF (lo que presenta la profesora) enlazados en cada clase y en Material; clases 12 y 13; ejercicios de clase EC02–EC04"
-  },
-  {
-   "hash": "8ce824a",
-   "fecha": "2026-10-19T01:26:18-06:00",
-   "mensaje": "RP: correcciones anotadas (✏️) verificadas con los audios"
   }
  ]
 }

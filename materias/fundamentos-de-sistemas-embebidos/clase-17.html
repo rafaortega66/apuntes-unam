@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 17 — Fundamentos de Sistemas Embebidos</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Fundamentos de Sistemas Embebidos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 17</h2>
+  <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 26 oct 2026 · Tema 3 (3.3, planificación de tareas) — Algoritmos de planificación (FIFO simple, <em>Shortest Job First</em>, prioridades, <em>Round Robin</em> y su versión con prioridad y preventiva), frecuencia del <em>scheduler</em> y cuánto de tiempo, y el <em>Completely Fair Scheduler</em> de Linux.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>FSE-Clase17.m4a</code>), 27 oct 2026. Retoma lo que el profesor había pospuesto en la <a href="clase-16.html">Clase 16</a> («salto cuántico»). Lo que NotebookLM pudo mezclar o no cuadra con la referencia técnica se marca en el texto con ⚠️.</p>
+</div>
+<div class="files" id="guia-estudio-pdf"><a class="btn" href="../../decimo/FSE/FSE-Resumenes/FSE-Clase17-resumen.pdf" target="_blank">📄 Guía de estudio (PDF): apuntes completos + resumen para estudiar</a></div>
+
+<details class="section-block sec" id="c17-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Los algoritmos de planificación y cómo elige cada uno la siguiente tarea: FIFO simple, <em>Shortest Job First</em>, prioridad y <em>Round Robin</em>.</strong><span class="evid">Evidencia: es el tema central; los explicó en el pizarrón paso a paso con un diagrama de tareas y sus estados (READY, RUNNING, WAIT).</span></li>
+<li><strong>Costo de encontrar la tarea más corta: árbol ordenado frente a búsqueda lineal (log₂ 300 ≈ 9 comparaciones).</strong><span class="evid">Evidencia: resolvió el ejercicio numérico en el pizarrón con 300 tareas.</span></li>
+<li><strong>Escala de prioridades en Linux (−20 a 20, donde −20 es la más alta) y la inanición.</strong><span class="evid">Evidencia: lo explicó y dibujó cómo tareas de alta prioridad que se bloquean y desbloquean dejan sin CPU a la de baja prioridad (la Tarea 4).</span></li>
+<li><strong>Cuánto de 4 ms (250 Hz) en escritorio y 100 Hz (10 ms) en servidores.</strong><span class="evid">Evidencia: lo justificó con el ejemplo de una página PHP de ~6 ms y con el costo de evaluar al <em>scheduler</em> 1,000 veces por segundo.</span></li>
+<li><strong>Políticas del CFS de Linux: SCHED_NORMAL, SCHED_BATCH, SCHED_IDLE, y SCHED_FIFO / SCHED_RR de tiempo real.</strong><span class="evid">Evidencia: las enumeró con su uso y destacó que las de tiempo real están por encima de cualquier prioridad de usuario.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c17-scheduler"><summary><span class="stitle">1 · El <em>scheduler</em> como «cadenero» del sistema operativo</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El componente del kernel que administra el procesador: decide cuál proceso, hilo o tarea en estado listo (READY) obtiene el núcleo.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es el cadenero de un antro: no deja pasar a quien no esté en la lista (estado READY) y decide quién entra primero a la pista de baile (el procesador).<span class="rompe">Dónde deja de servir: a un cadenero se le puede sobornar; las reglas del <em>scheduler</em> las ejecutan interrupciones de hardware y código determinista.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El sistema operativo administra tres cosas: procesador (<em>scheduler</em>), memoria (sistema de asignación) y periféricos (<em>drivers</em>). Para el <em>scheduler</em>, tarea, hilo y proceso son intercambiables: todos son unidades ejecutables con un contexto que se forman en una cola. El <em>scheduler</em> revisa la lista de tareas en READY y aplica un algoritmo de selección. Una tarea en espera (WAIT / BLOCKED) o pausada no puede entrar al núcleo.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es el corazón de la multitarea. Continúa los estados de un proceso de la <a href="clase-15.html">Clase 15</a>.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que el <em>scheduler</em> puede darle el CPU a una tarea que espera datos del puerto serie o del teclado (WAIT).</p></div>
+</details>
+
+<details class="section-block sec" id="c17-fifo"><summary><span class="stitle">2 · Algoritmo 1: FIFO simple (<em>First In, First Out</em>)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Algoritmo no preventivo que despacha las tareas en el orden estricto de llegada y deja que cada una corra a completitud sin interrumpirla.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es la fila de las tortillas o la caja del súper: el primero que llegó es el primero al que atienden y nadie pasa hasta que termina.<span class="rompe">Dónde deja de servir: en la fila la gente espera; en una computadora, si la primera tarea entra en un bucle infinito, bloquea todo el sistema.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Ejemplo del pizarrón con tres tareas:</p>
+<ol>
+<li>Las Tareas 1, 2 y 3 están en la cola READY; la Tarea 1 pasa a RUNNING.</li>
+<li>Si la Tarea 1 necesita datos de un periférico o de la Tarea 2, pasa a WAIT.</li>
+<li>El <em>scheduler</em> asigna el CPU a la Tarea 2 (la siguiente), que genera los datos y termina.</li>
+<li>Al recibir los datos, la Tarea 1 se desbloquea y pasa a READY, pero por la regla de FIFO se coloca <strong>al final</strong> de la cola: no regresa a RUNNING hasta que la Tarea 3 (que estaba antes) corra y descanse.</li>
+</ol>
+<p><strong>En embebidos:</strong> representa del 80 % al 90 % de la lógica de microcontroladores sencillos, con un bucle principal <code>while(1)</code> donde las funciones se ejecutan una tras otra de principio a fin.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es el de menor sobrecarga (<em>overhead</em>); ideal para firmware <em>bare-metal</em> de bajo costo.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que la Tarea 1, al desbloquearse, expulsa a las demás para retomar el CPU; en FIFO simple se encola al final de READY.</p></div>
+</details>
+
+<details class="section-block sec" id="c17-sjf"><summary><span class="stitle">3 · Algoritmo 2: <em>Shortest Job First</em> (SJF) y el árbol</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Algoritmo no preventivo que elige, entre las tareas en READY, la que tenga el menor tiempo estimado de procesamiento.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es la caja rápida del súper (10 artículos o menos): quien solo quiere inflar una llanta pasa antes que quien necesita reparar toda la transmisión.<span class="rompe">Dónde deja de servir: en el taller ves el daño; en software no puedes saber con exactitud cuánto durará un programa sin haberlo corrido.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Para no buscar en una lista desordenada, las tareas se organizan en una cola de prioridad con un <strong>árbol</strong> (NotebookLM dice «Árbol B»): ordenado de menor a mayor tiempo estimado, la tarea más corta queda en el nodo superior.</p>
+<p><strong>Ejercicio de clase (300 tareas en Linux):</strong> la búsqueda lineal revisa hasta 300 elementos, O(N). En el árbol el costo es O(log₂ N): log₂(300) ≈ 8.22, o sea <strong>9 comparaciones</strong>. Reordenar el árbol al insertar tareas cuesta O(N log N).</p>
+<p><strong>Imposibilidad teórica:</strong> predecir con exactitud el tiempo de ejecución depende de los datos de entrada y de los condicionales (NotebookLM lo llama NP-completo / NP-duro). En ingeniería se usa la estimación del <strong>peor caso</strong> (WCET, <em>Worst-Case Execution Time</em>).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Reduce el tiempo promedio de espera y evita que tareas breves de comunicaciones (vaciar búferes de UART o I²C, <a href="clase-11.html">Clase 11</a>) se queden detrás de cálculos pesados.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> pensar que el sistema operativo adivina el tiempo futuro de un programa sin evaluar su peor caso.</p></div>
+</details>
+
+<details class="section-block sec" id="c17-prioridad"><summary><span class="stitle">4 · Algoritmo 3: prioridades e inanición</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Algoritmo que asigna a cada tarea un número de prioridad y despacha siempre la tarea lista con la prioridad más alta.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es el acceso VIP de un parque de diversiones: quien trae pulsera dorada pasa directo sin importar cuántos con pulsera gris lleven horas formados.<span class="rompe">Dónde deja de servir: en la sociedad sería discriminación; en un procesador es vital que la tarea que lee el sensor de freno pase antes que la que dibuja la carátula del reproductor.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Escala en Linux:</strong> los valores de <em>niceness</em> van de −20 a 20 (⚠️ en Linux real son −20 a 19; así lo dictó NotebookLM). <strong>−20 es la prioridad más alta y 20 la más baja</strong>; se ordena de menor a mayor número.</p>
+<p><strong>Preventivo contra no preventivo:</strong> en el modo preventivo, en cuanto una tarea de mayor prioridad se activa o desbloquea, el kernel interrumpe a la de menor prioridad y le cede el procesador.</p>
+<p><strong>Inanición (<em>starvation</em>):</strong> en el diagrama del pizarrón (Tarea 1 de prioridad alta, Tareas 2 y 3 medias, Tarea 4 baja), si las Tareas 1, 2 y 3 se bloquean y desbloquean continuamente, la Tarea 4 nunca recibe CPU y «muere de inanición».</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es indispensable en sistemas de control y RTOS para atender eventos críticos antes que tareas secundarias.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que un número mayor (como 20) significa mayor prioridad en Linux.</p></div>
+</details>
+
+<details class="section-block sec" id="c17-rr"><summary><span class="stitle">5 · Algoritmo 4: <em>Round Robin</em></span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Algoritmo preventivo para sistemas de propósito general (GPOS) que da a cada tarea de la cola un intervalo fijo de tiempo, el <strong>cuanto</strong> (<em>time slice</em>), repartiendo el procesador por turnos.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es repartir un taco a cada comensal por turnos en lugar de dejar que uno se coma los 20 seguidos mientras los demás miran.<span class="rompe">Dónde deja de servir: comer a mordidas intercaladas enfría la comida; en el procesador cada cambio de turno cuesta una pequeña pérdida llamada conmutación de contexto.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Las tareas se forman en una cola circular. El temporizador de hardware dispara una interrupción cuando vence el cuanto. En escritorio el cuanto probado es de <strong>4 ms</strong>: al vencer, el timer interrumpe, el kernel pasa la tarea de RUNNING a READY al final de la cola y da los siguientes 4 ms a la siguiente. Al conmutar cada 4 ms se crea la ilusión de multitarea, aunque en un núcleo solo corre una instrucción a la vez.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Da equidad e interactividad fluida en Linux, Windows y macOS. Usa los temporizadores de la <a href="clase-07.html">Unidad 2</a>.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que <em>Round Robin</em> puro sirve en tiempo real duro; en RTOS se descarta porque rompe el determinismo de la ley de control (sensado → filtrado → ley de control → actuación).</p></div>
+</details>
+
+<details class="section-block sec" id="c17-rr-prioridad"><summary><span class="stitle">6 · <em>Round Robin</em> con prioridad y preventivo</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La combinación de turnos por tiempo de <em>Round Robin</em> con una jerarquía de prioridades, mediante un árbol de colas.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es una discoteca con salas VIP, Preferente y General: el cadenero reparte turnos de 4 minutos en la VIP; si queda vacía pasa a la General, pero si entra alguien a la VIP, interrumpe a la General y regresa con los VIP.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El kernel mantiene un árbol balanceado donde cada nodo guarda una cola circular de tareas de la misma prioridad.</p>
+<ol>
+<li>El <em>scheduler</em> busca el nivel de prioridad más alto que tenga tareas READY.</li>
+<li>Si hay varias en ese nivel, las alterna con <em>Round Robin</em> (4 ms por cuanto).</li>
+<li>Ninguna tarea recibe dos cuantos seguidos salvo que sea la única lista en su nivel.</li>
+<li>Si una tarea de mayor prioridad pasa a READY mientras corre una de menor, ocurre la <strong>prevención</strong>: se interrumpe a la de menor y se dan los 4 ms a la de mayor.</li>
+</ol>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Evita que tareas de la misma prioridad se acaparen entre sí y mantiene respuesta inmediata ante eventos de alta prioridad.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que tareas de igual prioridad se interrumpen entre sí por prevención; entre ellas el cambio ocurre solo al vencer el cuanto o al bloquearse por E/S.</p></div>
+</details>
+
+<details class="section-block sec" id="c17-frecuencia"><summary><span class="stitle">7 · Frecuencia del <em>scheduler</em> y selección del cuanto</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La frecuencia (en Hz) con la que el <em>scheduler</em> despierta para revisar la tabla de procesos y los temporizadores y decidir si conmuta tareas.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es cada cuánto toca la campana un profesor para revisar el avance: cada 5 segundos los alumnos pierden el tiempo guardando y sacando cuadernos; cada 3 horas, alguien se queda atorado todo el día en el primer ejercicio.</p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>RTOS:</strong> típicamente 1 kHz (rebanada de 1 ms) para cumplir <em>deadlines</em> rígidos.</li>
+<li><strong>GPOS (Linux):</strong> el tic del sistema se elige al compilar entre 100, 250, 300 o 1000 Hz (el ejemplo fue un kernel 2.6.30x). Escritorio: 250 Hz = 4 ms.</li>
+<li><strong>Servidores:</strong> 100 Hz (10 ms). Una página PHP con consultas a base de datos tarda ~6 ms en armarse; con rebanadas de 10 ms se despacha completa de un solo tiro, sin conmutaciones de contexto innecesarias.</li>
+<li><strong>Costo de evaluar:</strong> si evaluar el árbol de colas y conmutar el contexto toma 1 µs, a 1,000 evaluaciones por segundo (1 kHz) se pierde 1 ms por segundo solo en gestión.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Subir la frecuencia no siempre acelera el sistema: una frecuencia excesiva satura al CPU con la sobrecarga del <em>scheduler</em>.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> configurar un kernel de servidor a 1000 Hz creyendo que servirá las páginas más rápido; aumenta la degradación por conmutación de contexto.</p></div>
+</details>
+
+<details class="section-block sec" id="c17-cfs"><summary><span class="stitle">8 · El <em>scheduler</em> de Linux: evolución y políticas del CFS</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El subsistema del kernel de Linux que planifica procesos. Pasó del algoritmo simple no preventivo de Linus Torvalds (versiones 1.0 a 1.4) al <em>Completely Fair Scheduler</em> (CFS), desde el kernel 2.6.23.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un administrador de personal que sabe atender desde una tiendita (un reloj inteligente) hasta una fábrica automotriz (servidores en la nube), cambiando sus reglas según el turno.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El CFS usa un árbol rojo-negro para balancear el tiempo de ejecución virtual (<em>vruntime</em>) de las tareas. Sus políticas:</p>
+<table>
+<thead><tr><th>Política</th><th>Para qué sirve</th></tr></thead>
+<tbody>
+<tr><td><code>SCHED_NORMAL</code> (o <code>SCHED_OTHER</code>)</td><td>Estándar para aplicaciones de escritorio interactivas (Round Robin con prioridades y prevención).</td></tr>
+<tr><td><code>SCHED_BATCH</code></td><td>Sin conmutación frecuente y con rebanadas largas, para procesos por lotes (compilaciones, respaldos, consultas masivas).</td></tr>
+<tr><td><code>SCHED_IDLE</code></td><td>Prioridad ultra baja: solo recibe CPU cuando el sistema está ocioso (monitoreo ambiental, estaciones meteorológicas).</td></tr>
+<tr><td><code>SCHED_FIFO</code> / <code>SCHED_RR</code></td><td>Tiempo real, con prioridades de 1 a 99; cualquier tarea de tiempo real supera a todas las de usuario, incluso con <em>niceness</em> −20.</td></tr>
+</tbody>
+</table>
+<p>⚠️ NotebookLM dijo que una tarea RT 1 tiene mayor prioridad que una RT 99. En Linux real es al revés (99 es la más alta); confirma con el audio o con el profesor antes de usar ese dato.</p>
+<p><strong>Modos de prevención del kernel:</strong> <em>No Preemptive</em> (típico en servidores: las tareas del kernel no se interrumpen para no corromper transacciones), <em>Voluntary Preemption</em> (puntos de interrupción explícitos) y <em>Preemptive Kernel / Low-Latency Desktop</em> (todo el kernel es interrumpible, para escritorio y audio/video en tiempo real).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Explica por qué Linux corre en dispositivos tan distintos, de un reloj a un supercómputo.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que SCHED_FIFO y SCHED_RR vienen activados por defecto en cualquier distribución; requieren recompilar el kernel o el parche PREEMPT_RT.</p></div>
+</details>
+
+<details class="section-block sec" id="c17-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Por qué para el <em>scheduler</em> proceso, hilo y tarea son intercambiables?</summary><p>Porque al <em>scheduler</em> solo le importa si la unidad ejecutable está en READY para formarla en la cola y darle tiempo de procesador, no su jerarquía ni el dueño de la memoria.</p></details>
+<details class="qa"><summary>2. En FIFO simple, la Tarea 1 se bloquea por E/S y luego se desbloquea mientras las Tareas 2 y 3 están en READY. ¿Por qué no continúa de inmediato?</summary><p>Porque es FIFO no preventivo: al desbloquearse se encola al final de READY y debe esperar a que corran las Tareas 2 y 3, que llegaron antes.</p></details>
+<details class="qa"><summary>3. Con 300 tareas en un árbol para SJF, ¿cuántas comparaciones hacen falta como máximo?</summary><p>log₂(300) ≈ 8.22, o sea 9 comparaciones (la búsqueda lineal serían hasta 300).</p></details>
+<details class="qa"><summary>4. ¿Cómo se interpreta el número de prioridad en <em>niceness</em> y en tiempo real?</summary><p>En <em>niceness</em> (−20 a 20) el número más bajo, −20, es la prioridad más alta. En tiempo real (1 a 99) la tarea tiene prioridad absoluta sobre las de usuario normal (⚠️ confirmar si 1 o 99 es la más alta).</p></details>
+<details class="qa"><summary>5. ¿Cuánto dura por defecto el cuanto en escritorio?</summary><p>4 ms, que corresponde a 250 Hz.</p></details>
+<details class="qa"><summary>6. ¿Por qué un servidor web usa 100 Hz y no 1000 Hz?</summary><p>Porque una página PHP con base de datos tarda ~6 ms; con rebanadas de 10 ms se despacha de un solo tiro, sin perder tiempo en conmutaciones de contexto.</p></details>
+<details class="qa"><summary>7. ¿Qué pasa en <em>Round Robin</em> con prioridad si dos tareas de la máxima prioridad se bloquean y desbloquean sin parar?</summary><p>Provocan inanición de las tareas de menor prioridad, que nunca reciben CPU.</p></details>
+<details class="qa"><summary>8. ¿En qué difieren SCHED_BATCH y SCHED_IDLE?</summary><p>SCHED_BATCH da rebanadas largas a procesos pesados por lotes para terminarlos sin interrupciones frecuentes. SCHED_IDLE da prioridad ultra baja a tareas de fondo que solo corren cuando el CPU no tiene nada más.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c17-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>Plan de estudios:</strong> el profesor repasó la lista de materias del nuevo plan y se quejó de que desaparecen Compiladores, Sistemas Operativos, Lenguajes Formales y Física Cuántica a cambio de materias como Liderazgo Estratégico, Finanzas en Ingeniería o Inteligencia Artificial en cuarto semestre, antes de haber visto Estadística o Bases de Datos.</li>
+<li><strong>Fotos de título en Copilco:</strong> bromeó con la travesía de los alumnos para tomárselas con las orejas pegadas y fondo mate.</li>
+<li><strong>«Michi»:</strong> explicó que la palabra viene del náhuatl (cacomixtle, «medio gato») y no es un anglicismo.</li>
+<li><strong>«Doctor Agony»:</strong> volvió a la metáfora para explicar cómo la llamada <code>sys_brk</code> reorganiza procesos en la RAM sin que el programa lo note.</li>
+<li>Hubo además comentarios sobre método científico y política que se omiten aquí por no ser de la materia.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c17-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Próxima clase:</strong> según NotebookLM, seguir con administración de memoria y controladores de hardware; sin confirmar.</li>
+<li><strong>Laboratorio:</strong> traer preparadas las tarjetas Raspberry Pi con Linux en modo consola para las prácticas de compilación del kernel y desarrollo de controladores (<a href="clase-16.html#c16-pendiente">Práctica 8</a>).</li>
+<li><strong>Tareas:</strong> no se asignó ninguna nueva, según NotebookLM.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>FIFO simple: por orden de llegada y sin interrumpir; una tarea desbloqueada se encola al final. SJF: la más corta primero, con un árbol (log₂ 300 ≈ 9 comparaciones).</li>
+<li>Prioridades en Linux: −20 es la más alta; la inanición deja sin CPU a la tarea de baja prioridad.</li>
+<li><em>Round Robin</em>: cuanto de 4 ms (250 Hz) en escritorio; servidores a 100 Hz (10 ms); mayor frecuencia = más sobrecarga.</li>
+<li>CFS: SCHED_NORMAL, SCHED_BATCH, SCHED_IDLE y las de tiempo real SCHED_FIFO / SCHED_RR (1 a 99), siempre por encima de las de usuario.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 16 — Administración de Servicios de Internet</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Administración de Servicios de Internet</a>
+<div class="detail-head" style="border-color:#7C9CD6"><h2>Clase 16</h2>
+  <p class="prof">Mtro. Juan Ángel Calvillo Pérez · 26 oct 2026 · Nuevas tecnologías (fuera del temario) — Exposiciones y debate de la «Actividad 1: el empleo del futuro»: impacto de la tecnología en el contador, el agricultor, el conductor y el médico; supervisión humana, responsabilidad legal y fiscal.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>ASI-Clase16.m4a</code>), 27 oct 2026. Fue una sesión de presentaciones de equipos: lo que sigue mezcla lo que expusieron los alumnos con las correcciones del profesor, que es lo que importa. Continúa la tarea que dejó la <a href="clase-15.html">Clase 15</a>. No se anotan nombres de compañeros.</p>
+</div>
+<div class="files" id="guia-estudio-pdf"><a class="btn" href="../../decimo/ASI/ASI-Resumenes/ASI-Clase16-resumen.pdf" target="_blank">📄 Guía de estudio (PDF): apuntes completos + resumen para estudiar</a></div>
+
+<details class="section-block sec" id="c16-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>La tecnología cambia el rol del profesional hacia la supervisión y el criterio humano (modelo <em>human in the loop</em>).</strong><span class="evid">Evidencia: lo repitió en casi todas las presentaciones: toda herramienta de IA «requiere criterio humano, que revisen lo que les da».</span></li>
+<li><strong>Riesgos de automatizar por completo: ciberseguridad, fallas físicas e imprevistos.</strong><span class="evid">Evidencia: en el caso de vehículos autónomos señaló que ya hay carros hackeados con muertos y que alguien debe atender una ponchadura o una emergencia médica.</span></li>
+<li><strong>Contabilidad no es lo mismo que finanzas, y el contador no debe tener trato directo con los clientes.</strong><span class="evid">Evidencia: lo corrigió en la presentación del contador con argumentos de riesgo empresarial y fiscal.</span></li>
+<li><strong>Coherencia entre lo que se dice («solo ayuda») y lo que se presenta («desplazamiento laboral»).</strong><span class="evid">Evidencia: lo señaló en el caso de los drones agrícolas, con la diapositiva final del propio equipo.</span></li>
+<li><strong>Integración con servicios oficiales: conexión al SAT y archivos XML de los CFDI.</strong><span class="evid">Evidencia: lo explicó en el caso del software contable. Evidencia media: surgió como corrección, no como tema formal.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c16-contador"><summary><span class="stitle">1 · El contador y el software contable en la nube</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El rediseño de la función contable con plataformas en la nube (QuickBooks Online, SAP) que concilian ingresos y egresos y llevan al contador de capturar a auditar y asesorar en lo fiscal.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es tener un asistente que clasifica y registra tus recibos en segundo plano; tú ya no tecleas número por número, solo revisas que las cuentas cuadren.<span class="rompe">Dónde deja de servir: si el SAT audita o detecta una inconsistencia, la IA no firma ni responde; el contador humano sigue respondiendo legalmente.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El equipo afirmó al inicio que «el contador factura manualmente paso a paso». El profesor lo corrigió de inmediato: un contador real no hace facturas manuales, sino que <strong>audita e inspecciona</strong> los ingresos, egresos y gastos de la empresa. El equipo propuso QuickBooks Online y SAP para automatizar la facturación y el cotejo bancario, y listó como riesgos el desplazamiento laboral y la dependencia del software. El profesor respondió que si el software requiere supervisión humana, el rol no desaparece sino que se transforma en consultor o asesor fiscal.</p>
+<p>Después el equipo planteó que el nuevo contador debería «interactuar, presentar y negociar estrategias directo con los clientes». El profesor lo calificó como una pésima práctica: «no se recomienda jamás en la vida que el contador tenga contacto con el cliente», por el riesgo de que se robe a los clientes de la empresa o caiga en «factureo» fraudulento para evadir impuestos.</p>
+<p><strong>Anécdota que lo ilustra:</strong> al fundar su primera empresa no contrató contador y hizo él mismo las facturas; al primer mes el SAT le cobró <strong>$80,000 MXN</strong> de impuestos. Aprendió que una empresa necesita dos pilares: un buen contador y un buen abogado, que aprovechen los marcos legales de deducción (compras a nombre de la empresa, mobiliario, flotillas de autos deducidas a 5 años).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Se liga con los sistemas ERP, la integración con servicios web del SAT, la gestión de riesgos legales y la ciberseguridad financiera.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que el contador captura facturas a mano, ponerlo en contacto directo con los clientes y no conocer las reglas de deducción del SAT.</p></div>
+</details>
+
+<details class="section-block sec" id="c16-agricultura"><summary><span class="stitle">2 · Drones agrícolas y el debate del desplazamiento laboral</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El uso de drones agrícolas (por ejemplo la serie DJI Agras) con visión computacional y sensores para monitorear plagas, topografía y aplicar insumos en los cultivos.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es volar un helicóptero en miniatura programado sobre un terreno enorme para regar y revisar las plantas en minutos, en lugar de poner a varias personas a caminar días bajo el sol.<span class="rompe">Dónde deja de servir: si la semilla es defectuosa o la tecnología falla, el dron no evalúa la tierra ni reemplaza el conocimiento empírico del agricultor.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El equipo describió las tareas del agricultor (control de plagas, recolección, siembra, detección de zonas que requieren atención) y propuso drones que hoy operan con un esquema ~80 % autónomo y 20 % piloto humano. Su meta técnica es llegar al 100 % de autonomía con visión computacional, sensores de flujo óptico y cámaras láser, prescindiendo del GPS convencional para no perder el dron (cuesta más de $500,000 MXN).</p>
+<p>Durante el debate el equipo insistió en que «no busca desplazar al agricultor sino ayudarlo». El profesor señaló la contradicción: en su última diapositiva el primer riesgo era «desplazamiento laboral». Si un solo dron barre un campo de 200 × 200 metros que antes requería 5 personas, sí hay una eliminación directa de mano de obra no calificada, y ahora el agricultor debe capacitarse para operar, rellenar e iniciar el dron.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Conecta con IoT agrícola, visión artificial, automatización industrial y reconversión de la fuerza laboral rural.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> negar el desplazamiento laboral al hablar mientras se escribe en las diapositivas, y suponer que el campo no sufre fallas de conectividad o desorientación de sensores.</p></div>
+</details>
+
+<details class="section-block sec" id="c16-conduccion"><summary><span class="stitle">3 · Conducción autónoma: ciberseguridad y soporte físico</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Eliminar al chofer en taxis y camiones con vehículos autónomos guiados por sensores, cámaras y visión por computadora (el equipo citó a Waymo en San Francisco; NotebookLM lo escribió como «Bumo»).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un auto que te lleva a tu destino sin nadie al volante, siguiendo el mapa y respetando las señales.<span class="rompe">Dónde deja de servir: si se ponchan las llantas, falla la batería o el pasajero sufre una crisis médica, el vehículo no puede bajarse a cambiar la llanta ni dar primeros auxilios.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El equipo argumentó que una computadora no huye tras un accidente ni se distrae como un chofer. El profesor cuestionó la idea de prescindir de todo apoyo en emergencias. El equipo respondió con módulos de supervisión cada cierto kilometraje en las carreteras (se mencionó EE. UU.), con tres especialistas: un operador de sistemas o conductor remoto, un mecánico-eléctrico y un médico.</p>
+<p>El profesor añadió un peligro que no se había considerado: la <strong>ciberseguridad</strong>. Si un vehículo autónomo es hackeado por su red de datos, las consecuencias pueden ser ataques masivos y pérdida de vidas («han hackeado esos carros y ha habido muertos»).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Conecta con la ciberseguridad en transporte conectado, la ética algorítmica y el diseño de redes seguras.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> pensar que la conducción autónoma resuelve todos los imprevistos físicos e ignorar el riesgo de hackeo en vehículos conectados.</p></div>
+</details>
+
+<details class="section-block sec" id="c16-medicina"><summary><span class="stitle">4 · IA en medicina y el principio <em>human in the loop</em></span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La integración de visión computacional, análisis predictivo y transcripción automática de consultas como apoyo al médico general. En <em>human in the loop</em> la IA no sustituye al médico: se integra en un ciclo de supervisión humana constante.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un asistente que toma notas en silencio durante la consulta y marca zonas sospechosas en las radiografías para que el doctor las revise.<span class="rompe">Dónde deja de servir: la IA puede tener sesgos o inventar un diagnóstico, no explora al paciente, no siente empatía y no responde legalmente por una receta.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El equipo repartió su presentación en tres roles:</p>
+<ul>
+<li><strong>Tareas habituales:</strong> entrevista de síntomas, lectura del historial, exploración física, diagnóstico clínico, prescripción y seguimiento.</li>
+<li><strong>Herramientas:</strong> visión computacional para radiografías, análisis predictivo para patrones que no se ven a simple vista y reconocimiento de voz para armar el historial en tiempo real.</li>
+<li><strong>Riesgos y mitigación:</strong> dependencia tecnológica, inferencias erróneas y sesgos algorítmicos; mitigación con <em>human in the loop</em>.</li>
+</ul>
+<p>En el debate salieron la automedicación por internet o IA y la necesidad de verificar recetas digitales. El profesor comentó los intentos del gobierno de unificar las bases de datos de salud del país y los intentos pasados de surtir recetas con máquinas automáticas en farmacias y tiendas, que fracasaron por falsificación de recetas y robo de medicamentos.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Conecta con la ética médica en IA, el procesamiento de lenguaje natural y la gobernanza de bases de datos clínicas públicas.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> suponer que la IA reemplaza el diagnóstico presencial y la empatía, o ignorar los sesgos algorítmicos.</p></div>
+</details>
+
+<details class="section-block sec" id="c16-sat"><summary><span class="stitle">5 · Software contable con el SAT: contabilidad vs. finanzas</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Una plataforma para el mercado mexicano que se conecta al SAT para descargar los comprobantes fiscales (CFDI, en formato XML), concilia con los movimientos bancarios y genera reportes como la DIOT (Declaración Informativa de Operaciones con Terceros).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es una herramienta que jala sola las facturas digitales del SAT y las compara con el estado de cuenta del banco para armar los reportes de impuestos.<span class="rompe">Dónde deja de servir: no distingue si una operación a nombre de un tercero es legítima o una refacturación ilícita.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El equipo presentó una herramienta que descarga los CFDI en XML directamente del SAT, los compara con las cuentas bancarias y genera pólizas contables sin captura manual. El XML es la estructura básica con la que se llena toda la información. El profesor hizo varias aclaraciones:</p>
+<ul>
+<li><strong>Contabilidad contra finanzas:</strong> «la contabilidad es una cosa y las finanzas otra»: la contabilidad lleva los registros fiscales y el cumplimiento ante el SAT; las finanzas, la proyección estratégica de inversiones. Criticó llamar «analista financiero» al contador.</li>
+<li><strong>Operaciones a nombre de terceros:</strong> facturar a nombre de otra persona o la refacturación ilícita es un delito fiscal que persigue el SAT. Citó el caso mediático de un cantante en Veracruz, donde quisieron justificar una factura de $800,000 MXN a nombre de otra persona para pagarle solo $100,000 MXN en mano.</li>
+<li><strong>IA en este software:</strong> debería poner «banderas de alerta» con fechas de corte, declaraciones mensuales y anuales, requerimientos del SAT y periodos de descuento.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Conecta con las API gubernamentales, la estructura XML/CFDI, la ciberseguridad transaccional y la legalidad fiscal en el desarrollo de software.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> mezclar las funciones de contabilidad y finanzas, diseñar sistemas que permitan operaciones ilegales con terceros y omitir alertas del calendario fiscal.</p></div>
+</details>
+
+<details class="section-block sec" id="c16-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Qué tres roles debía cubrir cada equipo en su presentación?</summary><p>Uno identifica las tareas habituales de la profesión, otro propone la herramienta tecnológica y el tercero evalúa los efectos y riesgos para las personas.</p></details>
+<details class="qa"><summary>2. ¿Por qué es mala idea poner al contador en contacto directo con los clientes?</summary><p>Porque la empresa se expone a que se robe a los clientes o manipule facturas de forma fraudulenta, con problemas legales y fiscales ante el SAT.</p></details>
+<details class="qa"><summary>3. ¿Qué propuso el equipo de drones en lugar de depender del GPS?</summary><p>Visión computacional, sensores de flujo óptico y cámaras láser con algoritmos de IA y redes neuronales, para no perder la ubicación del dron.</p></details>
+<details class="qa"><summary>4. ¿En qué se distingue el contador del financiero?</summary><p>El contador lleva los registros, revisa los CFDI, ingresos y egresos y cumple ante el SAT; el financiero se ocupa de las estrategias de inversión, la rentabilidad y la proyección del capital.</p></details>
+<details class="qa"><summary>5. ¿Qué es <em>human in the loop</em> en medicina?</summary><p>Un esquema donde la IA apoya y el médico supervisa, valida y toma la decisión final de diagnóstico y receta.</p></details>
+<details class="qa"><summary>6. ¿Por qué procesar XML y no solo PDF en un software contable?</summary><p>Porque el XML trae la estructura limpia del CFDI (conceptos, importes, impuestos) y permite conciliar automáticamente con los bancos.</p></details>
+<details class="qa"><summary>7. ¿Qué tres profesionales se propusieron en los módulos de supervisión para vehículos autónomos?</summary><p>Un operador o conductor de soporte, un mecánico-eléctrico y un médico.</p></details>
+<details class="qa"><summary>8. ¿Qué contradicción señaló el profesor en el equipo de agricultura?</summary><p>Decían que el dron «no desplaza, solo ayuda», pero su diapositiva ponía «desplazamiento laboral»: un dispositivo sí sustituye mano de obra no calificada.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c16-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>Instrucciones:</strong> al ver que las presentaciones no seguían lo pedido la semana anterior, bromeó con que ojalá les tocara una pareja estricta «que se les quita todo».</li>
+<li><strong>Deducciones:</strong> contó que, cuando se casó, su contador logró deducir como gastos de la empresa el colchón, las lavadoras y la estufa.</li>
+<li><strong>Autos a nombre de la empresa:</strong> explicó la estrategia legal de comprar flotillas para deducir impuestos los primeros 5 años.</li>
+<li><strong>Plantilla de diapositivas:</strong> bromeó al ver una foto de un personaje en una plantilla («¿por qué pusieron la foto de don Juan?»).</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c16-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Próxima sesión (lunes):</strong> continúan las exposiciones de los equipos que faltan de la «Actividad 1: el empleo del futuro»; los que no subieron su trabajo a tiempo o tuvieron fallas deben preparar su presentación.</li>
+<li><strong>Reportes del proyecto:</strong> los equipos en Scrum siguen enviando su reporte semanal y su registro en Git los domingos por la noche.</li>
+<li><strong>Proyecto final:</strong> preparar los entregables (manual técnico, manual de usuario y video de demostración de máximo 15 minutos).</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>La tecnología cambia el rol profesional hacia la supervisión y el criterio humano; <em>human in the loop</em> en medicina.</li>
+<li>El contador audita y asesora, no factura a mano ni trata directo con los clientes; contabilidad ≠ finanzas.</li>
+<li>Decir «solo ayuda» y escribir «desplazamiento laboral» es una contradicción: automatizar sí sustituye mano de obra.</li>
+<li>Vehículos autónomos: riesgo de hackeo y necesidad de soporte físico ante emergencias.</li>
+<li>Software contable mexicano: conexión al SAT, CFDI en XML, DIOT; las operaciones a nombre de terceros son delito fiscal.</li>
+</ul></div>
+
+</div>
+</body>
+</html>
