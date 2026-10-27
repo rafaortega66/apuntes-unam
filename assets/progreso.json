@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-27T15:24:15+00:00",
+ "generatedAt": "2026-10-27T15:28:44+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -811,6 +811,11 @@
  },
  "gitlog": [
   {
+   "hash": "b9d5cc0",
+   "fecha": "2026-10-27T09:24:15-06:00",
+   "mensaje": "Páginas 'Guías de estudio' por materia: un PDF por clase, exámenes marcados en su fecha y desde qué clase estudiar para el 2.º parcial"
+  },
+  {
    "hash": "c0b46f0",
    "fecha": "2026-10-27T09:21:08-06:00",
    "mensaje": "Resumen de ASI Clase 8: hoja mínima que remite a la página de la clase"
@@ -1104,11 +1109,6 @@
    "hash": "8ce824a",
    "fecha": "2026-10-19T01:26:18-06:00",
    "mensaje": "RP: correcciones anotadas (✏️) verificadas con los audios"
-  },
-  {
-   "hash": "80bb1af",
-   "fecha": "2026-10-19T01:20:12-06:00",
-   "mensaje": "RP-E01: solución validada contra la resolución del profesor (audio RP-Clase11) — puntajes, etapas del diagrama, aclaraciones y comparación del LDA (7.74 en clase vs 7.83 exacto)"
   }
  ]
 }
