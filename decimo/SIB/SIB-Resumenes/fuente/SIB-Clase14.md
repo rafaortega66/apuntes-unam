@@ -85,3 +85,70 @@ Lo que implementa uno o varios servicios de seguridad (aplicación, técnica, ob
 | Importancia | Requerido (puerta y chapa) / discrecional (chapas extra) |
 | Cobertura (OSI) | Generalizado (toda la org.) / específico (capa o grupo) |
 | Acción | Preventivo (vacuna) / correctivo (penicilina) / detector / disuasivo |
+
+# PARTE 3 · Mis apuntes de clase
+~ Mis apuntes originales de este día (15/10/2026), tal cual los escribí.
+```
+4. Ataques Basados en Malware
+-Troyanos	-Ransomware		-Spyware	-Rootkits
+Algunas técnicas de mitigación: antivirus y Antimalware, Lista Blanca de Aplicaciones. Control de dispositivos USB.
+
+5. Ataques Físicos
+-Robo de Dispositivos	-Keyloggers Hardware	-Inyección de Hardware Malicioso
+Algunas técnincas de mitigación: Control de Acceso Físico, Cifrado de Dispositivos, Bloqueo Automático de Sesión.
+
+Para mitigar las técnicas de intrusión en seguridad informática, es esencial implementar una combinación de medidad preventivas, correctivas y de monitoreo.
+
+Mecanismos de Seguridad
+
+Un mecanismo de seguridad (también llamado herramientas de seguridad o control) es una técnica, recomendación, actividad, consideración, objeto, animal o persona que se utiliza para implementar uno o varios servicios de seguridad, resumiendo: Es todo aquello que implementa varios servicios básicos de seguridad o combinaciones de estos servicios básicos.
+
+Por lo que los mecanismos de seguridad contestan la tercera pregunta de seguridad: ¿Cómo lo voy a proteger?
+
+Es importante considerar que no existe un único mecanismo capaz de proveer todos los servicios, por lo que, la relación entre los servicios de seguridad y los mecanismos de seguridad se observan en la siguiente tabla:
+----------------------------------------------------
+Servicios de seguridad 	| Mecanismos de seguridad	|
+			1		   	|			1			 	|
+			1			|			N 			 	|
+			N 			|			1				|
+			N 			|			M 				|
+-----------------------------------------------------
+
+
+---------------
+-Clasificación-
+---------------
+1.-Por el tipo de servicio que im plementa
+a)Confidencialidad 	b)Integridad 		c)Disponibilidad 	d)No repudio
+e)Autenticación		f)Control de accedo
+
+2.-Por su grado de importancia
+a)Requeridos: necesario. 
+b)Discrecionales: complementarios.
+
+3.-Por la cobertura o especificación
+a)Generales / Generalizados		b)Específicos (Modelo OSI)
+
+4.-Por su acción/actividad
+a)Preventivos		b)Correctivos	c)Detectores/Detectives		d)Disuasivos
+
+Diagrama en cuaderno***
+
+EJERCICIO DE CLASE EN PAREJAS
+Indique de qué tipo son los siguientes (considere las clasificaciones vistas), justifique brevemente su respuesta
+1.-Firma Digital
+2.-Candado
+3.-Chip en animales
+4.-Rejas en las ventanas
+5.-Vacuna contra el sarampión
+6.-Reglamentos
+7.-Lentes obscuros
+8.-Ingerir alimentos ricos en calcio
+9.-Beber agua sin exceder el límite
+10.-Limitar la ingesta de carbohidratos
+11.-Contraseñas
+12.-Uso de firewalls
+13.-Uso de VPN
+14.-Uso de cámaras de vigilancia
+15.-Empleo de penicilina.
+```

@@ -86,3 +86,63 @@ Por **cambios significativos**, nunca por calendario: cambio de giro, nueva tecn
 | Redundancia | Respaldos: cómo, cada cuánto, quién |
 | Reducción del riesgo | Prevenir y definir perfiles ("autorizado" = quién) |
 | Responsabilidad individual | En **todas** las políticas; cada regla tiene sujeto |
+
+# PARTE 3 · Mis apuntes de clase
+~ Mis apuntes originales de este día (22/10/2026), tal cual los escribí.
+```
+IV. Políticas de seguridad informática de la organización.
+
+La política de seguridad, en el mundo real, es un comnjunto de leyes, reglas y prácticas que regulan la manera de dirigir, proteger y distribuir recursos en una organización para llevar a cabo los objetivos de seguridad dentro de la misma.
+
+Las políticas de seguridad son las reglas y procedimientos que regulan la forma en que una organización previene, protege y maneja los riesgos a los que se puede enfrentar. Permite identificar qué recursos son valiosos y qué medidas deben tomarse.
+
+Las políticas de seguridad informática (PSI) [tambiém políticas de seguridad de/en coḿputo (PSC)] se definen como la declaración general de principios, acuerdos, reglas y recomendaciones que permiten resguardar o proteger un recurso informático.
+
+Las políticas de seguridad tienen ciertas características:
+-> Documento con vigencia permanente, actualizarlo periódicamente.
+	-> Actualización
+		-> Cuando haya cambios significativos.
+			a)Cambio o giro
+			b)Adopción de nueva tecnología
+			c)Fusión de áreas
+			d)Separación de áreas
+			e)Cambios de puestos
+			f)Cambios en actividades
+			g)etc.
+-> Referencia para otros esquemas de seguridad en la organización.
+-> Enfocadas a la problemática particular de cada institución.
+-> Políticas con una estructura bien definida.
+-> Documento oficial por las autoridades y la comunidad.
+-> Claras, exactas, precisas y concisas.
+-> Establecen condiciones aceptables y no aceptables.
+-> Accesibles para toda la comunidad
+-> Aprobadas por la alta dirección y aplicar a todas las personas que laboran.
+
+Los objetivos que persiguen las políticas de seguridad se listan a continuación:
+1.-Definir controles en la organización
+2.-Estandarizar la seguridad humana y tecnológica
+3.-Establecer las relaciones de responsabilidad para el cumplimiento de tareas y las sanciones o premios.
+4.-Aclarar qué se protege y porqué
+5.-Indicar qué se va a permitir y qué se va a denegar
+6.-Poner las bases para resolver conflictos y bienes
+7.-Prevenir la prérdida de la información y bienes
+8.-Tener un uso adecuado y eficiente de los bienes
+
+Ventajas
+-> Se permite regular la adquisición de bienes en la organización
+-> Manejo de la excusa llamada ignoracia
+-> Manejo adecuado durante una auditoría
+-> Permite saber qué hacer en caso de eventualidades
+-> Permite saber qué hacer y qué no 
+-> Permite a las autoridades saber cómo reaccionar
+
+Características para redactar/diseñar políticas de seguridad
+1.-Reflejar los principios fundamentales
+	a)Autorización
+	b)Mínimo privilegio
+	c)Separación de bienes
+	d)Auditoría
+	e)Redundancia
+	f)Reducción del riesgo
+	g)Responsabilidad individual
+```

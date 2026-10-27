@@ -53,3 +53,36 @@ Debilidad en procedimientos, diseño, implementación o control interno que pued
 | Seis clases | Humanas, hardware, software, red, naturales, físicas/edificaciones |
 | Mayor vulnerabilidad | El factor humano por exceso de confianza |
 | Identificar | Amenaza: "¿qué malo pasa?"; vulnerabilidad: "¿de qué carezco?" |
+
+# PARTE 3 · Mis apuntes de clase
+~ Mis apuntes originales de este día (22/09/2026), tal cual los escribí.
+```
+Apuntes sib 22/09/26
+
+Vulnerabilidades
+
+Identificar las vulnerabilidades
+-¿De qué se quiere proteger? (pregunta2)
+-El nivel de riesgo se determina analizando la relación entre las amenazas y las vulnerabilidades.
+-Un riesgo existe cuando una amenaza tiene una vulnerabilidad correspondiente, aunque hay áreas de alta vulnerabilidad que no tienen consecuencia si no presenta amenazas. 
+
+
+Definiciones 
+
+Vulnerabilidad:
+-Debilidad en los procedimientos de seguridad, diseño, implementación o control interno que podría ser explotada (accidental o intencionalmente) y que resulta en una brecha de seguridad o una violación de la política de seguridad de sistemas. 
+-Punto débil de cualquier bien
+-Talón de aquiles
+
+
+Tipo de vulnerabilidades
+
+Debilidades o aspectos atacables en un sistema, -> Humana, Red, Natural, Hardware, Software, Física
+
+
+¿Como identificar vulnerabilidades?
+-¿Qué hizo/hace falta?
+-¿Qué no se ha hecho/implementado/considerado?
+-¿Qué es lo que no se tiene?
+-¿Qué es lo que se ha omitida/se omitió?
+```

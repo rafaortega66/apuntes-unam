@@ -62,3 +62,72 @@ CVE-año-número (identificador único); NVD = base del NIST. CVSS v3/v4: Bajo 0
 **Ciberterrorismo.** Desinformación para sembrar miedo.
 
 **Ataque.** Culminación de una amenaza que genera daño severo; físico ↔ lógico. **Recuperar cuesta más que prevenir.**
+
+# PARTE 3 · Mis apuntes de clase
+~ Mis apuntes originales de este día (01/10/2026), tal cual los escribí.
+```
+Escaneo de vulnerabilidades
+-Proceso automatizado o semiautomatizado para identificar vulnerabilidades y condiciones inseguras.
+-Puede realizarse sobre hosts, redes, sistemas operativos, servicios, aplicaciones o configuraciones.
+-Existen: Escaneo autenticado y escaneo no autenticado.
+Puede generar falsos positivos y falsos negativos; por ello, los resultados deben validarse. 
+
+Tipos de análisis de vulnerabilidades
+1.-Análisis estático: examinación sin ejecutar el sistema bajo análisis.
+2.-Análisis dinámico: observa del comportamiento durante su ejecución.
+3.-Análisis de composición de software (SCA): identifica componentes y sus vulnerabilidades conocidas.
+4.-Análisis basado en red: examina hosts, puertos, servicios y versiones.
+5.-Revisión de ocnfiguración: busca parámetros inseguros frente a una línea base o estándar.
+Los enfoques puedes combinarse para obtener una visión mas completa. 
+
+----------------
+
+Herramientas y fuentes de información
+-Escáneres de vulnerabilidades: ayudan a identificar problemas conocidos en sistemas, redes y aplicaciones.
+-DAST (Dynamic Application Security Testing): analiza aplicaciones en ejecución.
+-SAST (Static Application Security Testing): analiza el código fuente o representación del software.
+-SCA (Software Composition Analysis): analiza bibliotécs u dependencias.
+-Fuentes públicas: CVE, NVD, avisos de seguridad de fabricantes y bases de datos de vulnerabilidades.
+-Los resultados deben contratarse con versiones, configuraciones y evidencia del activo real.
+
+-----------------
+¿Qué es CVE?
+-CVE significa Common Vulnerabilities and Exposures.
+-Es un sistema para identificar y catalogar vulnerabilidades de ciberseguridad divulgadas públicamente.
+-Cada registro recibe un identificador único, por ejemplo: CVE-AAAA-NNNN.
+-El CVE funciona principalmente como identificador común; el registro puede incluir descripción, productos afestados y referencias
+- https://www.cvefind.com/es/
+
+-----------------
+¿Qué es la NVD?
+-La National Vulnerability Database (NVD) es un repositorio mantenido por NIST con información estructurada sobre vulnerabilidades.
+-Incluye información de apoyo para la gestión de vulnerabilidades.
+-Permite buscar registros CVE y consultar información técnica asociada.
+-En la práctica, CVE y NVD se complementan: CVE proporciona la identificación/catálogo y NVD agrega información de vulnerabilidad y evaluación.
+- https://nvd.nist.gov
+
+------------
+¿Qué es CVSS?
+-CVSS significa Common Vulnerability Scoring System.
+-Es un marco para expresar la severidad de la vulnerabilidad mediante una puntuación y un vector.
+-Las puntuaciones se expresan en una escala de 0.0 a 10.0.
+-Las métricas consideran características de la vulnerabilidad y sus posibles impactos.
+-CVSS expresa severidad, no equivale por sí solo al registro específico de una organización.
+-Por ello, una vulnerabilidad con CVSS alto no necesariamente tendrá la misma prioridad en todos los entornos.
+
+------------------
+INICIA TEMA 3
+
+"No busques el momento perfecto, solo busca el momento y hazlo perfecto." -Anónimo
+III. Identificación de ataques y técnicas de intrusión
+
+-Ataque: es la culminación de una amenaza. Es todo aquello que ya sucedió o está sucediendo y generó o está generando algún tipo de daño o pérdida.
+-Ataques lógicos: ciberataques, ataques informáticos.
+
+-Un ataque nunca debe minimizarse:
+	-Ataque lógico <--> Ataque físico
+-Al volverlo poco significativo/insignificante o no estar consciente de las implicaciones genera que se repita nuevamente.
+-PREVENIR ataques y en menor medida corregirlos.
+
+-¿Qué es mas costoso? ¿Prevenir un ataque o recuperarse de un ataque? R = Recuperación
+```
