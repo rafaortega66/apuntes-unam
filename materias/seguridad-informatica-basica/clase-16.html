@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIB · Clase 16</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Volver a SIB</a>
+<div class="detail-head" style="border-color:#E8735C">
+  <h3>Clase 16</h3>
+  <p class="prof">Dra. Cintia Quezada Reyes · 27 oct 2026 · Tema 4 — Políticas de seguridad: consejos de redacción (presente, sujeto explícito, vigencia, siglas), el grupo de trabajo multidisciplinario que las escribe, la organización por rubros y un ejercicio en equipo de 15 políticas.</p>
+  <p class="prof">Fuente: NotebookLM, audio <code>SIB-Clase16.m4a</code>, 28 oct 2026. Lo que NotebookLM no pudo contrastar con el audio se marca como dudoso. Continúa lo visto en la <a href="clase-15.html">Clase 15</a>.</p>
+</div>
+<div class="files" id="guia-estudio-pdf"><a class="btn" href="../../decimo/SIB/SIB-Resumenes/SIB-Clase16-resumen.pdf" target="_blank">📄 Guía de estudio (PDF): apuntes completos + resumen para estudiar</a></div>
+
+<details class="section-block sec" id="c16-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Quiénes forman el grupo de trabajo que redacta las políticas.</strong><span class="evid">Evidencia: la profesora dijo que encargárselas a una sola persona (como el administrador de sistemas) es «lo peor que podemos hacer» y enumeró los seis integrantes.</span></li>
+<li><strong>Errores de redacción: sin sujeto, en futuro, siglas sin definir.</strong><span class="evid">Evidencia: repitió varias veces el ejemplo de «no corro, no grito, no empujo» y explicó por qué el futuro y las siglas sueltas son errores.</span></li>
+<li><strong>Cómo se fija la entrada en vigor.</strong><span class="evid">Evidencia: contrastó explícitamente la política que aprueba la propia entidad (fecha exacta) con la que depende de una autoridad superior, como la Rectoría (al día siguiente de su aprobación).</span></li>
+<li><strong>Agrupar por rubros y delimitar a qué puestos aplica.</strong><span class="evid">Evidencia: lo ligó al ejercicio en equipo y a un litigio laboral real por un puesto renombrado.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c16-repaso"><summary><span class="stitle">1 · Repaso: qué son las políticas y para qué sirven</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Las políticas de seguridad son el conjunto de reglas, acuerdos y procedimientos documentados que guían a la organización para proteger sus bienes y cumplir sus objetivos de seguridad.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es el reglamento de un condominio: sin reglas escritas, cada vecino hace lo que quiere y la administración no puede sancionar a nadie.<span class="rompe">Dónde deja de servir: un condominio puede vivir de costumbres; una organización necesita las reglas por escrito, en papel o en digital, para que obliguen a todos.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>La clase abrió con un repaso a cargo de los alumnos: las políticas tienen vigencia continua y se modifican ante cambios significativos, no en fechas fijas; sirven para regular los recursos, enfrentar bien una auditoría y saber cómo actuar ante una eventualidad.</p>
+<p>La profesora preguntó cuál era el primer consejo para diseñarlas. La respuesta: que reflejen los principios fundamentales vistos en la <a href="clase-15.html">Clase 15</a> (autorización, mínimo privilegio, separación de funciones, redundancia, reducción del riesgo y responsabilidad individual).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Sin políticas claras, una auditoría marca no conformidades de inmediato.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> suponer que la gente conoce las reglas por «sentido común» o no tenerlas disponibles por escrito.</p></div>
+</details>
+
+<details class="section-block sec" id="c16-redaccion"><summary><span class="stitle">2 · Consejos para redactar políticas</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Lineamientos de forma, tiempo verbal, sujeto, vigencia y terminología para que una regla se pueda ejecutar, se entienda y no deje huecos legales ni operativos.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Son las instrucciones de un juego de mesa: «se avanzará cuando toque» no dice quién avanza ni cuándo; «el jugador en turno avanza dos casillas al sacar un 6» sí.<span class="rompe">Dónde deja de servir: en un juego, una regla mal escrita da risa; en una empresa puede acabar en demanda laboral o en una brecha de seguridad.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>Permitir o prohibir:</strong> evaluar qué conviene redactar. Si se intenta permitir muchas cosas de forma abierta, se termina escribiendo una lista interminable de prohibiciones.</li>
+<li><strong>Entrada en vigor:</strong> si la política la aprueba la propia entidad, se pone la fecha exacta. Si depende de una autoridad superior (por ejemplo, la Rectoría de la UNAM), se escribe que «entra en vigor al día siguiente de su aprobación» (o el mismo día), porque no se sabe cuándo se firmará.</li>
+<li><strong>Tiempo presente:</strong> «entra en vigor», «evita consumir alimentos». El futuro («entrará», «se aplicará») crea la excusa de que la regla todavía no aplica.</li>
+<li><strong>Sujeto explícito:</strong> siempre decir sobre quién recae: «Toda persona que se encuentre en la Facultad de Ingeniería…», «El personal docente…».</li>
+<li><strong>Siglas definidas:</strong> la primera vez se escriben completas, por ejemplo «Políticas de Seguridad de Cómputo (PSC)», y después ya se puede usar la sigla.</li>
+<li><strong>Capacitar y socializar:</strong> no basta con publicar; hay que capacitar al personal para que se sienta parte de la organización.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Retoma el ejercicio de la Clase 15, donde el grupo redactó reglas y vio lo difícil que es, y quita la excusa de «no sabía que aplicaba».</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> usar lemas como reglas («no corro, no grito, no empujo», «en caso de sismo replégate»): no tienen sujeto y cualquiera puede decir «a mí no me aplica». Redactar en futuro («se sancionará»).</p></div>
+</details>
+
+<details class="section-block sec" id="c16-grupo"><summary><span class="stitle">3 · El grupo de trabajo multidisciplinario</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El equipo, formado por distintos roles de la organización, que diseña, revisa y valida las políticas para evitar sesgos, vacíos legales o daños a las personas.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>En una cirugía, el cirujano no es también anestesiólogo, enfermero, abogado del hospital y recepcionista: cada especialista aporta lo suyo.<span class="rompe">Dónde deja de servir: una cirugía es urgente; redactar políticas es un trabajo de planeación que no se hace «al vapor».</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Encargar las políticas a una sola persona, típicamente al administrador de sistemas, es el peor error: el reglamento refleja solo su criterio, sus límites y sus sesgos. El grupo debe incluir:</p>
+<table>
+<tr><th>Integrante</th><th>Qué aporta</th></tr>
+<tr><td>Persona con autoridad (dueño, director, jefe de área, líder de proyecto)</td><td>La visión estratégica y la información sensible que los demás no conocen.</td></tr>
+<tr><td>Representante jurídico</td><td>Que nada contravenga leyes superiores (la Constitución, la Legislación Universitaria).</td></tr>
+<tr><td>Especialista en redacción y comunicación</td><td>Claridad, sin voz pasiva ambigua ni faltas de ortografía.</td></tr>
+<tr><td>Psicólogo laboral</td><td>Un tono que no dañe la autoestima ni genere ansiedad, y que evite sanciones absurdas o ilegales («se le cortarán las manos al infractor»).</td></tr>
+<tr><td>Administrador de sistemas</td><td>El conocimiento técnico cuando la política regula la infraestructura de TI.</td></tr>
+<tr><td>Usuario típico («conejillo de indias»)</td><td>El nivel operativo más bajo: muestra cómo reaccionan e interpretan las reglas las personas reales.</td></tr>
+</table>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Se liga a la idea de que el factor humano es el eslabón más débil y a las auditorías de cumplimiento.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> poner al administrador de sistemas a escribir políticas de compras o de recursos humanos porque «sabe de ciberseguridad»; dejar fuera al usuario típico y suponer que todos interpretarán la regla como la pensó la dirección.</p></div>
+</details>
+
+<details class="section-block sec" id="c16-rubros"><summary><span class="stitle">4 · Organizar por rubros y delimitar el alcance por puesto</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Agrupar las políticas en categorías claras y definir con precisión los puestos y el personal a los que aplican.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es una caja de herramientas con compartimientos etiquetados (clavos, martillos, llaves) en vez de un bote donde todo va revuelto.<span class="rompe">Dónde deja de servir: en la caja, algo mal puesto solo te hace perder tiempo; en una empresa, una etiqueta desactualizada puede costar un juicio.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>Rubros:</strong> secciones como «Manejo de contraseñas» o «Solicitud de cuentas de correo», para no tener que leer todo el reglamento cada vez que se busca algo. No se ordenan como se le van ocurriendo a quien redacta.</li>
+<li><strong>Alcance:</strong> decir si aplica a «toda persona que labore» o a un puesto concreto, con el nombre exacto del puesto.</li>
+</ul>
+<p><strong>Caso real:</strong> una empresa cambió el nombre del puesto de «Jefe de Área» a «Jefe de Departamento» sin actualizar el reglamento. Un trabajador demandó y, como esa figura ya no existía en los documentos oficiales, la empresa no pudo aplicar sus normas; el juicio, iniciado antes de la pandemia, llevaba más de cinco años sin cerrarse.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra la consecuencia legal de no actualizar las políticas ante un cambio organizacional, uno de los «cambios significativos» de la Clase 15.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> escribir «el personal» sin aclarar si incluye a contratados, servicio social, practicantes o visitantes.</p></div>
+</details>
+
+<details class="section-block sec" id="c16-ejercicio"><summary><span class="stitle">5 · Ejercicio en equipo: 15 políticas para un lugar ficticio</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un ejercicio en clase: cada equipo elige una organización ficticia y redacta 15 políticas aplicando todos los consejos.</p>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li>Elegir un lugar ficticio (escuela, antro, tienda, parque…) sin nombres ni marcas reales, con una imagen del lugar (se puede generar con IA).</li>
+<li>Redactar 15 políticas evitando el «no», con sujeto, horario, alcance y consecuencias.</li>
+</ul>
+<p>En el audio se oye a un equipo que eligió una escuela secundaria técnica ficticia, con entrada en vigor simulada el 1 de noviembre. Sus reglas trataban del uso de la credencial al entrar, el uniforme, la salida solo con tutor o pase de autorización, el celular en clase solo con permiso del docente, el cuidado del mobiliario y el respeto dentro y fuera de la escuela.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> que se cuele el «no» o un tono prohibitivo sin sujeto ni autorización.</p></div>
+</details>
+
+<details class="section-block sec" id="c16-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Por qué es un error que una sola persona redacte las políticas?</summary><p>Porque el reglamento queda limitado a su criterio, experiencia y sesgos, sin la visión jurídica, de redacción ni psicológica.</p></details>
+<details class="qa"><summary>2. Menciona los seis integrantes del grupo de trabajo.</summary><p>Persona con autoridad, representante jurídico, especialista en redacción y comunicación, psicólogo laboral, administrador de sistemas y usuario típico.</p></details>
+<details class="qa"><summary>3. ¿Por qué se redacta en presente y no en futuro?</summary><p>El presente indica que la regla ya aplica; el futuro da pie a decir que todavía no está vigente.</p></details>
+<details class="qa"><summary>4. Corrige: «No se debe correr en los pasillos».</summary><p>Por ejemplo: «Toda persona que se encuentre en las instalaciones evita correr en los pasillos». Lleva sujeto, está en presente y evita el «no».</p></details>
+<details class="qa"><summary>5. ¿Cómo se fija la entrada en vigor si la política la aprueba la Rectoría?</summary><p>«Entra en vigor al día siguiente de su aprobación», porque no se sabe la fecha de firma. Si la aprueba la propia entidad, se pone la fecha exacta.</p></details>
+<details class="qa"><summary>6. ¿Qué se hace con una sigla como PSC?</summary><p>Se escribe completa la primera vez: «Políticas de Seguridad de Cómputo (PSC)».</p></details>
+<details class="qa"><summary>7. ¿Qué enseña el caso del «Jefe de Área» renombrado?</summary><p>Que si se cambia un puesto y no se actualiza el reglamento, esa figura no existe legalmente y las normas no se pueden aplicar.</p></details>
+<details class="qa"><summary>8. ¿Para qué sirve el usuario típico en el grupo?</summary><p>Para probar cómo reaccionan e interpretan las reglas las personas reales del nivel operativo y anticipar excusas.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c16-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>GNP y el home office:</strong> la empresa mandó a todo su personal a trabajar desde casa y notó que se perdía el sentido de pertenencia; lo atacó con reuniones semanales de convivencia, como hacer adornos navideños de madera.</li>
+<li><strong>«Me da ansiedad»:</strong> casos virales de personas que decían que pedirles un croquis o un árbol genealógico les daba ansiedad, como ejemplo de por qué va un psicólogo laboral en el grupo.</li>
+<li><strong>Reglas cotidianas con historia:</strong> balnearios que prohíben trajes de baño blancos; toboganes donde hay que lanzarse con los brazos cruzados; no sacar la cabeza ni las manos por la ventana del autobús.</li>
+<li>Al bautizar su escuela ficticia, el equipo bromeó con nombres de exrectores y directores de la UNAM.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c16-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Ejercicio en equipo en la plataforma:</strong> el reglamento de 15 políticas para el lugar ficticio, con su nombre inventado y una imagen. <em>(Sin fecha ni número de Classroom en el audio; según NotebookLM se revisa en la siguiente sesión. Falta confirmarlo en Classroom.)</em></li>
+<li><strong>Próxima clase:</strong> jueves 29 oct.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Nunca una sola persona: autoridad, jurídico, redacción, psicólogo laboral, administrador de sistemas y usuario típico.</li>
+<li>Presente, sujeto explícito, siglas definidas la primera vez.</li>
+<li>Entrada en vigor: fecha exacta si aprueba la propia entidad; «al día siguiente de su aprobación» si aprueba una autoridad superior.</li>
+<li>Agrupar por rubros y nombrar los puestos exactos; un puesto renombrado sin actualizar el reglamento deja la regla sin efecto.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

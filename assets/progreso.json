@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-27T15:45:20+00:00",
+ "generatedAt": "2026-10-28T13:58:10+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -604,6 +604,13 @@
     "resumen": "Tema 2 — Prueba en vivo del servidor concurrente (Programa 06), cierre cruzado de descriptores, bitácora con struct tm , puertos efímeros y, como solución para un chat grupal, multiplexación con select() (Programa 07).",
     "url": "materias/arquitectura-cliente-servidor/clase-17.html",
     "formato": "estudio"
+   },
+   {
+    "num": 18,
+    "fecha": "2026-10-27",
+    "resumen": "Tema 2 — El chat grupal con select() (Programa 07) línea por línea, prueba en vivo con nc y puertos efímeros, el bloque /16 de PC Puma y la introducción a los sockets crudos ( SOCK_RAW ) para un sniffer.",
+    "url": "materias/arquitectura-cliente-servidor/clase-18.html",
+    "formato": "estudio"
    }
   ],
   "seguridad-informatica-basica": [
@@ -710,6 +717,13 @@
     "fecha": "2026-10-22",
     "resumen": "Tema 4 — Políticas de seguridad: qué son, políticas organizacionales contra las de seguridad informática, cuándo se actualizan, a quién aplican, sanciones y los seis principios para redactarlas.",
     "url": "materias/seguridad-informatica-basica/clase-15.html",
+    "formato": "estudio"
+   },
+   {
+    "num": 16,
+    "fecha": "2026-10-27",
+    "resumen": "Tema 4 — Políticas de seguridad: consejos de redacción (presente, sujeto explícito, vigencia, siglas), el grupo de trabajo multidisciplinario que las escribe, la organización por rubros y un ejercicio en equipo de 15 pol",
+    "url": "materias/seguridad-informatica-basica/clase-16.html",
     "formato": "estudio"
    }
   ],
@@ -819,11 +833,23 @@
     "resumen": "Tema 3 — Exposiciones de la Práctica 3.4 (clasificación de diabetes) y series de tiempo: componentes, ARIMA y elección del modelo",
     "url": "materias/mineria-de-datos/clase-15.html",
     "formato": "estudio"
+   },
+   {
+    "num": 16,
+    "fecha": "2026-10-27",
+    "resumen": "Tema 3 — Cierre de las exposiciones de diabetes (falsos negativos, variable trampa, umbral) e introducción a las redes neuronales: perceptrón, épocas y backpropagation, funciones de activación y las arquitecturas MLP, CN",
+    "url": "materias/mineria-de-datos/clase-16.html",
+    "formato": "estudio"
    }
   ],
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "edfb208",
+   "fecha": "2026-10-27T09:45:21-06:00",
+   "mensaje": "FSE: Clase 17 (26 oct) y ASI: Clase 16 (26 oct) — páginas, índices y guías de estudio en PDF"
+  },
   {
    "hash": "c7c453a",
    "fecha": "2026-10-27T09:28:44-06:00",
@@ -1118,11 +1144,6 @@
    "hash": "22b62ab",
    "fecha": "2026-10-19T11:00:17-06:00",
    "mensaje": "OAC-Proy01: proyecto_calculadora.py actualizado (Taylor con Horner, comentarios)"
-  },
-  {
-   "hash": "7c6007d",
-   "fecha": "2026-10-19T10:57:20-06:00",
-   "mensaje": "SIB: apuntes de las clases 07–13 en PDF (lo que presenta la profesora) enlazados en cada clase y en Material; clases 12 y 13; ejercicios de clase EC02–EC04"
   }
  ]
 }

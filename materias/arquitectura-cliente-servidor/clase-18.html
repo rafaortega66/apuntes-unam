@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 18 — Arquitectura Cliente-Servidor</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Arquitectura Cliente-Servidor</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 18</h2>
+  <p class="prof">Mtro. Carlos Alberto Román Zamitiz · 27 oct 2026 · Tema 2 — El chat grupal con <code>select()</code> (Programa 07) línea por línea, prueba en vivo con <code>nc</code> y puertos efímeros, el bloque /16 de PC Puma y la introducción a los sockets crudos (<code>SOCK_RAW</code>) para un sniffer.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>ACS-Clase18.m4a</code>), 28 oct 2026. Lo que NotebookLM agregó y no pudo contrastar con el audio se marca como dudoso. Continúa lo visto en la <a href="clase-17.html">Clase 17</a>.</p>
+</div>
+<div class="files" id="guia-estudio-pdf"><a class="btn" href="../../decimo/ACS/ACS-Resumenes/ACS-Clase18-resumen.pdf" target="_blank">📄 Guía de estudio (PDF): apuntes completos + resumen para estudiar</a></div>
+
+<details class="section-block sec" id="c18-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Los cinco parámetros de <code>select()</code> y qué pasa cuando no hay actividad.</strong><span class="evid">Evidencia: el profesor revisó la documentación de Open Group en pantalla parámetro por parámetro y explicó que la llamada se queda bloqueada sin gastar CPU hasta que un descriptor está listo.</span></li>
+<li><strong>Las cuatro macros de <code>fd_set</code>: <code>FD_ZERO</code>, <code>FD_SET</code>, <code>FD_CLR</code>, <code>FD_ISSET</code>.</strong><span class="evid">Evidencia: las señaló una por una dentro de <code>programa_07_servidor_grupal.c</code>.</span></li>
+<li><strong>La retransmisión (broadcast) a todos menos al remitente.</strong><span class="evid">Evidencia: se demostró en la prueba en vivo y es lo que resuelve el problema de memoria aislada de <code>fork()</code> visto en la Clase 17.</span></li>
+<li><strong>Sockets crudos: <code>AF_PACKET</code> + <code>SOCK_RAW</code>, capa 2, root y modo promiscuo.</strong><span class="evid">Evidencia: lo presentó como la herramienta extra del repositorio y anunció que en la próxima clase se ejecuta en vivo. Evidencia más débil: todavía no se vio funcionando.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c18-select"><summary><span class="stitle">1 · El Programa 07 línea por línea: un solo proceso con <code>select()</code></span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un servidor TCP en C que atiende a muchos clientes desde <strong>un solo proceso</strong> usando multiplexación de entrada/salida con <code>select()</code>, y que reenvía cada mensaje a todos los demás: una sala de chat grupal.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es el operador de radio de una flota de taxis: escucha una sola frecuencia y, cuando un taxista habla, repite el mensaje para todos los demás.<span class="rompe">Dónde deja de servir: el operador no puede hablarle en privado a un solo taxista; el Programa 07 tampoco tiene mensajes privados.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Preparación</strong> (lo mismo que en programas anteriores, más el arreglo de clientes):</p>
+<ol>
+<li>El arreglo <code>client_socket[max_clients]</code> se llena de ceros: 0 significa «lugar libre».</li>
+<li>Se crea el socket servidor con <code>socket(AF_INET, SOCK_STREAM, 0)</code>.</li>
+<li><code>setsockopt</code> con <code>SO_REUSEADDR</code> permite volver a usar el puerto de inmediato al relanzar el servidor.</li>
+<li>En <code>sockaddr_in</code>: <code>sin_family = AF_INET</code>, <code>sin_addr.s_addr = INADDR_ANY</code> (escuchar en todas las interfaces) y el puerto que llega por línea de comandos convertido con <code>htons()</code>.</li>
+<li><code>bind()</code> y luego <code>listen()</code> con un backlog de 10.</li>
+</ol>
+<p><strong>El ciclo <code>while(1)</code></strong>, en cada vuelta:</p>
+<ol>
+<li><code>FD_ZERO(&amp;readfds)</code> vacía el conjunto.</li>
+<li><code>FD_SET(master_socket, &amp;readfds)</code> mete el socket servidor.</li>
+<li>Se recorre <code>client_socket</code> y cada descriptor mayor que 0 se mete con <code>FD_SET</code>; de paso se calcula el descriptor más alto, <code>max_fd</code>.</li>
+<li><code>select(max_fd + 1, &amp;readfds, NULL, NULL, NULL)</code>: el programa se queda dormido, sin consumir CPU, hasta que al menos un descriptor tiene algo que leer.</li>
+<li>Si la actividad es del <strong>socket servidor</strong>, es una conexión nueva: <code>accept()</code> da <code>new_socket</code>, se imprime «Cliente conectado» con su IP y su puerto efímero, y el descriptor se guarda en el primer lugar libre (== 0) del arreglo.</li>
+<li>Si la actividad es de un <strong>cliente</strong> (se revisa con <code>FD_ISSET</code>), se lee:
+<ul>
+<li><code>read()</code> devuelve 0 → el cliente cerró: se imprime «Cliente desconectado», se hace <code>close()</code> y su lugar vuelve a 0.</li>
+<li><code>read()</code> devuelve más de 0 → hay mensaje: el servidor arma el texto con la IP y el puerto del remitente y lo manda con <code>send()</code> a cada lugar ocupado del arreglo <strong>excepto al remitente</strong>.</li>
+</ul></li>
+</ol>
+<p><strong>Los parámetros de <code>select()</code></strong> según Open Group:</p>
+<table>
+<tr><th>Parámetro</th><th>Qué es</th></tr>
+<tr><td><code>nfds</code></td><td>Rango de descriptores a revisar: de 0 a <code>nfds − 1</code>; por eso se pasa <code>max_fd + 1</code>.</td></tr>
+<tr><td><code>readfds</code></td><td>Conjunto de descriptores a vigilar para lectura (el único que usa el Programa 07).</td></tr>
+<tr><td><code>writefds</code></td><td>Conjunto para escritura (aquí <code>NULL</code>).</td></tr>
+<tr><td><code>errorfds</code></td><td>Conjunto para condiciones de error (aquí <code>NULL</code>).</td></tr>
+<tr><td><code>timeout</code></td><td>Puntero a <code>struct timeval</code> con el tiempo máximo de espera; <code>NULL</code> = esperar indefinidamente.</td></tr>
+</table>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Resuelve lo que se planteó en la <a href="clase-17.html#c17-select">Clase 17</a>: con <code>fork()</code> cada hijo tiene su propia memoria y no puede pasarle un mensaje a los otros hijos. Con un solo proceso, el arreglo <code>client_socket</code> está a la vista de todo el código.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> no llamar a <code>FD_ZERO</code> y volver a llenar el conjunto en cada vuelta: <code>select()</code> modifica <code>readfds</code> y deja solo los descriptores con actividad.</p></div>
+</details>
+
+<details class="section-block sec" id="c18-prueba-vivo"><summary><span class="stitle">2 · Prueba en vivo con <code>nc</code> y puertos efímeros</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Una demostración en el servidor del profesor (<code>132.248.59.6</code>, puerto <code>4898</code>) en la que el grupo entró al chat como clientes con Netcat.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Muchas personas llaman desde el mismo conmutador de la universidad: el número de salida es el mismo, pero a cada llamada se le asigna una extensión distinta para que no se crucen.<span class="rompe">Dónde deja de servir: la «extensión» (puerto efímero) la elige el sistema operativo de cada máquina y dura solo lo que dura la conexión.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<pre>gcc programa_07_servidor_grupal.c -o programa_07
+./programa_07 4898          # en el servidor
+nc -v 132.248.59.6 4898     # cada alumno (-v = verbose, confirma la conexión)</pre>
+<p>Los alumnos conectados desde la red inalámbrica de la UNAM aparecían con la misma IP pública, <code>132.247.100.226</code>, pero cada uno con un puerto efímero distinto (NotebookLM cita 49210 y 51448). El profesor también se conectó como cliente desde la propia máquina del servidor.</p>
+<p>Tres cosas que se notaron en la prueba:</p>
+<ul>
+<li><strong>No hay eco:</strong> quien escribe ve su texto porque lo tecleó, pero el servidor no se lo devuelve.</li>
+<li><strong>No hay palabra de salida:</strong> para irse hay que matar <code>nc</code> con <code>Ctrl + C</code>; la conexión se cierra, <code>read()</code> devuelve 0 en el servidor y aparece «Cliente desconectado».</li>
+<li><strong>No hay contador de usuarios:</strong> el profesor dijo que agregar un contador de conectados sería una buena mejora.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Retoma los puertos efímeros que se vieron con el Programa 06 en la <a href="clase-17.html#c17-efimeros">Clase 17</a>: lo que distingue a dos clientes detrás de la misma IP es el puerto.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> pensar que la IP pública identifica a cada alumno; detrás de la misma IP hay muchos clientes, y los separa el puerto efímero.</p></div>
+</details>
+
+<details class="section-block sec" id="c18-pcpuma"><summary><span class="stitle">3 · La red de PC Puma: un bloque /16</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La consulta de la IP compartida <code>132.247.100.226</code> en <code>ipinfo.io</code>, que mostró que pertenece a un bloque /16 de la UNAM.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es ver el plano del estacionamiento: cuántos cajones tiene la universidad para repartir.<span class="rompe">Dónde deja de servir: no todos los cajones se usan para alumnos; el bloque cubre todo tipo de equipos.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Con máscara /16 quedan 32 − 16 = 16 bits para los equipos: 2<sup>16</sup> = <strong>65,536 direcciones</strong> en el bloque.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Explica por qué todo el grupo salía con la misma IP pública en la prueba: la red del campus comparte direcciones públicas entre muchos dispositivos. <em>(La mención de NAT es de NotebookLM, sin contrastar con el audio.)</em></p>
+</div>
+</details>
+
+<details class="section-block sec" id="c18-raw"><summary><span class="stitle">4 · Herramienta extra: sniffer con sockets crudos (<code>SOCK_RAW</code>)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un programa en C que captura tramas directamente de la tarjeta de red, en la <strong>capa 2</strong> (enlace de datos), usando un socket crudo.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es poner un micrófono en el tubo por donde pasan las cartas, en vez de esperar a que lleguen abiertas a tu buzón.<span class="rompe">Dónde deja de servir: si las cartas van cifradas, el micrófono solo oye ruido.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<pre>int sock_raw = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL));</pre>
+<ul>
+<li><code>AF_PACKET</code> + <code>SOCK_RAW</code>: el kernel entrega la trama Ethernet completa, con sus cabeceras, sin quitarle las capas como hace con un socket <code>SOCK_STREAM</code>.</li>
+<li><code>ETH_P_ALL</code>: todos los protocolos.</li>
+<li>Se ejecuta como <strong>root</strong> (<code>sudo</code>); con un usuario normal <code>socket()</code> falla por permisos.</li>
+<li>Con la interfaz en <strong>modo promiscuo</strong> se ve también tráfico que no va dirigido a la MAC propia.</li>
+</ul>
+<p>El punto de seguridad: si un servidor manda texto sin cifrar, como el chat del Programa 07, un sniffer puede leerlo tal cual.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es lo que se ejecutará en vivo en la próxima clase, y muestra por qué en el mundo real se cifra el tráfico.</p>
+<p><em>Dudoso: NotebookLM menciona una «regla de las 4 P de la seguridad» (privado, público, promiscuo…) dicha de pasada; no la pudo reconstruir con claridad.</em></p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> correr el sniffer sin <code>sudo</code> y no entender por qué falla <code>socket()</code>.</p></div>
+</details>
+
+<details class="section-block sec" id="c18-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Qué hace <code>select()</code> cuando ningún descriptor tiene actividad?</summary><p>Se queda bloqueada, sin consumir CPU, hasta que al menos uno esté listo (o venza el <code>timeout</code>, si no es <code>NULL</code>).</p></details>
+<details class="qa"><summary>2. ¿Qué hace cada macro de <code>fd_set</code>?</summary><p><code>FD_ZERO</code> vacía el conjunto; <code>FD_SET</code> agrega un descriptor; <code>FD_CLR</code> lo quita; <code>FD_ISSET</code> pregunta si ese descriptor tiene actividad.</p></details>
+<details class="qa"><summary>3. ¿Por qué el chat grupal usa <code>select()</code> en vez de <code>fork()</code>?</summary><p>Porque los hijos de <code>fork()</code> tienen memoria aislada y no pueden pasarse mensajes; con un solo proceso, el arreglo <code>client_socket</code> está disponible para reenviar a todos.</p></details>
+<details class="qa"><summary>4. ¿Por qué se pasa <code>max_fd + 1</code> como primer argumento?</summary><p>Porque <code>select()</code> revisa los descriptores de 0 a <code>nfds − 1</code>; para incluir el más alto hay que sumarle 1.</p></details>
+<details class="qa"><summary>5. ¿Cómo detecta el servidor que un cliente de <code>nc</code> se fue?</summary><p>El cliente sale con <code>Ctrl + C</code>, la conexión se cierra y <code>read()</code> devuelve 0: se imprime «Cliente desconectado», se hace <code>close()</code> y el lugar del arreglo vuelve a 0.</p></details>
+<details class="qa"><summary>6. ¿Cuántas direcciones tiene un bloque /16?</summary><p>2<sup>32−16</sup> = 2<sup>16</sup> = 65,536.</p></details>
+<details class="qa"><summary>7. Dos alumnos salen con la misma IP pública. ¿Qué los distingue en el servidor?</summary><p>El puerto efímero de cada conexión.</p></details>
+<details class="qa"><summary>8. Compara un socket <code>SOCK_STREAM</code> con uno <code>AF_PACKET</code> + <code>SOCK_RAW</code>.</summary><p><code>SOCK_STREAM</code> entrega solo los datos de la conexión TCP, ya procesados por el kernel; el socket crudo entrega la trama Ethernet completa (capa 2), necesita root y, en modo promiscuo, ve tráfico ajeno.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c18-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>Joan Sebastian en el chat:</strong> durante la prueba alguien escribió una canción de Joan Sebastian; el profesor se rió y bromearon con ir a un karaoke al final del semestre.</li>
+<li>El profesor notó que al grupo le gustó ver sus mensajes en la pantalla y pidió probar el programa en casa.</li>
+<li><strong>Telegram:</strong> recordó que para unirse al canal no hace falta mostrar el número de teléfono ni el nombre real.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c18-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Sin entregas nuevas:</strong> según NotebookLM, no hay tarea obligatoria para la próxima sesión y las tareas 1 a 4 ya están calificadas.</li>
+<li><strong>Calificaciones del parcial:</strong> el profesor siguió mandándolas por correo y terminará el fin de semana; quien quedó registrado en la bitácora de su servidor remoto y envió su código tiene la calificación asegurada.</li>
+<li><strong>Tarea moral:</strong> probar el Programa 07 en casa con varias terminales o dispositivos en la misma red, y revisar en GitHub el código del sniffer.</li>
+<li><strong>Jueves 29 oct:</strong> se ejecuta en vivo el sniffer con sockets crudos para mostrar el riesgo de mandar datos sin cifrar.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li><code>select()</code> = un solo proceso vigila muchos descriptores y duerme sin gastar CPU.</li>
+<li>Cada vuelta: <code>FD_ZERO</code> → <code>FD_SET</code> del servidor y de cada cliente → <code>select(max_fd + 1, …)</code> → <code>FD_ISSET</code>.</li>
+<li><code>read()</code> = 0 → cliente desconectado; &gt; 0 → reenviar a todos menos al remitente.</li>
+<li>Misma IP pública, distinto puerto efímero; /16 = 65,536 direcciones.</li>
+<li>Socket crudo: <code>AF_PACKET</code> + <code>SOCK_RAW</code>, capa 2, root y modo promiscuo.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

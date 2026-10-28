@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 16 — Minería de Datos</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261012a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261012a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Minería de Datos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 16</h2>
+  <p class="prof">M.C. José Concepción Roberto Olvera López · 27 oct 2026 · Tema 3 — Cierre de las exposiciones de diabetes (falsos negativos, variable trampa, umbral) e introducción a las redes neuronales: perceptrón, épocas y backpropagation, funciones de activación y las arquitecturas MLP, CNN y RNN.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>MD-Clase16.m4a</code>), 28 oct 2026. Las cifras de las exposiciones son de los equipos, no del profesor; lo que NotebookLM no pudo contrastar con el audio se marca como dudoso. Continúa lo visto en la <a href="clase-15.html">Clase 15</a>.</p>
+</div>
+<div class="files" id="guia-estudio-pdf"><a class="btn" href="../../decimo/MD/MD-Resumenes/MD-Clase16-resumen.pdf" target="_blank">📄 Guía de estudio (PDF): apuntes completos + resumen para estudiar</a></div>
+
+<details class="section-block sec" id="c16-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Falsos negativos contra falsos positivos en un problema de salud.</strong><span class="evid">Evidencia: fue el eje de las preguntas del profesor en las dos exposiciones: «lo más crítico son los falsos negativos porque dejan ir a una persona enferma a su casa sin tratamiento».</span></li>
+<li><strong>La variable trampa (el identificador de la persona).</strong><span class="evid">Evidencia: al final lanzó la pregunta al grupo: había una variable puesta a propósito para que la descartaran desde el origen.</span></li>
+<li><strong>El perceptrón: entradas, pesos, suma ponderada, sesgo y función de activación.</strong><span class="evid">Evidencia: dibujó el diagrama completo en el pizarrón y explicó cada componente.</span></li>
+<li><strong>Qué función de activación va en cada capa: ReLU, sigmoide, softmax.</strong><span class="evid">Evidencia: lo explicó explícitamente según la capa y el tipo de variable objetivo.</span></li>
+<li><strong>Épocas, forward propagation y backpropagation.</strong><span class="evid">Evidencia: explicó el ciclo de aprendizaje con un ejemplo de cómo sube la precisión por época.</span></li>
+<li><strong>Qué arquitectura usar según los datos: MLP, CNN o RNN.</strong><span class="evid">Evidencia: lo ligó a la práctica individual de redes neuronales, donde cada quien elige la red según su dataset.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c16-diabetes"><summary><span class="stitle">1 · Cierre de la práctica de diabetes: errores, variables y umbral</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Las últimas exposiciones de la práctica de clasificación supervisada (regresión logística, árbol de decisión, Random Forest, entre otros) para predecir si una persona tiene diabetes (1) o no (0).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es el triaje de urgencias: no reemplaza al médico, pero con datos rápidos (glucosa, edad, IMC) manda a laboratorio a quien tiene riesgo alto para que nadie grave se vaya a casa por error.<span class="rompe">Dónde deja de servir: una enfermera puede dudar y pedir otra opinión; el modelo aplica un umbral numérico fijo y, si está mal calibrado, falla siempre con los casos limítrofes.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Datos y desbalance.</strong> Según la exposición: 829 registros, 64 % sin diabetes (537) y 36 % con diabetes (292). Un modelo que diga «nadie tiene diabetes» acierta el 64 %, por eso no basta la exactitud (accuracy): hay que ver recall, precisión, F1 y ROC-AUC.</p>
+<p><strong>Limpieza.</strong> Un cero en glucosa, presión, grosor de piel, insulina o IMC es un dato no tomado, no un valor real. Un equipo los reemplazó con la mediana. Insulina y grosor de piel se descartaron por tener demasiados ceros; urea y lipoproteína, porque se distribuían igual en sanos y enfermos (no separan las clases). Medianas citadas: glucosa 139 mg/dL en diabéticos contra 108 en no diabéticos; IMC 34.3 contra 30.3.</p>
+<p><strong>La variable trampa.</strong> La columna que identifica a la persona (el ID) se tenía que eliminar desde el origen: es una etiqueta, no aporta información biológica. El profesor la puso a propósito.</p>
+<p><strong>Resultados citados</strong> (70 % entrenamiento / 30 % prueba):</p>
+<table>
+<tr><th>Modelo</th><th>Lo que se reportó</th></tr>
+<tr><td>Regresión logística</td><td>Razón de momios: por cada desviación estándar más de glucosa, los momios de diabetes se multiplican por 2.47; por IMC, por 2.1. 37 falsos negativos.</td></tr>
+<tr><td>Árbol de decisión</td><td>Podado a 4 niveles para evitar sobreajuste. 32 falsos negativos.</td></tr>
+<tr><td>Random Forest (el mejor)</td><td>0.832, con validación cruzada de 5 pliegues. Detectó 55 de 83 diabéticos reales: 28 falsos negativos.</td></tr>
+</table>
+<p><strong>Quiénes fallan.</strong> Los falsos positivos tenían glucosa (~143) e IMC (~38) altos: prediabetes u obesidad severa que el modelo marca como diabetes. Los falsos negativos tenían glucosa promedio de 119.5, más cerca de los sanos: sobre todo jóvenes con glucosa normal. 39 personas fallaron en los tres modelos a la vez.</p>
+<p><strong>Propuesta.</strong> Bajar el umbral de decisión de 0.5 a 0.35 para reducir los falsos negativos aceptando más falsos positivos: un falso positivo cuesta un estudio de confirmación; un falso negativo deja a un enfermo sin tratamiento.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es el mismo caso de la <a href="clase-15.html#c15-clasificacion">Clase 15</a>. El profesor lo llevó a la decisión de negocio: con presupuesto para pocos estudios de laboratorio, el modelo dice a quién priorizar.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> dejar el ID como variable predictora; evaluar solo con accuracy en datos desbalanceados; no sacar la lista de pacientes que cayeron en falso positivo o falso negativo para darles seguimiento.</p></div>
+</details>
+
+<details class="section-block sec" id="c16-perceptron"><summary><span class="stitle">2 · Redes neuronales: el perceptrón y cómo aprende</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Una red neuronal artificial es un modelo de aprendizaje supervisado inspirado en las neuronas biológicas: capas de nodos (perceptrones) que combinan sus entradas con pesos, un sesgo y una función de activación para reconocer patrones no lineales.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un niño aprendiendo a andar en bicicleta: se cae (predicción errónea), siente qué tan fuerte fue la caída (error) y ajusta el equilibrio (pesos). Tras muchos intentos (épocas), pedalea solo.<span class="rompe">Dónde deja de servir: la red no siente nada; son multiplicaciones, sumas y ajustes numéricos.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Un perceptrón:</strong></p>
+<ul>
+<li><strong>Entradas</strong> x<sub>1</sub>, …, x<sub>n</sub>: las características.</li>
+<li><strong>Pesos</strong> w<sub>1</sub>, …, w<sub>n</sub>: la importancia de cada entrada.</li>
+<li><strong>Suma ponderada:</strong> Z = x<sub>1</sub>w<sub>1</sub> + x<sub>2</sub>w<sub>2</sub> + … + x<sub>n</sub>w<sub>n</sub>.</li>
+<li><strong>Sesgo (bias)</strong> B: se suma (Z + B) para mover el punto en que la neurona «se activa», independientemente de las entradas.</li>
+<li><strong>Función de activación:</strong> Y = f(Z + B).</li>
+</ul>
+<p><strong>El ciclo de aprendizaje:</strong></p>
+<ol>
+<li><strong>Forward propagation:</strong> los datos van de la capa de entrada, por las ocultas, a la de salida, y sale una predicción.</li>
+<li>Se compara la predicción con el valor real: el <strong>error</strong>.</li>
+<li><strong>Backpropagation:</strong> el error se propaga de la salida hacia la entrada y se ajustan los pesos y el sesgo.</li>
+<li>Una <strong>época</strong> es una pasada completa por todo el conjunto de datos.</li>
+</ol>
+<p>Ejemplo de clase (clasificación de flores): en la época 1 la precisión ronda 0.5 (adivina); hacia las épocas 10–20 sube a 0.7–0.8; hacia 30–50 se estabiliza cerca de 0.9. Subir a 100 épocas cuando la curva ya se estabilizó no mejora el modelo y solo gasta cómputo.</p>
+<p><strong>Hiperparámetros:</strong> tasa de aprendizaje (qué tan grande es cada ajuste), tamaño de lote (cuántas muestras antes de actualizar los pesos) y número de capas ocultas y neuronas, que se ajustan probando o con búsqueda en malla, búsqueda aleatoria o AutoML. <em>(Los nombres de herramientas, como Keras Tuner, son de NotebookLM y no se contrastaron con el audio.)</em></p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Las redes neuronales se mencionaron entre los modelos predictivos en la <a href="clase-07.html">Clase 07</a> (capas, nodos, pesos, sesgos); aquí se ve cómo aprenden.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> muy pocas épocas (subajuste) o demasiadas sobre pocos datos (sobreajuste).</p></div>
+</details>
+
+<details class="section-block sec" id="c16-activacion"><summary><span class="stitle">3 · Funciones de activación: ReLU, sigmoide y softmax</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La función no lineal que se aplica a la salida de cada neurona y deja el resultado en el rango que necesita el problema.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un regulador de luz: apagado, encendido o una intensidad intermedia según cuánto se gire.<span class="rompe">Dónde deja de servir: el regulador controla un foco; la función se aplica en miles de conexiones y se deriva para entrenar.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<table>
+<tr><th>Función</th><th>Fórmula / qué hace</th><th>Dónde va</th></tr>
+<tr><td>ReLU</td><td>f(x) = max(0, x): negativo → 0, positivo → igual.</td><td>Capas ocultas (la estándar).</td></tr>
+<tr><td>Sigmoide</td><td>f(x) = 1 / (1 + e<sup>−x</sup>): deja todo entre 0 y 1, como una probabilidad (0.85 = 85 %).</td><td>Salida en clasificación binaria (¿diabetes sí o no?).</td></tr>
+<tr><td>Softmax</td><td>Convierte las salidas en probabilidades positivas que suman 1.</td><td>Salida en clasificación multiclase.</td></tr>
+</table>
+<p>Ejemplo de clase con softmax: adulto 0.70, joven 0.20, niño 0.10; suma 1.00. NotebookLM dice que el profesor mencionó que existen entre 20 y 30 funciones de activación.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Sin una función no lineal, apilar capas equivale a una sola combinación lineal y la red no podría aprender patrones complejos. <em>(Esta justificación la añadió NotebookLM; no se contrastó con el audio.)</em></p>
+</div>
+</details>
+
+<details class="section-block sec" id="c16-arquitecturas"><summary><span class="stitle">4 · Las tres arquitecturas: MLP, CNN y RNN</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Tres tipos de red según el tipo de datos: <strong>MLP</strong> para tablas, <strong>CNN</strong> para imágenes y <strong>RNN</strong> para secuencias (series de tiempo, texto, audio).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es escoger el vehículo según el terreno: una camioneta de carga para cajas ordenadas (tablas), un escáner para fotos (imágenes) y una grabadora para conversaciones donde importa el orden (secuencias).<span class="rompe">Dónde deja de servir: las arquitecturas se pueden combinar, por ejemplo una CNN que lee los cuadros de un video y una RNN que sigue su secuencia.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>MLP (perceptrón multicapa, capas densas).</strong> Datos tabulares: capa de entrada → capas ocultas totalmente conectadas → capa de salida. Usos: fraude bancario, abandono de clientes, riesgo crediticio.</p>
+<p><strong>CNN (red convolucional).</strong> Imágenes. El flujo:</p>
+<ol>
+<li>Imagen de entrada (matriz de píxeles).</li>
+<li><strong>Convolución:</strong> filtros que extraen bordes, texturas y formas.</li>
+<li><strong>ReLU.</strong></li>
+<li><strong>Pooling</strong> (max pooling): reduce el tamaño conservando lo importante.</li>
+<li><strong>Aplanado (flattening):</strong> convierte la matriz en un vector.</li>
+<li><strong>Capa densa.</strong></li>
+<li><strong>Salida</strong> con softmax o sigmoide.</li>
+</ol>
+<p>Caso de clase: diagnóstico de neumonía con 5,856 radiografías de tórax, con <em>data augmentation</em> (rotar e inclinar las imágenes para evitar sobreajuste) y un recall de 96 %, la métrica clave porque en triaje lo grave es no detectar a un enfermo.</p>
+<p><strong>RNN (red recurrente; variantes LSTM y GRU).</strong> Datos secuenciales: tiene memoria interna que conserva información de pasos anteriores para la predicción actual.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Para la práctica individual de redes neuronales cada quien elige el tipo de red según su dataset. Las RNN conectan con las series de tiempo de la Clase 15.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c16-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Cuál era la variable trampa y por qué se elimina?</summary><p>El identificador de la persona (ID): es una etiqueta sin información biológica.</p></details>
+<details class="qa"><summary>2. ¿Por qué un 64 % de exactitud no dice nada en este dataset?</summary><p>Porque el 64 % no tiene diabetes: decir «nadie tiene diabetes» da 64 % de exactitud con recall 0, es decir, todos los enfermos son falsos negativos.</p></details>
+<details class="qa"><summary>3. ¿Por qué se baja el umbral de 0.5 a 0.35?</summary><p>Para atrapar más diabéticos (menos falsos negativos) a cambio de más falsos positivos, que solo cuestan un estudio de confirmación.</p></details>
+<details class="qa"><summary>4. Escribe la salida de un perceptrón.</summary><p>Y = f(x<sub>1</sub>w<sub>1</sub> + … + x<sub>n</sub>w<sub>n</sub> + B): suma ponderada más el sesgo, pasada por la función de activación.</p></details>
+<details class="qa"><summary>5. ¿Qué diferencia hay entre forward propagation y backpropagation?</summary><p>Forward lleva los datos de la entrada a la salida para predecir; backpropagation lleva el error de la salida a la entrada para ajustar pesos y sesgo.</p></details>
+<details class="qa"><summary>6. ¿Qué es una época y por qué no siempre conviene subirlas?</summary><p>Una pasada completa por todos los datos. Si la precisión ya se estabilizó (en el ejemplo, ~0.9 hacia las 30–50), más épocas solo gastan cómputo o sobreajustan.</p></details>
+<details class="qa"><summary>7. Clasificas flores en 5 especies. ¿Qué activación va en la salida?</summary><p>Softmax: da 5 probabilidades que suman 1.</p></details>
+<details class="qa"><summary>8. ¿Qué red usarías para detectar fraude con una tabla de transacciones? ¿Y para radiografías?</summary><p>MLP para la tabla; CNN para las radiografías.</p></details>
+<details class="qa"><summary>9. ¿Qué hace el aplanado en una CNN?</summary><p>Convierte las matrices de características que salen del pooling en un vector para la capa densa.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c16-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li>Una alumna comentó que la glucosa puede salir alta si el paciente tomó un jugo antes del estudio: un falso positivo temporal.</li>
+<li>El profesor pidió exponer con más energía: dominar el tema es lo que da seguridad frente a un cliente ejecutivo.</li>
+<li>Contó que en el sector financiero, cuando le advertían de un cliente «especial», más le gustaba: se preparaba a fondo y se ganaba su confianza.</li>
+<li>Sobre las redes neuronales dijo que, ya entrenada, la red «pedalea solita como un niño en bicicleta».</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c16-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Práctica de redes neuronales: individual</strong> (ya no en equipo).</li>
+<li><strong>Práctica de series de tiempo:</strong> la última entrega y exposición en equipo.</li>
+<li><strong>Próxima clase (jueves 29 oct):</strong> seguir con redes recurrentes y datos tabulares, según NotebookLM.</li>
+<li><strong>Examen:</strong> NotebookLM repite «jueves 13 de noviembre de 2026». <em>(Dudoso: el 13 de noviembre de 2026 es viernes; MD es martes y jueves, así que sería el jueves 12 o el martes 17. Confirmar con el profesor o en Classroom.)</em></li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>En salud, el falso negativo es el error caro: se baja el umbral (0.5 → 0.35) aunque suban los falsos positivos.</li>
+<li>El ID de la persona se elimina desde el origen.</li>
+<li>Perceptrón: Y = f(Σ x<sub>i</sub>w<sub>i</sub> + B); aprende con forward, error y backpropagation, época tras época.</li>
+<li>ReLU en ocultas; sigmoide en salida binaria; softmax en salida multiclase.</li>
+<li>MLP = tablas, CNN = imágenes, RNN = secuencias.</li>
+</ul></div>
+
+</div>
+</body>
+</html>
