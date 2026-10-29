@@ -1,0 +1,63 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><style>
+@page{size:Letter;margin:14mm}body{font-family:"DejaVu Sans",Arial;font-size:9.5pt;line-height:1.35;color:#111}
+h1{font-size:14pt;margin:0}h2{font-size:11.5pt;border-bottom:1px solid #999;margin:14px 0 6px}h3{font-size:10pt;margin:10px 0 4px}
+table{border-collapse:collapse;margin:4px 0}td,th{border:1px solid #aaa;padding:2px 6px;text-align:center}.n{color:#555;font-size:8.5pt}
+.box{background:#f3f3f3;border-left:3px solid #333;padding:4px 8px;margin:6px 0}img{float:right;width:82mm;margin-left:8px}
+</style></head><body>
+<h1>RP · Tarea 2 — solución para copiar a mano</h1>
+<p class="n">Guía para pasar en limpio (la tarea se entrega a mano). Verificada numéricamente. Rafael Ortega de la Paz · 420054085.</p>
+
+<h2>1.1 DBSCAN (ε = 1.5, minPts = 3, d ≤ ε, el punto cuenta en su vecindario)</h2>
+<img src="dbscan.png">
+<p><b>1. Gráfica.</b> Se ven dos grupos: uno abajo a la izquierda (A–E, con L cerca) y otro arriba a la derecha (F–I). J (4,4) y K (8.5,2) quedan aislados.</p>
+<p><b>Distancias que se descartan a simple vista:</b> entre los dos grupos, |Δx| ≥ 3 o |Δy| ≥ 3 ⇒ d &gt; 1.5. J está a ≥ 1.80 de todos (más cercano: L, √(1²+1.5²) = 1.80). K está a ≥ 4 de todos en x1 salvo H/F/I, donde |Δx2| ≥ 4. Basta con que |Δx| o |Δy| &gt; 1.5 para descartar.</p>
+<p><b>2. Distancias calculadas (≤ 1.5):</b></p>
+<table><tr><th>Par</th><td>A-B</td><td>A-C</td><td>A-D</td><td>A-E</td><td>B-C</td><td>B-D</td><td>B-E</td><td>C-D</td><td>D-E</td><td>D-L</td></tr>
+<tr><th>d</th><td>1.118</td><td>1.000</td><td>1.414</td><td>1.500</td><td>1.118</td><td>0.500</td><td>0.707</td><td>1.000</td><td>1.118</td><td>1.118</td></tr></table>
+<table><tr><th>Par</th><td>F-G</td><td>F-H</td><td>G-H</td><td>G-I</td><td>H-I</td></tr><tr><th>d</th><td>1.118</td><td>1.000</td><td>1.118</td><td>0.707</td><td>1.500</td></tr></table>
+<p class="n">Casi entran pero no (&gt; 1.5): B-L 1.581, C-E 1.803, C-L 1.803, F-I 1.803, J-L 1.803, E-L 2.000. Ojo: A-E y H-I valen exactamente 1.5 y sí cuentan (d ≤ ε).</p>
+<table><tr><th>p</th><th>N<sub>ε</sub>(p)</th><th>|N|</th><th>Tipo</th></tr>
+<tr><td>A</td><td>{A,B,C,D,E}</td><td>5</td><td>núcleo</td></tr>
+<tr><td>B</td><td>{A,B,C,D,E}</td><td>5</td><td>núcleo</td></tr>
+<tr><td>C</td><td>{A,B,C,D}</td><td>4</td><td>núcleo</td></tr>
+<tr><td>D</td><td>{A,B,C,D,E,L}</td><td>6</td><td>núcleo</td></tr>
+<tr><td>E</td><td>{A,B,D,E}</td><td>4</td><td>núcleo</td></tr>
+<tr><td>F</td><td>{F,G,H}</td><td>3</td><td>núcleo</td></tr>
+<tr><td>G</td><td>{F,G,H,I}</td><td>4</td><td>núcleo</td></tr>
+<tr><td>H</td><td>{F,G,H,I}</td><td>4</td><td>núcleo</td></tr>
+<tr><td>I</td><td>{G,H,I}</td><td>3</td><td>núcleo</td></tr>
+<tr><td>J</td><td>{J}</td><td>1</td><td>ruido</td></tr>
+<tr><td>K</td><td>{K}</td><td>1</td><td>ruido</td></tr>
+<tr><td>L</td><td>{D,L}</td><td>2</td><td>frontera (no es núcleo, pero está en N(D) y D es núcleo)</td></tr></table>
+<p><b>3–4. Clústeres:</b></p>
+<div class="box"><b>2 clústeres.</b> C1 = {A, B, C, D, E, L} (L frontera, alcanzado desde D) · C2 = {F, G, H, I} · <b>Ruido:</b> {J, K}.</div>
+
+<h2>1.2.1 Bayes ingenuo — Parte A (categóricos)</h2>
+<p><b>1. A priori:</b> Sí = ejemplos 1,2,3,4,5,10 → 6; No = 6,7,8,9 → 4. &nbsp; <b>P(Sí) = 6/10 = 0.6</b>, <b>P(No) = 4/10 = 0.4</b>.</p>
+<p><b>2. Verosimilitudes:</b></p>
+<table><tr><th>Atributo = valor</th><th>P(· | Sí)</th><th>P(· | No)</th></tr>
+<tr><td>Asistencia = Alta</td><td>5/6</td><td>1/4</td></tr><tr><td>Asistencia = Baja</td><td>1/6</td><td>3/4</td></tr>
+<tr><td>Tareas = Completas</td><td>4/6</td><td>1/4</td></tr><tr><td>Tareas = Incompletas</td><td>2/6</td><td>3/4</td></tr>
+<tr><td>Horas = Muchas</td><td>4/6</td><td>1/4</td></tr><tr><td>Horas = Pocas</td><td>2/6</td><td>3/4</td></tr></table>
+<p class="n">No hay ceros, así que no hace falta suavizado de Laplace.</p>
+<p><b>3. x1 = (Baja, Completas, Muchas)</b><br>
+Sí: 0.6 · (1/6)(4/6)(4/6) = 0.6 · 16/216 = <b>0.04444</b><br>
+No: 0.4 · (3/4)(1/4)(1/4) = 0.4 · 3/64 = <b>0.01875</b><br>
+Normalizando (suma 0.06319): P(Sí|x1) = <b>0.703</b>, P(No|x1) = 0.297 ⇒ <b>x1 → Aprueba (Sí)</b>.</p>
+<p><b>x2 = (Alta, Incompletas, Pocas)</b><br>
+Sí: 0.6 · (5/6)(2/6)(2/6) = 0.6 · 20/216 = <b>0.05556</b><br>
+No: 0.4 · (1/4)(3/4)(3/4) = 0.4 · 9/64 = <b>0.05625</b><br>
+Normalizando (suma 0.11181): P(Sí|x2) = 0.497, P(No|x2) = <b>0.503</b> ⇒ <b>x2 → No aprueba</b> (decisión muy cerrada).</p>
+
+<h2>1.2.2 Bayes ingenuo gaussiano — Parte B</h2>
+<p>P(Aprueba) = 5/8 = 0.625 · P(Reprueba) = 3/8 = 0.375. Varianza muestral s² = Σ(x−x̄)²/(n−1).</p>
+<table><tr><th>Clase</th><th>x̄ sueño</th><th>s² sueño</th><th>x̄ promedio</th><th>s² promedio</th></tr>
+<tr><td>Aprueba (n=5)</td><td>35/5 = 7</td><td>(0+1+1+0+0)/4 = 0.5</td><td>43/5 = 8.6</td><td>(0.01+0.16+0.36+0.81+0.36)/4 = 0.425</td></tr>
+<tr><td>Reprueba (n=3)</td><td>15/3 = 5</td><td>(0+1+1)/2 = 1</td><td>20/3 = 6.667</td><td>(0.444+0.694+0.028)/2 = 0.583</td></tr></table>
+<p>f(x) = 1/√(2πσ²) · exp(−(x−μ)²/(2σ²)), con x = (6.5, 7.5):</p>
+<table><tr><th></th><th>f(sueño = 6.5)</th><th>f(prom = 7.5)</th><th>P(c)·f·f</th><th>Posterior</th></tr>
+<tr><td>Aprueba</td><td>0.4394</td><td>0.1474</td><td>0.625·0.4394·0.1474 = 0.04048</td><td><b>0.743</b></td></tr>
+<tr><td>Reprueba</td><td>0.1295</td><td>0.2880</td><td>0.375·0.1295·0.2880 = 0.01399</td><td>0.257</td></tr></table>
+<div class="box"><b>x = (6.5 h, 7.5) → Aprueba</b> (posterior 0.743).</div>
+<p class="n">Si en clase se usó la varianza poblacional (÷ n): s² = 0.4, 0.34 (Aprueba) y 0.667, 0.389 (Reprueba); el resultado sigue siendo <b>Aprueba</b> (0.789 vs 0.211). Usa la convención del profesor.</p>
+</body></html>

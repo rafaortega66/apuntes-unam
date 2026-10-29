@@ -169,7 +169,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 | Entrega | Indicaciones | Entregado | Adicionales |
 |---|---|---|---|
 | RP-T01 | [RP-T01-indicaciones.pdf](RP/RP-Tareas/RP-T01/RP-T01-indicaciones.pdf) | [RP-T01-420054085.pdf](RP/RP-Tareas/RP-T01/RP-T01-entregables/RP-T01-420054085.pdf) | 1 |
-| RP-T02 | [RP-T02-indicaciones.md](RP/RP-Tareas/RP-T02/RP-T02-indicaciones.md)<br>[RP-T02-indicaciones.pdf](RP/RP-Tareas/RP-T02/RP-T02-indicaciones.pdf) | _(sin entrega aún)_ | — |
+| RP-T02 | [RP-T02-indicaciones.md](RP/RP-Tareas/RP-T02/RP-T02-indicaciones.md)<br>[RP-T02-indicaciones.pdf](RP/RP-Tareas/RP-T02/RP-T02-indicaciones.pdf) | _(sin entrega aún)_ | 3 |
 
 ## SIB — Seguridad Informática Básica
 
