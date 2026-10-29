@@ -376,9 +376,10 @@ NotebookLM y de Claude para el repaso. No correr `/nueva-clase` ni
 `/migrar-clase` por iniciativa propia.
 
 - **El sitio es solo de consulta y estudio (18 oct 2026).** Las tareas y los
-  exámenes se resuelven en Claude, en el proyecto (Projects) de cada materia
-  (ej. «ACS»), **no aquí**: no ofrecer programarlos ni resolverlos en este repo.
-  Aquí solo se registran y publican (archivos en `decimo/`, páginas, pendientes).
+  exámenes se resuelven en **chats normales de Claude** (desde el 29 oct 2026 ya no
+  se usan Projects por materia; Projects solo para el servicio social), **no aquí**:
+  no ofrecer programarlos ni resolverlos en este repo. Aquí solo se registran y
+  publican (archivos en `decimo/`, páginas, pendientes).
 - **ACS no usa Classroom:** el profesor manda los archivos por correo; el usuario
   los baja y se los pasa a Claude para meterlos en `decimo/ACS/…`. El archivo del
   profesor manda sobre NotebookLM (las notas de NotebookLM van en `-adicionales/`).
