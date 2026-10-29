@@ -85,7 +85,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 | FSE-T06 | [FSE-T06-indicaciones.pdf](FSE/FSE-Tareas/FSE-T06/FSE-T06-indicaciones.pdf) | [19-OEPR-T06.pdf](FSE/FSE-Tareas/FSE-T06/FSE-T06-entregables/19-OEPR-T06.pdf) | — |
 | FSE-T07 | [FSE-T07-indicaciones.pdf](FSE/FSE-Tareas/FSE-T07/FSE-T07-indicaciones.pdf) | [19-OEPR-T07.pdf](FSE/FSE-Tareas/FSE-T07/FSE-T07-entregables/19-OEPR-T07.pdf) | — |
 | FSE-T08 | [FSE-T08-indicaciones.pdf](FSE/FSE-Tareas/FSE-T08/FSE-T08-indicaciones.pdf) | [19-OEPR-T08.pdf](FSE/FSE-Tareas/FSE-T08/FSE-T08-entregables/19-OEPR-T08.pdf) | — |
-| FSE-T09 | [FSE-T09-indicaciones.pdf](FSE/FSE-Tareas/FSE-T09/FSE-T09-indicaciones.pdf) | _(sin entrega aún)_ | — |
+| FSE-T09 | [FSE-T09-indicaciones.pdf](FSE/FSE-Tareas/FSE-T09/FSE-T09-indicaciones.pdf) | _(sin entrega aún)_ | 2 |
 
 ## MD — Minería de Datos
 

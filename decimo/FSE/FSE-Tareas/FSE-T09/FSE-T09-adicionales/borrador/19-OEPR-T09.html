@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<style>
+@page { size: A4 landscape; margin: 9mm 10mm; }
+* { box-sizing: border-box; }
+body { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 7.7pt; line-height: 1.22; color: #1d1d1f; margin: 0; }
+header { text-align: center; margin-bottom: 3mm; }
+header .u { font-size: 9pt; letter-spacing: .02em; }
+header h1 { font-size: 15pt; margin: 1.5mm 0 1mm; }
+header .a { font-size: 9pt; color: #444; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; gap: 4mm 5mm; position: relative; }
+.center { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 47mm; padding: 3mm; background: #1d1d1f; color: #fff; text-align: center; border-radius: 4mm; font-size: 8.2pt; z-index: 2; border: 1.2mm solid #fff; }
+.center b { display: block; font-size: 10.5pt; margin-bottom: 1mm; }
+.box { border: .5mm solid var(--c); border-radius: 3mm; padding: 2.6mm 3mm; background: var(--bg); }
+.box h2 { margin: 0 0 1.6mm; font-size: 9.6pt; color: var(--c); }
+.box h2 span { display: inline-block; background: var(--c); color: #fff; border-radius: 50%; width: 5.4mm; height: 5.4mm; line-height: 5.4mm; text-align: center; margin-right: 1.5mm; font-size: 8.5pt; }
+ul { margin: 0; padding-left: 4mm; }
+li { margin-bottom: .6mm; }
+.sub { font-weight: bold; color: var(--c); }
+.b1 { --c: #b23a48; --bg: #fdf3f4; padding-right: 27mm; }
+.b2 { --c: #2f6690; --bg: #f1f6fa; padding-left: 27mm; }
+.b3 { --c: #6a4c93; --bg: #f6f3fa; padding-right: 27mm; }
+.b4 { --c: #2d7d46; --bg: #f1f8f3; padding-left: 27mm; }
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 3mm; }
+footer { margin-top: 3mm; font-size: 7pt; color: #555; text-align: center; }
+</style></head><body>
+<header>
+  <div class="u">Universidad Nacional Autónoma de México · Facultad de Ingeniería · Fundamentos de Sistemas Embebidos</div>
+  <h1>Tarea 9: The Social Dilemma — organizador gráfico</h1>
+  <div class="a">Rafael Ortega de la Paz | 420054085 | 29/10/26</div>
+</header>
+
+<div class="grid">
+  <div class="center"><b>The Social Dilemma</b>(Jeff Orlowski, 2020)<br>«Si no pagas por el producto, el producto eres tú»: el modelo de negocio es vender cambios en nuestra conducta.</div>
+
+  <section class="box b1">
+    <h2><span>i</span>Variables que maximizan los algoritmos</h2>
+    <ul>
+      <li><span class="sub">Engagement (interacción):</span> que hagamos scroll, demos «me gusta», comentemos y compartamos lo más posible.</li>
+      <li><span class="sub">Crecimiento:</span> que invitemos a más personas, volvamos a la app y sumemos contactos (notificaciones, etiquetas en fotos).</li>
+      <li><span class="sub">Publicidad:</span> que el tiempo y la atención se conviertan en ingresos; los clientes reales son los anunciantes.</li>
+      <li><span class="sub">Tiempo de pantalla y atención:</span> el recurso que se vende es nuestra atención; cada minuto extra es más inventario publicitario.</li>
+      <li>Para lograrlo se recaba todo dato de conducta (qué vemos, cuánto tiempo, a qué hora) y se construye un <b>modelo predictivo</b> de cada usuario; Shoshana Zuboff lo llama <i>capitalismo de vigilancia</i>.</li>
+      <li>El algoritmo no busca la verdad ni nuestro bienestar: optimiza una métrica, y lo que más la mueve suele ser lo que indigna o polariza.</li>
+    </ul>
+  </section>
+
+  <section class="box b2">
+    <h2><span>ii</span>¿Por qué los desarrolladores se fueron y piden regulación?</h2>
+    <ul>
+      <li><span class="sub">Remordimiento ético:</span> crearon herramientas con buena intención (botón «me gusta», scroll infinito, notificaciones) y vieron que se usan para manipular. Tristan Harris (exdiseñador ético de Google) intentó cambiarlo desde dentro sin éxito.</li>
+      <li><span class="sub">Conocen el mecanismo:</span> saben que el diseño persuasivo está hecho para vencer el autocontrol, por eso limitan su propio uso y no dan redes sociales a sus hijos (Tim Kendall, expresidente de Pinterest, reconoce su propia adicción al teléfono).</li>
+      <li><span class="sub">Daño medido en jóvenes:</span> Jonathan Haidt muestra el aumento de depresión, autolesiones y suicidios en adolescentes desde que las redes llegaron al celular (≈2009–2011).</li>
+      <li><span class="sub">Daño a la democracia:</span> polarización, desinformación y manipulación electoral a escala global.</li>
+      <li><span class="sub">El mercado no se corrige solo:</span> mientras la ganancia dependa de la atención, ninguna empresa cambiará por su cuenta; por eso piden leyes que graven o limiten la recolección de datos y el diseño adictivo (Center for Humane Technology).</li>
+    </ul>
+  </section>
+
+  <section class="box b3">
+    <h2><span>iii</span>De herramienta a fenómeno bio-psico-social</h2>
+    <ul>
+      <li><span class="sub">Objetivo original:</span> conectar a las personas, reencontrar amigos y familia, compartir información y organizarse (incluso para causas sociales).</li>
+      <li><span class="sub">En qué se convirtió:</span> una máquina de captar atención que moldea emociones, autoestima y opiniones de miles de millones de personas.</li>
+    </ul>
+    <div class="cols">
+      <ul>
+        <li><span class="sub">(a) Noticias falsas:</span> generan más interacción que la verdad, así que se difunden más rápido y más lejos; ejemplos del documental: Pizzagate, teorías de la Tierra plana y la violencia contra los rohinyá en Myanmar.</li>
+        <li><span class="sub">(b) Realidades a la medida:</span> cada quien recibe un feed distinto que confirma lo que ya cree; si dos personas ven «hechos» diferentes, dejan de poder entenderse y la sociedad se polariza.</li>
+      </ul>
+      <ul>
+        <li><span class="sub">(c) Explotar la biología:</span> recompensas intermitentes, como una máquina tragamonedas (refrescar el feed, likes, notificaciones), liberan dopamina y crean hábito; la necesidad humana de aprobación social se usa en contra de la persona.</li>
+        <li><span class="sub">Consecuencias:</span> ansiedad, comparación constante, filtros que distorsionan la propia imagen, menos sueño y menos convivencia real.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="box b4">
+    <h2><span>iv</span>Peligros del mal uso de datos de dispositivos IoT</h2>
+    <ul>
+      <li><span class="sub">Del clic al cuerpo y la casa:</span> si con clics ya se predice y manipula la conducta, un asistente de voz o un reloj inteligente aporta datos más íntimos: voz, rutina diaria, ubicación, ritmo cardiaco, sueño y estado de ánimo.</li>
+      <li><span class="sub">Perfiles más precisos:</span> esos datos alimentan modelos predictivos que permiten anuncios o mensajes en el momento exacto de mayor vulnerabilidad (estrés, cansancio, tristeza).</li>
+      <li><span class="sub">Discriminación:</span> datos de salud o de hábitos vendidos a aseguradoras, bancos o empleadores podrían usarse para negar seguros, créditos o empleos.</li>
+      <li><span class="sub">Vigilancia y seguridad:</span> micrófonos y sensores siempre encendidos pueden ser usados por empresas, gobiernos o atacantes (filtraciones, hackeos) para espiar o saber cuándo no hay nadie en casa.</li>
+      <li><span class="sub">Manipulación política y social:</span> con un perfil emocional casi en tiempo real, la desinformación y la polarización serían todavía más efectivas.</li>
+      <li><span class="sub">Lección para quien diseña embebidos:</span> recabar solo lo necesario, procesar localmente cuando se pueda, cifrar y ser transparente con el usuario.</li>
+    </ul>
+  </section>
+</div>
+<footer>Fuente: documental <i>The Social Dilemma</i> (Netflix, 2020), dir. Jeff Orlowski. El punto iv es un análisis propio a partir de lo expuesto en el documental.</footer>
+</body></html>
