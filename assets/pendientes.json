@@ -23,7 +23,8 @@
       "hora_confirmada": true,
       "detalle": "Entrega: PDF NL-CURP-L07.pdf.",
       "link": "materias/lab-de-fundamentos-de-sistemas-embebidos/material.html",
-      "classroom": "https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzY5MjY3ODA1/details"
+      "classroom": "https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzY5MjY3ODA1/details",
+      "avance": "2 nov: código listo y probado en simulación; falta circuito real y reporte"
     },
     {
       "id": "labfse-p8",

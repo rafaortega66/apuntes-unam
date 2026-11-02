@@ -249,7 +249,30 @@
     "u": "https://classroom.google.com/c/ODcxNzgyMDc2MDE1/a/ODc0NzY5MjY3ODA1/details"
    }
   ],
-  "fuente": "Manual oficial guardado en el sitio."
+  "fuente": "Manual oficial guardado en el sitio.",
+  "progreso": {
+   "actualizado": "2026-11-02",
+   "estado": "en curso",
+   "donde": "2 nov 2026: código de los 3 experimentos listo y probado en simulación (decimo/FSE/FSE-Lab/FSE-P07/FSE-P07-adicionales/src/). Falta armar y medir el circuito real y escribir el reporte NL-CURP-L07.pdf.",
+   "pasos": [
+    {
+     "t": "Código Arduino (Timer1 + I²C 0x0A) y scripts de la Pi para Exp. 1, 2 y 3",
+     "hecho": true
+    },
+    {
+     "t": "Armar circuito AC (Fig. 8) y DC (Fig. 9); verificar aislamiento con multímetro",
+     "hecho": false
+    },
+    {
+     "t": "Correr exp1/exp2/exp3 en el hardware y anotar mediciones (ver src/README.md)",
+     "hecho": false
+    },
+    {
+     "t": "Escribir y entregar el reporte NL-CURP-L07.pdf",
+     "hecho": false
+    }
+   ]
+  }
  },
  "labfse-p8": {
   "resumen": "Práctica 8 del laboratorio de FSE. <strong>Ojo:</strong> las fuentes no coinciden en el tema; confírmalo antes de empezar.",

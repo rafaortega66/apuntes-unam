@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-28T13:58:10+00:00",
+ "generatedAt": "2026-11-02T20:48:57+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -846,6 +846,26 @@
  },
  "gitlog": [
   {
+   "hash": "70ba3fe",
+   "fecha": "2026-10-29T09:40:00Z",
+   "mensaje": "RP-T02: solución verificada para copiar a mano (DBSCAN y Bayes ingenuo)"
+  },
+  {
+   "hash": "6442b87",
+   "fecha": "2026-10-29T08:55:41Z",
+   "mensaje": "FSE-T09: borrador del organizador gráfico (The Social Dilemma)"
+  },
+  {
+   "hash": "774d63e",
+   "fecha": "2026-10-29T08:51:53Z",
+   "mensaje": "CLAUDE.md: tareas en chats de Claude, Projects solo para servicio social"
+  },
+  {
+   "hash": "7522cbb",
+   "fecha": "2026-10-28T07:58:16-06:00",
+   "mensaje": "ACS: Clase 18, SIB: Clase 16 y MD: Clase 16 (27 oct) — páginas, índices y guías de estudio en PDF"
+  },
+  {
    "hash": "edfb208",
    "fecha": "2026-10-27T09:45:21-06:00",
    "mensaje": "FSE: Clase 17 (26 oct) y ASI: Clase 16 (26 oct) — páginas, índices y guías de estudio en PDF"
@@ -1124,26 +1144,6 @@
    "hash": "bb9553e",
    "fecha": "2026-10-19T13:53:11-06:00",
    "mensaje": "FSE: Clases 12 (7 oct, bootstrap/RESET/BSP-AP/paginación) y 13 (12 oct, API y llamadas a sistema, procesos vs. tareas) en formato de estudio desde NotebookLM; Clase 14 = examen parcial"
-  },
-  {
-   "hash": "990b68e",
-   "fecha": "2026-10-19T13:31:26-06:00",
-   "mensaje": "FSE-E01: primer examen parcial escaneado (14 oct 2026, calificación 101); pendiente del examen oculto"
-  },
-  {
-   "hash": "330daf9",
-   "fecha": "2026-10-19T11:51:07-06:00",
-   "mensaje": "SIB: numeración corregida según la hoja RegistroClases (Clase 11 = examen 6 oct; 8, 13 y 15 oct = Clases 12, 13 y 14); CLAUDE.md registra la hoja como fuente de verdad"
-  },
-  {
-   "hash": "b22c5d5",
-   "fecha": "2026-10-19T11:44:17-06:00",
-   "mensaje": "SIB: escaneos de ejercicios en clase — EC05 cuestionario de normatividad (Clase 04, calificado 3) y EC06 amenazas a la persona y a la casa (Clase 07, foto tapada)"
-  },
-  {
-   "hash": "22b62ab",
-   "fecha": "2026-10-19T11:00:17-06:00",
-   "mensaje": "OAC-Proy01: proyecto_calculadora.py actualizado (Taylor con Horner, comentarios)"
   }
  ]
 }

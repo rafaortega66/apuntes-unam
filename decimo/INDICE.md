@@ -69,7 +69,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 | FSE-P04 | [FSE-P04-indicaciones.pdf](FSE/FSE-Lab/FSE-P04/FSE-P04-indicaciones.pdf) | [19-OEPR-L04.pdf](FSE/FSE-Lab/FSE-P04/FSE-P04-entregables/19-OEPR-L04.pdf) | 3 |
 | FSE-P05 | [FSE-P05-indicaciones.pdf](FSE/FSE-Lab/FSE-P05/FSE-P05-indicaciones.pdf) | [19-OEPR-L05-adicionales.zip](FSE/FSE-Lab/FSE-P05/FSE-P05-entregables/19-OEPR-L05-adicionales.zip)<br>[19-OEPR-L05.pdf](FSE/FSE-Lab/FSE-P05/FSE-P05-entregables/19-OEPR-L05.pdf) | 1 |
 | FSE-P06 | [FSE-P06-indicaciones.pdf](FSE/FSE-Lab/FSE-P06/FSE-P06-indicaciones.pdf) | [19-OEPR-L06-adicionales.zip](FSE/FSE-Lab/FSE-P06/FSE-P06-entregables/19-OEPR-L06-adicionales.zip)<br>[19-OEPR-L06.pdf](FSE/FSE-Lab/FSE-P06/FSE-P06-entregables/19-OEPR-L06.pdf) | 10 |
-| FSE-P07 | [FSE-P07-indicaciones.pdf](FSE/FSE-Lab/FSE-P07/FSE-P07-indicaciones.pdf) | _(sin entrega aún)_ | 4 |
+| FSE-P07 | [FSE-P07-indicaciones.pdf](FSE/FSE-Lab/FSE-P07/FSE-P07-indicaciones.pdf) | _(sin entrega aún)_ | 10 |
 | FSE-P08 | [FSE-P08-indicaciones.pdf](FSE/FSE-Lab/FSE-P08/FSE-P08-indicaciones.pdf) | _(sin entrega aún)_ | 1 |
 | FSE-ProyFinal | [FSE-ProyFinal-indicaciones.pdf](FSE/FSE-Lab/FSE-ProyFinal/FSE-ProyFinal-indicaciones.pdf) | _(sin entrega aún)_ | — |
 
