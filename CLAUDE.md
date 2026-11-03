@@ -321,6 +321,16 @@ correspondiente. **Lab OAC no se documenta en ningún lado** (el usuario lo usa 
 para hacer las prácticas como las pide el ing. Ricardo; corrección del 21 oct 2026).
 Sus `index/material/entregas` se mantienen.
 
+## Tablero «En qué estoy trabajando» (portada, desde el 3 nov 2026)
+
+La portada (`index.html`) muestra arriba de las materias un tablero con el trabajo en curso en los
+**Projects de claude.ai** (un chat por tarea). Los datos viven en **`assets/trabajo.json`** y los pinta
+`initTrabajo()` en `assets/app.js`. Cada ítem: `materia`, `color`, `titulo`, `chat`, `chat_url`, `fecha`,
+`estado` (`en-curso` | `esperando` | `listo` | `entregado`), `resumen`, `falta` [lista] y `link` opcional.
+Para actualizarlo: leer con Claude en Chrome los chats del día (API de claude.ai,
+`/api/organizations/<org>/chat_conversations`), editar el JSON y cambiar `actualizado`. Quitar un ítem
+(u `oculto: true`) cuando se entregue. **Servicio social nunca va aquí** (sitio público).
+
 ## Sección global "Pendientes" — oculta (29 sep 2026)
 
 A petición del usuario se quitó de la interfaz el enlace 📌 Pendientes de la

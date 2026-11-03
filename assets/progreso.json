@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-03T15:24:00+00:00",
+ "generatedAt": "2026-11-03T17:51:38+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -846,6 +846,11 @@
  },
  "gitlog": [
   {
+   "hash": "ddd84b8",
+   "fecha": "2026-11-03T09:24:00-06:00",
+   "mensaje": "RP: 30 oct sin clase confirmado; SIB Actividad 2 hecha por el usuario"
+  },
+  {
    "hash": "de16d33",
    "fecha": "2026-11-03T09:14:14-06:00",
    "mensaje": "SIB: Actividad 2 (29 oct, sin clase) = investigación de modelos de seguridad del Equipo 4 (SIB-EC09)"
@@ -1139,11 +1144,6 @@
    "hash": "95e879d",
    "fecha": "2026-10-19T16:31:31-06:00",
    "mensaje": "ASI: Clase 12 (7 oct, examen) y Clase 13 (12 oct, examen de reposición en Teams) desde NotebookLM"
-  },
-  {
-   "hash": "52bb840",
-   "fecha": "2026-10-19T16:28:31-06:00",
-   "mensaje": "ACS: Clases 13 (8 oct, Programa 05), 14 (13 oct, SO_REUSEADDR y búferes) y 15 (15 oct, servidor de PDF e indicaciones del parcial) en formato de estudio desde NotebookLM"
   }
  ]
 }

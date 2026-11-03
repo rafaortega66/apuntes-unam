@@ -1,0 +1,55 @@
+{
+  "actualizado": "2026-11-03T12:00:00-06:00",
+  "nota": "Trabajo en curso en los Projects de claude.ai (un chat por tarea). Se pinta en la portada. Al avanzar o terminar algo, editar aquí: estado = en-curso | esperando | listo | entregado. Servicio social NO va aquí (sitio público).",
+  "items": [
+    {
+      "materia": "MD",
+      "color": "#A98BD1",
+      "titulo": "Proyecto 3.6 — MLP, RNN y CNN",
+      "proyecto": "Minería de Datos",
+      "chat": "MD - Proyecto 3.6",
+      "chat_url": "https://claude.ai/chat/dc6bcf26-7d94-4f15-85cf-cef4373643ef",
+      "fecha": "2026-11-03",
+      "estado": "en-curso",
+      "resumen": "Fashion-MNIST (70 000 fotos de prendas; caso: clasificar el catálogo de una tienda en línea). MLP sobre píxeles, LSTM bidireccional renglón por renglón y CNN tipo VGG con aumento de datos, en Keras, para CPU (o Colab con GPU).",
+      "falta": ["Terminar el entrenamiento de las tres redes (~1 h en la MSI)", "Resultados y conclusión con los números reales", "Recibir el .ipynb y el PDF"]
+    },
+    {
+      "materia": "RP",
+      "color": "#45B8A8",
+      "titulo": "Tarea 3 — KNN y regresión logística",
+      "proyecto": "Reconocimiento de Patrones",
+      "chat": "PDF para copiar a mano",
+      "chat_url": "https://claude.ai/chat/241795d5-8029-4c5f-abaa-bd38450cd390",
+      "fecha": "2026-11-03",
+      "estado": "listo",
+      "resumen": "Tarea3_Ortega_Rafael_420054085.pdf (5 págs.) con todo el procedimiento en tablas, verificado en Python. KNN A: k=1 → B, k=3 → A. KNN B: sin escalar → S, normalizado → N. Regresión logística: L₀ = 0.7532 → L₁ = 0.6289 (2/4 bien clasificadas).",
+      "falta": ["Copiarla a mano en GoodNotes", "Ojo: las muestras 2 y 4 dan p̂ = 0.5; se usó el umbral p̂ ≥ 0.5 → 1"]
+    },
+    {
+      "materia": "FSE",
+      "color": "#A98BD1",
+      "titulo": "Proyecto final — Consola Retro",
+      "proyecto": "Fundamentos de Sistemas Embebidos",
+      "chat": "Propuesta del proyecto final",
+      "chat_url": "https://claude.ai/chat/ee1396fb-28b5-463e-8b6c-ba95ea432cf9",
+      "fecha": "2026-11-03",
+      "estado": "en-curso",
+      "resumen": "Esqueleto en 19-OEPR-final.zip: Mednafen con menú propio y gamepad, instalador automático, arranque directo sin escritorio y splash provisional. Aún no está probado en la Raspberry Pi.",
+      "falta": ["Probarlo en la Pi", "Salir con el gamepad", "Importar ROMs por USB", "15 ROMs legales", "Logotipo", "Video"]
+    },
+    {
+      "materia": "Lab FSE",
+      "color": "#E8735C",
+      "titulo": "Práctica 7 — Modulación de potencia de una lámpara",
+      "proyecto": "Fundamentos de Sistemas Embebidos",
+      "chat": "fse-p04",
+      "chat_url": "https://claude.ai/chat/8b8fc69e-8cc1-4f64-90c5-74c6ac94a46a",
+      "fecha": "2026-11-03",
+      "estado": "esperando",
+      "resumen": "Con los videos y el borrador del compañero ya se puede armar la práctica; Claude redactó el mensaje de WhatsApp para pedirle lo que falta.",
+      "falta": ["Que el compañero mande el zip con los códigos", "Pasarle el zip al chat para armar el paquete final"],
+      "link": "tareas/labfse-p7.html"
+    }
+  ]
+}

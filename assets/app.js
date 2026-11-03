@@ -373,9 +373,59 @@
     });
   }
 
+
+  // ================= Tablero «En qué estoy trabajando» (portada) =================
+  // Fuente: assets/trabajo.json (trabajo en curso en los Projects de claude.ai).
+  function initTrabajo() {
+    var mount = document.getElementById('trabajo');
+    if (!mount) return;
+    var EST = {
+      'en-curso':  { t: 'En curso', i: '⚙️' },
+      'esperando': { t: 'Esperando a alguien', i: '⏸️' },
+      'listo':     { t: 'Listo para entregar', i: '✅' },
+      'entregado': { t: 'Entregado', i: '📤' }
+    };
+    var ORDEN = ['listo', 'en-curso', 'esperando', 'entregado'];
+    var esc = Pend.esc;
+    fetch(SITE_ROOT + 'assets/trabajo.json', { cache: 'no-store' })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        var items = (data.items || []).filter(function (it) { return !it.oculto; });
+        if (!items.length) { mount.innerHTML = ''; return; }
+        items.sort(function (a, b) { return ORDEN.indexOf(a.estado) - ORDEN.indexOf(b.estado); });
+        var cuenta = {};
+        items.forEach(function (it) { cuenta[it.estado] = (cuenta[it.estado] || 0) + 1; });
+        var act = data.actualizado ? new Date(data.actualizado) : null;
+        var actTxt = act && !isNaN(act) ? act.toLocaleDateString('es-MX', { weekday: 'long', day: 'numeric', month: 'long' }) : '';
+        var stats = ORDEN.filter(function (k) { return cuenta[k]; }).map(function (k) {
+          return '<div class="tr-stat tr-' + k + '"><span class="tr-num">' + cuenta[k] + '</span><span class="tr-lbl">' + EST[k].t + '</span></div>';
+        }).join('');
+        var cards = items.map(function (it) {
+          var e = EST[it.estado] || { t: it.estado, i: '•' };
+          var falta = (it.falta || []).map(function (f) { return '<li>' + esc(f) + '</li>'; }).join('');
+          var links = (it.chat_url ? '<a href="' + esc(it.chat_url) + '" target="_blank" rel="noopener">Abrir chat «' + esc(it.chat) + '» ↗</a>' : '') +
+                      (it.link ? '<a href="' + esc(SITE_ROOT + it.link) + '">Ver tarea →</a>' : '');
+          return '<article class="tr-card tr-' + esc(it.estado) + '" style="--c:' + esc(it.color || '#7C9CD6') + '">' +
+            '<div class="tr-top"><span class="tr-materia">' + esc(it.materia) + '</span><span class="tr-estado">' + e.i + ' ' + esc(e.t) + '</span></div>' +
+            '<h3 class="tr-titulo">' + esc(it.titulo) + '</h3>' +
+            (it.resumen ? '<p class="tr-resumen">' + esc(it.resumen) + '</p>' : '') +
+            (falta ? '<div class="tr-falta"><span>Falta</span><ul>' + falta + '</ul></div>' : '') +
+            (links ? '<div class="tr-links">' + links + '</div>' : '') +
+            '</article>';
+        }).join('');
+        mount.innerHTML =
+          '<div class="tr-head"><h2>🛠️ En qué estoy trabajando</h2>' +
+          (actTxt ? '<span class="tr-act">Projects de Claude · actualizado el ' + esc(actTxt) + '</span>' : '') + '</div>' +
+          '<div class="tr-stats">' + stats + '</div>' +
+          '<div class="tr-grid">' + cards + '</div>';
+      })
+      .catch(function () { mount.innerHTML = ''; });
+  }
+
   function init() {
     initTopBar();
     initHomePendientes();
+    initTrabajo();
     initPendientesPage();
     Pend.load();
     setInterval(Pend.tick, 30000);
