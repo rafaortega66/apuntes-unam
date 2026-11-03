@@ -14,17 +14,58 @@
 <a class="back" href="index.html">← Volver a SIB</a>
 <div class="detail-head" style="border-color:#E8735C">
   <h3>Actividad 2 · sin clase</h3>
-  <p class="prof">Dra. Cintia Quezada Reyes · jueves 29 oct 2026 · No hubo clase presencial; la profesora dejó una actividad.</p>
-  <p class="prof">Fuente: hoja RegistroClases («SIB - (sin clase) (actividad 2)»). No cuenta como clase, por eso no lleva número. Va después de la <a href="clase-16.html">Clase 16</a>.</p>
+  <p class="prof">Dra. Cintia Quezada Reyes · jueves 29 oct 2026 · Tema 4 (4.1.4) — No hubo clase presencial; la profesora dejó una investigación en equipo sobre modelos de seguridad (SIB-EC09).</p>
+  <p class="prof">Fuente: hoja RegistroClases («SIB - (sin clase) (actividad 2)») y el documento entregado por el Equipo 4, fechado el 29 oct 2026. El enunciado no está en archivo; lo que se pidió se deduce de los incisos del documento. No cuenta como clase, por eso no lleva número. Va después de la <a href="clase-16.html">Clase 16</a>.</p>
 </div>
+<div class="files"><a class="btn" href="../../decimo/SIB/SIB-EjerciciosClase/SIB-EC09/SIB-EC09-entregables/SIB-EC09-modelos-de-seguridad-equipo4.pdf" target="_blank">📄 Modelos de seguridad — Equipo 4 (PDF, 13 págs.)</a></div>
 
 <details class="section-block sec" id="a02-indicaciones" open><summary><span class="stitle">Qué se pidió</span></summary>
-<p><em>Falta: todavía no está registrado qué se pidió, si fue en equipo, qué me tocó ni el archivo entregado. No hay correo ni archivo de esta actividad en el repo (revisado el 3 nov 2026).</em></p>
+<ol type="a">
+<li>Definición de modelo de seguridad.</li>
+<li>Definición de modelo concreto y modelo abstracto.</li>
+<li>Características de los modelos de control de acceso.</li>
+<li>Características de los modelos de flujo de información (con «¿qué es entropía?»).</li>
+<li>Características de los modelos de integridad.</li>
+</ol>
+<p><em>No se sabe la hora ni el medio de entrega, ni qué incisos me tocaron.</em></p>
+</details>
+
+<details class="section-block sec" id="a02-definiciones"><summary><span class="stitle">a–b · Modelo de seguridad; concreto vs. abstracto</span></summary>
+<p><strong>Modelo de seguridad:</strong> conjunto de principios y reglas que establecen cómo proteger ciertos recursos frente a amenazas; en informática, la representación de las políticas y restricciones que protegen la información y controlan el acceso. Se apoya en confidencialidad, integridad y disponibilidad.</p>
+<table>
+<tr><th></th><th>Modelo concreto</th><th>Modelo abstracto</th></tr>
+<tr><td>Qué es</td><td>Reglas de protección específicas para usuarios, recursos y operaciones de un sistema determinado.</td><td>Representación conceptual o matemática de las condiciones para que un sistema sea seguro, sin detalles de implementación.</td></tr>
+<tr><td>Para qué</td><td>Precisar cómo aplicar las políticas en un entorno real; facilita pruebas y verificar el cumplimiento.</td><td>Analizar el comportamiento e identificar problemas antes de construir los mecanismos; no depende de una tecnología.</td></tr>
+</table>
+</details>
+
+<details class="section-block sec" id="a02-acceso"><summary><span class="stitle">c · Modelos de control de acceso</span></summary>
+<table>
+<tr><th>Modelo</th><th>Autores</th><th>Idea central</th><th>Limitación clave</th></tr>
+<tr><td>Matriz de acceso</td><td>Lampson (1971); Graham y Denning (1972)</td><td>Matriz sujeto × objeto; A[s,o] = derechos. Se implementa por columnas (ACL), por filas (capacidades) o como tabla de autorización. 8 reglas de Graham-Denning. Discrecional (DAC).</td><td>No escala completa; sin tipos ni roles; vulnerable a troyanos.</td></tr>
+<tr><td>HRU</td><td>Harrison, Ruzzo y Ullman (1976)</td><td>La matriz como sistema de transición de estados, con 6 operaciones primitivas y comandos condicionados. Pregunta: ¿puede un derecho «filtrarse»?</td><td>El problema de seguridad (safety) es <strong>indecidible</strong> en general; solo es decidible en casos muy restringidos (mono-operacionales).</td></tr>
+<tr><td>Take-Grant</td><td>Jones, Lipton y Snyder (1976)</td><td>Grafo dirigido de sujetos y objetos; derechos especiales <em>take</em> y <em>grant</em>; reglas take, grant, create y remove.</td><td>Analiza la transferencia de derechos, no el contenido; no modela roles ni contextos.</td></tr>
+<tr><td>Bell-LaPadula</td><td>Bell y LaPadula (1973)</td><td><strong>Confidencialidad</strong> por niveles (clearance / clasificación). <strong>No read up</strong> (seguridad simple), <strong>no write down</strong> (propiedad *), más la propiedad discrecional. Base del MAC.</td><td>No protege la integridad; rígido para compartir información.</td></tr>
+</table>
+</details>
+
+<details class="section-block sec" id="a02-flujo"><summary><span class="stitle">d · Modelos de flujo de información y entropía</span></summary>
+<p>Rastrean cómo viaja la información entre entidades para que no se filtre por vías indirectas (canales encubiertos), no solo quién abre un archivo. Características: estructura de <strong>retículo</strong> (Dorothy Denning: clases de seguridad ordenadas por ≤; la información de A solo fluye a B si A ≤ B), control del flujo dentro del programa, control de canales encubiertos (flujos implícitos como un <code>if</code>) y adaptables a confidencialidad o integridad.</p>
+<p><strong>Entropía (Shannon):</strong> medida de la incertidumbre o la información promedio de una fuente: H(X) = −Σ P(xᵢ) log₂ P(xᵢ). En seguridad: fuerza de claves y contraseñas (bits de entropía), detección de malware empaquetado o cifrado (secciones de alta entropía) y cuantificación de fugas de información en modelos de flujo.</p>
+</details>
+
+<details class="section-block sec" id="a02-integridad"><summary><span class="stitle">e · Modelos de integridad</span></summary>
+<p>Controlan quién puede <em>escribir o alterar</em> la información (Bell-LaPadula controla quién la lee).</p>
+<table>
+<tr><th>Modelo</th><th>Autores</th><th>Reglas</th><th>Limitación clave</th></tr>
+<tr><td>Biba</td><td>Kenneth J. Biba, MITRE (1975)</td><td>El inverso de Bell-LaPadula, con niveles de integridad: <strong>no read down</strong>, <strong>no write up</strong> y propiedad de invocación. Ejemplo: Mandatory Integrity Control de Windows.</td><td>No protege la confidencialidad; difícil de combinar con Bell-LaPadula.</td></tr>
+<tr><td>Clark-Wilson</td><td>Clark y Wilson (1987)</td><td>Entornos comerciales: CDI, UDI, TP e IVP; transacciones bien formadas, reglas de certificación y de aplicación, <strong>separación de funciones</strong> y bitácoras. Ejemplo: el retiro en un banco.</td><td>La certificación depende de personas y es costosa; menos formal.</td></tr>
+</table>
 </details>
 
 <details class="section-block sec" id="a02-estado"><summary><span class="stitle">Estado</span></summary>
 <ul>
-<li>Sin confirmar. Cuando se tenga el enunciado o el entregable, va a <code>decimo/SIB/SIB-EjerciciosClase/</code> como el siguiente EC.</li>
+<li>Documento del Equipo 4 (Chilpa Navarro, Medina Rubalcava, Murillo Rodríguez, Ortega de la Paz, Romero García) fechado el 29 oct 2026. Archivos e indicaciones en <code>decimo/SIB/SIB-EjerciciosClase/SIB-EC09/</code>.</li>
 </ul>
 </details>
 

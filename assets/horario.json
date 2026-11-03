@@ -30,7 +30,7 @@
     { "fecha": "2026-10-20", "motivo": "SIB sin clase: la profesora asistió a la entrega de diplomas del Diplomado en Ciberseguridad (gen. 19); dejó un ejercicio de clase (SIB-EC07). Hoja RegistroClases: «SIB - (sin clase) (actividad)»", "confirmado": true, "materias": ["SIB"] },
     { "fecha": "2026-10-28", "motivo": "OAC sin clase este miércoles (hoja RegistroClases: «OAC - no hubo clase»)", "confirmado": true, "materias": ["OAC"] },
     { "fecha": "2026-10-28", "motivo": "ASI sin clase: el ingeniero aplicó un extraordinario (hoja RegistroClases)", "confirmado": true, "materias": ["ASI"] },
-    { "fecha": "2026-10-29", "motivo": "SIB sin clase; hubo actividad (hoja RegistroClases: «SIB - (sin clase) (actividad 2)»). Falta saber qué se pidió.", "confirmado": true, "materias": ["SIB"] },
+    { "fecha": "2026-10-29", "motivo": "SIB sin clase; la profesora dejó una investigación en equipo sobre modelos de seguridad (SIB-EC09). Hoja RegistroClases: «SIB - (sin clase) (actividad 2)»", "confirmado": true, "materias": ["SIB"] },
     { "fecha": "2026-10-30", "motivo": "RP sin clase (hoja RegistroClases: «RP - no hubo clase?», con signo de interrogación)", "confirmado": false, "materias": ["RP"] },
     { "fecha": "2026-11-02", "motivo": "Asueto (hoja RegistroClases: «A S U E T O»)", "confirmado": true, "materias": [] }
   ]

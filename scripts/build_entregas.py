@@ -69,6 +69,7 @@ TITULOS = {
     'SIB-EC07': 'Ejercicio de clase — Investigación de ataques (Equipo 4; 20 oct, sin clase)',
     'ASI-EC01': 'Actividad 1 — El empleo del futuro, en equipo (Clase 15)',
     'SIB-EC08': 'Ejercicio de clase — 15 políticas de seguridad para una secundaria ficticia (Equipo 4, Clase 16)',
+    'SIB-EC09': 'Ejercicio de clase — Modelos de seguridad (Equipo 4; 29 oct, sin clase)',
     'ACS-E01': 'Examen parcial — cliente-servidor TCP (de casa)',
 }
 # Estado verificado en Google Classroom el 15 oct 2026 (las materias sin Classroom se marcan aparte).
@@ -103,6 +104,7 @@ ESTADO = {
     'SIB-EC07': 'Entregada (20 oct 2026, antes de las 11:15) · me tocaron los puntos 10 y 11',
     'ASI-EC01': 'Para exponer y debatir en la siguiente clase · sin confirmar si se presentó',
     'SIB-EC08': 'Documento del equipo del 27 oct 2026 · sin confirmar cuándo se entregó',
+    'SIB-EC09': 'Documento del equipo del 29 oct 2026 (día sin clase)',
 }
 SIN_CLASSROOM = {'ACS': 'Entregada (por correo; ACS no usa Classroom)', 'SIB': 'Entregada (por correo, en equipo)',
                  'OAC': 'Entregada (OAC teoría no usa Classroom)'}

@@ -194,6 +194,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 | SIB-EC06 | [SIB-EC06-indicaciones.md](SIB/SIB-EjerciciosClase/SIB-EC06/SIB-EC06-indicaciones.md) | [SIB-EC06-amenazas-persona-y-casa.pdf](SIB/SIB-EjerciciosClase/SIB-EC06/SIB-EC06-entregables/SIB-EC06-amenazas-persona-y-casa.pdf) | — |
 | SIB-EC07 | [SIB-EC07-indicaciones.md](SIB/SIB-EjerciciosClase/SIB-EC07/SIB-EC07-indicaciones.md) | [SIB-EC07-investigacion-ataques-equipo4.pdf](SIB/SIB-EjerciciosClase/SIB-EC07/SIB-EC07-entregables/SIB-EC07-investigacion-ataques-equipo4.pdf) | — |
 | SIB-EC08 | [SIB-EC08-indicaciones.md](SIB/SIB-EjerciciosClase/SIB-EC08/SIB-EC08-indicaciones.md) | [SIB-EC08-politicas-equipo4.pdf](SIB/SIB-EjerciciosClase/SIB-EC08/SIB-EC08-entregables/SIB-EC08-politicas-equipo4.pdf) | — |
+| SIB-EC09 | [SIB-EC09-indicaciones.md](SIB/SIB-EjerciciosClase/SIB-EC09/SIB-EC09-indicaciones.md) | [SIB-EC09-modelos-de-seguridad-equipo4.pdf](SIB/SIB-EjerciciosClase/SIB-EC09/SIB-EC09-entregables/SIB-EC09-modelos-de-seguridad-equipo4.pdf) | — |
 
 ### SIB-Exposiciones
 
