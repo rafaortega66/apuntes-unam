@@ -104,7 +104,7 @@ ESTADO = {
     'SIB-EC07': 'Entregada (20 oct 2026, antes de las 11:15) · me tocaron los puntos 10 y 11',
     'ASI-EC01': 'Para exponer y debatir en la siguiente clase · sin confirmar si se presentó',
     'SIB-EC08': 'Documento del equipo del 27 oct 2026 · sin confirmar cuándo se entregó',
-    'SIB-EC09': 'Documento del equipo del 29 oct 2026 (día sin clase)',
+    'SIB-EC09': 'Hecha el 29 oct 2026 con el Equipo 4 (día sin clase)',
 }
 SIN_CLASSROOM = {'ACS': 'Entregada (por correo; ACS no usa Classroom)', 'SIB': 'Entregada (por correo, en equipo)',
                  'OAC': 'Entregada (OAC teoría no usa Classroom)'}

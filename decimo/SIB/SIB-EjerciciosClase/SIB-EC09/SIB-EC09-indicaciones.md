@@ -11,6 +11,6 @@ SIB no publica en Classroom; no hay enunciado en archivo.
   a) definición de modelo de seguridad; b) modelo concreto vs. abstracto; c) características de los modelos de control de acceso
   (matriz de acceso, HRU, Take-Grant, Bell-LaPadula); d) características de los modelos de flujo de información, con «¿qué es entropía?»;
   e) características de los modelos de integridad (Biba, Clark-Wilson).
-- **No se sabe:** hora o medio de entrega, ni qué incisos le tocaron al usuario.
+- El usuario no fue a la escuela el jueves 29 oct, pero hizo la actividad con su equipo (confirmado el 3 nov 2026).
 
 Estado: documento del equipo fechado el 29 oct 2026. En el sitio: `materias/seguridad-informatica-basica/actividad-02.html`.
