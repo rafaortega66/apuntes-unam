@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-02T20:48:57+00:00",
+ "generatedAt": "2026-11-03T15:01:48+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -846,6 +846,11 @@
  },
  "gitlog": [
   {
+   "hash": "82a6560",
+   "fecha": "2026-11-02T14:49:30-06:00",
+   "mensaje": "FSE-P07: código de los 3 experimentos (Arduino Timer1 + I2C, consola, potencia real, web) probado en simulación"
+  },
+  {
    "hash": "70ba3fe",
    "fecha": "2026-10-29T09:40:00Z",
    "mensaje": "RP-T02: solución verificada para copiar a mano (DBSCAN y Bayes ingenuo)"
@@ -1139,11 +1144,6 @@
    "hash": "d86f0da",
    "fecha": "2026-10-19T14:05:31-06:00",
    "mensaje": "OAC: Clases 10 (12 oct, Taylor con FPU e interfaz PIO) y 11 (14 oct, cálculo de ciclos y frecuencia en máquinas de estado PIO) en formato de estudio desde NotebookLM"
-  },
-  {
-   "hash": "bb9553e",
-   "fecha": "2026-10-19T13:53:11-06:00",
-   "mensaje": "FSE: Clases 12 (7 oct, bootstrap/RESET/BSP-AP/paginación) y 13 (12 oct, API y llamadas a sistema, procesos vs. tareas) en formato de estudio desde NotebookLM; Clase 14 = examen parcial"
   }
  ]
 }

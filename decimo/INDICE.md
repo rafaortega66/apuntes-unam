@@ -28,6 +28,12 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 - **ASI-Material**: 15 archivos (ASI/ASI-Material/)
 
 
+### ASI-EjerciciosClase
+
+| Entrega | Indicaciones | Entregado | Adicionales |
+|---|---|---|---|
+| ASI-EC01 | [ASI-EC01-indicaciones.md](ASI/ASI-EjerciciosClase/ASI-EC01/ASI-EC01-indicaciones.md) | _(sin entrega aún)_ | 1 |
+
 ### ASI-Practicas
 
 | Entrega | Indicaciones | Entregado | Adicionales |
@@ -187,6 +193,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 | SIB-EC05 | [SIB-EC05-indicaciones.md](SIB/SIB-EjerciciosClase/SIB-EC05/SIB-EC05-indicaciones.md) | [SIB-EC05-cuestionario-normatividad.pdf](SIB/SIB-EjerciciosClase/SIB-EC05/SIB-EC05-entregables/SIB-EC05-cuestionario-normatividad.pdf) | — |
 | SIB-EC06 | [SIB-EC06-indicaciones.md](SIB/SIB-EjerciciosClase/SIB-EC06/SIB-EC06-indicaciones.md) | [SIB-EC06-amenazas-persona-y-casa.pdf](SIB/SIB-EjerciciosClase/SIB-EC06/SIB-EC06-entregables/SIB-EC06-amenazas-persona-y-casa.pdf) | — |
 | SIB-EC07 | [SIB-EC07-indicaciones.md](SIB/SIB-EjerciciosClase/SIB-EC07/SIB-EC07-indicaciones.md) | [SIB-EC07-investigacion-ataques-equipo4.pdf](SIB/SIB-EjerciciosClase/SIB-EC07/SIB-EC07-entregables/SIB-EC07-investigacion-ataques-equipo4.pdf) | — |
+| SIB-EC08 | [SIB-EC08-indicaciones.md](SIB/SIB-EjerciciosClase/SIB-EC08/SIB-EC08-indicaciones.md) | [SIB-EC08-politicas-equipo4.pdf](SIB/SIB-EjerciciosClase/SIB-EC08/SIB-EC08-entregables/SIB-EC08-politicas-equipo4.pdf) | — |
 
 ### SIB-Exposiciones
 
