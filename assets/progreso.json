@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-03T15:01:48+00:00",
+ "generatedAt": "2026-11-03T15:06:22+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -846,6 +846,11 @@
  },
  "gitlog": [
   {
+   "hash": "8698ce4",
+   "fecha": "2026-11-03T09:01:31-06:00",
+   "mensaje": "SIB: Actividad 1 (20 oct, sin clase) en la vista por clase; SIB-EC08 políticas del Equipo 4 (Clase 16); ASI-EC01; días sin clase del 28 oct al 2 nov en horario.json"
+  },
+  {
    "hash": "82a6560",
    "fecha": "2026-11-02T14:49:30-06:00",
    "mensaje": "FSE-P07: código de los 3 experimentos (Arduino Timer1 + I2C, consola, potencia real, web) probado en simulación"
@@ -1139,11 +1144,6 @@
    "hash": "6eb7350",
    "fecha": "2026-10-19T14:08:24-06:00",
    "mensaje": "OAC: Clase 12 (19 oct) desde NotebookLM — sesión sin tema nuevo: SBC, MicroSD vs. SSD M.2, ruido eléctrico y revisión de proyectos"
-  },
-  {
-   "hash": "d86f0da",
-   "fecha": "2026-10-19T14:05:31-06:00",
-   "mensaje": "OAC: Clases 10 (12 oct, Taylor con FPU e interfaz PIO) y 11 (14 oct, cálculo de ciclos y frecuencia en máquinas de estado PIO) en formato de estudio desde NotebookLM"
   }
  ]
 }
