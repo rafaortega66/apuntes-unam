@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-03T17:51:38+00:00",
+ "generatedAt": "2026-11-09T21:23:08+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -725,6 +725,13 @@
     "resumen": "Tema 4 — Políticas de seguridad: consejos de redacción (presente, sujeto explícito, vigencia, siglas), el grupo de trabajo multidisciplinario que las escribe, la organización por rubros y un ejercicio en equipo de 15 pol",
     "url": "materias/seguridad-informatica-basica/clase-16.html",
     "formato": "estudio"
+   },
+   {
+    "num": 17,
+    "fecha": "2026-11-03",
+    "resumen": "Tema 4 — Las fases para desarrollar y documentar políticas, los modelos de seguridad (abstractos y concretos; control de acceso, flujo de información e integridad) y los fundamentos de los planes de contingencia.",
+    "url": "materias/seguridad-informatica-basica/clase-17.html",
+    "formato": "estudio"
    }
   ],
   "lab-de-fundamentos-de-sistemas-embebidos": [],
@@ -845,6 +852,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "9948558",
+   "fecha": "2026-11-03T11:51:39-06:00",
+   "mensaje": "Portada: tablero «En qué estoy trabajando» con el trabajo de hoy en los Projects de Claude (MD 3.6, RP Tarea 3, FSE proyecto final, Lab FSE P7); datos en assets/trabajo.json"
+  },
   {
    "hash": "ddd84b8",
    "fecha": "2026-11-03T09:24:00-06:00",
@@ -1139,11 +1151,6 @@
    "hash": "8178a50",
    "fecha": "2026-10-19T16:44:02-06:00",
    "mensaje": "SIB: Clases 12 (8 oct, clasificación y etapas de ataques), 13 (13 oct, atacantes e intrusión) y 14 (15 oct, malware, físicos y mecanismos) en formato de estudio desde NotebookLM, con enlace a los apuntes PDF; nota sobre el desfase de audios de SIB"
-  },
-  {
-   "hash": "95e879d",
-   "fecha": "2026-10-19T16:31:31-06:00",
-   "mensaje": "ASI: Clase 12 (7 oct, examen) y Clase 13 (12 oct, examen de reposición en Teams) desde NotebookLM"
   }
  ]
 }

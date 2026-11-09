@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIB · Clase 17</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261103a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261103a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Volver a SIB</a>
+<div class="detail-head" style="border-color:#E8735C">
+  <h3>Clase 17</h3>
+  <p class="prof">Dra. Cintia Quezada Reyes · 3 nov 2026 · Tema 4 — Las fases para desarrollar y documentar políticas, los modelos de seguridad (abstractos y concretos; control de acceso, flujo de información e integridad) y los fundamentos de los planes de contingencia.</p>
+  <p class="prof">Fuente: NotebookLM, audio <code>SIB-Clase17.m4a</code>, 9 nov 2026. Lo que NotebookLM no pudo contrastar con el audio se marca como dudoso. Continúa lo visto en la <a href="clase-16.html">Clase 16</a>.</p>
+</div>
+<div class="files" id="guia-estudio-pdf"><a class="btn" href="../../decimo/SIB/SIB-Resumenes/SIB-Clase17-resumen.pdf" target="_blank">📄 Guía de estudio (PDF): apuntes completos + resumen para estudiar</a></div>
+
+<details class="section-block sec" id="c17-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Las fases para desarrollar y documentar una política, en orden.</strong><span class="evid">Evidencia: la profesora desglosó paso a paso la secuencia (objetivos, preparación, redacción, edición, aprobación, difusión, aplicación y revisión) y dijo que debe seguirse obligatoriamente.</span></li>
+<li><strong>Modelo abstracto contra modelo concreto.</strong><span class="evid">Evidencia: pidió la definición a los alumnos, anotó participaciones y la aterrizó con la frase de que el concreto «te pone nombres y apellidos».</span></li>
+<li><strong>Los modelos de control de acceso: matriz de acceso, HRU, Take-Grant y Bell-LaPadula.</strong><span class="evid">Evidencia: dibujó la matriz en el pizarrón, explicó las reglas Take y Grant con ejemplos de jefe y secretaria, y remarcó la confidencialidad multinivel.</span></li>
+<li><strong>Biba contra Clark-Wilson.</strong><span class="evid">Evidencia: los contrapuso explícitamente (mismo nivel de integridad contra transacciones bien formadas y separación de funciones).</span></li>
+<li><strong>Las cuatro fases de un plan de contingencia y los tipos de procedimientos.</strong><span class="evid">Evidencia: enumeró las fases (evaluación, planeación, ejecución, pruebas de viabilidad) y clasificó los procedimientos en preventivos y correctivos (planificados y no planificados) con ejemplos.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c17-fases"><summary><span class="stitle">1 · Fases para desarrollar y documentar políticas de seguridad</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Una metodología de etapas secuenciales que garantiza que las reglas de seguridad se diseñen alineadas a los objetivos, se corrijan, se validen institucionalmente, se comuniquen, se pongan en marcha y se mantengan al día.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como publicar un manual de convivencia escolar: no se imprimen borradores sin revisar la ortografía, sin que la dirección los selle y sin repartirlos a alumnos y tutores.<span class="rompe">Dónde deja de servir: un libro impreso rara vez cambia; un reglamento de seguridad exige revisiones y versiones (01, 02, 03…) cuando cambia el entorno o la tecnología.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ol>
+<li><strong>Planteamiento de objetivos:</strong> se parte de los objetivos específicos de la organización o del área.</li>
+<li><strong>Preparación:</strong> definir quiénes integran el grupo de trabajo, la modalidad (presencial, virtual o juntas) y que cada integrante llegue con propuestas previas.</li>
+<li><strong>Redacción:</strong> la junta no es para empezar a escribir desde cero, sino para revisar y discutir si las propuestas individuales se alinean con los objetivos.</li>
+<li><strong>Edición y apoyo editorial:</strong> se define el formato oficial (portal web, tipografías, negritas, márgenes, interlineado, colores) y se revisan ortografía y redacción. El documento regresa con observaciones cuantas veces sea necesario.</li>
+<li><strong>Aprobación:</strong> el creador no puede autoaprobar su trabajo; pasa por una o varias comisiones (técnica, académica de cómputo, de reglamentos) que lo validan con una leyenda oficial, sello con fecha, firma o código QR.</li>
+<li><strong>Difusión:</strong> entrega física con firma de recibido, distribución digital, liga en el contrato laboral, señalética o pósters en áreas clave, o minicuestionarios donde se exige una calificación mínima (por ejemplo 8, con intentos reiterados).</li>
+<li><strong>Aplicación y revisión periódica:</strong> entra en vigor con control de versiones y se audita ante cambios relevantes.</li>
+</ol>
+<p>El documento final debe incluir: ámbito de aplicación (áreas, proyectos o servicios, apoyado en organigramas), análisis de riesgos (qué, de qué y cómo proteger), catálogo de sanciones y estímulos alineado con la Constitución y las leyes, usos éticos y preguntas frecuentes, procedimientos ante emergencias o incidentes, glosario (contraseñas, passwords, siglas como PSC) y anexos para tablas de sanciones o diagramas largos.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Se conecta con las reglas de redacción de la <a href="clase-16.html">Clase 16</a> y con el proyecto del curso que la profesora anunció a los representantes de equipo.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> llegar a la junta a redactar desde cero en lugar de llevar propuestas; que quien redacta sea quien aprueba; reescribir protocolos de emergencia que la institución ya tiene (sismo, incendio en la Facultad), cuando lo correcto es solo referenciarlos.</p></div>
+</details>
+
+<details class="section-block sec" id="c17-modelos"><summary><span class="stitle">2 · Modelos de seguridad: abstractos y concretos</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un modelo de seguridad es una representación formal y conceptual de los sujetos, recursos, operaciones y reglas que determinan los comportamientos autorizados de un sistema, para garantizar que se cumplan las políticas de seguridad.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es el plano de una casa: el plano abstracto dice que debe haber una puerta con cerrojo entre la calle y el interior; el concreto dice que es de madera maciza, en tal dirección, y que solo Juan y María tienen llave.<span class="rompe">Dónde deja de servir: las llaves físicas se duplican sin registro; en los modelos informáticos las relaciones y transiciones se evalúan matemáticamente o por estados válidos.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>Modelo abstracto:</strong> representación conceptual o matemática que describe condiciones y reglas sin detalles de implementación. Trabaja con entidades genéricas: «Sujeto A», «Objeto X», «Actividad 1».</li>
+<li><strong>Modelo concreto:</strong> instancia que precisa cómo se aplican las reglas en un entorno real, con nombres y activos específicos: «Juan (sujeto) tiene permiso de crear la base de datos».</li>
+</ul>
+<p>La profesora preguntó qué distingue a un modelo concreto de uno abstracto. Dos alumnos leyeron las definiciones formales y ella las aterrizó: el concreto «te pone nombres y apellidos»; en el abstracto se habla de sujetos y actividades de manera generalizada.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la base para traducir políticas escritas en mecanismos y reglas que el software o el sistema operativo pueden aplicar.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> confundir la regla general con la asignación puntual de permisos a personas concretas.</p></div>
+</details>
+
+<details class="section-block sec" id="c17-acceso"><summary><span class="stitle">3 · Modelos de control de acceso</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Modelos que regulan y supervisan qué operaciones puede ejecutar cada sujeto sobre cada objeto del sistema.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Son los gafetes y listas de acceso de un edificio: dicen quién entra a qué piso, quién abre las bodegas y quién no puede tocar los servidores.<span class="rompe">Dónde deja de servir: un guardia puede dejar pasar a alguien por descuido; los modelos formales evalúan condiciones en cada intento.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<table>
+<tr><th>Modelo</th><th>Cómo funciona</th></tr>
+<tr><td>Matriz de acceso</td><td>Estructura bidimensional: filas = sujetos (en el pizarrón, Lis, Natalia, Gisel, Emily), columnas = objetos (PC, celular, silla, pizarrón) y celdas = derechos (usar, limpiar, desarmar, o vacío si está denegado).</td></tr>
+<tr><td>HRU (Harrison, Ruzzo y Ullman)</td><td>Extensión matemática de la matriz que da rigor formal a cómo cambian los derechos con el tiempo al crear o eliminar objetos y procesos, evaluando condiciones: «Lis puede usar la PC siempre y cuando esté dentro de su horario y trabaje en la organización».</td></tr>
+<tr><td>Take-Grant</td><td>Grafo dirigido: nodos = sujetos u objetos, aristas = derechos. <strong>Take:</strong> un sujeto con permiso «toma» los derechos de otro nodo (el jefe de división toma la atribución de asentar calificaciones si el profesor no está). <strong>Grant:</strong> un sujeto con autoridad «concede» sus derechos a un nodo de menor jerarquía (el jefe delega en su secretaria enviar un correo institucional a su nombre).</td></tr>
+<tr><td>Bell-LaPadula (David Bell y Leonard LaPadula)</td><td>Modelo multinivel enfocado solo en <strong>confidencialidad</strong>. Clasifica información y jerarquías en niveles (no clasificado, confidencial, secreto, ultrasecreto) e impide que quien está en un nivel inferior vea información de un nivel superior.</td></tr>
+</table>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Explica cómo los sistemas y las organizaciones definen permisos, asignan privilegios mínimos y delegan responsabilidades (ver los principios de la <a href="clase-15.html">Clase 15</a>).</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que un permiso de la matriz de acceso es eterno e incondicional; HRU lo resuelve con condiciones de estado y de tiempo.</p></div>
+</details>
+
+<details class="section-block sec" id="c17-flujo"><summary><span class="stitle">4 · Modelos de flujo de información y entropía</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Modelos basados en la teoría de la información que regulan los canales entre emisores y receptores para impedir fugas o deducciones no autorizadas.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es el juego del ahorcado: con una sola letra de una palabra larga la incertidumbre es altísima; con casi todas las letras la adivinas de inmediato.<span class="rompe">Dónde deja de servir: en el juego quieres que el rival adivine; en seguridad quieres que un atacante nunca deduzca credenciales o datos internos.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Se apoya en la <strong>entropía</strong>, definida en clase como el grado de incertidumbre. La relación es inversa: a mayor incertidumbre, menos información útil tiene el atacante; a menor incertidumbre, más claro y fácil es el ataque.</p>
+<p>La profesora lo hizo con un ejercicio en el pizarrón. Primero escribió una palabra casi completa, «cuestionario», y mostró que con baja entropía la deducción es inmediata. Luego escribió una palabra que solo terminaba en «a» y pidió adivinarla; los alumnos dijeron salsa, araña, abeja, pizza y regla, y ella reveló que había pensado en «torta»: con alta incertidumbre es imposible inferir el contenido real.</p>
+<p>De ahí concluyó que las políticas deben prohibir pegar contraseñas en los monitores o usar nombres obvios (usuario Rodrigo, contraseña Rodrigo) para evitar el <em>shoulder surfing</em>.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Se liga con las técnicas de espionaje físico vistas en la <a href="clase-13.html">Clase 13</a>.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> dar mensajes de error o pistas en un sistema que reducen la entropía para el atacante.</p></div>
+</details>
+
+<details class="section-block sec" id="c17-integridad"><summary><span class="stitle">5 · Modelos de integridad: Biba y Clark-Wilson</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Estructuras formales para que la información y los activos no sufran modificaciones, adiciones o eliminaciones no autorizadas, y mantengan su exactitud y confiabilidad.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es el control de un banco: un cajero no puede autorizarse a sí mismo un préstamo ni alterar el saldo de la bóveda; hace falta una transacción auditada y firmada por dos figuras distintas.<span class="rompe">Dónde deja de servir: el dinero en papel no cambia en milisegundos; los datos sí, por transacciones electrónicas.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>Modelo Biba (1977):</strong> orientado solo a la integridad. Política jerárquica estricta: el sujeto solo modifica activos que están exactamente en su mismo nivel de integridad; no modifica los de niveles inferiores ni superiores, para que datos de baja confianza no contaminen información fidedigna.</li>
+<li><strong>Modelo Clark-Wilson:</strong> no se limita a niveles. Tiene dos pilares: <strong>transacciones bien formadas</strong> (el sujeto no toca los datos directamente, sino mediante programas autorizados que preservan la consistencia) y <strong>separación de funciones</strong>. La profesora puntualizó que conjuga integridad con confidencialidad, con credenciales y permisos específicos para cada actividad.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Se conecta con el servicio de integridad y con el principio de separación de funciones de las <a href="clase-15.html">Clases 15</a> y <a href="clase-16.html">16</a>.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que pertenecer al mismo nivel organizativo da derecho a ver o editar toda la información; por confidencialidad y separación de funciones las tareas están segmentadas.</p></div>
+</details>
+
+<details class="section-block sec" id="c17-contingencia"><summary><span class="stitle">6 · Fundamentos de los planes de contingencia</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un conjunto de procedimientos planificados y documentados para que la organización se recupere de un desastre, una eventualidad o un ataque y mantenga la continuidad de sus operaciones lo más rápido posible.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es la llanta de refacción y el botiquín del coche: no los compras esperando que algo falle, pero si se ponchan, el plan te deja cambiarla y seguir el viaje.<span class="rompe">Dónde deja de servir: cambiar una llanta tarda 15 minutos; recuperarse de un desastre institucional puede tardar días, meses o años.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Las <strong>cuatro fases</strong>:</p>
+<ol>
+<li><strong>Evaluación:</strong> diagnosticar el estado de la organización, inventariar recursos y revisar si los planes previos están obsoletos o si los departamentos asignados todavía existen.</li>
+<li><strong>Planeación:</strong> diseñar las acciones con base en un análisis de riesgos previo y designar responsables por área (con silbato, chaleco y conocimiento de cuántas personas ocupan el espacio).</li>
+<li><strong>Ejecución:</strong> poner el plan en práctica cuando ocurre la eventualidad.</li>
+<li><strong>Pruebas de viabilidad:</strong> comprobar con simulacros e inspecciones si los procedimientos sirven o hay que replantearlos.</li>
+</ol>
+<p>Los <strong>tipos de procedimientos</strong>:</p>
+<table>
+<tr><th>Tipo</th><th>Qué es</th><th>Ejemplo</th></tr>
+<tr><td>Preventivo</td><td>Acciones para evitar que ocurra la eventualidad.</td><td>Verificar caducidad y carga del extintor, revisar la firmeza de las patas de una mesa de cómputo, capacitar en primeros auxilios.</td></tr>
+<tr><td>Correctivo planificado</td><td>Se ejecuta ya ocurrida la eventualidad, pero con un protocolo practicado.</td><td>Usar el extintor adecuado ante el fuego; levantar un reporte con día, hora y resguardo del equipo dañado.</td></tr>
+<tr><td>Correctivo no planificado</td><td>Reacción instintiva por pánico, sin protocolo.</td><td>En un sismo, desmayarse, correr, empujar o paralizarse en las puertas; darle agua a alguien que se ahoga.</td></tr>
+</table>
+<p>La profesora remarcó que los procedimientos correctivos no planificados no ayudan y pueden provocar más daños o nuevos incidentes.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Reduce el impacto económico y operativo de ataques y desastres y combate el sesgo humano de «minimizar los ataques» que se trata desde el inicio del curso.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> mezclar sismos, incendios y hackeos en un solo documento (deben ir por separado); usar un extintor de forma preventiva o comprar uno barato sin verificar el material que protege.</p></div>
+</details>
+
+<details class="section-block sec" id="c17-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Cuáles son las fases para desarrollar una política, en orden?</summary><p>Planteamiento de objetivos, preparación, redacción, edición y apoyo editorial, aprobación, difusión, y aplicación con revisión periódica.</p></details>
+<details class="qa"><summary>2. ¿Por qué quien redacta una política no puede aprobarla?</summary><p>Porque el creador no puede autoaprobar su trabajo; debe validarlo una comisión institucional con leyenda oficial, sello con fecha, firma o código QR.</p></details>
+<details class="qa"><summary>3. ¿Qué distingue a un modelo concreto de uno abstracto?</summary><p>El abstracto usa entidades genéricas («Sujeto A», «Objeto X»); el concreto «pone nombres y apellidos» y activos reales.</p></details>
+<details class="qa"><summary>4. ¿Qué significa HRU y qué aporta a la matriz de acceso?</summary><p>Harrison, Ruzzo y Ullman; aporta rigor formal para evaluar cómo cambian los derechos con el tiempo y bajo condiciones.</p></details>
+<details class="qa"><summary>5. Un director pide a su asistente enviar un memorándum con su firma. ¿Qué regla de Take-Grant es?</summary><p>Grant: concede o delega sus derechos a un nodo de menor jerarquía.</p></details>
+<details class="qa"><summary>6. ¿Por qué la entropía es inversa a la facilidad de ataque?</summary><p>Porque es el grado de incertidumbre: con más incertidumbre, el atacante tiene menos información útil para deducir el contenido.</p></details>
+<details class="qa"><summary>7. Compara Biba y Clark-Wilson.</summary><p>Biba solo permite modificar activos del mismo nivel de integridad; Clark-Wilson usa transacciones bien formadas y separación de funciones, y combina integridad con confidencialidad.</p></details>
+<details class="qa"><summary>8. ¿Cuáles son las cuatro fases de un plan de contingencia?</summary><p>Evaluación, planeación, ejecución y pruebas de viabilidad.</p></details>
+<details class="qa"><summary>9. ¿Diferencia entre un procedimiento preventivo y uno correctivo planificado con extintores?</summary><p>El preventivo verifica que el extintor esté cargado y no caduco y capacita al personal; el correctivo planificado es usar el extintor adecuado cuando ya hay fuego.</p></details>
+<details class="qa"><summary>10. ¿Por qué es contraproducente un procedimiento correctivo no planificado?</summary><p>Porque nace del instinto o de la falta de capacitación (correr, empujar, paralizarse) y genera caos y más daños.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c17-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>Refrigeradores atacados:</strong> hace poco, en Francia y Finlandia, un ciberataque a tiendas elevó de forma remota la temperatura de los refrigeradores conectados a la red y se echó a perder la comida.</li>
+<li><strong>La mesa que se tambalea:</strong> como ejemplo de medida preventiva viable, un calzador y cinta aislante; rodear la mesa con un cable de alta tensión para que nadie la toque violaría la proporcionalidad y la seguridad física.</li>
+<li><strong>Colegio Rébsamen:</strong> caso citado como falla de las pruebas de viabilidad: el protocolo de desalojo parecía adecuado en papel, pero la estructura del inmueble colapsó.</li>
+<li><strong>Sismo del 19 de septiembre de 2017:</strong> personas en pisos altos que, sin procedimientos interiorizados, se quedaron congeladas en los marcos de las puertas.</li>
+<li><strong>La alerta sísmica:</strong> tiene un tono perturbador grabado por un actor de doblaje para despertar a la gente y disparar la adrenalina; con la Quinta de Beethoven la gente seguiría dormida.</li>
+<li><strong>Color rosa en octubre:</strong> algunas pacientes de cáncer de mama evitan el rosa o se saturan de listones porque les recuerda su experiencia.</li>
+<li><strong>Sobremesa familiar:</strong> ingenieros que no firman convenios de confidencialidad cuentan sus proyectos en la comida familiar, un familiar lo comenta y la competencia lanza el producto antes.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c17-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Proyecto del curso:</strong> la profesora dijo que ya se envió, o se estaba publicando ese mismo día, a los representantes de equipo en la plataforma. Pidió leerlo con detenimiento para plantear dudas en la siguiente sesión. <em>(En el audio no se dijo fecha de entrega; falta confirmarla en Classroom.)</em></li>
+<li><strong>Próxima clase:</strong> ventajas y desventajas de los planes de contingencia.</li>
+<li>La sesión cerró con pase de lista nominal.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Fases de una política: objetivos, preparación, redacción, edición, aprobación, difusión, aplicación y revisión; quien redacta no aprueba.</li>
+<li>Modelo abstracto = genérico; concreto = con nombres y apellidos.</li>
+<li>Acceso: matriz, HRU (condiciones), Take-Grant (tomar/conceder), Bell-LaPadula (confidencialidad). Integridad: Biba (mismo nivel) y Clark-Wilson (transacciones y separación de funciones).</li>
+<li>Entropía: más incertidumbre, menos información para el atacante.</li>
+<li>Plan de contingencia: evaluación, planeación, ejecución y pruebas de viabilidad; procedimientos preventivos, correctivos planificados y no planificados.</li>
+</ul></div>
+
+</div>
+</body>
+</html>
