@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 19 — Fundamentos de Sistemas Embebidos</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261103a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261103a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Fundamentos de Sistemas Embebidos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 19</h2>
+  <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 4 nov 2026 · Tema 3 (3.4) — Comunicación entre procesos y RPC, por qué paginar la memoria (ejercicio de la tabla), el administrador de asignación y la fragmentación, los cinco algoritmos de asignación, recolección de basura y pozos de memoria para sistemas embebidos.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>FSE-Clase19.m4a</code>), 9 nov 2026. Lo que NotebookLM pudo mezclar o no cuadra con la referencia técnica se marca en el texto con ⚠️. Continúa lo visto en la <a href="clase-18.html">Clase 18</a> y retoma la paginación de la <a href="clase-12.html">Clase 12</a>.</p>
+</div>
+<div class="files" id="guia-estudio-pdf"><a class="btn" href="../../decimo/FSE/FSE-Resumenes/FSE-Clase19-resumen.pdf" target="_blank">📄 Guía de estudio (PDF): apuntes completos + resumen para estudiar</a></div>
+
+<details class="section-block sec" id="c19-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Los cinco algoritmos de asignación de memoria: First Fit, Next Fit, Best Fit, Worst Fit y Quick Fit.</strong><span class="evid">Evidencia: los dictó uno por uno en el pizarrón y dijo explícitamente que son los cinco que vienen en el examen sobre fragmentación.</span></li>
+<li><strong>El cálculo de la tabla de administración de memoria y por qué se pagina.</strong><span class="evid">Evidencia: resolvió el ejercicio completo en el pizarrón (64 KB, 32K localidades, tabla de 128 KB) para mostrar que la tabla pesaría más que la memoria.</span></li>
+<li><strong>Memory pools en sistemas embebidos.</strong><span class="evid">Evidencia: explicó los pozos en potencias de 2, la jerarquía de búsqueda y el ajuste manual del linker script como técnica para evitar fragmentación y tener tiempos deterministas.</span></li>
+<li><strong>Recolección de basura: Mark &amp; Sweep, Mark &amp; Compact y generacional.</strong><span class="evid">Evidencia: explicó el contador de referencias, el bloqueo de Mark &amp; Compact y la hipótesis de que los objetos mueren jóvenes. Evidencia moderada.</span></li>
+<li><strong>Memoria compartida contra paso de mensajes y RPC.</strong><span class="evid">Evidencia: contrastó el costo de serializar (JSON, XML) con pasar apuntadores y concluyó que en sistemas pequeños gana la memoria compartida. Evidencia moderada.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c19-ipc"><summary><span class="stitle">1 · Comunicación entre procesos: memoria compartida, mensajes y RPC</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Mecanismos para intercambiar información entre unidades de ejecución independientes. La memoria compartida mapea una misma región accesible por varios procesos; el paso de mensajes envía datos encapsulados por un canal o protocolo; la llamada a procedimiento remoto (RPC) pide que se ejecute una función en otro proceso o sistema y espera la respuesta.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>El paso de mensajes es mandar cartas o SMS en una sola dirección sin saber si el buzón sirve. La memoria compartida es un pizarrón en una sala común: cualquiera lo lee al instante, pero alguien puede borrarlo si no hay orden. El RPC es WhatsApp: mandas, ves las dos palomitas y esperas la respuesta.<span class="rompe">Dónde deja de servir: en un microcontrolador no hay carteros; pasar mensajes entre lenguajes distintos obliga a la CPU a traducir bytes a texto (JSON) y volver a analizarlos, gastando tiempo de reloj.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>Sistema homogéneo compilado como una unidad (C o C++):</strong> se prefiere memoria compartida. Los procesos se pasan solo apuntadores a los bloques que hacen falta («lo más pequeño que pueden mover: aquí están los datos que necesitas»), sin serialización, intermediarios ni encriptado.</li>
+<li><strong>Sistema distribuido, heterogéneo o conectado a internet</strong> (satélites, routers, rovers, servidores en la nube): no se sabe en qué lenguaje corre el otro lado (C#, Python, Pascal, Java), así que se usa una <em>lingua franca</em> con mensajes estructurados y su sobrecarga. En RPC el cliente envía la solicitud, se suspende y el servidor procesa y devuelve el resultado.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Define la arquitectura: en sistemas pequeños de bajo consumo gana la memoria compartida por su nulo <em>overhead</em>; en sistemas modulares o complejos (como ROS en robótica) conviene una capa intermedia para que la falla de un módulo no tire todo. Cierra lo visto en la <a href="clase-18.html#c18-ipc">Clase 18</a>.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> implementar paso de mensajes pesado con serialización en un microcontrolador pequeño sin sistema operativo de red.</p></div>
+</details>
+
+<details class="section-block sec" id="c19-paginacion"><summary><span class="stitle">2 · Por qué paginar la memoria: el ejercicio de la tabla</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El paso de ver la memoria como un bloque continuo único (procesadores Intel 8086 y 80186) a un modelo administrado por páginas o segmentos protegidos, para que los programas no choquen ni sobrescriban código ajeno.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es dividir un terreno comunal en lotes con escritura y barda: sin cercas, un vecino descuidado mete la camioneta en tu sala; con lotes, si alguien cruza la barda la policía (el procesador) lo detecta.<span class="rompe">Dónde deja de servir: las bardas son fijas; las páginas se mapean y reasignan en nanosegundos con registros y tablas del kernel.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Administrar dirección por dirección.</strong> El profesor planteó una memoria de 64 KB con palabras de 16 bits (2 bytes): 64 KB / 2 bytes = 32K localidades. Cada renglón de la tabla necesita:</p>
+<ul>
+<li>dirección de memoria: 16 bits;</li>
+<li>banderas: 2 bits (libre u ocupado, y limpio o sucio: limpio es con datos congruentes, sucio con basura);</li>
+<li>identificador del proceso dueño: 8 bits, para hasta 256 procesos (2⁸ = 256).</li>
+</ul>
+<p>Son 16 + 2 + 8 = 26 bits, que como se trabaja en múltiplos de 16 bits se redondean a <strong>32 bits (4 bytes)</strong> por renglón. La tabla pesa 32K renglones × 4 bytes = <strong>128 KB</strong>. La conclusión del profesor: «¿Se dan cuenta de que para administrar 64 KB de memoria necesito 128 KB? Necesito más memoria para administrarla que la memoria que tengo disponible».</p>
+<p><strong>Solución con páginas.</strong> Si la memoria se divide en bloques fijos, la tabla tiene muy pocas entradas. NotebookLM reportó el resultado con páginas de 1 KB (tabla de 64 bytes) y de 512 bytes (tabla de 128 bytes), una fracción que no llena ni una sola página.</p>
+<p>⚠️ Las cuentas de bits que dio NotebookLM para esos dos casos no cuadran entre sí (64 KB / 1 KB son 64 páginas, no 32, y se mezclan IDs de página y de proceso con distintos anchos). Lo que sí se sostiene es la conclusión: la tabla pasa de 128 KB a unas decenas o cientos de bytes.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite que el hardware (desde el 286) detecte violaciones de segmento con interrupciones automáticas y proteja al sistema operativo de errores de programación. Retoma la paginación y el <em>segfault</em> de la <a href="clase-12.html#c12-paginacion">Clase 12</a>.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> llevar el control de ocupación byte por byte o palabra por palabra: el costo de los metadatos arruina la memoria disponible.</p></div>
+</details>
+
+<details class="section-block sec" id="c19-mas"><summary><span class="stitle">3 · El administrador de asignación (MAS) y la fragmentación</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El componente del kernel que reserva memoria dinámica o estática para los procesos, mapea direcciones virtuales a físicas y controla el ciclo de vida (carga y descarga) de la memoria.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es el acomodador de un estacionamiento: si estaciona los autos donde caiga, quedan huecos de medio metro entre ellos donde ya no cabe nadie, aunque la suma de huecos sea enorme.<span class="rompe">Dónde deja de servir: los autos no se parten; el MAS puede mandar páginas inactivas al disco (swap) o suspender procesos para recompactar la RAM.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El MAS hace cuatro cosas: cargar y descargar procesos, reservar y liberar bloques, rastrear dónde está la información (en la RAM, en la GPU o en la memoria secundaria vía swap) y reducir la fragmentación. Un disco magnético es hasta 1000 veces más lento que la RAM y un SSD unas 100 veces, por eso abusar de la swap causa <em>lag</em> o colapso si el almacenamiento se llena.</p>
+<p>La <strong>fragmentación</strong> aparece cuando varios procesos reservan y liberan bloques de distintos tamaños y la memoria libre queda en huecos no contiguos. Si llega un proceso que necesita un bloque continuo y ningún hueco individual alcanza, el sistema debe suspender procesos grandes, mover memoria para compactar y recién entonces cargarlo.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>En un embebido de bajo costo sin memoria virtual, una fragmentación severa simplemente impide cargar la aplicación y el sistema falla.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> confundir la memoria libre total con la memoria <strong>contigua</strong> disponible; un programa exige bloques continuos.</p></div>
+</details>
+
+<details class="section-block sec" id="c19-algoritmos"><summary><span class="stitle">4 · Los cinco algoritmos de asignación de memoria</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Estrategias heurísticas con las que el administrador decide en qué hueco libre ubicar una nueva solicitud de memoria.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p><strong>First Fit:</strong> con hambre extrema, compras los primeros tacos que ves. <strong>Next Fit:</strong> en una feria gastronómica, tras comer en un puesto sigues caminando hacia adelante sin regresar a la entrada. <strong>Best Fit:</strong> evalúas a todas tus citas para ver cuál encaja a la medida. <strong>Worst Fit:</strong> te compras un pantalón talla 32 siendo 28 porque vas a crecer. <strong>Quick Fit:</strong> un organizador de tornillos por tamaño, vas directo al cajón.<span class="rompe">Dónde deja de servir: son metáforas de intuición; los algoritmos reales trabajan sobre una tabla de huecos con direcciones y tamaños.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<table>
+<tr><th>Algoritmo</th><th>Cómo busca</th><th>Ventaja y desventaja</th></tr>
+<tr><td>First Fit (primer encaje)</td><td>Siempre desde la primera posición; asigna el primer hueco donde quepa.</td><td>Satura y fragmenta el inicio de la memoria y reinicia el barrido en cada búsqueda.</td></tr>
+<tr><td>Next Fit (siguiente encaje)</td><td>Variante de First Fit: recuerda la última posición asignada y sigue hacia adelante.</td><td>Suele ser el más rápido porque explora zonas más probablemente libres; puede dejar fragmentación dispersa.</td></tr>
+<tr><td>Best Fit (mejor encaje)</td><td>Revisa toda la tabla y toma el hueco de tamaño más cercano a la solicitud.</td><td>Ideal si la aplicación conoce su consumo exacto; es lento y deja residuos minúsculos inutilizables.</td></tr>
+<tr><td>Worst Fit (peor encaje)</td><td>Revisa toda la tabla y toma deliberadamente el hueco más grande.</td><td>Sigue la filosofía de aplicaciones como Chrome: si el proceso va a crecer, se le da amplitud para no fragmentar a los vecinos.</td></tr>
+<tr><td>Quick Fit (encaje rápido)</td><td>Usa una estructura auxiliar, independiente de la tabla, con listas de huecos clasificados por tamaños frecuentes.</td><td>Muy veloz, pero gasta memoria extra en la estructura.</td></tr>
+</table>
+<p>⚠️ NotebookLM dijo que Quick Fit consulta una tabla hash con búsqueda binaria en O(log N); una tabla hash da acceso O(1) y la búsqueda binaria sobre un árbol ordenado O(log N), así que mezcló las dos. Lo que sí dijo el profesor es que la estructura auxiliar permite obtener el apuntador casi al instante.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>El profesor confirmó que estos cinco algoritmos forman parte de la evaluación.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que Best Fit siempre es el mejor; al dejar huecos minúsculos dispersos puede fragmentar peor que Worst Fit a largo plazo.</p></div>
+</details>
+
+<details class="section-block sec" id="c19-gc"><summary><span class="stitle">5 · Recolección de basura (garbage collection)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un mecanismo automático para rastrear y liberar la memoria de objetos que ya no son alcanzables desde ninguna parte del programa. Nació con los lenguajes orientados a objetos, como Java, para liberar al programador de administrar la memoria a mano.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es la trama de <em>Coco</em>: mientras alguien ponga tu foto en el altar y te recuerde (contador de referencias mayor a cero) sigues existiendo; cuando la última persona te olvida y el contador llega a cero, desapareces.<span class="rompe">Dónde deja de servir: los objetos no tienen alma; son bloques binarios cuya entrada en la tabla se marca como disponible.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Contador de referencias.</strong> Cada vez que una variable se asigna a un objeto, su contador sube 1. Cuando el programa sale del ámbito de la función (la llave de cierre <code>}</code>), la variable local se destruye y el contador baja 1. Si llega a cero, el objeto es inalcanzable y se marca como basura.</p>
+<ul>
+<li><strong>Mark &amp; Sweep (marcar y barrer):</strong> en cada ciclo recorre la tabla, identifica los objetos en cero y elimina su registro, dejando el bloque disponible. Deja la memoria muy fragmentada. ⚠️ NotebookLM lo llamó «no bloqueante»; en general los recolectores clásicos sí pueden detener el programa durante la recolección.</li>
+<li><strong>Mark &amp; Compact (marcar y compactar):</strong> tras identificar los bloques libres, copia y desplaza todos los objetos vivos hacia un extremo contiguo, como un camión de basura que prensa los desperdicios. Es estrictamente <strong>bloqueante</strong>: mientras se mueven los bloques, el programa se suspende. Con muchos objetos de vida corta, el procesador pasa más tiempo compactando que calculando. El profesor contó que Linux tuvo que reescribir esta técnica en sus inicios porque afectaba la velocidad de las tuberías (pipes) de bash.</li>
+<li><strong>Generacional:</strong> divide los objetos por antigüedad con la premisa empírica de que la mayoría muere joven. La región joven se limpia con alta frecuencia usando Mark &amp; Sweep rápido sin compactar; los que sobreviven varios ciclos pasan a la generación vieja, que se revisa con menos frecuencia y se compacta de forma esporádica.</li>
+</ul>
+<p>⚠️ El contador de referencias y Mark &amp; Sweep son estrategias distintas; NotebookLM las mezcló al explicar cómo se barre la tabla.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Explica por qué C y C++ siguen siendo los reyes de los embebidos de tiempo real: no tienen recolector, la memoria se administra a mano y no hay pausas impredecibles de compactación.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que el recolector sobrescribe los datos con ceros; solo elimina el registro de la tabla y libera la bandera de ocupación.</p></div>
+</details>
+
+<details class="section-block sec" id="c19-pozos"><summary><span class="stitle">6 · Pozos de memoria (memory pools) en sistemas embebidos</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Una técnica de memoria determinista en la que se reservan de antemano bloques fijos agrupados en potencias de dos, evitando el uso continuo del heap dinámico.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un despachador de vasos en una cafetería: ya hay vasos chicos, medianos y grandes en fila; si piden un café mediano sacas un vaso mediano al instante, sin medir ni cortar plástico.<span class="rompe">Dónde deja de servir: si piden 9 oz, en la cafetería buscarían un vaso especial; el procesador te da el de 12 (la potencia de 2 siguiente) y desperdicia el sobrante para conservar la velocidad.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Un sistema embebido que debe operar 10 o 20 años (el collar GPS de una mascota, un satélite) no puede permitirse que la fragmentación lo congele. Por eso se sustituye <code>malloc</code> por pozos:</p>
+<ol>
+<li>Al compilar, el compilador analiza el árbol de llamadas y calcula el peor caso de memoria.</li>
+<li>Se reservan pozos de tamaños estándar en potencias de 2 (por ejemplo 32 bytes para enteros, 64 y 128 bytes para cadenas).</li>
+<li><strong>Jerarquía de asignación:</strong> el MAS consulta primero la tabla de pozos del proceso; si hay un bloque libre en el pozo de ese tamaño, lo asigna; si el pozo está lleno, busca en el siguiente de mayor tamaño; si todos están agotados, acude al heap general; y si el heap no tiene espacio contiguo, el proceso se suspende, se copia a una región mayor, se duplica el tamaño de los pozos y se reanuda.</li>
+<li><strong>Ajuste fino:</strong> el ingeniero no confía a ciegas en el compilador; modifica a mano el archivo de enlace (<em>linker script</em>) tras 3 a 5 pruebas de compilación para fijar los tamaños definitivos.</li>
+</ol>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Garantiza el determinismo temporal que exigen los embebidos críticos: pedir memoria toma un número fijo de microsegundos y no hay fragmentación. Se conecta con las garantías de tiempo real de la <a href="clase-18.html">Clase 18</a>.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> confiar en que el compilador configura perfectamente los límites de memoria sin ajustar el linker script.</p></div>
+</details>
+
+<details class="section-block sec" id="c19-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Por qué cada renglón de la tabla del ejercicio necesita 32 bits?</summary><p>Porque lleva 16 bits de dirección, 2 de banderas y 8 de ID de proceso (hasta 256 procesos), que suman 26; como se trabaja en múltiplos de 16 bits, se redondea a 32 bits (4 bytes).</p></details>
+<details class="qa"><summary>2. ¿Cuánto pesaría la tabla para 64 KB y por qué es un problema?</summary><p>32K renglones × 4 bytes = 128 KB: más que la propia memoria. Por eso se divide la memoria en páginas.</p></details>
+<details class="qa"><summary>3. ¿Por qué la fragmentación puede impedir cargar un programa aunque haya memoria libre suficiente?</summary><p>Porque el programa necesita un bloque contiguo; si la memoria libre está repartida en huecos pequeños, ninguno basta.</p></details>
+<details class="qa"><summary>4. Diferencia entre First Fit y Next Fit.</summary><p>First Fit reinicia el barrido desde la primera localidad; Next Fit recuerda la última posición asignada y sigue desde ahí hacia adelante.</p></details>
+<details class="qa"><summary>5. Se piden 95 bytes con pozos en potencias de 2. ¿Qué se asigna y qué pasa con el sobrante?</summary><p>Un bloque del pozo de 128 bytes; los 33 bytes sobrantes se desperdician a cambio de velocidad y cero fragmentación.</p></details>
+<details class="qa"><summary>6. ¿Cuándo es basura un objeto con contador de referencias?</summary><p>Cuando su contador llega a cero: ninguna variable activa apunta a él.</p></details>
+<details class="qa"><summary>7. ¿Por qué Mark &amp; Compact degrada el rendimiento con muchos objetos pequeños?</summary><p>Porque bloquea la ejecución mientras copia y mueve objetos, y pasa más tiempo reorganizando memoria que ejecutando las aplicaciones.</p></details>
+<details class="qa"><summary>8. ¿Cómo difieren las generaciones joven y vieja en el recolector generacional?</summary><p>La joven se limpia con frecuencia y sin compactar porque se espera que los objetos mueran rápido; los sobrevivientes pasan a la vieja, que se revisa menos y se compacta de forma esporádica.</p></details>
+<details class="qa"><summary>9. Un chip rastreador de fauna debe operar 15 años sin reiniciarse. ¿Cómo manejas su memoria?</summary><p>Evitando malloc y free, que fragmentan la RAM con el tiempo; con memory pools calculados con el peor caso y ajustados a mano en el linker script.</p></details>
+<details class="qa"><summary>10. ¿Cuándo conviene memoria compartida y cuándo mensajes o RPC?</summary><p>Memoria compartida en sistemas homogéneos compilados juntos (se pasan apuntadores, sin overhead); mensajes o RPC en sistemas distribuidos o heterogéneos, con una lingua franca y el costo de serializar.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c19-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>Coco:</strong> la trama de la película le sirvió para explicar el contador de referencias.</li>
+<li><strong>El chiste de TCP:</strong> el saludo de tres vías contado como chiste («¿quieren escuchar un chiste de TCP?… recibí el chiste…»).</li>
+<li><strong>El gato con GPS:</strong> imaginó un chip rastreador en un gato que debe durar 20 años sin abrirse por fallas de memoria.</li>
+<li><strong>Consejos de vida y bromas:</strong> sobre no preocuparse por no tener pareja a los 20 años y sobre distintas profesiones.</li>
+<li>El resto del contexto de la clase son comentarios del profesor sobre noticias, política y universidades; no se resumen aquí.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c19-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Siguiente tema:</strong> la sesión terminó anunciando que se continuará con memoria virtual.</li>
+<li><strong>Examen:</strong> estudiar los cinco algoritmos de asignación (First Fit, Next Fit, Best Fit, Worst Fit y Quick Fit), confirmados para evaluación.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Memoria compartida (apuntadores) en sistemas homogéneos; mensajes y RPC en distribuidos o heterogéneos.</li>
+<li>Administrar 64 KB dirección por dirección cuesta una tabla de 128 KB: por eso se pagina.</li>
+<li>Cinco algoritmos: First, Next, Best, Worst y Quick Fit; la fragmentación es memoria libre no contigua.</li>
+<li>Recolección de basura: contador de referencias, Mark &amp; Sweep, Mark &amp; Compact (bloquea) y generacional.</li>
+<li>Memory pools en potencias de 2 y linker script a mano: memoria determinista para embebidos de larga vida.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

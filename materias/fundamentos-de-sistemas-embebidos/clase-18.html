@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 18 — Fundamentos de Sistemas Embebidos</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261103a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261103a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Fundamentos de Sistemas Embebidos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 18</h2>
+  <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 28 oct 2026 · Tema 3 (3.3) — Planificación de tiempo real (Minimal Laxity First, reserva de recursos, regla de oro de utilización y Rate Monotonic Scheduling con su cota del 70%), comunicación entre procesos (paso de mensajes contra memoria compartida) y RAM disk.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>FSE-Clase18.m4a</code>), 9 nov 2026. Lo que NotebookLM pudo mezclar o no cuadra con la referencia técnica se marca en el texto con ⚠️. Continúa lo visto en la <a href="clase-17.html">Clase 17</a>.</p>
+</div>
+<div class="files" id="guia-estudio-pdf"><a class="btn" href="../../decimo/FSE/FSE-Resumenes/FSE-Clase18-resumen.pdf" target="_blank">📄 Guía de estudio (PDF): apuntes completos + resumen para estudiar</a></div>
+
+<details class="section-block sec" id="c18-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>La regla de oro: la suma de C/T de todas las tareas periódicas debe ser ≤ 100%.</strong><span class="evid">Evidencia: el profesor la enunció en el pizarrón como «la regla de oro», resolvió ejercicios con fracciones y advirtió que quien pida más del 100% no cumplirá sus plazos.</span></li>
+<li><strong>Cálculo de la laxitud y prioridad con Minimal Laxity First.</strong><span class="evid">Evidencia: resolvió un ejercicio en vivo calculando la holgura de dos tareas instante por instante.</span></li>
+<li><strong>Rate Monotonic Scheduling: a menor periodo, mayor prioridad, y la cota del 70%.</strong><span class="evid">Evidencia: dictó la regla, dio la fórmula de la cota y su límite cuando el número de tareas tiende a infinito, y de ahí la recomendación de dejar ~30% libre.</span></li>
+<li><strong>Paso de mensajes contra memoria compartida en sistemas embebidos.</strong><span class="evid">Evidencia: explicó con detalle por qué en microcontroladores se usa memoria compartida (FreeRTOS) y no JSON ni sockets.</span></li>
+<li><strong>RAM disk y su ventaja sobre la MicroSD.</strong><span class="evid">Evidencia: lo ligó a la Raspberry Pi y al desgaste de la tarjeta. Evidencia más débil que las anteriores.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c18-mlf"><summary><span class="stitle">1 · Minimal Laxity First (MLF)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un algoritmo de planificación dinámico que da prioridad a la tarea con la menor <strong>laxitud</strong> (holgura) en el instante de evaluación. La laxitud es la diferencia entre el tiempo que falta para el deadline y el tiempo de ejecución que todavía le queda a la tarea.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Tienes una tarea difícil para mañana que te toma 8 horas y un proyecto para dentro de 2 semanas que te toma 2 semanas completas. Calculas cuánto margen te sobra antes de reprobar cada uno y haces primero el que menos margen deja.<span class="rompe">Dónde deja de servir: una persona puede negociar prórrogas; el scheduler recalcula la holgura en cada ciclo y descarta sin piedad lo que ya no es viable.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>En cada punto de decisión se calcula, para cada tarea, <em>tiempo restante hasta el deadline − trabajo pendiente</em>. Gana la de valor más pequeño. El ejercicio de clase usó dos tareas: P1 con periodo de 50 ms y consumo en el peor caso de 25 ms, y P2 con periodo de 100 ms y consumo de 40 ms.</p>
+<ul>
+<li><strong>t = 0:</strong> laxitud de P1 = 50 − 25 = 25; laxitud de P2 = 100 − 40 = 60. Como 25 &lt; 60, se ejecuta P1.</li>
+<li><strong>t = 10 ms</strong> (a P1 le quedan 15 ms y faltan 40 ms para su entrega): P1 = 40 − 15 = 25; P2 = (100 − 10) − 40 = 50. Sigue P1.</li>
+<li>P1 termina sus 25 ms en t = 25; entra P2 hasta que P1 vuelve a despertar a los 50 ms. Ambas cumplen sus plazos dentro del ciclo.</li>
+</ul>
+<p><strong>Sobrecarga del scheduler.</strong> El profesor enfatizó que si calcular la fórmula consume tiempo real (por ejemplo, una unidad de tiempo por cada conmutación en lugar de cero), ese costo se corre por todos los plazos y puede hacer colapsar el sistema.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Aprovecha al máximo el procesador, pero obliga a recalcular la holgura en ejecución. Contrasta con RMS, que es estático (sección 4), y continúa los algoritmos de la <a href="clase-17.html">Clase 17</a>.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> confundir la laxitud con el periodo total; cambia en cada instante porque depende de lo ya ejecutado y de lo que falta para el deadline.</p></div>
+</details>
+
+<details class="section-block sec" id="c18-reserva"><summary><span class="stitle">2 · Reserva de recursos</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un mecanismo de admisión para tiempo real: cada tarea trae un encabezado con su periodo y su consumo en el peor caso (WCET), y el sistema decide si la deja iniciar antes de arrancarla.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Llegas a la tortillería cuando preparan un pedido de 40 kilos y te dicen «regrese mañana»: la máquina está ocupada y no te pueden atender.<span class="rompe">Dónde deja de servir: el vendedor te pide esperar en una esquina; el sistema operativo simplemente rechaza la tarea para no desestabilizar las que ya están comprometidas.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Los programas se compilan con metadatos: «soy la tarea tal, este es mi periodo y este mi peor consumo esperado». Al instanciar la tarea, el sistema corre una simulación matemática rápida. Si la suma de demandas excede la capacidad del procesador, la tarea se rechaza.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Garantiza que admitir una tarea nueva nunca haga que las críticas ya aceptadas incumplan sus plazos; se apoya en la regla de oro de la sección siguiente.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que en tiempo real las tareas se pueden crear libremente al vuelo, como en un sistema operativo de propósito general.</p></div>
+</details>
+
+<details class="section-block sec" id="c18-regla"><summary><span class="stitle">3 · La regla de oro de planificabilidad</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La condición matemática necesaria de que la suma de las fracciones de utilización de procesador de todas las tareas periódicas sea menor o igual a 1.0 (100%).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es repartir las 24 horas del día: no puedes prometer 14 horas de trabajo, 8 de sueño y 6 de estudio, porque suman 28 y el día solo tiene 24.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>La utilización de cada tarea es su consumo entre su periodo: <strong>Uᵢ = Cᵢ / Tᵢ</strong>. La regla pide que <strong>Σ Cᵢ/Tᵢ ≤ 1.0</strong>.</p>
+<p>Ejercicio de clase: la tarea 1 tiene T = 50 ms y C = 35 ms (70/100); la tarea 2, T = 50 ms y C = 15 ms (30/100); la tarea 3, T = 100 ms y C = 15 ms (15/100). La suma es 1.15 (115%), así que <strong>el sistema no es planificable</strong>. Aunque la primera iteración parezca acomodarse, en el siguiente ciclo faltarán 15 ms de procesador y fallará.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la prueba de descarte más rápida: si no cumple, el sistema está sobrecargado. Es la base de la reserva de recursos y del criterio de RMS.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> revisar solo la primera iteración en una gráfica sin sumar los cocientes; si la suma pasa de 1.0, el desfase acumula retrasos que revientan el sistema.</p></div>
+</details>
+
+<details class="section-block sec" id="c18-rms"><summary><span class="stitle">4 · Rate Monotonic Scheduling (RMS) y la cota del 70%</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un algoritmo estático de asignación de prioridades para tareas periódicas: la prioridad es inversa al periodo, o sea, <strong>a menor periodo, mayor prioridad</strong>.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un número de turno fijado desde el principio: lo que se repite más seguido (parpadear, respirar) tiene prioridad absoluta sobre lo que se hace de vez en cuando (comer).<span class="rompe">Dónde deja de servir: el cuerpo ajusta sus prioridades; en RMS nunca cambian durante la ejecución.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Se ordenan las tareas de menor a mayor periodo y se fijan sus prioridades. Como son estáticas, se calculan antes de ejecutar. Liu y Layland dedujeron la cota máxima de utilización segura para <em>n</em> tareas: <strong>U ≤ n(2^(1/n) − 1)</strong>.</p>
+<table>
+<tr><th>Tareas</th><th>Cota</th></tr>
+<tr><td>1</td><td>1.0 (100%)</td></tr>
+<tr><td>2</td><td>≈ 0.828 (~83%)</td></tr>
+<tr><td>3</td><td>≈ 0.779 (~78%)</td></tr>
+<tr><td>n → ∞</td><td>ln 2 ≈ 0.693 (~70%)</td></tr>
+</table>
+<p>⚠️ NotebookLM dijo que con 4 tareas la cota «cae muy cerca del 70%»; el valor exacto con 4 tareas es ≈ 0.757, y se acerca al 69.3% conforme crecen. La regla de diseño que el profesor dio: cualquier sistema embebido con 4 o más tareas periódicas (como el lazo de control: adquisición, filtrado, ley de control y actuación) debe dejar alrededor de 30% de procesador libre.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Evita correr simulaciones costosas: si un conjunto no es planificable con RMS, ningún otro algoritmo de prioridad fija lo planifica en un solo procesador. Se contrasta con MLF, que es dinámico.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> querer que un sistema de tiempo real opere al 99% o 100% de uso del procesador; los sistemas deterministas necesitan holgura.</p></div>
+</details>
+
+<details class="section-block sec" id="c18-ipc"><summary><span class="stitle">5 · Comunicación entre procesos: mensajes y memoria compartida</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Los mecanismos con los que dos o más tareas intercambian información o se sincronizan dentro de un sistema embebido o un sistema operativo.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p><strong>Paso de mensajes:</strong> una carta certificada; la escribes, la metes al sobre, pagas estampillas y el cartero la entrega para que el otro la abra. <strong>Memoria compartida:</strong> un pizarrón en medio de la sala; uno escribe un número y el de al lado lo lee al instante.<span class="rompe">Dónde deja de servir: si dos escriben en el mismo lugar del pizarrón a la vez se estorban; por eso el software necesita semáforos y candados.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>Mensajes o red (cliente-servidor):</strong> exigen <em>serialización y deserialización</em>: convertir estructuras de C a cadenas JSON, YAML o XML, enviarlas por socket, parsear el texto y reconstruir enteros o flotantes. Consume muchísimos ciclos de CPU que un microcontrolador pequeño no puede pagar.</li>
+<li><strong>Memoria compartida (el estándar en embebidos):</strong> todas las tareas acceden a una misma región de RAM, normalmente con variables globales compartidas, como en FreeRTOS.</li>
+<li><strong>Sincronización:</strong> para evitar condiciones de carrera se usan semáforos, colas síncronas y candados (mutexes).</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>En un escritorio los programas deben aislarse por privacidad (que una app no lea lo que escribes en el banco). En un embebido todas las tareas persiguen un propósito común y deben cooperar con mínima latencia.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> implementar paso de mensajes con JSON y sockets entre hilos de un microcontrolador de recursos escasos, cuando se resuelve con memoria compartida.</p></div>
+</details>
+
+<details class="section-block sec" id="c18-ramdisk"><summary><span class="stitle">6 · RAM disk</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un mecanismo que reserva un bloque de RAM y lo presenta al sistema operativo como si fuera una unidad de disco.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es poner un archivero con carpetas sobre tu escritorio: conservas la organización de archivos y carpetas, pero con la rapidez de tener todo al alcance de la mano.<span class="rompe">Dónde deja de servir: el archivero conserva sus papeles al apagar la luz; la RAM es volátil y se vacía al reiniciar.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>En plataformas como la Raspberry Pi, escribir sin parar en la MicroSD trae dos problemas: es lenta y su vida útil depende de los ciclos de escritura, así que se degrada físicamente. La solución es montar en <code>/etc/fstab</code> un punto de montaje en memoria; en Linux, <code>/tmp</code> suele usar <code>tmpfs</code>. Al ser volátil no necesita bitácora (<em>journaling</em>, como ext3 o ext4). Resultado: opera a la velocidad del bus de RAM, no desgasta la tarjeta y se vacía solo al reiniciar.</p>
+<p>⚠️ NotebookLM mezcló <code>tmpfs</code> con montar un sistema <code>ext2</code> sobre RAM; son dos formas distintas de lograr un disco en memoria.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Sirve para registros temporales (<em>logs</em>), buffers de sensores y archivos temporales en sistemas embebidos con Linux. Se relaciona con la administración de memoria, que se retoma en la <a href="clase-19.html">Clase 19</a>.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> confundir el RAM disk con la <em>swap</em>: la swap pasa datos de la RAM a un disco lento; el RAM disk usa RAM rápida para simular un disco.</p></div>
+</details>
+
+<details class="section-block sec" id="c18-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Cómo se calcula la prioridad en MLF?</summary><p>Con la laxitud: tiempo restante hasta el deadline menos el trabajo pendiente. La tarea con la menor laxitud tiene la mayor prioridad.</p></details>
+<details class="qa"><summary>2. ¿Cuál es la regla de prioridades de RMS?</summary><p>A menor periodo, mayor prioridad.</p></details>
+<details class="qa"><summary>3. ¿Por qué se recomienda no pasar de ~70% de uso con muchas tareas?</summary><p>Porque la cota de Liu y Layland de RMS tiende a ln 2 ≈ 0.693 cuando n crece; arriba de eso no hay garantía matemática de cumplir todos los plazos.</p></details>
+<details class="qa"><summary>4. Tarea A: T = 20 ms, C = 12 ms. Tarea B: T = 50 ms, C = 25 ms. ¿Cumplen la regla de oro?</summary><p>U = 12/20 + 25/50 = 0.60 + 0.50 = 1.10 (110%). Es mayor que 1.0, así que no es viable en tiempo real.</p></details>
+<details class="qa"><summary>5. Diferencia entre un algoritmo estático (RMS) y uno dinámico (MLF).</summary><p>En el estático las prioridades se fijan antes y no cambian; en el dinámico se recalculan en ejecución según la holgura de cada tarea.</p></details>
+<details class="qa"><summary>6. ¿Por qué no usar JSON o XML entre tareas de un microcontrolador pequeño?</summary><p>Porque serializar y deserializar consume ciclos de CPU y memoria que no se pueden desperdiciar; se usa memoria compartida con semáforos o mutexes.</p></details>
+<details class="qa"><summary>7. Una Raspberry Pi escribe registros cada 10 ms. ¿Por qué usar RAM disk y no la MicroSD?</summary><p>Porque la MicroSD es lenta y se desgasta con las escrituras; el RAM disk opera a velocidad de RAM y no daña la tarjeta.</p></details>
+<details class="qa"><summary>8. ¿En qué se diferencia la swap de un RAM disk?</summary><p>La swap manda páginas de RAM a un disco secundario para liberar memoria; el RAM disk toma RAM y la usa como si fuera un disco.</p></details>
+<details class="qa"><summary>9. ¿Qué hace la reserva de recursos con una tarea que no cabe?</summary><p>Corre una simulación rápida al instanciarla y, si la suma de demandas excede la capacidad, la rechaza.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c18-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>Estática y √2:</strong> el profesor contó que, tras sacar 10 en Física y Mecánica en la Facultad de Ciencias, reprobó Estática cuatro veces en Ingeniería; al reclamar un ejercicio donde obtuvo √2/π le exigieron aproximar √2 como 1.414 con tres decimales, y bromeó con que por eso fue bueno que no era civil.</li>
+<li><strong>Aproximaciones de ingeniero:</strong> chiste de que a los ingenieros cualquier aproximación les parece buena.</li>
+<li><strong>El turno de inscripción:</strong> lo usó para explicar prioridades estáticas y dinámicas, y bromeó con el sistema cayéndose si 15,000 alumnos presionaran F5 a la vez.</li>
+<li><strong>Medicina y el estadio:</strong> comentó que el mural de la Facultad de Medicina lleva años tapado con una manta y que ahora cobran por entrar al estadio, que antes era gratis con credencial.</li>
+<li><strong>JSON:</strong> lo llamó «Jason, el cuate de Freddy Krueger».</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c18-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li>No hay clase el lunes por día feriado (2 de noviembre).</li>
+<li><strong>Siguiente sesión teórica (miércoles 4 nov):</strong> administración de memoria, tratada en la <a href="clase-19.html">Clase 19</a>.</li>
+<li><strong>Calendario que proyectó el profesor:</strong> relojes y temporizadores (9 nov), manejadores de dispositivos (11 nov), almacenamiento de archivos (18 nov) y administración de energía (23 nov).</li>
+<li><strong>Laboratorio:</strong> se coordinaron las fechas de la Práctica 8 y del Proyecto Final en las semanas intermedias de noviembre.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>MLF: gana la menor laxitud (tiempo al deadline − trabajo pendiente); es dinámico.</li>
+<li>Regla de oro: Σ C/T ≤ 1.0; con 1.15 el sistema no es planificable.</li>
+<li>RMS: estático, menor periodo = mayor prioridad; cota n(2^(1/n) − 1) que tiende a ~70%.</li>
+<li>En embebidos: memoria compartida con semáforos o mutexes, no JSON ni sockets.</li>
+<li>RAM disk: RAM como disco, rápido y sin desgastar la MicroSD; no es lo mismo que la swap.</li>
+</ul></div>
+
+</div>
+</body>
+</html>
