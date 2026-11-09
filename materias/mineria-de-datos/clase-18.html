@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 18 — Minería de Datos</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261103a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261103a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Minería de Datos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 18</h2>
+  <p class="prof">M.C. José Concepción Roberto Olvera López · 3 nov 2026 · Tema 3 — Metodología completa de un proyecto de minería de datos (13 actividades, triple ajuste de hiperparámetros, robustez), ejercicio de elegir el algoritmo según el problema y exposiciones de la Práctica 3.5 (pronóstico de ventas con Holt-Winters y SARIMA).</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>MD-Clase18.m4a</code>), 9 nov 2026. Las cifras de las exposiciones son de los equipos, no del profesor; lo que NotebookLM no pudo contrastar con el audio se marca como dudoso. Continúa lo visto en la <a href="clase-16.html">Clase 16</a> (la Clase 17 del 29 oct no se asistió).</p>
+</div>
+<div class="files" id="guia-estudio-pdf"><a class="btn" href="../../decimo/MD/MD-Resumenes/MD-Clase18-resumen.pdf" target="_blank">📄 Guía de estudio (PDF): apuntes completos + resumen para estudiar</a></div>
+
+<details class="section-block sec" id="c18-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Identificar el tipo de problema y el algoritmo (clasificación binaria, series de tiempo, agrupamiento).</strong><span class="evid">Evidencia: lo dijo explícitamente tras el caso del fraude: «Recuerden esa parte binaria de clasificación, es muy importante; en el examen vendrá una pregunta como estas… no es la misma, pero va a ser similar».</span></li>
+<li><strong>Modelo predictivo contra modelo descriptivo.</strong><span class="evid">Evidencia: lo enfatizó de forma tajante: «Tienen que tener bien claro qué cosa es un modelo predictivo y descriptivo».</span></li>
+<li><strong>El proceso de minería de datos y el triple ajuste de hiperparámetros.</strong><span class="evid">Evidencia: desglosó paso a paso las actividades hasta producción, repitió tres veces los tres momentos de ajuste, fijó el monitoreo de 3 a 6 meses y cerró con «El examen va a ser exactamente sobre todo el tema».</span></li>
+<li><strong>Criterios de robustez: resistir datos nuevos y comparar al menos dos modelos.</strong><span class="evid">Evidencia: lo marcó como principio de cierre y lo ligó a todas las prácticas: «¿Recuerdan que siempre corríamos dos?».</span></li>
+<li><strong>Series de tiempo: escala mensual, horizonte corto y Holt-Winters contra SARIMA.</strong><span class="evid">Evidencia: salió de la Práctica 3.5 expuesta en clase; el profesor explicó cómo validar un pronóstico (entrenar con N meses y predecir el siguiente) y dijo que quien entendió su práctica y la teoría estará listo.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c18-kdd"><summary><span class="stitle">1 · KDD y minería de datos: cuándo conviene seguir con un proyecto</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>KDD (Knowledge Discovery in Databases) es el macroproceso que va desde las entrevistas de negocio hasta la puesta en operación; la minería de datos es su «kernel», el núcleo técnico y tecnológico.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un restaurante: KDD es todo el proyecto (permisos, inversionistas, diseño del local, inauguración, atender comensales) y la minería de datos es la cocina donde los ingredientes se vuelven platillos.<span class="rompe">Dónde deja de servir: los ingredientes de una cocina se gastan; los datos se limpian, transforman y reutilizan en muchas pruebas.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El proceso arranca con una reunión con directivos o responsables de negocio para plantear alternativas y ver si el problema es abordable. Si no hay viabilidad, el proyecto se detiene de inmediato. Si se aprueba, se define el método (predictivo o descriptivo) y se auditan los datos.</p>
+<p>El profesor subrayó que el proyecto también se puede cancelar después de explorar los datos: si el cliente pide un pronóstico de series de tiempo pero solo tiene 3 o 4 meses de registros, no se puede construir un modelo confiable porque el rango de incertidumbre es demasiado amplio.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Evita invertir recursos en desarrollos condenados al fracaso por falta de datos o por proponer modelos incompatibles con la infraestructura de la empresa.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que la minería de datos abarca todo el proceso de negocio por sí sola, o seguir a ciegas con un historial insuficiente.</p></div>
+</details>
+
+<details class="section-block sec" id="c18-pred-desc"><summary><span class="stitle">2 · Modelos predictivos y descriptivos</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un modelo predictivo pronostica un valor o comportamiento futuro a partir de relaciones aprendidas; un modelo descriptivo descubre asociaciones, agrupaciones o patrones ocultos en los datos.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>El predictivo es un meteorólogo que usa presiones y vientos del pasado para decir si mañana lloverá; el descriptivo es un sociólogo que ve que los asistentes a un festival se dividen en tres grupos con gustos parecidos, sin intentar predecir qué harán.<span class="rompe">Dónde deja de servir: en la práctica se combinan, primero se descubren grupos y luego se predice qué comprará cada uno.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<table>
+<tr><th></th><th>Predictivo</th><th>Descriptivo</th></tr>
+<tr><td>Datos</td><td>Etiquetados y estructurados</td><td>Sin etiquetas (no supervisado); estructurados o no</td></tr>
+<tr><td>Salida</td><td>Estimación hacia el futuro</td><td>Conglomerados (clusters) o reglas de asociación</td></tr>
+<tr><td>Se evalúa con</td><td>Exactitud y error (precisión en clasificación, residuos en regresión)</td><td>Cohesión de los grupos y confianza de las asociaciones</td></tr>
+</table>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Ordena la ruta de solución de problemas reales: riesgos, detección de anomalías, recomendación, segmentación de clientes, pronóstico de demanda.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> aplicar un algoritmo predictivo supervisado a datos crudos sin variable objetivo etiquetada.</p></div>
+</details>
+
+<details class="section-block sec" id="c18-ejercicio"><summary><span class="stitle">3 · Ejercicio en clase: elegir el algoritmo según el problema</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Una dinámica dirigida por el profesor para diagnosticar si un problema de negocio necesita series de tiempo, regresión, clasificación o agrupamiento.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es el médico que escucha los síntomas y decide qué especialista debe atender al paciente, en vez de recetar lo mismo a todos.<span class="rompe">Dónde deja de servir: en medicina suele liderar un solo especialista; aquí varios algoritmos de distintas familias pueden colaborar en un mismo problema.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<table>
+<tr><th>Caso planteado</th><th>Respuesta y comentario del profesor</th></tr>
+<tr><td>Rendimiento de máquinas por sensores para predecir cuándo fallan</td><td>Los alumnos propusieron series de tiempo, regresión y árboles de decisión. Válido: se pueden combinar y los árboles tienen sentido si varios sensores aportan variables distintas.</td></tr>
+<tr><td>Transacciones bancarias en tiempo real para detectar fraude</td><td>Un alumno (Trinidad) dijo series de tiempo; el profesor: «No me gusta… ¿es anómalo o no es anómalo?». Respuesta correcta: <strong>clasificación</strong>, un problema binario como «tiene diabetes o no la tiene».</td></tr>
+<tr><td>Qué productos se venderán más por temporada, lugar y fechas festivas</td><td>Series de tiempo: el problema está regido por el paso del tiempo y las temporadas.</td></tr>
+<tr><td>Grupos de clientes parecidos para promociones</td><td>Agrupamiento (clustering), por ejemplo K-means.</td></tr>
+</table>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>El profesor advirtió que en el examen vendrá un ejercicio similar de relacionar problemas de negocio con tipos de algoritmo.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> proponer series de tiempo para fraude solo porque las transacciones ocurren en tiempo real, cuando el objetivo es etiquetar una anomalía de forma binaria.</p></div>
+</details>
+
+<details class="section-block sec" id="c18-actividades"><summary><span class="stitle">4 · Las 13 actividades del proceso y el triple ajuste</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El desglose paso a paso que sigue el equipo técnico para llevar un modelo desde la idea hasta producción.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es afinar un coche de carreras: revisas motor y gasolina, montas lo básico con configuración de fábrica, mides tiempos en pista, regresas al taller a mover bujías, llamas al piloto a probarlo, das un último ajuste y lo vigilas toda la temporada.<span class="rompe">Dónde deja de servir: el coche corre en circuitos iguales; en datos el «terreno» cambia cada mes.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ol>
+<li><strong>Definición del problema:</strong> reunión con directivos para identificar objetivos y contrastar con problemas ya resueltos.</li>
+<li><strong>Exploración y viabilidad de los datos:</strong> relevancia, volumen histórico, esquemas transaccionales, fuentes SQL, APIs y entorno tecnológico (por ejemplo Google Cloud).</li>
+<li><strong>Preprocesamiento:</strong> codificar categóricas, normalizar, escalar y limpiar.</li>
+<li><strong>Selección del algoritmo:</strong> la familia adecuada a la naturaleza del problema.</li>
+<li><strong>Selección de variables:</strong> ver si hay variable objetivo (continua o categórica) y reducir dimensionalidad, vital con decenas de atributos (por ejemplo 70).</li>
+<li><strong>Partición:</strong> entrenamiento y prueba 80/20, 70/30 o K-Fold.</li>
+<li><strong>Entrenamiento y primer ajuste:</strong> primera corrida con hiperparámetros por defecto (épocas, iteraciones o número de clusters).</li>
+<li><strong>Tuning:</strong> modificar hiperparámetros a propósito para maximizar el rendimiento.</li>
+<li><strong>Evaluación con métricas:</strong> F1 en clasificación, MAE o RMSE en regresión. Un resultado mediocre, como 70%, es inaceptable y obliga a cambiar variables o parámetros.</li>
+<li><strong>Validación cruzada:</strong> pruebas sobre distintos pliegues para comprobar la estabilidad.</li>
+<li><strong>Validación con el cliente y «último apretoncito»:</strong> se presentan resultados, se verifica que tengan sentido operativo y se hace la tercera calibración (nuevas variables o hiperparámetros).</li>
+<li><strong>Implementación:</strong> despliegue en producción.</li>
+<li><strong>Monitoreo continuo:</strong> mínimo de 3 a 6 meses, revisando según la frecuencia de ejecución (diaria, semanal o mensual).</li>
+</ol>
+<p>El profesor insistió en que el ajuste de hiperparámetros ocurre en <strong>tres momentos</strong>: el inicial por defecto, el tuning y el último apretoncito tras validar con el cliente.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Conecta la minería de datos tradicional con el machine learning y la IA que hoy viven dentro de las aplicaciones empresariales.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> dar por terminado el modelo al acabar el primer entrenamiento sin validar con el cliente, o saltarse el monitoreo asumiendo que no se degradará.</p></div>
+</details>
+
+<details class="section-block sec" id="c18-robustez"><summary><span class="stitle">5 · Criterios de éxito y robustez de un modelo</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Los principios que determinan si una solución de minería de datos está lista para operar en el mundo real.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Son unos zapatos de senderismo: no basta que se vean bien en la tienda; deben aguantar lluvia, lodo y caminatas largas.<span class="rompe">Dónde deja de servir: unos zapatos solo se desgastan; un modelo puede descalibrarse de golpe si cambia el mercado, aunque el código no falle.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>Alineado al reto del negocio:</strong> aporta valor real, no solo métricas teóricas.</li>
+<li><strong>Resistencia al cambio de datos:</strong> debe mantenerse estable cuando entran los datos del mes n+1 o n+2. Si se descompone o sus métricas cambian mucho, estuvo mal entrenado o sobreajustado.</li>
+<li><strong>Comparación obligatoria:</strong> nunca se implementa un solo algoritmo; se entrenan y comparan al menos dos en las mismas condiciones («¿Recuerdan que siempre corríamos dos?»: K-means contra DBSCAN, Holt-Winters contra SARIMA).</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Evita el sobreajuste y garantiza decisiones basadas en datos que se sostienen en el tiempo.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que un modelo es óptimo solo porque rinde bien con los datos históricos de entrenamiento.</p></div>
+</details>
+
+<details class="section-block sec" id="c18-practica35"><summary><span class="stitle">6 · Práctica 3.5: pronóstico de ventas de Tempra con series de tiempo</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Ejercicio en el que los equipos analizaron las ventas mensuales de Tempra en 7 plazas de México entre 2016 y 2020 para pronosticar la demanda de 2021. <strong>Todas las cifras de esta sección son de los equipos, no del profesor.</strong></p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es el encargado de una farmacia nacional que debe adivinar cuántas cajas pedir cada mes para no quedarse sin existencias en invierno ni tener cajas caducas en verano.<span class="rompe">Dónde deja de servir: la intuición no prevé eventos globales atípicos, como las compras de pánico al inicio de una pandemia.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Datos y partición.</strong> Siete plazas (Ciudad de México, Guadalajara, Guanajuato, Morelia, Puebla, Querétaro y Veracruz) por 60 meses dan 420 registros. Se entrenó con 48 meses (2016 a 2019) y se probó con 12 (2020). El profesor recomendó otra alternativa muy sólida: entrenar con N meses y predecir el siguiente (por ejemplo, entrenar con 6 y proyectar el 7.º para compararlo con la realidad).</p>
+<p><strong>Anomalías que encontraron los equipos.</strong></p>
+<ul>
+<li>Guadalajara 2018 traía ventas en cero y de 190 unidades, frente a miles; lo corrigieron imputando el promedio de los mismos meses de años anteriores.</li>
+<li>Los datos de Veracruz y Querétaro eran idénticos, atribuido a un error de captura.</li>
+<li>En marzo de 2020 hubo picos por compras de pánico (un equipo reportó cerca de 36,000 unidades en CDMX y 51,000 en Querétaro). El profesor aplaudió que ese equipo lo relacionara con el contexto de salud pública.</li>
+</ul>
+<p><strong>Escala temporal.</strong> Todos descartaron diaria, semanal y quincenal porque los datos venían por mes. También descartaron la trimestral porque aplanaba el pico de marzo y la caída de agosto y daba más error.</p>
+<p><strong>Modelos.</strong> SARIMA como detector de estacionalidad anual y cambios estructurales, evaluando residuos y la prueba ADF; Holt-Winters por adaptarse a estacionalidad regular y picos aislados sin desestabilizarse. <em>(Dudoso: NotebookLM dijo que un ADF mayor a 0.05 indicaba ruido blanco; no se contrastó con el audio.)</em></p>
+<p><strong>Horizonte de pronóstico (Equipo 5).</strong> Con la analogía del clima, el error crece con la distancia: 5.33% a 1 mes, 3.60% a 3 meses y hasta 11.48% más lejos. Recomendaron horizontes de 1 a 3 meses y reentrenar con pronósticos móviles.</p>
+<table>
+<tr><th>Plaza</th><th>Resultado del Equipo 5</th></tr>
+<tr><td>Ciudad de México</td><td>Ganó SARIMA: 11.48% de error contra 13.56% de Holt-Winters.</td></tr>
+<tr><td>Guadalajara</td><td>Ganó Holt-Winters; SARIMA falló con 94.73% por los registros en cero de 2018.</td></tr>
+<tr><td>Guanajuato</td><td>Ganó Holt-Winters con 7.23%.</td></tr>
+<tr><td>Morelia</td><td>Ganó SARIMA con 23.60%, contra casi 50% de Holt-Winters.</td></tr>
+<tr><td>Puebla</td><td>SARIMA reportó 29.43% de error. <em>(Dudoso si superó a Holt-Winters.)</em></td></tr>
+<tr><td>Querétaro y Veracruz</td><td>Ganó Holt-Winters con 8.69% en ambas.</td></tr>
+</table>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Confirma que ningún modelo es universalmente mejor: la elección depende de la regularidad estacional, las anomalías y la escala temporal. Aplica la regla de comparar al menos dos modelos.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que un modelo complejo como SARIMA siempre supera a uno de suavizamiento exponencial como Holt-Winters; con datos atípicos graves, como los de Guadalajara, SARIMA se descontroló.</p></div>
+</details>
+
+<details class="section-block sec" id="c18-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Cuál es el «kernel» de KDD?</summary><p>La minería de datos: KDD abarca entrevistas, fases administrativas y puesta en operación; la minería concentra la transformación técnica y el modelado.</p></details>
+<details class="qa"><summary>2. ¿En qué dos momentos tempranos se puede cancelar un proyecto?</summary><p>En la entrevista inicial si el problema no es viable, y tras auditar los datos si no hay historial suficiente (por ejemplo, solo 3 o 4 meses para un pronóstico de series de tiempo).</p></details>
+<details class="qa"><summary>3. ¿Por qué detectar fraude en tiempo real es clasificación y no series de tiempo?</summary><p>Porque no se predice una curva continua sino una decisión binaria por transacción: anómala o normal, como diagnosticar si alguien tiene o no una enfermedad.</p></details>
+<details class="qa"><summary>4. Diferencias entre modelo predictivo y descriptivo en datos y métricas.</summary><p>El predictivo usa datos etiquetados y estructurados, estima el futuro y se evalúa con exactitud o error; el descriptivo no requiere etiquetas, produce clusters o reglas y se evalúa con cohesión y confianza.</p></details>
+<details class="qa"><summary>5. ¿En qué tres momentos se ajustan los hiperparámetros?</summary><p>Ajuste inicial con valores por defecto, tuning de optimización y «último apretoncito» tras validar con el cliente.</p></details>
+<details class="qa"><summary>6. ¿Por qué un modelo debe «resistir al cambio de datos»?</summary><p>Porque si al entrar los datos del mes n+1 o n+2 sus métricas se desploman, estuvo mal entrenado o sobreajustado y no generaliza.</p></details>
+<details class="qa"><summary>7. ¿Cuánto debe durar el monitoreo en producción?</summary><p>Mínimo de 3 a 6 meses, revisando según la frecuencia de ejecución del modelo.</p></details>
+<details class="qa"><summary>8. ¿Por qué se prefirió la escala mensual a la trimestral en la Práctica 3.5?</summary><p>Porque la trimestral aplanaba el pico de marzo y la caída de agosto y daba mayor error.</p></details>
+<details class="qa"><summary>9. ¿Qué mostró la comparación Holt-Winters contra SARIMA?</summary><p>Que ninguno gana siempre: Holt-Winters fue mejor en Guanajuato, Querétaro, Veracruz y Guadalajara (por los ceros); SARIMA en CDMX y Morelia (cifras del Equipo 5).</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c18-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>El médico:</strong> comparó al especialista en minería de datos con un médico que interroga al paciente y manda estudios antes de recetar o decidir si es operable.</li>
+<li><strong>«El último apretoncito a los tornillos»:</strong> expresión coloquial para los ajustes finales previos a producción.</li>
+<li><strong>Inteligencia artificial:</strong> hoy todos hablan de IA como algo enorme, pero se apoya en estos mismos principios matemáticos y de machine learning, integrados como pequeños motores en los sistemas empresariales.</li>
+<li><strong>El foco:</strong> mientras se configuraban proyectores y computadoras hubo bromas sobre graduar la luz de un foco desde una app móvil.</li>
+<li><strong>El clima:</strong> un equipo explicó el horizonte con el pronóstico del clima, certero para mañana y casi imposible a varios meses.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c18-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Práctica de redes neuronales (MLP, perceptrón multicapa):</strong> entrega el viernes (6 nov); ya debían tener elegidos el algoritmo y los datos. Lleva diapositivas de PowerPoint, un resumen escrito con los puntos críticos y el código Python completo con datos. No se inventan datos; se vale buscar implementaciones en ChatGPT, Google o repositorios abiertos si se entiende cada paso, el problema de negocio y la arquitectura de la red.</li>
+<li><strong>Exposición:</strong> casi todos los equipos, máximo 5 minutos con las diapositivas, una o dos preguntas directas del profesor mientras revisa el código.</li>
+<li><strong>Examen:</strong> la siguiente sesión, sobre todo el temario (series de tiempo, clustering, 6 algoritmos de clasificación, redes neuronales, evaluación y proceso metodológico); el profesor dijo que muy probablemente sería en computadora.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>KDD es todo el proceso; la minería de datos es el núcleo técnico. Se puede cancelar si no hay viabilidad o historial.</li>
+<li>Predictivo: datos etiquetados, exactitud y error. Descriptivo: sin etiquetas, cohesión y confianza.</li>
+<li>Fraude = clasificación binaria; ventas por temporada = series de tiempo; grupos de clientes = agrupamiento.</li>
+<li>Triple ajuste: default, tuning y último apretoncito con el cliente; monitoreo de 3 a 6 meses.</li>
+<li>Robustez: valor de negocio, resistir datos nuevos y comparar al menos dos modelos.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

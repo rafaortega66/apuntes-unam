@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-09T21:23:08+00:00",
+ "generatedAt": "2026-11-09T21:59:59+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -847,11 +847,23 @@
     "resumen": "Tema 3 — Cierre de las exposiciones de diabetes (falsos negativos, variable trampa, umbral) e introducción a las redes neuronales: perceptrón, épocas y backpropagation, funciones de activación y las arquitecturas MLP, CN",
     "url": "materias/mineria-de-datos/clase-16.html",
     "formato": "estudio"
+   },
+   {
+    "num": 18,
+    "fecha": "2026-11-03",
+    "resumen": "Tema 3 — Metodología completa de un proyecto de minería de datos (13 actividades, triple ajuste de hiperparámetros, robustez), ejercicio de elegir el algoritmo según el problema y exposiciones de la Práctica 3.5 (pronóst",
+    "url": "materias/mineria-de-datos/clase-18.html",
+    "formato": "estudio"
    }
   ],
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "b1ee2df",
+   "fecha": "2026-11-09T15:23:18-06:00",
+   "mensaje": "SIB: Clase 17 (3 nov) — página, índice y guía de estudio en PDF"
+  },
   {
    "hash": "9948558",
    "fecha": "2026-11-03T11:51:39-06:00",
@@ -1146,11 +1158,6 @@
    "hash": "b2b7201",
    "fecha": "2026-10-19T16:52:37-06:00",
    "mensaje": "ASI: dos carpetas — ASI-Practicas y ASI-Proyecto por sprints (Sprint0–Sprint3, con README de cada uno y Sprint 3 en curso: Samba, SSH, permisos); diagramas UML renombrados; proyectos.html agrupado por sprint. MD: Práctica 3.3 = Regresión y 3.4 = Clasificación (vence 22 oct), confirmado en Classroom"
-  },
-  {
-   "hash": "8178a50",
-   "fecha": "2026-10-19T16:44:02-06:00",
-   "mensaje": "SIB: Clases 12 (8 oct, clasificación y etapas de ataques), 13 (13 oct, atacantes e intrusión) y 14 (15 oct, malware, físicos y mecanismos) en formato de estudio desde NotebookLM, con enlace a los apuntes PDF; nota sobre el desfase de audios de SIB"
   }
  ]
 }
