@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-09T22:11:41+00:00",
+ "generatedAt": "2026-11-09T22:22:18+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -497,6 +497,13 @@
     "resumen": "Nuevas tecnologías (fuera del temario) — Exposiciones y debate de la «Actividad 1: el empleo del futuro»: impacto de la tecnología en el contador, el agricultor, el conductor y el médico; supervisión humana, responsabili",
     "url": "materias/administracion-de-servicios-de-internet/clase-16.html",
     "formato": "estudio"
+   },
+   {
+    "num": 17,
+    "fecha": "2026-11-04",
+    "resumen": "Cierre de «el empleo del futuro», estándares RFC y calendario de fin de semestre — Últimas exposiciones (agricultura, taller automotriz, veterinaria y soporte de TI), debate sobre calidad contra cantidad de datos, asigna",
+    "url": "materias/administracion-de-servicios-de-internet/clase-17.html",
+    "formato": "estudio"
    }
   ],
   "arquitectura-cliente-servidor": [
@@ -874,6 +881,11 @@
  },
  "gitlog": [
   {
+   "hash": "2e14549",
+   "fecha": "2026-11-09T16:11:41-06:00",
+   "mensaje": "FSE: enlazar Clases 18 y 19 en índice y tabla de resúmenes"
+  },
+  {
    "hash": "2b57e94",
    "fecha": "2026-11-09T16:11:22-06:00",
    "mensaje": "FSE: Clases 18 (28 oct) y 19 (4 nov) — páginas, índice y guías de estudio en PDF"
@@ -1167,11 +1179,6 @@
    "hash": "4580b75",
    "fecha": "2026-10-19T23:55:45-06:00",
    "mensaje": "ASI-Proy06: reporte del Sprint 3 entregado (Classroom «Reporte», 19 oct · Turned in); pendiente del Sprint 3 oculto"
-  },
-  {
-   "hash": "7b68119",
-   "fecha": "2026-10-19T17:09:30-06:00",
-   "mensaje": "Indicaciones de Classroom descargadas (MD 3.4 + diabetes demo.csv, RP Tarea 2, Lab OAC previo P5 y reporte P4); OAC Trabajos 1–2 y Proyectos 1–2 mostrados en clase, faltan evidencias"
   }
  ]
 }

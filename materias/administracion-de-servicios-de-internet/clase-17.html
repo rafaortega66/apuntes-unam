@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 17 — Administración de Servicios de Internet</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261103a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261103a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Administración de Servicios de Internet</a>
+<div class="detail-head" style="border-color:#7C9CD6"><h2>Clase 17</h2>
+  <p class="prof">Mtro. Juan Ángel Calvillo Pérez · 4 nov 2026 · Cierre de «el empleo del futuro», estándares RFC y calendario de fin de semestre — Últimas exposiciones (agricultura, taller automotriz, veterinaria y soporte de TI), debate sobre calidad contra cantidad de datos, asignación de un RFC por equipo y fechas del examen final y del proyecto.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>ASI-Clase17.m4a</code>), 9 nov 2026. Fue una sesión de presentaciones y avisos: lo que sigue mezcla lo que expusieron los alumnos con las correcciones del profesor, que es lo que importa. Lo que NotebookLM no pudo contrastar con el audio se marca como dudoso. Continúa la <a href="clase-16.html">Clase 16</a>. No se anotan nombres de compañeros.</p>
+</div>
+<div class="files" id="guia-estudio-pdf"><a class="btn" href="../../decimo/ASI/ASI-Resumenes/ASI-Clase17-resumen.pdf" target="_blank">📄 Guía de estudio (PDF): apuntes completos + resumen para estudiar</a></div>
+
+<details class="section-block sec" id="c17-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Qué es un RFC y para qué sirve.</strong><span class="evid">Evidencia: dijo explícitamente que en el examen añadirá lo de los RFC y que cada unidad del temario habla de uno (2081, 1939, 3501…).</span></li>
+<li><strong>Calidad contra cantidad de datos.</strong><span class="evid">Evidencia: lo debatió con energía frente al grupo y concluyó que la precisión la da la calidad y un protocolo riguroso de captura.</span></li>
+<li><strong>App móvil nativa contra sitio web para usuarios en campo.</strong><span class="evid">Evidencia: cuestionó a un equipo en vivo con el ejemplo de comprar en Amazon y propuso Flutter y Dart. Evidencia moderada: fue una corrección a una exposición.</span></li>
+<li><strong>El auditor de procesos y algoritmos como nuevo puesto.</strong><span class="evid">Evidencia: dijo que ese es el puesto que sí le llamó la atención y que las empresas lo necesitan tras automatizar. Evidencia moderada.</span></li>
+<li><strong>Formato del examen final: individual, en hoja y sin celular.</strong><span class="evid">Evidencia: lo dijo textualmente («saca una hoja… escribes código… nada de celular»).</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c17-rfc"><summary><span class="stitle">1 · Los estándares RFC y la exposición por equipo</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un RFC (<em>Request for Comments</em>) es un documento oficial, emitido en el ámbito del IETF, que describe las reglas, especificaciones, comportamientos y protocolos para implementar y comunicar los servicios de Internet. El profesor lo resumió como «el documento que describe las reglas y comportamientos, el protocolo, las reglas de implementación y su comunicación».</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Son los manuales de construcción de Internet: si vas a montar un servicio de correo o de navegación, tienes que seguir esas especificaciones para que cualquier servidor del mundo entienda tus mensajes.<span class="rompe">Dónde deja de servir: una ley física no cambia; los RFC se revisan y se reemplazan por versiones nuevas que corrigen fallas o declaran obsoleto un protocolo.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El profesor aclaró con sarcasmo que aquí RFC no es el Registro Federal de Contribuyentes. Explicó que el temario de la materia es 100% teórico y se cimenta en la lectura de estos documentos; por eso metió prácticas de laboratorio en Linux, para no caer en la monotonía de la teoría pura. Para cerrar el temario asignó un RFC a cada equipo del proyecto final, para exponerlo en <strong>10 a 15 minutos</strong>:</p>
+<table>
+<tr><th>Equipo</th><th>RFC asignado</th></tr>
+<tr><td>1</td><td>1939 (POP3, Post Office Protocol versión 3)</td></tr>
+<tr><td>2</td><td>2821 / 2081 <em>(dudoso: NotebookLM oyó «281/2081»; 2821 es SMTP y 2081 corresponde a RIPng)</em></td></tr>
+<tr><td>5</td><td>1034 (conceptos y arquitectura del sistema de nombres de dominio, DNS)</td></tr>
+<tr><td>6</td><td>3898 / 3501 <em>(dudoso: 3501 es IMAP4rev1; 3898 es de DHCPv6)</em></td></tr>
+<tr><td>7</td><td>4511 / 451 <em>(dudoso: 4511 es el protocolo LDAP)</em></td></tr>
+<tr><td>8</td><td>2616 <em>(dudoso: HTTP/1.1)</em></td></tr>
+<tr><td>9</td><td>8446 (TLS 1.3)</td></tr>
+<tr><td>10</td><td>1700 (números y parámetros asignados en Internet) <em>(dudoso: confirmar con el profesor; ese RFC fue reemplazado por la base de datos de IANA)</em></td></tr>
+</table>
+<p><strong>Estructura obligatoria de la exposición:</strong></p>
+<ol>
+<li>Identificar el estándar y el tipo de documento técnico.</li>
+<li>Decir si administra, protege o diseña algún servicio de red.</li>
+<li>Describir la arquitectura del protocolo, sus reglas de implementación y el modelo de comunicación entre los extremos.</li>
+<li>Presentar un ejemplo técnico práctico de su funcionamiento.</li>
+</ol>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la columna vertebral de todo lo configurado en el semestre: DNS con Bind9, DHCP con Kea, servicios web, TLS y servidores de correo.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> limitarse a instalar paquetes de software sin conocer los principios ni los mensajes de control que define el RFC.</p></div>
+</details>
+
+<details class="section-block sec" id="c17-exposiciones"><summary><span class="stitle">2 · Cierre de las exposiciones del empleo del futuro</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Las últimas presentaciones de la «Actividad 1: el empleo del futuro», en las que cada equipo propuso cómo la tecnología cambia una profesión; el profesor intervino con correcciones y debates.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un ensayo de defensa de proyecto: el equipo presenta su idea y el profesor hace de cliente exigente que pregunta «¿y por qué así?».<span class="rompe">Dónde deja de servir: aquí no había nota por el producto; lo importante eran las preguntas y los criterios técnicos que salieron.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>Agricultura.</strong> Sensores de monitoreo ambiental y de suelo (sistemas embebidos) que alimentan una base de datos y un tablero web, más IA generativa para marketing personalizado, con datos del INEGI y una EDT de cuatro entregables. El profesor cuestionó el medio: «Propusiste una página web… ¿qué dispositivo cargan todos? ¿Has comprado por Amazon? ¿Te metes a la aplicación o abres Chrome?». Su corrección fue una <strong>aplicación móvil nativa</strong>, con herramientas como Flutter y su lenguaje Dart. También señaló que el proyecto se enfocó en mercadotecnia y descuidó la operación del agricultor, que sí se aborda con tecnologías como drones de aspersión.</li>
+<li><strong>Diagnóstico automotriz con IA.</strong> El mecánico conecta el escáner (OBD) y pasa los códigos de falla a la IA; se capturan marca, modelo, kilometraje y síntomas; el algoritmo correlaciona el histórico y sugiere comprobaciones en orden; si cambiar una pieza no resuelve la falla, descarta esa rama del árbol de decisión; al final el mecánico retroalimenta con la solución real. El profesor señaló una consecuencia no prevista: si el diagnóstico se vuelve tan sencillo, los dueños comprarán su propio escáner y prescindirán del taller; el nicho real son los especialistas que alimentan y mantienen esas bases de conocimiento.</li>
+<li><strong>IA en veterinaria.</strong> Diagnóstico de radiografías y ecografías y redacción de informes y recetas. Se contrastaron dos arquitecturas: <strong>SaaS o nube</strong> (suscripción periódica, menos cómputo y energía local, pero dependencia crítica de internet) y <strong>despliegue local</strong> (inversión inicial alta en servidores y tarjetas gráficas, pero autonomía ante caídas de red). El criterio del médico es irremplazable por la falta de empatía de los sistemas (por ejemplo, la decisión ética de una eutanasia) y el riesgo de alucinación o sesgo.</li>
+<li><strong>Soporte de TI autónomo.</strong> Cuatro ejes: mantenimiento predictivo con telemetría, «piloto automático» para resolver tickets repetitivos, escudo de aislamiento inmediato del equipo comprometido y aprovisionamiento automático de empleados (perfiles, permisos y credenciales). Riesgos: falsos positivos que bloquean equipos sanos, un punto central con credenciales críticas y la resistencia de los técnicos que temen ser despedidos.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Continúa el debate de la <a href="clase-16.html">Clase 16</a> sobre impacto laboral, supervisión humana y responsabilidad, ahora con ejemplos de TI, nube, sistemas embebidos y minería de datos.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> diseñar portales web para quienes trabajan a la intemperie en vez de aplicaciones móviles; creer que un código del escáner diagnostica solo; confundir tecnificar la producción con vender en redes sociales; implementar bloqueos automáticos sin tolerancias.</p></div>
+</details>
+
+<details class="section-block sec" id="c17-datos"><summary><span class="stitle">3 · Calidad de datos contra cantidad (Big Data)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El principio, defendido por el profesor frente al grupo, de que la precisión de un modelo depende de la calidad y del protocolo de captura de los datos, no del volumen.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es una agenda de contactos: mil teléfonos incompletos o guardados con apodos no sirven más que cincuenta contactos bien escritos.<span class="rompe">Dónde deja de servir: con datos limpios y suficientes, más volumen sí puede ayudar; el punto es que sin calidad no ayuda.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Un equipo propuso contratar personal para juntar radiografías de forma masiva con la idea de que más datos darían más precisión. El profesor lo refutó: «Hay una vertiente que dice que no necesariamente a mayor cantidad de datos, mayor precisión; lo que te da la precisión es la calidad». Preguntó cómo asegurarían esa calidad y concluyó que lo importante es un <strong>protocolo</strong> riguroso de captura y validación clínica.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Se conecta con la minería de datos y la regla <em>garbage in, garbage out</em>: datos desordenados multiplican los errores del modelo.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> suponer que acumular volumen garantiza precisión y omitir protocolos estandarizados de captura.</p></div>
+</details>
+
+<details class="section-block sec" id="c17-auditor"><summary><span class="stitle">4 · El auditor de procesos y algoritmos</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El perfil de ingeniero dedicado a supervisar que los procesos, la documentación, la ética y los modelos de decisión automatizados cumplan las políticas de la organización.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es el revisor de calidad de una fábrica automatizada: las máquinas producen solas, pero alguien debe verificar que lo que sale cumple las normas.<span class="rompe">Dónde deja de servir: un revisor de fábrica mira productos físicos; el auditor de TI revisa decisiones, sesgos y registros.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El profesor dijo que la automatización de mesas de ayuda y el despido de operadores de tickets ya es una realidad en corporativos globales. Para él la oportunidad no está en competir con los bots, sino en ser auditor: «Sí necesitas a alguien que esté auditando que los procesos y documentaciones vayan siendo correctas».</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Cierra el hilo de las exposiciones: la IA no elimina el control humano, lo desplaza hacia la auditoría.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que la automatización prescinde de auditorías periódicas de calidad técnica.</p></div>
+</details>
+
+<details class="section-block sec" id="c17-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Qué significa RFC y para qué sirve?</summary><p>Request for Comments: documentos oficiales que describen las reglas, especificaciones, comportamientos y protocolos para implementar y comunicar servicios de Internet.</p></details>
+<details class="qa"><summary>2. ¿Por qué más datos no siempre dan más precisión?</summary><p>Porque datos erróneos o desordenados multiplican los errores del modelo; la precisión la da la calidad y un protocolo riguroso de captura y validación.</p></details>
+<details class="qa"><summary>3. ¿Qué corrección hizo el profesor a un portal web para personal de campo?</summary><p>Usar una aplicación móvil nativa (por ejemplo con Flutter y Dart), porque el teléfono es el dispositivo que todos cargan y usan en el campo.</p></details>
+<details class="qa"><summary>4. Compara SaaS en la nube y despliegue local para IA médica.</summary><p>La nube cobra suscripción, usa menos cómputo y energía local, pero depende de internet; lo local exige gran inversión en servidores y GPU, pero funciona aunque falle la red.</p></details>
+<details class="qa"><summary>5. ¿Qué cuatro puntos debe tener la exposición de un RFC?</summary><p>El estándar y el tipo de documento; si administra, protege o diseña un servicio; la arquitectura, reglas y comunicación; y un ejemplo técnico de funcionamiento.</p></details>
+<details class="qa"><summary>6. ¿Qué puesto destacó el profesor tras automatizar el soporte de TI?</summary><p>El auditor de procesos y algoritmos, que vigila documentación, ética y cumplimiento de políticas.</p></details>
+<details class="qa"><summary>7. ¿Qué consecuencia no prevista señaló del asistente automotriz?</summary><p>Que los dueños podrían comprar su propio escáner y prescindir del taller; el nicho queda en quienes mantienen las bases de conocimiento.</p></details>
+<details class="qa"><summary>8. ¿Qué riesgo tiene un escudo automático que aísla equipos sospechosos?</summary><p>Los falsos positivos: bloquear equipos legítimos y detener el trabajo de usuarios que no estaban comprometidos.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c17-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>El «seis»:</strong> el profesor recordó que el primer día ofreció asentar un 6 a quien quisiera desentenderse de la materia, y bromeó con que ahora, al final del semestre, le piden puntos como «regalo de graduación» o de Navidad.</li>
+<li><strong>El matcha:</strong> un alumno justificó su propuesta con un video de un productor japonés de matcha, de ocho generaciones, que estaba en quiebra por no saber vender fuera.</li>
+<li><strong>Puestos en las facultades:</strong> el comercio informal en las facultades está controlado por plazas, horarios y administraciones internas.</li>
+<li><strong>Alias en Classroom:</strong> ironizó con un nombre de entrega que era un alias porque el alumno usaba la misma cuenta para comentar en YouTube.</li>
+<li><strong>Despidos en TI:</strong> comentó que empresas tecnológicas despidieron a equipos enteros de desarrollo y soporte asumiendo que la IA absorbería los tickets.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c17-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Lunes 9 y miércoles 11 de noviembre:</strong> exposiciones de los RFC por los mismos equipos del proyecto final, 10 a 15 minutos cada uno, formato libre y entrega digital en Classroom. Al Equipo 10 le tocó el RFC 1700 <em>(dudoso: confirmar con el profesor)</em>.</li>
+<li><strong>Lunes 16 de noviembre: examen final.</strong> Individual, en hoja suelta, con código y teoría (incluidos los RFC asignados), sin celular.</li>
+<li><strong>Miércoles 18 de noviembre:</strong> sin sesión presencial; el profesor dedica el horario a revisar y calificar exámenes y prácticas.</li>
+<li><strong>Viernes 20 de noviembre:</strong> entrega del proyecto final, fecha acordada con el grupo.</li>
+<li><strong>Semana del 23 al 27 de noviembre:</strong> revisión de actas y aclaraciones; se publicará un rol de atención que divide al grupo entre el lunes 23 y el miércoles 25.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>RFC: documento que describe las reglas, el comportamiento y el protocolo de un servicio de Internet; entra al examen.</li>
+<li>Exposición de RFC: estándar, qué administra o protege, arquitectura y reglas, ejemplo técnico; 10 a 15 minutos.</li>
+<li>En el campo, app móvil nativa antes que sitio web; calidad de datos antes que volumen.</li>
+<li>El puesto que crece tras automatizar el soporte es el auditor de TI.</li>
+<li>Fechas: RFC el 9 y 11 nov, examen final el 16 nov (individual, en papel, sin celular), proyecto el 20 nov.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

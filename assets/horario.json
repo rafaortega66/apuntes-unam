@@ -32,6 +32,7 @@
     { "fecha": "2026-10-28", "motivo": "ASI sin clase: el ingeniero aplicó un extraordinario (hoja RegistroClases)", "confirmado": true, "materias": ["ASI"] },
     { "fecha": "2026-10-29", "motivo": "SIB sin clase; la profesora dejó una investigación en equipo sobre modelos de seguridad (SIB-EC09). Hoja RegistroClases: «SIB - (sin clase) (actividad 2)»", "confirmado": true, "materias": ["SIB"] },
     { "fecha": "2026-10-30", "motivo": "RP sin clase (confirmado por el usuario el 3 nov 2026)", "confirmado": true, "materias": ["RP"] },
-    { "fecha": "2026-11-02", "motivo": "Asueto (hoja RegistroClases: «A S U E T O»)", "confirmado": true, "materias": [] }
+    { "fecha": "2026-11-02", "motivo": "Asueto (hoja RegistroClases: «A S U E T O»)", "confirmado": true, "materias": [] },
+    { "fecha": "2026-11-18", "motivo": "ASI sin sesión presencial: el profesor dedica el horario a revisar y calificar (dicho en la Clase 17; falta confirmar)", "confirmado": false, "materias": ["ASI"] }
   ]
 }
