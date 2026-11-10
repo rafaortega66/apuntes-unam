@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-09T22:22:18+00:00",
+ "generatedAt": "2026-11-10T14:45:08+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -632,6 +632,13 @@
     "resumen": "Tema 2 — El chat grupal con select() (Programa 07) línea por línea, prueba en vivo con nc y puertos efímeros, el bloque /16 de PC Puma y la introducción a los sockets crudos ( SOCK_RAW ) para un sniffer.",
     "url": "materias/arquitectura-cliente-servidor/clase-18.html",
     "formato": "estudio"
+   },
+   {
+    "num": 21,
+    "fecha": "2026-11-05",
+    "resumen": "Tema 5 — Cifrado simétrico con la API EVP de OpenSSL (AES-256 en modo CBC con relleno PKCS#7) aplicado a un cliente y un servidor en C: llave en archivo, vector de inicialización aleatorio y protocolo de tres send y tres",
+    "url": "materias/arquitectura-cliente-servidor/clase-21.html",
+    "formato": "estudio"
    }
   ],
   "seguridad-informatica-basica": [
@@ -880,6 +887,11 @@
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "82e0f58",
+   "fecha": "2026-11-09T16:22:18-06:00",
+   "mensaje": "ASI: Clase 17 (4 nov) — página, índice, guía de estudio en PDF y 18 nov sin sesión (por confirmar)"
+  },
   {
    "hash": "2e14549",
    "fecha": "2026-11-09T16:11:41-06:00",
@@ -1174,11 +1186,6 @@
    "hash": "ee57f48",
    "fecha": "2026-10-20T00:07:30-06:00",
    "mensaje": "ASI-Proyecto: un solo proyecto, sin subcarpetas ASI-ProyNN — cada ASI-SprintN con su README, indicaciones, entregables y adicionales; proyectos.html con una tarjeta por sprint"
-  },
-  {
-   "hash": "4580b75",
-   "fecha": "2026-10-19T23:55:45-06:00",
-   "mensaje": "ASI-Proy06: reporte del Sprint 3 entregado (Classroom «Reporte», 19 oct · Turned in); pendiente del Sprint 3 oculto"
   }
  ]
 }

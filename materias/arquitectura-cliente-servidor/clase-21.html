@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 21 — Arquitectura Cliente-Servidor</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261103a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261103a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Arquitectura Cliente-Servidor</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 21</h2>
+  <p class="prof">Mtro. Carlos Alberto Román Zamitiz · 5 nov 2026 · Tema 5 — Cifrado simétrico con la API EVP de OpenSSL (AES-256 en modo CBC con relleno PKCS#7) aplicado a un cliente y un servidor en C: llave en archivo, vector de inicialización aleatorio y protocolo de tres <code>send</code> y tres <code>recv</code>.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>ACS-Clase21.m4a</code>), 10 nov 2026. Lo que NotebookLM no pudo contrastar con el audio se marca como dudoso. <strong>Las Clases 19 (29 oct) y 20 (3 nov) no se asistieron y su página está pendiente</strong>; esta continúa el hilo de la <a href="clase-18.html">Clase 18</a>.</p>
+</div>
+<div class="files" id="guia-estudio-pdf"><a class="btn" href="../../decimo/ACS/ACS-Resumenes/ACS-Clase21-resumen.pdf" target="_blank">📄 Guía de estudio (PDF): apuntes completos + resumen para estudiar</a></div>
+
+<details class="section-block sec" id="c21-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>El protocolo de tres <code>send</code> y tres <code>recv</code>: IV, longitud y texto cifrado.</strong><span class="evid">Evidencia: lo explicó como el núcleo para que el servidor descifre sin conocer de antemano la longitud ni el IV: «como el cliente hace tres send, el servidor tiene que hacer tres recv».</span></li>
+<li><strong>El relleno PKCS#7 a bloques de 16 bytes, incluido el caso de exactamente 16.</strong><span class="evid">Evidencia: le dedicó el inicio de la clase con ejemplos numéricos y advirtió que un mensaje de 16 bytes recibe un bloque entero extra de relleno.</span></li>
+<li><strong>El flujo de funciones EVP para cifrar y descifrar.</strong><span class="evid">Evidencia: mostró los dos códigos lado a lado y señaló la correspondencia init, update y final.</span></li>
+<li><strong>Compilar con <code>-lssl -lcrypto</code>.</strong><span class="evid">Evidencia: cuando a los alumnos les falló la compilación en vivo, se detuvo a explicar qué banderas faltaban.</span></li>
+<li><strong>Abrir la llave en modo binario (<code>rb</code> y <code>wb</code>).</strong><span class="evid">Evidencia: explicó que la llave son bytes puros y no una cadena de texto. Evidencia moderada.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c21-padding"><summary><span class="stitle">1 · Relleno PKCS#7 en bloques de 16 bytes</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un mecanismo que ajusta el tamaño del texto plano para que sea un múltiplo exacto del tamaño del bloque del algoritmo, que en AES es de 16 bytes.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es empacar en un camión que solo lleva tarimas de 16 cajas. Si tu pedido son 10 cajas, faltan 6; el embalador llena los 6 huecos con etiquetas que dicen «6», y quien recibe lee «6» y sabe cuántas cajas desechar.<span class="rompe">Dónde deja de servir: si tu pedido llena justo las 16 cajas, en la vida real mandarías la tarima tal cual; PKCS#7 obliga a mandar una segunda tarima completa con la etiqueta «16» para no confundir el final de los datos reales.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El algoritmo calcula cuántos bytes faltan para el siguiente múltiplo de 16. Si faltan <em>k</em> bytes, agrega exactamente <em>k</em> bytes, cada uno con el valor numérico <em>k</em>. Ejemplos vistos en clase:</p>
+<ul>
+<li>«Hola Mundo» mide 10 bytes: faltan 6, se agregan 6 bytes con valor 0x06.</li>
+<li>Un texto de 12 bytes: faltan 4, se agregan 4 bytes con valor 0x04.</li>
+<li>Un texto de 11 bytes: faltan 5, se agregan 5 bytes con valor 0x05.</li>
+<li>Un texto de exactamente 16 bytes: se agrega un bloque completo de 16 bytes con valor 16 (0x10) y el total pasa a 32 bytes.</li>
+</ul>
+<p>El profesor aclaró una confusión frecuente de la pantalla: un bloque cifrado de 16 bytes ocupa 32 caracteres al imprimirse en hexadecimal, porque cada byte se escribe con dos dígitos hexadecimales (16 × 2 = 32).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite aplicar cifradores de bloque como AES en modo CBC a cadenas de cualquier longitud.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que los bytes de relleno son ceros (0x00); creer que ver 32 caracteres hexadecimales significa que el mensaje mide 32 bytes.</p></div>
+</details>
+
+<details class="section-block sec" id="c21-evp"><summary><span class="stitle">2 · El ciclo de cifrado y descifrado con la API EVP de OpenSSL</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un conjunto de funciones de alto nivel de OpenSSL que estandariza el cifrado simétrico por bloques sin importar el algoritmo elegido.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es una máquina trituradora y empacadora de documentos: la enciendes y la calibras con la llave (Init), le metes hojas por bloques (Update) y al final jalas la palanca para poner el sello (Final).<span class="rompe">Dónde deja de servir: en la máquina se nota si se altera el orden; en el código, saltarse un paso da un resultado inválido sin avisar.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Se incluyen las cabeceras <code>openssl/evp.h</code> y <code>openssl/rand.h</code>.</p>
+<p><strong>Para cifrar:</strong></p>
+<ol>
+<li><code>EVP_CIPHER_CTX_new()</code> crea el contexto.</li>
+<li><code>EVP_EncryptInit_ex()</code> recibe el contexto, el algoritmo (<code>EVP_aes_256_cbc()</code>), <code>NULL</code>, la llave de 32 bytes (256 bits) y el IV de 16 bytes.</li>
+<li><code>EVP_EncryptUpdate()</code> recibe el contexto, el buffer de salida, un puntero entero con la longitud escrita, el texto original y su longitud.</li>
+<li><code>EVP_EncryptFinal_ex()</code> agrega el bloque final de relleno; se usa aritmética de punteros para concatenarlo al arreglo destino.</li>
+</ol>
+<p><strong>Para descifrar</strong> se hace el proceso inverso con <code>EVP_DecryptInit_ex()</code>, <code>EVP_DecryptUpdate()</code> y <code>EVP_DecryptFinal_ex()</code>, usando exactamente la misma llave y el mismo IV. Al terminar se libera la memoria del contexto.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Conecta la programación de sockets con la seguridad: protege las comunicaciones de quien intercepte la red.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> descifrar con un IV distinto al que se generó para ese mensaje; si no coincide exactamente, el descifrado falla por completo.</p></div>
+</details>
+
+<details class="section-block sec" id="c21-llave"><summary><span class="stitle">3 · La llave compartida y el vector de inicialización (IV)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Gestión del material criptográfico simétrico: la llave secreta fija que comparten cliente y servidor, y el vector de inicialización aleatorio que se genera en cada ejecución.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>La llave es la combinación de una caja fuerte que conocen de antemano emisor y receptor; el IV es girar la perilla a un número al azar antes de meter la combinación, de modo que aunque la combinación sea la misma el punto de partida cambie.<span class="rompe">Dónde deja de servir: el IV no es secreto, se manda al servidor; lo que protege es que los bloques cifrados no se repitan.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li>La llave de 256 bits (32 bytes) vive en un archivo, <code>llave.key</code>. Se abre con <code>fopen("llave.key", "rb")</code> y se lee con <code>fread</code> a un arreglo de 32 bytes; para escribirla se usa <code>"wb"</code>.</li>
+<li>El profesor analizó el dilema de diseño: si el servidor regenerara la llave en cada arranque (por ejemplo tras un Ctrl+C), las llaves de todos los clientes quedarían obsoletas; por eso en la práctica la llave es fija.</li>
+<li>El IV de 16 bytes lo genera el cliente en cada ejecución con <code>RAND_bytes</code>.</li>
+<li><strong>Efecto de dispersión:</strong> por el IV y el encadenamiento CBC, el mismo texto («Hola Mundo») produce bloques cifrados totalmente distintos en cada ejecución.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Evita que un espía vea patrones repetidos aunque el cliente mande el mismo mensaje varias veces.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> abrir la llave como texto (<code>"r"</code> o <code>"w"</code>): se corrompen los bytes que coinciden con saltos de línea o caracteres de control.</p></div>
+</details>
+
+<details class="section-block sec" id="c21-bytes"><summary><span class="stitle">4 · Inspección de bytes, bits y código ASCII</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Imprimir un arreglo de bytes binarios en su representación bit a bit y revisar qué caracteres son visibles según la tabla ASCII.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es ver un billete bajo un microscopio: en vez de papel moneda ves cada fibra y cada tinta para confirmar que no falta ningún detalle.<span class="rompe">Dónde deja de servir: el microscopio solo mira; esta función sirve para comparar lo enviado contra lo recibido.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El profesor presentó la función auxiliar <code>bytes_to_bits()</code>, que recibe el arreglo cifrado y su longitud y, por cada byte, imprime su valor decimal, su binario y su carácter.</p>
+<ul>
+<li>Un byte son 8 bits: 2⁸ = 256 combinaciones, de 0 a 255.</li>
+<li>En números con signo, el bit más significativo (el de la izquierda) es el signo: si es 1, el valor es negativo y se interpreta con complemento a dos.</li>
+<li>En ASCII, los códigos 0 a 31 son de control y no se imprimen; el 32 es la barra espaciadora y desde el 33 (el signo de admiración) empiezan los caracteres imprimibles.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Sirve para depurar a bajo nivel: comparar los bytes que mandó el cliente con los que recibió el servidor y detectar alteraciones.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> imprimir el buffer cifrado con <code>printf("%s")</code>: la salida se corta en el primer byte 0x00 o muestra caracteres de control invisibles.</p></div>
+</details>
+
+<details class="section-block sec" id="c21-integracion"><summary><span class="stitle">5 · Integración del cifrado en el cliente y el servidor (programa_09)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La modificación del par cliente-servidor para que el nombre del alumno viaje cifrado por un socket TCP (<code>AF_INET</code>).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como el pase de asistencia anterior, pero ahora el alumno mete su nombre en un sobre con candado, pega afuera las instrucciones de apertura y lo manda al servidor para que lo abra y registre su asistencia.<span class="rompe">Dónde deja de servir: el sobre protege el contenido, pero si cliente y servidor no coinciden en llave, IV y orden de envío, el servidor no puede abrirlo.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Primero se corrió el par en <strong>texto plano</strong> (<code>servidor_texto_plano.c</code> y <code>cliente_texto_plano.c</code>, puerto 4898) para validar la conexión y mostrar cómo un sniffer capturaría el nombre sin protección.</p>
+<p>El problema técnico: para descifrar, el servidor necesita la llave (la lee de <code>llave.key</code>) y el IV que generó el cliente. Además, como el cifrado agrega relleno, el tamaño del texto cifrado ya no es el de la longitud del nombre original.</p>
+<p>El <strong>protocolo síncrono</strong> es:</p>
+<ol>
+<li><code>send(fd, iv, 16, 0)</code> del cliente y <code>recv(fd, iv, 16, 0)</code> del servidor: el IV.</li>
+<li>El cliente envía la longitud del texto cifrado con <code>send(fd, &amp;longitud, sizeof(int), 0)</code>, para que el servidor reserve el buffer necesario.</li>
+<li>El cliente envía los bytes cifrados y el servidor los recibe en el buffer <code>texto_encriptado</code>.</li>
+</ol>
+<p>Luego el servidor ejecuta el descifrado, obtiene el nombre en texto plano, imprime la bitácora (<code>ID : IP - día/mes/año hora:minuto:segundo - nombre</code>) y responde al cliente «registro exitoso» en texto plano.</p>
+<p>Compilación requerida:</p>
+<pre><code>gcc cliente_texto_crypto.c -o cliente_texto_crypto -lssl -lcrypto
+gcc servidor_texto_crypto.c -o servidor_texto_crypto -lssl -lcrypto</code></pre>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Junta todo el curso: sockets TCP, argumentos por línea de comandos, memoria dinámica y criptografía. Es el paso previo a TLS (subtema 5.1 del temario), que aún no se ve.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> olvidar <code>-lssl -lcrypto</code> al compilar; descoordinar el orden o la cantidad de <code>send</code> y <code>recv</code> entre cliente y servidor, lo que bloquea el socket para siempre.</p></div>
+</details>
+
+<details class="section-block sec" id="c21-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Cuántos bytes mide un bloque de AES y cuántos caracteres ocupa en hexadecimal?</summary><p>16 bytes, que se muestran como 32 caracteres hexadecimales porque cada byte necesita dos dígitos.</p></details>
+<details class="qa"><summary>2. ¿Qué dos bibliotecas se enlazan con gcc para usar OpenSSL?</summary><p><code>-lssl</code> y <code>-lcrypto</code>.</p></details>
+<details class="qa"><summary>3. ¿Por qué el cliente hace tres <code>send</code> antes de que el servidor pueda descifrar?</summary><p>Porque el servidor necesita primero el IV, luego la longitud exacta del texto cifrado para reservar su buffer, y por último los bytes cifrados.</p></details>
+<details class="qa"><summary>4. Una cadena de 14 bytes: ¿cuánto relleno PKCS#7 y con qué valor?</summary><p>2 bytes, cada uno con el valor 2 (0x02).</p></details>
+<details class="qa"><summary>5. Una cadena de exactamente 16 bytes: ¿cuál es el tamaño final con relleno?</summary><p>32 bytes: se agrega un bloque completo de 16 bytes con valor 16.</p></details>
+<details class="qa"><summary>6. ¿Por qué se abre la llave con <code>"rb"</code> y no con <code>"r"</code>?</summary><p>Porque son bytes puros; el modo texto puede truncar o alterar bytes que coinciden con saltos de línea o nulos.</p></details>
+<details class="qa"><summary>7. ¿Desde qué código ASCII hay caracteres visibles y qué es el 32?</summary><p>Desde el 33 (el signo de admiración); el 32 es la barra espaciadora y del 0 al 31 son de control.</p></details>
+<details class="qa"><summary>8. ¿Por qué el mismo texto «Carlos» da bytes cifrados distintos en cada ejecución?</summary><p>Porque el cliente genera un IV pseudoaleatorio nuevo cada vez, que cambia el punto de partida y los bloques siguientes por el encadenamiento CBC.</p></details>
+<details class="qa"><summary>9. ¿Qué pasa si cliente y servidor usan un IV distinto?</summary><p>El descifrado falla por completo: el IV debe coincidir exactamente con el que se usó al cifrar.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c21-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>Libro:</strong> recomendó el libro de criptografía en Java de David Hook para profundizar en la teoría de los algoritmos y el relleno.</li>
+<li><strong>El tropiezo:</strong> mientras esperaba las conexiones de los alumnos casi se tropieza en la tarima y bromeó al respecto.</li>
+<li><strong>Prueba en vivo:</strong> varios alumnos se conectaron pero sus nombres no salían en pantalla; el profesor comparó los primeros bytes de los arreglos para saber quién era cada uno, porque todos llegaban por la misma IP de la red PC Puma.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c21-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Entregas:</strong> no hay tarea que entregar.</li>
+<li><strong>Tarea «moral»:</strong> probar en casa el par <code>servidor_texto_crypto.c</code> y <code>cliente_texto_crypto.c</code>, con el archivo <code>llave.key</code> en el mismo directorio.</li>
+<li><strong>Calificaciones:</strong> el profesor dijo que sigue pendiente de calificar la Tarea 5.</li>
+<li>No hubo pase de lista porque la clase se extendió hasta las 8:30. <strong>Próxima clase:</strong> martes.</li>
+<li><strong>Pendiente en el sitio:</strong> las páginas de las Clases 19 y 20, a las que no se asistió, se reconstruyen con el material del profesor.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>AES cifra en bloques de 16 bytes; PKCS#7 rellena k bytes con valor k, y un mensaje de 16 recibe un bloque extra de 16.</li>
+<li>EVP: new, Init_ex, Update, Final_ex para cifrar; Decrypt equivalente con la misma llave y el mismo IV.</li>
+<li>Llave de 32 bytes en <code>llave.key</code> (modo binario); IV de 16 bytes aleatorio por ejecución.</li>
+<li>Protocolo: tres <code>send</code> y tres <code>recv</code> (IV, longitud, texto cifrado).</li>
+<li>Compilar con <code>-lssl -lcrypto</code>.</li>
+</ul></div>
+
+</div>
+</body>
+</html>
