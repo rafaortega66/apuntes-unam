@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="no-aplica">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 19 — Examen — Minería de Datos</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261103a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261103a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Minería de Datos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 19 — Examen</h2>
+  <p class="prof">M.C. José Concepción Roberto Olvera López · Fecha: 5 nov 2026 · Segundo Examen Parcial: aprendizaje supervisado, clustering (K-means, DBSCAN, Mean Shift), clasificación, reducción de dimensionalidad, series de tiempo (Holt-Winters, ARIMA, SARIMA), redes neuronales, proceso con el cliente y casos de negocio.</p>
+</div>
+<div class="files" id="guia-estudio-pdf"><a class="btn" href="../../decimo/MD/MD-Resumenes/MD-Clase19-resumen.pdf" target="_blank">📄 Guía de estudio (PDF): el examen y dónde repasar cada tema</a></div>
+
+<div class="section-block nota" style="border-left:3px solid #A98BD1"><p style="margin:0"><strong>📋 Nota:</strong> esta sesión fue el <strong>Segundo Examen Parcial</strong>, no una clase con tema nuevo. Abajo están mis respuestas, transcritas del PDF que entregué. El archivo original sigue en <a href="entregas.html">Entregas</a>: <a href="../../decimo/MD/MD-Examenes/MD-E02/MD-E02-entregables/Examen2OrtegadelaPazRafael.pdf" target="_blank">Examen2OrtegadelaPazRafael.pdf</a>. El profesor lo había anunciado en la <a href="clase-18.html">Clase 18</a> como un examen sobre todo el temario, probablemente en computadora. No hay registro de la calificación.</p></div>
+
+<details class="section-block sec" id="c19-p1-4"><summary><span class="stitle">Preguntas 1 a 4: aprendizaje supervisado, clustering, clasificación y dimensionalidad</span></summary>
+<p><strong>1. Los 3 principales desafíos del aprendizaje supervisado.</strong> Selección y calidad de las variables independientes; sobreajuste (<em>overfitting</em> y generalización); e impacto y análisis de los errores en la matriz de confusión (falsos positivos y falsos negativos).</p>
+<p><strong>2. Tres diferencias entre K-means y DBSCAN, y cómo funciona Mean Shift.</strong></p>
+<ul>
+<li><strong>Definición previa del número de grupos:</strong> en K-means es obligatoria; DBSCAN descubre la cantidad de grupos según la conectividad y la proximidad de los datos.</li>
+<li><strong>Forma geométrica de las agrupaciones.</strong></li>
+<li><strong>Manejo de valores atípicos</strong> (outliers o ruido).</li>
+</ul>
+<p><em>Mean Shift (desplazamiento medio):</em> algoritmo de agrupamiento no paramétrico basado en estimación de densidad por kernel. Define una ventana deslizante o radio de búsqueda alrededor de los puntos, calcula el promedio vectorial y desplaza el centro hacia la zona de mayor densidad; itera hasta converger. Se recomienda para procesamiento y segmentación de imágenes, seguimiento de objetos en video y estructuras de densidad no paramétricas.</p>
+<p><strong>3. Modelo de clasificación: propósito, características, algoritmos y métricas.</strong> El propósito es predecir y asignar etiquetas o clases cualitativas y discretas a nuevas observaciones, aprendiendo de datos históricos etiquetados. Características: aprendizaje supervisado, variable objetivo cualitativa o discreta, mapeo de variables independientes y sensibilidad al desbalance de clases. Algoritmos: árboles de decisión, bosques aleatorios (Random Forest), regresión logística, K-vecinos más cercanos (KNN), máquinas de vectores de soporte (SVM), Naive Bayes y redes neuronales artificiales. Métricas: matriz de confusión, exactitud (<em>accuracy</em>), precisión, sensibilidad o exhaustividad (<em>recall</em>), F1-score, curva ROC y AUC, KS y coeficiente de Gini, y validación cruzada K-Fold.</p>
+<p><strong>4. Razón y técnicas para reducir la dimensionalidad.</strong> Razones: optimización y eficiencia computacional, mitigar el sobreajuste y la maldición de la dimensionalidad, eliminar ruido, redundancia y multicolinealidad, y facilitar la visualización y la interpretación. Técnicas: de extracción y proyección de características, y de selección de características.</p>
+</details>
+
+<details class="section-block sec" id="c19-p5-7"><summary><span class="stitle">Preguntas 5 a 7: funciones de Python y series de tiempo</span></summary>
+<p><strong>5. Cuándo se usan <code>StandardScaler</code>, <code>feature_importances_</code>, t-SNE y Ridge/Lasso.</strong></p>
+<ul>
+<li><strong>StandardScaler:</strong> en el preprocesamiento, antes de entrenar algoritmos sensibles a la escala y magnitud de las variables.</li>
+<li><strong>feature_importances_:</strong> en la evaluación, el análisis y la selección de características, tras ajustar un modelo basado en árboles (clasificación o regresión).</li>
+<li><strong>t-SNE:</strong> en la exploración y el análisis visual de datos de alta dimensionalidad.</li>
+<li><strong>Ridge y Lasso:</strong> al entrenar modelos lineales con muchas variables, multicolinealidad o alto riesgo de sobreajuste.</li>
+</ul>
+<p><strong>6. Triple Exponential Smoothing (Holt-Winters).</strong> Propósito: proyectar valores futuros modelando y descomponiendo tres componentes estructurales a la vez. Característica principal: ponderación exponencial decreciente, donde los datos recientes pesan más que los lejanos. Se recomienda en series con patrones cíclicos o estacionales definidos por periodos, con al menos 2 a 4 ciclos completos de historial. La confiabilidad se evalúa con métricas de error sobre datos de prueba (MAPE, MAE y RMSE): a menor error, mayor confiabilidad.</p>
+<p><strong>7. ARIMA y SARIMA; ACF de una serie no estacionaria.</strong> Propósito: predecir valores futuros de series complejas modelando la correlación de los datos con sus valores pasados y con los errores aleatorios previos. <em>ARIMA</em> tiene tres componentes: autorregresivo, de integración o diferenciación y de media móvil. <em>SARIMA</em> lo extiende con una estructura multiplicativa para patrones estacionales repetitivos. ARIMA se recomienda sin estacionalidad fija pero con trayectorias irregulares o tendencias no lineales; SARIMA cuando hay dinámica estocástica compleja con estacionalidad marcada en periodos fijos. Confiabilidad: pruebas de estacionariedad previas, diagnóstico y análisis de residuos, criterios de información para elegir el orden y métricas de error en datos de prueba. El gráfico ACF de una serie <strong>no</strong> estacionaria muestra decaimiento extremadamente lento, valores persistentemente altos y positivos, y permanencia fuera de las bandas de significancia.</p>
+</details>
+
+<details class="section-block sec" id="c19-p8-10"><summary><span class="stitle">Preguntas 8 a 10: redes neuronales, proceso con el cliente y casos de negocio</span></summary>
+<p><strong>8. Redes neuronales.</strong> Componentes: capa de entrada y neuronas, pesos sinápticos, sesgo, suma ponderada, función de activación y mecanismos de optimización. Tres tipos: <em>perceptrón multicapa (MLP)</em>, de conexiones densas hacia adelante sin ciclos, para datos tabulares, clasificación y regresión; <em>convolucionales (CNN)</em>, con filtros que extraen patrones espaciales y reducen dimensionalidad, para imágenes y video; <em>recurrentes (RNN y LSTM)</em>, con memoria temporal de secuencias, para texto, audio y series de tiempo. Épocas y precisión: se monitorean la precisión y el error sobre datos de validación y se detiene el entrenamiento cuando la métrica se estabiliza, antes de caer en sobreajuste. <em>(La parte sobre cómo influyen las capas ocultas y las neuronas no quedó respondida en el PDF.)</em></p>
+<p><strong>9. Actividades clave para un modelo predictivo con un cliente.</strong> Entendimiento del negocio (definir el problema y la meta analítica); exploración o EDA (diagnosticar distribuciones y varianza); limpieza; transformación; reducción de variables; partición y balanceo; modelado; evaluación; interpretación; despliegue y monitoreo.</p>
+<p><strong>10. Casos de negocio: algoritmo y por qué.</strong></p>
+<table>
+<tr><th>Caso</th><th>Algoritmo y razón</th></tr>
+<tr><td>a) Análisis de reclamaciones</td><td>Random Forest o árboles (o Naive Bayes para texto): reglas complejas para separar reclamos legítimos de fraudes y mitigar falsos negativos.</td></tr>
+<tr><td>b) Predicción de epidemia</td><td>SARIMA o regresión: estacionalidad climática y contagios pasados para anticipar picos y preparar insumos médicos.</td></tr>
+<tr><td>c) Optimización de precios</td><td>Regresión lineal o Ridge: elasticidad precio-demanda para fijar el precio que maximice ingresos sin perder ventas.</td></tr>
+<tr><td>d) Simulación de presupuestos</td><td>Regresión regularizada o series de tiempo: controla variables correlacionadas para proyectar gastos y flujos en distintos escenarios.</td></tr>
+<tr><td>e) Optimización de rutas</td><td>DBSCAN o clustering jerárquico: agrupa destinos por densidad y distancia real para trazar microzonas y reducir tiempos.</td></tr>
+<tr><td>f) Optimización de campañas</td><td>K-means más regresión logística: segmenta clientes por gasto y predice su propensión de compra para personalizar promociones y elevar el ROI.</td></tr>
+<tr><td>g) Demanda de inventarios</td><td>Holt-Winters o SARIMA: ciclos estacionales de consumo para calcular compras exactas y evitar desabasto o sobrestock.</td></tr>
+<tr><td>h) Apoyo a diagnósticos médicos</td><td>CNN (imágenes) o regresión logística y árboles (datos clínicos): detecta patrones patológicos para acelerar el triaje y minimizar falsos negativos.</td></tr>
+</table>
+</details>
+
+<details class="section-block sec" id="c19-repaso"><summary><span class="stitle">Dónde repasar cada tema</span></summary>
+<table>
+<tr><th>Tema del examen</th><th>Clases</th></tr>
+<tr><td>Clustering (K-means, DBSCAN, Mean Shift)</td><td><a href="clase-09.html">9</a>, <a href="clase-11.html">11</a></td></tr>
+<tr><td>Clasificación, métricas y validación cruzada</td><td><a href="clase-12.html">12</a>, <a href="clase-13.html">13</a>, <a href="clase-15.html">15</a>, <a href="clase-16.html">16</a></td></tr>
+<tr><td>Regresión, Ridge y Lasso</td><td><a href="clase-11.html">11</a>, <a href="clase-14.html">14</a></td></tr>
+<tr><td>Redes neuronales (MLP, CNN, RNN)</td><td><a href="clase-16.html">16</a></td></tr>
+<tr><td>Proceso con el cliente y criterios de robustez</td><td><a href="clase-18.html">18</a></td></tr>
+<tr><td>Series de tiempo (Holt-Winters, SARIMA)</td><td><a href="clase-18.html">18</a></td></tr>
+</table>
+</details>
+
+<details class="section-block sec" id="c19-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li>Calificación del examen: no registrada.</li>
+<li>Falta confirmar en Classroom la entrega del examen y la práctica de redes neuronales (MLP), que según la <a href="clase-18.html">Clase 18</a> se entregaba el viernes 6 nov.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Segundo parcial de MD, 5 nov 2026: diez preguntas sobre todo el temario del curso.</li>
+<li>Casos de negocio: clasificación (Random Forest, regresión logística) para fraude y diagnóstico; series de tiempo (SARIMA, Holt-Winters) para epidemias e inventarios; clustering (K-means, DBSCAN) para campañas y rutas.</li>
+<li>Se repasa con las Clases 9 a 18 y la guía en PDF.</li>
+</ul></div>
+</div>
+</body>
+</html>

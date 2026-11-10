@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-10T14:45:08+00:00",
+ "generatedAt": "2026-11-10T14:57:55+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -882,11 +882,23 @@
     "resumen": "Tema 3 — Metodología completa de un proyecto de minería de datos (13 actividades, triple ajuste de hiperparámetros, robustez), ejercicio de elegir el algoritmo según el problema y exposiciones de la Práctica 3.5 (pronóst",
     "url": "materias/mineria-de-datos/clase-18.html",
     "formato": "estudio"
+   },
+   {
+    "num": 19,
+    "fecha": "2026-11-05",
+    "resumen": "Segundo Examen Parcial: aprendizaje supervisado, clustering (K-means, DBSCAN, Mean Shift), clasificación, reducción de dimensionalidad, series de tiempo (Holt-Winters, ARIMA, SARIMA), redes neuronales, proceso con el cli",
+    "url": "materias/mineria-de-datos/clase-19.html",
+    "formato": "no-aplica"
    }
   ],
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "e3527f1",
+   "fecha": "2026-11-10T08:45:08-06:00",
+   "mensaje": "ACS: Clase 21 (5 nov) — página, índice y guía de estudio en PDF"
+  },
   {
    "hash": "82e0f58",
    "fecha": "2026-11-09T16:22:18-06:00",
@@ -1181,11 +1193,6 @@
    "hash": "ab426f5",
    "fecha": "2026-10-20T00:10:41-06:00",
    "mensaje": "ASI-Sprint2 (dos semanas): reportes renombrados ASI-Sprint2-semana1.pdf y -semana2.pdf; regla para sprints de varias semanas en CLAUDE.md"
-  },
-  {
-   "hash": "ee57f48",
-   "fecha": "2026-10-20T00:07:30-06:00",
-   "mensaje": "ASI-Proyecto: un solo proyecto, sin subcarpetas ASI-ProyNN — cada ASI-SprintN con su README, indicaciones, entregables y adicionales; proyectos.html con una tarjeta por sprint"
   }
  ]
 }
