@@ -556,3 +556,9 @@ details.qa p { font-size: 14px; }
 .tr-links { margin-top: auto; display: flex; flex-wrap: wrap; gap: 12px; padding-top: 4px; }
 .tr-links a { font-size: 12.5px; color: var(--indigo); text-decoration: none; }
 .tr-links a:hover { text-decoration: underline; }
+
+/* vista Por clase: dos tarjetas por fila (una en pantallas angostas) */
+.v-clase { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; align-items: stretch; }
+.v-clase > :not(a.clase-link) { grid-column: 1 / -1; }
+.v-clase a.clase-link { margin: 0; }
+@media (max-width: 760px) { .v-clase { grid-template-columns: 1fr; } }
