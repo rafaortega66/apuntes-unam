@@ -24,7 +24,7 @@ NotebookLM (audio ASI-Clase17.m4a). Fue una sesión de presentaciones y avisos; 
 | 7 | 4511 / 451 (dudoso: LDAP) |
 | 8 | 2616 (dudoso: HTTP/1.1) |
 | 9 | 8446 (TLS 1.3) |
-| 10 | 1700 (números y parámetros asignados; dudoso, confirmar con el profesor) |
+| 10 | 1700 (números y parámetros asignados; confirmado por el PDF del equipo) |
 ### Estructura obligatoria de la exposición
 1. Identificar el estándar y el tipo de documento.
 2. Decir si administra, protege o diseña un servicio de red.
