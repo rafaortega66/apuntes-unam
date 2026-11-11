@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 20 — Reconocimiento de Patrones</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261110a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261103a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Reconocimiento de Patrones</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Clase 20 <span style="font-size:.6em;font-weight:400;color:var(--ink-soft)">(sesión 23 del curso)</span></h2>
+  <p class="prof">Ing. Rubén Omar Azuara Domínguez · 9 nov 2026 · Temas 9 y 10 — Redes convolucionales (convolución, CNN, pooling, ResNet), autoencoders, aumento de datos y aprendizaje por transferencia; introducción al procesamiento de lenguaje natural (N-gramas, TF-IDF y embeddings).</p>
+  <p style="font-size:12px;color:var(--ink-soft);margin:2px 0 0">🔢 Sesión 23 del curso (cronología real). Fuente: audio RP-Clase20 procesado en NotebookLM, 11 nov 2026. Las fechas y entregas del final salen de NotebookLM y no se han contrastado con Classroom.</p>
+</div>
+<div class="files" id="guia-estudio-pdf"><a class="btn" href="../../decimo/RP/RP-Resumenes/RP-Clase20-resumen.pdf" target="_blank">📄 Guía de estudio (PDF): apuntes completos + resumen para estudiar</a></div>
+
+<details class="section-block sec" id="c20-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Por qué una red densa falla con imágenes y cómo lo resuelve la convolución.</strong><span class="evid">Evidencia: hizo la cuenta en clase: una imagen de 224×224×3 son 150,528 entradas y, con una capa oculta de 1024 neuronas, unos 154 millones de pesos; además aplanar destruye la vecindad entre píxeles.</span></li>
+<li><strong>Convolución contra correlación cruzada.</strong><span class="evid">Evidencia: la distinguió formalmente en 1D y 2D: la convolución refleja la señal y es conmutativa; la correlación no refleja y el orden sí importa.</span></li>
+<li><strong>Conexión residual de ResNet, H(x) = F(x) + x, y sus dos bloques.</strong><span class="evid">Evidencia: la presentó como el hito de 2015 contra el desvanecimiento del gradiente y mostró el bloque básico y el de cuello de botella.</span></li>
+<li><strong>Autoencoder y su uso en detección de anomalías.</strong><span class="evid">Evidencia: discutió con los alumnos para qué querríamos una red cuya salida es igual a su entrada y dio el ejemplo del fraude bancario.</span></li>
+<li><strong>Hiperparámetros de una capa convolucional y número de coeficientes de un filtro.</strong><span class="evid">Evidencia: calculó que un filtro 3×3×3 tiene 27 coeficientes y explicó filtros, stride y padding. Evidencia más débil: no lo marcó como pregunta de examen.</span></li>
+<li><strong>Limitaciones de los N-gramas y embeddings contextuales.</strong><span class="evid">Evidencia: fue la transición central hacia los modelos modernos; dio el ejemplo de «banco» (institución o asiento).</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c20-contexto-ia"><summary><span class="stitle">1 · IA, aprendizaje profundo y por qué las redes densas fallan con imágenes</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La inteligencia artificial contiene al aprendizaje automático, que contiene al aprendizaje profundo (modelos basados en redes neuronales). La visión computacional busca que las computadoras perciban e interpreten imágenes: detectar, segmentar y reconocer objetos.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Son cajas chinas: la más grande es la IA, dentro va el aprendizaje automático y al fondo el profundo. La visión computacional es enseñarle a la máquina a «ver» con significado y no solo a procesar una cuadrícula de números.<span class="rompe">Dónde deja de servir: la visión computacional no es solo un subconjunto del aprendizaje profundo; existía antes con descriptores manuales.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El profesor explicó por qué un perceptrón multicapa estándar no sirve para imágenes. Primero, la <strong>explosión dimensional</strong>: una imagen de 224×224 con 3 canales (RGB) equivale a 150,528 entradas; conectarlas a una sola capa oculta de 1024 neuronas exige 150,528 × 1024 ≈ 154 millones de pesos, solo en las dos primeras capas. Segundo, la <strong>pérdida de coherencia espacial</strong>: los píxeles vecinos (los de la boca de un gato) se relacionan entre sí, mientras que un píxel de la oreja no tiene relación inmediata con la pata, y aplanar la imagen a un vector destruye esa vecindad.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Justifica dejar los descriptores manuales vistos en la Clase 1 (como HOG o GLCM) y usar convoluciones. Se liga con la limitación espacial del Boosting señalada en la <a href="clase-18.html">Clase 18</a>.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> meter una imagen aplanada en una red densa creyendo que aprenderá la estructura espacial de los objetos.</p></div>
+</details>
+
+<details class="section-block sec" id="c20-convolucion"><summary><span class="stitle">2 · Convolución, correlación cruzada y autocorrelación (1D, 2D, 3D)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Una operación que mide qué tan relacionada está una señal con otra al desplazar una sobre la otra, multiplicando y sumando los valores en cada posición.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es deslizar un sello transparente sobre un papel para ver en qué partes los trazos coinciden.<span class="rompe">Dónde deja de servir: si la señal se estira o distorsiona sin una correspondencia fija de escala, el sello ya no encaja.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Convolución:</strong> se refleja una señal respecto al origen y se desplaza posición por posición sobre la otra, multiplicando y acumulando. En continuo, (f∗g)(t) = ∫ f(τ) g(t−τ) dτ; en discreto, (f∗g)[n] = Σ f[k] g[n−k]. Es <strong>conmutativa</strong>: f∗g = g∗f.</p>
+<p><strong>Correlación cruzada:</strong> la misma operación de desplazar, multiplicar y sumar, pero <strong>sin reflejar</strong> la señal; por eso el orden de las señales sí altera el resultado. <strong>Autocorrelación:</strong> aplicarla a una señal consigo misma para hallar patrones repetitivos o picos característicos.</p>
+<p><strong>Dimensiones:</strong> 1D son señales temporales como el audio; 2D, arreglos como una fotografía; 3D, volúmenes como un video (fotogramas concatenados) o imágenes satelitales con altura. Un alumno preguntó si con 1D se puede procesar un video; el profesor contestó que se podría forzar, pero daría un pésimo resultado porque al colapsar el dominio tridimensional se destruye la información de movimiento y espacio.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es el núcleo computacional de las capas de una red convolucional.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> confundir convolución con correlación cruzada al olvidar el reflejo de la señal.</p></div>
+</details>
+
+<details class="section-block sec" id="c20-cnn"><summary><span class="stitle">3 · Redes convolucionales (CNN) e hiperparámetros</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Una arquitectura de aprendizaje profundo cuyas capas convolucionales aplican filtros (kernels) deslizantes que aprenden solos a extraer mapas de características de una imagen.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un juego de lupas especializadas: una busca líneas horizontales, otra esquinas, otra círculos, y las capas profundas combinan esos rasgos para reconocer caras o coches.<span class="rompe">Dónde deja de servir: las lupas no se escogen a mano; la red las aprende por descenso de gradiente.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Se desliza un filtro K sobre la imagen I y los pesos que aprende la red son los coeficientes del filtro. <strong>Ahorro de parámetros:</strong> sobre una entrada de 28×28×3, un filtro de 3×3×3 tiene solo 27 coeficientes, frente a millones de conexiones densas. Los filtros de las primeras capas (bordes, contrastes) se parecen a cómo el sistema visual humano procesa la luz.</p>
+<ul>
+<li><strong>Número de filtros:</strong> cuántos mapas de características se extraen (32 filtros dan 32 mapas de activación).</li>
+<li><strong>Desplazamiento (stride):</strong> cuántos píxeles avanza el filtro en cada paso (con stride 2 se salta de dos en dos).</li>
+<li><strong>Relleno (padding):</strong> bordes de ceros alrededor de la imagen para cubrir los extremos sin encoger el tamaño espacial demasiado pronto.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es el estándar para clasificación, detección y segmentación visual.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que los filtros son fijos o manuales como en el procesamiento de imágenes tradicional.</p></div>
+</details>
+
+<details class="section-block sec" id="c20-pooling"><summary><span class="stitle">4 · Pooling, convolución transpuesta y convolución 1×1</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Operaciones para reducir la resolución espacial (pooling), aumentarla (convolución transpuesta) o cambiar la profundidad de canales (convolución 1×1).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>El pooling es un resumen ejecutivo que descarta el detalle fino; la convolución transpuesta es un zoom reconstructivo; la 1×1 es un mezclador de canales.<span class="rompe">Dónde deja de servir: el resumen descarta información de forma irreversible.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>Max pooling:</strong> una ventana (por ejemplo 2×2) conserva solo el valor máximo, el rasgo más dominante.</li>
+<li><strong>Average pooling:</strong> promedia los valores de la ventana.</li>
+<li><strong>Global average pooling:</strong> promedia todo el mapa a un único valor por canal; se usa al final, antes de clasificar, para evitar capas densas gigantescas.</li>
+<li><strong>Convolución transpuesta:</strong> expande la resolución espacial; se usa en segmentación y en redes generativas.</li>
+<li><strong>Convolución 1×1:</strong> opera a lo largo de los canales y sube o baja el número de mapas sin cambiar alto ni ancho.</li>
+</ul>
+<p>Un alumno preguntó si un pooling es mejor que otro. El profesor respondió que no hay regla estricta ni uno universalmente superior: depende de la arquitectura y de la tarea.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Organizan el flujo espacial y de memoria dentro de la red.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> confundir el global average pooling con el average pooling estándar (el global reduce todo el mapa a un escalar).</p></div>
+</details>
+
+<details class="section-block sec" id="c20-arquitectura"><summary><span class="stitle">5 · Arquitectura típica de una CNN</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Una estructura secuencial con un extractor de características y un clasificador denso.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un embudo: primero analiza texturas y geometrías y al final entrega un vector numérico a un clasificador que emite el veredicto.<span class="rompe">Dónde deja de servir: un embudo solo filtra; la red también aprende qué filtrar.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ol>
+<li><strong>Extracción:</strong> bloques repetidos de convolución, activación no lineal y pooling.</li>
+<li><strong>Transición:</strong> aplanado (flatten) o global average pooling para pasar de mapas 2D a un vector 1D.</li>
+<li><strong>Clasificación:</strong> red totalmente conectada; la capa de salida tiene tantas neuronas como clases, con sigmoide (binaria) o softmax (multiclase).</li>
+</ol>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Une las convoluciones con las redes densas de la <a href="clase-18.html">Clase 18</a>.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> omitir la activación no lineal tras la convolución o poner mal el número de neuronas de salida.</p></div>
+</details>
+
+<details class="section-block sec" id="c20-resnet"><summary><span class="stitle">6 · Redes residuales (ResNet) y evolución histórica</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Una arquitectura de 2015 (ganadora de ImageNet) con conexiones de salto que permite entrenar redes de más de 100 capas sin que el gradiente se desvanezca.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un puente peatonal que te deja saltar un tramo de carretera: la señal original viaja intacta por el puente y se suma al final con lo que se procesó en el camino.<span class="rompe">Dónde deja de servir: el puente solo funciona si ambos caminos llegan con el mismo tamaño.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>La conexión residual define H(x) = F(x) + x. En la retropropagación el gradiente fluye directo por el término +x, cuya derivada es 1, y no se atenúa hacia cero.</p>
+<ul>
+<li><strong>Bloque básico:</strong> mantiene constante el número de canales (por ejemplo 64 en la entrada y en la salida).</li>
+<li><strong>Bloque de cuello de botella (bottleneck):</strong> convolución 1×1 que baja los canales (de 256 a 64), convolución 3×3 en medio y otra 1×1 que los restaura a 256, y al final se suma la identidad.</li>
+</ul>
+<p>Hay versiones desde ResNet-18 hasta ResNet-152, y a mayor profundidad menor error en ImageNet. Línea del tiempo que presentó: LeNet (1998), AlexNet (2012), VGGNet y GoogLeNet, ResNet (2015), MobileNet (2017), EfficientNet y Vision Transformers.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Demostró que apilar profundidad funciona si se resuelve el gradiente que se desvanece; es la solución de conexiones residuales de la <a href="clase-18.html">Clase 18</a>.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> sumar x directo cuando sus dimensiones o canales no coinciden con los de F(x); entonces hay que ajustarlo con una convolución 1×1.</p></div>
+</details>
+
+<details class="section-block sec" id="c20-autoencoder"><summary><span class="stitle">7 · Autoencoders</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Una red no supervisada que reconstruye en su salida la misma señal que recibe, pasando por una representación comprimida en un espacio latente.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es leer un libro de 300 páginas, escribir un resumen de 5 renglones y pedirle a otra persona que reescriba el libro solo con esos renglones: se pierde detalle, pero queda lo esencial.<span class="rompe">Dónde deja de servir: el resumen de la red son números, no frases legibles.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El <strong>encoder</strong> reduce una entrada de alta dimensión (una imagen de 28×28×1 = 784 variables) a un espacio latente o cuello de botella de muy pocos valores (por ejemplo 8 o 10). El <strong>decoder</strong> expande ese vector y reconstruye la señal. La compresión siempre es <strong>con pérdida</strong>, a diferencia de un ZIP o WinRAR. Aplicaciones:</p>
+<ul>
+<li><strong>Detección de anomalías:</strong> se entrena solo con transacciones bancarias normales; ante una fraudulenta el error de reconstrucción se dispara y delata la anomalía.</li>
+<li><strong>Eliminación de ruido:</strong> se alimenta con una imagen ruidosa y se entrena para que la salida sea la imagen limpia.</li>
+<li><strong>Compresión y recomendación:</strong> guardar solo el vector latente de 10 números en lugar de toda la matriz.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es una forma no supervisada y no lineal de extraer y reducir características.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que el autoencoder reproduce una copia idéntica sin pérdida de información.</p></div>
+</details>
+
+<details class="section-block sec" id="c20-datos"><summary><span class="stitle">8 · Aumento de datos y aprendizaje por transferencia</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Dos técnicas para entrenar modelos profundos cuando hay pocos datos.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>El aumento de datos es mostrarle a un niño fotos del mismo perro de cabeza, inclinado o con filtro de color para que aprenda que sigue siendo un perro. La transferencia es contratar a un radiólogo experto en pulmones para detectar manchas en la piel: no empieza de cero porque ya sabe interpretar radiografías.<span class="rompe">Dónde deja de servir: si las dos tareas son muy distintas, lo aprendido antes puede no ayudar.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Aumento de datos:</strong> transformaciones artificiales de las imágenes de entrenamiento (rotaciones, volteos, recortes, cambios de color o brillo, desenfoque) que obligan a la red a aprender representaciones invariantes.</p>
+<p><strong>Transferencia:</strong> se toma un modelo B preentrenado con millones de datos (ImageNet, o 200,000 radiografías de pulmón) y se reutilizan sus pesos como punto de partida para una tarea A con pocos datos (por ejemplo 1,000 imágenes de cáncer de piel). Converge más rápido, generaliza mejor y evita el sobreajuste.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite usar aprendizaje profundo en la industria sin millones de datos propios etiquetados; el aumento de datos ya apareció como técnica de regularización en la <a href="clase-18.html">Clase 18</a>.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> entrenar una red profunda desde cero con un conjunto pequeño (menos de unas 2,000 imágenes), que lleva a sobreajuste severo.</p></div>
+</details>
+
+<details class="section-block sec" id="c20-nlp"><summary><span class="stitle">9 · Introducción al procesamiento de lenguaje natural y N-gramas</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La disciplina que busca que las computadoras interpreten, modelen y generen lenguaje humano. Un N-grama es un modelo probabilístico que predice la siguiente palabra suponiendo que depende solo de las n−1 palabras previas (supuesto de Markov).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Para la máquina las palabras son unos y ceros; el NLP es la traducción que le permite notar que el orden cambia el sentido. Un bigrama es como adivinar la siguiente palabra mirando solo la anterior.<span class="rompe">Dónde deja de servir: el N-grama no entiende lo dicho hace diez palabras.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El lenguaje es difícil porque la computadora no entiende contexto, gramática, intención ni semántica por sí sola. El orden importa: «el perro mordió al hombre» y «el hombre mordió al perro» tienen las mismas palabras y significados opuestos. El profesor distinguió tres niveles de patrones secuenciales: caracteres (tras la «q» en español suele venir la «u»), palabras y oraciones o dependencias largas.</p>
+<p><strong>Bigramas</strong> son secuencias de 2 palabras («me gusta») y <strong>trigramas</strong> de 3 («me gusta aprender»). Con un corpus de frases sobre gatos, perros y comida, tras «el gato» el modelo calculó 67 % de probabilidad de «come» y 33 % de «bebe».</p>
+<p><strong>Limitaciones:</strong> explosión combinatoria (con 1000 palabras, 10⁶ bigramas posibles y 10⁹ trigramas); contexto corto, incapaz de recordar dependencias lejanas («el perro que estaba jugando con los niños en el parque finalmente encontró su pelota»); y probabilidad cero para combinaciones que no aparecieron en el entrenamiento.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es el antecedente directo de los modelos de lenguaje modernos.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> usar N-gramas grandes para lenguaje complejo sin prever la explosión de memoria.</p></div>
+</details>
+
+<details class="section-block sec" id="c20-embeddings"><summary><span class="stitle">10 · Sintaxis, semántica, TF-IDF y embeddings contextuales</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La diferencia entre estructura y significado del texto, una forma estadística de pesar términos (TF-IDF) y representaciones vectoriales densas de las palabras (embeddings).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>La sintaxis es que las piezas de Lego encajen; la semántica, que la figura armada tenga sentido. Un embedding es darle a cada palabra unas coordenadas GPS en un mapa donde las parecidas quedan cerca.<span class="rompe">Dónde deja de servir: un mapa GPS tiene 2 dimensiones; un embedding tiene cientos.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Sintaxis contra semántica:</strong> «el perro come comida» (sujeto, verbo, objeto) está bien construida; la semántica pide que además tenga sentido. Ejemplo de ambigüedad: «vi al hombre con el telescopio» (¿yo usé el telescopio o él lo tenía?).</p>
+<p><strong>TF-IDF:</strong> las palabras comunes en todos los documentos (artículos como «el») reciben peso bajo; las raras y distintivas («felino», «leche») reciben peso alto. Si la palabra no aparece en el documento, su valor en el vector es cero.</p>
+<p><strong>Embeddings:</strong> vectores continuos y densos de baja dimensión donde la distancia geométrica refleja afinidad semántica; mango, plátano y naranja quedan juntos y lejos de martillo o ventana. Los <strong>estáticos</strong> (Word2Vec, GloVe, FastText) dan un solo vector fijo por palabra y permiten álgebra semántica (rey − hombre + mujer ≈ reina). Los <strong>contextuales</strong> (Transformers, BERT, GPT) cambian el vector según el contexto: «banco» en «voy al banco a depositar dinero» y en «me senté en el banco del parque» tiene vectores muy distintos.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la base de los modelos de lenguaje actuales; la clase siguiente entra a los Transformers.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que en modelos tipo GPT cada palabra tiene un vector fijo sin importar el contexto.</p></div>
+</details>
+
+<details class="section-block sec" id="c20-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Cuántas entradas y parámetros requiere una red densa para una imagen 224×224×3 con una capa oculta de 1024 neuronas?</summary><p>150,528 entradas y unos 154 millones de parámetros (150,528 × 1024) solo en las primeras dos capas.</p></details>
+<details class="qa"><summary>2. Compara convolución y correlación cruzada.</summary><p>La convolución refleja una señal antes de desplazarla y es conmutativa (f∗g = g∗f). La correlación cruzada no refleja y el orden sí cambia el resultado.</p></details>
+<details class="qa"><summary>3. ¿Por qué H(x) = F(x) + x evita el desvanecimiento del gradiente?</summary><p>Porque la derivada del término +x es 1: el gradiente viaja por el atajo sin multiplicarse por fracciones pequeñas capa tras capa.</p></details>
+<details class="qa"><summary>4. ¿Cómo detecta un autoencoder transacciones fraudulentas?</summary><p>Se entrena solo con transacciones normales; ante una anómala no sabe reconstruirla y el error de reconstrucción se vuelve muy alto.</p></details>
+<details class="qa"><summary>5. Diferencia entre aumento de datos y transferencia de aprendizaje.</summary><p>El aumento genera datos nuevos transformando los existentes; la transferencia reutiliza los pesos de un modelo preentrenado en otra tarea como punto de partida.</p></details>
+<details class="qa"><summary>6. ¿Qué supuesto hace un N-grama sobre la siguiente palabra?</summary><p>El de Markov: depende solo de las n−1 palabras anteriores, no de toda la historia.</p></details>
+<details class="qa"><summary>7. ¿Por qué Word2Vec falla con «banco» y cómo lo resuelven los Transformers?</summary><p>Word2Vec da un solo vector fijo a la palabra. Los Transformers calculan un vector distinto según el contexto (dinero o parque).</p></details>
+<details class="qa"><summary>8. ¿Cuántos coeficientes tiene un filtro 3×3×3?</summary><p>27 (más un sesgo opcional).</p></details>
+<details class="qa"><summary>9. ¿Qué hace una convolución 1×1 y para qué sirve el bottleneck de ResNet?</summary><p>Opera a lo largo de los canales sin cambiar alto ni ancho. En el bottleneck baja los canales (256 a 64), se aplica la 3×3 y otra 1×1 los restaura a 256 antes de sumar la identidad.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c20-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>Dataset RAF-DB:</strong> al inicio un alumno pidió el dataset de emociones en imágenes del proyecto, que no es público; el profesor lo enviará por correo a quienes elijan esa opción.</li>
+<li><strong>Filtros y ojo humano:</strong> al proyectar los filtros aprendidos por las primeras capas, mostró que parecen los campos receptivos del ojo y la corteza visual.</li>
+<li><strong>Compresión con pérdida:</strong> aclaró que un autoencoder no es como WinRAR o ZIP.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c20-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Práctica 5:</strong> el profesor dijo que la subía ese lunes; se entrega y expone el siguiente viernes de clases presenciales (unos 15 a 20 minutos por equipo). NotebookLM la marcó como [material] «CNN para clasificar imágenes»; por confirmar en Classroom.</li>
+<li><strong>Última tarea (teórico-práctica):</strong> se deja el viernes y se entrega el lunes o el viernes siguiente; son cálculos sencillos a mano, como los de distancias y DBSCAN.</li>
+<li><strong>Segundo examen parcial:</strong> el lunes de la última semana de clases (fecha exacta por confirmar). Las calificaciones se darán por Classroom.</li>
+<li><strong>Proyecto final:</strong> viernes 27 nov 2026; exposición de 25 a 30 minutos por equipo; en el reporte solo fragmentos de código si son esenciales para entender la metodología.</li>
+<li><strong>Próxima clase:</strong> terminar NLP con la arquitectura y los mecanismos de atención de los Transformers (tipo BERT y GPT).</li>
+</ul>
+</details>
+
+</div>
+</body>
+</html>

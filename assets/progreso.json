@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-11T16:18:35+00:00",
+ "generatedAt": "2026-11-11T17:21:46+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -154,6 +154,13 @@
     "fecha": "2026-11-06",
     "resumen": "Tema 8 — Revisión de la Práctica 4 (KNN y regresión logística): elección de k, estrategia de lotes, caja blanca contra caja negra, regularización L1 y L2, pesado por clase.",
     "url": "materias/reconocimiento-de-patrones/clase-19.html",
+    "formato": "estudio"
+   },
+   {
+    "num": 20,
+    "fecha": "2026-11-09",
+    "resumen": "Temas 9 y 10 — Redes convolucionales (convolución, CNN, pooling, ResNet), autoencoders, aumento de datos y aprendizaje por transferencia; introducción al procesamiento de lenguaje natural (N-gramas, TF-IDF y embeddings).",
+    "url": "materias/reconocimiento-de-patrones/clase-20.html",
     "formato": "estudio"
    }
   ],
@@ -909,6 +916,11 @@
  },
  "gitlog": [
   {
+   "hash": "39400c9",
+   "fecha": "2026-11-11T10:18:35-06:00",
+   "mensaje": "RP: Clase 19 (6 nov) — revisión de la Práctica 4; página, índice y guía de estudio en PDF"
+  },
+  {
    "hash": "7e59274",
    "fecha": "2026-11-10T09:45:32-06:00",
    "mensaje": "Por clase: dos tarjetas por fila y SIB Actividad 2 en orden por fecha"
@@ -1202,11 +1214,6 @@
    "hash": "edc55e0",
    "fecha": "2026-10-20T12:37:00-06:00",
    "mensaje": "ASI Clase 01: formato de estudio"
-  },
-  {
-   "hash": "c7d53c5",
-   "fecha": "2026-10-20T12:33:50-06:00",
-   "mensaje": "ACS Clase 02: formato de estudio"
   }
  ]
 }
