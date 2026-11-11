@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 19 — Reconocimiento de Patrones</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261110a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261103a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Reconocimiento de Patrones</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Clase 19 <span style="font-size:.6em;font-weight:400;color:var(--ink-soft)">(sesión 22 del curso)</span></h2>
+  <p class="prof">Ing. Rubén Omar Azuara Domínguez · 6 nov 2026 · Tema 8 — Revisión de la Práctica 4 (KNN y regresión logística): elección de k, estrategia de lotes, caja blanca contra caja negra, regularización L1 y L2, pesado por clase.</p>
+  <p style="font-size:12px;color:var(--ink-soft);margin:2px 0 0">🔢 Sesión 22 del curso (cronología real). Fuente: audio RP-Clase19 procesado en NotebookLM, 11 nov 2026. <strong>La grabación está incompleta al inicio</strong> (arranca a mitad de las preguntas de la exposición de la Práctica 4) y no hubo teoría nueva. Las fechas y entregas del final salen de NotebookLM y no se han contrastado con Classroom.</p>
+</div>
+<div class="files" id="guia-estudio-pdf"><a class="btn" href="../../decimo/RP/RP-Resumenes/RP-Clase19-resumen.pdf" target="_blank">📄 Guía de estudio (PDF): apuntes completos + resumen para estudiar</a></div>
+
+<details class="section-block sec" id="c19-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Regularización L1 (Lasso) contra L2 (Ridge) y su efecto en los pesos θ.</strong><span class="evid">Evidencia: pidió proyectar las gráficas de evolución de pesos del equipo, las elogió y dedicó varios minutos a contrastarlas «para que les quede más claro a todos».</span></li>
+<li><strong>Regresión logística como caja blanca frente a redes neuronales como caja negra.</strong><span class="evid">Evidencia: fue pregunta directa al equipo («¿qué ventaja tiene frente a SVM o redes complejas?») y los alumnos respondieron «interpretabilidad».</span></li>
+<li><strong>El pesado por clase se aplica sobre la clase, nunca sobre las características ni sobre ejemplos aislados.</strong><span class="evid">Evidencia: lo remarcó con «ojo, esto es muy importante».</span></li>
+<li><strong>Lote completo contra minilotes, y por qué la regresión logística converge al mínimo global.</strong><span class="evid">Evidencia: interrogó al equipo sobre la estrategia de lotes y se discutió que la entropía cruzada binaria es convexa. Evidencia más débil: no dijo que fuera de examen.</span></li>
+<li><strong>Cómo elegir k en KNN (no quedarse a ciegas con el pico de exactitud).</strong><span class="evid">Evidencia: se discutió que k=41 dio el mejor puntaje, pero un k muy grande suaviza de más las fronteras. Evidencia más débil: salió de la exposición de los alumnos.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c19-k"><summary><span class="stitle">1 · Elección del hiperparámetro k en KNN</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El número de vecinos más cercanos que se consultan para decidir por voto de la mayoría en KNN, un algoritmo supervisado perezoso basado en instancias.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es el tamaño del grupo de vecinos al que le pides opinión. Con un solo vecino, si es un bicho raro te confunde; con todo el vecindario, la opinión promedio borra las particularidades locales y solo gana la mayoría.<span class="rompe">Dónde deja de servir: los vecinos se pesan por distancia en el espacio de características, no por cercanía física.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>En el experimento de la Práctica 4 el mejor valor de exactitud se obtuvo con k = 41, y apareció además un pico en k = 81. El equipo justificó que, aunque la práctica pedía elegir numéricamente el mejor k, en la práctica suele ser preferible un valor menor para conservar estabilidad y no suavizar en exceso las fronteras de decisión.</p>
+<p>[material] Con k muy pequeño (por ejemplo k = 1) hay sobreajuste, fronteras irregulares y sensibilidad al ruido. Con k muy grande hay subajuste, fronteras sobresuavizadas y el rendimiento decae hacia el azar.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra que no siempre conviene escoger el pico más alto de exactitud si corresponde a un k desproporcionado que pierde resolución espacial. Se liga con el efecto de K visto en la <a href="clase-12.html">Clase 12</a>.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> quedarse con un k enorme por una mejora numérica pequeña en la muestra de prueba, o usar k = 1 y capturar ruido.</p></div>
+</details>
+
+<details class="section-block sec" id="c19-lotes"><summary><span class="stitle">2 · Estrategia de lotes en regresión logística</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La forma de presentar los ejemplos de entrenamiento al optimizador para evaluar la pérdida y actualizar los pesos θ con descenso de gradiente: lote completo, minilotes o un ejemplo a la vez (estocástico).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es decidir si calificas tarea por tarea, por paquetitos de exámenes o todo el salón antes de ajustar la clase.<span class="rompe">Dónde deja de servir: calificar no cambia al calificador; aquí cada actualización sí modifica los pesos.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El profesor preguntó: «¿qué estrategia de lotes utilizaron para entrenar su regresión logística?». Los alumnos dudaron si habían dividido entre 4 o mandado todo. El profesor aclaró los números reales: el dataset Breast Cancer tiene 569 observaciones; con la partición 80/20 quedan 455 de entrenamiento y 114 de prueba. El equipo confirmó que mandó los 455 ejemplos juntos en cada iteración (lote completo).</p>
+<p>Un alumno señaló que mandar el lote completo puede llevar a mínimos locales en otros modelos, pero en regresión logística la entropía cruzada binaria es una función convexa: no hay mínimos locales y converge al óptimo global.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Conecta con las redes neuronales de la <a href="clase-18.html">Clase 18</a>, donde la superficie de pérdida no es convexa y por eso se usan minilotes.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> confundir las 569 observaciones totales con las 455 de entrenamiento, o no tener claro el tamaño de lote que implementa el código.</p></div>
+</details>
+
+<details class="section-block sec" id="c19-caja"><summary><span class="stitle">3 · Caja blanca contra caja negra: interpretabilidad</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un modelo de caja blanca tiene mecanismos y ponderaciones comprensibles y auditables (regresión logística). Uno de caja negra combina tantas transformaciones no lineales que es difícil explicar por qué tomó una decisión (redes neuronales profundas).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>En una caja blanca ves los engranes y sabes qué palanca movió qué aguja; en una caja negra metes datos por una ranura y sale un resultado sin que nadie pueda explicar cada paso intermedio.<span class="rompe">Dónde deja de servir: hay herramientas para interpretar redes, solo que es mucho más difícil.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El profesor preguntó qué ventaja tiene la regresión logística frente a SVM o redes complejas. Los alumnos respondieron que es la interpretabilidad, por ser caja blanca. La predicción es la combinación lineal z = θ₀ + Σ θᵢxᵢ pasada por la sigmoide, y cada peso θᵢ indica el impacto y la dirección con que la característica xᵢ empuja la probabilidad hacia benigno o maligno.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es crucial en áreas como la salud: un médico necesita saber qué rasgos llevaron al diagnóstico de un tumor.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que un θ positivo es «bueno» y uno negativo «malo» (ver el apartado 5).</p></div>
+</details>
+
+<details class="section-block sec" id="c19-reg"><summary><span class="stitle">4 · Regularización L1 (Lasso) contra L2 (Ridge) y el comportamiento de los pesos θ</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Técnicas que suman a la función de pérdida un término de penalización, multiplicado por el hiperparámetro λ, para frenar el crecimiento desmedido de los parámetros θ y evitar el sobreajuste.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un freno de mano para que el modelo no invente fórmulas extravagantes. L1 es un podador estricto que corta de raíz lo que no sirve (lo vuelve cero); L2 es un moderador que aprieta a todos por igual para que nadie se dispare.<span class="rompe">Dónde deja de servir: el freno no distingue qué variable «merece» peso; solo castiga la magnitud.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El profesor pidió proyectar las gráficas de θ contra iteraciones del equipo y las comparó:</p>
+<ul>
+<li><strong>Sin regularización:</strong> el modelo tiene libertad absoluta y las magnitudes de θ crecen sin control. En el dataset de la práctica se mantuvieron en [−1.5, 1.5] porque el conjunto estaba preparado para no descontrolarse; en problemas reales con millones de inferencias los pesos pueden irse a 25,000, 50,000 o 100,000, lo que encarece la memoria y el procesamiento.</li>
+<li><strong>L1 (Lasso):</strong> deja que los pesos varíen, pero manda exactamente a cero las variables que no aportan información relevante (selección intrínseca de características).</li>
+<li><strong>L2 (Ridge):</strong> no anula pesos; los mantiene estables y en un rango pequeño. Desde las primeras épocas (alrededor de 15) ya se estabilizan.</li>
+</ul>
+<p>[material] Pérdida con L2: J(θ) = BCE + (λ/2m)·Σθⱼ², con gradiente extra (λ/m)·θⱼ. Pérdida con L1: J(θ) = BCE + (λ/m)·Σ|θⱼ|, con gradiente extra (λ/m)·signo(θⱼ).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>L1 sirve cuando se sospecha que muchas características son ruido y se busca un modelo disperso; L2, cuando todas aportan y se busca estabilidad numérica. Es la regularización de la <a href="clase-14.html">Clase 14</a>, ahora vista en las gráficas reales de una práctica.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> un λ excesivo: con L1 anula todas las variables y con L2 encoge tanto los parámetros que el modelo subajusta.</p></div>
+</details>
+
+<details class="section-block sec" id="c19-pesos"><summary><span class="stitle">5 · Cómo leer el signo y el tamaño de los pesos θ</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Entender que el modelo evalúa una combinación lineal simultánea de todas las características, cada una ponderada por su coeficiente.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>El diagnóstico no lo da un solo síntoma, sino la suma ponderada de todos los indicios empujando hacia un lado o hacia el otro de la balanza.<span class="rompe">Dónde deja de servir: una balanza física no tiene variables correlacionadas entre sí.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Un alumno preguntó si un peso positivo o negativo significa que la variable aporta más o menos. El profesor aclaró que no se trata de que una variable sea más importante por su signo: los pesos positivos empujan la predicción hacia una clase (por ejemplo maligno) y los negativos hacia la otra (benigno). Lo que importa es el conjunto integrado de todas las variables; ninguna determina todo por sí sola. Por eso se busca mantener los pesos en rangos acotados.</p>
+<p>Al revisar las curvas observaron que la característica «dimensión fractal» quedó pegada a cero desde el inicio, ejemplo visual de una variable candidata a descartarse con L1.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Evita conclusiones erróneas sobre la importancia de las características en modelos lineales.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que una variable con peso negativo «resta valor» o no aporta información.</p></div>
+</details>
+
+<details class="section-block sec" id="c19-clase"><summary><span class="stitle">6 · Pesado por clase (class weighting)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Modificar la función de costo para que los errores sobre la clase minoritaria penalicen más.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Si en un salón hay 95 niños sanos y 5 enfermos, el profesor le cobra al clasificador una multa 20 veces más cara si se le escapa un enfermo que si confunde a un sano.<span class="rompe">Dónde deja de servir: es una analogía de costos; el modelo no «paga» nada, solo corrige más fuerte el gradiente.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El profesor preguntó si el pesado por clase mejoraría sus resultados con el dataset de cáncer de mama. Los alumnos dijeron que sí podría ayudar, porque hay un ligero desbalance: 357 benignos contra 212 malignos en las 569 observaciones. Regla estricta del profesor: el pesado se aplica sobre la clase objetivo (las etiquetas), <strong>no sobre las características ni sobre ejemplos aislados</strong>; le indica al gradiente que corrija con mayor magnitud cuando falla en la clase de mayor interés.</p>
+<p>[material] Peso de la clase k: w_k = m / (K·m_k), con m el total de ejemplos, K el número de clases y m_k los ejemplos de la clase k.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Evita que el clasificador caiga en la trampa de predecir siempre la clase mayoritaria y obtener una exactitud alta ignorando los casos malignos. Ya se había visto en la <a href="clase-14.html">Clase 14</a>.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> aplicar el factor de peso a una columna de características en lugar de al término del costo de la clase minoritaria.</p></div>
+</details>
+
+<details class="section-block sec" id="c19-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Qué pasa con las magnitudes de θ si no se usa regularización?</summary><p>Crecen sin control. En aplicaciones reales de gran escala pueden llegar a 25,000, 50,000 o 100,000, lo que encarece memoria y cómputo.</p></details>
+<details class="qa"><summary>2. Compara L1 y L2 en las trayectorias de los pesos.</summary><p>L1 permite que los pesos varíen pero manda exactamente a cero los que no aportan. L2 no los anula: los mantiene estables y acotados, y desde unas 15 épocas ya se estabilizan.</p></details>
+<details class="qa"><summary>3. ¿Por qué la regresión logística es «caja blanca» y una red profunda no?</summary><p>Porque cada peso θᵢ se puede leer (valor y signo) para ver cómo la variable empuja la probabilidad hacia una clase. En la red, las capas y no linealidades impiden rastrear la contribución individual.</p></details>
+<details class="qa"><summary>4. ¿Sobre qué se aplica el pesado por clase?</summary><p>Sobre la clase (penalizando más el error en la minoritaria); nunca sobre las características individuales ni sobre ejemplos aislados.</p></details>
+<details class="qa"><summary>5. Si entrenas con los 455 ejemplos completos en cada iteración, ¿por qué no te atrapa un mínimo local?</summary><p>Porque la entropía cruzada binaria de la regresión logística es convexa: solo hay un mínimo global.</p></details>
+<details class="qa"><summary>6. ¿Un θ negativo significa que la variable es inútil o resta información?</summary><p>No. Empuja la probabilidad hacia la clase opuesta dentro de la combinación lineal; lo que importa es el conjunto de todas las variables.</p></details>
+<details class="qa"><summary>7. En KNN, ¿por qué no conviene quedarse con k = 41 solo porque dio el mejor puntaje?</summary><p>Un k tan alto sobresuaviza las fronteras y pierde estructura local; un k más moderado da mejor estabilidad y generalización.</p></details>
+<details class="qa"><summary>8. ¿Por qué importa acotar θ cuando hay 18 millones de inferencias diarias?</summary><p>Pesos enormes sin acotar elevan la memoria y el tiempo de cómputo y degradan la estabilidad numérica; a esa escala se traduce en costos altos de servidores.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c19-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>Elogio a las gráficas:</strong> al proyectar la evolución de pesos dijo «bájale a las últimas tres porque se ve bastante bien… les quedó bien padre».</li>
+<li><strong>Escala real:</strong> contrastó las ~50 inferencias de una práctica con más de 18 millones diarias en sistemas industriales, donde la escala de los pesos se vuelve dinero en servidores.</li>
+<li><strong>Grabación:</strong> el audio empieza a mitad de las preguntas de la exposición de la Práctica 4 (equipo de Jorge, Roberto y Rafael, según NotebookLM) y dura unos 19 minutos.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c19-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Próxima clase (lunes 9 nov):</strong> terminar redes neuronales (propagación, activaciones no saturadas, regularización).</li>
+<li><strong>Práctica 5:</strong> la deja el lunes. Como el lunes siguiente es feriado (NotebookLM escribió «17 de noviembre», pero el lunes de esa semana es el 16; por confirmar), la entrega y exposición se recorren al viernes. Sin contrastar con Classroom.</li>
+<li><strong>Proyecto final:</strong> último viernes del semestre, 27 nov 2026 según el audio (el sitio tenía 30 nov como tentativo). Ponderación: 30 % reporte y código, 20 % exposición oral con demostración en vivo, 50 % metodología (justificación del modelo, matrices de confusión y análisis de métricas). Opciones: emociones en imágenes (FER2013 o RAF-DB), emociones en audio (RAVDESS) o comandos de voz (Speech Commands, 35 clases).</li>
+<li><strong>Después:</strong> último bloque del semestre: procesamiento de lenguaje natural y Transformers.</li>
+</ul>
+</details>
+
+</div>
+</body>
+</html>

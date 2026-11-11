@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-10T15:02:03+00:00",
+ "generatedAt": "2026-11-11T16:18:35+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -147,6 +147,13 @@
     "fecha": "2026-10-26",
     "resumen": "Tema 9 — Redes neuronales: del perceptrón al perceptrón multicapa, activaciones, entrenamiento con SGD, retropropagación, desvanecimiento y explosión del gradiente, y regularización.",
     "url": "materias/reconocimiento-de-patrones/clase-18.html",
+    "formato": "estudio"
+   },
+   {
+    "num": 19,
+    "fecha": "2026-11-06",
+    "resumen": "Tema 8 — Revisión de la Práctica 4 (KNN y regresión logística): elección de k, estrategia de lotes, caja blanca contra caja negra, regularización L1 y L2, pesado por clase.",
+    "url": "materias/reconocimiento-de-patrones/clase-19.html",
     "formato": "estudio"
    }
   ],
@@ -902,6 +909,21 @@
  },
  "gitlog": [
   {
+   "hash": "7e59274",
+   "fecha": "2026-11-10T09:45:32-06:00",
+   "mensaje": "Por clase: dos tarjetas por fila y SIB Actividad 2 en orden por fecha"
+  },
+  {
+   "hash": "3482e07",
+   "fecha": "2026-11-10T09:36:44-06:00",
+   "mensaje": "Reintentar publicación de Pages (SIB 18, ACS 21, MD 19, ASI 17)"
+  },
+  {
+   "hash": "97c2f66",
+   "fecha": "2026-11-10T09:02:04-06:00",
+   "mensaje": "ASI Clase 17: RFC 1700 del Equipo 10 confirmado por el PDF del equipo"
+  },
+  {
    "hash": "201b5c3",
    "fecha": "2026-11-10T09:00:01-06:00",
    "mensaje": "SIB: Clase 18 (5 nov) — página, índice y guía de estudio en PDF"
@@ -1185,21 +1207,6 @@
    "hash": "c7d53c5",
    "fecha": "2026-10-20T12:33:50-06:00",
    "mensaje": "ACS Clase 02: formato de estudio"
-  },
-  {
-   "hash": "962ed71",
-   "fecha": "2026-10-20T12:06:11-06:00",
-   "mensaje": "SIB-EC07: investigación de ataques del Equipo 4 (20 oct, sin clase; puntos 10 y 11 míos), PDF renombrado; 20 oct sin clase de SIB en horario.json; ACS Clase 16 pendiente en CLAUDE.md; MAPEO-ENTREGAS.md guardado en decimo/ como plantilla"
-  },
-  {
-   "hash": "f82baa9",
-   "fecha": "2026-10-20T05:52:36-06:00",
-   "mensaje": "CLAUDE.md: dónde nos quedamos (20 oct) — clases del 19 oct completas; pendientes: práctica de auditoría ASI en Classroom, deck de árboles RP, migración de 4 páginas en formato viejo"
-  },
-  {
-   "hash": "4d46af3",
-   "fecha": "2026-10-20T00:30:20-06:00",
-   "mensaje": "FSE Clase 15, ASI Clase 14 y RP Clase 16 (19 oct) en formato de estudio desde NotebookLM: estados de un proceso y tareas de tiempo real; seguridad y auditoría en Oracle con triggers; árboles de decisión, poda y Random Forest"
   }
  ]
 }
