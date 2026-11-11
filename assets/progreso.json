@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-11T17:33:21+00:00",
+ "generatedAt": "2026-11-11T18:18:00+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -403,6 +403,13 @@
     "fecha": "2026-11-04",
     "resumen": "Tema 3 (3.4) — Comunicación entre procesos y RPC, por qué paginar la memoria (ejercicio de la tabla), el administrador de asignación y la fragmentación, los cinco algoritmos de asignación, recolección de basura y pozos d",
     "url": "materias/fundamentos-de-sistemas-embebidos/clase-19.html",
+    "formato": "estudio"
+   },
+   {
+    "num": 20,
+    "fecha": "2026-11-09",
+    "resumen": "Tema 3 (3.4 y 3.5) — Cierre de memoria virtual (swapping, desgaste de discos flash, zram) y arranque de relojes y temporizadores: retardos síncronos, temporizadores asíncronos con semáforo, fecha y hora y deriva por jiff",
+    "url": "materias/fundamentos-de-sistemas-embebidos/clase-20.html",
     "formato": "estudio"
    }
   ],
@@ -923,6 +930,11 @@
  },
  "gitlog": [
   {
+   "hash": "76214bf",
+   "fecha": "2026-11-11T11:33:21-06:00",
+   "mensaje": "OAC: Clase 15 (9 nov) — documental de historia de las máquinas de calcular; página, índice y guía de estudio en PDF"
+  },
+  {
    "hash": "bffc0bc",
    "fecha": "2026-11-11T11:21:46-06:00",
    "mensaje": "RP: Clase 20 (9 nov) — CNN, ResNet, autoencoders y arranque de NLP; página, índice y guía de estudio en PDF"
@@ -1216,11 +1228,6 @@
    "hash": "6f4f0e7",
    "fecha": "2026-10-20T12:44:54-06:00",
    "mensaje": "ACS Clase 01: formato de estudio — ya no quedan clases en formato viejo"
-  },
-  {
-   "hash": "3614101",
-   "fecha": "2026-10-20T12:41:52-06:00",
-   "mensaje": "FSE Clase 01: formato de estudio"
   }
  ]
 }

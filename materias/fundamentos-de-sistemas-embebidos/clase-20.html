@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 20 — Fundamentos de Sistemas Embebidos</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261110a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261103a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Fundamentos de Sistemas Embebidos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 20</h2>
+  <p class="prof">M.C. José Mauricio Matamoros de María y Campos · 9 nov 2026 · Tema 3 (3.4 y 3.5) — Cierre de memoria virtual (swapping, desgaste de discos flash, zram) y arranque de relojes y temporizadores: retardos síncronos, temporizadores asíncronos con semáforo, fecha y hora y deriva por jiffies.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>FSE-Clase20.m4a</code>), 11 nov 2026. Lo que NotebookLM pudo mezclar o no cuadra con la referencia técnica se marca en el texto con ⚠️. El código es una reconstrucción de NotebookLM, no una copia verificada del pizarrón. Continúa lo visto en la <a href="clase-19.html">Clase 19</a>.</p>
+</div>
+<div class="files" id="guia-estudio-pdf"><a class="btn" href="../../decimo/FSE/FSE-Resumenes/FSE-Clase20-resumen.pdf" target="_blank">📄 Guía de estudio (PDF): apuntes completos + resumen para estudiar</a></div>
+
+<details class="section-block sec" id="c20-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Temporizador asíncrono periódico que no se solapa: la función del temporizador solo hace <code>sem_post</code> y un hilo trabajador hace <code>sem_wait</code>.</strong><span class="evid">Evidencia: lo planteó en el pizarrón como la «pregunta para entrar a Google» y resolvió el ejercicio completo con tiempos de 3, 15 y 25 ms contra un periodo de 10 ms.</span></li>
+<li><strong>Los tres comportamientos del scheduler ante un retardo síncrono: tiempo cero, corto (0 a 100 ms) y largo (más de 100 ms).</strong><span class="evid">Evidencia: los clasificó explícitamente y advirtió que en el rango corto no hay precisión exacta (50 ms pueden ser 54 o más).</span></li>
+<li><strong>Cálculo de vida útil de un disco flash por escrituras.</strong><span class="evid">Evidencia: lo resolvió en el pizarrón con 3.2×10⁷ segundos por año, 10 y 100 megaescrituras.</span></li>
+<li><strong>zram contra swap en disco.</strong><span class="evid">Evidencia: lo mostró en vivo en la terminal con el dispositivo <code>zram0</code>. Evidencia más débil: no dijo que fuera de examen.</span></li>
+<li><strong>Deriva del reloj por jiffies y la diferencia entre <code>date</code> y <code>time</code>.</strong><span class="evid">Evidencia: dio la cifra de 4 a 10 minutos por año sin sincronizar. Evidencia más débil: lo dijo de pasada.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c20-swap"><summary><span class="stitle">1 · Memoria virtual, páginas y swapping</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El mecanismo que usa memoria secundaria (disco o SSD) como extensión de la RAM mediante bloques de tamaño fijo llamados páginas, para poder ejecutar programas cuando la RAM física se llena.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un escritorio donde solo caben dos libros abiertos: si necesitas un tercero, guardas uno que no lees en una caja en el suelo (swapping).<span class="rompe">Dónde deja de servir: mover un libro es rápido; mover una página al disco pasa por DMA, buses y controladores órdenes de magnitud más lentos que la RAM.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Para el CPU todas las direcciones son iguales (el profesor bromeó: «no hay nadie más comunista que el CPU»). La MMU mapea los espacios virtuales de cada proceso a páginas físicas de la RAM. Si Chrome llena la memoria y el usuario abre otra aplicación pesada (Spotify, hecho con Electron), el sistema operativo hace <strong>swapping</strong>: identifica procesos inactivos, en espera o de baja prioridad y mueve sus páginas a la partición o archivo de intercambio del disco. Se mueven páginas, no archivos sueltos: como mover cajas estandarizadas. Así un juego puede descargar al disco menús o niveles que ya no usa.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Continúa la paginación de la <a href="clase-12.html">Clase 12</a> y el administrador de asignación de la <a href="clase-19.html">Clase 19</a>; cierra el punto 3.4 del temario.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que la memoria virtual se administra archivo por archivo; se administra por páginas.</p></div>
+</details>
+
+<details class="section-block sec" id="c20-desgaste"><summary><span class="stitle">2 · Desgaste del almacenamiento flash y particionado</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La degradación irreversible de las celdas de almacenamiento (SSD, tarjetas microSD) por el número de escrituras, agravada por el archivo de intercambio.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es una libreta donde escribes con lápiz y borras con goma: el papel aguanta cierto número de borrones; si usas siempre la misma hoja cada segundo, se agujera pronto.<span class="rompe">Dónde deja de servir: en el papel el daño se ve; en la flash el desgaste no avisa hasta que el bloque falla.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Cálculo resuelto en clase.</strong> Un año tiene unos 31,536,000 s ≈ 3.2×10⁷ s. Escribiendo una vez por segundo de forma continua, un medio de 10 megaescrituras (10⁷) se agota en unos pocos meses; uno de 100 megaescrituras (10⁸) dura unos 3 años. Por eso se separan las particiones <code>/boot</code>, <code>/</code> y <code>/home</code> en medios distintos y se evita escribir de más sobre la flash.</p>
+<p>⚠️ NotebookLM dice que <code>/boot</code> y <code>/</code> (binarios de solo lectura) van en el disco rápido y que <code>/home</code>, donde se escribe más, va a medios baratos o discos mecánicos, y habla de hasta 25 años de durabilidad. No se pudo verificar cuál medio se asignó a cuál partición; confirmar con el audio antes de estudiarlo.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es crítico en sistemas embebidos industriales y en Raspberry Pi, donde un mal diseño de almacenamiento mata una microSD en semanas.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> montar todo el sistema de archivos con lectura y escritura en una sola partición de una tarjeta flash sin considerar el límite de escrituras.</p></div>
+</details>
+
+<details class="section-block sec" id="c20-zram"><summary><span class="stitle">3 · zram: memoria virtual comprimida en RAM</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un módulo del kernel de Linux que reserva un bloque de RAM para usarlo como dispositivo de intercambio comprimido, sin tocar el disco físico.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es guardar las cobijas en bolsas al vacío dentro del mismo clóset en lugar de llevarlas a una bodega lejana: ocupan menos y las tienes a la mano.<span class="rompe">Dónde deja de servir: comprimir y descomprimir gasta ciclos de CPU.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>En lugar de mandar las páginas inactivas al disco lento, zram toma un segmento de RAM y, según NotebookLM, lo monta con formato ext2. Cuando la memoria empieza a agotarse, comprime las páginas al vuelo (gzip o bzip2, con unos 30 % de reducción) y las guarda en esa misma zona de RAM. El profesor lo mostró en la terminal con el dispositivo <code>/dev/zram0</code> activo.</p>
+<p>⚠️ El formato ext2 y los algoritmos gzip y bzip2 vienen de NotebookLM; en Linux real zram suele usar compresores como lzo, lz4 o zstd. Revisar con el audio.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Acelera sistemas con poca RAM y evita el desgaste de la flash en dispositivos embebidos.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> confundir zram con el swap en disco; zram vive íntegro en la RAM.</p></div>
+</details>
+
+<details class="section-block sec" id="c20-timers"><summary><span class="stitle">4 · Temporizadores y relojes por software</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Servicios del kernel, colgados del scheduler, que permiten conocer la fecha y hora y programar la ejecución de eventos futuros. Corresponde al punto 3.5 del temario.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>El temporizador de hardware de la Unidad 2 era un reloj de arena con campanita; el de software es una secretaria con una agenda llena de citas y alarmas que avisa a cada empleado cuándo trabajar.<span class="rompe">Dónde deja de servir: la «agenda» del kernel es una lista que se revisa en microsegundos en cada interrupción de tick.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El servicio tiene dos partes: hora y fecha, y calendarización (ejecutar funciones en instantes determinados o de forma periódica). En sistemas de bajo consumo, como un marcapasos, dejar al procesador en un bucle continuo a 8 MHz agota la batería; el temporizador permite dormir al núcleo y despertarlo solo para registrar cada pulso (ejemplo de clase: de 120 a 180 latidos por minuto).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Lleva el temporizador de hardware de la Unidad 2 (contador que interrumpe al llegar a cero) a la infraestructura del sistema operativo.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> usar bucles vacíos de retardo activo en sistemas complejos: desperdician energía y bloquean el CPU.</p></div>
+</details>
+
+<details class="section-block sec" id="c20-delay"><summary><span class="stitle">5 · Retardos síncronos y los tres comportamientos del scheduler</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Llamadas de retardo (<code>delay</code>, <code>sleep</code>) en las que el hilo que las invoca detiene su flujo hasta que pasa el tiempo indicado.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es ponerte en espera en una llamada: sin sistema operativo el procesador cuenta en silencio gastando batería; con sistema operativo, la secretaria te cuelga, atiende a otros y te llama de vuelta.<span class="rompe">Dónde deja de servir: la «llamada de vuelta» no llega a una hora exacta.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Sin sistema operativo, <code>delay()</code> ejecuta millones de instrucciones vacías (NOP). Con sistema operativo, el kernel aplica tres reglas según el tiempo pedido:</p>
+<ol>
+<li><strong>Tiempo cero:</strong> el scheduler reevalúa su cola de tareas listas (READY), revisa semáforos pendientes y devuelve el control casi de inmediato, en nanosegundos.</li>
+<li><strong>Tiempo corto (0 a 100 ms):</strong> saca al proceso del CPU y lo vuelve a formar en la cola. No garantiza precisión: si pides 50 ms pueden pasar 54 o más según la carga.</li>
+<li><strong>Tiempo largo (más de 100 ms):</strong> extrae la tarea, la suspende y programa una alarma para readmitirla en la cola al vencer el plazo.</li>
+</ol>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Los retardos del sistema operativo no sirven para tiempo real duro; hay que usarlos con cautela.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> suponer que <code>sleep(50)</code> detiene el proceso exactamente 50 ms.</p></div>
+</details>
+
+<details class="section-block sec" id="c20-async"><summary><span class="stitle">6 · Temporizador asíncrono periódico sin solapamiento (semáforo)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un mecanismo para ejecutar una función de forma periódica en un hilo aparte, sin bloquear el hilo principal y sin que haya más de una instancia ejecutándose a la vez.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un timbre de horno que suena cada 10 minutos para meter una tanda de galletas: si una tanda tarda 25, no metes tres charolas juntas; pones un letrero de «horno ocupado» (el semáforo) y las siguientes esperan turno.<span class="rompe">Dónde deja de servir: el horno solo cabe una charola; un procesador multinúcleo sí podría correr varias instancias, y eso es justo lo que se quiere evitar.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>El problema.</strong> Un temporizador dispara una función <code>bar()</code> cada 10 ms. Si la primera llamada tarda 3 ms, la segunda 15 ms y la tercera 25 ms, las nuevas instancias arrancan antes de que acabe la anterior y llegan a competir hasta 3 instancias a la vez.</p>
+<p><strong>La solución</strong> (la «pregunta para entrar a Google»): la función que atiende al temporizador no hace trabajo pesado, solo libera un semáforo. El trabajo real lo hace un hilo trabajador que espera ese semáforo binario. Si una tarea dura 25 ms, la siguiente liberación queda pendiente y el hilo la atiende en secuencia al terminar, así que a lo más corre una instancia.</p>
+<p>Reconstrucción de NotebookLM (no verificada contra el pizarrón; el nombre <code>running_flag</code> es dudoso):</p>
+<pre><code>sem_t sem_timer;            /* semáforo binario, inicia en 0 */
+
+void* worker(void* arg) {
+    while (running_flag) {  /* nombre de la bandera: dudoso */
+        sem_wait(&amp;sem_timer);   /* espera el permiso */
+        procesar_tarea();       /* 3, 15 o 25 ms */
+    }
+    return NULL;
+}
+
+void timer_callback(void) {
+    sem_post(&amp;sem_timer);   /* solo libera, no trabaja */
+}</code></pre>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Junta hilos, semáforos y temporizadores en un patrón de sincronización básico de los sistemas embebidos.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> poner el cálculo pesado dentro de la propia función del temporizador.</p></div>
+</details>
+
+<details class="section-block sec" id="c20-reloj"><summary><span class="stitle">7 · Fecha y hora, <code>date</code> contra <code>time</code> y deriva por jiffies</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La infraestructura del sistema operativo que mantiene la fecha y hora civil.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es calcular la hora contando tus pasos: si das dos por segundo vas sumando, pero si a veces caminas más lento, al año tu reloj mental no coincide con el de la pared.<span class="rompe">Dónde deja de servir: el error del sistema viene del cristal de cuarzo y de la latencia de las interrupciones, no de cansancio.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><code>date</code> devuelve la fecha y hora civil del sistema.</li>
+<li><code>time</code> mide el tiempo de procesador y la duración de un comando o proceso; no imprime la hora.</li>
+<li>En Linux el reloj avanza sumando los ticks (<strong>jiffies</strong>) de cada interrupción del scheduler. Si un sistema embebido pasa un año sin sincronizarse por red (NTP), acumula un desfase de entre 4 y 10 minutos.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Por eso los sistemas de medición o bitácoras críticas usan un RTC por hardware con batería o sincronización NTP.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que <code>time</code> da la hora del reloj.</p></div>
+</details>
+
+<details class="section-block sec" id="c20-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Por qué la memoria virtual necesita páginas?</summary><p>Porque dividen la memoria en bloques de tamaño fijo que el sistema operativo puede mover de forma ordenada entre la RAM y el disco con las tablas de la MMU.</p></details>
+<details class="qa"><summary>2. ¿Cómo evita zram usar el disco para el intercambio?</summary><p>Reserva un bloque de la propia RAM y guarda ahí las páginas comprimidas (unos 30 % menos), sin escribir al almacenamiento secundario.</p></details>
+<details class="qa"><summary>3. Pides <code>delay(50)</code> en Linux embebido. ¿Qué precisión esperas y qué hace el scheduler?</summary><p>No exacta: pueden pasar 54 ms o más. Saca la tarea del CPU, la deja en la cola de listas y la reencola sin garantía determinista.</p></details>
+<details class="qa"><summary>4. ¿Qué diferencia hay entre <code>date</code> y <code>time</code>?</summary><p><code>date</code> da la fecha y hora civil; <code>time</code> mide el tiempo de procesador y la duración de un comando.</p></details>
+<details class="qa"><summary>5. Sin NTP durante 12 meses, ¿cuánto se desfasa el reloj?</summary><p>Entre 4 y 10 minutos por el conteo de jiffies.</p></details>
+<details class="qa"><summary>6. ¿Por qué no se pone el trabajo pesado en la función del temporizador?</summary><p>Porque si tarda más que el periodo se solapan instancias; la función solo hace <code>sem_post</code> y un hilo trabajador hace el trabajo en secuencia.</p></details>
+<details class="qa"><summary>7. ¿Cuánto dura un medio de 10 megaescrituras si escribes una vez por segundo?</summary><p>10⁷ s, unos 116 días (unos meses). Con 100 megaescrituras (10⁸ s) son unos 3 años.</p></details>
+<details class="qa"><summary>8. ¿En qué difiere un temporizador de hardware de uno de software?</summary><p>El de hardware es un contador en silicio que interrumpe al llegar a cero; el de software es un servicio del kernel que administra listas de funciones y despierta hilos con el scheduler.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c20-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>«El CPU es comunista»:</strong> broma para explicar que el CPU ve todas las direcciones de memoria por igual.</li>
+<li><strong>Cajas en el Ministerio Público:</strong> metáfora de páginas como cajas estandarizadas de expedientes.</li>
+<li><strong>Electron y Spotify:</strong> criticó el consumo de RAM de apps que cargan un navegador Chromium solo para reproducir música.</li>
+<li><strong>Marcapasos:</strong> ejemplo de bajo consumo con 120 a 180 latidos por minuto.</li>
+<li><strong>Antes de internet:</strong> recordó que sin sincronización automática la gente vivía con minutos de adelanto o atraso.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c20-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Próxima clase:</strong> según NotebookLM, continúan los temporizadores asíncronos (<code>init_timer</code>, <code>add_timer</code>, <code>del_timer</code>) y la estructura de llamadas al kernel. <em>(Por confirmar: son nombres de la API antigua de Linux.)</em></li>
+<li><strong>Después:</strong> modelos de manejadores de dispositivos y sistema de archivos (3.6 y 3.7), según el calendario.</li>
+<li><strong>Temario:</strong> la sesión cierra el 3.4 (administración de memoria) y abre el 3.5 (relojes y temporizadores). No se mencionó tarea nueva.</li>
+</ul>
+</details>
+
+</div>
+</body>
+</html>
