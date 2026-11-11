@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 15 — Organización y Arquitectura de Computadoras</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261110a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261103a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Organización y Arquitectura de Computadoras</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>Clase 15</h2>
+  <p class="prof">M.I. José Antonio de Jesús Arredondo Garza · 9 nov 2026 · Sin tema nuevo del temario — Documental sobre la historia de las máquinas de calcular (de la Pascalina al Intel 4004 y la HP-35) y reflexión final sobre la inteligencia artificial.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>OAC-Clase15.m4a</code>, unos 40 minutos), 11 nov 2026. <strong>Casi toda la grabación es el audio de un documental</strong> que el profesor proyectó en el aula; su intervención en vivo son los últimos dos minutos. Lo del documental son datos históricos tal como los narra el video, no explicaciones del profesor. Continúa lo visto en la <a href="clase-14.html">Clase 14</a>.</p>
+</div>
+<div class="files" id="guia-estudio-pdf"><a class="btn" href="../../decimo/OAC/OAC-Resumenes/OAC-Clase15-resumen.pdf" target="_blank">📄 Guía de estudio (PDF): apuntes completos + resumen para estudiar</a></div>
+
+<details class="section-block sec" id="c15-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<p>El profesor no marcó nada de esta sesión como material de examen: fue un documental de cultura general. Si algo se pregunta, lo más probable es lo que se liga con arquitectura, con evidencia más débil en todos los casos:</p>
+<ol class="examen-lista">
+<li><strong>El Intel 4004 (1971) nació de un encargo de la empresa japonesa Busicom para una calculadora.</strong><span class="evid">Evidencia: el documental lo subraya como el origen del primer microprocesador comercial. Evidencia débil: no la mencionó el profesor.</span></li>
+<li><strong>Cómo la Pascalina resolvió el acarreo (sautoir) y la resta por complemento a 9.</strong><span class="evid">Evidencia: el documental lo explica con detalle y se liga con el complemento a dos de las ALU. Evidencia débil: no hay indicación del profesor.</span></li>
+<li><strong>Tambor escalonado de Leibniz: multiplicar como sumas sucesivas.</strong><span class="evid">Evidencia: pieza central del documental. Evidencia débil: no hay indicación del profesor.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c15-pascalina"><summary><span class="stitle">1 · Cálculo mecánico y la Pascalina (Blaise Pascal, 1642)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La máquina aritmética o Pascalina fue el primer dispositivo mecánico operativo que sumaba y restaba con un tren de engranajes y acarreo automático.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es como el odómetro de un coche antiguo: cuando una rueda pasa de 9 a 0, una uñeta empuja a la vecina para que marque 1.<span class="rompe">Dónde deja de servir: en un odómetro el giro es continuo; en la Pascalina cada columna podía tener una base distinta.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Era una caja metálica alargada con ruedas numeradas que se giraban con un punzón hasta un tope, parecido a un teléfono de disco. El gran reto era el <strong>acarreo en cadena</strong> (al sumar 99 + 1, varias ruedas deben girar a la vez sin atascarse por la fricción). Pascal lo resolvió con el <strong>sautoir</strong> (saltador), una palanca con contrapeso: al pasar la rueda de 9 a 0 lo eleva, se sostiene en el ápice y cae por su propio peso empujando el diente de la rueda siguiente. Como depende de la gravedad y no de la fuerza de la mano, la fuerza es constante y uniforme.</p>
+<p>Las ruedas no giraban hacia atrás, así que la <strong>resta</strong> se hacía sumando el <strong>complemento a 9</strong> del sustraendo, con una regleta deslizante superior que mostraba las cifras complementarias. Además, como en la Francia del siglo XVII 1 libra eran 20 sueldos y 1 sueldo 12 dineros, Pascal fabricó ruedas de 12 y de 20 divisiones para dineros y sueldos, y de base 10 para las libras.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Introdujo el acarreo automático y el uso de complementos, antecedente del complemento a dos de las ALU modernas.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que la Pascalina multiplicaba por engranajes (solo sumaba y restaba) o que giraba en reversa para restar.</p></div>
+</details>
+
+<details class="section-block sec" id="c15-leibniz"><summary><span class="stitle">2 · Precursores y Leibniz: el tambor escalonado</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La evolución de sumar a mecanizar las cuatro operaciones aritméticas (multiplicación y división incluidas).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es un cilindro como el de una caja de música, con púas de distinto tamaño: según dónde coloques el engranaje, atrapa más o menos dientes por vuelta de manivela.<span class="rompe">Dónde deja de servir: la caja de música toca notas; el tambor multiplica sumando una y otra vez.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Wilhelm Schickard (1623)</strong> construyó en Tubinga un «reloj calculador» para Johannes Kepler que sumaba, restaba y ayudaba a multiplicar con varillas de Napier mecánicas; un incendio destruyó el prototipo en 1624 y sus notas quedaron olvidadas hasta los años 50 (se hizo una réplica en 1960). <strong>Gottfried Leibniz (1672–1694)</strong> diseñó una máquina que multiplicaba y dividía con su <strong>tambor escalonado</strong>: un cilindro con nueve dientes de longitudes crecientes; al deslizar una rueda dentada a lo largo del cilindro y girar la manivela se acumulan sumas sucesivas (multiplicación = sumas repetidas; división = restas repetidas). Sus mecanismos de arrastre fallaban por la poca precisión de las herramientas metalúrgicas de la época.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es el antecedente de multiplicar con sumas y desplazamientos, como hacen los multiplicadores de los microprocesadores.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> atribuir a Leibniz la primera máquina de sumar; su aporte fue la multiplicación y la división.</p></div>
+</details>
+
+<details class="section-block sec" id="c15-industria"><summary><span class="stitle">3 · Del aritmómetro y el contómetro a la Curta</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El paso de las máquinas artesanales de museo a instrumentos comerciales robustos para empresas, banca y trabajo de campo.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es pasar de un prototipo delicado de laboratorio a una herramienta tan resistente y compacta que cabía en el bolsillo de la camisa.<span class="rompe">Dónde deja de servir: aun la más portátil seguía operándose paso a paso con una manivela.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>Aritmómetro de Thomas de Colmar (1820 / 1851):</strong> primera calculadora mecánica producida a escala industrial; perfeccionó el tambor de Leibniz.</li>
+<li><strong>Contómetro de Dorr Felt (1885 / 1887):</strong> cambió la manivela por un teclado directo.</li>
+<li><strong>Burroughs (1885):</strong> sumadora de teclas con impresión en cinta de papel.</li>
+<li><strong>Curta (Curt Herzstark, 1948):</strong> diseñada en el campo de Buchenwald y fabricada en Liechtenstein; un tambor escalonado central miniatura dentro de un cilindro («molinillo de pimienta») que hacía las cuatro operaciones en la palma de la mano.</li>
+</ul>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Muestra la miniaturización extrema previa al silicio.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que la Curta era electrónica; era 100 % mecánica.</p></div>
+</details>
+
+<details class="section-block sec" id="c15-electronica"><summary><span class="stitle">4 · La revolución electrónica: Intel 4004, HP-35 y el consumo de las pilas</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El cambio de engranajes a circuitos integrados, el nacimiento del microprocesador y las calculadoras científicas de bolsillo.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es cambiar un reloj lleno de rueditas por un chip donde los electrones suman en silencio a gran velocidad.<span class="rompe">Dónde deja de servir: los primeros chips gastaban tanta energía que agotaban la pila en horas.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li><strong>Texas Instruments (1967):</strong> prototipo portátil con circuitos integrados e impresión en tira de papel (Jack Kilby y su equipo).</li>
+<li><strong>Intel 4004 (1971):</strong> hecho para el encargo de la empresa japonesa Busicom de un conjunto de chips para calculadoras; primer microprocesador comercial.</li>
+<li><strong>HP-35 (1972):</strong> primera calculadora científica de bolsillo (trigonométricas, logaritmos y exponenciales); sustituyó a la regla de cálculo.</li>
+</ul>
+<p><strong>Comentario en vivo del profesor:</strong> las primeras calculadoras HP, con funciones científicas, duraban unas 4 horas con una pila, y en la facultad se buscaba colgarse de un contacto para seguir usándolas y no volver a comprar pilas.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Se liga con lo visto sobre consumo eléctrico en las Clases 1 y 5 (de chips que consumían del orden de 1 A a microcontroladores como la Pico 2, con miliamperios en reposo).</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> suponer que el 4004 se diseñó para computadoras personales; nació para una calculadora de escritorio.</p></div>
+</details>
+
+<details class="section-block sec" id="c15-ia"><summary><span class="stitle">5 · Reflexión final del profesor sobre la inteligencia artificial</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Una crítica a la idea de que la IA piensa de verdad o puede igualar la cognición y la percepción humanas (opinión del profesor, en los últimos dos minutos).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Una calculadora suma rapidísimo pero no sabe qué significa el dinero; la IA combina patrones enormes pero, según el profesor, no tiene juicio propio.<span class="rompe">Dónde deja de servir: las redes neuronales sí aprenden tareas complejas; la discusión es qué significa «pensar».</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El profesor ligó la frase de Pascal sobre la máquina aritmética (produce efectos más cercanos al pensamiento que los de los animales, pero carece de voluntad) con la IA actual. Dijo que el pensamiento humano se basa en <strong>inferencia y referencia</strong>, que la IA no tiene de manera intrínseca y solo «aparenta» pensar. Contó que ha sometido algoritmos a temas filosóficos y de percepción musical, y que en definir lo que percibe el oído humano en música compleja la IA falla entre 50 % y 60 %. Es una afirmación suya, no un resultado de clase.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Se conecta con la red neuronal en la Pico de la <a href="clase-14.html">Clase 14</a>: es un modelo matemático, no una mente.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> afirmar que los modelos de IA «piensan» o procesan música con exactitud perfecta.</p></div>
+</details>
+
+<details class="section-block sec" id="c15-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Cómo resolvió Pascal el acarreo sin depender de la fuerza del usuario?</summary><p>Con el sautoir: una palanca con contrapeso que sube de 9 a 0 y cae por gravedad sobre el engranaje contiguo.</p></details>
+<details class="qa"><summary>2. ¿Cómo restaba la Pascalina si sus ruedas no giraban hacia atrás?</summary><p>Sumaba el complemento a 9 del sustraendo, que mostraba una regleta deslizante.</p></details>
+<details class="qa"><summary>3. ¿En qué se distingue la máquina de Leibniz de la Pascalina?</summary><p>La Pascalina solo sumaba y restaba. Leibniz añadió el tambor escalonado, que multiplica por sumas repetidas y divide por restas repetidas.</p></details>
+<details class="qa"><summary>4. ¿Para quién y para qué se diseñó el Intel 4004?</summary><p>Para la empresa japonesa Busicom, en 1971, como conjunto de chips de una calculadora de escritorio.</p></details>
+<details class="qa"><summary>5. ¿Por qué no todas las ruedas de la Pascalina tenían 10 divisiones?</summary><p>Porque la moneda francesa no era decimal: 1 libra = 20 sueldos y 1 sueldo = 12 dineros.</p></details>
+<details class="qa"><summary>6. ¿Qué contó el profesor de las primeras calculadoras HP?</summary><p>Que la pila duraba unas 4 horas y se buscaban contactos en la facultad para no quedarse sin batería.</p></details>
+<details class="qa"><summary>7. ¿Qué calculadora de 1948 hacía las cuatro operaciones en la palma de la mano?</summary><p>La Curta de Curt Herzstark, mecánica, con un tambor escalonado central miniatura.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c15-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li><strong>La máquina de Leibniz en un desván:</strong> según el documental, desapareció casi dos siglos hasta que en 1879 un obrero que reparaba el techo de la Universidad de Gotinga la halló cubierta de polvo.</li>
+<li><strong>Herzstark en Buchenwald:</strong> según el documental, siguió dibujando los planos de su calculadora porque los oficiales alemanes reconocieron su talento; la fabricó en Liechtenstein tras ser liberado en 1945.</li>
+<li><strong>Las HP en la facultad:</strong> el profesor lo contó con humor: un lujo, pero un dolor de cabeza por el gasto en pilas.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c15-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li><strong>Próxima clase:</strong> según NotebookLM, el profesor dijo que verán un documental más amplio sobre Ada Lovelace. <em>(Por confirmar con el audio.)</em></li>
+<li><strong>Proyecto final:</strong> entrega el miércoles 25 de noviembre de 2026, fijada en la <a href="clase-14.html">Clase 14</a>; en esta clase no se cambió la fecha ni se dejó tarea nueva. Opciones: ensamblador aprovechando la FPU de la Pico 2, direccionamiento directo con <code>machine.mem32</code>, o una red neuronal ligera en MicroPython.</li>
+</ul>
+</details>
+
+</div>
+</body>
+</html>

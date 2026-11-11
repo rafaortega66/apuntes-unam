@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-11T17:21:46+00:00",
+ "generatedAt": "2026-11-11T17:33:21+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -261,6 +261,13 @@
     "fecha": "2026-10-26",
     "resumen": "Sin tema nuevo del temario — Opciones para el proyecto final (ensamblador o mem32 ), una red neuronal de perceptrón multicapa en MicroPython en la Raspberry Pi Pico (ejemplo de la compuerta XOR) y fecha de entrega del pr",
     "url": "materias/organizacion-y-arquitectura-de-computadoras/clase-14.html",
+    "formato": "estudio"
+   },
+   {
+    "num": 15,
+    "fecha": "2026-11-09",
+    "resumen": "Sin tema nuevo del temario — Documental sobre la historia de las máquinas de calcular (de la Pascalina al Intel 4004 y la HP-35) y reflexión final sobre la inteligencia artificial.",
+    "url": "materias/organizacion-y-arquitectura-de-computadoras/clase-15.html",
     "formato": "estudio"
    }
   ],
@@ -916,6 +923,11 @@
  },
  "gitlog": [
   {
+   "hash": "bffc0bc",
+   "fecha": "2026-11-11T11:21:46-06:00",
+   "mensaje": "RP: Clase 20 (9 nov) — CNN, ResNet, autoencoders y arranque de NLP; página, índice y guía de estudio en PDF"
+  },
+  {
    "hash": "39400c9",
    "fecha": "2026-11-11T10:18:35-06:00",
    "mensaje": "RP: Clase 19 (6 nov) — revisión de la Práctica 4; página, índice y guía de estudio en PDF"
@@ -1209,11 +1221,6 @@
    "hash": "3614101",
    "fecha": "2026-10-20T12:41:52-06:00",
    "mensaje": "FSE Clase 01: formato de estudio"
-  },
-  {
-   "hash": "edc55e0",
-   "fecha": "2026-10-20T12:37:00-06:00",
-   "mensaje": "ASI Clase 01: formato de estudio"
   }
  ]
 }
