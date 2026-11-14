@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-14T23:39:37+00:00",
+ "generatedAt": "2026-11-14T23:45:39+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -1021,6 +1021,11 @@
  },
  "gitlog": [
   {
+   "hash": "972aa76",
+   "fecha": "2026-11-14T17:39:38-06:00",
+   "mensaje": "Clases faltantes del 29 oct al 13 nov: ACS 19, 20, 22, 23; ASI 18, 19; FSE 21; MD 17, 20, 21; RP 21; SIB 19, 20"
+  },
+  {
    "hash": "8482ccb",
    "fecha": "2026-11-11T12:18:00-06:00",
    "mensaje": "FSE: Clase 20 (9 nov) — memoria virtual, zram y temporizadores por software; página, índice y guía de estudio en PDF"
@@ -1314,11 +1319,6 @@
    "hash": "a6c4de2",
    "fecha": "2026-10-20T14:19:56-06:00",
    "mensaje": "ACS: agregar Clase 16 (20 oct) — servidor de clientes concurrentes con fork() (Programa 06), arquitecturas reales y log del examen parcial"
-  },
-  {
-   "hash": "5b7764d",
-   "fecha": "2026-10-20T14:16:05-06:00",
-   "mensaje": "MD-P03-3: entregables de la Práctica 3.3 Regresión (notebook y presentación del Equipo 7)"
   }
  ]
 }

@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<title>Propuesta — Modelos de integridad (e, e.1, e.2)</title>
+<style>
+@page { size: Letter; margin: 2.2cm 2.2cm; }
+body { font-family: "Times New Roman", Georgia, serif; font-size: 12pt; line-height: 1.45; color:#111; }
+h1 { font-size: 16pt; margin: 0 0 4pt; }
+h2 { font-size: 14pt; margin: 18pt 0 6pt; }
+h3 { font-size: 12.5pt; margin: 12pt 0 4pt; }
+.nota { border: 1px solid #999; background:#f3f3f3; padding: 8pt 10pt; font-family: Helvetica, Arial, sans-serif; font-size: 9.5pt; margin-bottom: 14pt; }
+.nota b { color:#a00; }
+.cita-clase { border-left: 3px solid #E8735C; padding-left: 8pt; font-style: italic; }
+table { border-collapse: collapse; width: 100%; font-size: 10.5pt; margin: 6pt 0; }
+th, td { border: 1px solid #555; padding: 4pt 6pt; vertical-align: top; }
+th { background: #e6e6e6; }
+ul, ol { margin: 4pt 0 6pt; }
+li { margin-bottom: 2pt; }
+.ref p { padding-left: 1.27cm; text-indent: -1.27cm; margin: 0 0 6pt; }
+.mono { font-family: Menlo, Consolas, monospace; font-size: 10.5pt; }
+.pb { page-break-before: always; }
+</style></head><body>
+<div class="nota">
+<b>Propuesta para transcribir en «Equipo4Modelos».</b> Los títulos son los mismos que ya están en el documento: el texto va debajo de cada uno. Va con la misma extensión y el mismo formato que las secciones del equipo. Las 3 referencias nuevas van en la lista del final, en orden alfabético.
+</div>
+
+<h2>Características de los modelos de integridad</h2>
+<p>Los modelos de integridad son modelos formales de seguridad cuyo objetivo es evitar que la información sea modificada de forma indebida. A diferencia de Bell-LaPadula, que controla quién puede <i>leer</i> la información, estos modelos controlan quién puede <i>escribirla o alterarla</i>.</p>
+<p>Características principales:</p>
+<ul>
+<li>Se enfocan en la integridad, no en la confidencialidad.</li>
+<li>Evitan que usuarios no autorizados modifiquen la información y que usuarios autorizados hagan cambios indebidos.</li>
+<li>Mantienen la consistencia de los datos (lo que dice el sistema corresponde con la realidad).</li>
+<li>Impiden que datos o programas poco confiables influyan en datos críticos.</li>
+<li>Pueden basarse en niveles de integridad (Biba) o en transacciones controladas (Clark-Wilson).</li>
+</ul>
+
+<h3>1. Modelo Biba</h3>
+<p>Lo propuso Kenneth J. Biba en 1975, en la MITRE Corporation (Biba, 1975). Es un modelo enfocado en la integridad de la información y se considera el inverso de Bell-LaPadula: usa niveles, pero invierte las reglas para evitar que la información se contamine.</p>
+<ul>
+<li>Cada sujeto y cada objeto tiene un nivel de integridad, que indica qué tan confiable es.</li>
+<li>Los niveles pueden ser, por ejemplo: Bajo, Medio, Alto y Sistema.</li>
+<li>La información solo puede fluir de los niveles más confiables a los menos confiables.</li>
+<li>Es un modelo de control de acceso obligatorio (MAC).</li>
+</ul>
+<p>Reglas de Biba:</p>
+<ul>
+<li><b>Propiedad de integridad simple (no read down):</b> un sujeto no puede leer información de un nivel de integridad inferior al suyo.<br>Ejemplo: un proceso del sistema no debe tomar como entrada un archivo descargado de internet.</li>
+<li><b>Propiedad estrella de integridad (no write up):</b> un sujeto no puede escribir en un objeto de nivel de integridad superior al suyo.<br>Ejemplo: un usuario común no puede modificar los archivos de configuración del sistema operativo.</li>
+<li><b>Propiedad de invocación:</b> un sujeto no puede solicitar servicios a un sujeto de nivel superior.</li>
+</ul>
+<p>Ejemplo: Windows aplica este principio con su <i>Mandatory Integrity Control</i>: un proceso de integridad baja no puede escribir en un objeto de integridad media, aunque sus permisos se lo permitan (Microsoft, 2025).</p>
+<p>Características:</p>
+<ul>
+<li>Está orientado a la protección de la integridad.</li>
+<li>Usa niveles jerárquicos de integridad para sujetos y objetos.</li>
+<li>Es un modelo formal y obligatorio: el sistema impone las reglas.</li>
+<li>Es simple de aplicar, porque solo compara niveles.</li>
+<li>Evita que datos poco confiables contaminen datos críticos.</li>
+</ul>
+<p>Limitaciones:</p>
+<ul>
+<li>No protege la confidencialidad.</li>
+<li>Sus reglas son opuestas a las de Bell-LaPadula, por lo que es difícil usar ambos a la vez.</li>
+<li>Es rígido: muchos procesos necesitan leer datos de entrada poco confiables.</li>
+<li>No evita que un usuario autorizado haga cambios incorrectos o fraudulentos.</li>
+<li>No contempla separación de funciones ni auditoría.</li>
+</ul>
+
+<h3>2. Modelo de Clark-Wilson</h3>
+<p>Lo propusieron David D. Clark y David R. Wilson en 1987 (Clark &amp; Wilson, 1987). Está pensado para entornos comerciales, como bancos y sistemas contables, donde lo más importante es evitar el fraude y los errores. En lugar de niveles, se basa en dos principios: transacciones bien formadas y separación de funciones.</p>
+<ul>
+<li><b>CDI</b> (Constrained Data Item): datos cuya integridad se debe proteger, como el saldo de una cuenta.</li>
+<li><b>UDI</b> (Unconstrained Data Item): datos de entrada no verificados, como lo que escribe un usuario.</li>
+<li><b>TP</b> (Transformation Procedure): programas autorizados que modifican los CDI.</li>
+<li><b>IVP</b> (Integrity Verification Procedure): procedimientos que verifican que los CDI sean válidos.</li>
+</ul>
+<p>Reglas de Clark-Wilson:</p>
+<ul>
+<li><b>Reglas de certificación:</b> los TP y los IVP deben ser revisados y aprobados antes de usarse; cada TP debe llevar los datos de un estado válido a otro, registrar sus operaciones en una bitácora y validar o rechazar los datos de entrada (UDI).</li>
+<li><b>Reglas de aplicación:</b> el sistema solo permite modificar los CDI mediante TP certificados, autentica a cada usuario y solo permite las combinaciones usuario–programa–dato autorizadas.</li>
+<li><b>Separación de funciones:</b> quien certifica una operación no puede ser quien la ejecuta.</li>
+</ul>
+<p>Ejemplo: en un banco, el cliente no puede cambiar su saldo directamente; solo puede usar la operación «retiro», que valida el monto, actualiza el saldo y registra el movimiento. Al final del día se verifica que los saldos coincidan con los movimientos.</p>
+<p>Características:</p>
+<ul>
+<li>Está orientado a la integridad en entornos comerciales.</li>
+<li>Los usuarios solo acceden a los datos por medio de programas autorizados.</li>
+<li>Se basa en transacciones bien formadas y separación de funciones.</li>
+<li>Incluye auditoría mediante bitácoras.</li>
+<li>Protege también contra cambios indebidos de usuarios autorizados.</li>
+</ul>
+<p>Limitaciones:</p>
+<ul>
+<li>La certificación depende de personas y no se puede automatizar por completo.</li>
+<li>Certificar cada programa es costoso en sistemas grandes o que cambian con frecuencia.</li>
+<li>Es menos formal y matemático que Biba o Bell-LaPadula.</li>
+<li>No protege la confidencialidad.</li>
+<li>Si un programa se certificó mal, el modelo no lo detecta por sí mismo.</li>
+</ul>
+
+<h2>Referencias (agregar a la lista del equipo, en orden alfabético)</h2>
+<div class="ref">
+<p>Biba, K. J. (1975, 30 de junio). <i>Integrity considerations for secure computer systems</i> (MTR-3153). The MITRE Corporation. Recuperado el 29 de octubre de 2026, de https://seclab.cs.ucdavis.edu/projects/history/papers/biba75.pdf</p>
+<p>Clark, D. D., &amp; Wilson, D. R. (1987). A comparison of commercial and military computer security policies. En <i>1987 IEEE Symposium on Security and Privacy</i> (p. 184). IEEE. Recuperado el 29 de octubre de 2026, de https://doi.org/10.1109/SP.1987.10001</p>
+<p>Microsoft. (2025, 8 de julio). <i>Control de integridad obligatorio</i>. Microsoft Learn. Recuperado el 29 de octubre de 2026, de https://learn.microsoft.com/es-es/windows/win32/secauthz/mandatory-integrity-control</p>
+</div>
+<p style="font-size:9.5pt;font-family:Helvetica,Arial,sans-serif;color:#555">Berti (destcert), que ya está en la lista del equipo, también describe Biba y Clark-Wilson.</p>
+</body></html>
