@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 20 — Seguridad Informática Básica</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261110a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261103a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Seguridad Informática Básica</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 20</h2>
+  <p class="prof">Dra. Cintia Quezada Reyes · 12 nov 2026 · Tema 5 (análisis y gestión de riesgos) — La desigualdad de costos (ataque, bien y protección), gestión de riesgos con infraestructuras y procesos críticos y escenarios, cinco técnicas rápidas (What if, APR, cinco porqués, FMEA y checklist), la matriz de riesgos con NIST y un ejercicio individual sobre el salón.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>SIB-Clase20.m4a</code>), 14 nov 2026. Continúa la <a href="clase-19.html">Clase 19</a>.</p>
+</div>
+<div class="files" id="guia-estudio-pdf"><a class="btn" href="../../decimo/SIB/SIB-Resumenes/SIB-Clase20-resumen.pdf" target="_blank">📄 Guía de estudio (PDF): apuntes completos + resumen para estudiar</a></div>
+
+<details class="section-block sec" id="c20-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>La desigualdad de costos: ataque, valor del bien y protección.</strong><span class="evid">Evidencia: la proyectó, la ligó con el tiempo, dinero y esfuerzo de la clase anterior y la ilustró con números.</span></li>
+<li><strong>Construir una matriz de riesgos (probabilidad × impacto, rangos excluyentes) y detectar sus errores.</strong><span class="evid">Evidencia: fue el bloque central, entró en el ejercicio y anunció otro ejercicio de esto.</span></li>
+<li><strong>Las cinco técnicas rápidas: What if, APR, cinco porqués, FMEA y checklist.</strong><span class="evid">Evidencia: las explicó con ejemplos y pidió desarrollar una en el ejercicio.</span></li>
+<li><strong>Infraestructuras críticas, procesos críticos y escenarios de riesgo.</strong><span class="evid">Evidencia: hizo un ejercicio participativo (casa, McDonald's) y fueron los primeros incisos del ejercicio.</span></li>
+<li><strong>Evidencia en el análisis y el examen final completo.</strong><span class="evid">Evidencia: repitió la regla de evidencias y pidió ir estudiando todo.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c20-repaso"><summary><span class="stitle">1 · Repaso y la regla de evidencias</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Los alumnos recordaron lo de la Clase 19: cuantitativo contra cualitativo, activo, riesgo, aceptación y análisis, cada cuándo se hace, las tres preguntas, tablas de frecuencia, entrevistas, cuestionarios y checklists con apoyo de la dirección.</p>
+<span class="lbl">Cómo funciona</span>
+<p>Insistió en guardar evidencia de todo: si todos los cuestionarios tienen la misma letra y tamaño, parece que el analista los llenó solo; ante «¿de dónde lo sacaste?», la evidencia prueba que no se inventó.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c20-costos"><summary><span class="stitle">2 · La desigualdad de costos en seguridad</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p><strong>Costo del ataque &gt; valor del bien &gt; costo de la protección.</strong> Al atacante le debe costar más (en dinero, tiempo y esfuerzo) que lo que obtendría, y la protección no debe costar más que el bien.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Con una bici de 2,000 pesos quieres un candado que le cueste al ladrón más de 2,000 romper, pero no compras una caja fuerte de 50,000: «sale más caro el caldo que las albóndigas».<span class="rompe">Dónde deja de servir: las personas no tienen precio («priceless»).</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Dinero:</strong> si para entrar a una base de datos de IBM el atacante paga 2,000 a cinco personas (10,000) y compra equipos de 23,000, pero la base se vende en 5,000 en el mercado negro, no le conviene. <strong>Tiempo:</strong> si quiere las direcciones de empleados que están hoy en un congreso, cualquier retraso frustra su objetivo.</p>
+<p>Un celular de 10,000: robarlo debe costarle más de 10,000; pero si lo que hay dentro vale 20,000, sí le conviene.</p>
+<p>En redes se inyecta tráfico aparente las 24 horas: si solo hubiera tráfico de 10 a.m. a 5 p.m., el atacante sabría cuándo atacar; con tráfico constante tendría que vigilar todo el día.</p>
+<p>Gastar 50,000 o 100,000 en proteger ese celular no conviene. Excepción: las personas; un seguro de vida no devuelve a nadie, y perder a un empleado clave puede hacer que clientes cancelen contratos.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Retoma la regla de la Clase 19: el control no puede costar más que el bien.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> pensar solo en el dinero y olvidar el tiempo, el esfuerzo y el personal clave.</p></div>
+</details>
+
+<details class="section-block sec" id="c20-criticos"><summary><span class="stitle">3 · Gestión de riesgos: infraestructuras y procesos críticos y escenarios</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p><strong>Gestión de riesgos:</strong> administrar los riesgos detectados (quién los maneja y cómo se recupera la organización). <strong>Infraestructuras críticas:</strong> lo vital para que operen los procesos. <strong>Procesos críticos:</strong> actividades que no pueden dejar de hacerse. <strong>Escenarios de riesgo:</strong> descripción detallada de qué pasaría si se materializa un riesgo.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>En un restaurante: luz, agua y gas son la infraestructura crítica; cocinar y cobrar, los procesos críticos; imaginar qué hacer si se corta el agua a medio servicio, el escenario; decidir quién llama a la pipa, la gestión.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>La gestión conecta con los planes de contingencia. En casa, la infraestructura crítica según los alumnos: internet (que depende de la luz), agua y gas.</p>
+<p><strong>¿Qué no puede dejar de hacer McDonald's?</strong> Refrigeración, registro de pedidos, preparación, inventarios, proveedores y cobranza. Destacó la <strong>cobranza</strong>: si regalan la Cajita Feliz, quiebran. Los procesos se jerarquizan por criticidad.</p>
+<p>Los escenarios suponen lo peor (sin agua o sin gas) y describen todo: consecuencias, amenazas, vulnerabilidades y opciones (cerrar o contratar una pipa de emergencia).</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> escribir un escenario de una sola frase («se va el gas»).</p></div>
+</details>
+
+<details class="section-block sec" id="c20-tecnicas"><summary><span class="stitle">4 · Cinco técnicas rápidas para analizar riesgos</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>What if, Análisis Preliminar de Riesgos (APR), los cinco porqués, FMEA y listas de verificación.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Cinco lupas para revisar una bici antes del viaje: ¿y si llueve?; anotar cómo están los frenos para comparar en tres meses; preguntar cinco veces por qué rechina la cadena; listar qué piezas fallan más y qué tan grave es; palomear una lista.<span class="rompe">Dónde deja de servir: en una empresa no se hace solo: se trabaja en grupo con perfiles distintos.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<table>
+<thead><tr><th>Técnica</th><th>Qué es</th><th>Ejemplo de clase</th></tr></thead>
+<tbody>
+<tr><td><strong>What if</strong></td><td>Preguntas hipotéticas encadenadas sobre eventualidades que solemos ignorar.</td><td>¿Y si se va el gas? ¿Y si es una fuga? ¿Y si nadie contesta? ¿Y si contrato sin investigar a un atacante?</td></tr>
+<tr><td><strong>APR</strong></td><td>Al inicio, detectar los problemas actuales para comparar antes y después (a los 3–4 meses o al año).</td><td>Registrar las fallas por escrito, no en pláticas junto al microondas.</td></tr>
+<tr><td><strong>Cinco porqués</strong></td><td><strong>Exactamente cinco</strong> «¿por qué?» sucesivos hasta la causa raíz (más de cinco ya no es la técnica).</td><td>Aparecieron cuentas de usuario creadas: ¿por qué nadie avisó?…</td></tr>
+<tr><td><strong>FMEA</strong></td><td>Detectar, describir y clasificar fallas por frecuencia, gravedad y cómo se detectaron, para definir acciones.</td><td>Alguien da de alta usuarios sin avisar: ¿el jefe o un intruso con credenciales robadas? → reglas de quién da altas y a quién avisar.</td></tr>
+<tr><td><strong>Checklist</strong></td><td>Lista detallada verificada con Sí / No.</td><td>En auditorías se desglosa cada punto en incisos (5.1.3 inciso A, B…). A algunos no les gusta por escueta.</td></tr>
+</tbody>
+</table>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> usar más o menos de cinco preguntas y llamarlo cinco porqués; checklists ambiguos sin incisos; comunicar riesgos de palabra; analizar en solitario.</p></div>
+</details>
+
+<details class="section-block sec" id="c20-matriz"><summary><span class="stitle">5 · La matriz de riesgos (enfoque NIST)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Tabla donde el nivel de riesgo = <strong>probabilidad × impacto</strong>, con rangos numéricos asociados a colores.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Un semáforo en cuadrícula: cruzas qué tan seguido pasa contra qué tanto duele; casi nunca y no duele, verde; seguido y catastrófico, rojo.<span class="rompe">Dónde deja de servir: la matriz formal necesita la fórmula, rangos excluyentes y una definición escrita de cada nivel.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Colores NIST:</strong> rojo = alto, amarillo = moderado (naranja si hace falta un cuarto nivel), verde = muy bajo. Se pueden usar otros colores, pero en un informe formal conviene NIST.</p>
+<p>Ejemplo 5×5: probabilidad 1–5 por impacto 1–5 (5 × 1 = 5, hasta 25). La escala 1–5 es común, no obligatoria (2–10, 10–50, 1–100).</p>
+<table>
+<thead><tr><th>Rango</th><th>Nivel</th><th>Significado</th></tr></thead>
+<tbody>
+<tr><td>1 a 5</td><td>Bajo (verde)</td><td>Probablemente no pase y, si pasa, sin consecuencias significativas.</td></tr>
+<tr><td>6 a 12</td><td>Medio (amarillo)</td><td>Molestia, contratiempos.</td></tr>
+<tr><td>15 a 25</td><td>Alto (rojo)</td><td>Consecuencias graves (pérdida de personas o de la organización).</td></tr>
+</tbody>
+</table>
+<p>Un alumno preguntó si dentro del mismo rango se pueden usar tonos más claros y más fuertes del mismo color: sí, mientras sea el mismo nivel.</p>
+<p><strong>Errores en matrices de internet:</strong> rangos traslapados (1–5, 5–12, 10–25: el 5 y el 10 caen en dos niveles); el mismo número pintado de distinto color en celdas distintas; mostrar solo palabras y colores sin los números.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> los tres anteriores.</p></div>
+</details>
+
+<details class="section-block sec" id="c20-ejercicio"><summary><span class="stitle">6 · Ejercicio individual: análisis de riesgos del salón</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Actividad de una hora en hoja blanca («Ejercicio de clase», fecha 12, nombre y número de cuenta) sobre el propio salón.</p>
+<span class="lbl">Cómo funciona</span>
+<ol>
+<li>Definir los procesos críticos del salón.</li>
+<li>Al menos 5 activos (las personas cuentan, con su función).</li>
+<li>Al menos 2 amenazas y 2 vulnerabilidades por activo (pueden repetirse).</li>
+<li>Al menos 2 escenarios de riesgo; elegir uno y plantear las preguntas de una técnica (What if, checklist o exactamente 5 porqués, sin responder).</li>
+<li>La matriz de riesgos del escenario (sin plumas de color, anotar el color entre paréntesis).</li>
+</ol>
+<p>La matriz depende del contexto: no es igual que falte gas en una casa que en una panadería.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c20-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. Escribe la desigualdad de costos y su excepción.</summary><p>Costo del ataque &gt; valor del bien &gt; costo de la protección; excepción: las personas.</p></details>
+<details class="qa"><summary>2. ¿Por qué se inyecta tráfico aparente las 24 horas?</summary><p>Para que el atacante no sepa cuándo atacar y le cueste más tiempo vigilar.</p></details>
+<details class="qa"><summary>3. ¿Qué proceso de McDonald's destacó la profesora y por qué?</summary><p>La cobranza: si regalan la comida, quiebran aunque todo lo demás funcione.</p></details>
+<details class="qa"><summary>4. ¿Cuántas preguntas tiene la técnica de los cinco porqués?</summary><p>Exactamente cinco.</p></details>
+<details class="qa"><summary>5. ¿Para qué sirve el APR?</summary><p>Para registrar al inicio los problemas actuales y comparar antes y después.</p></details>
+<details class="qa"><summary>6. ¿Qué está mal en una matriz con rangos 1–5, 5–12 y 10–25?</summary><p>Se traslapan: el 5 y el 10 caen en dos niveles.</p></details>
+<details class="qa"><summary>7. Probabilidad 3 e impacto 4 en la matriz de clase: ¿nivel?</summary><p>12 → medio (amarillo).</p></details>
+</details>
+
+<details class="section-block sec" id="c20-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li>La profesora ya publicó en Classroom las metodologías de análisis de riesgos.</li>
+<li>Repasar análisis de riesgos y matrices: la próxima clase hay un ejercicio práctico completo.</li>
+<li><strong>Examen:</strong> todo el contenido; en la última semana (martes o jueves), por definir si en equipo.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Costo del ataque &gt; valor del bien &gt; costo de la protección; las personas no tienen precio.</li>
+<li>Infraestructura crítica → procesos críticos (jerarquizados) → escenarios descritos a detalle → gestión.</li>
+<li>What if, APR (antes y después), cinco porqués (exactamente 5), FMEA (frecuencia, gravedad, detección), checklist (Sí/No con incisos).</li>
+<li>Matriz: probabilidad × impacto; colores NIST; rangos sin traslape (1–5 verde, 6–12 amarillo, 15–25 rojo); siempre con números.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

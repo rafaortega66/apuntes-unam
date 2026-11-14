@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 22 — Arquitectura Cliente-Servidor</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261110a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261103a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Arquitectura Cliente-Servidor</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 22</h2>
+  <p class="prof">Mtro. Carlos Alberto Román Zamitiz · 10 nov 2026 · Tema 2 (seguridad en cliente-servidor) — Por qué fallaba el descifrado en el cliente-servidor (llaves distintas), diseño e implementación de <code>encriptador.c</code> y <code>desencriptador.c</code> para cifrar archivos completos en bloques de 4,096 bytes, y anatomía de un ataque de ransomware.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>ACS-Clase22.m4a</code>), 14 nov 2026. El profesor no dijo qué vendría en el examen; la sección de examen sale de lo que enfatizó y demostró. Continúa la <a href="clase-21.html">Clase 21</a>.</p>
+</div>
+<div class="files" id="guia-estudio-pdf"><a class="btn" href="../../decimo/ACS/ACS-Resumenes/ACS-Clase22-resumen.pdf" target="_blank">📄 Guía de estudio (PDF): apuntes completos + resumen para estudiar</a></div>
+
+<details class="section-block sec" id="c22-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>En cifrado simétrico la llave debe ser idéntica en ambos extremos; compilar con <code>-lssl -lcrypto</code>.</strong><span class="evid">Evidencia: dedicó el inicio a mostrar que los 16 bytes llegaban iguales pero el texto salía vacío por usar llaves distintas, y repitió la sintaxis de compilación.</span></li>
+<li><strong>Cifrar archivos por bloques de 4,096 bytes y dónde va el vector de inicialización.</strong><span class="evid">Evidencia: explicó el PDF paso a paso, recordó por qué 4,096 (tamaño de página) y mostró que el .encrypt de «Hola Mundo» mide 32 bytes.</span></li>
+<li><strong>Abrir en binario (<code>"rb"</code>, <code>"wb"</code>) y leer byte por byte.</strong><span class="evid">Evidencia: lo señaló varias veces en el código y explicó por qué no se ven los 32 bytes al abrir el archivo como texto.</span></li>
+<li><strong><code>snprintf</code> y <code>EVP_MAX_BLOCK_LENGTH</code> para no desbordar búferes.</strong><span class="evid">Evidencia: consultó la documentación de Open Group en clase.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c22-llave"><summary><span class="stitle">1 · La misma llave en ambos extremos</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Verificar que cliente y servidor carguen exactamente el mismo <code>llave.key</code> y compilen con las bibliotecas de OpenSSL.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Dos personas se mandan mensajes en un cofre: aunque la mensajería entregue intacto cada pedazo del cofre y en orden, si quien recibe usa una llave que fabricó esa mañana, no puede abrirlo.<span class="rompe">Dónde deja de servir: la respuesta «registro exitoso» viaja en texto plano, así que no depende de la llave.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El profesor corrió <code>crypto_v2</code>, que generó una llave nueva en el servidor. Compiló el cliente con <code>cc archivo.c -o ejecutable -lssl -lcrypto</code> (<code>-lssl</code> junto, espacio, <code>-lcrypto</code> con y).</p>
+<p>Con el servidor en el puerto 4898 y el cliente hacia 132.248.59.6, mandó «Carlos» (6 caracteres → 16 bytes). El cliente imprimió 119, −111, −72, …, −40 y el servidor recibió exactamente esos bytes en el mismo orden, pero el nombre descifrado salió vacío.</p>
+<p>Era el mismo fallo del final de la clase anterior: los clientes usaban el <code>llave.key</code> del repositorio de Git y el servidor la llave recién generada. Lo resolvió descargando la llave del repositorio y copiándola al servidor con <code>scp llave.key 132.248.59.6:&lt;ruta&gt;</code>. Al reiniciar, el servidor ya descifró los nombres (Víctor, 6 bytes + 10 de relleno; Ángel, Miriam, Osvaldo, Juan Carlos, Cynthia).</p>
+<p>Aclaró que quienes usaron Codespaces en el examen parcial obtuvieron otra hora con <code>date</code> porque ese entorno tiene otro huso horario.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la regla básica del cifrado simétrico: aunque el transporte sea perfecto, con otra llave no se descifra.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> tener otra versión de <code>llave.key</code> en el servidor; olvidar <code>-lssl -lcrypto</code>.</p></div>
+</details>
+
+<details class="section-block sec" id="c22-archivos"><summary><span class="stitle">2 · Diseño: cifrar archivos completos (<code>encriptador.c</code> y <code>desencriptador.c</code>)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Dos programas en C que cifran el contenido binario completo de cualquier archivo (.txt, .jpg, .mp3, .mp4, .pdf) por bloques de 4,096 bytes y lo reconstruyen sin alterar un solo byte.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es una mudanza: no cabe la casa en una caja, así que empacas en cajas estándar de 4,096 y pegas la etiqueta con el ajuste inicial de la cerradura (el IV) al principio de la primera caja, sin candado.<span class="rompe">Dónde deja de servir: si en la mudanza falta un plato, pierdes un plato; si a un PDF le falta un byte, todo el archivo queda corrupto.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El profesor abrió el PDF «Análisis del par de programas encriptador y desencriptador» (antes corrigió en su página la liga a la que le faltaba <code>.pdf</code>). Para AES todo archivo es una secuencia de bytes.</p>
+<p><code>encriptador</code> recibe el nombre del archivo, genera y guarda una llave nueva en <code>llave_archivo.key</code> (otro nombre para no pisar <code>llave.key</code>) y crea <code>archivo.encrypt</code>. <code>desencriptador</code> recibe el .encrypt, lee <code>llave_archivo.key</code> y crea <code>.decrypt</code>, idéntico al original.</p>
+<p><strong>Reto 1, el tamaño:</strong> un video de 2 GB no cabe en RAM como las cadenas de <code>crypto.c</code>. Se usa un <code>while</code> con un búfer de <strong>4,096 bytes, el tamaño de una página de memoria</strong>.</p>
+<p><strong>Reto 2, el IV:</strong> es aleatorio, así que el desencriptador no puede generar otro. En el cliente-servidor se mandaba en tres <code>send</code>; aquí el encriptador <strong>escribe los 16 bytes del IV sin cifrar al principio del .encrypt</strong> y después los bloques cifrados.</p>
+<ol>
+<li><strong>Encriptador:</strong> abrir el original y crear el .encrypt; generar y guardar la llave; escribir el IV al inicio; en un <code>while</code> leer hasta 4,096 bytes, cifrar y escribir; al final, el relleno y cerrar.</li>
+<li><strong>Desencriptador:</strong> abrir el .encrypt y crear el .decrypt; leer los primeros 16 bytes (el IV); leer la llave; en un <code>while</code> leer el resto, descifrar y escribir; cerrar.</li>
+</ol>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Une el cifrado de OpenSSL con el tamaño de página de memoria y con el manejo de archivos en disco.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> querer cargar un archivo de gigas completo en RAM; creer que el IV se cifra o que se puede regenerar al descifrar.</p></div>
+</details>
+
+<details class="section-block sec" id="c22-ransomware"><summary><span class="stitle">3 · Anatomía de un ataque de ransomware</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Software malicioso que combina ingeniería social, exfiltración de archivos por sockets en segundo plano y cifrado de los archivos de la víctima para exigir un rescate a cambio de la llave.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Alguien disfrazado de mensajero de tu universidad te deja un paquete; al abrirlo entra un ladrón que fotocopia tus documentos y los saca por la ventana, y luego guarda tus originales en una caja fuerte cuya llave solo él tiene.<span class="rompe">Dónde deja de servir: aunque tengas respaldos y no pagues, el atacante ya tiene copia de tus datos.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<ol>
+<li><strong>Engaño (ingeniería social):</strong> un correo con adjunto o liga adaptado a la víctima (a empleados, una factura; a estudiantes, un aviso falso de que su cuenta de ingenieria.unam.edu caduca o una liga para evaluar profesores). Los alumnos dijeron que revisan el remitente, pero el <em>From</em> puede venir falseado: usar «Mostrar original» o «Ver origen del mensaje» para ver los metadatos. «Se confía, pero se comprueba.»</li>
+<li><strong>Infección:</strong> la víctima abre el adjunto o la liga y se instala el ransomware.</li>
+<li><strong>Exfiltración:</strong> antes de cifrar, abre un socket en segundo plano y manda copia de los archivos al atacante (un síntoma es que la computadora se alenta).</li>
+<li><strong>Cifrado y extorsión:</strong> cifra los archivos y pide el rescate, normalmente en Bitcoin.</li>
+</ol>
+<p>Tener respaldos (por ejemplo, de la medianoche anterior) evita perder la operación, pero queda el daño económico (si se paga, a veces ni mandan la llave) y el reputacional, porque los datos pueden venderse o exponerse. Tampoco hay que escanear códigos QR desconocidos.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Junta los sockets y el par encriptador/desencriptador del curso con un ataque real.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> confiar solo en el nombre del remitente; creer que con respaldos desaparece el daño; escanear cualquier QR.</p></div>
+</details>
+
+<details class="section-block sec" id="c22-codigo"><summary><span class="stitle">4 · Revisión de <code>encriptador.c</code> y prueba en vivo</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La implementación en C con la API EVP de OpenSSL, E/S binaria (<code>fopen</code>, <code>fread</code>, <code>fwrite</code>, <code>fclose</code>) y <code>snprintf</code>.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es la empacadora por dentro: etiqueta las cajas sin salirse del espacio (<code>snprintf</code>), toma montones de hasta 4,096 de la banda (<code>fread</code>), los sella en una caja un poco más grande para que quepa el relleno y, cuando la banda se vacía, pone el sello final.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Nombres:</strong> un arreglo de 512 <code>char</code> para el nombre de salida, armado con <code>snprintf</code>, que recibe el búfer, el tamaño máximo (incluido el terminador), el formato y los argumentos; a diferencia de <code>sprintf</code>, no desborda.</p>
+<p><strong>Llave, IV y archivos:</strong> genera la llave y la guarda en <code>llave_archivo.key</code>; abre el original con <code>"rb"</code> y el .encrypt con <code>"wb"</code>, y escribe primero los 16 bytes del IV (no es secreto).</p>
+<p><strong>Contexto y búferes:</strong> <code>EVP_CIPHER_CTX_new()</code> (EVP = <em>envelope</em>); búfer de entrada de 4,096 bytes y de salida de <code>4096 + EVP_MAX_BLOCK_LENGTH</code>, para que quepa el relleno en cualquier distribución.</p>
+<p><strong>Ciclo:</strong> <code>fread</code> lee hasta 4,096 bytes y devuelve cuántos leyó (pueden ser menos, por ejemplo 1,024); mientras sea mayor que 0, cifra y escribe con <code>fwrite</code>. Al llegar a 0 sale, hace el paso final con el relleno, libera y cierra.</p>
+<p><strong>Prueba:</strong> <code>archivo.txt</code> con «Hola Mundo» (10 bytes; Linux lista 11 por el salto de línea). <code>gcc encriptador.c -o encriptador -lssl -lcrypto</code> y <code>./encriptador archivo.txt</code> generaron <code>llave_archivo.key</code> (32 bytes) y <code>archivo.txt.encrypt</code> de <strong>32 bytes = 16 del IV + 16 del bloque</strong>. Abierto como texto no se ven los 32 porque los valores 0 a 32 no son visibles: se lee byte por byte. Luego <code>./desencriptador archivo.txt.encrypt</code> creó <code>archivo.txt.encrypt.decrypt</code> con «Hola Mundo» intacto.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Convierte la teoría en herramientas que funcionan; el código de <code>desencriptador.c</code> se revisa la siguiente clase.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> correr los programas sin el nombre del archivo; olvidar <code>-lssl -lcrypto</code>; tratar el .encrypt como cadena de texto.</p></div>
+</details>
+
+<details class="section-block sec" id="c22-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Cómo se compila <code>encriptador.c</code>?</summary><p><code>cc encriptador.c -o encriptador -lssl -lcrypto</code> (o con gcc).</p></details>
+<details class="qa"><summary>2. Los 16 bytes de «Carlos» llegaron iguales al servidor pero el nombre salió vacío. ¿Por qué y cómo se arregló?</summary><p>El servidor tenía una llave distinta a la de los clientes; se copió la llave del repositorio al servidor con scp.</p></details>
+<details class="qa"><summary>3. «Buenas noches» mide 13 bytes. ¿Cuánto mide <code>nota.txt.encrypt</code>?</summary><p>32 bytes: 16 del IV sin cifrar más 16 del bloque (13 bytes + relleno).</p></details>
+<details class="qa"><summary>4. ¿Por qué un búfer de 4,096 bytes y uno de salida de <code>4096 + EVP_MAX_BLOCK_LENGTH</code>?</summary><p>Porque un archivo grande no cabe en RAM y 4,096 es el tamaño de página; lo extra es para el relleno.</p></details>
+<details class="qa"><summary>5. ¿Cómo se comparte el IV en el cliente-servidor y en el par de archivos?</summary><p>En el cliente-servidor, en el primero de tres <code>send</code>; en los archivos, escrito sin cifrar en los primeros 16 bytes del .encrypt.</p></details>
+<details class="qa"><summary>6. ¿Qué pasa si falta un byte en un .txt y en un .pdf? ¿Qué diferencia hay entre <code>sprintf</code> y <code>snprintf</code>?</summary><p>El .txt sale incompleto; el .pdf queda corrupto. <code>snprintf</code> recibe el tamaño máximo y evita desbordar.</p></details>
+<details class="qa"><summary>7. ¿Por qué no hay que tomar los primeros 16 caracteres visibles del .encrypt como el IV?</summary><p>Porque muchos bytes (0 a 32) no son visibles; hay que abrir en binario y leer byte por byte.</p></details>
+<details class="qa"><summary>8. ¿Por qué los respaldos no eliminan todo el daño de un ransomware?</summary><p>Porque antes de cifrar ya mandó copia de los archivos al atacante: queda el daño reputacional.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c22-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li>La liga del PDF de análisis no funcionaba porque le faltaba <code>.pdf</code>; la corrigió en vivo en GitHub.</li>
+<li>Al final la lista de asistencia tardó en cargar: «los astros no quieren que pase lista».</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c22-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li>No hay tarea para entregar; repasar probando el encriptador, el desencriptador y el par cifrado.</li>
+<li>El profesor sigue sin terminar de calificar la Tarea 5 y compartirá el PDF de la presentación de ransomware.</li>
+<li><strong>Jueves:</strong> análisis del código de <code>desencriptador.c</code>. Quedan dos semanas (5 clases) para terminar.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Cifrado simétrico: la misma llave en ambos extremos o el descifrado sale vacío.</li>
+<li>Archivos grandes: bloques de 4,096 bytes (tamaño de página) en un <code>while</code>.</li>
+<li>IV de 16 bytes escrito sin cifrar al inicio del .encrypt; «Hola Mundo» → 32 bytes.</li>
+<li><code>"rb"</code> / <code>"wb"</code>, <code>snprintf</code> y <code>4096 + EVP_MAX_BLOCK_LENGTH</code>.</li>
+<li>Ransomware: engaño → infección → exfiltración por socket → cifrado y rescate.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

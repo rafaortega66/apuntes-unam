@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 23 — Arquitectura Cliente-Servidor</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261110a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261103a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Arquitectura Cliente-Servidor</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 23</h2>
+  <p class="prof">Mtro. Carlos Alberto Román Zamitiz · 12 nov 2026 · Tema 4 (transferencia de archivos) — Un FTP básico en C: recorrer directorios con <code>dirent.h</code>, protocolo de tres envíos por archivo (nombre, tamaño y contenido en bloques de 1,024 bytes) y <code>accept()</code> fuera del ciclo; aclaraciones sobre DDoS con IoT y la exfiltración del ransomware.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>ACS-Clase23.m4a</code>), 14 nov 2026. El profesor no dijo qué vendría en el examen; la sección de examen sale de lo que enfatizó. Continúa la <a href="clase-22.html">Clase 22</a>.</p>
+</div>
+<div class="files" id="guia-estudio-pdf"><a class="btn" href="../../decimo/ACS/ACS-Resumenes/ACS-Clase23-resumen.pdf" target="_blank">📄 Guía de estudio (PDF): apuntes completos + resumen para estudiar</a></div>
+
+<details class="section-block sec" id="c23-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>El protocolo de tres envíos por archivo: nombre, tamaño y contenido en bloques.</strong><span class="evid">Evidencia: preguntó al grupo qué datos necesita el servidor y comparó tres envíos contra dos.</span></li>
+<li><strong><code>accept()</code> antes del <code>while(1)</code> en el servidor receptor.</strong><span class="evid">Evidencia: lo remarcó leyendo el comentario del código.</span></li>
+<li><strong>Recibir exactamente los bytes del archivo: <code>while (total_recibido &lt; tamano_archivo)</code>.</strong><span class="evid">Evidencia: hizo la traza completa con un archivo de 2,048 bytes y búfer de 1,024.</span></li>
+<li><strong><code>dirent.h</code> (DIR, struct dirent, opendir, readdir, closedir) y saltarse «.» y «..».</strong><span class="evid">Evidencia: compiló primero <code>listado_archivos.c</code> e insistió en el operador flecha.</span></li>
+<li><strong>Tipos y modos: <code>long</code> para el tamaño, nombre de 256, <code>"rb"</code> / <code>"wb"</code>.</strong><span class="evid">Evidencia: justificó cada elección.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c23-ddos"><summary><span class="stitle">1 · Aclaraciones: DDoS con IoT y exfiltración del ransomware</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Un DDoS satura un servidor con peticiones ilegítimas desde muchos dispositivos infectados. En el ransomware, los archivos robados pueden viajar al atacante en texto plano o ya cifrados.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Miles de llamadas falsas a la misma pizzería: mientras el empleado las contesta, los clientes reales encuentran la línea ocupada.<span class="rompe">Dónde deja de servir: quienes llaman no son personas, sino cámaras y aparatos IoT infectados sin que sus dueños lo sepan.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Lo ligó con la cola SYN y los valores 0 y 1 que se ajustaron en la Tarea 4: con valores mayores hay más reintentos y se pueden dejar peticiones en espera; con 0 y 1 se rechazan rápido.</p>
+<p>En el ransomware, tras infectar, el programa abre un socket y manda los archivos al atacante: en texto plano (y luego cifra los locales) o cifrándolos primero. Al atacante no le importa recibirlos cifrados porque tiene la llave.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c23-dirent"><summary><span class="stitle">2 · Listar un directorio con <code>dirent.h</code> (<code>listado_archivos.c</code>)</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Programa local en C que hace lo básico de <code>ls</code>: lista los nombres del directorio actual con <code>dirent.h</code>.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Un bibliotecario abre el cajón de fichas (<code>opendir</code>), saca tarjeta por tarjeta (<code>readdir</code>) leyendo el título (<code>d_name</code>) y cierra el cajón (<code>closedir</code>).<span class="rompe">Dónde deja de servir: en Linux todo es archivo: también salen las subcarpetas y las entradas «.» y «..».</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Declara <code>DIR *carpeta</code> y <code>struct dirent *archivo</code>; abre con <code>opendir(".")</code> (el directorio actual; puede ser cualquier ruta) y si devuelve <code>NULL</code> hace <code>perror</code> y termina.</p>
+<p><code>while ((archivo = readdir(carpeta)) != NULL)</code>: cada llamada avanza a la siguiente entrada y al final devuelve <code>NULL</code>. Como <code>archivo</code> es apuntador a estructura, se usa <strong><code>archivo-&gt;d_name</code></strong> (flecha, no punto). Al terminar, <code>closedir</code>.</p>
+<p>Se compila con <code>gcc listado_archivos.c -o listado_archivos</code> (sin OpenSSL).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Permite que el cliente descubra solo los archivos de una carpeta.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> usar el punto en vez de la flecha con un apuntador a estructura.</p></div>
+</details>
+
+<details class="section-block sec" id="c23-ftp"><summary><span class="stitle">3 · Cliente y servidor de transferencia de archivos</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p><code>cliente_envia_archivos.c</code> recorre un directorio y manda cada archivo completo en bloques de 1,024 bytes; <code>servidor_recibe_archivos.c</code> los recrea en su directorio actual. Es un FTP básico sin cifrar.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Mandar una colección de libros en sobres de tamaño fijo: primero una etiqueta con el título para que el receptor prepare la carpeta, luego cuántas páginas trae y después las páginas en sobres hasta completar la cuenta.<span class="rompe">Dónde deja de servir: si falta una página lees el resto; si falta un byte, el archivo queda corrupto.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>¿Qué necesita el servidor? El grupo dijo nombre, ruta, tamaño y permisos. <strong>Nombre</strong> (hasta 256 caracteres, el límite de los sistemas operativos); la <strong>ruta</strong> no se manda (el servidor guarda en su directorio actual); el <strong>tamaño</strong> en <code>long</code> (más amplio que <code>int</code>) para saber cuántos bytes leer; los permisos importan, pero aquí se asume lectura.</p>
+<p><strong>Tres envíos contra dos:</strong> con dos (nombre y contenido) el servidor tendría que reservar un búfer enorme y luego recortarlo; con tres controla el tamaño exacto a cambio de un envío más. Depende del hardware del servidor y de la latencia.</p>
+<p><strong>Cliente</strong> (<code>./cliente_envia_archivos IP puerto directorio</code>): valida <code>argc != 4</code>, prepara <code>sockaddr_in</code>, hace <code>connect</code>, recorre el directorio <strong>saltándose «.» y «..»</strong> y por cada archivo: (1) manda el nombre, (2) obtiene el tamaño con <code>stat</code> (<code>st_size</code>) y lo manda, (3) abre con <code>"rb"</code> y manda bloques de hasta 1,024 bytes con <code>fread</code> mientras lea más de 0.</p>
+<p><strong>Servidor</strong> (<code>./servidor_recibe_archivos puerto</code>): <code>INADDR_ANY</code>, <code>bind</code>, <code>listen</code> (backlog 1) y <strong><code>accept()</code> antes del <code>while(1)</code></strong>, porque atiende a un solo cliente y el ciclo es para recibir varios archivos de esa conexión. En cada vuelta: (A) recibe el nombre; si <code>recv</code> da ≤ 0, el cliente terminó y hace <code>break</code>; (B) recibe el tamaño y crea el archivo con <code>"wb"</code>; (C) <code>while (total_recibido &lt; tamano_archivo)</code> con <code>a_leer = 1024</code>, o lo que falte si es menos; <code>recv</code>, <code>fwrite</code> y <code>total_recibido += leidos</code>; al final <code>fclose</code>.</p>
+<p><strong>Traza (2,048 bytes, búfer de 1,024):</strong> vuelta 1: 2048 − 0 &lt; 1024 es falso → lee 1,024, total = 1,024. Vuelta 2: 2048 − 1024 &lt; 1024 es falso (es igual) → lee 1,024, total = 2,048. 2048 &lt; 2048 es falso → sale tras exactamente 2 <code>recv</code>.</p>
+<p><strong>Prueba en vivo:</strong> cliente en GitHub Codespaces (sin IP pública) hacia 132.248.59.6:4898; el servidor corría en una carpeta vacía; se mandaron <code>archivo1.txt</code> y <code>archivo2.txt</code> (21 bytes cada uno) y llegaron intactos.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Junta directorios, protocolo síncrono y archivos binarios; la siguiente clase se le integra el cifrado para un FTP seguro.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> no filtrar «.» y «..»; usar <code>int</code> para el tamaño; olvidar <code>fclose</code>; correr el servidor en una carpeta llena de otros archivos.</p></div>
+</details>
+
+<details class="section-block sec" id="c23-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Qué tres cosas manda el cliente por cada archivo?</summary><p>Nombre, tamaño y contenido en bloques de 1,024 bytes.</p></details>
+<details class="qa"><summary>2. ¿Por qué <code>accept()</code> va antes del <code>while(1)</code>?</summary><p>Porque el servidor atiende a un solo cliente y el ciclo recibe varios archivos de esa misma conexión.</p></details>
+<details class="qa"><summary>3. Archivo de 2,500 bytes con búfer de 1,024: ¿cuántos <code>recv</code> y de cuánto?</summary><p>Tres: 1,024, 1,024 y 452.</p></details>
+<details class="qa"><summary>4. ¿Por qué <code>archivo-&gt;d_name</code> y no <code>archivo.d_name</code>?</summary><p>Porque <code>archivo</code> es un apuntador a estructura.</p></details>
+<details class="qa"><summary>5. ¿Por qué el tamaño va en <code>long</code>?</summary><p>Porque es más amplio que <code>int</code> y alcanza para archivos grandes.</p></details>
+<details class="qa"><summary>6. Tres envíos contra dos.</summary><p>Con dos el servidor reserva un búfer enorme y recorta; con tres sabe el tamaño exacto a cambio de un envío más.</p></details>
+</details>
+
+<details class="section-block sec" id="c23-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li>No hay tarea para entregar; probar el par cliente/servidor con archivos binarios grandes, con el servidor en una carpeta vacía.</li>
+<li><strong>Próxima clase:</strong> integrar el cifrado a la transferencia para un FTP seguro. El profesor avisará si las últimas clases terminan antes.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li><code>dirent.h</code>: opendir → readdir (hasta NULL) → closedir; <code>archivo-&gt;d_name</code>; saltar «.» y «..».</li>
+<li>Tres envíos por archivo: nombre (256), tamaño (<code>long</code>, con <code>stat</code>), contenido en bloques de 1,024.</li>
+<li>Servidor: <code>accept()</code> antes del <code>while(1)</code>; <code>recv</code> ≤ 0 = el cliente terminó.</li>
+<li><code>while (total_recibido &lt; tamano_archivo)</code> con <code>a_leer</code> = lo que falte, máximo 1,024.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

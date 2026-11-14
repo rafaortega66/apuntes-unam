@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 19 — Administración de Servicios de Internet</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261110a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261103a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Administración de Servicios de Internet</a>
+<div class="detail-head" style="border-color:#7C9CD6"><h2>Clase 19</h2>
+  <p class="prof">Mtro. Juan Ángel Calvillo Pérez · 11 nov 2026 · Exposiciones de los RFC (2.ª parte) — Últimas exposiciones de RFC: el 3898 (opciones de NIS y NIS+ para DHCPv6) y el 8446 (TLS 1.3: handshake de 1-RTT, AEAD con AES-GCM y claves efímeras), actividad en clase y fechas: examen el miércoles 18 y presentación del proyecto el 23 y 25 nov.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>ASI-Clase19.m4a</code>, 19 min), 14 nov 2026. El contenido técnico es de los equipos; el profesor no intervino durante las exposiciones.</p>
+</div>
+<div class="files" id="guia-estudio-pdf"><a class="btn" href="../../decimo/ASI/ASI-Resumenes/ASI-Clase19-resumen.pdf" target="_blank">📄 Guía de estudio (PDF): apuntes completos + resumen para estudiar</a></div>
+
+<details class="section-block sec" id="c19-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Presentación del proyecto (23 y 25 nov): preguntas técnicas y cambios en tiempo real.</strong><span class="evid">Evidencia: el profesor dijo que hará preguntas y pedirá cambios en vivo, y pidió ponerse a estudiar.</span></li>
+<li><strong>RFC 8446 / TLS 1.3: 1-RTT, algoritmos eliminados, AEAD y claves efímeras.</strong><span class="evid">Evidencia: evidencia débil para el examen escrito: fue el estándar más extenso de la sesión, sin comentarios del profesor.</span></li>
+<li><strong>RFC 3898: opciones 27–30 y el flujo de cuatro pasos.</strong><span class="evid">Evidencia: evidencia débil: completa los RFC expuestos antes del examen.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c19-rfc3898"><summary><span class="stitle">1 · RFC 3898: opciones de NIS y NIS+ para DHCPv6</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>DHCP configura automáticamente los parámetros de red; NIS (<em>Network Information System</em>) administra la información de una red. El RFC 3898 (octubre de 2004) define cómo DHCPv6 entrega los datos para localizar servidores NIS y NIS+.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Llegas a una oficina nueva y, en vez de que un técnico te anote a mano dónde está el archivo central de usuarios, tu computadora se lo pregunta al encargado de asignar escritorios (DHCPv6) con unos códigos del 27 al 30.<span class="rompe">Dónde deja de servir: el encargado no te da esos datos si no los pides explícitamente, y todo viaja sin cifrar.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<table>
+<thead><tr><th>Opción</th><th>Entrega</th></tr></thead>
+<tbody>
+<tr><td>27</td><td>Direcciones IP de servidores NIS</td></tr>
+<tr><td>28</td><td>Direcciones IP de servidores NIS+</td></tr>
+<tr><td>29</td><td>Nombre de dominio NIS</td></tr>
+<tr><td>30</td><td>Nombre de dominio NIS+</td></tr>
+</tbody>
+</table>
+<p>Cada opción indica tipo, longitud y contenido, y puede llevar varias direcciones (más disponibilidad). Suelen ir en pares (27 y 29, 28 y 30); si el cliente ya conoce la IP, puede pedir solo el dominio, o al revés.</p>
+<ol>
+<li>El cliente envía una solicitud de búsqueda incluyendo los códigos 27–30.</li>
+<li>El servidor responde con un anuncio (su identificador, servidores disponibles y la posible IP).</li>
+<li>El cliente envía la petición formal y debe <strong>volver a incluir</strong> los códigos.</li>
+<li>El servidor devuelve la información.</li>
+</ol>
+<p>El RFC no implementa NIS: solo es el transporte por DHCPv6. Por su inseguridad (puede dirigir a servidores falsos y manda contraseñas sin cifrar), hoy se usa LDAP o Active Directory.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> creer que DHCPv6 manda los datos de NIS sin pedirlos, o que basta pedirlos una vez; creer que el RFC implementa NIS.</p></div>
+</details>
+
+<details class="section-block sec" id="c19-tls13"><summary><span class="stitle">2 · RFC 8446: TLS 1.3</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Especificación de la IETF de TLS 1.3 (sucesor de SSL), que reemplaza a TLS 1.2 (RFC 5246) para dar confidencialidad, integridad y autenticación entre cliente y servidor.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es el manual común de todos los bancos y navegadores para presentarse, comprobar con una identificación oficial que el banco es quien dice y abrir un canal privado en un solo saludo de ida y vuelta.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Interoperabilidad: cualquier navegador (Chrome, Firefox, donde ya es la versión recomendada) habla con cualquier servidor. Tres pilares contra el <em>man-in-the-middle</em>: confidencialidad, integridad y autenticación con certificado digital.</p>
+<p><strong>Handshake:</strong> TLS 1.2 necesitaba 2 RTT; TLS 1.3 solo <strong>1 RTT</strong>, e incluso un modo sin espera (0-RTT) donde los primeros datos quedan algo más expuestos. En una transacción bancaria por API REST, primero se acuerda el cifrado (AES-GCM) y las claves efímeras y el servidor presenta su certificado.</p>
+<p>Eliminó algoritmos inseguros: MD5, SHA-1 y RC4.</p>
+<p><strong>AEAD</strong> (<em>Authenticated Encryption with Associated Data</em>): cifra y autentica a la vez. AES-GCM combina el contenido y el encabezado para producir un <em>authentication tag</em>; el servidor recalcula y compara, y si cambió un solo bit (por ejemplo el monto de una transferencia) descarta y cierra la conexión. Analogía del equipo: además de la caja fuerte, un sello de cera que se rompe si alguien la abre.</p>
+<p><strong>Perfect forward secrecy:</strong> claves efímeras por Diffie-Hellman que solo existen durante la sesión y se borran de la RAM al terminar; aunque alguien haya grabado el tráfico, después ya no puede descifrarlo (con claves estáticas sí podía).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es el estándar actual para la banca en línea y las APIs.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c19-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Qué entregan las opciones 27, 28, 29 y 30 del RFC 3898?</summary><p>IP de NIS, IP de NIS+, dominio NIS y dominio NIS+.</p></details>
+<details class="qa"><summary>2. ¿Por qué el cliente pide los códigos dos veces?</summary><p>Porque el servidor no los entrega por defecto: van en la solicitud inicial y otra vez en la petición formal.</p></details>
+<details class="qa"><summary>3. ¿Cuántos viajes de ida y vuelta necesita el handshake de TLS 1.2 y de TLS 1.3?</summary><p>2 RTT contra 1 RTT.</p></details>
+<details class="qa"><summary>4. ¿Qué es AEAD y qué pasa si se altera un bit?</summary><p>Cifrado autenticado (AES-GCM): el tag no coincide y el servidor descarta y cierra la conexión.</p></details>
+<details class="qa"><summary>5. ¿Qué es el perfect forward secrecy?</summary><p>Claves efímeras Diffie-Hellman que se borran al terminar la sesión; el tráfico grabado no se puede descifrar después.</p></details>
+</details>
+
+<details class="section-block sec" id="c19-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li>Actividad (infografía) para entregar ese día.</li>
+<li><strong>Lunes 16 nov: no hay clase.</strong></li>
+<li><strong>Miércoles 18 nov: examen</strong> (cambia la fecha del 16 que se había dicho en la <a href="clase-17.html">Clase 17</a>).</li>
+<li><strong>Lunes 23 y miércoles 25 nov:</strong> presentación del proyecto por número rifado, con preguntas y cambios en tiempo real; quien expone un día puede faltar el otro.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>RFC 3898: DHCPv6 transporta los datos de NIS/NIS+ (opciones 27–30); obsoleto por inseguro (→ LDAP, Active Directory).</li>
+<li>TLS 1.3: 1-RTT, sin MD5/SHA-1/RC4, AEAD con AES-GCM, claves efímeras (forward secrecy).</li>
+<li>Examen: miércoles 18 nov. Proyecto: 23 y 25 nov con cambios en vivo.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

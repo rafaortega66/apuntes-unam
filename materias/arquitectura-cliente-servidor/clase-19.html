@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 19 — Arquitectura Cliente-Servidor</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261110a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261103a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Arquitectura Cliente-Servidor</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 19</h2>
+  <p class="prof">Mtro. Carlos Alberto Román Zamitiz · 29 oct 2026 · Tema 3 (sniffer con sockets crudos) · clase reconstruida — Análisis de tramas en capa 2 con sockets crudos: modo promiscuo, AF_PACKET + SOCK_RAW, encapsulamiento Ethernet–IPv4–TCP, orden de bytes de red, extracción del payload y la Tarea 5.</p>
+  <p class="prof">Fuente: material oficial del profesor en su sitio (<a href="https://cromanzamitiz.github.io/arquitectura-cliente-servidor/tema3/" target="_blank">Tema 3</a>): presentación «Análisis de tramas en capa 2, desencapsulamiento TCP/IP y raw sockets», <code>sniffer.c</code> y el requerimiento de la Tarea 5.</p>
+  <div class="aviso" style="margin-top:.6em;padding:.6em .8em;border-left:4px solid #E8735C;background:#E8735C18"><p>⚠️ <strong>No asistí a esta clase y no hay audio.</strong> El contenido se reconstruyó con el material del profesor. Que esta sesión haya sido la del sniffer se deduce del orden del material (la <a href="clase-18.html">Clase 18</a> lo introdujo y la <a href="clase-21.html">Clase 21</a> ya era de cifrado); no está confirmado qué se vio exactamente ese día.</p></div>
+</div>
+<div class="files" id="guia-estudio-pdf"><a class="btn" href="../../decimo/ACS/ACS-Resumenes/ACS-Clase19-resumen.pdf" target="_blank">📄 Guía de estudio (PDF): apuntes completos + resumen para estudiar</a></div>
+
+<details class="section-block sec" id="c19-raw"><summary><span class="stitle">1 · De los sockets de aplicación a los sockets crudos</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Con <code>SOCK_STREAM</code> sobre <code>AF_INET</code> parece haber un «tubo directo» entre cliente y servidor: el kernel agrega y quita las cabeceras TCP, IP y Ethernet, y la tarjeta de red descarta las tramas cuya MAC destino no es la suya. Un sniffer rompe esa abstracción.</p>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Modo promiscuo:</strong> el driver de la tarjeta entrega al CPU todas las tramas del medio, sin filtrar por MAC.</p>
+<p><strong>Sockets crudos</strong> (<code>AF_PACKET</code> + <code>SOCK_RAW</code>): el kernel no desarma el paquete; se recibe la trama completa desde la capa 2. Requieren root (<code>CAP_NET_RAW</code>).</p>
+<pre><code>raw_socket = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
+if (raw_socket &lt; 0) { perror(&quot;Error (¿Ejecutaste con sudo?)&quot;); return 1; }</code></pre>
+</div>
+</details>
+
+<details class="section-block sec" id="c19-punteros"><summary><span class="stitle">2 · Encapsulamiento y aritmética de punteros</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El paquete capturado se recorre superponiendo estructuras sobre un búfer y sumando desplazamientos.</p>
+<span class="lbl">Cómo funciona</span>
+<p><code>malloc(65536)</code>: 64 KB, el tamaño máximo teórico de un paquete IP (2¹⁶). <code>recvfrom()</code> copia la trama al búfer y devuelve cuántos bytes llegaron.</p>
+<p>Secuencia: <strong>Ethernet (14 B) → IPv4 (20–60 B) → TCP (20–60 B) → datos de aplicación</strong>.</p>
+<p><strong>Ethernet</strong> (<code>struct ethhdr</code>, en el byte 0): MAC destino (6 B), MAC origen (6 B) y EtherType (2 B; <code>ETH_P_IP</code> = 0x0800 es IPv4).</p>
+<p><strong>IPv4</strong> (<code>buffer + sizeof(struct ethhdr)</code>): <code>iph-&gt;ihl</code> mide la cabecera en palabras de 4 bytes (5 × 4 = 20 B); <code>iph-&gt;protocol == 6</code> es TCP (1 = ICMP, 17 = UDP).</p>
+<p><strong>TCP</strong> (tras 14 + longitud IP): <code>tcph-&gt;doff * 4</code> es la longitud de la cabecera TCP. Se filtra el puerto 4898.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c19-endian"><summary><span class="stitle">3 · Orden de bytes de red</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>TCP/IP transmite primero el byte más significativo (<em>big-endian</em>); x86 guarda primero el menos significativo (<em>little-endian</em>).</p>
+<span class="lbl">Cómo funciona</span>
+<p>El puerto 4898 = 0x1322 viaja como 0x13 y luego 0x22. Si se lee sin convertir, la CPU ve 0x2213 = 8723.</p>
+<p><code>htons()</code> al mandar valores de 16 bits al socket (<code>htons(ETH_P_ALL)</code>); <code>ntohs()</code> al leer <code>h_proto</code>, <code>tcph-&gt;source</code> y <code>tcph-&gt;dest</code>.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> leer puertos o EtherType sin <code>ntohs()</code>.</p></div>
+</details>
+
+<details class="section-block sec" id="c19-payload"><summary><span class="stitle">4 · El payload y el riesgo del texto plano</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Los datos de usuario empiezan después de todas las cabeceras.</p>
+<span class="lbl">Cómo funciona</span>
+<pre><code>int tcp_header_len = tcph-&gt;doff * 4;
+int total_headers_size = sizeof(struct ethhdr) + iphdrlen + tcp_header_len;
+unsigned char *payload = buffer + total_headers_size;
+int payload_size = data_size - total_headers_size;
+if (payload_size &gt; 0) printf(&quot;%.*s\n&quot;, payload_size, payload);</code></pre>
+<p>Si <code>payload_size == 0</code> es un paquete de control (SYN, ACK, FIN) y se ignora. <code>%.*s</code> imprime exactamente <code>payload_size</code> bytes (evita leer de más).</p>
+<p>Conclusión: un cliente-servidor sobre TCP puro expone contraseñas y comandos en la red local; la mitigación es cifrar en tránsito (TLS), que es lo que sigue en el Tema 4.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c19-tarea5"><summary><span class="stitle">5 · Tarea 5: probar el sniffer en tres terminales</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Guía de laboratorio del profesor.</p>
+<span class="lbl">Cómo funciona</span>
+<ol>
+<li><strong>Terminal 1 (root):</strong> <code>ip link set eth0 promisc on</code> (o <code>lo</code> en loopback; comprobar con <code>ifconfig</code>), <code>gcc sniffer.c -o sniffer</code> y <code>./sniffer</code>.</li>
+<li><strong>Terminal 2:</strong> servidor en el 4898 (programa 04 o 05): <code>./programa04_servidor_internet 4898</code>.</li>
+<li><strong>Terminal 3:</strong> cliente: <code>./programa04_cliente_internet 127.0.0.1 4898</code>.</li>
+</ol>
+<p>La terminal 1 intercepta la trama, desencapsula IP y TCP e imprime el payload en claro. Si se usan máquinas distintas, <strong>solo la del sniffer</strong> va en modo promiscuo, porque es la observadora pasiva.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c19-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Qué hace el modo promiscuo?</summary><p>Que la tarjeta entregue todas las tramas del medio sin filtrar por MAC.</p></details>
+<details class="qa"><summary>2. ¿Qué socket crea el sniffer y por qué pide root?</summary><p><code>socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL))</code>; los sockets crudos requieren <code>CAP_NET_RAW</code>.</p></details>
+<details class="qa"><summary>3. Con <code>ihl = 5</code> y <code>doff = 5</code>, ¿dónde empieza el payload?</summary><p>14 + 20 + 20 = 54 bytes después del inicio.</p></details>
+<details class="qa"><summary>4. ¿Qué ve la CPU si lee el puerto 4898 sin <code>ntohs()</code>?</summary><p>0x2213 = 8723.</p></details>
+<details class="qa"><summary>5. ¿Qué máquina va en modo promiscuo si son tres distintas?</summary><p>Solo la del sniffer.</p></details>
+</details>
+
+<details class="section-block sec" id="c19-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li>Tarea 5: probar el sniffer en tres terminales y entregar capturas (requerimiento en el sitio del profesor).</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Modo promiscuo + <code>AF_PACKET</code>/<code>SOCK_RAW</code> (root) = trama completa desde capa 2.</li>
+<li>Ethernet 14 B → IP <code>ihl·4</code> → TCP <code>doff·4</code> → payload; protocolo 6 = TCP.</li>
+<li>Red = big-endian; <code>ntohs()</code> al leer, <code>htons()</code> al mandar.</li>
+<li>El texto plano se lee tal cual: hay que cifrar.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

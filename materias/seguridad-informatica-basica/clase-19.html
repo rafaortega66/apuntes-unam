@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 19 — Seguridad Informática Básica</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261110a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261103a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Seguridad Informática Básica</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 19</h2>
+  <p class="prof">Dra. Cintia Quezada Reyes · 10 nov 2026 · Tema 5 (análisis de riesgos) — Inicio del análisis de riesgos: las tres preguntas en orden, terminología, cómo recopilar información, riesgo residual y pérdidas esperadas, análisis cuantitativo (ALE) y cualitativo, los ocho pasos del proceso, cada cuándo se hace y la matriz FODA.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>SIB-Clase19.m4a</code>), 14 nov 2026. Continúa la <a href="clase-18.html">Clase 18</a>.</p>
+</div>
+<div class="files" id="guia-estudio-pdf"><a class="btn" href="../../decimo/SIB/SIB-Resumenes/SIB-Clase19-resumen.pdf" target="_blank">📄 Guía de estudio (PDF): apuntes completos + resumen para estudiar</a></div>
+
+<details class="section-block sec" id="c19-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Las tres preguntas de seguridad y su orden estricto.</strong><span class="evid">Evidencia: las anotó y preguntó al grupo, corrigió que no se cambie el orden y las usó para estructurar los ocho pasos.</span></li>
+<li><strong>Terminología: aceptación, manejo, evaluación, pérdidas esperadas y riesgo residual.</strong><span class="evid">Evidencia: dedicó el primer bloque a definirlos e insistió en el riesgo residual y en suponer siempre lo peor.</span></li>
+<li><strong>Análisis cuantitativo (ALE) contra cualitativo, y que se usan juntos.</strong><span class="evid">Evidencia: los contrastó con ejemplos reales y recalcó que no se elige uno solo.</span></li>
+<li><strong>Los 8 pasos, la evidencia y la prohibición de recomendar marcas.</strong><span class="evid">Evidencia: lo ligó al proyecto (15 bienes) y repitió que nunca se ponen marcas ni proveedores.</span></li>
+<li><strong>Cada cuándo se hace un análisis de riesgos y el papel de la alta dirección.</strong><span class="evid">Evidencia: lo preguntó al grupo y advirtió que el próximo examen evaluará todo el contenido.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c19-preguntas"><summary><span class="stitle">1 · Las tres preguntas y la terminología</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El análisis de riesgos detecta problemáticas y qué tan seguido pueden pasar, respondiendo en orden: <strong>1) ¿qué quiero proteger?, 2) ¿de qué lo quiero proteger? y 3) ¿cómo lo voy a proteger?</strong> <strong>Aceptación:</strong> el dueño decide si está dispuesto a que pase y asume las consecuencias. <strong>Manejo:</strong> cómo controlar y minimizar los riesgos que no se aceptan. <strong>Evaluación:</strong> comparar con metodologías, tablas o análisis previos. <strong>Pérdidas esperadas:</strong> suponer siempre lo peor.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es revisar tu casa antes de un viaje: qué cosas valiosas tienes, qué les podría pasar, y si pones chapas o un seguro, sin gastar 50,000 pesos en un candado para una bici de 2,000.<span class="rompe">Dónde deja de servir: en casa decides de memoria; en una organización hay tablas, el último análisis documentado, costos y el respaldo de la alta dirección.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Los alumnos recordaron «¿qué?» y «¿cómo?»; la profesora corrigió el orden: cambiarlo lleva a comprar herramientas antes de conocer el problema.</p>
+<p>Se identifican bienes y riesgos (posibilidad de daño y frecuencia) y se arman tablas métricas: frecuencia al año (0 = ninguna en verde; 1–10, 11–20…), qué es más caótico y pérdidas en dinero. Cinco incidencias al año pueden ser extremas en una empresa donde casi nunca pasa nada. Si la empresa ya tiene tablas, se usan esas.</p>
+<p>Si no se acepta el riesgo, se maneja, y la regla de oro es que <strong>el manejo no puede costar más (en tiempo, dinero y esfuerzo) que el bien</strong>. Excepción: bienes sin precio de reposición, como una persona, para los que hay seguros de gastos médicos mayores.</p>
+<p>Para evaluar: si nunca se ha hecho un análisis, se parte de cero; si hay varios, se toma <strong>el último</strong>, no el primero.</p>
+<p>Problemas reales: lo piden «para ayer», la gente miente al dar información y hace falta el apoyo («el amor») de la alta dirección.</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Resume el semestre y alimenta las políticas (<a href="clase-17.html">Clase 17</a>) y los planes de contingencia (<a href="clase-18.html">Clase 18</a>).</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> cambiar el orden de las preguntas; tomar el primer análisis histórico; gastar más en el control que en el bien.</p></div>
+</details>
+
+<details class="section-block sec" id="c19-recopilar"><summary><span class="stitle">2 · Recopilar información y el apoyo de la alta dirección</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Entrevistas, cuestionarios (impresos o digitales) y listas de verificación para recabar datos reales de la organización.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Si a un familiar mayor le preguntas «¿qué vulnerabilidades de capa de aplicación tiene tu sistema?», no te entiende; si le preguntas «¿se te apaga o se traba?», te da información útil.</p></div>
+<span class="lbl">Cómo funciona</span>
+<ul>
+<li>Lenguaje amigable según quién responde: preguntar qué problemas tiene con su PC, no por «ciberataques».</li>
+<li>Cuestionarios fluidos y cortos: las primeras 10 preguntas se contestan con ganas; después de la 20, al azar.</li>
+<li>No dejar el formulario días sin seguimiento (lo olvidan o lo contesta otra persona).</li>
+<li>Evitar preguntas sesgadas: rangos sin la opción cero o «menos de 10», sin «Otro (especifique)», o preguntas obligatorias que no aplican.</li>
+</ul>
+<p>«La piedrita en el zapato»: la alta dirección debe emitir un oficio o hacer una junta autorizando la colaboración, con avisos de privacidad y confidencialidad. Si no respalda ni actúa, la empresa reaccionará con «el agua hasta el cuello» y cometerá errores como despedir gente sin quitarle el acceso remoto (los ataques más exitosos vienen de internos).</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> usar tecnicismos; cuestionarios eternos o con rangos cerrados; dejar que otro conteste; empezar sin oficio de la dirección.</p></div>
+</details>
+
+<details class="section-block sec" id="c19-residual"><summary><span class="stitle">3 · Riesgo residual y pérdidas esperadas</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>El <strong>riesgo residual</strong> es el riesgo mínimo que queda después de aplicar controles y que el dueño acepta. Las <strong>pérdidas esperadas</strong> obligan a imaginar el peor escenario antes de que ocurra.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Vacunarte es un control: aceptas el riesgo residual de un resfriado leve para no terminar intubado. Un seguro que te devuelve el 80 % te deja un riesgo residual del 20 %.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Sin controles asumes el 100 % de la pérdida. Nunca hay que subestimar el peor escenario ni avisar de palabra: si un servidor ya no admite actualizaciones, el analista debe advertirlo <strong>por escrito y con sello</strong>, o después le reclamarán «¿por qué no me avisaste?».</p>
+<p>Ilustró «suponer lo peor» con casos de imprudencias fatales, accidentes sin seguro y la falta de exámenes médicos o perfiles psicológicos al contratar; también los costos de las reacciones no planificadas en una emergencia (romper una ventana con una silla).</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> decir «no pasa nada»; avisar riesgos graves solo de palabra; contratar sin exámenes por amistad.</p></div>
+</details>
+
+<details class="section-block sec" id="c19-metodos"><summary><span class="stitle">4 · Análisis cuantitativo (ALE) contra cualitativo</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p><strong>Cuantitativo:</strong> números, porcentajes, costos, fórmulas, tablas y gráficas; incluye la <strong>ALE</strong> (expectativa de pérdida anual), cuánto se perdería en un periodo y el costo de reponer. <strong>Cualitativo:</strong> cualidades sin cálculos, con colores, figuras o palabras.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>En el doctor, el cuantitativo es tu análisis de sangre («140 de glucosa, el tratamiento cuesta 2,500»); el cualitativo es el semáforo («estás en amarillo»).<span class="rompe">Dónde deja de servir: a un directivo, «foco rojo, carita triste» no le basta para aprobar presupuesto: necesita saber si son 10 pesos o un millón de dólares.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>A la empresa no le sirve «tu pérdida será extrema» sin saber de cuánto se habla. Ejemplos de pérdidas mal estimadas: el Pontiac Aztek (abarataron el interior; en 2003 seguían sin vender más del 80 % de las unidades), el último vocho de Puebla con llantas cara blanca y Windows 8.</p>
+<p>Cualitativo: verde = sin eventualidades, amarillo = en 1 o 2 áreas, rojo = en más de 3 (como las banderas de las playas); caritas; o palabras (alto, medio, bajo; nada, poco, muy o extremadamente sensible).</p>
+<p><strong>Se usan juntos:</strong> el cualitativo para lo que no tiene precio y para leer rápido; el cuantitativo para los costos reales, incluidos los ocultos (una falla que debía tomar 5 minutos y toma una hora porque olvidaron la contraseña).</p>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Prepara la matriz de riesgos con NIST de la siguiente clase.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> entregar solo etiquetas cualitativas a directivos; creer que los métodos se excluyen.</p></div>
+</details>
+
+<details class="section-block sec" id="c19-pasos"><summary><span class="stitle">5 · Los 8 pasos del análisis de riesgos y el informe</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Secuencia obligatoria cuando no se sigue una metodología específica (o que se complementa con los pasos de la metodología elegida).</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Es el diagnóstico de un mecánico: lista de piezas valiosas, qué fallas tienen y qué tan seguido, qué refacciones ya traen, cuánto riesgo queda, qué mejorar y el reporte firmado.<span class="rompe">Dónde deja de servir: el mecánico te recomienda marcas; en un análisis de riesgos ético está prohibido.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>La profesora publicará en Classroom las metodologías más usadas. Los pasos, agrupados por pregunta:</p>
+<ol>
+<li><strong>(¿Qué?)</strong> Identificar los bienes indispensables y su valor y jerarquía. En una empresa no hay mínimo ni máximo; <strong>en el proyecto, 15 bienes</strong>.</li>
+<li><strong>(¿De qué?)</strong> Identificar y describir con claridad las amenazas de cada bien (también ambientales, como ratas o incendios).</li>
+<li>Identificar y describir las vulnerabilidades con precisión (no «no contar con estándares», sino cuáles faltan).</li>
+<li>Determinar el impacto y la frecuencia, con estadísticas cuando existan (sismos en septiembre, cortes de luz).</li>
+<li><strong>(¿Cómo?)</strong> Identificar los controles que ya existen y qué hacen.</li>
+<li>Determinar los riesgos residuales.</li>
+<li>Recomendaciones para aumentar la seguridad, <strong>sin marcas ni proveedores</strong>, solo características o perfiles.</li>
+<li><strong>Informe final</strong> con todo: introducción, conclusiones, referencias, imágenes y evidencia de cómo se recabó la información (entrevistas grabadas, cuestionarios firmados). Sin escribir literalmente las tres preguntas como títulos.</li>
+</ol>
+<span class="lbl">Por qué importa / con qué se conecta</span>
+<p>Es la guía del proyecto del curso.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> poner solo «las computadoras» como bienes; amenazas o vulnerabilidades de una palabra; informe sin evidencia; incluir marcas; titular con las tres preguntas.</p></div>
+</details>
+
+<details class="section-block sec" id="c19-periodicidad"><summary><span class="stitle">6 · Cada cuándo, la matriz FODA y cómo cotizar</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Criterios para repetir el análisis, la matriz FODA como resumen rápido y cómo dividir y cotizar en organizaciones grandes.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Actualizas el inventario y el seguro de tu casa cuando te mudas o compras un coche, no cada lunes. FODA es un post-it con lo bueno y lo malo: útil, pero no reemplaza el inventario.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>«¿Cada cuándo se hace?» Una alumna: «cuando hay cambios». Igual que las políticas: cada que hay <strong>cambios significativos</strong> (fusiones, puestos, áreas, misión o visión, nuevas tecnologías).</p>
+<p>La <strong>FODA</strong> (fortalezas, oportunidades, debilidades, amenazas) sirve para resúmenes rápidos, sin la profundidad de un análisis formal (que puede pasar de 30 hojas).</p>
+<p>En organizaciones grandes se analiza por departamentos y de abajo hacia arriba (en la Facultad: un departamento, otro, los denominadores comunes y luego la división).</p>
+<p>No cotizar a ciegas (10,000 pesos sin conocer el tamaño, la gente, traslados o equipo): investigar tarifas de mercado.</p>
+</div>
+<div class="errores"><p><strong>Errores comunes:</strong> analizar una institución enorme de golpe; confundir FODA con análisis formal; cotizar sin conocer la organización.</p></div>
+</details>
+
+<details class="section-block sec" id="c19-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Cuáles son las tres preguntas y por qué no se cambia el orden?</summary><p>¿Qué?, ¿de qué? y ¿cómo lo protejo?; si empiezas por el cómo, compras herramientas sin conocer los bienes ni los problemas.</p></details>
+<details class="qa"><summary>2. Una organización tiene tres análisis previos. ¿Cuál toma de base? ¿Y si no tiene ninguno?</summary><p>El último; si no hay ninguno, parte de cero apoyándose en metodologías o en un especialista.</p></details>
+<details class="qa"><summary>3. ¿Qué es el riesgo residual? Ejemplo de la vacuna o el seguro.</summary><p>El riesgo mínimo aceptado tras los controles: un resfriado leve en vez de terapia intensiva; perder el 20 % con un seguro del 80 %.</p></details>
+<details class="qa"><summary>4. Cuantitativo contra cualitativo: ¿cuál conviene?</summary><p>Ambos: cifras (ALE, costos) para decidir inversiones y colores o palabras para lo que no tiene precio y para leer rápido.</p></details>
+<details class="qa"><summary>5. Una clínica dental quiere los títulos «¿Qué quiero proteger?» en el informe, marcas de cámaras recomendadas, y su personal no conoce términos técnicos. ¿Qué corriges y cómo recabas la información?</summary><p>Sin las preguntas como títulos, sin marcas (solo características), los 8 pasos con evidencia; oficio de la dirección con avisos de privacidad y cuestionarios en lenguaje amigable.</p></details>
+<details class="qa"><summary>6. ¿Por qué el manejo no debe costar más que el bien y cuál es la excepción?</summary><p>Porque sería ilógico; la excepción son las personas, que se cubren con seguros.</p></details>
+<details class="qa"><summary>7. Una empresa migra la nómina a la nube, fusiona áreas y cambia de misión. ¿Qué hace?</summary><p>Rehacer las políticas y el análisis de riesgos, porque son cambios significativos.</p></details>
+</details>
+
+<details class="section-block sec contexto" id="c19-contexto"><summary><span class="chip chip-contexto">contexto</span><span class="stitle">Contexto — no examen</span></summary>
+<ul>
+<li>Ejemplos de «suponer lo peor» con accidentes en rascacielos y el actor de Superman que quedó cuadripléjico tras una caída de caballo.</li>
+<li>Los ingenieros que, revisando un lugar «hermético», descubrieron mosquitos entrando por las lámparas: por eso el equipo de análisis debe tener distintas habilidades de observación.</li>
+<li>«No todos somos Elon Musk», y la crítica a que en la UNAM «cobren barato».</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="c19-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul>
+<li>La profesora publicará en Classroom las metodologías de análisis de riesgos más usadas.</li>
+<li><strong>Próxima clase:</strong> ejercicio de matriz de riesgos con el <em>framework</em> de NIST.</li>
+<li><strong>Proyecto:</strong> análisis de riesgos con 15 bienes, informe sin marcas.</li>
+<li><strong>Examen:</strong> abarcará todo el contenido; probablemente en la última semana (martes o jueves), por definir si en equipo.</li>
+</ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Tres preguntas en orden: ¿qué?, ¿de qué?, ¿cómo?</li>
+<li>Aceptar o manejar el riesgo; el manejo no cuesta más que el bien; tomar el último análisis como base.</li>
+<li>Riesgo residual = lo que queda tras los controles; pérdidas esperadas = suponer lo peor, y avisar por escrito.</li>
+<li>Cuantitativo (ALE, costos) y cualitativo (colores, palabras), juntos.</li>
+<li>8 pasos: bienes → amenazas → vulnerabilidades → impacto y frecuencia → controles → residual → recomendaciones sin marcas → informe con evidencia.</li>
+</ul></div>
+
+</div>
+</body>
+</html>
