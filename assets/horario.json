@@ -1,38 +1,276 @@
 {
   "_fuente": "PDF de la Secretaría de Servicios Académicos, UNAM — periodo 2027-1, cuenta 420054085 (confirmado por el usuario el 16 sep 2026). Es la misma tabla que está en CLAUDE.md. dia: 0=lunes … 4=viernes.",
   "materias": [
-    { "sigla": "RP",  "slug": "reconocimiento-de-patrones", "nombre": "Reconocimiento de Patrones", "color": "#45B8A8",
-      "sesiones": [ { "dia": 0, "inicio": "07:00", "fin": "08:30", "salon": "S227" }, { "dia": 4, "inicio": "07:00", "fin": "08:30", "salon": "S227" } ] },
-    { "sigla": "OAC", "slug": "organizacion-y-arquitectura-de-computadoras", "nombre": "Organización y Arquitectura de Computadoras", "color": "#45B8A8",
-      "sesiones": [ { "dia": 0, "inicio": "09:00", "fin": "10:30", "salon": "A107" }, { "dia": 2, "inicio": "09:00", "fin": "10:30", "salon": "A107" } ] },
-    { "sigla": "FSE", "slug": "fundamentos-de-sistemas-embebidos", "nombre": "Fundamentos de Sistemas Embebidos", "color": "#A98BD1",
-      "sesiones": [ { "dia": 0, "inicio": "13:00", "fin": "14:30", "salon": "A107" }, { "dia": 2, "inicio": "13:00", "fin": "14:30", "salon": "A107" } ] },
-    { "sigla": "ASI", "slug": "administracion-de-servicios-de-internet", "nombre": "Administración de Servicios de Internet", "color": "#7C9CD6",
-      "sesiones": [ { "dia": 0, "inicio": "17:00", "fin": "19:00", "salon": "D004" }, { "dia": 2, "inicio": "17:00", "fin": "19:00", "salon": "D004" } ] },
-    { "sigla": "ACS", "slug": "arquitectura-cliente-servidor", "nombre": "Arquitectura Cliente-Servidor", "color": "#E8735C",
-      "sesiones": [ { "dia": 1, "inicio": "07:00", "fin": "08:30", "salon": "A305" }, { "dia": 3, "inicio": "07:00", "fin": "08:30", "salon": "A305" } ] },
-    { "sigla": "SIB", "slug": "seguridad-informatica-basica", "nombre": "Seguridad Informática Básica", "color": "#E8735C",
-      "sesiones": [ { "dia": 1, "inicio": "09:00", "fin": "11:00", "salon": "A206" }, { "dia": 3, "inicio": "09:00", "fin": "11:00", "salon": "A206" } ] },
-    { "sigla": "Lab FSE", "slug": "lab-de-fundamentos-de-sistemas-embebidos", "nombre": "Lab. de Fundamentos de Sistemas Embebidos", "color": "#E8735C", "sin_paginas_de_clase": true,
-      "sesiones": [ { "dia": 1, "inicio": "13:00", "fin": "15:00", "salon": "T101" } ] },
-    { "sigla": "MD",  "slug": "mineria-de-datos", "nombre": "Minería de Datos", "color": "#A98BD1",
-      "sesiones": [ { "dia": 1, "inicio": "15:00", "fin": "17:00", "salon": "A306" }, { "dia": 3, "inicio": "15:00", "fin": "17:00", "salon": "A306" } ] },
-    { "sigla": "Lab OAC", "slug": "lab-de-organizacion-y-arquitectura-de-computadoras", "nombre": "Lab. de Organización y Arquitectura de Computadoras", "color": "#7C9CD6", "sin_paginas_de_clase": true,
-      "sesiones": [ { "dia": 2, "inicio": "07:00", "fin": "09:00", "salon": "Q209" } ] }
+    {
+      "sigla": "RP",
+      "slug": "reconocimiento-de-patrones",
+      "nombre": "Reconocimiento de Patrones",
+      "color": "#45B8A8",
+      "sesiones": [
+        {
+          "dia": 0,
+          "inicio": "07:00",
+          "fin": "08:30",
+          "salon": "S227"
+        },
+        {
+          "dia": 4,
+          "inicio": "07:00",
+          "fin": "08:30",
+          "salon": "S227"
+        }
+      ]
+    },
+    {
+      "sigla": "OAC",
+      "slug": "organizacion-y-arquitectura-de-computadoras",
+      "nombre": "Organización y Arquitectura de Computadoras",
+      "color": "#45B8A8",
+      "sesiones": [
+        {
+          "dia": 0,
+          "inicio": "09:00",
+          "fin": "10:30",
+          "salon": "A107"
+        },
+        {
+          "dia": 2,
+          "inicio": "09:00",
+          "fin": "10:30",
+          "salon": "A107"
+        }
+      ]
+    },
+    {
+      "sigla": "FSE",
+      "slug": "fundamentos-de-sistemas-embebidos",
+      "nombre": "Fundamentos de Sistemas Embebidos",
+      "color": "#A98BD1",
+      "sesiones": [
+        {
+          "dia": 0,
+          "inicio": "13:00",
+          "fin": "14:30",
+          "salon": "A107"
+        },
+        {
+          "dia": 2,
+          "inicio": "13:00",
+          "fin": "14:30",
+          "salon": "A107"
+        }
+      ]
+    },
+    {
+      "sigla": "ASI",
+      "slug": "administracion-de-servicios-de-internet",
+      "nombre": "Administración de Servicios de Internet",
+      "color": "#7C9CD6",
+      "sesiones": [
+        {
+          "dia": 0,
+          "inicio": "17:00",
+          "fin": "19:00",
+          "salon": "D004"
+        },
+        {
+          "dia": 2,
+          "inicio": "17:00",
+          "fin": "19:00",
+          "salon": "D004"
+        }
+      ]
+    },
+    {
+      "sigla": "ACS",
+      "slug": "arquitectura-cliente-servidor",
+      "nombre": "Arquitectura Cliente-Servidor",
+      "color": "#E8735C",
+      "sesiones": [
+        {
+          "dia": 1,
+          "inicio": "07:00",
+          "fin": "08:30",
+          "salon": "A305"
+        },
+        {
+          "dia": 3,
+          "inicio": "07:00",
+          "fin": "08:30",
+          "salon": "A305"
+        }
+      ]
+    },
+    {
+      "sigla": "SIB",
+      "slug": "seguridad-informatica-basica",
+      "nombre": "Seguridad Informática Básica",
+      "color": "#E8735C",
+      "sesiones": [
+        {
+          "dia": 1,
+          "inicio": "09:00",
+          "fin": "11:00",
+          "salon": "A206"
+        },
+        {
+          "dia": 3,
+          "inicio": "09:00",
+          "fin": "11:00",
+          "salon": "A206"
+        }
+      ]
+    },
+    {
+      "sigla": "Lab FSE",
+      "slug": "lab-de-fundamentos-de-sistemas-embebidos",
+      "nombre": "Lab. de Fundamentos de Sistemas Embebidos",
+      "color": "#E8735C",
+      "sin_paginas_de_clase": true,
+      "sesiones": [
+        {
+          "dia": 1,
+          "inicio": "13:00",
+          "fin": "15:00",
+          "salon": "T101"
+        }
+      ]
+    },
+    {
+      "sigla": "MD",
+      "slug": "mineria-de-datos",
+      "nombre": "Minería de Datos",
+      "color": "#A98BD1",
+      "sesiones": [
+        {
+          "dia": 1,
+          "inicio": "15:00",
+          "fin": "17:00",
+          "salon": "A306"
+        },
+        {
+          "dia": 3,
+          "inicio": "15:00",
+          "fin": "17:00",
+          "salon": "A306"
+        }
+      ]
+    },
+    {
+      "sigla": "Lab OAC",
+      "slug": "lab-de-organizacion-y-arquitectura-de-computadoras",
+      "nombre": "Lab. de Organización y Arquitectura de Computadoras",
+      "color": "#7C9CD6",
+      "sin_paginas_de_clase": true,
+      "sesiones": [
+        {
+          "dia": 2,
+          "inicio": "07:00",
+          "fin": "09:00",
+          "salon": "Q209"
+        }
+      ]
+    }
   ],
   "_sin_clase": "Días sin clase. confirmado=false → la página lo muestra como 'por confirmar', no como clase faltante. Agregar aquí asuetos o suspensiones cuando el usuario los mencione. 'materias' vacío = todas.",
   "sin_clase": [
-    { "fecha": "2026-09-15", "motivo": "Sin clase (confirmado por el usuario el 6 oct 2026: no hubo clase de las materias de martes)", "confirmado": true, "materias": [] },
-    { "fecha": "2026-09-16", "motivo": "Día de la Independencia (asueto oficial)", "confirmado": true, "materias": [] },
-    { "fecha": "2026-09-23", "motivo": "OAC sin clase este miércoles (confirmado por el usuario el 6 oct 2026)", "confirmado": true, "materias": ["OAC"] },
-    { "fecha": "2026-10-07", "motivo": "OAC sin clase este miércoles (confirmado por el usuario el 8 oct 2026)", "confirmado": true, "materias": ["OAC"] },
-    { "fecha": "2026-10-14", "motivo": "ASI sin clase este miércoles (según la hoja RegistroClases del usuario, 18 oct 2026)", "confirmado": true, "materias": ["ASI"] },
-    { "fecha": "2026-10-20", "motivo": "SIB sin clase: la profesora asistió a la entrega de diplomas del Diplomado en Ciberseguridad (gen. 19); dejó un ejercicio de clase (SIB-EC07). Hoja RegistroClases: «SIB - (sin clase) (actividad)»", "confirmado": true, "materias": ["SIB"] },
-    { "fecha": "2026-10-28", "motivo": "OAC sin clase este miércoles (hoja RegistroClases: «OAC - no hubo clase»)", "confirmado": true, "materias": ["OAC"] },
-    { "fecha": "2026-10-28", "motivo": "ASI sin clase: el ingeniero aplicó un extraordinario (hoja RegistroClases)", "confirmado": true, "materias": ["ASI"] },
-    { "fecha": "2026-10-29", "motivo": "SIB sin clase; la profesora dejó una investigación en equipo sobre modelos de seguridad (SIB-EC09). Hoja RegistroClases: «SIB - (sin clase) (actividad 2)»", "confirmado": true, "materias": ["SIB"] },
-    { "fecha": "2026-10-30", "motivo": "RP sin clase (confirmado por el usuario el 3 nov 2026)", "confirmado": true, "materias": ["RP"] },
-    { "fecha": "2026-11-02", "motivo": "Asueto (hoja RegistroClases: «A S U E T O»)", "confirmado": true, "materias": [] },
-    { "fecha": "2026-11-18", "motivo": "ASI sin sesión presencial: el profesor dedica el horario a revisar y calificar (dicho en la Clase 17; falta confirmar)", "confirmado": false, "materias": ["ASI"] }
+    {
+      "fecha": "2026-09-15",
+      "motivo": "Sin clase (confirmado por el usuario el 6 oct 2026: no hubo clase de las materias de martes)",
+      "confirmado": true,
+      "materias": []
+    },
+    {
+      "fecha": "2026-09-16",
+      "motivo": "Día de la Independencia (asueto oficial)",
+      "confirmado": true,
+      "materias": []
+    },
+    {
+      "fecha": "2026-09-23",
+      "motivo": "OAC sin clase este miércoles (confirmado por el usuario el 6 oct 2026)",
+      "confirmado": true,
+      "materias": [
+        "OAC"
+      ]
+    },
+    {
+      "fecha": "2026-10-07",
+      "motivo": "OAC sin clase este miércoles (confirmado por el usuario el 8 oct 2026)",
+      "confirmado": true,
+      "materias": [
+        "OAC"
+      ]
+    },
+    {
+      "fecha": "2026-10-14",
+      "motivo": "ASI sin clase este miércoles (según la hoja RegistroClases del usuario, 18 oct 2026)",
+      "confirmado": true,
+      "materias": [
+        "ASI"
+      ]
+    },
+    {
+      "fecha": "2026-10-20",
+      "motivo": "SIB sin clase: la profesora asistió a la entrega de diplomas del Diplomado en Ciberseguridad (gen. 19); dejó un ejercicio de clase (SIB-EC07). Hoja RegistroClases: «SIB - (sin clase) (actividad)»",
+      "confirmado": true,
+      "materias": [
+        "SIB"
+      ]
+    },
+    {
+      "fecha": "2026-10-28",
+      "motivo": "OAC sin clase este miércoles (hoja RegistroClases: «OAC - no hubo clase»)",
+      "confirmado": true,
+      "materias": [
+        "OAC"
+      ]
+    },
+    {
+      "fecha": "2026-10-28",
+      "motivo": "ASI sin clase: el ingeniero aplicó un extraordinario (hoja RegistroClases)",
+      "confirmado": true,
+      "materias": [
+        "ASI"
+      ]
+    },
+    {
+      "fecha": "2026-10-29",
+      "motivo": "SIB sin clase; la profesora dejó una investigación en equipo sobre modelos de seguridad (SIB-EC09). Hoja RegistroClases: «SIB - (sin clase) (actividad 2)»",
+      "confirmado": true,
+      "materias": [
+        "SIB"
+      ]
+    },
+    {
+      "fecha": "2026-10-30",
+      "motivo": "RP sin clase (confirmado por el usuario el 3 nov 2026)",
+      "confirmado": true,
+      "materias": [
+        "RP"
+      ]
+    },
+    {
+      "fecha": "2026-11-02",
+      "motivo": "Asueto (hoja RegistroClases: «A S U E T O»)",
+      "confirmado": true,
+      "materias": []
+    },
+    {
+      "fecha": "2026-11-11",
+      "motivo": "OAC sin clase (confirmado por el usuario el 14 nov 2026)",
+      "confirmado": true,
+      "materias": [
+        "OAC"
+      ]
+    },
+    {
+      "fecha": "2026-11-18",
+      "motivo": "ASI sin sesión presencial: el profesor dedica el horario a revisar y calificar (dicho en la Clase 17; falta confirmar)",
+      "confirmado": false,
+      "materias": [
+        "ASI"
+      ]
+    }
   ]
 }
