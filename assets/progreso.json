@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-15T01:48:48+00:00",
+ "generatedAt": "2026-11-15T02:41:38+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -1021,6 +1021,11 @@
  },
  "gitlog": [
   {
+   "hash": "4af01c0",
+   "fecha": "2026-11-14T19:48:54-06:00",
+   "mensaje": "Mapas conceptuales: uno por clase (junto al resumen), uno por materia y de examen (SIB, FSE, ASI); MD 17 marcada como falta"
+  },
+  {
    "hash": "33f3918",
    "fecha": "2026-11-14T19:27:41-06:00",
    "mensaje": "horario: OAC sin clase el 11 nov 2026 (confirmado por el usuario)"
@@ -1314,11 +1319,6 @@
    "hash": "90ad98d",
    "fecha": "2026-10-20T23:30:04-06:00",
    "mensaje": "Lab OAC: entregado el Previo 1 (Práctica 5) — previo1_grupo3_Ortega_delaPaz_Rafael.pdf"
-  },
-  {
-   "hash": "2da63d5",
-   "fecha": "2026-10-20T14:24:27-06:00",
-   "mensaje": "MD 3.1–3.3: los archivos que no son PDF se abren normal y llevan al lado un botón «⬇ descargar»"
   }
  ]
 }

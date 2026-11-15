@@ -78,5 +78,20 @@ def main():
         print("✓", f.relative_to(ROOT))
 
 
+def botones_en_clases():
+    """Botón «🗺️ Mapa conceptual» junto al de la guía de estudio en cada clase-NN.html."""
+    for s, slug in SLUG.items():
+        for f in sorted((ROOT / "materias" / slug).glob("clase-*.html")):
+            t = f.read_text(encoding="utf-8")
+            t2 = re.sub(r' <a class="btn mapa-btn"[^>]*>.*?</a>', "", t)
+            m = re.search(r'(<div class="files" id="guia-estudio-pdf"><a class="btn" href="([^"]*?)-resumen\.pdf"[^>]*>.*?</a>)', t2)
+            if m and (ROOT / "materias" / slug / (m.group(2) + "-mapa.pdf")).resolve().exists():
+                t2 = t2.replace(m.group(1), m.group(1) + f' <a class="btn mapa-btn" href="{m.group(2)}-mapa.pdf" '
+                                f'target="_blank">🗺️ Mapa conceptual (PDF)</a>', 1)
+            if t2 != t:
+                f.write_text(t2, encoding="utf-8")
+
+
 if __name__ == "__main__":
     main()
+    botones_en_clases()
