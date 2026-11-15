@@ -253,6 +253,18 @@ Leer la respuesta: `get_page_text` falla por un panel de emojis; con `javascript
 del siguiente prompt. **Revisar fechas y cálculos de NotebookLM**: el 19 oct 2026 inventó un
 «jueves 17 de octubre» (era el 17 sep, dicho en la Clase 3) y traía retardos PIO que no cuadraban.
 
+## Mapas conceptuales (desde el 14 nov 2026)
+
+PDF horizontal, tema al centro y ramas hacia los lados. Viven en `decimo/<SIGLA>/<SIGLA>-Resumenes/`:
+- `<SIGLA>-ClaseNN-mapa.pdf` — uno por clase, junto a su resumen: `python3 scripts/mapas_conceptuales.py clases [SIGLA…]`
+  (sale de la Parte 1 de la fuente `.md`: cada `##` es una rama; conceptos = negritas, recuadros `!!!` y 1.ª columna de tablas).
+- `<SIGLA>-mapa-curso.pdf` — temario oficial + todo lo visto clase por clase: `python3 scripts/mapas_materia.py curso`.
+- `<SIGLA>-mapa-examen-N.pdf` — lo que viene en el próximo examen (puntos «🎯» de cada clase que entra + lo que el
+  profesor dijo explícitamente): `python3 scripts/mapas_materia.py examen SIB FSE ASI`. Fechas, alcance y formato de
+  cada examen en el dict `EXAMENES` de ese script (fuente: NotebookLM, 14 nov 2026).
+- `python3 scripts/enlazar_mapas.py` agrega la columna «Mapa» y el recuadro de mapas a cada `resumenes.html`
+  (y las filas «❌ Falta», p. ej. MD 17); correrlo de nuevo después de `build_resumenes.py --indices`.
+
 ## El buscador global — hay que mantenerlo actualizado
 
 El sitio tiene un buscador (botón 🔍 flotante, tecla `/`) que indexa las 9

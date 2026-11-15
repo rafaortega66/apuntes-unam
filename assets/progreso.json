@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-15T01:27:41+00:00",
+ "generatedAt": "2026-11-15T01:48:48+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -1021,6 +1021,11 @@
  },
  "gitlog": [
   {
+   "hash": "33f3918",
+   "fecha": "2026-11-14T19:27:41-06:00",
+   "mensaje": "horario: OAC sin clase el 11 nov 2026 (confirmado por el usuario)"
+  },
+  {
    "hash": "718ade4",
    "fecha": "2026-11-14T17:46:03-06:00",
    "mensaje": "SIB-EC09: propuesta de modelos de integridad a adicionales; índices al día"
@@ -1314,11 +1319,6 @@
    "hash": "2da63d5",
    "fecha": "2026-10-20T14:24:27-06:00",
    "mensaje": "MD 3.1–3.3: los archivos que no son PDF se abren normal y llevan al lado un botón «⬇ descargar»"
-  },
-  {
-   "hash": "7c5e8ca",
-   "fecha": "2026-10-20T14:22:52-06:00",
-   "mensaje": "MD 3.1–3.3: los archivos que no son PDF (ipynb, csv, rmp) se descargan al abrirlos en vez de verse como texto"
   }
  ]
 }
