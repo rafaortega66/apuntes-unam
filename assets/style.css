@@ -540,6 +540,7 @@ details.qa p { font-size: 14px; }
 .tr-stat.tr-listo .tr-num { color: var(--teal); }
 .tr-stat.tr-en-curso .tr-num { color: var(--indigo); }
 .tr-stat.tr-esperando .tr-num { color: var(--coral); }
+.tr-stat.tr-atrasada .tr-num { color: var(--coral); }
 .tr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
 .tr-card { position: relative; background: var(--white); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px 16px 14px 20px; overflow: hidden; display: flex; flex-direction: column; gap: 8px; }
 .tr-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: var(--c); }
@@ -549,6 +550,7 @@ details.qa p { font-size: 14px; }
 .tr-card.tr-listo .tr-estado { background: rgba(69,184,168,0.15); color: var(--teal); }
 .tr-card.tr-en-curso .tr-estado { background: rgba(124,156,214,0.15); color: var(--indigo); }
 .tr-card.tr-esperando .tr-estado { background: rgba(232,115,92,0.15); color: var(--coral); }
+.tr-card.tr-atrasada .tr-estado { background: rgba(232,115,92,0.15); color: var(--coral); }
 .tr-titulo { font-size: 15.5px; margin: 0; line-height: 1.3; }
 .tr-resumen { font-size: 13px; color: var(--ink-soft); margin: 0; line-height: 1.45; }
 .tr-falta span { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-soft); }

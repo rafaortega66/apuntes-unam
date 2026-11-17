@@ -375,17 +375,18 @@
 
 
   // ================= Tablero «En qué estoy trabajando» (portada) =================
-  // Fuente: assets/trabajo.json (trabajo en curso en los Projects de claude.ai).
+  // Fuente: assets/trabajo.json (pendientes de Classroom + ACS).
   function initTrabajo() {
     var mount = document.getElementById('trabajo');
     if (!mount) return;
     var EST = {
-      'en-curso':  { t: 'En curso', i: '⚙️' },
+      'atrasada':  { t: 'Atrasada', i: '⚠️' },
+      'en-curso':  { t: 'Pendiente', i: '⏳' },
       'esperando': { t: 'Esperando a alguien', i: '⏸️' },
       'listo':     { t: 'Listo para entregar', i: '✅' },
       'entregado': { t: 'Entregado', i: '📤' }
     };
-    var ORDEN = ['listo', 'en-curso', 'esperando', 'entregado'];
+    var ORDEN = ['atrasada', 'listo', 'en-curso', 'esperando', 'entregado'];
     var esc = Pend.esc;
     fetch(SITE_ROOT + 'assets/trabajo.json', { cache: 'no-store' })
       .then(function (r) { return r.json(); })
@@ -415,7 +416,7 @@
         }).join('');
         mount.innerHTML =
           '<div class="tr-head"><h2>🛠️ En qué estoy trabajando</h2>' +
-          (actTxt ? '<span class="tr-act">Projects de Claude · actualizado el ' + esc(actTxt) + '</span>' : '') + '</div>' +
+          (actTxt ? '<span class="tr-act">Classroom + ACS · actualizado el ' + esc(actTxt) + '</span>' : '') + '</div>' +
           '<div class="tr-stats">' + stats + '</div>' +
           '<div class="tr-grid">' + cards + '</div>';
       })

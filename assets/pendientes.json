@@ -53,9 +53,9 @@
       "materia": "ASI",
       "color": "#7C9CD6",
       "titulo": "3ª entrega del Proyecto Final (documentación)",
-      "vence": "2026-11-22T23:59:00-06:00",
-      "hora_confirmada": false,
-      "detalle": "Domingo 22 nov: Manual técnico, manual de usuario, enlace al repositorio Git y video de implementación (máx. 15 min).",
+      "vence": "2026-11-20T23:59:00-06:00",
+      "hora_confirmada": true,
+      "detalle": "Viernes 20 nov, 23:59 (fecha de Classroom, 17 nov): Manual técnico, manual de usuario, enlace al repositorio Git y video de implementación (máx. 15 min).",
       "link": "materias/administracion-de-servicios-de-internet/index.html"
     },
     {
