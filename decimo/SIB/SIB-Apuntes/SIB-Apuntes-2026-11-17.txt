@@ -1,0 +1,99 @@
+VI. Auditoría y Ética informática
+
+Auditoría informática
+
+La auditoría es un proceso de recoger, agrupar y evaluar evidencias para determinar si un sistema de información salvaguarda el activo empresarial, mantiene la integridad de lso datos, lleva a cabo eficazmente los fines de la organización y utiliza eficientemente los recursos.
+
+Los objetivos de la auditoría informática son:
+-El control de la función informática.
+-El análisis de la eficiencia de los Sistemas Informáticos.
+-La verificación del cumplimiento de la Normativa en este ámbito.
+-La revisión de la eficaz gestión de los recursos informáticos. 
+
+
+La auditoría informática cuenta con las siguientes carcaterísticas:
+	a) Eficiencia: utilizar recursos de forma adecuada.
+	b) Eficacia: alcanzar o lograr los objetivos propuestos.
+	c) Rentabilidad: generar suficiente unidad o beneficio. (ROI)
+	d) Seguridad: preservar la CIA.
+	-Cumplir estandarizaciones consideradas
+	-Entender por qué se siguen
+	-Estar al tanto de cuales son dichos estándares
+
+En general se siguen los siguientes pasos para llevar a cabo una auditoría:
+	1.-Planeación. Elaboración de los programas de trabajo.
+	2.-Trabajo de preliminares. Serie de entrevistar con el cliente.
+	3.-Diagnóstico administrativo. Panorámica de la empresa.
+	4.-Investigación previa. Problemática que fue expuesta por el cliente.
+
+	5.-Elaboración del programa de la AI. Planeación y tiempos.
+		Plan de auditoría
+			Auditores, objetivos, días, horarios
+	6.-Obtención de la Información. Información sobre el caso estudiado.
+	7.-Análisis, clasificación y evaluación de la información.
+	8.-Informe, elaboración y presentación del informe final.
+
+-------------------
+-ÉTICA INFORMÁTICA-
+-------------------
+
+Definiciones
+
+Ética: Teoría o ciencia del comportamiento moral de los hombres en sociedad, es decir, es la ciencia de una forma específica de conducta humana
+
+Moral: Procede del latín mos o mores, costumbre o costumbres, en el sentido de conjunto de normas o reglas 
+adquiridad por hábito.
+
+Gracias a las problemáticas generadas por la tecnología surge la ética informática.
+	a)Equipos de computo	No había Redes
+	b)Equipos de cómputo	Si hay Redes	No hay aplicaciones
+	c)Equipos de cómputo 	Si hay redes 	Si hay aplicaciones		No es Viral
+	d))Equipos de cómputo 	Si hay redes 	Si hay aplicaciones		Si es Viral
+
+Ética Informática:
+	+ Disciplina que analiza problemas éticos que son creados por la tecnología y por las personas que utilizan los avances de las tecnologías de la información
+	+ Es el análisis de la naturaleza y el impacto social de la tecnología informática y correspondiente formulación y justificación de políticas para un solo ético de dicha tecnología.
+
+
+Contenido de la ética informática:
+	+ Ética profesional general
+	+ Utilización de la información
+	+ Software como un bien o propiedad
+	+ Bienes informáticos como instrumento de actos potencialmente dañinos
+	+ Medios y amenazas de la informática
+	+ Dimensiones sociales de la información
+
+
+Código deontológico: Las asociaciones de profesionales de Informática y algunas empresas relacionadas con la informática han desarrollado códigos de la conducta profesional.
+
+Hoax.
+- Generación en ciertas organizaciones
+- Generación en ciertos países
+
+Funciones del código deontológico
+	+ Existencia de normas éticas para una profesión
+	+ Suplemento a la ley y sirven de ayuda a los cuerpos legislativos, administrativos y judiciales
+	+ Concienciación pública
+	+ Función soiológica ya que dan una identidad a los profesionistas como grupo que piensa de una determinada manera.
+	+ Fuente de evaluación pública de una profesión.
+	+ Permiten armonizar legislaciones o criterios divergentes existentes (o ausentes, en su caso) en los países individuales.
+
+Principios de la ética informática
+	+ El secreto profesional y la confidencialidad.
+	+ La responsabilidad profesional.
+	+ La lealtad hacia la empresa y al público usuario.
+	+ La dignidad, la honestidad y la honradez.
+	+ La preferencia del servicio al bien común y al bien público.
+	+ La preparación académica y continua.
+	+ La solidaridad profesional.
+	+ La integridad profesional.
+	+ El apoyar y practicar el derecho a proveer y recibir información.
+	+ EL transmitir datos con exactitud.
+	+ El evitar invasiones a la intimidad.
+	+ EL utilizar solamente justos u honestos medios en el ejercicio de la actividad profesional
+	+ El saber mostrar us competencia
+	+ El respeto y protección de la propiedad intelectual y los derechos de autor.
+
+Los mandamientos de la ética informática
+	http://cpsr.org/issues/ethics/cei/
+	+ Creación de decálogos

@@ -34,3 +34,4 @@ mpl.AddExample([nnTrue,nnTrue],[nnTrue])
 learnCount = mpl.LearnExamples()
 #Imprimir aprox
 print(" =False xor False %s" mlp.Predict([nnFalse, nnFalse])[0].AsBool)
+

@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-15T02:41:38+00:00",
+ "generatedAt": "2026-11-17T18:45:20+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -1021,6 +1021,16 @@
  },
  "gitlog": [
   {
+   "hash": "b6e52c4",
+   "fecha": "2026-11-14T20:42:28-06:00",
+   "mensaje": "Tarjeta de Guías de estudio: se restaura el texto original"
+  },
+  {
+   "hash": "1f4ee30",
+   "fecha": "2026-11-14T20:41:38-06:00",
+   "mensaje": "Botón del mapa conceptual en cada página de clase; tarjeta «Guías de estudio y mapas»"
+  },
+  {
    "hash": "4af01c0",
    "fecha": "2026-11-14T19:48:54-06:00",
    "mensaje": "Mapas conceptuales: uno por clase (junto al resumen), uno por materia y de examen (SIB, FSE, ASI); MD 17 marcada como falta"
@@ -1309,16 +1319,6 @@
    "hash": "023472c",
    "fecha": "2026-10-20T23:34:18-06:00",
    "mensaje": "Pendientes: quitar los avisos de lo ya entregado"
-  },
-  {
-   "hash": "b7dfdf1",
-   "fecha": "2026-10-20T23:32:18-06:00",
-   "mensaje": "Buscador: quitar las entradas del guion de exposición (no va en el sitio)"
-  },
-  {
-   "hash": "90ad98d",
-   "fecha": "2026-10-20T23:30:04-06:00",
-   "mensaje": "Lab OAC: entregado el Previo 1 (Práctica 5) — previo1_grupo3_Ortega_delaPaz_Rafael.pdf"
   }
  ]
 }

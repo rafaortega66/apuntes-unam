@@ -1,0 +1,73 @@
+En cualquier análisis del riesgo deben tomarse en cuenta tres costos o valores fundamentales;
+
+1.-Costo del sistema informático o recursos (Cr)
+2.-Costo de los medios necesarios para atacat (Ca)
+3.-Costo de las medidas de seguridad necesarias (Cs)
+
+Para que la política de seguridad del sistema sea lógica, debe cumplirse la siguiente relación:
+
+Ca>Cr>Cs
+
+Gestión de Riesgos
+Enfoque estructurado para manejar las amenazas y vulnerabilidades relacionadas con los bienes a través de una serie de actividades que incluyen la identificación, y el análisis y la evaluación de riesgo, para luego establecer las estrategias de su tratamiento utilizando recursos de la organización.
+
+Proceso Crítico
+Se trata de aquellas actividades que una organización no puede dejar de llevar a cabo bajo ningún escenario de emergencia mayor. Es de suma importancia determinar el impacto al momento de que se presente alguna eventualidad en los procesos críticos.
+
+
+Escenarios de riesgo(s)
+-Descripción, análisis del entorno, describiendo detalladamente lo que puede suceder.
+-Identificar amenazas y vulnerabilidades. Decidir cambios, herramientas, etc. para sobrellevar o salir de la eventualidad.
+
+Técnicas rápidas que se emplean para evaluar los riesgos de un proyecto o un proceso
+1.-What if (¿Qué pasaría si...?)
+	Se forumlan preguntas que ayuden a visibilizar posibles problemas.
+2.-Análisis preliminar de riesgos (APR)
+	-Se utiliza para identificar posibles riesgos cuando el proyecto apenas está comenzando.
+	-Asentarlos en algún documento para que existan precedentes.
+3.-Cinco porqués
+	Se indica el problema y se plantean 5 preguntas relacionadas con él y se buscan las respuestas.
+4.-FMEA (Failure Mode and Effective Analysis - Análisis de Modo de Fallas y Efectos)
+	Consiste en identificar, clasificar y eliminar las fallas de los proyectos o de los procesos antes de que estas ocurran. La puntuación de los riesgog se determina teniendo en cuenta tres criterios: Frecuencia, gravedad y detección.
+5.-Lista de chequeo (checklist)(Listas de verificación)
+	Verifica que las medidas preventivas de los procesos de análisis y riesgo están siendo adoptadas. Se crea una lista con todos los riesgos que se han identificado y sus recomendaciones de prevención correspondientes. Frente a cada ítem se debe llenar una casilla con las tareas que ya fueron hechas y las que no.
+
+-------------------
+-Matriz De Riesgos-
+-------------------
+Los riesgos altos deben ir en rojo, los moderados en amarillo (ámbar) y los bajos en verde, también se pueden usar colores estrechamente ligados a ellos.
+
+El nivel de riesgo está dado por la fórmula:
+	
+	Probabilidad X Impactos = Nivel de Riesgo
+
+IMPACTO: ¿Que tan severos serían los resultados si ocurrieran los riesgos?
+PROBABILIDAD: ¿Cuál es la probabilidad de que ocurra el riesgo?
+
+											IMPACTO
+PROBABILIDAD	|---------------------------------------------------------------------------------------|
+				|				 | 1)Insignificante  2)Menor  3)Moderado  4)Importante   5)Catastrófico |
+				|5)Muy Probable  |        5			    10		  15		    20			    25      |
+				|4)Probable      |        4              8        12            16              20      |
+				|3)Posible       |        3              6         9            12              15      |
+				|2)No es posible |		  2              4         6             8              10      |
+				|1)Improbable    |        1              2         3             4               5      |
+				-------------------------------------------------------------------------------------------
+
+Rangos:
+Bajo (1-5): es probable que los eventos de bajo riesgo no sucedan y, si suceden, no tendrán consecuencias negativas.
+Medio (6-12): son una molestia y pueden causar contratiempos.
+Alto (15-25): tiene consecuencias graves.
+
+-----------
+-EJERCICIO-
+-----------
+Aplicar los conceptos de análisis de riesgo para evaluar y proponer estrategias de mitigación en el salón de clases
+
+1) Realizar el análisis de riesgos contemplando las fases generales
+	a) Definir 2 procesos críticos dentro del salón de clases
+	b) Identificar al menos 5 activos
+	c) Identificar al menos 2 amenazas y 2 vulnerabilidades de cada activo
+	d) Identificar al menos 2 escenarios de riesgo
+
+Realizar la evaluación y tratamiento del riesgo de solo 1 escenario de riesgo, indique de las 5 técnicas vistas cuál empleó y desarróllela, incluya su matriz de riesgo.

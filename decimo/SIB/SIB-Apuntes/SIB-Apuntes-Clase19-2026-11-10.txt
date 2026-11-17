@@ -1,0 +1,111 @@
+Apuntes SIB 10/11/26
+
+Tema V.- Análisis de riesgos
+
+Contesta las 3 preguntas de seguridad
+1.-¿Qué quiero proteger?
+2.-¿De qué lo quiero proteger?
+3.-¿Cómo lo quiero proteger?
+
+En un proceso de ánalisis del riesgo debe considerarse la siguiente terminología:
+1.-Activo
+2.-Riesgo
+3.-Aceptación del riesgo
+4.-Análisis del riesgo: uso sistemático de información disponible para identificar las fuentes y para estimar qué tan seguido determinados eventos no deseados pueden ocurrir y la magnitud de sus consecuencias.
+
+Tabla 1.1 UN EJEMPLO DE LA CLASIFICACIÓN DEL RIESGO
+Cálculo del riesgo de
+ incidencias por año	Clasificación
+		0 					Ninguna
+		1-3					Baja
+		4-7					Media
+		8-14				Alta
+		15-19				Crítica
+		20-30				Extrema
+
+5.-Manejo del riesgo: proceso de identificación, control y minimización o eliminación de riesgos de seguridad que pueden adfectar sistemas de información, por un costo aceptable.
+
+6.-Evaluación del riesgo: comparación de los resultadosde un análisis del riesgo con los criterios estándares del riesgo u otros criterios de decisión.
+
+7.-Impacto: pérdida como resultado de la actividad de una amenaza.
+
+8.-Pérdida esperada: el impacto antícipado y negativo a los activos debido a una manifestación de la amenaza.
+
+9.-Vulnerabilidad
+
+10.-Amenaza
+
+11.-Riesgo residual: el nivel de riesgo que queda después de la consideración de todas las medidas necesarias, los niveles de vulnerabilidad y las amenazas relacionadas.
+
+12.-Control.
+
+Se requiere apoyo de la alta dirección quien debe informarle a todo el personal las actividades que se van a realizar, quiénes interactuarán con el personal, la disposición y disponibilidad que debe existir para que el análisis de riesgos sea exitoso.
+
+Un análisis de riesgos requiere de tiempo para que la información recabada sea veraz y lo más apegado posible a la realidad, de otra manera, esta información no permitirá un buen análisis y por ende la contestación a las preguntas de seguridad serían parciales o erróneas.
+
+Es importante tomar en cuenta que quien realiza el análisis de riesgos debe recabar la información adecuadamente, se pueden emplear las técnicas para ello
+a)Entrevistas		b)Cuestionarios		c)Checklist
+Sin embargo, siempre debe quedar evidencia de ello.
+
+AMENAZA AMENAZA AMENAZA
+	|		|		|
+	  VULNERABILIDAD
+	  -----------------CONTROLES
+	  		|
+	  	  ACTIVO
+	  	  	|
+	  	  IMPACTO->{DESTRUCCIÓN, DENEGACIÓN DE SERVICIOS,
+	  	  				REVELACIÓN, MODIFICACIÓN}
+
+Figura 1: Relaciones entre los elementos de un análisis de riesgo
+
+-------------------
+
+Tipos de análisis de riesgo
+Existen dos tipos esenciales del análisis del riesgo.
+
+1.-Análisis cuantitativo del riesgo
+Expectativa de Pérdida Anual (ALE) o Costo Anual Estimado (EAC), el cual es calculado para un cierto acontecimiento simplemente multiplicando la frecuencia de la ocurrencia de la amenaza por el valor del activo o clasificación del daño.
+*Estadísticas	*Proyecciones	*Aplicación de fórmulas matemáticas
+*Cálculos matemáticos	*Porcentajes	*Proyecciones	*Costo	*$$$
+
+2.-Análisis cualitativo del riesgo
+Cualidades: colores, figuras, palabras, etc.
+
+Ambos tipos del análisis del riesgo hacen uso de los siguientes elementos interrelacionados:
+a)Amenazas		b)Vulnerabilidades		c)Controles
+Disuasivos, preventivos, correctivos y detectores
+
+Continuidad de actividades		|	Color 	 |
+No hay evento 					|	Verde 	 |	Nada
+Eventualidades en 1 o 2 áreas	|	Amarillo |	Medio
+Eventualidades en mas de 3 		|	Rojo	 |	Mucho
+
+
+Análisis de riesgos
+Pasos del análisis del riesgo
+
+Cualquier análisis del riesgo de seguridad debe indicar:
+	-El actual nivel de riesgo
+	-Las consecuencias probables
+	-Qué hacer con el riesgo residual si es muy alto.
+
+El proceso de análisis del riesgo consiste en ocho pasos interrelacionados:
+
+¿Qué se quiere proteger?
+	1.-Identificar y evaluar los activos
+¿De qué se quiere proteger?
+	2.-Identificar las amenazas correspondientes
+	3.-Identificar/describir vulnerabilidades
+	4.-Determinar el impacto de la ocurrencia de una amenaza
+¿Cómo se va a proteger?
+5.-Controles en el lugar
+6.-Determinar los riesgos residuales (conclusiones)
+7.-Identificar los controles adicionales (recomendaciones)
+
+8.-Realizar el informe de análisis de riesgos
+
+¿Cada cuánto hacer un análisis de riesgos?
+Cada que haya cambios significativos
+
+Algunos departamentos -> Matriz FODAx

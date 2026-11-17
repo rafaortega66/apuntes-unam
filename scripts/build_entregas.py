@@ -69,8 +69,10 @@ TITULOS = {
     'SIB-EC06': 'Ejercicio en clase — Amenazas a la persona y a la casa (Clase 07)',
     'SIB-EC07': 'Ejercicio de clase — Investigación de ataques (Equipo 4; 20 oct, sin clase)',
     'ASI-EC01': 'Actividad 1 — El empleo del futuro, en equipo (Clase 15)',
+    'ASI-EC02': 'Infografía — ¿Qué RFC siguen vigentes? (Clase 19)', 'ASI-Exp01': 'Exposición — RFC 1700, Equipo 10 (Clase 18)',
     'SIB-EC08': 'Ejercicio de clase — 15 políticas de seguridad para una secundaria ficticia (Equipo 4, Clase 16)',
     'SIB-EC09': 'Ejercicio de clase — Modelos de seguridad (Equipo 4; 29 oct, sin clase)',
+    'SIB-EC10': 'Ejercicio de clase — Análisis de riesgos en el salón (Clase 20, 12 nov)',
     'ACS-E01': 'Examen parcial — cliente-servidor TCP (de casa)',
 }
 # Estado verificado en Google Classroom el 15 oct 2026 (las materias sin Classroom se marcan aparte).
@@ -104,8 +106,10 @@ ESTADO = {
     'SIB-EC06': 'Entregada en clase (en papel)',
     'SIB-EC07': 'Entregada (20 oct 2026, antes de las 11:15) · me tocaron los puntos 10 y 11',
     'ASI-EC01': 'Para exponer y debatir en la siguiente clase · sin confirmar si se presentó',
+    'ASI-EC02': 'Entregada (11 nov, por Drive)', 'ASI-Exp01': 'Expuesta (9 nov)',
     'SIB-EC08': 'Documento del equipo del 27 oct 2026 · sin confirmar cuándo se entregó',
     'SIB-EC09': 'Hecha el 29 oct 2026 con el Equipo 4 (día sin clase)',
+    'SIB-EC10': 'Hecha el 12 nov 2026 · sin confirmar si se entregó',
 }
 SIN_CLASSROOM = {'ACS': 'Entregada (por correo; ACS no usa Classroom)', 'SIB': 'Entregada (por correo, en equipo)',
                  'OAC': 'Entregada (OAC teoría no usa Classroom)'}

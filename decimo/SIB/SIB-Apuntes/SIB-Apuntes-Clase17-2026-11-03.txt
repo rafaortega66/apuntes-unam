@@ -1,0 +1,87 @@
+La metodología para la creación de las políticas se basa en 9 pasos:
+
+1.- Planteamiento de objetivos
+
+2.- Preparación
+
+3.- Redacción
+
+4.- Edición
+
+5.- Aprobación -> Por una comisión
+
+6.-Difusión - > Quien recibe el original
+
+7.-Revisión -> 
+
+8.-Aplicación -> Aplicar la reglamentación
+
+9.-Actualización -> 
+
+
+
+El contenido de las políticas de seguridad considera lo siguiente:
+1.-Ámbito de aplicación
+2.-Análisis de riesgo
+3.-Enunciados de políticas
+4.-Sanciones
+5.-Sección de usos éticos de los recursos
+6.-Sección de procedimientos para el manejo de incidentes
+7.-Glosario de términos
+8.-Anexos
+
+Modelos de seguridad
+a)Modelo concreto: nombres puntuales.
+b)Modelo abstracto: sujetos, actividades, permisos, restricciones, etc.
+
+Modelo de control de acceso
+1.-Matriz de acceso: sujetos, derechos/obligaciones, objetos
+-----------------------------
+|LIZ	|NATALIA  |ITZEL	|	
+|PC 	|PIZARRÓN |TABLET	|
+|CELULAS|		  |MESA		|
+-----------------------------
+
+2.-Modelo HRU
+Condiciones
+
+3.-Modelo Take-Grant
+Reglas{[take, grant]}
+
+4.-Modelo Bell-LaPadulla
+-Política multinivel
+
+Modelo de flujo de información
+
+Teoría de la información
+*Entropía: Grado de incertidumbre
+
+EJ. Cuesti_nario
+	E___________
+-------------------------
+--Modelos de integridad--
+-------------------------
+a)Modelo Biba
+	Sujeto -> Activo 
+	Mismo nivel para manipular
+b)Modelo Clark-Wilson
+Integridad y confidencialidad al momento de manejar bienes
+
+----------------------------------------------------------------------------------|
+Plan te contingencia o Plan de contingencias o Protocolos de emergencia o         | Protocolos de eventualidades o Protocolos de recuperación o Recuperación de desastre
+------------------------------------------------------------------------------------
+Un plan de contingencia de seguridad contiene los pasos que se deben seguir, luego de un desastre, para recuperar, aunque sea en parte, la capacidad funcional de la organización
+
+Etapas o fases
+1.-Evaluación
+2.-Planeación
+3.-Ejecución
+4.-Pruebas de viabilidad
+
+Los planes de contingencias manejan 2 tipos de procedimientos
+a) Procedimientos preventivos	
+b) Procedimientos correctivos {planificados, no planificados}
+
+PRÓXIMA CLASE
+VENTAJAS Y DESVETAJAS
+

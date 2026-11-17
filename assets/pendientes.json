@@ -4,6 +4,18 @@
   "nota": "Solo tareas obligatorias. Cuando Classroom no muestra hora, se asume fin del día (23:59). Classroom manda sobre lo dicho en clase. Los ítems sin fecha exacta no se ocultan solos.",
   "items": [
     {
+      "id": "asi-examen-final",
+      "materia": "ASI",
+      "color": "#7C9CD6",
+      "tipo": "examen",
+      "titulo": "Examen final de ASI",
+      "vence": "2026-11-18T17:00:00-06:00",
+      "hora": "17:00",
+      "hora_confirmada": false,
+      "detalle": "Miércoles 18 nov, D004 (hora de clase; el profesor solo dijo «miércoles»). Individual, en hojas blancas, sin celular. Entra todo el curso + los 9 RFC expuestos; posiblemente escribir comandos de Linux, SQL de Oracle y Nmap a mano.",
+      "link": "materias/administracion-de-servicios-de-internet/examen-final.html"
+    },
+    {
       "id": "fse-t09",
       "materia": "FSE",
       "color": "#A98BD1",

@@ -1,0 +1,27 @@
+2.-Seleccionar una filosofía
+a)Filosofía prohibitiva o restrictiva
+2.-Seleccionar una filosofía
+	a)Filosofía prohibitiva o restrictiva
+		"Todo está prohibido a expeción de lo que expresamente se permite"
+	b)Filosofía permisiva
+		"Todo está permitido a exepción de lo que expresamente se prohíbe"
+3.-Indicar fecha de entrada en rigor
+4.-Evitar redactar verbos en futuro
+5.-Evitar emplear la palabra NO -> Positiva
+6.-Toda regla debe tener asignado un dueño
+7.-Actualización
+8.-Redacción sin ambiguedades y uso de terminología conocida por toda persona
+9.-Concentrarse en la capacitación
+
+Diseño de políticas
+El diseño de políticas debe recaer en un grupo de personas. El gurpo de personas debe estar conformado por:
+1.-Persona con autoridad
+2.-Representante jurídico
+3.-Editor/Redactor
+4.-Psicólogos
+5.-Administradores de sistemas
+6.-Usuario típico
+
+En las políticas se acostumbra:
+a)Dividir en rubros y agrupar las políticas correspondientes a cada uno
+b)Considerar reglas/políticas con base en la jerarquía de puestos

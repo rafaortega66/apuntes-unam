@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="no-aplica">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Examen final — Administración de Servicios de Internet</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261110a">
+<script src="../../assets/app.js?v=20261103a" defer></script>
+<style>
+.chuleta td,.chuleta th{font-size:.92em;vertical-align:top}
+pre.code{background:rgba(124,156,214,.12);padding:.8em 1em;border-radius:8px;overflow-x:auto;font-size:.88em;line-height:1.45}
+.ojo{border-left:4px solid #E8735C;padding:.4em .8em;margin:.6em 0;background:rgba(232,115,92,.08);border-radius:4px}
+</style>
+</head>
+<body style="--c:#7C9CD6">
+<div class="wrap">
+<a class="back" href="index.html">← Administración de Servicios de Internet</a>
+<div class="detail-head" style="border-color:#7C9CD6"><h2>📝 Examen final · miércoles 18 nov 2026</h2>
+  <p class="prof">Mtro. Juan Ángel Calvillo Pérez · 17:00–19:00 · D004 · individual, en hojas blancas, sin celular · entra <strong>todo el curso + los RFC</strong>.</p>
+  <p class="prof">Fuentes: NotebookLM (cuaderno ASI, audios de las Clases 1–19), pregunta hecha el 17 nov 2026 específicamente sobre este examen; «ASI · Guía para el examen final» en Drive (NotebookLM, 16 nov); y tu <em>Infografía RFC</em> del 11 nov (contrastada con el RFC Editor). Aquí no se inventó nada: lo que no está en las grabaciones se dice.</p>
+</div>
+<div class="files">
+  <a class="btn" href="https://docs.google.com/document/d/1jhbhQWg9nWUX9Px6uBr-bMdaofB0ESfnrTV-fPn3UnY/edit" target="_blank">📘 Guía larga en Drive (NotebookLM)</a>
+  <a class="btn" href="https://drive.google.com/file/d/1GdsSfaS1vmDQ8qhMVHJ6-FnjGQPSz6ly/view" target="_blank">🧠 Mapa mental detallado</a>
+  <a class="btn" href="../../decimo/ASI/ASI-EjerciciosClase/ASI-EC02/ASI-EC02-entregables/Infografia_RFC_Ortega.pdf" target="_blank">📊 Mi infografía de RFC</a>
+  <a class="btn" href="resumenes.html">📄 Guías por clase (PDF)</a>
+</div>
+
+<details class="section-block sec" id="ef-formato" open><summary><span class="stitle">1 · Lo que dijo el profesor del examen (citas del audio)</span></summary>
+<ul>
+<li><strong>Fecha:</strong> primero dijo lunes 16; en la Clase 19 lo movió: «Miércoles el examen… 18 va a ser».</li>
+<li><strong>Qué entra:</strong> a la pregunta «¿es final o solo RFC?» respondió «todo, todo, todo, todo. Por eso se llama examen final» (Clase 17), y «en el examen voy a añadir los de los RFCs».</li>
+<li><strong>Formato:</strong> individual, sin celular, en hojas blancas. En la Clase 13 dijo que <strong>no lo hace de opción múltiple</strong>.</li>
+<li><strong>¿Hay que escribir código?</strong> Le preguntaron si sería «saca una hoja y escribes código» y contestó: «El extra estuvo manchado. Yo creo me voy a basar en el [extra]». → Prepárate para escribir a mano <strong>comandos de Linux, SQL de Oracle (usuarios, roles, trigger) y banderas de Nmap</strong>.</li>
+<li><strong>No está en las grabaciones:</strong> cuántas preguntas trae ni cuánto vale el examen. Un alumno dijo en voz baja que el proyecto «es el 40», sin confirmación del profesor.</li>
+<li><strong>Antecedente:</strong> en el 1.er parcial «el más alto lleva siete» (Clase 13), y la parte que salió mal fue OLAP / modelo de datos.</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="ef-top" open><summary><span class="stitle">🎯 Los 10 temas más probables (en orden) y su evidencia</span></summary>
+<ol class="examen-lista">
+<li><strong>Qué es un RFC + los 9 RFC expuestos.</strong><span class="evid">Clase 17: «en el examen voy a añadir los de los RFCs»; fueron lo último del curso (Clases 18–19). → sección 2.</span></li>
+<li><strong>Servidor vs. repositorio, pirámide DIK, CID.</strong><span class="evid">Clase 3: «parece muy obvio, pero luego en el examen me ponen ahí cada barbaridad».</span></li>
+<li><strong>OLAP, Data Warehouse y esquemas estrella / copo de nieve / constelación.</strong><span class="evid">Clase 10: «de ahí sí podemos sacar un buen [ejercicio] para su examen»; fue lo que salió mal en el parcial.</span></li>
+<li><strong>Oracle: usuario → rol → privilegios, UNLIMITED TABLESPACE, COMMIT, SYSDATE, trigger con :OLD/:NEW.</strong><span class="evid">Clase 14: «Yo pondría mucha alta atención»; apostó la calificación en vivo.</span></li>
+<li><strong>Comandos y permisos de Linux.</strong><span class="evid">Clase 1 + «me voy a basar en el extra» (escribir comandos).</span></li>
+<li><strong>Nmap (-sn, -sS, -sV, -O, -A) y Metasploit.</strong><span class="evid">Clase 9: resumió las 5 banderas al cierre.</span></li>
+<li><strong>Requerimientos funcionales / no funcionales / de sistema + presupuestos en la nube.</strong><span class="evid">Clase 3: 6 ejercicios en vivo; «los presupuestos en la nube son en dólares… importantísimo».</span></li>
+<li><strong>DHCP (DORA, componentes del ámbito, ISC vs. Kea) y DNS.</strong><span class="evid">Clase 4: «no se puede tener más de una puerta de enlace».</span></li>
+<li><strong>Cascada/PMBOK vs. Ágil/Scrum y recursos en MS Project.</strong><span class="evid">Clase 2: «Scrum no es una metodología; la metodología es ágil».</span></li>
+<li><strong>Big Data: calidad &gt; cantidad; Von Neumann vs. Harvard RISC y pipeline.</strong><span class="evid">Clase 17 (debate con el grupo) y Clase 1 (33 % y 20 % de uso de la ALU).</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="ef-rfc" open><summary><span class="stitle">2 · Los RFC: clase + infografía en una sola tabla</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es un RFC</span>
+<p><em>Request for Comments</em>: documento técnico público y gratuito del IETF que fija las reglas de un protocolo de Internet (formatos, mensajes, MUST/SHOULD/MAY, registros en IANA). Lo inició Steve Crocker en ARPANET (1969). <strong>Es inmutable:</strong> no se edita; si hay que cambiarlo se publica un RFC nuevo que lo <em>actualiza</em> o lo <em>vuelve obsoleto</em>. Categorías: Standard Track, BCP, Informational, Experimental, Historic. (Y no, no es el Registro Federal de Contribuyentes: el profesor hizo ese chiste.)</p>
+<div class="ojo"><strong>Trampa que preguntó en clase:</strong> «¿LDAP es el protocolo o el RFC?» → LDAP es el <strong>protocolo</strong>; el RFC 4510 es el <strong>documento</strong> que lo organiza. Igual con todos: HTTP ≠ RFC 2616.</div>
+</div>
+<table class="chuleta">
+<tr><th>RFC</th><th>Qué es · año · equipo</th><th>Puerto / dato clave (clase)</th><th>Estado real (RFC Editor, tu infografía)</th></tr>
+<tr><td><strong>854</strong></td><td>Telnet · may 1983 · Eq. 4</td><td>TCP 23; NVT (ASCII 7 bits + bit de control); negocia con WILL / WONT / DO / DONT e IAC. Todo sin cifrar.</td><td>Vigente (STD 8) <em>pero en desuso</em>; en la práctica lo desplazó SSH (RFC 4251, puerto 22).</td></tr>
+<tr><td><strong>1034</strong></td><td>DNS, conceptos · nov 1987 · Eq. 5</td><td>Capa 7, puerto 53 TCP/UDP; jerárquico y descentralizado (BIND, .com, .unam).</td><td>Vigente (STD 13); va con el 1035; lo actualizan 19 RFC (DNSSEC 4033–4035).</td></tr>
+<tr><td><strong>1700</strong></td><td>Números asignados (IANA) · oct 1994 · <strong>Eq. 10 (el tuyo)</strong></td><td>Protocolo IP 6 = TCP, 17 = UDP; puertos 20/21 FTP, 22 SSH, 25 SMTP, 53 DNS, 80 HTTP. Reynolds y Postel.</td><td>Reemplazado → RFC 3232 (2002): las tablas pasan a la base en línea de IANA.</td></tr>
+<tr><td><strong>1939</strong></td><td>POP3 · may 1996 · Eq. 1</td><td>110 / 995 (POP3S). 3 estados: Autorización (USER, PASS, APOP-MD5) → Transacción (STAT, LIST, RETR, DELE, RSET, NOOP) → Update (QUIT). Respuestas +OK / -ERR. Timeout 10 min.</td><td>Vigente (STD 53); sustituyó al 1725.</td></tr>
+<tr><td><strong>2616</strong></td><td>HTTP/1.1 · jun 1999 · Eq. 8</td><td>TCP 80; petición-respuesta <strong>sin estado</strong>; códigos 1xx–5xx; GET (seguro), POST, PUT, DELETE (idempotentes). Añadió conexiones persistentes, Host obligatorio (virtual hosting), chunked y caché. 176 páginas.</td><td>Reemplazado → RFC 7230–7235 (2014) → RFC 9110–9112 (2022). Luego HTTP/2 y HTTP/3 (QUIC).</td></tr>
+<tr><td><strong>3501</strong></td><td>IMAP4rev1 · mar 2003 · Eq. 3</td><td>143 / 993. 4 estados: No autenticado → Autenticado → Seleccionado → Cierre. Comandos con etiqueta (A001 LOGIN); respuestas OK / NO / BAD. Banderas \Seen, \Answered, \Flagged, \Deleted (+ EXPUNGE), \Draft, \Recent.</td><td>Reemplazado → RFC 9051 (IMAP4rev2, ago 2021). En el audio se oye «951»: es <strong>9051</strong>.</td></tr>
+<tr><td><strong>3898</strong></td><td>Opciones NIS/NIS+ en DHCPv6 · oct 2004 · Eq. 6</td><td>Códigos 27 (IP NIS), 28 (IP NIS+), 29 (dominio NIS), 30 (dominio NIS+). El cliente los pide <strong>dos veces</strong> (búsqueda inicial y request). Solo transporta, no implementa NIS.</td><td>Vigente (Proposed Standard) <em>pero en desuso</em>; sin sustituto formal; en la práctica, LDAP / Active Directory.</td></tr>
+<tr><td><strong>4510</strong></td><td>LDAPv3, mapa de ruta · jun 2006 · Eq. 7</td><td>6 páginas (Zeilenga); «X.500 light». Organiza la familia 4511 (operaciones Bind/Search/Modify), 4512 (modelos), 4513 (SASL/TLS), 4514–4519.</td><td>Vigente (Proposed Standard); sustituyó a 10 RFC (entre ellos 3377).</td></tr>
+<tr><td><strong>8446</strong></td><td>TLS 1.3 · ago 2018 · Eq. 9</td><td>Handshake de 2 RTT → <strong>1 RTT</strong>; quitó MD5, SHA-1 y RC4; obliga AEAD (AES-GCM, sello sobre payload + encabezado) y <strong>Perfect Forward Secrecy</strong> con Diffie-Hellman efímero.</td><td>El RFC quedó obsoleto en jul 2026 por el <strong>RFC 9846</strong> (mismo TLS 1.3, que sigue vigente).</td></tr>
+</table>
+<div class="ojo"><strong>Dónde la clase y el RFC Editor no coinciden</strong> (lo encontraste en tu infografía): 8446 «plenamente vigente» en clase → obsoleto por 9846; 1034 «1984» en clase → 1987; 854 «obsoleto» en clase → sigue siendo STD 8, lo que cayó fue su uso; 3898 «reemplazado por LDAP/AD» → no hay RFC que lo reemplace. <em>Sugerencia:</em> contesta lo que se dijo en clase y añade la precisión en una línea; así no pierdes puntos con ninguna de las dos lecturas.</div>
+<p><strong>Preguntas que hizo el profesor en las exposiciones:</strong> (a) HTTP: «¿cómo se aplica en un GET o un POST?» → GET pide (solo lectura), POST envía. (b) IMAP: «¿IMAP o POP?» → el equipo dijo IMAP (varios dispositivos), pero él aclaró que <strong>la mayoría sigue usando POP</strong> para descargar y liberar espacio. (c) «¿Qué desventaja tiene IMAP?» → dependes del servidor y su almacenamiento crece sin fin. (d) «¿Qué pasó en Japón?» → cayeron ~300 bancos por depender de un mismo servidor central. (e) «¿LDAP es protocolo o RFC?» → protocolo. En las Clases 18 (1939, 1700, 854, 1034) y 19 (3898, 8446) no hizo preguntas técnicas.</p>
+</details>
+
+<details class="section-block sec" id="ef-codigo"><summary><span class="stitle">3 · Lo que podrías tener que escribir a mano</span></summary>
+<span class="lbl">Oracle (Clase 14) — orden correcto: usuario → rol → privilegios</span>
+<pre class="code">ALTER SESSION SET "_ORACLE_SCRIPT"=true;   -- si sale ORA-65096
+CREATE USER auditor IDENTIFIED BY clave;
+CREATE ROLE rol_app;
+GRANT CREATE SESSION, CREATE TABLE, CREATE TRIGGER TO rol_app;
+GRANT rol_app TO auditor;
+GRANT UNLIMITED TABLESPACE TO auditor;     -- DIRECTO al usuario: en un rol da ORA-01950
+-- otra cuenta ve la tabla como usuario.tabla (si no: ORA-00942) y solo tras COMMIT
+
+CREATE OR REPLACE TRIGGER trg_auditoria
+AFTER INSERT OR UPDATE OR DELETE ON auditor.empleados
+FOR EACH ROW
+BEGIN
+  IF INSERTING THEN
+    INSERT INTO bitacora VALUES (USER, SYSTIMESTAMP, 'INSERT', NULL, :NEW.sueldo);
+  ELSIF UPDATING THEN
+    INSERT INTO bitacora VALUES (USER, SYSTIMESTAMP, 'UPDATE', :OLD.sueldo, :NEW.sueldo);
+  ELSIF DELETING THEN
+    INSERT INTO bitacora VALUES (USER, SYSTIMESTAMP, 'DELETE', :OLD.sueldo, NULL);
+  END IF;
+END;</pre>
+<p><strong>:OLD</strong> = valor antes del cambio; <strong>:NEW</strong> = valor después. <strong>DATE</strong> guarda solo fecha (con SYSDATE); <strong>TIMESTAMP</strong> guarda fecha, hora y fracciones (nanosegundos) — el profesor preguntó «¿para qué tanta precisión?»: para ordenar eventos de auditoría que ocurren en el mismo segundo. (Los nombres de tabla y columnas de arriba son de ejemplo.)</p>
+<span class="lbl">Linux (Clase 1)</span>
+<table class="chuleta">
+<tr><td><code>which</code> vs <code>whereis</code></td><td>which: solo la ruta del ejecutable · whereis: todas las carpetas del paquete</td></tr>
+<tr><td><code>ps aux</code></td><td>a = todos los usuarios · u = CPU/RAM · x = sin terminal (lo primero que revisas si hay virus)</td></tr>
+<tr><td><code>mkdir -m 700 -p a/b/c</code></td><td>-m fija permisos (700 = rwx solo dueño) · -p crea las carpetas padre</td></tr>
+<tr><td><code>cat a b &gt; todo.txt</code> · <code>cat -n</code></td><td>concatena en orden · numera líneas</td></tr>
+<tr><td><code>ls -lsa</code></td><td>-l detalles · -s tamaño · -a ocultos</td></tr>
+<tr><td>Permisos</td><td>tipo · dueño · grupo · otros; r=4 w=2 x=1. Nunca 777.</td></tr>
+<tr><td>Directorios</td><td>/boot arranque y kernel (no confundir con /bin) · /bin comandos · /etc configuración · /usr programas estáticos (no usuarios) · /home usuarios · /var y /tmp temporales · /dev dispositivos · /opt software extra</td></tr>
+</table>
+<span class="lbl">Nmap (Clase 9)</span>
+<p><code>-sn</code> hosts activos · <code>-sS</code> escaneo sigiloso (SYN) · <code>-sV</code> versiones de servicios · <code>-O</code> sistema operativo · <code>-A</code> agresivo (todo; deja rastro). Metasploit: <code>msfconsole</code> → <code>use …</code> → <code>show options</code> → <code>set RHOSTS …</code> → <code>exploit</code>/<code>run</code>.</p>
+</details>
+
+<details class="section-block sec" id="ef-resto"><summary><span class="stitle">4 · El resto del curso en una página</span></summary>
+<ul>
+<li><strong>Servidor:</strong> equipo hardware o software que ofrece servicios o recursos a clientes a través de una red, y <em>ejecuta</em> procesos. <strong>Repositorio</strong> (Git): solo almacena, no ejecuta. <strong>DIK:</strong> Datos → Información (con contexto) → Conocimiento (decisiones). <strong>CID:</strong> confidencialidad, integridad, disponibilidad.</li>
+<li><strong>Requerimientos:</strong> de sistema (hardware, servidores, ancho de banda) · funcionales (<em>qué</em> hace: «el usuario inicia sesión») · no funcionales (<em>cómo se mide</em>: «responde en &lt; 2 s», «fácil de usar»).</li>
+<li><strong>Nube:</strong> presupuestos en <strong>dólares</strong> y con alertas de costo previsto y real.</li>
+<li><strong>DHCP:</strong> DORA = Discover, Offer, Request, Acknowledge. Entrega IP, máscara, puerta de enlace (solo una) y DNS; excluir 127.x.x.x. ISC DHCP sin mantenimiento desde 2022 → Kea (JSON, multihilo).</li>
+<li><strong>Metodologías:</strong> Cascada/PMBOK = fases secuenciales, triángulo alcance-costo-tiempo, Project Manager, cambios caros. Ágil = iterativo, incremental, colaborativo, adaptable; <strong>Scrum implementa Ágil</strong> (sprints de 2–4 semanas, Scrum Master, Product Owner). Recursos en Project: Trabajo, Material, Costo.</li>
+<li><strong>OLAP / DW:</strong> ETL alimenta el Data Warehouse; nunca se regresan datos del DW a la BD transaccional. Estrella (1 tabla de hechos + dimensiones directas), copo de nieve (dimensiones normalizadas), constelación (varias tablas de hechos que comparten dimensiones). Medidas no aditivas no se suman directo. En la ENOE: cuidado con sumar vs. promediar vs. contar.</li>
+<li><strong>Arquitectura:</strong> Von Neumann = una sola memoria (cuello de botella). Harvard RISC = memoria de instrucciones y de datos separadas, load/store, pipeline de 4 etapas (Fetch, Decode, Execute, Write Back) → 1 instrucción por ciclo. Ejemplo: 1 de 3 instrucciones usa la ALU = 33 %; 1 de 5 = 20 %.</li>
+<li><strong>Big Data e IA:</strong> más datos no es más precisión; la da la calidad y un protocolo de captura. La IA automatiza pero exige auditoría humana (<em>human in the loop</em>).</li>
+</ul>
+</details>
+
+<details class="section-block sec" id="ef-prueba" open><summary><span class="stitle">🧠 Ponte a prueba (15 preguntas de NotebookLM)</span></summary>
+<details class="qa"><summary>1. ¿Diferencia entre servidor y repositorio? ¿Cómo define el RFC 2616 la comunicación web?</summary><p>El repositorio solo almacena; el servidor comparte recursos y ejecuta procesos para clientes en red. HTTP/1.1: petición-respuesta sin estado sobre TCP 80, con línea inicial, cabeceras y cuerpo opcional.</p></details>
+<details class="qa"><summary>2. Nmap encuentra 22, 23, 53, 80 y 1521 abiertos y en IPv4 ves protocolo 6 y 17. ¿Qué es cada número?</summary><p>6 = TCP, 17 = UDP. 22 SSH, 23 Telnet, 53 DNS, 80 HTTP, 1521 Oracle.</p></details>
+<details class="qa"><summary>3. ¿Qué es el NVT del RFC 854, con qué 4 comandos negocia y por qué se sustituyó?</summary><p>Terminal virtual de red: ASCII de 7 bits + bit de control. WILL, WONT, DO, DONT (con IAC). Viaja sin cifrar → SSH, puerto 22.</p></details>
+<details class="qa"><summary>4. Compara IMAP (3501) y POP3 (1939): puertos, estados y manejo de mensajes.</summary><p>IMAP 143/993, 4 estados, mensajes en el servidor, borra con \Deleted + EXPUNGE. POP3 110/995, 3 estados, descarga y borra al hacer QUIT.</p></details>
+<details class="qa"><summary>5. POP3 con 4 correos: DELE 2, RSET y se cae la conexión antes de QUIT. ¿Cuántos quedan?</summary><p>Los 4: DELE solo marca, RSET desmarca y el borrado real solo ocurre en Update con QUIT. Contra el texto plano: APOP (MD5) y luego POP3S (995).</p></details>
+<details class="qa"><summary>6. ¿LDAP vs. RFC 4510? ¿Por qué nació frente a X.500? ¿Qué cubre el 4513?</summary><p>LDAP es el protocolo; 4510 el mapa de ruta de LDAPv3. X.500 exigía toda la pila OSI. 4513: autenticación y seguridad (SASL/TLS).</p></details>
+<details class="qa"><summary>7. ¿Capa y puerto del DNS (1034)? ¿Qué gana con la descentralización? ¿Cómo se liga con DHCP?</summary><p>Capa 7, puerto 53 TCP/UDP. No hay un único punto de falla (aunque hay retrasos de propagación/caché). DHCP, en DORA, entrega al cliente las IP de los servidores DNS.</p></details>
+<details class="qa"><summary>8. RFC 3898: ¿qué son los códigos 27–30, por qué se envían dos veces y qué lo sustituyó?</summary><p>27 IP NIS, 29 dominio NIS, 28 IP NIS+, 30 dominio NIS+. El servidor no los manda por defecto: el cliente los pide en la búsqueda y en el request. En la práctica lo sustituyeron LDAP/AD (sin RFC que lo obsolete).</p></details>
+<details class="qa"><summary>9. Las dos restricciones obligatorias de TLS 1.3, su mejora de latencia y qué quitó.</summary><p>AEAD (AES-GCM) y Perfect Forward Secrecy con Diffie-Hellman efímero. 2 RTT → 1 RTT. Quitó MD5, SHA-1 y RC4. (El RFC 8446 lo obsoletó el 9846 en jul 2026.)</p></details>
+<details class="qa"><summary>10. Escribe en Oracle: usuario, rol, tablespace; explica SYSDATE (DATE vs TIMESTAMP) y :OLD/:NEW.</summary><p>Ver sección 3. UNLIMITED TABLESPACE va directo al usuario. DATE = fecha; TIMESTAMP = fecha, hora y fracciones. :OLD = antes, :NEW = después.</p></details>
+<details class="qa"><summary>11. which vs whereis; letras de ps aux; qué hace mkdir -m 700 -p a/b.</summary><p>which: ruta del ejecutable; whereis: todas las carpetas. a todos los usuarios, u CPU/RAM, x sin terminal. Crea a/b con permisos 700.</p></details>
+<details class="qa"><summary>12. ¿Qué hace cada bandera de Nmap: -sn, -sS, -sV, -O, -A?</summary><p>Hosts activos · sigiloso · versiones · sistema operativo · agresivo (todo, deja rastro).</p></details>
+<details class="qa"><summary>13. Estrella vs. copo de nieve vs. constelación; ¿qué regla hay entre DW y BD transaccional?</summary><p>1 tabla de hechos con dimensiones directas · dimensiones normalizadas en subdimensiones · varias tablas de hechos. Nunca regresar datos del DW a la transaccional.</p></details>
+<details class="qa"><summary>14. Clasifica: (a) varios servidores para disponibilidad, (b) el usuario inicia sesión, (c) respuesta &lt; 2 s. ¿Moneda de la nube? ¿Ágil y Scrum?</summary><p>(a) sistema, (b) funcional, (c) no funcional. Dólares. Ágil es la metodología, Scrum la implementa.</p></details>
+<details class="qa"><summary>15. 5 instrucciones y 1 usa la ALU: ¿% de uso? ¿Qué hace Harvard RISC? ¿Qué da precisión en Big Data?</summary><p>20 % de uso, 80 % de desperdicio. Separa memoria de instrucciones y de datos para hacer pipeline (1 instrucción por ciclo). La calidad y el protocolo de captura, no la cantidad.</p></details>
+</details>
+
+</div>
+</body>
+</html>

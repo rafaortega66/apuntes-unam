@@ -1,0 +1,13 @@
+Disaster Recovery Plan (DRP)
+Planes de contingencias
+Cuenta con procedimientos {preventivos, correctivos}
+Considerar 3 subplanes
+
+1.El plan de respaldo
+Contempla las contramedidas preventivas antes de que se materialice una amenaza. Su finalidad es evitar dicha materialización.
+
+2.-El plan de emergencia
+Contempla las contramedidas necesarias durante la materialización de una amenaza, o inmediatamente después. Su finalidad es minimizar los efectos adversos de la amenaza.
+
+3.-El plan de recuperación
+Contempla las medidas necesarias después de materializada y controlada la amenaza. Su finalidad es restaurar el estado de las cosas tal y como se encontraban antes de la materialización de la amenaza.

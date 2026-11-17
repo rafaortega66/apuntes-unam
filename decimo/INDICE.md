@@ -25,7 +25,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 
 ## ASI — Administración de Servicios de Internet
 
-- **ASI-Material**: 15 archivos (ASI/ASI-Material/)
+- **ASI-Material**: 22 archivos (ASI/ASI-Material/)
 
 
 ### ASI-EjerciciosClase
@@ -33,6 +33,13 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 | Entrega | Indicaciones | Entregado | Adicionales |
 |---|---|---|---|
 | ASI-EC01 | [ASI-EC01-indicaciones.md](ASI/ASI-EjerciciosClase/ASI-EC01/ASI-EC01-indicaciones.md) | _(sin entrega aún)_ | 1 |
+| ASI-EC02 | [ASI-EC02-indicaciones.md](ASI/ASI-EjerciciosClase/ASI-EC02/ASI-EC02-indicaciones.md) | [Infografia_RFC_Ortega.pdf](ASI/ASI-EjerciciosClase/ASI-EC02/ASI-EC02-entregables/Infografia_RFC_Ortega.pdf) | — |
+
+### ASI-Exposiciones
+
+| Entrega | Indicaciones | Entregado | Adicionales |
+|---|---|---|---|
+| ASI-Exp01 | [ASI-Exp01-indicaciones.md](ASI/ASI-Exposiciones/ASI-Exp01/ASI-Exp01-indicaciones.md) | [RFC_Garcia-Ortega-Valdes.pdf](ASI/ASI-Exposiciones/ASI-Exp01/ASI-Exp01-entregables/RFC_Garcia-Ortega-Valdes.pdf) | 1 |
 
 ### ASI-Practicas
 
@@ -196,6 +203,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 | SIB-EC07 | [SIB-EC07-indicaciones.md](SIB/SIB-EjerciciosClase/SIB-EC07/SIB-EC07-indicaciones.md) | [SIB-EC07-investigacion-ataques-equipo4.pdf](SIB/SIB-EjerciciosClase/SIB-EC07/SIB-EC07-entregables/SIB-EC07-investigacion-ataques-equipo4.pdf) | — |
 | SIB-EC08 | [SIB-EC08-indicaciones.md](SIB/SIB-EjerciciosClase/SIB-EC08/SIB-EC08-indicaciones.md) | [SIB-EC08-politicas-equipo4.pdf](SIB/SIB-EjerciciosClase/SIB-EC08/SIB-EC08-entregables/SIB-EC08-politicas-equipo4.pdf) | — |
 | SIB-EC09 | [SIB-EC09-indicaciones.md](SIB/SIB-EjerciciosClase/SIB-EC09/SIB-EC09-indicaciones.md) | [SIB-EC09-modelos-de-seguridad-equipo4.pdf](SIB/SIB-EjerciciosClase/SIB-EC09/SIB-EC09-entregables/SIB-EC09-modelos-de-seguridad-equipo4.pdf) | 2 |
+| SIB-EC10 | [SIB-EC10-indicaciones.md](SIB/SIB-EjerciciosClase/SIB-EC10/SIB-EC10-indicaciones.md) | [SIB-analisis-de-riesgos-salon.pdf](SIB/SIB-EjerciciosClase/SIB-EC10/SIB-EC10-entregables/SIB-analisis-de-riesgos-salon.pdf) | — |
 
 ### SIB-Exposiciones
 

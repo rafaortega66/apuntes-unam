@@ -1,7 +1,57 @@
 {
-  "actualizado": "2026-11-03T12:00:00-06:00",
-  "nota": "Trabajo en curso en los Projects de claude.ai (un chat por tarea). Se pinta en la portada. Al avanzar o terminar algo, editar aquí: estado = en-curso | esperando | listo | entregado. Servicio social NO va aquí (sitio público).",
+  "actualizado": "2026-11-17T13:30:00-06:00",
+  "nota": "Trabajo en curso (chats de claude.ai y pendientes del sitio). Se pinta en la portada. Al avanzar o terminar algo, editar aquí: estado = en-curso | esperando | listo | entregado. Servicio social NO va aquí (sitio público). Reescrito por completo el 17 nov 2026 a partir de los chats del 9 al 17 nov.",
   "items": [
+    {
+      "materia": "ASI",
+      "color": "#7C9CD6",
+      "titulo": "Examen final — miércoles 18 nov",
+      "proyecto": "Administración de Servicios de Internet",
+      "chat": "Sesión de Claude Code del 17 nov",
+      "chat_url": "",
+      "fecha": "2026-11-17",
+      "estado": "en-curso",
+      "resumen": "Individual, en hojas blancas y sin celular. Entra todo el curso y los 9 RFC. El profesor dijo que se basará en el extraordinario, así que puede pedir comandos y código escritos a mano. Ya está la página de estudio con lo que dijo NotebookLM y tu infografía.",
+      "falta": ["Estudiar la página «Examen final» (RFC, Oracle, Linux, Nmap, OLAP)", "Resolver las 15 preguntas de práctica sin ver las respuestas", "Repasar la guía larga de Drive"],
+      "link": "materias/administracion-de-servicios-de-internet/examen-final.html"
+    },
+    {
+      "materia": "FSE",
+      "color": "#A98BD1",
+      "titulo": "Subir las presentaciones de FSE al cuaderno de NotebookLM",
+      "proyecto": "Fundamentos de Sistemas Embebidos",
+      "chat": "Pendiente tuyo",
+      "chat_url": "",
+      "fecha": "2026-11-17",
+      "estado": "esperando",
+      "resumen": "El cuaderno FSE y el sitio solo tienen las diapositivas 01 a 08. Las clases llegan a la 21, pero no encontré presentaciones posteriores a la 08 en Drive ni en el escritorio.",
+      "falta": ["Conseguir las presentaciones después de la 08 (Classroom o el profesor)", "Subirlas al cuaderno FSE de NotebookLM", "Pasármelas para meterlas a decimo/FSE/FSE-Material y a material.html"],
+      "link": "materias/fundamentos-de-sistemas-embebidos/material.html"
+    },
+    {
+      "materia": "ASI",
+      "color": "#7C9CD6",
+      "titulo": "Proyecto final — 3.ª entrega y evaluación",
+      "proyecto": "Administración de Servicios de Internet",
+      "chat": "Pendiente del sitio",
+      "chat_url": "",
+      "fecha": "2026-11-17",
+      "estado": "en-curso",
+      "resumen": "Domingo 22 nov: manual técnico, manual de usuario, repositorio Git y video (máx. 15 min). Evaluación presencial el lunes 23 y miércoles 25 nov: pueden preguntarle a cualquier integrante.",
+      "falta": ["Manual técnico", "Manual de usuario", "Video de implementación", "Preparar la defensa"]
+    },
+    {
+      "materia": "ACS",
+      "color": "#E8735C",
+      "titulo": "Tarea 5 — sniffer en modo promiscuo",
+      "proyecto": "Arquitectura Cliente-Servidor",
+      "chat": "Tarea 5 del ingeniero",
+      "chat_url": "https://claude.ai/chat/c9c89e68-a671-402a-aebd-6cdd280ecb35",
+      "fecha": "2026-11-15",
+      "estado": "en-curso",
+      "resumen": "Se va paso a paso en la terminal. Lo último pedido: poner loopback en modo promiscuo (ip link set lo promisc on) y mandar la captura de ifconfig lo con la bandera PROMISC.",
+      "falta": ["Mandar la captura de la Terminal 1", "Paso 2: compilar y levantar el sniffer", "Armar el entregable como las tareas anteriores"]
+    },
     {
       "materia": "MD",
       "color": "#A98BD1",
@@ -9,47 +59,46 @@
       "proyecto": "Minería de Datos",
       "chat": "MD - Proyecto 3.6",
       "chat_url": "https://claude.ai/chat/dc6bcf26-7d94-4f15-85cf-cef4373643ef",
-      "fecha": "2026-11-03",
-      "estado": "en-curso",
-      "resumen": "Fashion-MNIST (70 000 fotos de prendas; caso: clasificar el catálogo de una tienda en línea). MLP sobre píxeles, LSTM bidireccional renglón por renglón y CNN tipo VGG con aumento de datos, en Keras, para CPU (o Colab con GPU).",
-      "falta": ["Terminar el entrenamiento de las tres redes (~1 h en la MSI)", "Resultados y conclusión con los números reales", "Recibir el .ipynb y el PDF"]
+      "fecha": "2026-11-10",
+      "estado": "esperando",
+      "resumen": "Fashion-MNIST con MLP, LSTM y CNN en Keras. Lo último del chat (10 nov) fue repasar los conceptos: softmax, entropía cruzada, Adam, lotes de 128 y paro temprano. No está en el sitio todavía.",
+      "falta": ["Confirmar si ya se entregó", "Pasar el .ipynb y el PDF para registrarlos en decimo/MD"]
     },
     {
-      "materia": "RP",
-      "color": "#45B8A8",
-      "titulo": "Tarea 3 — KNN y regresión logística",
-      "proyecto": "Reconocimiento de Patrones",
-      "chat": "PDF para copiar a mano",
-      "chat_url": "https://claude.ai/chat/241795d5-8029-4c5f-abaa-bd38450cd390",
-      "fecha": "2026-11-03",
+      "materia": "Lab OAC",
+      "color": "#7C9CD6",
+      "titulo": "Práctica 6 (carta ASM en la DE10-Lite) y Previo 2",
+      "proyecto": "Lab. de Organización y Arquitectura de Computadoras",
+      "chat": "Práctica 6 ASM tarjeta",
+      "chat_url": "https://claude.ai/chat/8ab6a13d-222c-4cbb-bcf3-b2f6f92811fa",
+      "fecha": "2026-11-17",
       "estado": "listo",
-      "resumen": "Tarea3_Ortega_Rafael_420054085.pdf (5 págs.) con todo el procedimiento en tablas, verificado en Python. KNN A: k=1 → B, k=3 → A. KNN B: sin escalar → S, normalizado → N. Regresión logística: L₀ = 0.7532 → L₁ = 0.6289 (2/4 bien clasificadas).",
-      "falta": ["Copiarla a mano en GoodNotes", "Ojo: las muestras 2 y 4 dan p̂ = 0.5; se usó el umbral p̂ ≥ 0.5 → 1"]
-    },
-    {
-      "materia": "FSE",
-      "color": "#A98BD1",
-      "titulo": "Proyecto final — Consola Retro",
-      "proyecto": "Fundamentos de Sistemas Embebidos",
-      "chat": "Propuesta del proyecto final",
-      "chat_url": "https://claude.ai/chat/ee1396fb-28b5-463e-8b6c-ba95ea432cf9",
-      "fecha": "2026-11-03",
-      "estado": "en-curso",
-      "resumen": "Esqueleto en 19-OEPR-final.zip: Mednafen con menú propio y gamepad, instalador automático, arranque directo sin escritorio y splash provisional. Aún no está probado en la Raspberry Pi.",
-      "falta": ["Probarlo en la Pi", "Salir con el gamepad", "Importar ROMs por USB", "15 ROMs legales", "Logotipo", "Video"]
+      "resumen": "En Drive ya están practica06_equipo07_Rea_Ortega.pdf (17 nov) y previo2_grupo3_Ortega_delaPaz_Rafael.pdf (15 nov, chat «Previo 2 en formato APA»).",
+      "falta": ["Confirmar que ambos se entregaron", "Registrarlos en decimo/OAC/OAC-Lab"]
     },
     {
       "materia": "Lab FSE",
       "color": "#E8735C",
-      "titulo": "Práctica 7 — Modulación de potencia de una lámpara",
+      "titulo": "Prácticas 5 y 8 — Raspberry Pi",
       "proyecto": "Fundamentos de Sistemas Embebidos",
-      "chat": "fse-p04",
-      "chat_url": "https://claude.ai/chat/8b8fc69e-8cc1-4f64-90c5-74c6ac94a46a",
-      "fecha": "2026-11-03",
-      "estado": "esperando",
-      "resumen": "Con los videos y el borrador del compañero ya se puede armar la práctica; Claude redactó el mensaje de WhatsApp para pedirle lo que falta.",
-      "falta": ["Que el compañero mande el zip con los códigos", "Pasarle el zip al chat para armar el paquete final"],
-      "link": "tareas/labfse-p7.html"
+      "chat": "Práctica 8 Raspberry Pi",
+      "chat_url": "https://claude.ai/chat/89a233d6-0a51-4198-9b6b-39b5837cbf4e",
+      "fecha": "2026-11-15",
+      "estado": "entregado",
+      "resumen": "19-OEPR-L05.pdf (10 nov) y 19-OEPR-L08.pdf + adicionales (15 nov) ya están en el Drive del profesor. La 8 se entregó tarde (vencía el 10 nov).",
+      "falta": ["Confirmar que el video de Enzo muestra el arranque, el nombre y la marquesina"]
+    },
+    {
+      "materia": "SIB",
+      "color": "#E8735C",
+      "titulo": "Decálogo del ingeniero en computación",
+      "proyecto": "Seguridad Informática Básica (por confirmar)",
+      "chat": "Decálogo del ingeniero en computación",
+      "chat_url": "https://claude.ai/chat/5cb30402-76e9-4aad-a688-95c2b3cf5a86",
+      "fecha": "2026-11-17",
+      "estado": "listo",
+      "resumen": "10 puntos: secreto profesional, responsabilidad, lealtad, honestidad, veracidad, integridad… Coincide con el Tema VI (Auditoría y ética informática) que se vio hoy en SIB, pero el chat no dice la materia.",
+      "falta": ["Confirmar la materia y entregarlo"]
     }
   ]
 }
