@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-17T18:45:34+00:00",
+ "generatedAt": "2026-11-17T22:05:32+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -1021,6 +1021,16 @@
  },
  "gitlog": [
   {
+   "hash": "e9c5128",
+   "fecha": "2026-11-17T15:43:09-06:00",
+   "mensaje": "Tablero: solo pendientes de Classroom (17 nov) + Tarea 5 de ACS, banners mínimos; estado «Atrasada»; Proyecto final ASI vence el 20 nov (Classroom)"
+  },
+  {
+   "hash": "652381e",
+   "fecha": "2026-11-17T12:45:34-06:00",
+   "mensaje": "ASI examen final: enlace al mapa conceptual de examen"
+  },
+  {
    "hash": "18d6b8a",
    "fecha": "2026-11-17T12:44:59-06:00",
    "mensaje": "ASI: página del examen final (18 nov) con NotebookLM + infografía RFC; tablero de trabajo actualizado; escritorio ordenado"
@@ -1309,16 +1319,6 @@
    "hash": "d9525f5",
    "fecha": "2026-10-21T11:25:42-06:00",
    "mensaje": "OAC: subir los 4 reportes en PDF entregados (T01, T02, Proy01, Proy02) y la versión enviada del filtro IIR"
-  },
-  {
-   "hash": "a7d18ef",
-   "fecha": "2026-10-21T11:25:36-06:00",
-   "mensaje": "OAC: registrar la entrega por correo (21 oct) de Tareas 1 y 2 y Proyectos 1 y 2 al Mtro. Arredondo; quitar sus pendientes"
-  },
-  {
-   "hash": "0ec5cd6",
-   "fecha": "2026-10-21T10:53:48-06:00",
-   "mensaje": "MD Clase 14 (20 oct) y OAC Clase 13 (21 oct) en formato de estudio desde NotebookLM: regresión en vino y series de tiempo; Orange Pi, Raspberry Pi 5, VNC/WinSCP y Pico 2"
   }
  ]
 }

@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="no-aplica">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía para el examen final — Arquitectura Cliente-Servidor</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261117b">
+<script src="../../assets/app.js?v=20261117b" defer></script>
+<style>
+.gf h3{margin:1.2em 0 .4em} .gf h4{margin:1em 0 .3em;opacity:.9}
+.gf .tabla-scroll{overflow-x:auto} .gf table td,.gf table th{font-size:.9em;vertical-align:top}
+.gf p.nota{border-left:3px solid var(--c);padding:.3em .8em;opacity:.9}
+.gf li{margin:.25em 0}
+</style>
+</head>
+<body style="--c:#E8735C">
+<div class="wrap gf">
+<!-- Generado por scripts/build_guias_finales.py. No editar a mano. -->
+<a class="back" href="index.html">← Arquitectura Cliente-Servidor</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>📘 Guía para el examen final</h2>
+  <p class="prof">Arquitectura Cliente-Servidor · semestre 2027-1 · hecha con NotebookLM a partir de los audios de clase y el material del profesor (16 nov 2026).</p>
+  <p class="prof">Las fechas y cálculos de NotebookLM pueden fallar: ante la duda, revisa la página de la clase que cita.</p>
+</div>
+<div class="files">
+  <a class="btn" href="https://docs.google.com/document/d/1NeYIiZeyNwmtHDzR47WpThlRyYFDc20t08GeO-QP-lI/edit" target="_blank">📄 Original en Drive</a>
+  <a class="btn" href="https://docs.google.com/document/d/1ELLf3oMJ5i-f0PS7EiQ7FB_y3HvNln5Hvm6h9KzKR_U/edit" target="_blank">📝 Apuntes y resumen (Drive)</a>
+  <a class="btn" href="https://drive.google.com/file/d/1i204QLbxnoZ0j5es2cWGmDgKv-Ss78GN/view" target="_blank">🧠 Mapa mental detallado</a>
+  <a class="btn" href="resumenes.html">📚 Guías por clase</a>
+</div>
+<p class="nota"><em>Nota sobre las fuentes consultadas: esta guía integra únicamente el contenido de las 20 clases disponibles en el cuaderno (</em> <em>ACS-Clase1.m4a</em> <em>a</em> <em>ACS-Clase4.m4a</em> <em>,</em> <em>ACS-Clase6.m4a</em> <em>a</em> <em>ACS-Clase18.m4a</em> <em>y</em> <em>ACS-Clase21.m4a</em> <em>a</em> <em>ACS-Clase23.m4a</em> <em>) y los fragmentos de presentaciones y código que el profesor mostró y leyó en ellas. No existen archivos PDF independientes adjuntos ni grabaciones de las Clases 5, 19 y 20 en el cuaderno, por lo que cualquier detalle exclusivo de esas tres sesiones (como el enunciado completo de la Tarea 5 o la revisión de</em> <em>desencriptador.c</em> <em>si ocurrió allí) no figura en las fuentes.</em></p>
+<details class="section-block sec" id="gf-hilo-conductor" open><summary><span class="stitle">HILO CONDUCTOR</span></summary>
+<p>La materia parte de una idea central: antes de construir aplicaciones distribuidas en red, hay que entender qué es un proceso vivo dentro del sistema operativo Linux, cómo se organiza su memoria, con qué privilegios se ejecuta y cómo nace, se comunica o muere. Por eso el curso arranca estudiando la imagen de un proceso, sus segmentos en memoria y el control de permisos e identificadores de usuario (UID/eUID), para luego dominar el ciclo de vida de los procesos mediante llamadas al sistema (fork(), exec(), kill()) y señales (signal()), descubriendo el riesgo de bloqueos mutuos (<em>deadlock</em>), procesos huérfanos y procesos zombie. Con esa base de sistemas operativos dominada, el curso da el salto a la red definiendo la arquitectura cliente-servidor como procesos de software que dialogan a través de <strong>sockets</strong> (tratados en Unix/Linux como descriptores de archivo) usando direcciones IP y puertos lógicos.</p>
+<p class="">A partir de ahí, el desarrollo avanza por capas incrementales de complejidad hasta culminar en una aplicación distribuida segura: primero se construye el flujo básico en C (socket–bind–listen–accept–connect–send/recv), luego se destripa el saludo de tres vías TCP, la cola de espera del kernel, los puertos efímeros y la fragmentación por tamaños de búfer. Después se resuelve la escalabilidad pasando de un servidor secuencial (uno a la vez) a servidores concurrentes con fork() y, al chocar con la memoria aislada de los hijos, a la multiplexación en un solo proceso con select() para chats grupales. Finalmente, al demostrar con un <em>sniffer</em> de capa 2 (SOCK_RAW) que todo el texto y los archivos viajan expuestos en texto plano por la red, se introduce la criptografía simétrica con OpenSSL (AES-256-CBC y relleno PKCS) y la transferencia completa de directorios y archivos binarios, mostrando cómo los mismos módulos técnicos que permiten construir un FTP encriptado explican también el funcionamiento real de ataques como el <em>ransomware</em> y el DDoS.</p>
+</details>
+<details class="section-block sec" id="gf-unidad-1-linux-anatomia-de-un-proceso-pe"><summary><span class="stitle">UNIDAD 1: LINUX, ANATOMÍA DE UN PROCESO, PERMISOS Y MANEJO DE ERRORES</span></summary>
+<h3>(a) Qué problema resuelve y cómo se conecta con el curso</h3>
+<p>Un cliente y un servidor en C son <strong>procesos de software en ejecución</strong>. Antes de abrir conexiones de red, es indispensable comprender cómo el kernel asigna memoria a un ejecutable, cómo lo identifica y aísla, bajo qué usuario corre (privilegios) y cómo reporta errores de sistema cuando una llamada falla.</p>
+<h3>(b) Conceptos clave</h3>
+<ul><li>
+<strong>Proceso e Imagen de un Proceso (Clase 1)</strong>
+<ul><li>
+<strong>Definición:</strong> Un proceso es un programa ejecutable en ejecución que permanece vivo mientras corre y muere al terminar. La imagen de un proceso es la fotografía o instantánea de la zona de memoria independiente (espacio de direcciones) que el sistema carga para ese binario en tiempo de ejecución, diferenciada del contexto del kernel o Bloque de Control de Procesos (PCB / BCP).
+</li><li>
+<strong>Analogía:</strong> Es como la diferencia entre una receta impresa en un libro (el archivo ejecutable en disco) y la cocina activa con los ingredientes sobre la mesa mientras se prepara el platillo (la imagen del proceso en RAM).
+</li><li>
+<strong>Ejemplo de clase:</strong> Al ejecutar el servidor sencillo en C pausado con getchar() en una terminal, se inspeccionó su memoria desde otra terminal antes de presionar Enter y liberar la memoria (PID observado en vivo: 14478).
+</li></ul>
+</li><li>
+<strong>Segmentos de la memoria del proceso: Text , Data , BSS , Heap y Stack (Clase 1)</strong>
+<ul><li>
+<strong>Definición:</strong> División lógica de la memoria del proceso en áreas estáticas y dinámicas. Text contiene el código ejecutable y literales de cadena (como los textos de printf); Data almacena variables globales inicializadas; BSS (<em>Block Started by Symbol</em>) guarda variables globales no inicializadas; Heap (montículo) gestiona memoria asignada dinámicamente en ejecución (con malloc); y Stack (pila) guarda variables locales cuyo alcance (<em>scope</em>) se limita a una función.
+</li><li>
+<strong>Analogía:</strong> Una mochila con compartimentos fijos para las instrucciones y datos de partida (Text, Data, BSS) y dos bolsas expansibles que crecen en direcciones opuestas conforme se necesitan (Heap y Stack).
+</li><li>
+<strong>Ejemplo de clase:</strong> El comando size mostró únicamente los tamaños en bytes de los segmentos estáticos (text 1767, data 592, bss 8, más sus sumas dec y hex), mientras que pmap &lt;PID&gt; consultó al kernel para mostrar las zonas dinámicas en múltiplos de páginas de memoria de 4 KB (4096 bytes), verificando que Heap y Stack carecen de permisos de ejecución para evitar inyección de código malicioso.
+</li></ul>
+</li><li>
+<strong>Árbol de procesos, PID/PPID, Tiempo Compartido y Demonios (Clase 1)</strong>
+<ul><li>
+<strong>Definición:</strong> Todo proceso tiene un identificador propio único (PID) y el identificador de su proceso padre (PPID). El proceso raíz del sistema tiene PID 1 (init en sistemas antiguos, systemd en distribuciones modernas). Linux es un sistema de tiempo compartido donde el planificador alterna turnos de CPU entre procesos. Los procesos sin terminal interactiva que corren en segundo plano se denominan <em>daemons</em> o demonios (suelen terminar en d, como systemd o watchdogd, y muestran ? en la columna TTY).
+</li><li>
+<strong>Analogía:</strong> Un árbol genealógico donde cada persona tiene su acta propia y el número de acta de su padre, atendidos por turnos rápidos en una misma ventanilla.
+</li><li>
+<strong>Ejemplo de clase:</strong> Con ps -e -o pid,ppid,user,stat,cmd (sin espacios tras las comas), el comando ps tuvo PID 14680 y PPID 14456, comprobándose que 14456 era el PID de la terminal bash que lo lanzó. El comando ls -ltr ordena archivos por fecha en orden inverso dejando el más reciente pegado al <em>prompt</em>.
+</li></ul>
+</li><li>
+<strong>Permisos UGO, chmod octal, Bit SetUID y /etc/passwd vs /etc/shadow (Clases 2, 3)</strong>
+<ul><li>
+<strong>Definición:</strong> El modelo UGO asigna permisos en tres ternas: Usuario dueño (U), Grupo (G) y Otros (O), sumando lectura (4), escritura (2) y ejecución (1). El archivo /etc/passwd almacena usuarios del sistema separados por : (username:x:UID:GID:nombre:home:shell, usando /sbin/nologin en cuentas de sistema que no deben iniciar sesión), mientras /etc/shadow resguarda datos ocultos/de sistema cuando no aparecen en /etc/passwd. Un proceso posee un ID real (getuid()) del dueño en /etc/passwd y un ID efectivo (geteuid()) del usuario con cuyos privilegios corre. Al activar el <strong>bit SetUID</strong> con un cuarto dígito 4 a la izquierda en chmod (ej. 4511), cualquier usuario que ejecute el binario asume temporalmente el ID efectivo del dueño durante la ejecución.
+</li><li>
+<strong>Analogía:</strong> Una credencial temporal de contratista que te da acceso de administrador únicamente mientras estás dentro de la sala de servidores realizando un trámite; al salir vuelves a ser visitante.
+</li><li>
+<strong>Ejemplo de clase (Tarea 2):</strong> Con programa_02_ids.c corriendo como usuario codespace (UID 1000), getuid() y geteuid() devolvieron 1000 y 1000. Tras cambiar el dueño a root:root con chown, aplicar chmod 700 arrojó <em>permiso denegado</em>. Al aplicar chmod 4511 (r-s--x--x, sombreado en rojo), el usuario codespace ejecutó el binario y obtuvo <strong>Usuario Real 1000 y Usuario Efectivo 0 ( root )</strong>. También se probó chmod 2511 (SetGID, cambia el grupo efectivo) y chmod 1511 (pone una T en otros sin efecto apreciable en getuid/getgid).
+</li></ul>
+</li><li>
+<strong>Códigos de error del sistema ( errno ), strerror() y perror() (Clases 3, 4)</strong>
+<ul><li>
+<strong>Definición:</strong> Variable global del sistema errno (no requiere declararse) que guarda el entero del último error ocurrido. El código 0 representa <strong>éxito</strong> (<em>Success</em>), mientras que de 1 en adelante representan errores estándar (como 2 / ENOENT: <em>No such file or directory</em>, EPERM, EIO). strerror(int) devuelve la cadena de texto descriptiva de un código, y perror("texto") imprime la cadena personalizada seguida de : y el mensaje de sistema del error.
+</li><li>
+<strong>Ejemplo de clase:</strong> Con programa_03_codigos_sistema.c iterando i de 0 a 150, el sitio web listaba 131 códigos, pero el Linux ejecutado en clase llegó hasta el 133 (con el 41 reservado/sin mensaje) y a partir del 134 imprimió Unknown error.
+</li></ul>
+</li></ul>
+<h3>(c) Comparaciones y comandos clave (Unidad 1)</h3>
+<div class="tabla-scroll"><table><tr><th>Elemento / Comando</th><th>Función / Comportamiento</th><th>Detalles clave de clase</th></tr><tr><td>size &lt;ejecutable&gt;</td><td>Análisis estático del binario.</td><td>Muestra text, data, bss, suma dec y hex; omite Heap y Stack.</td></tr><tr><td>pmap &lt;PID&gt;</td><td>Mapa dinámico desde el kernel.</td><td>Múltiplos de páginas de 4 KB; segmentos dinámicos sin permiso x.</td></tr><tr><td>top vs ps</td><td>Monitoreo en vivo vs instantánea.</td><td>top es dinámico (sale con q); ps es estático (ps, ps aux, ps -e -o ...).</td></tr><tr><td>chmod 644 vs 755 vs 4511</td><td>Permisos UGO octales y SetUID.</td><td>644: editable no ejecutable; 755: ejecutable normal; 4511: r-s--x--x (SetUID).</td></tr><tr><td>strerror(code) vs perror(msg)</td><td>Reporte de errores en C.</td><td>strerror traduce cualquier código entero a string; perror antepone msg: al error actual de errno.</td></tr></table></div>
+<h3>(d) Errores comunes y puntos recalcados para examen (Unidad 1)</h3>
+<ul><li>
+Olvidar que para ejecutar un binario se requiere también permiso de lectura (5 = 4 + 1), no solo 1.
+</li><li>
+Dejar activado el bit SetUID (4511) en binarios de root representa un grave riesgo de seguridad; en la Tarea 2 debía restaurarse a 755 al terminar.
+</li><li>
+Colocar espacios después de las comas en ps -e -o pid,ppid,user,stat,cmd provoca error de sintaxis.
+</li><li>
+Asumir que el número máximo de códigos de error es fijo (131 vs 133 según la distribución Linux).
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-2-ciclo-de-vida-sincronizacion-se"><summary><span class="stitle">UNIDAD 2: CICLO DE VIDA, SINCRONIZACIÓN, SEÑALES Y PROCESOS ESPECIALES</span></summary>
+<h3>(a) Qué problema resuelve y cómo se conecta con el tema anterior</h3>
+<p>Una vez entendida la imagen de un proceso aislado, un servidor de red necesita crear múltiples procesos para atender clientes en paralelo, reemplazar ejecutables, controlar cuándo y cómo terminan los hijos y evitar que dejen basura en la tabla de procesos del sistema.</p>
+<h3>(b) Conceptos clave</h3>
+<ul><li>
+<strong>Creación de procesos con fork() , Condición de Carrera y Deadlock (Clases 2, 4)</strong>
+<ul><li>
+<strong>Definición:</strong> fork() clona el proceso invocante creando un hijo idéntico en código y variables, excepto en su PID, su PPID y el valor de retorno de fork() (de tipo pid_t): al <strong>padre</strong> le devuelve el PID del hijo (&gt; 0), al <strong>hijo</strong> le devuelve 0, y en caso de error devuelve -1. Ambos corren asíncronamente creando una <strong>condición de carrera</strong> (<em>race condition</em>); si el padre espera al hijo y el hijo espera al padre, ocurre un <strong>bloqueo o abrazo mortal</strong> (<em>deadlock</em>).
+</li><li>
+<strong>Analogía:</strong> Una máquina fotocopiadora instantánea que duplica a un trabajador con su hoja de instrucciones; a cada uno le entrega un gafete distinto (0 al clon, número del clon al original) para que un if/else los mande por pasillos diferentes.
+</li><li>
+<strong>Ejemplo de clase:</strong> En programa05_fork_v2.c, el padre tuvo PID 30405, el hijo 30406, el PPID del hijo fue 30405 y el PPID del padre fue el de la terminal bash. En programa_08 (3 caminos: -1, 0, &gt;0), se observó el caso en que el padre terminó antes que el hijo.
+</li></ul>
+</li><li>
+<strong>Proceso Huérfano y Subprocesos Reaper (Clase 4)</strong>
+<ul><li>
+<strong>Definición:</strong> Ocurre cuando el proceso padre termina o muere antes que el proceso hijo, dejando al hijo vivo sin padre. Como Linux no permite procesos huérfanos, el proceso con PID 1 (init/systemd) —o en distribuciones modernas un subproceso recogedor (<em>reaper</em>) dedicado a aliviar la carga del PID 1— lo adopta de inmediato.
+</li><li>
+<strong>Ejemplo de clase:</strong> Al ejecutar programa_08, en lugar de imprimir el PID del padre, getppid() del hijo imprimió 1 (y en la máquina Fedora moderna de un alumno imprimió otro PID perteneciente a un <em>reaper</em>).
+</li></ul>
+</li><li>
+<strong>Familia de funciones exec() (Clase 4)</strong>
+<ul><li>
+<strong>Definición:</strong> Familia de 6 funciones (execl, execv, execle, execve, execlp, execvp) que reemplazan la imagen completa del proceso actual por la de un nuevo ejecutable. A diferencia de fork(), no crea un proceso paralelo: si tiene éxito, el proceso original muere y solo queda el nuevo.
+</li><li>
+<strong>Analogía:</strong> Un actor en escena que, al leer la palabra mágica, desaparece instantáneamente y en su misma silla aparece otra persona con otro libreto.
+</li><li>
+<strong>Ejemplo de clase ( programa_10 ):</strong> execl("/bin/ls", "/bin/ls", "-l", "/", NULL) repitió /bin/ls porque el primer argumento es la ruta absoluta (PATH) y el segundo es argv (el nombre del ejecutable), cerrando la lista con NULL. Al cambiarlo intencionalmente a /bin/lsa, falló devolviendo -1 y perror("exec") imprimió No such file or directory; si no se pone exit(EXIT_FAILURE) dentro del if, el código posterior ("esto no se imprime") termina ejecutándose erróneamente.
+</li></ul>
+</li><li>
+<strong>Señales, signal() , kill() y modos Foreground/Background (Clases 6, 7)</strong>
+<ul><li>
+<strong>Definición:</strong> Notificaciones asíncronas enviadas a un proceso (man 7 signal). Ante una señal hay tres escenarios: (1) <strong>Ignorarla</strong> (SIG_IGN, programa_04), (2) <strong>Capturarla/Tratarla</strong> con una función void handler(int sig) que lo deje vivo (programa_05_v1 con variable static) o lo termine con exit(0) tras N veces (programa_05_v2), o (3) <strong>Señal imparable</strong> (SIGKILL / 9 y SIGSTOP) que no puede ignorarse ni capturarse (programa_06). Para detener un proceso en primer plano (<em>foreground</em>) se usa Ctrl+Z (SIGTSTP, 20), con bg pasa a segundo plano (<em>background</em>), jobs lista trabajos,, y fg &lt;num&gt; lo regresa a primer plano para poder matarlo con Ctrl+C (SIGINT, 2). En C, kill(pid, señal) envía señales programáticamente (programa_11: el padre duerme 10 s mientras el hijo imprime cada 1 s y luego lo mata con SIGKILL).
+</li></ul>
+</li><li>
+<strong>Proceso Zombie ( Z+ / ) y soluciones (Clase 7)</strong>
+<ul><li>
+<strong>Definición:</strong> Proceso hijo que ya terminó de ejecutarse (exit(0)) y envió la señal SIGCHLD (17 en x86/ARM) a su padre, pero permanece en la tabla de procesos en un estado entre vivo y muerto porque el padre está ocupado (ej. dormido) y no ha recogido ni limpiado la señal de la cola.
+</li><li>
+<strong>Analogía:</strong> Un empleado que ya terminó su turno y dejó su reporte de salida en la puerta, pero como el jefe está dormido, su ficha sigue marcada como pendiente en recepción.
+</li><li>
+<strong>Ejemplo de clase ( programa_08 zombie):</strong> El padre duerme 60 s y el hijo termina al instante; ps muestra al padre en S+ (<em>sleeping</em>) y al hijo en Z+ con &lt;defunct&gt; durante ese minuto hasta que el padre despierta y limpia la señal. El estatus X (muerto) existe en man ps pero jamás debe verse en salida. Soluciones en programa_09: ignorar SIGCHLD con SIG_IGN (como dejar pasar la pelota en béisbol) o implementar un manejador para SIGCHLD.
+</li></ul>
+</li></ul>
+<h3>(c) Tablas comparativas (Unidad 2)</h3>
+<div class="tabla-scroll"><table><tr><th>Letra en exec*</th><th>Significado</th><th>Forma de paso / Búsqueda</th></tr><tr><td>l (execl, execle, execlp)</td><td><em>List</em></td><td>Argumentos individuales terminados en NULL.</td></tr><tr><td>v (execv, execve, execvp)</td><td><em>Vector</em></td><td>Arreglo de cadenas (char *[]) terminado en NULL.</td></tr><tr><td>e (execle, execve)</td><td><em>Environment</em></td><td>Recibe arreglo de variables de entorno para esa ejecución.</td></tr><tr><td>p (execlp, execvp)</td><td><em>PATH</em></td><td>Busca el ejecutable por nombre en la variable PATH (no requiere ruta absoluta).</td></tr></table></div>
+<div class="tabla-scroll"><table><tr><th>Señal clave</th><th>Número (x86/ARM)</th><th>¿Se puede ignorar/tratar?</th><th>Origen o función principal</th></tr><tr><td>SIGHUP</td><td>1</td><td>Sí</td><td>Colgado / recarga.</td></tr><tr><td>SIGINT</td><td>2</td><td>Sí (SIG_IGN / handler)</td><td>Ctrl+C desde terminal.</td></tr><tr><td>SIGABRT</td><td>6</td><td>Sí (abort())</td><td>El proceso se aborta a sí mismo.</td></tr><tr><td>SIGKILL</td><td>9</td><td><strong>NO</strong> (siempre mata)</td><td>Equivalente al conjuro fulminante (kill -9).</td></tr><tr><td>SIGTERM</td><td>15</td><td>Sí</td><td>Apagado ordenado del sistema (<em>shutdown</em> ).</td></tr><tr><td>SIGCHLD / SIGCLD</td><td>17 (18 en otras arch.)</td><td>Sí (SIG_IGN / handler)</td><td>Hijo avisa al padre que va a morir; si no se recoge, genera <strong>zombie</strong> .</td></tr><tr><td>SIGTSTP</td><td>20</td><td>Sí</td><td>Ctrl+Z (detener terminal, no mata).</td></tr></table></div>
+<h3>(d) Errores comunes y puntos recalcados para examen (Unidad 2)</h3>
+<ul><li>
+Al usar kill entre distintas arquitecturas, usar el nombre de la macro (ej. -SIGKILL o -SIGBUS) porque los números pueden variar (SIGBUS es 7 en x86 y 10 en otras).
+</li><li>
+Olvidar que sleep(5) en C recibe <strong>segundos</strong> (no milisegundos como en Java).
+</li><li>
+No encerrar execl() en if (execl(...) == -1) con exit(EXIT_FAILURE): si el comando está mal escrito, el código siguiente al execl() se ejecutará.
+</li><li>
+Intentar matar con Ctrl+C un proceso que está en <em>background</em>: primero debe traerse a <em>foreground</em> con fg &lt;num&gt; (o enviar kill -9 &lt;PID&gt;).
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-3-fundamentos-de-redes-y-sockets-"><summary><span class="stitle">UNIDAD 3: FUNDAMENTOS DE REDES Y SOCKETS TCP EN C (TEMA 3)</span></summary>
+<h3>(a) Qué problema resuelve y cómo se conecta con el tema anterior</h3>
+<p>Los procesos ya saben nacer y enviarse señales dentro de una misma máquina, pero en la realidad las aplicaciones (WhatsApp, Netflix, bancos) son procesos corriendo en computadoras distintas separadas por redes. Los <strong>sockets</strong> permiten comunicar esos procesos a través de la red reutilizando el mismo concepto Unix de descriptores de archivo.</p>
+<h3>(b) Conceptos clave</h3>
+<ul><li>
+<em>Arquitectura Cliente-Servidor, Socket, Descriptores y Familias AF_ (Clases 7, 8)*</em>
+<ul><li>
+<strong>Definición:</strong> Modelo que divide tareas en <strong>Cliente</strong> (software que solicita un servicio con IP/dominio y puerto del servidor) y <strong>Servidor</strong> (software que provee el servicio). Un <strong>socket</strong> es cada extremo del canal de comunicación entre procesos y se maneja como un descriptor de archivo. Como 0 (entrada estándar/teclado), 1 (salida estándar/monitor) y 2 (error estándar/monitor, con prioridad de salida) están reservados, el primer socket abierto recibe el descriptor 3, el siguiente 4, etc..
+</li><li>
+<strong>Analogía:</strong> El socket es como el casquillo donde enroscas el foco en casa, pero en lugar de foco enroscas un proceso.
+</li><li>
+<strong>Familias de socket:</strong> AF_INET (IPv4 de 4 bytes / 4 octetos de 0 a 255), AF_INET6 (IPv6), AF_UNIX (procesos en la misma máquina usando archivos del sistema, como MySQL/PostgreSQL por defecto), AF_NETLINK (kernel-usuario), AF_BLUETOOTH y AF_PACKET (tramas crudas en capa 2 para <em>sniffers</em>).
+</li></ul>
+</li><li>
+<strong>Puertos lógicos, IANA y Tipos de Socket (Clases 7, 8, 9)</strong>
+<ul><li>
+<strong>Definición:</strong> Un puerto lógico es un identificador de 16 bits (216=65,536 puertos, del 0 al 65,535). La <strong>IANA</strong> (<em>Internet Assigned Numbers Authority</em>) clasifica los primeros 1024 puertos (0–1023) como reservados para el administrador (root: SSH 22, correo 25, HTTP 80, HTTPS 443, MySQL 3306), y de 1024 a 65,535 para programas de usuario (como 4898 o 8080 de Apache/Tomcat). Tipos de socket: SOCK_STREAM (TCP, capa 4, fiable y ordenado: ABC llega ABC) vs SOCK_DGRAM (UDP, no confiable).
+</li></ul>
+</li><li>
+<strong>Estructuras sockaddr_in , hostent , DNS Round-Robin y Conversiones (Clases 8, 9, 10, 11, 13)</strong>
+<ul><li>
+<strong>struct sockaddr_in :</strong> Tiene 4 atributos (sin_ = <em>socket internet</em>): sin_family (AF_INET o su equivalente PF_INET), sin_port (puerto convertido de decimal a binario de red con htons() = <em>Host To Network Short</em>), sin_addr.s_addr (IP binaria; en el servidor suele usarse INADDR_ANY para escuchar por todas sus interfaces de red, incluida 127.0.0.1 loopback), y sin_zero (8 ceros '\0' con memset, opcional en Linux moderno).
+</li><li>
+<strong>struct hostent y DNS:</strong> gethostbyname() consulta el DNS y devuelve struct hostent * (o NULL si falla), con h_name y h_addr_list (donde h_addr es h_addr_list). En clase, consultar www.google.com devolvió 8 IPs rotando por <strong>DNS round-robin</strong> (alta disponibilidad), mientras google.com devolvió 1 IP.
+</li><li>
+<strong>Conversiones de IP:</strong> Donde aparece <strong>n</strong> (<em>network</em>) es binario de máquina; <strong>a</strong> (<em>ASCII/address</em>) o <strong>p</strong> (<em>presentation</em>) es texto legible por humanos. Así: inet_aton() / inet_addr() (texto → binario), inet_ntoa() y inet_ntop() (binario → texto). En clase se desmenuzó de adentro hacia afuera inet_ntoa(*(struct in_addr *)H-&gt;h_addr_list).
+</li></ul>
+</li><li>
+<strong>Ciclo completo de funciones Socket y doble socket del Servidor (Clases 9, 10, 11, 12, 13, 17)</strong>
+<ul><li>
+<strong>Lado Servidor (2 estructuras sockaddr_in y 2 descriptores):</strong> 1. socket(AF_INET, SOCK_STREAM, 0) (o IPPROTO_TCP): crea el socket y devuelve fd_s (3). 1. setsockopt(fd_s, SOL_SOCKET, SO_REUSEADDR, &amp;(int){1}, sizeof(int)): permite reusar el puerto inmediatamente aunque esté en estado TIME_WAIT tras matar el servidor con Ctrl+C, evitando <em>"Address already in use"</em>. 1. Inicializar con memset la estructura servidor. 1. bind(fd_s, (struct sockaddr *)\&amp;servidor, sizeof(servidor)): liga/nombra el socket con IP y puerto. 1. listen(fd_s, backlog): pone al servidor en escucha y define la cola de espera. 1. accept(fd_s, (struct sockaddr *)\&amp;cliente, \&amp;long_cliente): bloquea esperando un cliente, inicializa automáticamente la estructura cliente y devuelve el segundo descriptor <strong>fdc</strong> (4) para comunicarse. El servidor usa fd_s para aceptar y fd_c para send/recv, requiriendo dos close() (close(fd_c) y close(fd_s)).
+</li><li>
+<strong>Lado Cliente (1 estructura sockaddr_in y 1 descriptor fd ):</strong> socket() → inicializa servidor con IP (memcpy o inet_addr) y puerto (htons) → connect() (devuelve 0 o -1, por lo que puede meterse en un while con sleep() para reintentar) → send/recv → close(fd).
+</li><li>
+<strong>Intercambio síncrono y truncado de búferes:</strong> Se deben emparejar send()/recv() o write()/read() sin mezclarlos. recv() devuelve n (bytes reales leídos); para imprimir exacto en pantalla se usa write(1, buff, n). En el chat secuencial (programa_05), do-while limpia el búfer en cada ciclo con memset, trunca el salto de línea (buff[n-1] = '\0') y termina con "adiós" enviando el servidor una respuesta automática.
+</li></ul>
+</li><li>
+<strong>Saludo de 3 vías TCP, Doble Cola ( SYN y Accept ), sk_acceptq_is_full() y Puertos Efímeros (Clases 12, 13, 18)</strong>
+<ul><li>
+<strong>Definición:</strong> Cuando el cliente llama connect(), ocurre el <em>Three-Way Handshake</em>: (1) cliente manda SYN (estado SYN_SENT), (2) servidor responde SYN+ACK (SYN_RECV) y mete la petición en la <strong>cola SYN</strong>, (3) cliente responde ACK (ESTABLISHED) y el servidor mueve la conexión a la <strong>cola Accept</strong> definida por backlog en listen().
+</li><li>
+<strong>Regla backlog + 1 :</strong> La función del kernel sk_acceptq_is_full() compara con &gt; en vez de &gt;= (1 &gt; 1 es falso), por lo que la cola acepta <strong>backlog + 1</strong> conexiones en espera (ej. con backlog = 1 atiende a 1, encola 2 y rechaza hasta el cliente 4).
+</li><li>
+<strong>Puertos Efímeros y NAT (Tarea 4 y Clase 17/18):</strong> Cuando varios clientes detrás de una misma IP pública (ej. PC Puma 132.247.100.226, bloque /16 = 216=65,536 nodos) salen al mismo servidor 132.248.59.6:4898, el SO asigna a cada cliente una puerta de salida temporal distinta llamada <strong>puerto efímero</strong> (observados en vivo con watch -n1 "ss -atnp": 49802, 48469, 49808, 46740, 49210, 51448).
+</li></ul>
+</li><li>
+<strong>Fragmentación TCP, Búferes y Servidor HTTP/PDF (Clases 14, 15)</strong>
+<ul><li>
+<strong>Definición:</strong> TCP no garantiza entregar mensajes grandes en una sola lectura; los segmenta según el búfer del kernel (/proc/sys/net/core/rmem_default y rmem_max = 212,992), la latencia y los bytes enviados. Solución: leer en bucle while ((n = read(...)) &gt; 0).
+</li><li>
+<strong>Ejemplo en vivo ( compara_tiempos_buffers.c ):</strong> Consultando www.google.com:80 con tamaños 1024, 4096 (teóricamente óptimo por ser 1 página de memoria), 8192, 16384 y 100000, en la práctica 8 KB, 16 KB y 100 KB fueron más rápidos (0.0011 s y 0.0004 s vs 0.0013 s de 4 KB), variando ligeramente los bytes recibidos (90,442, 90,378, 90,246) por diferencias dinámicas en las cabeceras HTTP.
+</li><li>
+<strong>programa_08_servidor_pdf.c :</strong> Despacha holamundo.pdf enviando cabeceras HTTP (200 OK, Content-Type: application/pdf vs 404 text/plain), usando recv(..., MSG_DONTWAIT) para descartar las cabeceras del navegador sin bloquear clientes que no envían HTTP, y enviando bloques de 8192 bytes restando los bytes enviados de los restantes (left) con aritmética de punteros.
+</li></ul>
+</li><li>
+<strong>Evolución de Servidores: Secuencial ( 05 ) vs Concurrente fork() ( 06 ) vs Multiplexado select() ( 07 ) (Clases 16, 17, 18)</strong>
+<ul><li>
+<strong>Servidor Concurrente ( programa_06 ):</strong> Tras accept(), llama a fork(). El <strong>hijo</strong> (if (pid == 0)) declara localmente sus búferes para ahorrar RAM en el padre, ejecuta <strong>close(fds)</strong> (no acepta clientes), atiende al cliente y al terminar cierra fd_c y muere; el <strong>padre</strong> (else) ejecuta <strong>close(fdc)</strong> (no conversa con clientes) y regresa al while(1) a accept(). Registra conexión usando time(), localtime() y struct tm (tm_mon + 1, tm_year + 1900). Limitación: los hijos tienen <strong>memorias separadas</strong> y no pueden reenviarse mensajes para un chat grupal.
+</li><li>
+<strong>Multiplexación con select() ( programa_07_servidor_grupal.c ):</strong> Un único proceso vigila múltiples descriptores en un arreglo client_socket[] usando el conjunto fd_set y 4 macros: FD_ZERO (vacía el conjunto), FD_SET (agrega un fd), FD_CLR (elimina un fd) y FD_ISSET (verifica actividad). select(max_fd + 1, \&amp;readfds, writefds, errorfds, timeout) bloquea sin consumir CPU hasta que algún descriptor esté listo. Si hay actividad en master_socket, acepta y guarda al cliente; si es en un cliente y read() devuelve 0 (Ctrl+C en nc -v), imprime desconexión y limpia su ranura; si trae texto, usa getpeername() + inet_ntop() y hace <strong>broadcast</strong> a todos los demás clientes excepto al remitente.
+</li></ul>
+</li><li>
+<strong>Sockets Crudos ( SOCK_RAW / AF_PACKET ), Sniffer y Niveles de Seguridad (Clase 18)</strong>
+<ul><li>
+<strong>Definición:</strong> Sockets de capa 2 (socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL))) que entregan tramas Ethernet y segmentos TCP completos sin que el kernel los procese. Requieren privilegios de superusuario (sudo/root) y colocar la tarjeta de red en <strong>modo promiscuo</strong> (los 3 modos de tarjeta son: <em>default</em>, <em>promiscuo</em> y <em>monitor</em> para Wi-Fi; no confundir con las "4 P's" de seguridad en redes: Paranoico, Prohibitivo, Permissivo y Promiscuo). Permite ataques <em>Man-in-the-Middle</em> para reconstruir texto plano o PDFs interceptados.
+</li></ul>
+</li></ul>
+<h3>(c) Comparación de arquitecturas de servidor (Unidad 3)</h3>
+<div class="tabla-scroll"><table><tr><th>Programa</th><th>Modelo</th><th>Manejo de accept() y procesos</th><th>Comunicación entre clientes</th><th>Límite / Desventaja</th></tr><tr><td>programa_04</td><td>Único cliente</td><td>Acepta 1 cliente, envía frase fija, cierra todo.</td><td>Nula.</td><td>Muere tras 1 cliente.</td></tr><tr><td>programa_05</td><td>Secuencial</td><td>while(1) con accept() y do-while interno.</td><td>Nula.</td><td>Bloquea a los demás en cola listen (backlog + 1).</td></tr><tr><td>programa_06</td><td>Concurrente (fork)</td><td>accept() crea hijo; hijo close(fd_s), padre close(fd_c).</td><td>Imposible directo (memorias aisladas).</td><td>No sirve para chat grupal sin <em>pipes</em> /IPC; costo de clonar procesos.</td></tr><tr><td>programa_07</td><td>Multiplexado (select)</td><td>1 solo proceso; select(max_fd + 1, ...) vigila fd_set.</td><td><strong>Sí</strong> (broadcast por arreglo client_socket).</td><td>Limitado por tamaño de arreglo/fd_set.</td></tr></table></div>
+<h3>(d) Errores comunes y puntos recalcados para examen (Unidad 3)</h3>
+<ul><li>
+<strong>Pregunta explícita de examen teórico (Clase 17):</strong> ¿Cómo distinguir a simple vista el código de un servidor frente al de un cliente? El servidor tiene <strong>dos</strong> estructuras sockaddr_in (propia y cliente) y dos descriptores (fd_s y fd_c), mientras que el cliente solo tiene <strong>una</strong> estructura sockaddr_in y un descriptor.
+</li><li>
+En programa_06, olvidar close(fd_s) en el hijo o close(fd_c) en el padre deja descriptores fugados y colgados.
+</li><li>
+No verificar if (info_cliente != NULL) tras gethostbyaddr() provoca <em>segmentation fault</em> cuando el DNS no resuelve la IP del cliente.
+</li><li>
+En programa_05, omitir memset en cada ciclo del chat provoca que mensajes cortos se mezclen con sobrantes de mensajes largos anteriores (como ocurrió en vivo con "Hola, me llamo Víctor" -&gt; "Soy ingeniero" -&gt; "taco").
+</li><li>
+En struct tm, olvidar sumar + 1 a tm_mon (meses 0–11) y + 1900 a tm_year.
+</li><li>
+En select(), olvidar reiniciar FD_ZERO y reinsertar descriptores en cada vuelta del while(1).
+</li><li>
+Olvidar configurar tcp_syncookies = 0 y tcp_syn_retries = 1 (en vez de 5 = 63 s o 6 = 180 s) al probar el rechazo por desbordamiento de cola en la Tarea 4.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-4-criptografia-simetrica-transfer"><summary><span class="stitle">UNIDAD 4: CRIPTOGRAFÍA SIMÉTRICA, TRANSFERENCIA DE ARCHIVOS Y CIBERSEGURIDAD (TEMA 4)</span></summary>
+<h3>(a) Qué problema resuelve y cómo se conecta con el tema anterior</h3>
+<p>Como demostró el <em>sniffer</em> de capa 2, enviar mensajes o PDFs en claro permite que cualquiera en la red reconstruya la información. Además, hasta la Unidad 3 no se había programado un cliente-servidor propio para transferir directorios y archivos binarios completos. Esta unidad une criptografía simétrica OpenSSL (EVP) con transferencia de archivos por bloques para obtener un FTP seguro y comprender el <em>ransomware</em>.</p>
+<h3>(b) Conceptos clave</h3>
+<ul><li>
+<strong>Relleno ( Padding ) PKCS y Cifrado Simétrico AES-256-CBC con OpenSSL EVP (Clases 21, 22)</strong>
+<ul><li>
+<strong>Definición:</strong> AES opera sobre bloques fijos de 16 bytes (DES usaba 8). El relleno <strong>PKCS</strong> completa los k bytes faltantes hasta el siguiente múltiplo de 16 llenando cada byte faltante con el valor numérico k. Si la cadena ya mide exactamente 16 bytes, el algoritmo agrega un bloque entero adicional de 16 bytes con valor 16, subiendo a 32 bytes.
+</li><li>
+<strong>Analogía:</strong> Tarimas de paquetería de 16 espacios: si mandas 10 cajas, llenas los 6 huecos con espuma marcada con el número "6"; si llenas los 16 espacios justos, debes mandar otra tarima vacía de 16 espumas marcadas con "16" para que el receptor sepa dónde acaba el mensaje real.
+</li><li>
+<strong>Ciclo EVP ( , ):</strong> Utiliza una llave simétrica de 32 bytes (256 bits) guardada/leída en binario ("wb" / "rb") y un Vector de Inicialización (IV) aleatorio de 16 bytes (RAND_bytes), que hace que una misma entrada produzca salidas distintas cada vez. Ciclo de cifrado: EVP_CIPHER_CTX_new() → EVP_EncryptInit_ex(..., EVP_aes_256_cbc(), NULL, key, iv) → EVP_EncryptUpdate() → EVP_EncryptFinal_ex(). El descifrado usa las funciones simétricas DecryptInit_ex, DecryptUpdate, DecryptFinal_ex con <strong>exactamente la misma llave y el mismo IV</strong>.
+</li><li>
+<strong>Inspección de bytes ( bytes_to_bits en crypto_v2.c ):</strong> Un bloque cifrado de 16 bytes imprime 32 caracteres en hexadecimal (2 hex por byte). En ASCII (0–255), los primeros 33 valores (0 al 32, espacio) no son visibles en pantalla; los visibles empiezan en el 33 (!). Si el bit más significativo del char es 1, el valor decimal sale negativo por complemento a dos.
+</li></ul>
+</li><li>
+<strong>Protocolo Cifrado Cliente-Servidor de 3 envíos ( servidor_texto_crypto.c / cliente_texto_crypto.c ) (Clases 21, 22)</strong>
+<ul><li>
+<strong>Definición:</strong> Como el IV de 16 bytes es aleatorio por ejecución y la longitud cifrada varía como múltiplo de 16, el cliente realiza <strong>3 send()</strong> y el servidor <strong>3 recv()</strong> en estricto orden: (1) IV de 16 bytes, (2) longitud del texto encriptado (para reservar memoria exacta), y (3) arreglo de bytes encriptados (longitud_original + EVP_MAX_BLOCK_LENGTH).
+</li><li>
+<strong>Compilación:</strong> Requiere enlazar dos librerías al final: gcc archivo.c -o archivo -lssl -lcrypto (con y).
+</li><li>
+<strong>Ejemplo de clase:</strong> Al enviar "Carlos" (6 caracteres → 16 bytes cifrados), los 16 bytes (119, -111, -72,..., -40) llegaron idénticos, pero al inicio el descifrado salía en blanco porque el servidor había regenerado un llave.key distinto al de GitHub; se corrigió copiando la llave con scp.
+</li></ul>
+</li><li>
+<strong>Encriptación de Archivos Completos ( encriptador.c / desencriptador.c ) (Clase 22)</strong>
+<ul><li>
+<strong>Definición:</strong> Cifrado de archivos arbitrarios (texto, PDF, MP4 de 2 GB) que no caben enteros en RAM, procesándolos por pedazos (<em>chunks</em>) en un bucle while con búfer de entrada de <strong>4096 bytes</strong> (tamaño de una página de memoria del SO) y búfer de salida de <strong>4096 + EVP_MAX_BLOCK_LENGTH</strong>. Usa snprintf para construir &lt;archivo&gt;.encrypt evitando desbordamientos de búfer.
+</li><li>
+<strong>Sincronización del IV y llave:</strong> Guarda la llave en llave_archivo.key (32 bytes) y escribe los 16 bytes del <strong>IV sin encriptar al inicio del archivo .encrypt</strong> antes de escribir los bloques cifrados.
+</li><li>
+<strong>Ejemplo en vivo:</strong> archivo.txt con "Hola Mundo" (10 bytes, 11 en Linux por el salto de línea \n) generó archivo.txt.encrypt de <strong>32 bytes</strong> (16 del IV + 16 del bloque cifrado). Al pasarlo por desencriptador, generó .decrypt idéntico al original sin borrar archivos.
+</li></ul>
+</li><li>
+<strong>Listado de directorios ( ) y Transferencia de Archivos FTP ( cliente_envia_archivos.c / servidor_recibe_archivos.c ) (Clase 23)</strong>
+<ul><li>
+<strong>Listado local ( listado_archivos.c ):</strong> Usa DIR *carpeta = opendir("."), recorre con while ((archivo = readdir(carpeta)) != NULL) accediendo al nombre con operador flecha <strong>archivo-&gt;d_name</strong> (por ser apuntador a struct dirent) y cierra con closedir().
+</li><li>
+<strong>Arquitectura FTP (3 envíos por archivo y accept() fuera del while(1) ):</strong>
+</li><li>
+<strong>Cliente (4 argumentos: ./cliente ):</strong> Recorre el directorio omitiendo "." (directorio actual) y ".." (directorio padre), y por cada archivo envía: (A) nombre (256 chars máx., límite del SO), (B) tamaño en tipo <strong>long</strong> (obtenido con stat st_size, más amplio que int), y (C) contenido binario ("rb") en bloques de 1024 bytes con fread + send.
+</li><li>
+<strong>Servidor (2 argumentos: ./servidor ):</strong> Coloca <strong>accept() ANTES del while(1)</strong> porque atiende a un solo cliente y usa el while(1) para recibir N archivos secuenciales en esa misma conexión. Paso A: recv nombre (si &lt;= 0 el cliente terminó -&gt; break). Paso B: recv tamaño long y fopen(..., "wb"). Paso C: bucle while (total_recibido &lt; tamano_archivo) calculando a_leer para no pasarse en el último bloque (if (tamano_archivo - total_recibido &lt; 1024)), escribiendo con fwrite y cerrando con fclose.
+</li><li>
+<strong>Traza en vivo:</strong> Archivo de 2048 bytes con búfer 1024 realiza exactamente 2 subciclos (0 + 1024 = 1024 &lt; 2048 verdadero; 1024 + 1024 = 2048 &lt; 2048 falso). Prueba desde Codespaces hacia 132.248.59.6:4898 transfiriendo archivo1.txt y archivo2.txt (21 bytes cada uno).
+</li></ul>
+</li><li>
+<strong>Anatomía de Ransomware y DDoS (Clases 22, 23)</strong>
+<ul><li>
+<strong>Ransomware (4 pasos):</strong> (1) Ingeniería social / phishing (revisar origen real del correo con <em>"Mostrar original"</em> / <em>"Ver origen del mensaje"</em>, no confiar solo en el campo From, ni escanear QR desconocidos); (2) Infección; (3) Exfiltración en segundo plano abriendo un socket (causa lentitud; los archivos pueden viajar en texto plano y luego cifrarse en la víctima, o cifrarse primero y enviarse ya cifrados); (4) Cifrado local y extorsión en Bitcoin. Tener respaldos evita parar operaciones, pero <strong>no evita el daño reputacional ni el económico</strong> porque el atacante ya robó copia de los datos.
+</li><li>
+<strong>DDoS / SYN Flood :</strong> Botnets de dispositivos IoT saturan la cola SYN; valores altos en parámetros de red (tcp_syn_retries 5/6) generan muchos reintentos, mientras 0 y 1 (Tarea 4) descartan rápido para no retener conexiones semiabiertas.
+</li></ul>
+</li></ul>
+<h3>(c) Comparación del protocolo de 3 pasos en Cifrado vs FTP (Unidad 4)</h3>
+<div class="tabla-scroll"><table><tr><th>Aspecto</th><th>Cifrado Cliente-Servidor (texto_crypto)</th><th>Encriptador de Archivos (encriptador)</th><th>FTP (envia / recibe_archivos)</th></tr><tr><td><strong>Metadatos iniciales</strong></td><td>Envío 1: IV (16 bytes). Envío 2: Longitud cifrada.</td><td>Primeros 16 bytes del archivo .encrypt guardan el IV sin cifrar.</td><td>Envío 1: Nombre (256 chars máx.). Envío 2: Tamaño (long).</td></tr><tr><td><strong>Transferencia / Proceso</strong></td><td>Envío 3: Texto encriptado (+ EVP_MAX_BLOCK_LENGTH).</td><td>Bucle de lectura-cifrado-escritura en bloques de 4096 bytes.</td><td>Bucle total_recibido &lt; tamano en bloques de 1024 bytes.</td></tr><tr><td><strong>Modos de archivo</strong></td><td>"rb" para leer llave.key (32 bytes).</td><td>"rb" origen, "wb" .encrypt y llave_archivo.key.</td><td>"rb" en cliente, "wb" en servidor.</td></tr></table></div>
+<h3>(d) Errores comunes y puntos recalcados para examen (Unidad 4)</h3>
+<ul><li>
+Creer que el relleno PKCS rellena con ceros o olvidar que una cadena exacta de 16 bytes crece a 32 bytes (agregando 16 bytes de valor 16).
+</li><li>
+Confundir 32 caracteres hexadecimales con 32 bytes (32 hex = 16 bytes) o intentar contar 32 caracteres visibles en .encrypt (los bytes ASCII 0–32 son no imprimibles).
+</li><li>
+Compilar sin -lssl -lcrypto (o escribir cripto con i).
+</li><li>
+Usar llaves distintas entre cliente y servidor: los bytes cifrados llegan idénticos, pero el descifrado sale vacío.
+</li><li>
+No omitir "." y ".." al recorrer directorios con readdir(), usar int en lugar de long para el tamaño de archivo, o colocar accept() dentro del while(1) en el servidor receptor de múltiples archivos.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-lo-que-mas-probablemente-viene-en-el-fin" open><summary><span class="stitle">LO QUE MÁS PROBABLEMENTE VIENE EN EL FINAL</span></summary>
+<ul><li>
+<strong>Diferenciación entre Cliente y Servidor en código y gestión de los dos sockets ( fds vs fdc )</strong>
+<ul><li>
+<strong>Evidencia:</strong> El profesor lo planteó explícitamente como <em>"pregunta de examen teórico"</em> en la Clase 17 (servidor tiene 2 sockaddr_in y 2 descriptores; cliente solo 1) y dijo en la Clase 10: <em>"Entendiendo esto ya prácticamente tienen aprobada la materia"</em>.
+</li></ul>
+</li><li>
+<strong>Cierre cruzado de descriptores tras fork() en servidores concurrentes ( programa_06 )</strong>
+<ul><li>
+<strong>Evidencia:</strong> Lo dibujó en pizarrón, lo repitió en la Clase 16 y en la Clase 17 advirtió que <em>"esto es lo complicado"</em>: el hijo ejecuta close(fd_s) y usa fd_c; el padre ejecuta close(fd_c) y conserva fd_s para regresar a accept().
+</li></ul>
+</li><li>
+<strong>Por qué fork() no sirve para chat grupal y cómo funciona select() con fd_set ( programa_07 )</strong>
+<ul><li>
+<strong>Evidencia:</strong> Explicó en la Clase 17 que las memorias aisladas de los hijos impiden triangular mensajes, y en la Clase 18 desglosó los 5 argumentos de select() en Open Group y las 4 macros (FD_ZERO, FD_SET, FD_CLR, FD_ISSET).
+</li></ul>
+</li><li>
+<strong>Saludo de 3 vías TCP, colas SYN / Accept y regla backlog + 1 de sk_acceptq_is_full()</strong>
+<ul><li>
+<strong>Evidencia:</strong> Fue el núcleo de la Tarea 4 y se analizó en las Clases 12, 13 y 23 (operador &gt; en lugar de &gt;= en el kernel, ataque <em>SYN flood</em> y efecto de tcp_syncookies = 0 y tcp_syn_retries = 1).
+</li></ul>
+</li><li>
+<strong>Conversiones de red ( htons , inet_aton / inet_addr , inet_ntoa , inet_ntop ) y macro INADDR_ANY</strong>
+<ul><li>
+<strong>Evidencia:</strong> Lo repitió desde la Clase 9 hasta la 23, dedicó un PDF completo en la Clase 13 a desmembrar inet_ntoa(*(struct in_addr *)H-&gt;h_addr_list) y exigió htons y captura de IP como requisitos obligatorios del examen parcial.
+</li></ul>
+</li><li>
+<strong>Bit SetUID ( chmod 4511 ), ID real vs efectivo ( getuid vs geteuid ) y /etc/passwd vs /etc/shadow</strong>
+<ul><li>
+<strong>Evidencia:</strong> Fue la Tarea 2 completa (Clases 2 y 3), probada en vivo con programa_02_ids.c obteniendo Real 1000 y Efectivo 0 durante la ejecución.
+</li></ul>
+</li><li>
+<strong>Ciclo fork() , procesos huérfanos ( reaper ), procesos zombie ( Z+ ) y familia exec()</strong>
+<ul><li>
+<strong>Evidencia:</strong> El profesor recalcó el manejo de error con if (... == -1) y exit(EXIT_FAILURE) en execl() (Clase 4), resolvió en vivo los valores de getpid/getppid en fork() (Clase 2) y dedicó el cierre del Tema 2 a provocar y evitar zombies mediante SIGCHLD (Clase 7).
+</li></ul>
+</li><li>
+<strong>Relleno PKCS a 16 bytes, ciclo EVP de OpenSSL ( -lssl -lcrypto ) y protocolo de 3 envíos (IV, longitud, cifrado)</strong>
+<ul><li>
+<strong>Evidencia:</strong> Resolvió múltiples ejemplos numéricos de relleno en vivo (10, 11, 12 y 16 bytes -&gt; 32 bytes) en la Clase 21, comparó lado a lado Encrypt* vs Decrypt*, y remarcó que son obligatoriamente 3 send / 3 recv y compilar con -lssl -lcrypto.
+</li></ul>
+</li><li>
+<strong>Cifrado de archivos por bloques de 4096 bytes y ubicación del IV al inicio de .encrypt</strong>
+<ul><li>
+<strong>Evidencia:</strong> En la Clase 22 señaló explícitamente la pregunta teórica del PDF sobre por qué se usa 4096 bytes (tamaño de página de memoria), mostró snprintf y 4096 + EVP_MAX_BLOCK_LENGTH, y demostró por qué "Hola Mundo" (10 bytes) resulta en un .encrypt de 32 bytes (16 IV + 16 bloque).
+</li></ul>
+</li><li>
+<strong>Transferencia FTP de directorios ( , omisión de "." y ".." , accept() antes de while(1) y traza de bloques de 1024 )</strong>
+<ul><li>
+<strong>Evidencia:</strong> En la Clase 23 señaló con un comentario explícito la posición de accept() antes del while(1), preguntó al grupo qué atributos necesita el servidor (nombre, tamaño long, contenido) y resolvió paso a paso la traza numérica de 2048 bytes en bloques de 1024.
+</li></ul>
+</li><li>
+<strong>Limpieza y truncado de búferes ( memset , buff[n-1] ), setsockopt(SO_REUSEADDR) y fragmentación TCP</strong>
+<ul><li>
+<strong>Evidencia:</strong> Demostró en vivo el desastre al comentar memset en el chat (Clase 13), explicó SO_REUSEADDR advirtiendo que les servirá para el proyecto final (Clase 14) y enfatizó el bucle while ((n = read(...)) &gt; 0) en TCP (Clases 14 y 15).
+</li></ul>
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-conexiones-clave"><summary><span class="stitle">CONEXIONES CLAVE</span></summary>
+<ul><li>
+Imagen del proceso -&gt; divide memoria en -&gt; Segmentos estáticos (Text, Data, BSS) y dinámicos (Heap, Stack)
+</li><li>
+size -&gt; inspecciona -&gt; Segmentos estáticos del ejecutable en disco
+</li><li>
+pmap -&gt; consulta al kernel -&gt; Páginas dinámicas de 4 KB sin permisos de ejecución
+</li><li>
+/etc/passwd -&gt; almacena -&gt; Identidad real del usuario leída por getuid()
+</li><li>
+Bit SetUID (chmod 4511) -&gt; eleva temporalmente -&gt; Identidad efectiva (geteuid()) al dueño del binario
+</li><li>
+fork() -&gt; clona el proceso devolviendo -&gt; PID del hijo al padre y 0 al hijo
+</li><li>
+Ejecución asíncrona tras fork() -&gt; puede provocar -&gt; Condiciones de carrera y bloqueos mutuos (<em>deadlock</em>)
+</li><li>
+Muerte prematura del padre -&gt; convierte al hijo en -&gt; Proceso huérfano adoptado por PID 1 o por un <em>reaper</em>
+</li><li>
+Terminación del hijo -&gt; envía -&gt; Señal SIGCHLD (17) al padre para limpiar la tabla de procesos
+</li><li>
+Padre dormido sin recoger SIGCHLD -&gt; transforma al hijo en -&gt; Proceso zombie (Z+ &lt;defunct&gt;)
+</li><li>
+Familia exec() -&gt; reemplaza -&gt; La imagen del proceso invocante por un nuevo ejecutable
+</li><li>
+Ctrl+Z (SIGTSTP) + bg -&gt; mueven -&gt; Un proceso de <em>foreground</em> a <em>background</em> controlado con jobs y fg
+</li><li>
+SIGKILL (9) -&gt; supera -&gt; Cualquier intento de ignorar (SIG_IGN) o capturar con signal()
+</li><li>
+Descriptores reservados 0, 1, 2 -&gt; dejan disponibles -&gt; Descriptores 3, 4, 5 para nuevos sockets
+</li><li>
+struct sockaddr_in -&gt; configura -&gt; Familia (AF_INET), puerto (htons) e IP (INADDR_ANY / inet_addr)
+</li><li>
+gethostbyname() -&gt; consulta DNS devolviendo -&gt; struct hostent * con múltiples IPs en <em>DNS round-robin</em>
+</li><li>
+inet_ntoa / inet_ntop -&gt; traducen -&gt; Direcciones IP de binario de red (n) a texto legible (a/p)
+</li><li>
+socket() + bind() + listen() -&gt; preparan -&gt; El socket servidor (fd_s) para recibir conexiones en accept()
+</li><li>
+setsockopt(SO_REUSEADDR) -&gt; evita -&gt; El error de puerto ocupado en estado TIME_WAIT al reiniciar el servidor
+</li><li>
+Saludo de tres vías (SYN / SYN+ACK / ACK) -&gt; alimenta -&gt; La cola SYN y la cola Accept del kernel
+</li><li>
+sk_acceptq_is_full() con operador &gt; -&gt; permite encolar -&gt; backlog + 1 peticiones en espera en listen()
+</li><li>
+accept() -&gt; devuelve -&gt; El descriptor fd_c dedicado a send() y recv() con el cliente
+</li><li>
+IP pública compartida (NAT) -&gt; distingue clientes simultáneos mediante -&gt; Puertos efímeros únicos asignados en el cliente
+</li><li>
+Fragmentación TCP y búferes del kernel -&gt; obligan a -&gt; Leer mensajes grandes en bucle while hasta devolver 0
+</li><li>
+Servidor concurrente (programa_06) -&gt; logra paralelismo mediante -&gt; fork(), cerrando fd_s en el hijo y fd_c en el padre
+</li><li>
+Memoria aislada de procesos hijos con fork() -&gt; exige usar -&gt; Multiplexación con select() y fd_set para chats grupales
+</li><li>
+SOCK_RAW con AF_PACKET -&gt; intercepta en capa 2 -&gt; Tramas Ethernet sin cifrar usando modo promiscuo
+</li><li>
+Relleno PKCS -&gt; expande los bloques -&gt; Al siguiente múltiplo de 16 bytes (y de 16 a 32 bytes)
+</li><li>
+Cifrado simétrico EVP (AES-256-CBC) -&gt; requiere sincronizar -&gt; La misma llave de 32 bytes (llave.key) y el mismo IV de 16 bytes
+</li><li>
+cliente_texto_crypto -&gt; transmite al servidor en orden -&gt; IV (16 bytes), longitud cifrada y bloque cifrado (3 send/recv)
+</li><li>
+encriptador.c -&gt; procesa archivos arbitrarios -&gt; En bloques de página de 4096 bytes anteponiendo el IV al archivo .encrypt
+</li><li>
+&lt;dirent.h&gt; (opendir/readdir) -&gt; permite recorrer -&gt; Un directorio completo omitiendo "." y ".." para transferir archivos
+</li><li>
+servidor_recibe_archivos.c -&gt; coloca accept() antes de while(1) para -&gt; Recibir múltiples archivos de un mismo cliente en bloques de 1024 bytes
+</li><li>
+Sockets en segundo plano + encriptador -&gt; reproducen la mecánica -&gt; De exfiltración y secuestro de datos de un <em>ransomware</em>
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-anexo-clases-que-no-estaban-en-el-cuader"><summary><span class="stitle">Anexo · Clases que no estaban en el cuaderno de NotebookLM</span></summary>
+<p><em>Resumen para estudiar de cada una, tomado de los apuntes por clase del sitio (decimo/ACS/ACS-Resumenes/).</em></p>
+<h3>Clase 5 · Estados de un proceso, señales, wait() y zombies (martes 8 sep 2026)</h3>
+<p><em>Versión corta de lo que más probablemente se pregunta. Léela primero y vuelve a la Parte 1 si algo no queda claro.</em></p>
+<div class="tabla-scroll"><table><tr><th>Concepto</th><th>Para recordar</th></tr><tr><td>Estados</td><td>9; el 9 es zombie</td></tr><tr><td>Señales</td><td>Asíncronas; KILL 9 ineludible, TERM 15 manejable</td></tr><tr><td>SIGCHLD</td><td>17 en x86/ARM (18 en la tabla System V)</td></tr><tr><td>wait()</td><td>Bloquea al padre; WIFEXITED, WEXITSTATUS, WIFSIGNALED, WTERMSIG</td></tr><tr><td>Zombie</td><td>Padre no llamó wait(); ps: Z+ defunct</td></tr><tr><td>\$?</td><td>≥ 128 = terminó por señal</td></tr></table></div>
+<h3>Clase 19 · El sniffer en capa 2 (reconstruida del material del profesor) (jueves 29 oct 2026)</h3>
+<p><em>Versión corta de lo que más probablemente se pregunta. Léela primero y vuelve a la Parte 1 si algo no queda claro.</em></p>
+<h4>Puntos clave</h4>
+<ul><li>
+Modo promiscuo + AF_PACKET/SOCK_RAW (root) = trama completa desde capa 2.
+</li><li>
+Ethernet 14 B → IP ihl·4 → TCP doff·4 → payload; protocolo 6 = TCP.
+</li><li>
+Red = big-endian; ntohs() al leer, htons() al mandar.
+</li><li>
+El texto plano se lee tal cual: hay que cifrar.
+</li></ul>
+<h4>Ponte a prueba</h4>
+<ul><li>
+<strong>¿Qué hace el modo promiscuo?</strong> Que la tarjeta entregue todas las tramas del medio sin filtrar por MAC.
+</li><li>
+<strong>¿Qué socket crea el sniffer y por qué pide root?</strong> socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL)); los sockets crudos requieren CAP_NET_RAW.
+</li><li>
+<strong>Con ihl = 5 y doff = 5, ¿dónde empieza el payload?</strong> 14 + 20 + 20 = 54 bytes después del inicio.
+</li><li>
+<strong>¿Qué ve la CPU si lee el puerto 4898 sin ntohs()?</strong> 0x2213 = 8723.
+</li><li>
+<strong>¿Qué máquina va en modo promiscuo si son tres distintas?</strong> Solo la del sniffer.
+</li></ul>
+<h3>Clase 20 · Criptografía simétrica con OpenSSL: AES-256-CBC (reconstruida) (martes 3 nov 2026)</h3>
+<p><em>Versión corta de lo que más probablemente se pregunta. Léela primero y vuelve a la Parte 1 si algo no queda claro.</em></p>
+<h4>Puntos clave</h4>
+<ul><li>
+Texto plano = interceptación y modificación (X.800).
+</li><li>
+AES-256: bloque de 16 B, llave de 32 B, 14 rondas; CBC con IV de 16 B; relleno PKCS#7.
+</li><li>
+EVP: new → init → update → final; descifrar con la misma llave y el mismo IV.
+</li><li>
+RAND_bytes y llave.key en "wb"; compilar con -lcrypto.
+</li></ul>
+<h4>Ponte a prueba</h4>
+<ul><li>
+<strong>¿Cuánto miden el bloque de AES, la llave de AES-256 y el IV?</strong> 16 bytes, 32 bytes y 16 bytes.
+</li><li>
+<strong>¿Qué hace el modo CBC?</strong> Combina cada bloque con XOR con el bloque cifrado anterior (el primero con el IV) para eliminar patrones.
+</li><li>
+<strong>¿Por qué se suma EVP_MAX_BLOCK_LENGTH al arreglo cifrado?</strong> Por el relleno PKCS#7 del último bloque.
+</li><li>
+<strong>¿Por qué la llave se escribe con "wb"?</strong> Porque los bytes crudos pueden contener 0x00 o 0x0A, que el modo texto corrompería.
+</li><li>
+<strong>¿Qué diferencia hay entre libssl y libcrypto?</strong> libssl: protocolos TLS/DTLS; libcrypto: algoritmos, aleatorios y certificados.
+</li><li>
+<strong>Ordena el ciclo de cifrado EVP.</strong> CTX_new → EncryptInit_ex → EncryptUpdate → EncryptFinal_ex (→ CTX_free).
+</li></ul>
+</details>
+</div>
+</body>
+</html>

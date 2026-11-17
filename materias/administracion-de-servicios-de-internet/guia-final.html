@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="no-aplica">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía para el examen final — Administración de Servicios de Internet</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261117b">
+<script src="../../assets/app.js?v=20261117b" defer></script>
+<style>
+.gf h3{margin:1.2em 0 .4em} .gf h4{margin:1em 0 .3em;opacity:.9}
+.gf .tabla-scroll{overflow-x:auto} .gf table td,.gf table th{font-size:.9em;vertical-align:top}
+.gf p.nota{border-left:3px solid var(--c);padding:.3em .8em;opacity:.9}
+.gf li{margin:.25em 0}
+</style>
+</head>
+<body style="--c:#7C9CD6">
+<div class="wrap gf">
+<!-- Generado por scripts/build_guias_finales.py. No editar a mano. -->
+<a class="back" href="index.html">← Administración de Servicios de Internet</a>
+<div class="detail-head" style="border-color:#7C9CD6"><h2>📘 Guía para el examen final</h2>
+  <p class="prof">Administración de Servicios de Internet · semestre 2027-1 · hecha con NotebookLM a partir de los audios de clase y el material del profesor (16 nov 2026).</p>
+  <p class="prof">Las fechas y cálculos de NotebookLM pueden fallar: ante la duda, revisa la página de la clase que cita.</p>
+</div>
+<div class="files">
+  <a class="btn" href="https://docs.google.com/document/d/1jhbhQWg9nWUX9Px6uBr-bMdaofB0ESfnrTV-fPn3UnY/edit" target="_blank">📄 Original en Drive</a>
+  <a class="btn" href="https://docs.google.com/document/d/1QOPXf275iYkitd4E6XimdhAxFfP8pfzF7WxZEyp1F3s/edit" target="_blank">📝 Apuntes y resumen (Drive)</a>
+  <a class="btn" href="https://drive.google.com/file/d/1GdsSfaS1vmDQ8qhMVHJ6-FnjGQPSz6ly/view" target="_blank">🧠 Mapa mental detallado</a>
+  <a class="btn" href="examen-final.html">📝 Repaso del examen</a>
+  <a class="btn" href="../../decimo/ASI/ASI-Resumenes/ASI-mapa-examen-2.pdf" target="_blank">🗺️ Mapa de examen</a>
+  <a class="btn" href="resumenes.html">📚 Guías por clase</a>
+</div>
+<details class="section-block sec" id="gf-1-hilo-conductor" open><summary><span class="stitle">1. HILO CONDUCTOR</span></summary>
+<p>El curso parte desde la base física y lógica de la máquina hasta los estándares globales que gobiernan internet: primero se entiende cómo ejecuta instrucciones un procesador, cómo se elimina el cuello de botella de Von Neumann mediante arquitecturas RISC con <em>pipeline</em> y cómo se organiza y administra un sistema operativo Linux por consola (permisos, directorios y procesos), porque todo servicio de internet corre en última instancia sobre hardware y un sistema operativo (Clase 1). Una vez dominada la máquina local, antes de levantar cualquier infraestructura, se aprende a planificar y controlar el trabajo de ingeniería eligiendo entre metodologías tradicionales (Cascada/PMBOK) y ágiles (Scrum), definiendo qué hace un servidor frente a un simple repositorio, levantando requerimientos (funcionales, no funcionales y de sistema) y modelando la arquitectura en UML para que el código coincida con el diseño (Clases 2, 3, 5, 6, 7). Con el proyecto planificado y los requerimientos claros, se construye y protege la infraestructura: primero se despliegan servicios en la nube (controlando presupuestos y alertas en dólares) y servicios esenciales de red local/corporativa (DHCP y DNS) para automatizar el direccionamiento y evitar conflictos (Clases 3, 4); luego se evalúa la seguridad real de esos servidores mediante pentesting (Metasploit y Nmap en Kali Linux) y se blinda la capa de datos auditando quién modifica la información mediante usuarios, roles, privilegios y <em>triggers</em> en Oracle (Clases 8, 9, 14). A partir de esos datos ya resguardados y auditados, se da el salto analítico para convertir datos crudos en decisiones ejecutivas usando cubos OLAP, Data Warehouse, Power BI y encuestas reales como la ENOE (Clases 10, 11, 13); finalmente, el curso conecta la tecnología con el negocio y la normatividad: analiza cómo la transformación digital, la IA y el <em>Big Data</em> redefinen las profesiones sin reemplazar el criterio de calidad y auditoría humana, y cierra regresando a la raíz teórica oficial del temario mediante los <strong>RFCs</strong>, que documentan las reglas exactas de cada protocolo visto en el semestre (HTTP, IMAP, POP3, LDAP, IANA, Telnet, DNS, DHCPv6/NIS y TLS 1.3) (Clases 15, 16, 17, 18, 19).</p>
+</details>
+<details class="section-block sec" id="gf-unidad-1-fundamentos-de-arquitectura-com"><summary><span class="stitle">UNIDAD 1: Fundamentos de Arquitectura Computacional y Administración en Linux (Clase 1)</span></summary>
+<h4>(a) Problema que resuelve y conexión con el curso</h4>
+<p>Explica por qué los procesadores reales necesitan arquitecturas eficientes más allá de las matemáticas ideales y cómo operar por línea de comandos el sistema operativo base (Linux) donde se instalarán los servidores de las unidades siguientes (Clase 1).</p>
+<h4>(b) Conceptos clave</h4>
+<ul><li>
+<strong>Procesador, Máquina de Turing y Arquitectura de Von Neumann (Clase 1)</strong>
+<ul><li>
+<em>Definición:</em> Un procesador es el elemento central de la computadora encargado de realizar cálculos de información tomando algoritmos y valores desde la memoria principal. La Máquina de Turing es un autómata de doble pila con cinta infinita y operaciones básicas (moverse a izquierda/derecha, leer y escribir) capaz de resolver cualquier algoritmo. La arquitectura de Von Neumann implementa electrónicamente ese modelo con un <strong>controlador</strong>, un <strong>registro de estado</strong>, un <strong>registro de propósito general</strong>, un <strong>contador de programa</strong> y una <strong>ALU</strong>, operando sobre una memoria única que contiene programa, datos y pila.
+</li><li>
+<em>Analogía:</em> Es como una cocina donde un solo chef (la ALU/procesador) tiene que caminar hasta una única despensa (la memoria) por la receta, luego volver por los ingredientes, cocinarlos y regresar a guardar el platillo en el mismo estante; funciona para cualquier receta, pero todos los demás utensilios quedan parados mientras él camina.
+</li><li>
+<em>Ejemplo concreto:</em> En clase se analizó un bucle for (i = 0; i &lt; n; i++) en estilo CISC: para set (i = 0) hay 3 accesos a memoria, para JL (salta si menor) hay 4 accesos a memoria (instrucción, i, n y dirección de salto), y en el incremento vuelve a leer de memoria, cargar a ALU y escribir, dejando inactivos el bus, el decodificador o la ALU en cada paso.
+</li></ul>
+</li><li>
+<strong>Arquitectura Harvard RISC, Modelo <em>Load/Store</em> y <em>Pipeline</em> (Clase 1)</strong>
+<ul><li>
+<em>Definición:</em> Propuesta estudiada por Patterson (mencionado como Peterson) que parte la cinta única de Von Neumann en dos memorias separadas —una de instrucciones (solo lectura) y otra de datos (lectura/escritura)— para trabajar con instrucciones simples de carga/almacenamiento (<em>load/store</em>) y ejecutar etapas en paralelo mediante <em>pipeline</em> (Fetch, Decode, Execute, Write Back).
+</li><li>
+<em>Analogía:</em> Es convertir la cocina en una línea de ensamblaje de hamburguesas con cuatro estaciones: mientras el plato 1 pasa a cocinarse (<em>Execute</em>), el plato 2 ya se está preparando (<em>Decode</em>) y el pedido 3 ya se está leyendo (<em>Fetch</em>).
+</li><li>
+<em>Ejemplo concreto:</em> Al reescribir el bucle en RISC, el profesor calculó el porcentaje de uso real de la ALU: en el primer bloque de <strong>3 instrucciones</strong> (LDA, LDC, STA), solo <strong>1</strong> usa la ALU (<strong>33% de uso, 66% de desperdicio</strong>); en el segundo bloque de <strong>5 instrucciones</strong>, solo <strong>1</strong> usa la ALU (<strong>20% de uso, 80% de no cómputo</strong>). Al alinear todas las operaciones al mismo tiempo en <em>pipeline</em> de 4 etapas, tras el arranque inicial se obtiene <strong>1 instrucción terminada por cada ciclo de reloj</strong>.
+</li></ul>
+</li><li>
+<strong>Jerarquía de directorios y distribuciones de Linux (Clase 1)</strong>
+<ul><li>
+<em>Definición:</em> Estructura jerárquica a partir de / (<em>root</em>) que separa binarios, arranque, dispositivos, configuraciones, usuarios y temporales, y variantes (distribuciones) adaptadas a distintos niveles de estabilidad o uso.
+</li><li>
+<em>Analogía:</em> Es un edificio corporativo donde la recepción y dirección general (/root) controlan el acceso maestro, el cuarto de máquinas (/boot y /dev) maneja la energía y periféricos, el archivo de planos (/etc) guarda las reglas del edificio y los cubículos personales (/home) pertenecen a cada empleado.
+</li><li>
+<em>Ejemplo concreto:</em> Se explicó la diferencia entre /var (temporales que se eliminan al momento) y /tmp (temporales donde un error puede recuperarse mediante <em>recovery</em> mientras no se reinicie el equipo y se sobrescriba la RAM), y cómo /opt guarda software adicional instalado por un usuario.
+</li></ul>
+</li><li>
+<strong>Permisos, procesos y flujo en consola Linux (Clase 1)</strong>
+<ul><li>
+<em>Definición:</em> Sistema de control de acceso dividido en 4 partes (tipo/directorio, propietario, grupo y otros) con tres permisos básicos —r (leer), w (escribir) y x (ejecutar)— junto con comandos de gestión de archivos, búsqueda y monitoreo de procesos (PID, TTY, TIME, CMD).
+</li><li>
+<em>Analogía:</em> Es el gafete de una oficina con zonas restringidas: los de sistemas forman un <strong>grupo</strong>, tú eres el <strong>propietario</strong> de tu escritorio, y los visitantes en la red de invitados son <strong>otros</strong> (a quienes jamás debes dar llave maestra 777).
+</li><li>
+<em>Ejemplo concreto:</em> mkdir reprobaditos crea una carpeta casi 777 (salvo escritura para otros); dar permiso x a otros en archivos/carpetas permite entrar o ejecutar código malicioso. Con mkdir -m 700 reprobados21 solo el propietario lee, escribe y ejecuta.
+</li></ul>
+</li></ul>
+<h4>(c) Tablas de referencia técnica (Clase 1)</h4>
+<h4>Directorios clave de Linux:</h4>
+<div class="tabla-scroll"><table><tr><th>Directorio</th><th>Función principal explicada en clase</th><th>Prioridad / Nota clave</th></tr><tr><td>/ (root)</td><td>Ruta base inicial del sistema</td><td>Dirige todo el sistema</td></tr><tr><td>/boot</td><td>Arranque del sistema y <em>kernel</em></td><td>Alta; no confundir con /bin</td></tr><tr><td>/bin</td><td>Comandos esenciales ejecutables por usuarios (cd, ls)</td><td>Alta; equivalente crítico a System32</td></tr><tr><td>/dev</td><td>Dispositivos externos e internos (<em>drivers</em>)</td><td>Clave para discos, impresoras, escáneres</td></tr><tr><td>/etc</td><td>Archivos de configuración del sistema y aplicaciones</td><td>Alta</td></tr><tr><td>/home</td><td>Carpetas personales de los usuarios</td><td>Alta; organización por usuario</td></tr><tr><td>/var</td><td>Temporales y archivos ocultos que se eliminan al instante</td><td>Media</td></tr><tr><td>/usr</td><td>Programas, bibliotecas, documentación y archivos estáticos</td><td>Alta</td></tr><tr><td>/tmp</td><td>Temporales recuperables antes de reiniciar (antes de liberar RAM)</td><td>Baja</td></tr><tr><td>/root, /lib, /opt</td><td>Directorio del superusuario, librerías y software adicional de usuario</td><td>/root media</td></tr></table></div>
+<h4>Distribuciones de Linux según uso:</h4>
+<div class="tabla-scroll"><table><tr><th>Distribución</th><th>Uso recomendado en clase</th><th>Observación clave</th></tr><tr><td><strong>Linux Mint / Ubuntu</strong></td><td>Principiantes / usuario final</td><td>Interfaz parecida a Windows; Ubuntu cambia mucho de versión/parches</td></tr><tr><td><strong>Debian</strong></td><td>Servidores (alta estabilidad)</td><td>Muy estable</td></tr><tr><td><strong>Fedora</strong></td><td>Desarrollo y programación</td><td>Soporte rápido a hardware reciente (Bluetooth, inalámbricos)</td></tr><tr><td><strong>CentOS -&gt; AlmaLinux</strong></td><td>Servidores de almacenamiento</td><td>Copias gratuitas de <strong>Red Hat</strong> (de pago); CentOS sin soporte desde 2017–2019</td></tr><tr><td><strong>Arch Linux</strong></td><td>Usuarios avanzados (instalación manual personalizada)</td><td>No vale la pena si se instala con "siguiente, siguiente"</td></tr><tr><td><strong>Kali Linux</strong></td><td>100% ciberseguridad</td><td>Más de 600 herramientas precargadas (Clases 1, 8)</td></tr></table></div>
+<h4>Comandos de Linux vistos en clase:</h4>
+<div class="tabla-scroll"><table><tr><th>Comando</th><th>Qué hace exactamente según la clase</th></tr><tr><td>whereis &lt;cmd&gt; vs which &lt;cmd&gt;</td><td>whereis muestra todas las carpetas del paquete; which muestra únicamente la ruta del ejecutable (útil para migraciones o buscar ejecutables como en Oracle).</td></tr><tr><td>pwd</td><td>Imprime el directorio actual completo (evita encadenar cd ..).</td></tr><tr><td>man &lt;cmd&gt;</td><td>Muestra el manual del comando offline (Ctrl+Z / salir).</td></tr><tr><td>ps / ps aux / kill / top</td><td>Lista procesos (PID, TTY terminal origen, TIME, CMD); en ps aux: a todos los usuarios, u recursos CPU/RAM, x procesos sin terminal asociada (primero a revisar si entra un virus); kill mata por PID; top muestra procesos en tiempo real.</td></tr><tr><td>nano</td><td>Editor de texto en terminal; se sale con Ctrl+X.</td></tr><tr><td>cat / cat -n / &gt;</td><td>Visualiza archivos; -n numera líneas; cat a.txt b.txt &gt; todito.txt concatena en un nuevo archivo respetando el orden de los argumentos.</td></tr><tr><td>ls -l / -a / -s / -lsa</td><td>-l detalles (permisos, propietario, peso, fecha); -a incluye ocultos (inician con .); -s peso en KB; se combinan como ls -lsa.</td></tr><tr><td>mkdir -m &lt;modo&gt; / mkdir -p / tree</td><td>-m asigna permisos al crear (ej. 644, 700); -p crea árbol completo de carpetas; tree muestra la estructura de árbol.</td></tr><tr><td>Otros pedidos en resultados</td><td>mv, rm, ls con -d/-h/-R mayúscula, grep, wc, touch, cambio de permisos/propietario en archivos y carpetas (chmod/chown mencionados como instrucciones distintas para archivos y carpetas).</td></tr></table></div>
+<h4>(d) Errores comunes y puntos de examen (Clase 1)</h4>
+<ul><li>
+Confundir /usr con carpeta de usuarios (es para programas y bibliotecas estáticas, los usuarios van en /home).
+</li><li>
+Usar mkdir carpeta1/carpeta2/carpeta3 sin -p (falla si las carpetas padre no existen) ni confundir -m (modo/permisos) con -p (ruta padre).
+</li><li>
+Usar permiso 777 o dejar permiso x abierto a otros usuarios.
+</li><li>
+Creer que whereis y which devuelven lo mismo, o que cat solo sirve para leer un archivo.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-2-gestion-requerimientos-y-modela"><summary><span class="stitle">UNIDAD 2: Gestión, Requerimientos y Modelado de Proyectos de Servicios (Clases 2, 3, 5, 6, 7)</span></summary>
+<h4>(a) Problema que resuelve y conexión con el tema anterior</h4>
+<p>Antes de configurar servicios sobre Linux, un equipo de ingeniería debe decidir cómo planificar entregas, presupuesto, responsabilidades, requisitos y planos técnicos para no perder alcance, dinero ni coherencia entre lo diseñado y lo programado (Clases 2, 3, 5, 7).</p>
+<h4>(b) Conceptos clave</h4>
+<ul><li>
+<strong>Metodología Tradicional (Cascada / PMBOK) (Clases 2, 5)</strong>
+<ul><li>
+<em>Definición:</em> Enfoque predictivo basado en fases secuenciales (análisis, diseño, implementación, pruebas, mantenimiento), planificación anticipada, requisitos fijos desde el inicio, documentación extensa y entrega única al final, gobernado por el <strong>triángulo de hierro</strong> (alcance, costo y tiempo). PMBOK (PMI, "libro rojo") abarca inicio, planificación, ejecución, monitoreo/control y cierre sobre 10 áreas de conocimiento (integración, alcance, cronograma, costos, calidad, recursos, comunicaciones, riesgos, adquisiciones e interesados) bajo un <strong>Project Manager</strong>.
+</li><li>
+<em>Analogía:</em> Construir una casa con planos arquitectónicos aprobados: no puedes levantar el segundo piso si no terminaste los cimientos, y si a media obra el cliente quiere quitar una columna, se recalcula todo y se cobra aparte.
+</li><li>
+<em>Ejemplo concreto:</em> Caso de la página de vacunación COVID en España que se cayó a los 10 minutos por saltar la etapa de pruebas al salir a producción; en clase se aplicó en Microsoft Project con fechas límite fijas (16 de noviembre inicialmente).
+</li></ul>
+</li><li>
+<strong>Metodologías Ágiles y Scrum (Clases 2, 5, 6)</strong>
+<ul><li>
+<em>Definición:</em> Ágil es la metodología (nacida del Manifiesto Ágil de 2001) basada en cuatro pilares —<strong>iterativo, incremental, colaborativo y adaptable</strong>— y <strong>Scrum</strong> es un marco que la implementa mediante ciclos cortos llamados <em>sprints</em> (2 a 4 semanas) que producen incrementos potencialmente utilizables.
+</li><li>
+<em>Analogía:</em> Entregar una aplicación por partes funcionales: en la junta 1 muestras el <em>layout</em> y altas; en la 2 altas y bajas; en la 3 altas, bajas y cambios. Si en la arquitectura se exagera la complacencia al cliente, terminas poniendo un candelabro en el Metro Hidalgo que no sirve funcionalmente pero cumple lo que pidió el cliente.
+</li><li>
+<em>Ejemplo concreto:</em> En el curso, los equipos en Scrum debían hacer <em>Daily</em> (15 min) con bitácora y al menos <strong>2 avances semanales en Git</strong> (lunes y miércoles) más reporte semanal. En proyectos ágiles el profesor recomendó sumar <strong>+15% de margen al presupuesto</strong> por cambios (ej. si cuesta 1 millón, cotizar +15%). Mencionó como malos ejemplos de adaptación excesiva la Línea 12 del Metro e Infonavit.
+</li></ul>
+</li><li>
+<strong>Planificación en Microsoft Project (Recursos y Costos) (Clase 2)</strong>
+<ul><li>
+<em>Definición:</em> Herramienta de diagramas de Gantt que vincula predecesoras (ej. 4CC = comienzo a comienzo) y asigna tres tipos de recursos: <strong>Trabajo</strong> (personas/equipos por tiempo), <strong>Material</strong> (bienes que se compran/entregan una vez al cliente) y <strong>Costo</strong> (gastos fijos permanentes como luz, internet o renta, independientemente de si hay proyecto).
+</li><li>
+<em>Analogía:</em> Una computadora puede ser <strong>Trabajo</strong> (ahorras \$3/semana por desgaste), <strong>Material</strong> (compras una Mac Mini de \$27,000 o terminal de Oxxo y se la cobras/entregas al cliente) o <strong>Costo</strong> (el trabajador usa su propia PC en casa).
+</li><li>
+<em>Ejemplo concreto:</em> En vivo, al asignar todos los recursos al nivel 1 del proyecto, Project arrojó <strong>51.13 días = 3,272 horas-hombre y \$34,000</strong>; al asignar correctamente por tarea (Luisa análisis, Paola requerimientos funcionales, Fernando no funcionales —sin traslapar dos tareas simultáneas a Paola—), bajó a <strong>304 horas y \$812.50</strong>.
+</li></ul>
+</li><li>
+<strong>Levantamiento de Requerimientos y UML (Clases 3, 5, 7)</strong>
+<ul><li>
+<em>Definición:</em> Existen exactamente tres tipos de requerimientos: <strong>de Sistema</strong> (hardware, servidores, ancho de banda), <strong>Funcionales</strong> (<em>qué</em> hace el sistema: entradas/salidas/interacción) y <strong>No Funcionales</strong> (<em>cómo</em> se mide: eficiencia, rapidez, facilidad de uso). <strong>UML</strong> (<em>Lenguaje Unificado de Modelado</em>) documenta la estructura y comportamiento del software (incluyendo componentes, despliegue y casos de uso).
+</li><li>
+<em>Analogía:</em> Si vas a una agencia por un auto, "que tenga 4 llantas y motor" es de sistema; "que frene cuando piso el pedal" es funcional; "que frene en menos de 2 segundos" es no funcional.
+</li><li>
+<em>Ejemplo concreto:</em> Ejercicios resueltos en clase: <em>"El usuario debe loguearse"</em> -&gt; <strong>Funcional</strong>; <em>"Tiempo de respuesta muy corto"</em> -&gt; <strong>No funcional</strong> (mide); <em>"Múltiples servidores para disponibilidad"</em> -&gt; <strong>Sistema</strong>; <em>"Amplio ancho de banda para streaming"</em> -&gt; <strong>Sistema</strong>; <em>"Enviar email semanal"</em> -&gt; <strong>Funcional</strong>; <em>"Interfaz sencilla y fácil de usar"</em> -&gt; <strong>No funcional</strong>.
+</li></ul>
+</li><li>
+<strong>Especificaciones del Proyecto Final (Clases 5, 6, 7, 17, 19)</strong>
+<ul><li>
+<em>Definición:</em> Implementación de servicios reales sobre <strong>2 a 3 máquinas virtuales</strong> combinando Linux y Windows (si el servidor es Ubuntu Server, el cliente es Windows; si es Windows Server, el cliente es Linux) con red, servicios, seguridad y evidencias.
+</li><li>
+<em>Analogía:</em> Un simulacro empresarial completo donde no basta que el sistema funcione en tu laptop: debes entregar los planos de instalación (manual técnico), el instructivo para empleados (manual de usuario) y la grabación probando que tus propios planos sí levantan el servicio.
+</li><li>
+<em>Ejemplo concreto:</em> Los 10 proyectos asignados abarcan: 1) Intranet empresarial (DNS interno + Apache + HTTPS), 2) Correo (DNS + SMTP + POP3 + IMAP + autenticación), 3) Acceso remoto seguro (SSH + grupos/permisos + FTP), 4) Archivos Samba por CLI, 5) Web con BD (PHP/Java/Python + BD excepto SQL Server por licencias; CRUD), 6) Web con balanceo de cargas / espejo, 7) Infraestructura escolar (DHCP + DNS + Web + Samba), 8) Web HTTPS (SSL/TLS + 2FA), 9) Archivos y remoto multiplataforma (Windows/Linux), 10) Proxy con control de accesos y <em>triggers</em>/bitácora.
+</li></ul>
+</li></ul>
+<h4>(c) Comparación Tradicional / PMBOK vs. Ágil / Scrum (Clases 2, 5, 6)</h4>
+<div class="tabla-scroll"><table><tr><th>Criterio</th><th>Tradicional / Cascada / PMBOK</th><th>Ágil / Scrum</th></tr><tr><td><strong>Planificación y requisitos</strong></td><td>Detallada y anticipada; requisitos fijos desde el inicio</td><td>Iterativa y continua; evoluciona durante el proyecto</td></tr><tr><td><strong>Entregas</strong></td><td>Única entrega al final (3 revisiones en clase: inicio, mitad, final)</td><td>Frecuentes e incrementales (sprints 2–4 sem; en clase 2 avances/sem en Git + reporte semanal)</td></tr><tr><td><strong>Participación del cliente</strong></td><td>Puntual (inicio, mitad y entrega)</td><td>Constante (Daily, Review)</td></tr><tr><td><strong>Documentación</strong></td><td>Extensa (Acta inicio, RF/RNF, Casos uso, BD, Pruebas, Control cambios)</td><td>Ligera/esencial (Visión, Product Backlog con HU, Sprint Backlog, bitácora Git)</td></tr><tr><td><strong>Cambios</strong></td><td>Costosos, requieren control formal y nueva factura</td><td>Bienvenidos; Scrum no reajusta precio fácilmente (añadir +15% colchón)</td></tr><tr><td><strong>Rol central</strong></td><td>Project Manager (responsable único)</td><td>Scrum Master + Product Owner + Equipo</td></tr></table></div>
+<h4>(d) Errores comunes y puntos de examen (Clases 2, 3, 5, 6, 7)</h4>
+<ul><li>
+<strong>Decir que "Scrum es la metodología":</strong> El profesor recalcó que <strong>Ágil</strong> es la metodología y <strong>Scrum</strong> es quien la implementa (como redes vs Cisco).
+</li><li>
+<strong>Confundir requerimientos:</strong> Escribir un requerimiento sin separar qué es <em>Sistema</em> (hardware/red), <em>Funcional</em> (acción) y <em>No Funcional</em> (métrica).
+</li><li>
+<strong>Inconsistencia UML–Código:</strong> El profesor advirtió que si los diagramas UML entregados no coinciden con la programación del proyecto, estará mal.
+</li><li>
+<strong>Cambiar de metodología a medio curso:</strong> Automáticamente reprobado. En la evaluación final del proyecto, si un integrante no sabe responder, reprueba todo el equipo.
+</li><li>
+<em>(Nota de transparencia: En el audio de Clase 7 solo se nombran explícitamente los diagramas de componentes, despliegue y casos de uso; la lista completa de la diapositiva proyectada no fue leída en voz alta ``.)</em>
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-3-servidores-nube-y-servicios-ese"><summary><span class="stitle">UNIDAD 3: Servidores, Nube y Servicios Esenciales de Red (DHCP y DNS) (Clases 3, 4)</span></summary>
+<h4>(a) Problema que resuelve y conexión con el tema anterior</h4>
+<p>Una vez definidos los requerimientos de sistema, debemos elegir dónde hospedar la infraestructura (local o nube como Azure) y automatizar la comunicación entre clientes y servidores sin configurar direcciones IP a mano ni confundir almacenamiento pasivo con procesamiento activo (Clases 3, 4).</p>
+<h4>(b) Conceptos clave</h4>
+<ul><li>
+<strong>Servidor vs. Repositorio y Pirámide DIK (Clase 3)</strong>
+<ul><li>
+<em>Definición:</em> Un <strong>servidor</strong> es un equipo hardware o software (proceso computacional) que ofrece y comparte servicios o recursos —y ejecuta procesos como CRUD, simulaciones o redes neuronales— a uno o más clientes a través de una red (internet o intranet local). Un <strong>repositorio</strong> (ej. Git) solo almacena datos estructurados o no estructurados sin ejecutarlos por sí mismo. La pirámide <strong>DIK</strong> transforma <strong>Datos</strong> (nivel más bajo) -&gt; <strong>Información</strong> (al darles contexto) -&gt; <strong>Conocimiento</strong> (decisiones basadas en estadística/algoritmos).
+</li><li>
+<em>Analogía:</em> Un repositorio es una bodega de cajas donde guardas ingredientes o planos (como Git); un servidor es el taller/restaurante activo que recibe pedidos, cocina con esos ingredientes y entrega el plato al cliente.
+</li><li>
+<em>Ejemplo concreto:</em> Si subes código Python o SQL a Git, ahí no corre; en un servidor de BD tú te conectas con SQL Plus (cliente) y toda la carga y consultas corren en el servidor. El profesor mostró que las redes sociales convierten tus datos (ej. a qué hora ves páginas) en información y luego en conocimiento para mandarte publicidad.
+</li></ul>
+</li><li>
+<strong>Principios de Seguridad CID en Servidores (Clase 3)</strong>
+<ul><li>
+<em>Definición:</em> Todo servidor en su enfoque de seguridad debe garantizar <strong>Disponibilidad</strong> (siempre accesible cuando se ocupe), <strong>Integridad</strong> (los datos se guardan exactamente como deben y las tramas llegan íntegras con encabezado y cola) y <strong>Confidencialidad</strong> (solo acceden personas autorizadas y los paquetes viajan protegidos).
+</li><li>
+<em>Analogía:</em> Tu cuenta bancaria: que puedas entrar al cajero a la hora que sea (<strong>Disponibilidad</strong>), que si tenías \$75 sigan siendo \$75 (<strong>Integridad</strong>) y que tu vecino no pueda ver tu saldo ni leer tu carta sellada (<strong>Confidencialidad</strong>).
+</li><li>
+<em>Ejemplo concreto:</em> Caso de caídas en apps bancarias (como Bancomer) que impiden sacar \$100 cuando se necesitan, o el saldo de \$75 que no debe alterarse en dos o tres días.
+</li></ul>
+</li><li>
+<strong>Infraestructura en la Nube y Presupuestos (Azure) (Clase 3)</strong>
+<ul><li>
+<em>Definición:</em> Provisión de máquinas virtuales, almacenamiento y servicios gestionados por un proveedor (Microsoft Azure, AWS, Google Cloud) donde la facturación no tiene tarifa fija sino que depende de <strong>consumo, almacenamiento y tipo de ingreso/acceso</strong> (frecuente vs esporádico).
+</li><li>
+<em>Analogía:</em> Renta de bodega vs departamento: una bodega solo cobra por guardar cajas (almacenamiento), pero un departamento cobra por vivir y usar agua/luz dentro (ejecutar cómputo por tiempo conectado).
+</li><li>
+<em>Ejemplo concreto:</em> Los presupuestos en nube son siempre en <strong>dólares estadounidenses</strong>. El profesor configuró un presupuesto de <strong>\$5,000 USD</strong> con dos alertas: previsto en 0.40 (40%) y costo real en 0.50 (50% = <strong>\$2,500 USD</strong>). Caso real de una papelería en CDMX que gastó <strong>\$45,000</strong> en un pico de marzo por elegir Azure sin análisis de requerimientos.
+</li></ul>
+</li><li>
+<strong>DNS y DHCP (Proceso DORA y Componentes) (Clase 4)</strong>
+<ul><li>
+<em>Definición:</em> <strong>DNS</strong> traduce nombres de dominio legibles a direcciones IP numéricas. <strong>DHCP</strong> (<em>Dynamic Host Configuration Protocol</em>) asigna automáticamente IP, máscara de subred, puerta de enlace y DNS mediante el proceso <strong>DORA</strong>: <em>Discover</em> (difusión buscando servidor), <em>Offer</em> (oferta de IP), <em>Request</em> (solicitud formal) y <em>Acknowledge</em> (confirmación).
+</li><li>
+<em>Analogía:</em> DNS es la agenda de contactos de tu celular (guardas "Princesita" en vez de memorizar el número); DHCP era antes una operadora de Telmex conectando cables a mano y hoy es un recepcionista automático que asigna extensión temporal.
+</li><li>
+<em>Ejemplo concreto:</em> <strong>RIU</strong> en la UNAM asignaba configuraciones manuales fijas y se saturó porque nadie liberaba las IPs; <strong>PC Puma</strong> usa DHCP, asigna IP al conectar y la libera cuando te desconectas.
+</li></ul>
+</li><li>
+<strong>Seguridad en DHCP/DNS y Kea DHCP vs. ISC DHCP (Clase 4)</strong>
+<ul><li>
+<em>Definición:</em> Riesgos principales del DHCP/DNS: (1) <strong>DoS</strong> por agotamiento del ámbito combinado con inyección SQL al reiniciar módems, (2) <strong>DHCP falso / DNS suplantado</strong> (ej. sustituir m por rn), (3) <strong>exposición de red interna</strong> si das IPs directas sin DNS/VPN. Para mitigarlos se usan <strong>firewalls, DMZ y VPN</strong> ("una red que no es una red"). <strong>Kea DHCP</strong> es el sucesor moderno de código abierto de <strong>ISC DHCP</strong> (sin mantenimiento desde fines de 2022).
+</li><li>
+<em>Ejemplo concreto:</em> En Ubuntu (en modo puente o NAT para que la VM esté en el rango) se configura isc-dhcp-server en texto plano (192.168.1.0, rango .100–.200, router .1, DNS 8.8.8.8/8.8.4.4, interfaz ens33) y luego <strong>Kea</strong> (kea-dhcp4-server versión <strong>2.4</strong>, evitando la 2.6 por ser beta/última) que configura en JSON, soporta IPv4/IPv6, APIs, alta disponibilidad y es <strong>multihilo</strong>. Se mencionó el caso de una empresa que sufrió pérdidas diarias durante 3 días por ataque (la cifra exacta inicial de dólares quedó cortada en el audio: ",00000 dólar").
+</li></ul>
+</li></ul>
+<h4>(c) Componentes del ámbito DHCP (Clase 4) y comparativa ISC vs. Kea</h4>
+<div class="tabla-scroll"><table><tr><th>Componente DHCP</th><th>Regla / Ejemplo visto en clase</th></tr><tr><td><strong>1. Ámbito</strong></td><td>Rango de IPs asignables (ej. .1 a .254, excluyendo .0 red y .255 broadcast); en empresas se segmenta por área (ej. 10–20 conta, 20–40 finanzas, 50–200 ventas).</td></tr><tr><td><strong>2. Tiempo de concesión (<em>Lease</em>)</strong></td><td>Periodo válido de la IP (segundos en redes de paso como Infinitum móvil, minutos/horas/1 día).</td></tr><tr><td><strong>3. Puerta de enlace (<em>Gateway</em>)</strong></td><td>Dirección del router de salida; <strong>solo una puerta de enlace</strong> (poner varias multiplica puntos de ataque).</td></tr><tr><td><strong>4. Servidor DNS</strong></td><td>IPs que resuelven nombres (ej. 8.8.8.8, 8.8.4.4).</td></tr><tr><td><strong>5. Reservas</strong></td><td>IP fija ligada a dirección MAC; solo para superadministradores o impresoras viejas (no para todos).</td></tr><tr><td><strong>6. Exclusiones</strong></td><td>IPs del rango que nunca deben asignarse automáticamente (ej. 127.x.x.x).</td></tr></table></div>
+<div class="tabla-scroll"><table><tr><th>Característica</th><th>ISC DHCP Server</th><th>Kea DHCP (kea-dhcp4-server)</th></tr><tr><td><strong>Estado</strong></td><td>Descontinuado desde finales de <strong>2022</strong></td><td>Sucesor oficial activo (usar v2.4, no 2.6)</td></tr><tr><td><strong>Soporte</strong></td><td>Solo IPv4 (versión vista)</td><td>IPv4 e IPv6, APIs y bases de datos (ej. MySQL)</td></tr><tr><td><strong>Formato y arquitectura</strong></td><td>Texto plano, <strong>un solo hilo</strong> (secuencial)</td><td>Archivos <strong>JSON</strong>, <strong>multihilo</strong> (procesos simultáneos) y alta disponibilidad</td></tr></table></div>
+<h4>(d) Errores comunes y puntos de examen (Clases 3, 4)</h4>
+<ul><li>
+<strong>Definir "servidor" usando la palabra "servidor"</strong> (definición circular) o <strong>confundir servidor con repositorio</strong>. El profesor enfatizó que la definición exacta de servidor suele ponerse mal en el examen.
+</li><li>
+<strong>No definir requerimientos antes de recomendar una nube</strong> (como en el caso Avante Textil) u olvidar que los presupuestos en nube están en <strong>dólares</strong>.
+</li><li>
+<strong>Configurar múltiples <em>gateways</strong></em> buscando velocidad (multiplica la superficie de ataque) o no reiniciar el servicio tras editar el archivo de configuración DHCP.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-4-ciberseguridad-practica-kali-me"><summary><span class="stitle">UNIDAD 4: Ciberseguridad Práctica (Kali, Metasploit, Nmap) y Auditoría de Bases de Datos (Oracle) (Clases 8, 9, 14)</span></summary>
+<h4>(a) Problema que resuelve y conexión con el tema anterior</h4>
+<p>Una vez desplegados los servicios web y de red, hay que verificar qué puertos e información exponen hacia afuera (auditoría externa) y proteger e investigar quién inserta, modifica o elimina datos dentro del servidor de base de datos (auditoría interna) (Clases 8, 9, 14).</p>
+<h4>(b) Conceptos clave</h4>
+<ul><li>
+<strong>Roles en Ciberseguridad y Servicios Profesionales (Clase 8)</strong>
+<ul><li>
+<em>Definición:</em> <strong>Hackers</strong>: <em>Blanco</em> (ético/defensivo), <em>Negro</em> (malicioso) y <em>Gris</em> (aprendizaje, donde deberían estar los estudiantes). <strong>Pentester</strong>: especialista en pruebas y detección de errores (incluso sin programar). <strong>CISO</strong>: máximo responsable de seguridad. <strong>Ingeniero forense</strong>: recupera información física de discos/USB (máximo <strong>80%</strong> recuperable). <strong>Asesoría</strong> (enseñas al personal interno, más barata) vs. <strong>Consultoría</strong> (resuelves y entregas sin enseñar el cómo, más cara y rápida).
+</li><li>
+<em>Analogía:</em> Un forense es como un perito que abre una caja negra dañada para saber qué murió y rescatar lo posible; en asesoría contratas a un entrenador para tu equipo, en consultoría contratas a un cerrajero que cambia la chapa y se va.
+</li></ul>
+</li><li>
+<strong>Metasploit Framework y Escaneo Web (Clases 8, 9)</strong>
+<ul><li>
+<em>Definición:</em> <em>Framework</em> de código abierto en consola (msfconsole) con módulos de <em>exploits</em> y <em>auxiliares</em> para pruebas de penetración, recolección de datos y análisis de vulnerabilidades.
+</li><li>
+<em>Analogía:</em> Como un electrocardiograma con líquido radiactivo: inyectas tráfico por un puerto hacia una IP para iluminar qué caminos existen y dónde está expuesto o bloqueado el sistema.
+</li><li>
+<em>Ejemplo concreto:</em> Comandos usados: use auxiliary/scanner/http/... (equivalente a un import en Java/Python), set RHOSTS www... (asigna objetivo), show options, exploit. En vivo se observó: CECyT 9 en un solo CPU con puerto 80 abierto sin seguridad; IPN protegido en Azure (error 404/bloqueo); UNITEC con 4 servicios en IPs públicas; Tec de Monterrey con 2 servicios en nube; Google devolviendo 16 hosts y usando servidores espejo en un <strong>ciclo cerrado de seguridad</strong> para hacer perder tiempo al atacante.
+</li></ul>
+</li><li>
+<strong>Nmap (Network Mapper) (Clases 8, 9)</strong>
+<ul><li>
+<em>Definición:</em> Herramienta de análisis de red que descubre hosts activos, puertos abiertos/cerrados/filtrados, servicios, versiones y sistema operativo.
+</li><li>
+<em>Analogía:</em> Tocar todas las puertas y ventanas de un edificio para ver cuáles están abiertas, cuáles cerradas con llave y cuáles tienen un guardia bloqueándote el paso (<em>filtered</em>).
+</li><li>
+<em>Ejemplo concreto:</em> Tras ver red local con ip a (127.0.0.1 loopback, .255 broadcast) y conectividad con ping, escanear una máquina virtual mostró puertos como 3306 (MySQL), 1521 (Oracle), 445 (Microsoft/NetBIOS), 21 (FTP), 22 (SSH), 23 (Telnet), 80 (HTTP) y 443 (HTTPS). Con nmap -sn &lt;IP&gt; solo detectó 4 hosts activos en 8 segundos; con /24 (255.255.255.0) sacó direcciones MAC y latencias.
+</li></ul>
+</li><li>
+<strong>Seguridad y Auditoría de Bases de Datos en Oracle (Clase 14)</strong>
+<ul><li>
+<em>Definición:</em> Administración segura en servidores empresariales (Oracle elegido por ser estándar de producción frente a MySQL) siguiendo la jerarquía <strong>Usuario -&gt; Rol -&gt; Privilegios</strong>, más disparadores (<strong>Triggers</strong>) que se ejecutan automáticamente antes (BEFORE) o después (AFTER) de un INSERT, UPDATE o DELETE.
+</li><li>
+<em>Analogía:</em> El <strong>Rol</strong> es el gafete de "becario" con sus llaves incluidas (GRANT); el <strong>Tablespace</strong> es la carpeta privada de cada usuario; el <strong>COMMIT</strong> es como el git push (si no confirmas la transacción, nadie más ve tus cambios); y el <strong>Trigger</strong> es una cámara de seguridad automática que anota quién entró y qué cambió en la bitácora.
+</li><li>
+<em>Ejemplo concreto:</em> En Oracle local: 1) Habilitar creación de usuario común: ALTER SESSION SET "_ORACLE_SCRIPT"=true;. 2) CREATE USER rafa IDENTIFIED BY 123; -&gt; CREATE ROLE becario; -&gt; GRANT CREATE SESSION, CREATE TABLE, INSERT ANY TABLE, SELECT ANY TABLE, CREATE TRIGGER TO becario; -&gt; GRANT becario TO rafa;. 3) Permisos de sistema operativo directo al usuario (no basta el rol): GRANT UNLIMITED TABLESPACE TO rafa;. 4) Acceso global entre usuarios: SELECT * FROM rafa.reprobaditos; (tras COMMIT). Nótese que DROP TABLE NO requiere COMMIT. 5) SYSDATE guardado en columna DATE devuelve solo fecha; en TIMESTAMP devuelve fecha, hora y <strong>nanosegundos</strong> (clave para rastrear operaciones en el mismo segundo). 6) Trigger de auditoría: CREATE OR REPLACE TRIGGER i_auditoria AFTER INSERT ON rafa.condicion FOR EACH ROW BEGIN INSERT INTO auditoria VALUES (USER, 'Insertó', SYSDATE); END; (diferenciando USER función vs SHOW USER comando). Para la práctica, integrar en <strong>un solo trigger</strong> INSERTING, UPDATING y DELETING usando las variables :OLD (dato anterior) y :NEW (dato nuevo), además de conectar SQL Developer a <strong>Oracle Free/Live SQL</strong> en la nube (puerto 1521 abierto vs 2484 seguro).
+</li></ul>
+</li></ul>
+<h4>(c) Banderas de Nmap (Clase 9)</h4>
+<div class="tabla-scroll"><table><tr><th>Comando / Bandera Nmap</th><th>Qué hace</th></tr><tr><td>nmap -sn &lt;red/24&gt;</td><td>Descubre únicamente qué hosts están activos (<em>up</em>)</td></tr><tr><td>nmap -sS &lt;IP&gt;</td><td>Escaneo <strong>sigiloso</strong> (puede automatizarse en bash cada hora)</td></tr><tr><td>nmap -sV &lt;IP&gt;</td><td>Detecta <strong>versiones</strong> y servicios corriendo en los puertos abiertos</td></tr><tr><td>nmap -O &lt;IP&gt;</td><td>Detecta el <strong>sistema operativo</strong> (vulnerabilidades asociadas)</td></tr><tr><td>nmap -A &lt;IP&gt;</td><td>Escaneo <strong>agresivo / completo</strong> (máxima precisión, pero fácil de detectar y deja rastro)</td></tr></table></div>
+<h4>(d) Errores comunes y puntos de examen (Clases 8, 9, 14)</h4>
+<ul><li>
+Ejecutar pruebas de Metasploit o Nmap desde tu equipo real sin máquina virtual ni autorización (deja rastro de IP).
+</li><li>
+Dar privilegios directo al usuario saltándose los <strong>Roles</strong>, o olvidar que UNLIMITED TABLESPACE sí va directo al usuario y no por rol.
+</li><li>
+Creer que SYSDATE solo devuelve la fecha (depende del tipo de columna: DATE vs TIMESTAMP), o olvidar COMMIT al consultar desde otro usuario.
+</li><li>
+Confundir <strong>Trigger</strong> (automático ante INSERT/UPDATE/DELETE) con <strong>Procedimiento almacenado</strong> (se invoca manualmente), o hacer 3 triggers separados cuando el profesor pidió 1 solo usando INSERTING/UPDATING/DELETING con :OLD y :NEW.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-5-servicios-de-datos-cubos-olap-d"><summary><span class="stitle">UNIDAD 5: Servicios de Datos, Cubos OLAP, Data Warehouse e Inteligencia de Negocios (Clases 10, 11, 13)</span></summary>
+<h4>(a) Problema que resuelve y conexión con el tema anterior</h4>
+<p>Con los datos almacenados y auditados en Oracle, las organizaciones necesitan analizar históricos desde múltiples perspectivas sin frenar las bases operativas ni caer en consultas JOIN lentas o en gráficos estadísticos engañosos (Clases 10, 11, 13).</p>
+<h4>(b) Conceptos clave</h4>
+<ul><li>
+<strong>Roles en Datos y Proceso ETL (Clases 10, 11)</strong>
+<ul><li>
+<em>Definición:</em> Cuatro puestos clave: <strong>Modelador/Diseñador</strong> (cardinalidades, restricciones), <strong>Arquitecto de datos</strong> (optimización/<em>tuning</em>, software+hardware, CREATE TABLESPACE calculado por registros), <strong>DBA</strong> (seguridad, usuarios, roles, GRANT/REVOKE) y <strong>Analista de datos</strong> (qué/cómo/cuándo; distinto del Científico de datos que usa estadística inferencial, ecuaciones diferenciales y Laplace). <strong>ETL</strong> significa <strong>Extracción</strong> (de ERP, CRM, Excel, PDF, JSON), <strong>Transformación</strong> (limpieza en Power Query) y <strong>Carga</strong>.
+</li><li>
+<em>Analogía:</em> En una cocina industrial, el Modelador diseña los estantes, el Arquitecto calcula el tamaño del refrigerador (CREATE TABLESPACE), el DBA controla quién tiene llave y el Analista decide qué platillos se venden más.
+</li></ul>
+</li><li>
+<strong>Cubo de Información (OLAP), Medidas y Dimensiones (Clase 10)</strong>
+<ul><li>
+<em>Definición:</em> <strong>OLAP</strong> (<em>Online Analytical Processing</em>) es una <strong>estructura conceptual</strong> (no un archivo físico) que organiza <strong>medidas numéricas</strong> alrededor de <strong>dimensiones</strong> para responder una <strong>pregunta</strong> u objetivo. Las dimensiones tienen <strong>jerarquías</strong> de lo general a lo particular (Tiempo: Año -&gt; Trimestre -&gt; Mes -&gt; Día; Geografía: País -&gt; Estado -&gt; Ciudad -&gt; Sucursal; Producto: Categoría -&gt; Subcategoría -&gt; Producto). Las medidas se dividen en <strong>Aditivas</strong> (sumables en todas dimensiones: ventas, costos), <strong>Semiaditivas</strong> (sumables en unas dimensiones pero no en todas, ej. saldo bancario por cliente pero no por tiempo; suelen combinar string + número) y <strong>No aditivas</strong> (calculadas con fórmulas/campos derivados: porcentajes, promedios, precio con IVA, sueldo bruto/neto).
+</li><li>
+<em>Analogía:</em> Un dado donde cada cara es una dimensión (tiempo, producto, sucursal, cliente): puedes girar el dado para responder cuánto vendiste sin importar desde qué cara empieces.
+</li><li>
+<em>Ejemplo concreto:</em> En Power Maps, buscar "Monterrey" sin jerarquía devuelve 3 lugares (México y Venezuela), y "León" aparece en México y España; por eso se requiere la jerarquía completa. Ejemplo de clase: Ventas = \$1,250,000 (medida) por sucursal (Ecatepec vs Santa Fe) en 2026 Q1.
+</li></ul>
+</li><li>
+<strong>Data Warehouse y Esquemas Analíticos (Clases 10, 11)</strong>
+<ul><li>
+<em>Definición:</em> <strong>Data Warehouse</strong> es un <strong>repositorio</strong> (no una BD transaccional común) orientado al análisis, integrado desde múltiples fuentes e <strong>histórico</strong> en el tiempo. <strong>Regla crítica:</strong> nunca regresar datos del Data Warehouse a la base de datos transaccional porque rompe la integridad. Sus operaciones analíticas alimentan un <strong>EIS</strong> (Sistema de Información Ejecutiva / <em>Dashboards</em>): <em>Slice</em> (una rebanada, ej. solo 2026), <em>Dice</em> (varias condiciones, ej. laptops en CDMX en Q2) y <em>Drill-down</em> (bajar al detalle: año -&gt; mes -&gt; día).
+</li><li>
+<em>Analogía:</em> La BD transaccional es la caja registradora en vivo; el Data Warehouse es la hemeroteca histórica de reportes donde solo consultas hacia adelante para el tablero del director.
+</li></ul>
+</li><li>
+<strong>Análisis Crítico en Power BI con ENOE/ENIGH y Gobernanza (Clases 10, 11, 13)</strong>
+<ul><li>
+<em>Definición:</em> Flujo <strong>Excel (básico / Power Query) -&gt; Oracle (almacenamiento DW + SQL con funciones OLAP como RANK y OVER) -&gt; Power BI Desktop (modelos semánticos y dashboards)</strong>. Por <strong>gobernanza de datos</strong>, no deben usarse/compartirse datos públicos de los últimos <strong>5 años</strong> sin permiso (en 2026, restringidos 2021–2025; se usó ENOE 2017).
+</li><li>
+<em>Ejemplo concreto:</em> Con la <strong>ENOE</strong> (Encuesta Nacional de Ocupación y Empleo, teóricamente ≥15 años) se demostró en vivo que en 2017 había <strong>8 niños de 12 años</strong> y <strong>4 personas de 98 años</strong> trabajando para mantener hogares; el pico más alto de suma de ingresos está a los <strong>36 años</strong>. Al analizar <strong>brecha salarial</strong>, sumar ingresos totales mostraba casi el doble para hombres, pero al cambiar a <strong>recuento</strong> había ~6,300 hombres vs ~4,000 mujeres (y 175 hombres vs casi la mitad de mujeres en un pico de edad). En <strong>escolaridad</strong>, el sistema juntó Media Superior + Superior frente a Secundaria completa; en <strong>promedio salarial</strong>, 6 de los top 10 estados son del norte (Baja California, Nuevo León, Sinaloa, Coahuila, Sonora) y no CDMX; el empleo <strong>formal</strong> gana más antes de impuestos, pero en CDMX y Oaxaca predomina lo <strong>informal</strong> frente a Nuevo León y Quintana Roo (hoteles).
+</li></ul>
+</li></ul>
+<h4>(c) Esquemas de Data Warehouse (Clase 10)</h4>
+<div class="tabla-scroll"><table><tr><th>Esquema</th><th>Forma Normal</th><th>Estructura de tablas</th><th>Ventaja / Uso</th></tr><tr><td><strong>Estrella</strong></td><td><strong>1FN</strong> mínimo (atomicidad, sin grupos repetidos, llaves primarias)</td><td><strong>1 tabla de hechos</strong> central (llave primaria compuesta por foráneas de todas las dimensiones) + dimensiones directas</td><td>Sencillo, una sola consulta centralizada; evita JOINs pesados (Explain Plan)</td></tr><tr><td><strong>Copo de Nieve</strong></td><td><strong>2FN</strong></td><td><strong>1 tabla de hechos</strong>, pero las dimensiones se normalizan en <strong>subdimensiones</strong> (ej. Producto -&gt; Categoría / Marca)</td><td>Reduce redundancia manteniendo relación 1:N hacia la tabla de hechos</td></tr><tr><td><strong>Constelación</strong></td><td><strong>3FN</strong></td><td><strong>Más de 1 tabla de hechos</strong> compartiendo dimensiones (y posibles subdimensiones)</td><td>Cubre múltiples procesos analíticos complejos</td></tr></table></div>
+<h4>(d) Errores comunes y puntos de examen (Clases 10, 11, 13)</h4>
+<ul><li>
+<strong>Empezar un cubo por la pregunta y al final buscar la medida:</strong> Se debe definir primero <strong>Medida + Dimensiones</strong> y luego responder la pregunta del cliente.
+</li><li>
+<strong>Creer que "cubo de información" es un archivo físico</strong> (es un concepto) o decir que "edad" es el único campo calculado sin entender medidas no aditivas/derivadas.
+</li><li>
+<strong>Gráficos engañosos:</strong> Usar <strong>suma</strong> en lugar de <strong>promedio o recuento</strong> (crea falsas brechas por tamaño poblacional) o elegir el gráfico "más bonito" sin saber cuándo usar barras, líneas o dispersión.
+</li><li>
+<strong>No revisar el modelo relacional antes de responder:</strong> En la Clase 13 advirtió explícitamente que si no armas bien el modelo entidad-relación entre los 5 archivos, todas las respuestas salen mal. <em>(Los cubos OLAP fueron explícitamente anunciados para el examen parcial previo ``, por lo que siguen siendo base del examen final integral.)</em>
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-6-transformacion-digital-nuevas-t"><summary><span class="stitle">UNIDAD 6: Transformación Digital, Nuevas Tecnologías e IA en Profesiones (Clases 15, 16, 17)</span></summary>
+<h4>(a) Problema que resuelve y conexión con el tema anterior</h4>
+<p>Los datos y modelos analíticos culminan en automatización e inteligencia artificial; esta unidad evalúa cómo integrarlas estratégicamente en empresas y oficios reales sin perder el negocio, el criterio humano ni la calidad de los datos (Clases 15, 16, 17).</p>
+<h4>(b) Conceptos clave</h4>
+<ul><li>
+<strong>Digitalizar vs. Digitalizar Procesos vs. Transformación Digital (Clase 15)</strong>
+<ul><li>
+<em>Definición:</em> <strong>Digitalizar</strong> es convertir papel a formato digital (escanear); <strong>digitalizar procesos</strong> es usar herramientas digitales para mejorar tareas actuales (facturas electrónicas, ERP como SAP); <strong>transformación digital</strong> es integrar tecnologías para rediseñar el modelo de negocio, cultura, procesos y forma de entregar valor.
+</li><li>
+<em>Analogía:</em> Pasar tus apuntes a PDF es <em>digitalizar</em>; usar una app para generar recibos automáticos es <em>digitalizar procesos</em>; cambiar por completo cómo vendes y entregas tu servicio sin cargar infraestructura ajena es <em>transformación digital</em>.
+</li><li>
+<em>Ejemplo concreto:</em> <strong>Netflix</strong>: empezó rentando DVDs, pasó a <em>streaming</em> queriendo operar todos sus servidores y subtítulos ("el clásico yo-yo"), y se transformó delegando infraestructura a la nube (Google/AWS) para enfocarse en contenido propio y análisis de datos de usuarios. Caso <strong>Avante</strong>: despidió a un departamento entero (mencionado como 19 o ~28 personas) dejando solo a quienes sabían usar IA.
+</li></ul>
+</li><li>
+<strong>IA como Herramienta, <em>Prompts</em> y Áreas Tecnológicas (Clases 15, 16, 17)</strong>
+<ul><li>
+<em>Definición:</em> La IA no es objetiva (se basa en probabilidades/porcentajes, recompensa sin penalización al alucinar y en el perfil del usuario) y es un apoyo, no un reemplazo. Escribir un <em>prompt</em> efectivo equivale a escribir un <strong>algoritmo</strong> detallado.
+</li><li>
+<em>Ejemplo concreto:</em> En las exposiciones (Clases 16, 17) se analizaron casos reales:
+</li><li>
+<em>Contaduría:</em> Automatización de CFDI/XML/PDF en SAP/QuickBooks, evitando contacto directo riesgoso contador-cliente y operaciones a terceros (refacturación ilegal).
+</li><li>
+<em>Agricultura:</em> Drones DJI Agras (más de <strong>\$500,000 MXN</strong>), sensores de flujo óptico y láseres cuando falla el GPS; en PyMEs agrícolas, usar app móvil mejor que web para campo (aclarando que <strong>Flutter</strong> es el aplicativo y <strong>Dart</strong> el lenguaje).
+</li><li>
+<em>Transporte autónomo y Medicina:</em> Vehículos autónomos (Waymo) exigen nuevos roles (programador, mecánico eléctrico, médico en módulos, <strong>ciberseguridad</strong> porque ha habido muertes por hackeo); medicina usa modelo <strong><em>human-in-the-loop</strong></em> y verificador de recetas contra autorrecetas/falsificación.
+</li><li>
+<em>Mecánica y Soporte TI:</em> Asistente de IA con escáner automotriz (riesgo de autodiagnóstico del cliente, oportunidad en quien alimenta datos); soporte predictivo autónomo de 4 rubros donde el profesor destacó como único aporte clave el rol del <strong>auditor</strong> de procesos y documentación.
+</li></ul>
+</li><li>
+<strong>Big Data y Calidad vs. Cantidad de Datos (Clase 17)</strong>
+<ul><li>
+<em>Definición:</em> <strong>Big Data</strong> es una "gran cantidad de datos"; sin embargo, el profesor recalcó que <strong>a mayor cantidad de datos NO hay necesariamente mayor precisión: la precisión la da la calidad y seguir un protocolo estricto de captura</strong>.
+</li><li>
+<em>Analogía:</em> La agenda del teléfono celular: aunque tengas campos separados para nombre, apellido paterno y materno, si todos ponen apodos en el campo de nombre, por miles de contactos que tengas las búsquedas fallarán.
+</li><li>
+<em>Ejemplo concreto:</em> Base de datos de radiografías/ecografías veterinarias (nube vs local): si las redes neuronales confunden perro con gato o los datos se capturan sin protocolo, arrojan diagnósticos erróneos.
+</li></ul>
+</li></ul>
+<h4>(c) Errores comunes y puntos de examen (Clases 15, 16, 17)</h4>
+<ul><li>
+Confundir digitalizar (escanear) con transformar digitalmente el negocio.
+</li><li>
+Creer que <em>Big Data</em> garantiza mayor precisión por volumen y que basta "contratar a alguien" para llenar datos sin establecer un <strong>protocolo</strong>.
+</li><li>
+Negar el desplazamiento laboral en la explicación oral cuando en la propia diapositiva o diseño dicen que una máquina hace el trabajo de 5 personas o es 100% autónoma.
+</li><li>
+Usar IA sin supervisión humana (especialmente en finanzas/dineros, decisiones médicas o enviando prácticas sin quitar la línea del chat de IA), o que los empleados usen IA por su cuenta sin políticas ni auditoría de la empresa.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-7-estandares-oficiales-de-interne"><summary><span class="stitle">UNIDAD 7: Estándares Oficiales de Internet (RFCs) y Protocolos Fundamentales (Clases 17, 18, 19)</span></summary>
+<h4>(a) Problema que resuelve y conexión con el tema anterior</h4>
+<p>Todo servicio visto en el semestre (Linux, HTTP, correo, directorios, IP/puertos, acceso remoto, DNS, DHCP y cifrado) no funciona por improvisación: la <strong>IETF</strong> estandariza sus reglas en documentos públicos llamados <strong>RFC</strong> para garantizar interoperabilidad mundial entre sistemas distintos (Clases 17, 18, 19).</p>
+<h4>(b) Conceptos clave</h4>
+<ul><li>
+<strong>¿Qué es un RFC? (Clases 17, 18)</strong>
+<ul><li>
+<em>Definición:</em> <em>Request for Comments</em> (iniciado por Steve Crocker en ARPANET en 1969): documentos técnicos públicos, gratuitos e <strong>inmutables</strong> (no se editan; solo evolucionan publicando un nuevo RFC que reemplaza o actualiza al anterior) que definen reglas de protocolos, formatos, mensajes, palabras clave (MUST, SHOULD, MAY) y registros ante <strong>IANA</strong>. Categorías: <em>Standard Track</em>, <em>BCP</em>, <em>Informational</em>, <em>Experimental</em> e <em>Historic</em>.
+</li><li>
+<em>(Nota sobre asignación en Clase 17 vs exposición en Clases 18–19: En Clase 17 se mencionaron 1939, 281, 1034, 3898, 451, 261, 8446, 1700 —y 2081/3501 en temario—, no quedando claros en el audio los números de los equipos 3 y 4. En las Clases 18 y 19 los equipos expusieron exactamente 9 RFCs: <strong>2616, 3501, 1939, 4510, 1700, 854, 1034, 3898 y 8446</strong>.)</em>
+</li></ul>
+</li><li>
+<strong>RFC 2616 — HTTP/1.1 (Clase 18)</strong>
+<ul><li>
+<em>Definición:</em> Publicado en junio de 1999 por la IETF; define HTTP 1.1 como protocolo <strong>petición-respuesta sin estado</strong> (<em>stateless</em>) sobre TCP (puerto 80).
+</li><li>
+<em>Analogía:</em> Ventanilla sin memoria: cada petición lleva línea inicial/final, cabeceras y cuerpo opcional, y recibe código 1xx (info), 2xx (éxito), 3xx (redirección), 4xx (error cliente) o 5xx (error servidor).
+</li><li>
+<em>Ejemplo concreto:</em> Métodos como GET (seguro, solo lectura), POST, PUT, DELETE (idempotentes), OPTIONS, CONNECT. Mejoró a RFC 1945 (solo "yo recomiendo") y 2068 (vacíos) añadiendo conexiones persistentes, cabecera obligatoria (Virtual Hosting), <em>Chunked Transfer Encoding</em> y caché. Por ser <strong>monolítico (176 hojas)</strong>, quedó obsoleto en <strong>2014</strong> al dividirse en <strong>RFC 7230–7235</strong>, refactorizarse en <strong>2022</strong> y dar paso a HTTP/2 (multiplexación) y HTTP/3 (sobre QUIC).
+</li></ul>
+</li><li>
+<strong>RFC 3501 — IMAP4rev1 (Clase 18)</strong>
+<ul><li>
+<em>Definición:</em> Creado en 2003 por Mark Crispin; protocolo de capa 7 (puertos <strong>143</strong> normal, <strong>993</strong> cifrado) para acceder y manipular correos directamente en el servidor desde múltiples dispositivos.
+</li><li>
+<em>Analogía:</em> Archivero central en la oficina donde lees y sellas cartas sin llevártelas a casa.
+</li><li>
+<em>Ejemplo concreto:</em> Comandos con etiqueta (A001 LOGIN usuario clave) -&gt; respuestas OK, NO, BAD y datos sin etiqueta *. <strong>4 estados:</strong> No autenticado (LOGIN) -&gt; Autenticado (SELECT) -&gt; Seleccionado -&gt; Cierre (LOGOUT). Banderas: \Seen, \Answered, \Flagged, \Deleted (requiere EXPUNGE para borrar definitivo), \Draft, \Recent. En ejemplo real, se conectó al puerto 993 viendo 172 mensajes (1 reciente) y descargó solo cabeceras con FETCH. Desventajas: dependencia total del servidor (como la caída de <strong>300 bancos en Japón</strong>) y crecimiento continuo de almacenamiento.
+</li></ul>
+</li><li>
+<strong>RFC 1939 — POP3 (Clase 18)</strong>
+<ul><li>
+<em>Definición:</em> Publicado en mayo de 1996 (reemplaza RFC 1725); protocolo simple sobre TCP (puerto <strong>110</strong> normal, <strong>995</strong> POP3S con SSL/TLS) donde el cliente descarga correos localmente y se borran del servidor.
+</li><li>
+<em>Analogía:</em> Buzón físico afuera de tu casa: el cartero (SMTP) deposita, tú sacas todo a tu escritorio y el buzón queda vacío.
+</li><li>
+<em>Ejemplo concreto:</em> Respuestas +OK, -ERR y . al final de listas. <strong>3 estados:</strong> Autorización (USER, PASS, APOP con MD5) -&gt; Transacción (STAT, LIST, RETR n, DELE n, RSET desmarca, NOOP) -&gt; <em>Update</em> (QUIT, única forma en que DELE borra definitivamente). Timeout de <strong>10 minutos</strong> y bloqueo exclusivo del buzón.
+</li></ul>
+</li><li>
+<strong>RFC 4510 — LDAPv3 (Clase 18)</strong>
+<ul><li>
+<em>Definición:</em> Documento de 6 páginas (junio 2006, Kurt Zeilenga / OpenLDAP, <em>Standard Track</em>) que actúa como <strong>mapa de ruta normativo</strong> de <strong>LDAPv3</strong>, alternativa ligera ("X.500 <em>light</em>") a X.500 (que exigía toda la pila OSI) para gestionar usuarios, contraseñas y permisos en red.
+</li><li>
+<em>Ejemplo concreto:</em> Sustituyó al RFC 3377 y organiza la familia <strong>4511</strong> (operaciones <em>Bind/Search/Modify/Delete</em>), <strong>4512</strong> (modelos), <strong>4513</strong> (SASL/TLS), <strong>4514–4519</strong> (nombres, filtros, URLs, esquemas como uid/mail), <strong>4520</strong> (registros IANA) y <strong>4521</strong> (extensiones).
+</li></ul>
+</li><li>
+<strong>RFC 1700 — Números Asignados / IANA (Clase 18)</strong>
+<ul><li>
+<em>Definición:</em> Documento histórico de 1994 (Joyce Reynolds y Jon Postel) que recopiló en tablas los identificadores de protocolos y <strong>puertos bien conocidos</strong> de IANA para interoperabilidad entre arquitecturas (x86/x64, ARM).
+</li><li>
+<em>Ejemplo concreto:</em> En IPv4, protocolo <strong>6 = TCP</strong> y <strong>17 = UDP</strong>. Puertos esenciales: <strong>20</strong> (FTP datos), <strong>21</strong> (FTP control), <strong>22</strong> (SSH), <strong>25</strong> (SMTP), <strong>53</strong> (DNS TCP/UDP), <strong>80</strong> (HTTP). Por ser estático y lento para actualizar por consenso, pasó a histórico y lo sustituyó el <strong>RFC 3232</strong> (2002, base en línea) y hoy los registros IANA en tiempo real.
+</li></ul>
+</li><li>
+<strong>RFC 854 — Telnet (Clase 18)</strong>
+<ul><li>
+<em>Definición:</em> Publicado en 1983 (Postel y Reynolds, estatus <strong>STD 8</strong>); abarca el documento, el protocolo de control de 8 bits independiente del SO y el programa cliente (ej. PuTTY) como terminal remota interactiva sobre TCP <strong>puerto 23</strong>.
+</li><li>
+<em>Ejemplo concreto:</em> Creó <strong>NVT (<em>Network Virtual Terminal</em>)</strong> en <strong>ASCII de 7 bits + octavo bit de control</strong> como traductor entre hosts distintos; negocia opciones con <strong>WILL, WONT, DO, DONT</strong> y IAC (<em>Interpret As Command</em>, bit 155, ej. ocultar eco de contraseñas). Modularidad con RFC 856 (binarios), bidireccionalidad y RFC 1091 (colores/cursores). Por enviar todo <strong>sin cifrar</strong>, fue reemplazado en producción por <strong>SSH (RFC 4251)</strong> en puerto 22.
+</li></ul>
+</li><li>
+<strong>RFC 1034 — DNS (Clase 18)</strong>
+<ul><li>
+<em>Definición:</em> Publicado (1984 según exposición) por la IETF; especifica arquitectura, formato, resolución global jerárquica y escalabilidad distribuida del DNS en <strong>capa 7, puerto 53</strong>.
+</li><li>
+<em>Ejemplo concreto:</em> Traduce youtube.com o estructuras .com.mx/.unam en servidores como <strong>BIND</strong> y dirige correos. Descentralizado (evita caídas por servidor único), aunque inicialmente vulnerable y sujeto a retrasos de propagación/caché.
+</li></ul>
+</li><li>
+<strong>RFC 3898 — Opciones NIS/NIS+ en DHCPv6 (Clase 19)</strong>
+<ul><li>
+<em>Definición:</em> Publicado en octubre de 2004; transporte para que DHCPv6 entregue parámetros de servidores NIS/NIS+ mediante cuatro códigos (<strong>27 al 30</strong>).
+</li><li>
+<em>Ejemplo concreto:</em> <strong>27</strong> (IP NIS) + <strong>29</strong> (dominio NIS); <strong>28</strong> (IP NIS+) + <strong>30</strong> (dominio NIS+) en tablas de 16 bits. Flujo de 4 pasos (el servidor no entrega NIS por defecto: el cliente pide códigos en búsqueda inicial -&gt; servidor envía anuncio -&gt; cliente reenvía códigos en <em>request</em> -&gt; servidor entrega configuración). Obsoleto por transmitir <strong>sin cifrar</strong> y riesgo de servidores falsos; sustituido por <strong>LDAP / Active Directory</strong>.
+</li></ul>
+</li><li>
+<strong>RFC 8446 — TLS 1.3 (Clase 19)</strong>
+<ul><li>
+<em>Definición:</em> Especificación vigente de <em>Transport Layer Security</em> 1.3 (reemplaza TLS 1.2 RFC 5246 y RFC 507; actualiza 5705 y 7961) que garantiza <strong>confidencialidad, integridad e identificación</strong> (certificado digital) contra ataques <strong><em>Man-in-the-Middle</strong></em>.
+</li><li>
+<em>Analogía:</em> <strong>AEAD</strong> es como guardar dinero en una caja fuerte (AES) y además sellarla con un <strong>sello de cera</strong> (<em>authentication tag</em>): si alguien altera un solo bit del contenido o del encabezado, el sello se rompe y el servidor aborta la transacción al instante.
+</li><li>
+<em>Ejemplo concreto:</em> Reduce <em>handshake</em> de <strong>2 RTT</strong> (TLS 1.2) a <strong>1 RTT</strong>; elimina <strong>MD5, SHA-1 y RC4</strong>. Impone dos restricciones obligatorias: (1) <strong>AEAD</strong> (predilecto <strong>AES-GCM</strong>, etiqueta sobre <em>payload</em> + encabezado) y (2) <strong><em>Perfect Forward Secrecy</strong></em> con <strong>claves efímeras Diffie-Hellman</strong> que <strong>se borran de la RAM</strong> al cerrar sesión (dejando paquetes capturados ilegibles).
+</li></ul>
+</li></ul>
+<h4>(c) Tabla resumen de puertos y estado de los RFCs (Clases 18, 19)</h4>
+<div class="tabla-scroll"><table><tr><th>RFC</th><th>Protocolo / Tema</th><th>Capa / Transporte / Puertos</th><th>Estado actual / Reemplazo</th></tr><tr><td><strong>2616</strong></td><td>HTTP/1.1</td><td>Aplicación / TCP / <strong>80</strong></td><td>Obsoleto (2014 -&gt; <strong>7230–7235</strong> -&gt; 2022 / HTTP/2, HTTP/3)</td></tr><tr><td><strong>3501</strong></td><td>IMAP4rev1</td><td>Capa 7 / TCP / <strong>143</strong> (normal), <strong>993</strong> (cifrado)</td><td>Base clásica (sustituido por rev. posterior citada como 951)</td></tr><tr><td><strong>1939</strong></td><td>POP3</td><td>Capa transporte/app / TCP / <strong>110</strong> (normal), <strong>995</strong> (POP3S)</td><td>Vigente en descargas locales (con POP3S cifrado)</td></tr><tr><td><strong>4510</strong></td><td>LDAPv3 (hoja de ruta)</td><td>Aplicación / Familia 4511–4521</td><td>Vigente en directorios empresariales</td></tr><tr><td><strong>1700</strong></td><td>Números IANA</td><td>Red/Transporte (6=TCP, 17=UDP; 20/21, 22, 25, 53, 80)</td><td>Histórico (2002 -&gt; <strong>RFC 3232</strong> -&gt; registros IANA en vivo)</td></tr><tr><td><strong>854</strong></td><td>Telnet</td><td>Aplicación / TCP / <strong>23</strong></td><td>Obsoleto en producción por falta de cifrado (-&gt; <strong>SSH RFC 4251</strong>, puerto 22)</td></tr><tr><td><strong>1034</strong></td><td>DNS</td><td>Capa 7 / TCP-UDP / <strong>53</strong></td><td>Arquitectura base vigente (actualizada por nuevos RFCs de seguridad)</td></tr><tr><td><strong>3898</strong></td><td>Opciones NIS en DHCPv6</td><td>Red/App / Códigos <strong>27–30</strong></td><td>Obsoleto por inseguridad (-&gt; <strong>LDAP / Active Directory</strong>)</td></tr><tr><td><strong>8446</strong></td><td>TLS 1.3</td><td>Capa de transporte segura (<strong>1 RTT</strong>)</td><td>Vigente recomendado (Chrome/Firefox); reemplaza <strong>5246</strong></td></tr></table></div>
+<h4>(d) Errores comunes y puntos de examen (Clases 17, 18, 19)</h4>
+<ul><li>
+Confundir el protocolo con el RFC (ej. en Clase 18 el profesor preguntó explícitamente si <strong>LDAP</strong> es el protocolo o el RFC: LDAP es el <strong>protocolo</strong> y el RFC 4510 es el documento normativo que lo organiza).
+</li><li>
+Confundir las siglas <strong>RFC</strong> (documentación oficial de reglas técnicas de internet, no el Registro Federal de Contribuyentes).
+</li><li>
+Creer que en POP3 DELE borra los correos de inmediato (solo marca; borra en estado <em>Update</em> al ejecutar QUIT, y RSET lo revierte).
+</li><li>
+Olvidar que en el RFC 3898 los códigos 27–30 deben enviarse <strong>dos veces</strong> (en la búsqueda inicial y en el <em>request</em> formal) y que el RFC no implementa NIS, solo lo transporta.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-3-lo-que-mas-probablemente-viene-en-el-f" open><summary><span class="stitle">3. LO QUE MÁS PROBABLEMENTE VIENE EN EL FINAL</span></summary>
+<p><em>(Fecha del examen final confirmada en Clase 19: <strong>miércoles 18 de noviembre</strong>, individual, en hojas blancas, sin celular, abarcando todo el curso.)</em></p>
+<ul><li>
+<strong>Definición precisa de Servidor vs. Repositorio y tipos de Requerimientos:</strong> <em>Evidencia fuerte</em> — en Clase 3, el profesor advirtió explícitamente <em>"parece muy obvio, pero luego en el examen me ponen ahí cada barbaridad"</em> al dar la definición de servidor, y resolvió 5 ejercicios en vivo diferenciando requerimientos funcionales, no funcionales y de sistema.
+</li><li>
+<strong>Escritura de código y comandos en papel (basado en examen extraordinario):</strong> <em>Evidencia fuerte</em> — en Clase 17 le preguntaron si había que sacar hoja y escribir código, y el profesor confirmó: <em>"El extra estuvo manchado. Yo creo me voy a basar en el [extra]"</em>. Incluye comandos de Linux (ls, cat, mkdir -m/-p, ps aux, which/whereis) (Clase 1), SQL/Oracle (CREATE USER, ROLE, GRANT, UNLIMITED TABLESPACE, TRIGGER con :OLD/:NEW) (Clase 14) y scripts/comandos de red o ciberseguridad (Nmap, Metasploit, Kea/DHCP) (Clases 4, 8, 9).
+</li><li>
+<strong>Los RFCs expuestos y qué es un RFC:</strong> <em>Evidencia fuerte y explícita</em> — en Clase 17, el profesor afirmó: <em>"en el examen voy a añadir los de los RFCs"</em> y destacó que toda la materia y el temario se basan en ellos. Especial atención a HTTP/1.1 (2616 y GET/POST preguntados en Clase 18), IMAP (3501) vs POP3 (1939) (preguntados en Clase 18), LDAP (4510, preguntado si era protocolo o RFC), IANA (1700 puertos y protocolo 6/17), Telnet (854 vs SSH), DNS (1034), DHCPv6/NIS (3898) y TLS 1.3 (8446: 1-RTT, AEAD/AES-GCM, Diffie-Hellman efímero).
+</li><li>
+<strong>Cubos de información (OLAP), Data Warehouse y Esquemas (Estrella 1FN, Copo de nieve 2FN, Constelación 3FN):</strong> <em>Evidencia fuerte</em> — en Clase 10 dijo explícitamente <em>"de ahí sí podemos sacar un buen para su examen"</em>, en Clase 13 señaló que salieron mal en ese parcial (máximo 7) y les puso actividad de reposición enfatizando revisar primero el modelo relacional, y en Clase 17 confirmó que el final cubre <em>"todo, todo, todo, todo"</em>.
+</li><li>
+<strong>Auditoría en Oracle: Usuarios -&gt; Roles -&gt; Privilegios, COMMIT, SYSDATE/TIMESTAMP y Triggers (:OLD / :NEW):</strong> <em>Evidencia fuerte</em> — en Clase 14 el profesor repitió <em>"Yo pondría mucha alta atención"</em>, apostó calificaciones en vivo con SYSDATE y acceso usuario.tabla, y enfatizó la diferencia entre USER vs SHOW USER y el uso de :OLD y :NEW en un solo disparador.
+</li><li>
+<strong>Metodologías de Proyectos (Tradicional/PMBOK vs. Ágil/Scrum) y Tipos de Recursos en Project:</strong> <em>Evidencia moderada/fuerte</em> — ocupó dos sesiones completas con cuadro comparativo formal, cálculo de horas y costos en vivo en MS Project (Trabajo, Material, Costo) y la distinción clave de que Scrum implementa a la metodología ágil (Clases 2, 5).
+</li><li>
+<strong>Servicios de Red (DHCP proceso DORA, componentes del ámbito, Kea vs. ISC y Seguridad DoS/SQLi/DMZ/VPN):</strong> <em>Evidencia moderada</em> — incluyó ejercicios prácticos de red (192.168.1.100–200, exclusión 127.x.x.x, una sola puerta de enlace) y comparativa técnica ISC vs Kea (Clase 4).
+</li><li>
+<strong>Big Data (Calidad vs. Cantidad de datos y necesidad de Protocolos):</strong> <em>Evidencia moderada</em> — en Clase 17 el profesor interrumpió la exposición de veterinaria para interrogar a todo el grupo sobre si más datos dan mayor precisión y refutarlo enfatizando protocolos de captura.
+</li><li>
+<strong>Arquitectura Von Neumann vs. Harvard RISC y Cálculo de uso de ALU en <em>Pipeline</em>:</strong> <em>Evidencia moderada</em> — fue el único ejercicio matemático-arquitectónico resuelto en pizarrón/clase con porcentajes exactos (33% y 20% de uso de ALU) al arranque del curso (Clase 1).
+</li><li>
+<strong>Principios CID en servidores, Presupuestos en Nube (dólares y alertas) y Banderas de Nmap / Metasploit:</strong> <em>Evidencia moderada</em> — temas repetidos en múltiples clases (CID en Clase 3; alertas 0.40/0.50 en Clase 3; banderas -sn, -sS, -sV, -O, -A resumidas al cierre de Clase 9 y conectadas en Clase 14 para rastrear IP del atacante desde el <em>trigger</em>).
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-4-conexiones-clave"><summary><span class="stitle">4. CONEXIONES CLAVE</span></summary>
+<p>Procesador Von Neumann -&gt; genera -&gt; Cuello de botella en acceso único a memoria (Clase 1) Arquitectura Harvard RISC -&gt; separa -&gt; Memorias de instrucciones y datos para lograr pipeline (Clase 1) Sistema operativo Linux -&gt; aloja -&gt; Servicios de red con permisos, usuarios y procesos (Clase 1) Metodología tradicional PMBOK -&gt; fija -&gt; Alcance, costo y tiempo con cambios formales costosos (Clase 2) Metodología ágil -&gt; implementa -&gt; Entregas incrementales mediante el marco Scrum (Clase 2) Microsoft Project -&gt; clasifica -&gt; Recursos en trabajo, material y costo fijo (Clase 2) Levantamiento de requerimientos -&gt; distingue -&gt; Qué hace el sistema (funcional) de cómo se mide (no funcional) (Clase 3) Diagramas UML -&gt; obligan -&gt; Coherencia exacta con el código del proyecto final (Clase 7) Repositorio -&gt; almacena -&gt; Datos brutos que un servidor sí procesa y comparte en red (Clase 3) Principios CID -&gt; garantizan -&gt; Disponibilidad, integridad y confidencialidad de todo servidor (Clase 3) Servicios en la nube -&gt; requieren -&gt; Presupuestos en dólares con alertas de costo previsto y real (Clase 3) Servidor DHCP -&gt; automatiza -&gt; Asignación de IP, máscara, gateway y DNS mediante proceso DORA (Clase 4) Kea DHCP -&gt; sustituye -&gt; Al obsoleto ISC DHCP aportando configuración JSON y multihilo (Clase 4) Firewall, DMZ y VPN -&gt; mitigan -&gt; Ataques DoS, inyección SQL y servidores DHCP/DNS falsos (Clase 4) Metasploit -&gt; inyecta -&gt; Tráfico auxiliar para descubrir puertos, IPs y arquitectura expuesta (Clases 8, 9) Nmap -&gt; mapea -&gt; Hosts activos, puertos, versiones, SO y vulnerabilidades de una red (Clase 9) Jerarquía Oracle -&gt; ordena -&gt; Seguridad creando primero usuario, luego rol y luego privilegios (Clase 14) Tablespace en Oracle -&gt; requiere -&gt; Privilegio UNLIMITED TABLESPACE directo al usuario (Clase 14) Trigger de auditoría -&gt; registra -&gt; Usuario, fecha nanosegundos, :OLD y :NEW ante DML (Clase 14) Proceso ETL -&gt; alimenta -&gt; Cubos OLAP y Data Warehouse desde orígenes heterogéneos (Clases 10, 11) Data Warehouse -&gt; prohíbe -&gt; Regresar datos a la BD transaccional para preservar integridad (Clases 10, 11) Esquemas analíticos -&gt; normalizan -&gt; Estrella (1FN), Copo de nieve (2FN) y Constelación (3FN) (Clase 10) Medidas no aditivas -&gt; calculan -&gt; Valores derivados mediante fórmulas que no deben sumarse directo (Clase 10) Power BI sobre ENOE -&gt; revela -&gt; Sesgos entre sumas totales, promedios y recuentos reales (Clase 11) Transformación digital -&gt; rediseña -&gt; El modelo de negocio más allá de solo escanear o digitalizar procesos (Clase 15) Big Data -&gt; depende -&gt; De calidad y protocolos de captura más que de cantidad de datos (Clase 17) Automatización con IA -&gt; exige -&gt; Supervisión <em>human-in-the-loop</em> y rol de auditoría humana (Clases 16, 17) Documentos RFC -&gt; estandarizan -&gt; Reglas inmutables de protocolos e identificadores IANA (Clases 17, 18) HTTP/1.1 (RFC 2616) -&gt; evoluciona -&gt; Hacia series 7230–7235, HTTP/2 y HTTP/3 al dividirse por monolítico (Clase 18) POP3 (RFC 1939) -&gt; descarga -&gt; Correos localmente borrándolos del servidor frente a IMAP (RFC 3501) (Clase 18) Telnet (RFC 854) -&gt; cede -&gt; Ante SSH (RFC 4251) por transmitir tráfico remoto sin cifrado (Clase 18) TLS 1.3 (RFC 8446) -&gt; protege -&gt; Comunicaciones en 1-RTT mediante AEAD (AES-GCM) y claves efímeras Diffie-Hellman (Clase 19)</p>
+<p>💡 Si quieres repasar antes del miércoles 18, puedo armarte un <strong>simulador de examen final tipo extraordinario</strong> (con ejercicios de código en papel en Linux, Oracle SQL/Triggers, cálculo de pipeline/project y preguntas trampa de RFCs y OLAP) para que lo resuelvas y lo revisemos juntos.</p>
+</details>
+<details class="section-block sec" id="gf-anexo-clases-que-no-estaban-en-el-cuader"><summary><span class="stitle">Anexo · Clases que no estaban en el cuaderno de NotebookLM</span></summary>
+<p><em>Resumen para estudiar de cada una, tomado de los apuntes por clase del sitio (decimo/ASI/ASI-Resumenes/).</em></p>
+<h3>Clase 12 · Examen (miércoles 7 oct 2026)</h3>
+<p>Si tienes el enunciado o tu calificación, agrégalos en decimo/ASI/ para completar este resumen.</p>
+</details>
+</div>
+</body>
+</html>

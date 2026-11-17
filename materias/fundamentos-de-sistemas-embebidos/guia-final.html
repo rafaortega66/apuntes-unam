@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="no-aplica">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía para el examen final — Fundamentos de Sistemas Embebidos</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261117b">
+<script src="../../assets/app.js?v=20261117b" defer></script>
+<style>
+.gf h3{margin:1.2em 0 .4em} .gf h4{margin:1em 0 .3em;opacity:.9}
+.gf .tabla-scroll{overflow-x:auto} .gf table td,.gf table th{font-size:.9em;vertical-align:top}
+.gf p.nota{border-left:3px solid var(--c);padding:.3em .8em;opacity:.9}
+.gf li{margin:.25em 0}
+</style>
+</head>
+<body style="--c:#A98BD1">
+<div class="wrap gf">
+<!-- Generado por scripts/build_guias_finales.py. No editar a mano. -->
+<a class="back" href="index.html">← Fundamentos de Sistemas Embebidos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>📘 Guía para el examen final</h2>
+  <p class="prof">Fundamentos de Sistemas Embebidos · semestre 2027-1 · hecha con NotebookLM a partir de los audios de clase y el material del profesor (16 nov 2026).</p>
+  <p class="prof">Las fechas y cálculos de NotebookLM pueden fallar: ante la duda, revisa la página de la clase que cita.</p>
+</div>
+<div class="files">
+  <a class="btn" href="https://docs.google.com/document/d/1MDfj1ayv8KlybmUOZIMJEjV0mshScoi-AwayxL3bV10/edit" target="_blank">📄 Original en Drive</a>
+  <a class="btn" href="https://docs.google.com/document/d/1d534lgJF7VyRr3iqVfk_tFMGIDQ_k90JzydHd0qbQlU/edit" target="_blank">📝 Apuntes y resumen (Drive)</a>
+  <a class="btn" href="https://drive.google.com/file/d/1Wipwbb5Fpro5IDL-hTPl4r7m19h-JdR4/view" target="_blank">🧠 Mapa mental detallado</a>
+  <a class="btn" href="../../decimo/FSE/FSE-Resumenes/FSE-mapa-examen-2.pdf" target="_blank">🗺️ Mapa de examen</a>
+  <a class="btn" href="resumenes.html">📚 Guías por clase</a>
+</div>
+<details class="section-block sec" id="gf-hilo-conductor" open><summary><span class="stitle">HILO CONDUCTOR</span></summary>
+<p>La historia del curso comienza entendiendo qué hace distinto a un <strong>sistema embebido</strong>: no es una computadora general, sino un sistema dedicado sujeto a restricciones estrictas de costo, energía, memoria y confiabilidad cuya <strong>arquitectura</strong> debe resolver esos desafíos desde el diseño (Diapositivas clase 1). Al bajar al silicio para diseñar esa arquitectura, el primer protagonista es el <strong>procesador</strong> (desde microcontroladores simples de 8 bits hasta ARM Cortex, ESP32, RP2040 y CPUs Intel) junto con su <strong>mapa de memoria</strong>, donde el hardware separa o unifica instrucciones, datos y periféricos, y distingue entre memorias volátiles rápidas y memorias no volátiles persistentes que interactúan mediante <strong>modos de direccionamiento</strong> (Clases 2–6; Diapositivas clases 2–4). Pero un procesador aislado no sirve si no reacciona al mundo físico ni mide el tiempo: por eso aparecen el <strong>controlador de interrupciones (ICU)</strong> para dejar de desperdiciar ciclos consultando pines, los <strong>timers de hardware</strong> para marcar el pulso periódico del sistema, y los buses externos (<strong>USB</strong>) e internos (<strong>I²C, SMBus, SPI, I²S, UART, RS-232/485, One-Wire</strong>) para hablar con sensores, actuadores y memorias, culminando el bloque de hardware con la <strong>secuencia de arranque (<em>bootstrap</em>)</strong> que despierta al procesador desde el vector de RESET hasta dejar todo listo para cargar software (Clases 7–12; Diapositivas clases 5–8). Cuando el sistema embebido crece y un simple ciclo infinito ya no basta, entra en escena el <strong>sistema operativo</strong> como árbitro de los tres recursos fundamentales que heredamos del hardware: el procesador, la memoria y los periféricos (Clases 7, 12, 13). Para usar esos recursos, las aplicaciones cruzan una frontera protegida mediante llamadas al sistema y se organizan como <strong>procesos, hilos o tareas</strong> (Clases 13, 15). A partir de ahí, el curso desarma cada componente del núcleo del sistema operativo: primero el <strong><em>scheduler</strong></em>, que decide quién usa la CPU en cada instante y cómo garantizar plazos en <strong>tiempo real</strong> (Clases 17–18); después el <strong><em>Memory Allocation System</strong></em> <strong>(MAS)</strong>, que evita tablas gigantes mediante <strong>paginación</strong>, combate la <strong>fragmentación</strong> con algoritmos de asignación o <strong>pozos de memoria</strong> y protege los discos flash del desgaste usando <strong>particionado</strong> y <strong>zram</strong> (Clases 19–20); luego los <strong>relojes y temporizadores por software</strong>, que convierten un solo <em>timer</em> físico en retardos síncronos, tareas periódicas seguras y hora civil sincronizada por <strong>NTP</strong> (Clase 20); y finalmente los <strong>manejadores de dispositivos (<em>drivers</em>)</strong> y los <strong>sistemas de archivos</strong>, que estandarizan el acceso al hardware y garantizan que los datos persistan en RAM o flash sin corromperse ante apagones (Clase 21).</p>
+</details>
+<details class="section-block sec" id="gf-unidad-1-introduccion-a-los-sistemas-emb"><summary><span class="stitle">UNIDAD 1: Introducción a los Sistemas Embebidos</span></summary>
+<h3>1.1 Sistema, Sistema Embebido y Arquitectura</h3>
+<ul><li>
+<strong>(a) Problema que resuelve y conexión</strong>: Antes de elegir procesadores o sistemas operativos, se necesita definir qué es un sistema embebido y por qué sus restricciones de ingeniería obligan a diseñar hardware y software a la medida (Diapositivas clase 1).
+</li><li>
+<strong>(b) Conceptos clave</strong>:
+<ul><li>
+<strong>Sistema (ingeniería)</strong>: Conjunto de elementos interconectados o interrelacionados que realizan una función o cumplen un propósito específico; no todo sistema tiene entradas, salidas, ni es electrónico o digital, y existen sistemas abiertos y cerrados (Diapositivas clase 1). <em>Analogía</em>: Un automóvil o el sistema de transporte colectivo tienen piezas mecánicas, humanas y de control cooperando para mover personas, aunque no todo sistema requiera electrónica (Diapositivas clase 1). <em>Ejemplo</em>: En el laboratorio y en el mundo físico se mencionan desde un controlador PID, un automóvil o una bacteria hasta un medidor de CFE, donde bajar el umbral de detección de corriente de 5 microamperes a 5 nanoamperes hace que cualquier aparato conectado mueva el medidor (Clase 1; Diapositivas clase 1).
+</li><li>
+<strong>Sistema embebido (o integrado)</strong>: Sistema de cómputo de propósito específico y de características más restringidas que una computadora personal o supercomputadora, caracterizado por: (1) funcionalidad más limitada en hardware y software que una PC, (2) diseño para una función específica y dedicada, y (3) requerimientos de calidad, confiabilidad y robustez superiores a otros sistemas de cómputo (Diapositivas clase 1). <em>Analogía</em>: Un cirujano especialista frente a un médico general: no atiende cualquier enfermedad ni instala aplicaciones arbitrarias, pero la única operación que realiza debe hacerla sin fallar. <em>Ejemplo</em>: Dispositivos como PDA o tabletas a menudo se llaman embebidos, pero <strong>no son realmente sistemas embebidos</strong> porque tienen propósito general; en cambio, un marcapasos o un chip GPS implantado en una mascota sí lo son (Diapositivas clase 1; Clases 19–20).
+</li><li>
+<strong>Arquitectura de un sistema embebido</strong>: Abstracción o generalización del dispositivo donde los componentes de hardware y software (internos o externos) se representan como elementos interactivos, describiendo sus propiedades, comportamientos e interrelaciones sin mostrar detalles finos de código o circuitos (Diapositivas clase 1). <em>Analogía</em>: El plano arquitectónico de una casa frente a la lista de tornillos y cables eléctricos.
+</li></ul>
+</li><li>
+<strong>(c) Desafíos de diseño, modelos de desarrollo y clasificación (Diapositivas clase 1)</strong>:
+</li></ul>
+<div class="tabla-scroll"><table><tr><th>Eje</th><th>Opciones / Criterios vistos en clase</th></tr><tr><td><strong>Desafíos arquitectónicos</strong></td><td>Costos; confiabilidad y seguridad; limitaciones físicas (procesamiento, memoria, batería); comerciabilidad y vendibilidad; requisitos específicos.</td></tr><tr><td><strong>Modelos de diseño</strong></td><td><strong>Big-bang</strong> (sin planeación); <strong>Programa y corrige</strong> (ensayo y error, requisitos informales); <strong>Cascada</strong> (pasos secuenciales según necesidad); <strong>Espiral</strong> (diseño general por etapas ajustado en ciclos Planeación → Análisis → Desarrollo).</td></tr><tr><td><strong>Capas del modelo tipo</strong></td><td>1) Capa de Hardware (<strong>obligatoria</strong>); 2) Capa de Software de Sistema (<strong>opcional</strong>); 3) Capa de Software de Aplicación (<strong>opcional</strong>).</td></tr><tr><td><strong>Tipos (función / tecnología)</strong></td><td><em>Por función</em>: entretenimiento, manejo de red, monitoreo, control. <em>Por tecnología</em>: sistema operativo, lenguaje, hardware (procesador, memoria, periféricos).</td></tr><tr><td><strong>Tamaños o alcances</strong></td><td>Micro, pequeño, mediano y ¿grande? <em>(Nota: los criterios numéricos exactos por tamaño no aparecen detallados en los fragmentos recuperados del audio de la Clase 1)</em>.</td></tr></table></div>
+<ul><li>
+<strong>(d) Puntos clave para examen</strong>: Distinguir por qué una tableta o PDA no es un sistema embebido real, y recordar que definir la arquitectura resuelve los desafíos de costo, batería y confiabilidad de manera intrínseca (Diapositivas clase 1).
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-2-organizacion-arquitectura-y-pla"><summary><span class="stitle">UNIDAD 2: Organización, Arquitectura y Plataformas de Sistemas Embebidos</span></summary>
+<h3>2.1 El Procesador: Taxonomía, CISC vs. RISC y Plataformas Comerciales</h3>
+<ul><li>
+<strong>(a) Problema que resuelve y conexión</strong>: Elegida la arquitectura general en la Unidad 1, hay que seleccionar la unidad central de cómputo entendiendo cómo procesa flujos de instrucciones y datos, por qué difiere su conjunto de instrucciones y qué compilador/hardware exige (Clases 2–4; Diapositivas clase 2).
+</li><li>
+<strong>(b) Conceptos clave</strong>:
+<ul><li>
+<strong>Computadora (concepto básico)</strong>: Máquina compuesta por elementos de entrada, elementos de salida, un procesador central y memoria (Diapositivas clase 2).
+</li><li>
+<strong>Taxonomía de Flynn</strong>: Clasifica las computadoras según el número de flujos de instrucciones (<em>Instruction Pool</em>) y datos (<em>Data Pool</em>) que procesan sus unidades (<em>PU</em>) (Diapositivas clase 2).
+</li><li>
+<strong>CISC vs. RISC</strong>: <strong>CISC</strong> (<em>Complex Instruction Set Computer</em>, ejemplo Intel 80x86) maneja instrucciones complejas y numerosas (millones de combinaciones/operaciones acumuladas y mezcla datos e instrucciones en memoria común), mientras <strong>RISC</strong> (<em>Reduced Instruction Set Computer</em>) reduce las instrucciones al orden de ~1,000 o ~60 mnemónicos y conceptualmente separa instrucciones de datos (Clase 2; Diapositivas clase 2). <em>Analogía</em>: CISC es un robot de cocina con 500 botones específicos ("haz pastel de chocolate"), mientras RISC tiene 10 herramientas básicas ("bate", "hornea", "mezcla") con las que construyes cualquier receta. <em>Ejemplo real</em>: Un Intel Core i7 Coffee Lake (2017) es CISC por fuera pero usa un predecodificador con <strong>microfusión</strong> que parte instrucciones CISC en microoperaciones tipo RISC internamente, sabiendo que el 60%–75% del programa solo carga y almacena; el Intel P6 ya tenía <em>pipeline</em> de <strong>14 etapas</strong> y dividía un cálculo de seno en <strong>64 microoperaciones</strong> (Clases 2, 4).
+</li><li>
+<strong>Ejecución especulativa y renombramiento de registros</strong>: El procesador renombra registros de hardware para correr dos programas de 16 bits en registros de 32 bits (partes baja L y alta H) o dos programas de 32 bits en registros de 64 bits sin intervención de hilos ni semáforos del sistema operativo (Clases 2, 4).
+</li><li>
+<strong>Bus coherente vs. no coherente y acoplamiento</strong>: En un <em>pipeline</em> <strong>fuertemente acoplado</strong> cambiar un módulo exige rediseñar todo el CPU (como tener todo el código en main()), frente al <strong>débilmente acoplado</strong> modular (como MVC) (Clase 3). Un <strong>bus no coherente</strong> escribe solo en caché y deja la RAM desactualizada; un <strong>bus coherente</strong> frena al CPU para actualizar caché y RAM garantizando consistencia de datos aunque sea más lento (Clase 3).
+</li></ul>
+</li><li>
+<strong>(c) Comparaciones técnicas (Clases 2–4; Diapositivas clase 2)</strong>:
+</li></ul>
+<div class="tabla-scroll"><table><tr><th>Taxonomía de Flynn</th><th>Significado y estructura en diagrama</th></tr><tr><td><strong>SISD</strong></td><td>1 flujo de instrucciones → 1 PU ← 1 flujo de datos.</td></tr><tr><td><strong>SIMD</strong></td><td>1 flujo de instrucciones compartido → múltiples PUs ← múltiples flujos de datos.</td></tr><tr><td><strong>MISD</strong></td><td>Múltiples flujos de instrucciones → múltiples PUs encadenadas sobre un mismo flujo de datos.</td></tr><tr><td><strong>MIMD</strong></td><td>Múltiples flujos de instrucciones → múltiples PUs ← múltiples flujos de datos.</td></tr></table></div>
+<div class="tabla-scroll"><table><tr><th>Plataforma comercial</th><th>Arquitectura y detalles clave vistos en clase</th></tr><tr><td><strong>PIC18F452 / 4550</strong></td><td>Microcontrolador con un solo registro acumulador W, pila pequeña de 8 (o 31 en PIC18F452) niveles que desaconseja recursividad (ej. factorial(9) desborda pila de 8), bus de 16 bits + 5 bits (21 bits = &gt;1 MB) (Clase 2; Diapositivas clase 3).</td></tr><tr><td><strong>ESP32 / ESP32-C3</strong></td><td>SoC con CPU RISC-V 32 bits (C3) o Xtensa LX6 (Harvard por buses I/D separados, aunque la SRAM/PSRAM externa revuelve datos e instrucciones que luego separan las cachés I-cache y D-cache). Incluye acelerador criptográfico SHA de 256 bits para AWS (Clase 2; Diapositivas clase 2).</td></tr><tr><td><strong>ARM Cortex-M0+ / M3 / M4 / M7</strong></td><td>Todos comparten el mismo conjunto de instrucciones base, pero difieren en hardware: <strong>M0</strong> no tiene FPU y emula división flotante inyectando ~30 instrucciones enteras en la ALU; <strong>M3</strong> multiplica y soporta flotante sin optimizar (calcula inverso y multiplica); <strong>M4</strong> optimiza punto flotante (multiplica y divide); <strong>M7</strong> añade unidad vectorial (BPU/FPU) para DSP; <strong>Cortex-A</strong> añade multimedia y usa compilador distinto (hf vs eabi) (Clases 2, 16).</td></tr><tr><td><strong>RP2040 / RP2350</strong></td><td><strong>RP2040</strong> (Raspberry Pi Pico): doble núcleo ARM Cortex-M0+ (ARMv6-M), 264 KB/340 KB según versión (en clase: &lt;1 MB RAM, XIP/Cache, PIO0/PIO1, 2x SPI, 2x I²C, 2x UART, USB). <strong>RP2350</strong>: 2 núcleos Cortex-M4/M33 [audio dice Cortex-M4 con hermanito y FPU], <strong>512 KB</strong> RAM y <strong>16 MB</strong> Flash (Clases 2, 5, 21; Diapositivas clase 2).</td></tr><tr><td><strong>Intel x86 / x86-64</strong></td><td><strong>8086</strong> (16 bits, 5–10 MHz, 220 dirs.), <strong>286</strong> (25 MHz, 2.66 MIPS, <strong>modo protegido</strong>), <strong>386</strong> (<strong>IA32</strong>, 32 bits, hasta 4 GB RAM, modo virtual <strong>VM86</strong>), <strong>Itanium</strong> (64 bits, IA64 incompatible con x86, North Bridge separado), <strong>AMD64/x86-64</strong> (retrocompatible con IA32 y controlador de memoria integrado), <strong>Golden Cove</strong> (2021, 12 puertos de ejecución, 502 entradas) (Clases 2–4).</td></tr></table></div>
+<ul><li>
+<strong>(d) Errores comunes / puntos de examen</strong>: No confundir la arquitectura externa de un procesador (RISC/CISC) con cómo organiza sus memorias: en el ESP32-C3 y ARMv6-M los datos e instrucciones viven revueltos en la SRAM/DRAM externa, pero se separan al entrar a las cachés L1 de instrucciones y datos del procesador (Clase 2; Diapositivas clase 2). En examen: saber explicar qué es un <strong>bus coherente</strong> (Clase 3).
+</li></ul>
+<h4>2.2 Mapa de Memoria, Memoria Volátil/No Volátil y Direccionamientos</h4>
+<ul><li>
+<strong>(a) Problema que resuelve y conexión</strong>: Una vez que el procesador sabe ejecutar instrucciones, necesita saber en qué direcciones físicas buscar código, variables y registros de periféricos, qué tipo de memoria física resiste cortes de energía y cómo referenciar operandos en ensamblador (Clases 5–6; Diapositivas clases 3–4).
+</li><li>
+<strong>(b) Conceptos clave</strong>:
+<ul><li>
+<strong>Mapa de memoria del sistema</strong>: Distribución lógica de direcciones que separa memoria de programa, memoria de datos (registros de propósito general GPR, registros de funciones especiales SFR) y periféricos (Diapositivas clase 3). En <strong>ARM</strong>, coexisten el mapa de la arquitectura (buses en tarjeta madre) y el mapa del núcleo, intercalando bloques de RAM y periféricos para mantener retrocompatibilidad de direcciones entre versiones (Clase 5). <em>Regla crítica</em>: Los registros de periféricos <strong>nunca se cachean</strong>, porque leer una copia vieja de un puerto serie impediría ver el dato nuevo real del mundo exterior (Clase 5). <em>Ejemplo</em>: En el <strong>PIC18F452</strong>, el vector de RESET está en 0000h, las interrupciones de alta prioridad en 0008h y baja prioridad en 0018h; el <strong>ATMega328p</strong> mapea 32 registros (0–1Fh), 64 registros E/S (20–5Fh), 416 E/S externos (60–1FFh) y SRAM interna (200–21FFh, 8192 × 8) (Diapositivas clase 3).
+</li><li>
+<strong>Memoria volátil vs. no volátil</strong>: La <strong>volátil</strong> pierde la información sin energía y se divide en <strong>estática (SRAM)</strong> —que no caduca, es rapidísima, cara y se calienta mucho, por lo que se usa en cachés pequeñas (ej. 4 MB en Intel)— y <strong>dinámica (DRAM)</strong> —basada en capacitores parásitos que no se calientan, mucho más barata y densa, pero que pierde su carga y requiere <strong>refresco cada ~60 ms</strong> (60.03 o 60.3 ms) antes de caer a un voltaje ambiguo— (Clase 5). La <strong>no volátil</strong> conserva los datos sin energía: <strong>ROM</strong> (matriz fija), <strong>PROM</strong> (programable una vez), <strong>EPROM</strong> (borrable 15 min con luz UV y grabada a 13 V), <strong>EEPROM</strong> (borrable eléctricamente a 25 V, muy lenta en ms por byte), <strong>Flash</strong> (evolución matricial en <strong>clústeres</strong> de 64 KB, 128 KB o 4 MB que baja el tiempo efectivo de escritura a nanosegundos aunque muere el clúster si falla un bit), medios <strong>magnéticos</strong> (cintas secuenciales, disquetes, HDD) y <strong>ópticos</strong> (eternos, grabados con láser de 1 kW) (Clase 6). <em>Analogía</em>: SRAM es una pizarra luminosa encendida al instante pero carísima de mantener; DRAM es un balde con una gotera constante que debes rellenar cada 60 ms; Flash es una hoja dividida en cuadritos grandes que borras por bloques completos.
+</li><li>
+<strong>Modos de direccionamiento (Motorola 68HC11 como modelo didáctico)</strong> (Clase 6; Diapositivas clase 4):
+</li></ul>
+</li></ul>
+<div class="tabla-scroll"><table><tr><th>Modo de direccionamiento</th><th>Definición técnica</th><th>Ejemplo de clase</th></tr><tr><td><strong>Inherente</strong></td><td>No necesita operandos; la operación actúa implícitamente sobre registros o control.</td><td>NOP, retorno de subrutina (RTS), corrimientos, reinicio.</td></tr><tr><td><strong>Inmediato</strong></td><td>El dato constante viene inmediatamente después del código de operación.</td><td>ADDA #8 (suma constante 8 al registro A); en PIC MOVLW 7Fh.</td></tr><tr><td><strong>Extendido</strong></td><td>El código de operación va seguido de la dirección completa (palabra completa) donde reside el dato en memoria.</td><td>Sumar al registro A el contenido de una dirección completa de 16 bits.</td></tr><tr><td><strong>Directo</strong></td><td>Igual al extendido pero abreviado (media palabra) para acceder rápido únicamente a la <strong>parte baja</strong> de la memoria sin leer ceros altos.</td><td>Variables frecuentes del kernel o programas pequeños.</td></tr><tr><td><strong>Indexado</strong></td><td>Código de operación + desplazamiento de 8 bits sin signo sumado a un registro índice (X o Y) para localizar el <strong>dato</strong>.</td><td>ADDA 5,X (recorre vectores y matrices).</td></tr><tr><td><strong>Relativo</strong></td><td>Código de operación + desplazamiento de 8 bits con signo sumado al <strong>Contador de Programa (PC)</strong> para calcular la <strong>siguiente instrucción</strong>.</td><td>Saltos condicionales/incondicionales (JMP, JZ, JNZ, CALL).</td></tr></table></div>
+<ul><li>
+<strong>(d) Errores comunes / puntos de examen</strong>: Confundir <strong>indexado</strong> (calcula la dirección de un <strong>dato</strong> usando X/Y + delta) con <strong>relativo</strong> (calcula la dirección de la <strong>siguiente instrucción</strong> usando PC + delta) (Clase 6). También no confundir memoria Flash (no volátil) con DRAM (volátil con refresco de 60 ms) (Clase 5).
+</li></ul>
+<h4>2.3 Controlador de Interrupciones (ICU) y Temporizadores de Hardware</h4>
+<ul><li>
+<strong>(a) Problema que resuelve y conexión</strong>: Si el CPU consulta periódicamente en un ciclo (<em>busy wait / polling</em>) si llegó un byte por el puerto serie o si se presionó un botón, desperdicia energía y ciclos de reloj. Las <strong>interrupciones</strong> invierten el control para que el hardware avise al CPU, y los <strong>timers</strong> permiten generar interrupciones periódicas precisas (Clase 7; Diapositivas clase 5).
+</li><li>
+<strong>(b) Conceptos clave</strong>:
+<ul><li>
+<strong>Interrupción y Controlador de Interrupciones (ICU / PIC / APIC)</strong>: Señal que interrumpe el flujo de ejecución de instrucciones de un programa para que el procesador atienda una petición externa (Clase 7; Diapositivas clase 5). <em>Analogía</em>: En lugar de asomarte a la puerta cada segundo para ver si llegó el repartidor (<em>busy wait</em>), sigues cocinando hasta que suena el timbre. <em>Tipos</em>: <strong>Enmascarables</strong> (ignorables mediante máscara Intr_Mask y compuerta AND con Intr_Pending: PWM, timers, teclado, serial, banderas) y <strong>no enmascarables</strong> (no ignorables: <strong>Reset</strong> y <strong>Overheat</strong>, "como cuando te habla tu madre") (Clase 7; Diapositivas clase 5).
+</li><li>
+<strong>Identificación y Prioridad</strong>: <strong>Por tabla</strong> (la tabla CPU apunta a una rutina genérica en software que busca qué línea fue, más lenta) vs. <strong>por vector</strong> (la propia UCI entrega el vector o apuntador directo a la ISR, instantánea pero costosa en hardware embebido) (Clase 7; Diapositivas clase 5). En prioridad: <strong>mononivel</strong> (todas iguales) vs. <strong>multinivel</strong> (se atienden primero las de mayor prioridad) (Diapositivas clase 5).
+</li><li>
+<strong>Desencadenamiento (<em>trigger</em>)</strong>: <strong>Por valor (0 o 1)</strong>, donde la interrupción permanece activa mientras el pin siga en ese nivel (ej. botón físico de Reset u Overheat; desastroso en CPUs rápidos de 8 MHz recibiendo datos serie a 9600 bps porque se atora ~1000 pulsos durante la duración del byte), vs. <strong>por flanco (<em>edge</em>)</strong>, donde solo dispara un instante en el cambio de nivel (Clase 7; Diapositivas clase 5).
+</li><li>
+<strong>IRQ y DMA</strong>: En el bus <strong>ISA</strong> (16 bits) cada IRQ es un alambre dedicado que exige pistas de igual longitud; en <strong>PCI</strong> (32 bits) un multiplexor permite compartir IRQs (Clase 7; Diapositivas clase 5). El <strong>DMA</strong> (<em>Direct Memory Access</em> / <em>"Direct Memory Allocation"</em> en diapositiva [diapositivas-clase-05.pdf]) permite que hardware externo atienda interrupciones y escriba directo en RAM <strong>saltándose al CPU</strong> (Diapositivas clase 5).
+</li><li>
+<strong>Temporizador o <em>Timer</em> de hardware</strong>: <strong>Contador en cuenta regresiva que activa una interrupción al llegar a cero y reinicia el conteo automáticamente</strong>; también llamado <strong>reloj de pared</strong>, es esencial en todas las computadoras y todo sistema operativo requiere al menos uno (Clase 7; Diapositivas clase 5).
+</li><li>
+<strong>Cristal oscilador (XTAL)</strong>: Su precisión se mide en <strong>PPM</strong> (<em>Parts per Million</em>); <strong>12 PPM ≈ 1 segundo de error por día</strong>, mayor precisión cuesta más y requiere batería (no siempre disponible), por lo que <strong>se recomienda NTP como respaldo</strong> en dispositivos autónomos (estaciones meteorológicas, chips en animales) (Clase 7; Diapositivas clase 5).
+</li></ul>
+</li><li>
+<strong>(c) Las 4 características de los Timers — "Todas son preguntas de examen" (Clase 7; Diapositivas clase 5)</strong>:
+</li></ul>
+<div class="tabla-scroll"><table><tr><th>Característica del Timer</th><th>Valores / Opciones posibles</th></tr><tr><td><strong>1. Modo</strong></td><td><em>Free run</em> (reinicia al llegar a cero indefinidamente) o <em>One shot</em> (corre una vez y se detiene).</td></tr><tr><td><strong>2. Dirección de conteo</strong></td><td>Incrementa o decrementa.</td></tr><tr><td><strong>3. Rango</strong></td><td>Número de bits del contador.</td></tr><tr><td><strong>4. Fuente</strong></td><td>Oscilador interno o señal externa (ej. <em>encoder</em> de motor, audio, electromiógrafo).</td></tr></table></div>
+<ul><li>
+<strong>(d) Puntos recalcados para examen</strong>: La definición exacta de <em>timer</em> y sus <strong>4 características</strong> (<em>"Todas son preguntas de examen"</em>), la diferencia entre <em>trigger</em> por valor vs. flanco y cómo funcionan las compuertas de enmascaramiento (Clase 7; Diapositivas clase 5).
+</li></ul>
+<h4>2.4 Bus Serie Universal (USB) e Interconexión de Dispositivos</h4>
+<ul><li>
+<strong>(a) Problema que resuelve y conexión</strong>: Los puertos clásicos (Serial a 1.5 Mbps, Paralelo a 2.5 Mbps y SCSI caro con conector DB25 a 20 MB/s) eran lentos, voluminosos e incompatibles entre sí; USB unificó la conexión hacia la PC/host, mientras que dentro de la placa madre o entre chips embebidos se usan buses seriales más simples de pocos pines (&lt;100 MHz, &lt;1 Mbps típico) para abaratar el hardware (Clases 8–10; Diapositivas clases 6–7).
+</li><li>
+<strong>(b) Conceptos clave</strong>:
+<ul><li>
+<strong>USB vs. IEEE 1394 (Firewire)</strong>: Firewire (1995) era más potente (30 V, 1.5 A = <strong>45 W</strong>, hasta <strong>3200 Mbps</strong>, coprocesador independiente y búfer externo, síncrono/asíncrono) pero muy costoso; ganó <strong>USB</strong> por económico (5 V, 1 A = <strong>5 W</strong>, hasta <strong>12 Mbps</strong> en 1.1, anclado al procesador usando RAM buffer, asíncrono) (Clase 8; Diapositivas clase 6).
+</li><li>
+<strong>Topología y física de USB 2.0</strong>: <strong>Topología en árbol/pirámide de máximo 7 niveles</strong> (Nivel 1: <em>Host</em> con <em>Root Hub</em> obligatorio; intermedios: <em>Hubs</em> encadenados; hojas: <em>Funciones</em> o periféricos). Usa <strong>par trenzado diferencial</strong> (D+ y D-) con un buffer y un negador muy baratos que detectan ruido automáticamente si ambas líneas caen iguales. Al conectarse, todo dispositivo recibe <strong>100 mA</strong> garantizados por derecho base (hasta 800 mA en USB 3.0 si negocia potencia) (Clases 8–9).
+</li></ul>
+</li><li>
+<strong>(c) Tablas comparativas clave de USB y Protocolos de Interconexión (Clases 8–11; Diapositivas clases 6–7)</strong>:
+</li></ul>
+<div class="tabla-scroll"><table><tr><th>Versión USB</th><th>Velocidad y canales</th><th>Notas de arquitectura</th></tr><tr><td><strong>USB 1.1</strong></td><td>12 Mbps, 1 canal</td><td>Incluye <em>Low Speed</em> (humanos, 1.5 Mbps en especificación clásica) y <em>Full Speed</em> (12 Mbps, audio/módem).</td></tr><tr><td><strong>USB 2.0</strong></td><td>480 Mbps, 1 canal</td><td><em>"Se come"</em> a USB 1.1 (retrocompatible total); modo <em>High Speed</em> (25–400+ Mbps) para video y discos.</td></tr><tr><td><strong>USB 3.0 / 3.2</strong></td><td>3 canales (Gen1: 5 Gbps, Gen2: 10 Gbps)</td><td>Encapsula a USB 2.0 añadiendo 2 canales SuperSpeed y mayor potencia de salida.</td></tr></table></div>
+<div class="tabla-scroll"><table><tr><th>Modo de transferencia USB 2.0</th><th>Uso y característica principal (Diapositivas clase 6; Clases 9, 21)</th></tr><tr><td><strong>Control</strong></td><td>Obligatorio en todo dispositivo USB; configuración e inicialización.</td></tr><tr><td><strong>Bulk</strong></td><td>Transmisión de bloques grandes de datos en ráfagas (alto volumen, ej. discos).</td></tr><tr><td><strong>Interrupt</strong></td><td>Paquetes cortos que representan cambios físicos (mouse, teclado).</td></tr><tr><td><strong>Isochronous (Isócrono)</strong></td><td>Simulación síncrona mediante <strong>reserva fija de ancho de banda</strong> (si solo usas el 10% de tu rebanada, nadie más puede usar el resto; ej. audio/ultrasonido/motores).</td></tr></table></div>
+<div class="tabla-scroll"><table><tr><th>Protocolo</th><th>Alambres</th><th>Tipo / Reloj</th><th>Topología / Maestros</th><th>Velocidades y detalles críticos vistos en clase</th></tr><tr><td><strong>I²C</strong></td><td>2 (SCL, SDA) + GND</td><td>Síncrono</td><td>Multimaestro, múltiples esclavos</td><td>Colector abierto con resistencias <em>pull-up</em> (solo escribe ceros, permite mezclar 3.3 V y 5 V); Start = bajar SDA antes del reloj; Stop = subir SDA después; transmite byte a byte con ACK/NACK. Modos: Estándar 100 kbps (400 pF), Rápido 400 kbps (400 pF, RP2040), Fast+ 1 Mbps (55 pF), Alta velocidad 1.7–3.4 Mbps (100 pF).</td></tr><tr><td><strong>SMBus</strong></td><td>2 (SCL, SDA) + GND</td><td>Síncrono</td><td>Punto a punto (1 maestro, 1 esclavo)</td><td>Basado en I²C pero lento (<strong>10–100 kHz</strong>); sin dirección de esclavo, usa bits libres para modo comando en <em>motherboards</em> (fuente, ventilador, temperatura, DRAM).</td></tr><tr><td><strong>SPI / QSPI</strong></td><td>4 (SCK, MOSI/TX, MISO/RX, CS)</td><td>Síncrono</td><td>Maestro-esclavo (CS por esclavo)</td><td>Hasta <strong>80 MHz</strong> o más. A 80 MHz: SPI estándar = <strong>10 MB/s</strong>, QSPI (4 líneas) = <strong>20 MB/s</strong>, Octa-SPI = <strong>40 MB/s</strong> (o <strong>80 MB/s</strong> simétrico). Usado por Intel para cargar BIOS desde Flash ROM y en MicroSD.</td></tr><tr><td><strong>I²S</strong></td><td>3 (CLK, SD, WS)</td><td>Síncrono</td><td>Maestro-esclavo</td><td>Inventado por Philips exclusivamente para audio digital; hasta <strong>3 MHz</strong>.</td></tr><tr><td><strong>UART</strong></td><td>2 (TX, RX) cruzados (<em>null-modem</em>)</td><td>Asíncrono (baudios)</td><td>Punto a punto</td><td>Reloj interno por acuerdo previo de <strong>baudrate</strong> (ej. 9600, 56600, 115200 bps); muestrea a medio bit tras flanco de bajada. Paquete típico <strong>N81</strong> = 1 start + 8 datos + sin paridad + 1 stop (10 bits/byte). Control de flujo HW (RTS/CTS, +2 alambres) o SW (XON Ctrl+S / XOFF Ctrl+Q). Bluetooth emula hasta 60 puertos seriales virtuales sobre UART.</td></tr><tr><td><strong>RS-232 vs RS-422/485</strong></td><td>2+ (datos) / 4 (con potencia en 485)</td><td>Capa física de UART</td><td><strong>232</strong>: punto a punto (1:1). <strong>422/485</strong>: multipunto</td><td><strong>RS-232</strong>: no diferencial, ± 12 V (hasta ± 5 V), máx. <strong>15 m</strong> y <strong>20 kbps</strong>. <strong>RS-485</strong>: diferencial (recupera señal con ± 1.5 V), hasta <strong>32 receptores</strong>, <strong>1.2 km</strong>, <strong>10–35 Mbps</strong>, estándar industrial.</td></tr><tr><td><strong>One-Wire</strong></td><td>1 señal (+ GND; alimentación parásita)</td><td>Asíncrono (tiempos fijos)</td><td>Maestro-muchos esclavos</td><td>Reset = línea en bajo <strong>480 µs</strong> (8 bits a 9600 bps con F0); lectura/escritura a 115200 bps enviando FF o 00. Enumeración por búsqueda binaria (Search ROM leyendo bit + complemento) sobre ID único de <strong>64 bits</strong> (8 bits familia + <strong>48 bits</strong> dispositivo + CRC). Comandos: Read ROM (0x33), Skip ROM, Match ROM. En Linux se lee/escribe como archivo en /sys/bus/w1/....</td></tr></table></div>
+<ul><li>
+<strong>(d) Puntos recalcados para examen</strong>: El profesor dijo explícitamente en la Clase 8 que el <strong>límite máximo de 7 niveles en USB 2.0</strong> y sus <strong>modos de operación</strong> vienen en el examen; en la Clase 9 pidió saberse de memoria de cada mecanismo de interconexión su <strong>topología, configuración (maestro/esclavo o pares), frecuencia, nombre y número de líneas</strong>.
+</li></ul>
+<h4>2.5 Secuencia de Arranque (Bootstrap)</h4>
+<ul><li>
+<strong>(a) Problema que resuelve y conexión</strong>: Con todo el hardware cableado e interconectado, al encender la energía el procesador tiene "amnesia" (ni la memoria RAM ni las cachés están listas ni sabe cuántos núcleos tiene); necesita una rutina determinista desde hardware para despertar e iniciar el sistema operativo (Clase 12; Diapositivas clase 8).
+</li><li>
+<strong>(b) Conceptos clave</strong>:
+<ul><li>
+<strong>Hard Reset vs. Soft Reset</strong>: <strong>Hard Reset</strong> ocurre al suministrar corriente (<em>power-on</em>), estabilizando voltajes y oscilador principal (en baterías un microcontrolador/CPLD estabiliza el <em>power</em>); <strong>Soft Reset</strong> ocurre por interrupción (botón de reset, <em>Watchdog Timer</em> por bloqueo en una instrucción, <em>Overheat</em> o despertar tras <strong>suspensión ACPI</strong>, donde la RAM retiene el SO y el procesador reinicia pero salta directo a reanudar sin recargar el sistema operativo) (Clase 12; Diapositivas clase 8).
+</li><li>
+<strong>BSP (<em>Bootstrap Processor</em>) vs. AP (<em>Application Processor</em>)</strong>: Al recibir RESET, todos los núcleos/hilos se tratan como procesadores completos; el <strong>LAPIC</strong> asigna el bit BSP en <strong>1</strong> al procesador elegido como <strong>BSP</strong> (arranca el sistema) y en <strong>0</strong> a todos los <strong>AP</strong> (ejecutan autoprueba y quedan en WAIT-for-SIPI) (Diapositivas clase 8).
+</li><li>
+<strong>Vector de RESET</strong>: Dirección fija inicial donde el procesador hace su primer <em>fetch</em> (en Intel FFFFFFF0h; otras direcciones fijas para ARM Cortex-M/R, Cortex-A y PowerPC) (Clase 12; Diapositivas clase 8).
+</li></ul>
+</li><li>
+<strong>(c) Flujo general del arranque en plataformas Intel — "Funcionamiento general" para examen (Clase 12; Diapositivas clase 8)</strong>:
+<ul><li>
+Estabilización de energía/reloj y <em>fetch</em> del vector de <strong>RESET</strong> en el BSP (mientras los AP esperan SIPI).
+</li><li>
+Salto corto/largo a código ROM, cambio a <strong>modo protegido</strong> y actualización de microcódigo.
+</li><li>
+Deshabilitar cachés, configurar caché segura y rehabilitar cachés.
+</li><li>
+Inicializar memoria (DRAM) y probarla (si falla: HALT); configurar pila DRAM, copiar código/datos de ROM a RAM y saltar a DRAM (aquí inicia la BIOS/UEFI).
+</li><li>
+Inicializar y habilitar interrupciones (APIC).
+</li><li>
+<strong>Detección multiproc</strong>: el BSP envía una interrupción <strong>SIPI</strong> a los primeros 4 KB de RAM y se inicia una <strong>condición de carrera con semáforo</strong> donde cada AP suma 1 al contador, registra su APIC ID y entra en espera de INIT.
+</li><li>
+Deshabilitar cachés para reglas finales avanzadas, rehabilitarlas, descubrir y configurar dispositivos <strong>PCI/ISA</strong> y enrutamiento de interrupciones.
+</li><li>
+Cargar imagen del sistema operativo y saltar al cargador (<em>bootloader</em>) —en <strong>UEFI</strong> los AP ayudan a inicializar periféricos y cargar el SO en paralelo, a diferencia de <strong>BIOS</strong> donde solo el BSP lo hace—.
+</li></ul>
+</li><li>
+<strong>(d) Puntos clave para examen</strong>: Un alumno preguntó en Clase 12 si debían memorizar las 32 cajas exactas o el orden general; el profesor aclaró que se pregunta el <strong>funcionamiento general y el orden correcto de las fases</strong> (no las direcciones hexadecimales ni los 32 pasos de memoria).
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-3-sistemas-operativos-para-plataf"><summary><span class="stitle">UNIDAD 3: Sistemas Operativos para Plataformas Embebidas</span></summary>
+<h3>3.1 Interfaz de Aplicación, Procesos, Hilos y Tareas</h3>
+<ul><li>
+<strong>(a) Problema que resuelve y conexión</strong>: Una vez que el <em>bootstrap</em> entrega el control al sistema operativo (Linux o RTOS como FreeRTOS/VxWorks), el SO debe aislar la memoria de cada programa (para evitar fallos de segmento o corrupciones como desbordar la pila hacia el kernel) y ofrecer una puerta segura para pedir servicios del núcleo (Clases 12–13).
+</li><li>
+<strong>(b) Conceptos clave</strong>:
+<ul><li>
+<strong>Interfaz de aplicación y saltos de privilegio</strong>: Conjunto de comandos de usuario (cat, sort, ls) y llamadas de librerías (stdio, stdlib como printf, malloc) que solicitan servicios al kernel. En <strong>Linux</strong> hay <strong>1 salto</strong> (usuario → kernel); en <strong>Windows</strong> hay <strong>2 saltos</strong> (usuario → capa ejecutiva → kernel) (Clase 13).
+</li><li>
+<strong>Programa, Proceso, Hilo y Tarea</strong>: Un <strong>programa</strong> es el archivo ejecutable pasivo en disco con un encabezado que indica formato, arquitectura de bits (16/32/64) y memoria inicial requerida (Clase 15). Un <strong>proceso</strong> es la estructura instanciada en memoria por el SO con su espacio aislado (PID) y recursos; en sistemas de propósito general (<strong>GPOS</strong> como Linux/Windows) el <strong>hilo</strong> (<em>light process</em>) es la unidad mínima de ejecución dentro de un proceso y <strong>comparte memoria y prioridad</strong> con los demás hilos de su proceso padre (Clases 13, 15). En un <strong>RTOS</strong> (como <strong>FreeRTOS</strong> o <strong>VxWorks</strong>), existe un solo superproceso raíz sin prioridad propia y la unidad mínima es la <strong>tarea</strong>, que posee atributos propios, prioridad individual y <strong><em>deadline</strong></em>, y cuyos accesos se verifican en compilación porque el binario corre estáticamente (Clases 13, 15).
+</li></ul>
+</li><li>
+<strong>(c) Los 6 pasos de una llamada a servicio — "Pregunta de examen" (Clase 13)</strong>:
+<ul><li>
+<strong>Enmascaramiento (en compilación/enlace)</strong>: El <strong>linker</strong> resuelve las llamadas (ej. malloc / printf) contra librerías dinámicas (.so con identificadores retrocompatibles de <strong>64 bits para librería + 64 bits para llamada</strong>, evitando el <em>"DLL Hell"</em> de Windows).
+</li><li>
+<strong>Paso de argumentos</strong>: Se colocan primero los argumentos en la pila y al final la llamada, y se carga en un registro del CPU (ej. EAX) el número de servicio (ej. 45 para sys_brk).
+</li><li>
+<strong>Despacho de la trampa</strong>: Se genera una interrupción por software (ej. int 80h en x86) que dispara la trampa hacia el vector de interrupciones.
+</li><li>
+<strong>Cambio de nivel</strong>: Se transfiere el control desde el modo usuario sin privilegios al modo kernel (en segmentos distintos de memoria).
+</li><li>
+<strong>Desenmascaramiento y ejecución</strong>: El kernel abre la trampa, traduce el identificador al servicio correspondiente (ej. sys_brk ampliando memoria o buscando en <em>fastbins</em>) y lo ejecuta en nombre del proceso.
+</li><li>
+<strong>Retorno</strong>: El kernel devuelve el resultado (ej. apuntador asignado) y restaura el flujo al proceso en modo usuario.
+</li></ul>
+</li><li>
+<strong>Estados de un proceso (Clase 15)</strong>: Los <strong>3 estados base</strong> son <strong>wait</strong> (cargándose en memoria o bloqueado esperando un periférico como scanf() o la red; nunca pasa directo de <em>wait/blocked</em> a <em>running</em>, sino a <em>ready</em>), <strong>ready</strong> (listo y formado en la cola esperando CPU) y <strong>running</strong> (uno por núcleo ejecutando instrucciones). En sistemas POSIX existen además <strong>pending</strong> (cargado por cron esperando su hora), <strong>delayed</strong> (demorado por tarea de mayor prioridad, ej. respaldo vs. consulta de servidor), <strong>suspended</strong> (pausado con 0% de CPU), <strong>stopping</strong> (ejecuta destructores y libera puertos/cámara antes de morir) y <strong>stopped</strong> (terminado esperando limpieza).
+</li><li>
+<strong>(d) Errores comunes / puntos de examen</strong>: Los <strong>6 pasos de la llamada a servicio</strong> (<em>"Pregunta de examen"</em>), distinguir qué unidad mínima existe en <strong>GPOS</strong> (<strong>hilo</strong>) frente a <strong>RTOS</strong> (<strong>tarea</strong>, mientras FreeRTOS ni siquiera soporta procesos dinámicos ni cargador), y recordar que un proceso bloqueado en wait siempre regresa primero a ready y nunca directo a running (Clases 13, 15).
+</li></ul>
+<h4>3.2 Planificación (Scheduler) y Sistemas de Tiempo Real</h4>
+<ul><li>
+<strong>(a) Problema que resuelve y conexión</strong>: Con múltiples procesos, hilos o tareas en estado ready, el <em>scheduler</em> decide cuál ocupa el núcleo en cada instante y cómo garantizar en sistemas embebidos que ninguna respuesta crítica llegue tarde (Clases 15, 17, 18).
+</li><li>
+<strong>(b) Conceptos clave</strong>:
+<ul><li>
+<strong>Tiempo real (definición exacta)</strong>: No significa "rápido", sino <strong>que la salida se calcula antes de que llegue la siguiente entrada y responde en tiempo constante</strong> (ej. audio a 48 kHz requiere MHz, frenos ABS a 200 km/h avanzan 1 mm/ms y les basta 1 kHz, y un horno de pan Bimbo tolera segundos) (Clase 15). Se divide en <strong>tiempo real duro</strong> (si falla un plazo el sistema se desestabiliza irreversiblemente con consecuencias catastróficas: reactor nuclear, colisionador de hadrones, alerones de avión, cablebús) y <strong>tiempo real blando/flexible</strong> (degrada calidad de servicio pero se reencausa: llamadas por WhatsApp, <em>streaming</em>, enrutadores) (Clase 15).
+</li><li>
+<strong>Tipos de tareas</strong>: <strong>Periódicas</strong> (tienen periodo T y <em>deadline</em>, base del análisis de planificabilidad), <strong>aperiódicas</strong> (tienen <em>deadline</em> pero no periodo, ej. calcular frenado ante un obstáculo inesperado; se modelan como periódicas en el peor caso para garantizar planificabilidad) y <strong>esporádicas</strong> (sin <em>deadline</em>, ocupan el tiempo sobrante; desde tiempo real todas las tareas de GPOS se ven esporádicas) (Clase 15).
+</li><li>
+<strong>Minimal Laxity First (MLF)</strong>: Política dinámica que elige la tarea con menor holgura o laxitud: Laxitud = (Tiempo restante hasta el deadline) - (Trabajo pendiente por consumir) (Clase 18).
+</li><li>
+<strong>Resource Reservation</strong>: Módulo acoplable a cualquier política donde cada tarea declara en su encabezado su periodo y peor consumo esperado para decidir matemáticamente al admitirla si cabe o se rechaza (Clase 18).
+</li><li>
+<strong>Rate Monotonic Scheduling (RMS)</strong>: Algoritmo <strong>estático óptimo</strong> donde las prioridades se fijan antes de ejecutar según la regla <strong>a menor periodo, mayor prioridad</strong> (Clase 18).
+</li></ul>
+</li><li>
+<strong>(c) Algoritmos de planificación y fórmulas clave (Clases 17–18)</strong>:
+</li></ul>
+<div class="tabla-scroll"><table><tr><th>Algoritmo</th><th>Funcionamiento, costos y uso en clase</th></tr><tr><td><strong>Simple FIFO (Cooperativo)</strong></td><td>Ejecuta en orden de llegada hasta que la tarea termina o se bloquea; presente en ~80–90% de embebidos simples (while(1) o FreeRTOS por demanda).</td></tr><tr><td><strong>Shortest Job First (SJF)</strong></td><td>Usa cola de prioridad ordenada por menor duración estimada (peor caso); reordenar en árbol toma O(Nlog N) y buscar O(log N).</td></tr><tr><td><strong>Priority</strong></td><td>Asigna prioridad fija por tarea (en Linux -20 es mayor que 20); puede ser <strong>preemptivo</strong> (interrumpe a las de menor prioridad).</td></tr><tr><td><strong>Round Robin (RR)</strong></td><td>Divide el tiempo en rebanadas (<em>quanta</em>) de <strong>4 ms</strong> en escritorio (250 Hz; servidores 100 Hz; RT 1 ms / 1 kHz). Variantes: <strong>RR con prioridad</strong> y <strong>RR preemptivo</strong> con <strong>árbol de colas</strong> para evitar que dos tareas altas acaparen el CPU (para 300 procesos Linux, altura de árbol lceil log2 300 rceil = 9).</td></tr><tr><td><strong>CFS (Linux moderno)</strong></td><td><em>Completely Fair Scheduler</em> con políticas: Normal (RR), Batch (lotes a completitud en servidores), Idle (mínima prioridad, estaciones meteorológicas), y tiempo real RT-FIFO / RT-RR (prioridades <strong>1 a 99</strong>, donde <strong>RT1 &gt; RT99 &gt; -20 &gt; 20</strong>). Preempción: <em>None</em> (servidores), <em>Voluntary</em> (mixto) o <em>Full</em> (embebidos).</td></tr><tr><td><strong>EDF <em>(sin siglas explícitas en fragmento)</em> / MLF</strong></td><td>En Clase 18 se describe primero la política fija por el programador, luego la que escoge dinámicamente <strong>la que se entrega primero</strong> (EDF) y luego <strong>MLF</strong> (menor holgura). <em>Ejercicio 1 en vivo</em>: P1(T=50, C=25) y P2(T=100, C=40): uso de P1 = 25/50 = 0.5 (50%); si P1 tiene prioridad, cumplen ambas; si P2 corre primero (0–40), P1 falla su <em>deadline</em> en 50. Con MLF en t=0: L1=50-25=25 &lt; L2=100-40=60, gana P1 y cumple. <em>Ejercicio 2 en vivo</em>: T1(50,30), T2(50,15), T3(100,15) apenas cumple asumiendo <em>scheduler</em> de <strong>tiempo 0</strong> (si el <em>scheduler</em> gasta 1 unidad, falla).</td></tr></table></div>
+<ul><li>
+<strong>Fórmulas obligatorias de Tiempo Real (Clase 18)</strong>:
+<ul><li>
+<strong>Uso de procesador</strong>: Ui = (Ci)/(Ti).
+</li><li>
+<strong>La Regla de Oro</strong>: Σi=1n (Ci)/(Ti) ≤ 1. <em>Ejercicio fallido de clase</em>: (35)/(50) + (15)/(50) + (15)/(100) = (70+30+15)/(100) = 1.15 &gt; 1, por lo que falla inevitablemente en el segundo ciclo de 50 ms.
+</li><li>
+<strong>Cota de planificabilidad de RMS</strong>: U(n) = n(21/n - 1) xrightarrown → ∞ ln(2) ≈ 0.693 ≈ 0.7 (70%), lo que implica que desde <strong>4 tareas</strong> (ej. sensado, filtrado, control y actuación) no debe superarse el <strong>70%</strong> de uso de CPU.
+</li></ul>
+</li><li>
+<strong>(d) Errores comunes / puntos de examen</strong>: Confundir periodo T con consumo C al calcular uso de CPU; creer que tiempo real significa velocidad bruta; en Linux recordar que un número nice o RT <strong>menor</strong> indica <strong>mayor</strong> prioridad (RT1 &gt; RT99 &gt; -20 &gt; 20); el profesor advirtió explícitamente en Clase 18 que <strong>la demostración matemática del límite de RMS NO viene en el examen</strong>, pero los ejercicios de MLF y la Regla de Oro sí.
+</li></ul>
+<h4>3.3 Administración de Memoria (MAS, Paginación, Asignación, GC, Pozos y Memoria Virtual)</h4>
+<ul><li>
+<strong>(a) Problema que resuelve y conexión</strong>: Repartido el CPU por el <em>scheduler</em>, el sistema operativo necesita asignar RAM a los procesos, permitirles comunicarse cuando cooperan, impedir que la fragmentación paralice sistemas de larga vida y aprovechar el almacenamiento secundario sin destruir unidades flash (Clases 19–20).
+</li><li>
+<strong>(b) Conceptos clave</strong>:
+<ul><li>
+<strong>Paginación y cálculo de tabla</strong>: Administrar memoria dirección por dirección es inviable. <em>Ejercicio en vivo (Clase 19)</em>: una memoria de <strong>64 KB</strong> en arquitectura de <strong>16 bits</strong> tiene <strong>32K localidades</strong>. Cada renglón necesitaría 16 bits de dirección + 2 bits de banderas (<em>libre/ocupado</em> y <em>limpio/sucio</em>, donde <em>limpio</em> = datos congruentes y <em>sucio</em> = basura) + 8 bits para <strong>256 procesos</strong> = 26 bits, redondeados a <strong>32 bits (4 bytes)</strong>; 32K × 4 bytes = 128 KB (el doble de la RAM disponible). Al dividir en <strong>páginas de 1 KB</strong> (32 páginas), cada entrada usa <strong>5 bits</strong> de ID de página (corrigiendo en clase el desliz de 4 bits: 25=32) + <strong>5 bits</strong> de proceso + 6 bits de banderas = 16 bits (1 palabra), ocupando <strong>32 palabras = 64 bytes</strong>; con páginas de <strong>512 bytes</strong> (64 páginas) ocupa <strong>64 palabras = 128 bytes</strong>.
+</li><li>
+<strong>Comunicación entre procesos (IPC) y RPC</strong>: <strong>Memoria compartida</strong> (variables globales visibles protegidas por semáforos/mutex; rapidísima sin serialización ni cifrado, estándar en embebidos pequeños compilados en C/FreeRTOS) frente a <strong>Paso de mensajes</strong> (obligatorio entre sistemas heterogéneos o distribuidos mediante JSON/YAML/XML, que exige <strong>serialización/deserialización</strong> y cifrado costosos en CPU). Sobre ambos se construye <strong>RPC</strong> (<em>Remote Procedure Call</em>) para recibir respuesta bidireccional (Clases 18–19).
+</li><li>
+<strong>MAS (<em>Memory Allocation System</em>) y Fragmentación</strong>: Componente del kernel que carga/descarga procesos, reserva/libera bloques, rastrea ubicación física (RAM/GPU/disco), mapea espacios virtuales a físicos vía la <strong>MMU</strong> y minimiza la <strong>fragmentación</strong> (huecos no contiguos dejados al morir procesos intercalados; mientras en GPOS se suspende y compacta, en embebidos de baja gama falla la carga) (Clases 19–20).
+</li><li>
+<strong>Recolección de basura (<em>Garbage Collection</em>)</strong>: Heredada de Java para liberar objetos sin referencias. <strong>Mark &amp; Sweep</strong> lleva contador de referencias (al cerrar llave } decrementa; en 0 borra la entrada de tabla, no bloquea pero <strong>fragmenta mucho</strong>); <strong>Mark &amp; Compact</strong> recorre y compacta objetos vivos eliminando huecos, pero <strong>bloquea todo el sistema</strong> (causó fallos graves en las primeras versiones de Linux al usar <em>pipes</em> en bash); <strong>Generacional</strong> revisa frecuente a objetos jóvenes y poco a veteranos (optimizado hoy con modelos ocultos de Markov). <em>Regla crítica</em>: Requiere <em>middleware</em> y <strong>no existe en C/C++ nativo</strong> (Clase 19).
+</li><li>
+<strong>Pozos de memoria (<em>Memory Pools</em>)</strong>: Reserva previa de bloques en <strong>potencias de 2</strong> (ej. 32 bytes para int, 64 bytes para long/double, 128 bytes para char/char). Al pedir memoria (ej. 64 KB), el MAS busca: (1) en el pozo de su tamaño, (2) en el siguiente pozo más grande libre, (3) en el <em>heap</em>, y (4) si todo está lleno, suspende el proceso, lo copia a un segmento mayor y duplica los pozos. En embebidos críticos se afina tras <strong>3 a 5 compilaciones</strong> editando el <strong>archivo de <em>linker</strong></em> para garantizar sistemas predecibles por 20 años (Clase 19).
+</li><li>
+<strong>Memoria virtual, <em>Swapping</em>, <em>RAM disk</em> y zram</strong>: La memoria virtual requiere <strong>páginas</strong> y vuelca páginas inactivas al disco (<em>swapping</em>). Windows coloca swapfile.sys en C: (fragmenta el sistema), mientras Linux coloca una partición swap fija al final del disco. <em>Ancho de banda en vivo (Clase 20)</em>: un núcleo de <strong>64 bits (8 bytes) a 3.2 GHz</strong> pide <strong>25.6 GB/s</strong> (DDR entregaba 3.2 GB/s, DDR2 6.4 GB/s, DDR4 25.6 GB/s; 4 núcleos piden ~100 GB/s), mientras un SSD escribe a <strong>433 MB/s</strong> (100x más lento que RAM) y un HDD a <strong>60 MB/s</strong> (1000x más lento). <em>Vida útil SSD en vivo</em>: 1 año = 31.536 × 106 s ≈ 3.2 × 107 s; a 1 escritura/s, un SSD de <strong>10 megaescrituras</strong> dura <strong>meses</strong>, y uno de <strong>100 megaescrituras</strong> dura <strong>~3 años</strong>. <em>Soluciones Linux</em>: (a) Particionado separando /boot y / o /usr (&gt;10 GB, casi solo lectura) en SSD y /home en HDD barato para durar <strong>25 años</strong>; (b) <strong>RAM disk (ramfs / tmpfs)</strong> que monta un bloque de RAM en ext2 (usado para /tmp en /etc/fstab, al contrario del <em>swap</em>); (c) <strong>zram</strong> (/dev/zram0 visto con swapon), que reserva RAM con ext2 y comprime páginas con gzip/bzip2 al <strong>~30%</strong> sin tocar el disco físico (Clases 6, 18, 20).
+</li></ul>
+</li><li>
+<strong>(c) Los 5 algoritmos de asignación del MAS — "Vienen en el examen" (Clase 19)</strong>:
+</li></ul>
+<div class="tabla-scroll"><table><tr><th>Algoritmo</th><th>Estrategia de búsqueda</th><th>Ventaja / Desventaja / Uso ideal</th></tr><tr><td><strong>First Fit</strong></td><td>Busca siempre desde el inicio de la tabla y asigna el primer hueco donde quepa.</td><td>Simple, pero reescanea desde el inicio cada vez.</td></tr><tr><td><strong>Next Fit</strong></td><td>Continúa buscando desde la última posición asignada hacia adelante.</td><td>Suele ser el más rápido en barrido lineal, pero sigue generando fragmentación.</td></tr><tr><td><strong>Best Fit</strong></td><td>Barre toda la tabla y elige el hueco más ajustado al tamaño pedido.</td><td>Reduce fragmentación; ideal cuando las apps saben su consumo fijo.</td></tr><tr><td><strong>Worst Fit</strong></td><td>Barre toda la tabla y asigna el hueco más grande disponible (avaricioso).</td><td>Ideal para apps que crecen (filosofía Google Chrome) para dar espacio de expansión.</td></tr><tr><td><strong>Quick Fit</strong></td><td>Tabla auxiliar tipo <em>hash</em> ordenada con tamaños y apuntadores libres.</td><td>Búsqueda muy rápida (O(log N) con binaria) y acelera Best/Worst Fit; gasta RAM adicional.</td></tr></table></div>
+<ul><li>
+<strong>(d) Puntos recalcados para examen</strong>: El profesor señaló explícitamente que los <strong>5 algoritmos de asignación de memoria vienen en el examen</strong> (Clase 19); también hay que evitar la confusión común entre <strong>swap</strong> (RAM → disco) y <strong>RAM disk / tmpfs</strong> (RAM usada como disco rápido) (Clase 18).
+</li></ul>
+<h4>3.4 Relojes y Temporizadores por Software</h4>
+<ul><li>
+<strong>(a) Problema que resuelve y conexión</strong>: Con un solo <em>timer</em> de hardware (reloj del sistema de Unidad 2), el <em>scheduler</em> construye servicios de software para dormir microcontroladores en lugar de quemar batería en while(1) (ej. marcapasos a <strong>8 MHz</strong> frente a un corazón bajo taquicardia de <strong>&lt;200 Hz</strong>, ~160 estándar), gestionar retardos, lanzar funciones futuras sin traslapes y llevar la fecha civil (Clase 20).
+</li><li>
+<strong>(b) Conceptos clave</strong>:
+<ul><li>
+<strong>Timer vs. Reloj contador</strong>: El <em>timer</em> produce interrupciones periódicas; el <em>reloj contador</em> lleva la cuenta del tiempo (Clase 20).
+</li><li>
+<strong>Jiffy</strong>: Unidad de tiempo interna del <em>scheduler</em>, calculada automáticamente al arrancar el sistema operativo según su reloj (Clase 20).
+</li><li>
+<strong>Ejecución síncrona (delay / sleep)</strong>: En <em>bare-metal</em> quema millones de instrucciones NOP. En un SO, el <em>scheduler</em> intercepta la llamada en <strong>3 escenarios</strong>: (1) <strong>&gt;100 ms</strong>: saca y suspende la tarea reprogramándola a futuro; (2) <strong>0</strong>: abstracción para reevaluar colas y semáforos y devolver control casi inmediato (nanosegundos); (3) <strong>entre 0 y 100 ms</strong>: saca la tarea y la vuelve a encolar en READY, <strong>sin garantizar precisión exacta</strong> (pedir 50 ms puede tardar 54 ms o más) (Clase 20).
+</li><li>
+<strong>Ejecución asíncrona periódica y prevención de solapamiento ("Pregunta para entrar a Google")</strong>: Si un <em>timer</em> llama cada <strong>10 ms</strong> a bar(), y las ejecuciones duran <strong>3 ms, 15 ms, 25 ms, 20 ms, 15 ms</strong>, llegan a coexistir <strong>3 instancias simultáneas</strong> no deseadas. <em>Solución de clase</em>: La función bar() del <em>timer</em> no hace trabajo pesado, únicamente libera un <strong>semáforo binario</strong> inicializado cerrado (0, máx. 1) mediante sem_post; un hilo trabajador independiente con foo() corre while(running) bloqueado en sem_wait, garantizando <strong>a lo más una instancia a la vez</strong> (Clase 20).
+</li><li>
+<strong>Primitivas del kernel</strong>: <strong>init_timer</strong> (configura apuntador a función, parámetros y delta_t en <em>jiffies</em>, sin arrancar), <strong>add_timer</strong> (encola el <em>timer</em> para ejecutarlo; volverlo a llamar al final de la función logra repetición periódica) y <strong>del_timer</strong> (cancela y saca el <em>timer</em> de la tabla) (Clase 20).
+</li><li>
+<strong>Servicio de Fecha/Hora</strong>: En Linux, <strong>date</strong> consulta la fecha y hora civil del sistema, mientras <strong>time</strong> mide el tiempo de procesador que tarda un proceso (no da la hora). Sin internet, sumar <em>jiffies</em> acumula un <strong>atraso o adelanto de 4 a 10 minutos al año</strong>; por ello los sistemas embebidos remotos se conectan brevemente por <strong>NTP</strong> (sincronizado a relojes atómicos con 1 pulso de variación cada 100 millones de años —nota: en clase se mencionó erróneamente "germanio dopado" al referirse al cristal/elemento del reloj atómico [dudoso]—) y vuelven a dormir (Clase 20).
+</li></ul>
+</li></ul>
+<h4>3.5 Manejadores de Dispositivos (Drivers) y Sistemas de Archivos</h4>
+<ul><li>
+<strong>(a) Problema que resuelve y conexión</strong>: Para completar la tríada del núcleo (CPU, memoria y periféricos), las aplicaciones jamás acceden directo al hardware; el SO actúa como <strong>árbitro</strong> (bloqueando exclusividad en dispositivos como la cámara web o compartiendo el micrófono, y evitando penalizaciones de <em>middleware</em> como <strong>Snapcraft</strong> en Ubuntu 24 —45 s y 1.4 GB en Firefox— frente a la compilación nativa de Debian Bookworm —10 s y 340 MB— con el mismo kernel 6.1 y Xfce) mediante <strong>controladores</strong> y <strong>sistemas de archivos</strong> montados sobre ellos (Clase 21).
+</li><li>
+<strong>(b) Conceptos clave</strong>:
+<ul><li>
+<strong>Controlador (<em>device driver</em>)</strong>: Software encargado de gestionar el hardware y servir de liga entre los fierros y cualquier capa superior (Clase 21).
+</li><li>
+<strong>10 funciones generales de un driver + familias</strong>: (1) <strong>Arranque</strong> (negocia potencia, ej. 1 A para girar plato de disco), (2) <strong>Apagado</strong> (corta energía física), (3) <strong>Habilitación</strong> (encender lámpara de escáner, purgar cabezales de impresora), (4) <strong>Deshabilitación</strong> (pausa sin desconectar), (5) <strong>Adquisición</strong> (<em>lock</em> exclusivo), (6) <strong>Liberación</strong>, (7) <strong>Lectura</strong>, (8) <strong>Escritura</strong>, (9) <strong>Instalación</strong> (negocia DMA, IRQ, resolución, botones), (10) <strong>Desinstalación</strong> (vuelca búferes en discos antes de deshabilitar y apagar). Se añaden <strong>ACPI</strong> (suspend, standby, wake), <strong>USB</strong> (Control + modo de transferencia) y <strong>almacenamiento</strong> (montar, desmontar, expulsar) (Clase 21).
+</li><li>
+<strong>Tipos de controladores — "Pregunta de examen" (Clase 21)</strong>: <strong>Dedicados</strong> (vinculados al CPU antes de la arquitectura; le "recuerdan" tras el despertar cómo está su memoria, caché, MMU, FPU, coprocesadores, FPGA o núcleos gemelos como un Cortex-M0 en Blackpill vs. RP2040 o Cortex-M4 en Bluepill vs. RP2350) y <strong>genéricos</strong> (gestionan todo el hardware externo al núcleo en la tarjeta madre: SMBus, I²C, PCI, bancos DRAM, Ethernet, USB).
+</li><li>
+<strong>Categorías y modelo POSIX</strong>: Puertos serie (UART, I²C, SPI, SMBus), dispositivos de red (Ethernet, Wi-Fi con TCP/IP y cifrado en tarjeta, WiMAX hasta 5 km), SATA/Flash (almacenamiento matricial con <strong>balanceo de desgaste</strong>), buses (PCI, PCIe, USB, SMBus) e interrupciones (exclusivos del kernel). En <strong>POSIX</strong>, <strong>PCI</strong> es transversal y conecta red (ej. montaje remoto —el profesor dijo <em>"NTFS, Network File System"</em>, lapsus por <strong>NFS</strong> [dudoso]— como dispositivo de bloques), tarjetas USB y Bluetooth (con <strong>256 puertos virtuales</strong> hacia caracteres y <strong>TTY</strong> sobre puerto serie) (Clase 21).
+</li><li>
+<strong>Sistema de archivos, escritura asíncrona y bitácora</strong>: Tabla estructurada de registros montada sobre el driver; en <strong>FAT</strong> (FAT12 para disquetes, FAT16 y FAT32 con nombres 8.3 y límite de <strong>4 GB</strong>), el disco se divide en <strong>clústeres</strong> (no caben dos archivos en un clúster, pero un archivo se fragmenta en varios). Las lecturas van al disco, pero la <strong>escritura (write) es asíncrona</strong>: se acumula en un búfer en RAM para consolidar operaciones de alto volumen (explicando por qué copiar a USB arranca a ~120 MB/s los primeros ~300 MB y luego cae a ~20 MB/s, y por qué desconectar sin expulsar / <strong>flush</strong> borra lo que seguía en RAM). Según tolerancia a fallos, hay sistemas <strong>con bitácora (<em>journaling</em>)</strong> —aplican actualizaciones transaccionales atómicas y escritura diferida para hacer <em>rollback</em> ante apagones (NTFS, ext3, ext4, JFFS)— y <strong>sin bitácora</strong> —riesgo de corromper toda la tabla (FAT32, exFAT, ext2)— (Clase 21).
+</li></ul>
+</li><li>
+<strong>(c) Sistemas de archivos para sistemas embebidos (Clase 21)</strong>:
+</li></ul>
+<div class="tabla-scroll"><table><tr><th>Sistema de archivos</th><th>Bitácora / Lectura-Escritura</th><th>Características técnicas y uso real visto en clase</th></tr><tr><td><strong>ext2</strong></td><td>Sin bitácora / RW</td><td>Creado en ~1995 para el kernel Linux; soporta particiones hasta <strong>32 TB</strong> y archivos de <strong>2–4 GB</strong>; usado en <strong>RAM disks</strong> y flash (si la flash falla físicamente ya no se lee).</td></tr><tr><td><strong>ramfs / tmpfs</strong></td><td>Sin bitácora / RW (no persistente)</td><td>ramfs monta RAM con expansión dinámica (en clase se dijo que <em>"solamente soporta un archivo"</em> [dudoso en Linux real]), por lo que sobre RAM se formatea <strong>ext2</strong> para crear <strong>tmpfs</strong> (ej. /tmp).</td></tr><tr><td><strong>cramfs</strong></td><td>Sin bitácora / Solo lectura</td><td>Primer sistema de carga del kernel; comprimido con <strong>zlib</strong> (~256 MB+); aún usado en televisiones actuales.</td></tr><tr><td><strong>initramfs</strong></td><td>Sin bitácora / Solo lectura</td><td>Evolución de cramfs que cambia zlib por <strong>gzip</strong> (mayor compresión, más CPU) y descomprime a cualquier destino; <strong>lo carga GRUB al arrancar Linux</strong> (<em>"ese sí se lo tienen que saber"</em>).</td></tr><tr><td><strong>JFFS</strong></td><td><strong>Con bitácora</strong> / RW</td><td>Para memorias flash <strong>NOR</strong> y <strong>NAND</strong> (hoy dominantes), límite <strong>128 MB</strong> y soporte de <strong>enlaces duros</strong> (múltiples rutas al mismo archivo real, aprovechados por rdfind para deduplicar).</td></tr></table></div>
+<ul><li>
+<strong>(d) Puntos recalcados para examen</strong>: Distinguir <strong>controladores dedicados vs. genéricos</strong> (<em>"pregunta de examen"</em>), conocer <strong>initramfs</strong> (<em>"si no han oído este, están en el hoyo... ese sí se lo tienen que saber"</em>), y comprender la diferencia entre <strong>write asíncrono + flush</strong> y sistemas <strong>con/sin bitácora</strong> (Clase 21).
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-lo-que-mas-probablemente-viene-en-el-fin" open><summary><span class="stitle">LO QUE MÁS PROBABLEMENTE VIENE EN EL FINAL</span></summary>
+<ul><li>
+<strong>Definición y 4 características de los <em>Timers</em> de hardware</strong>: El profesor señaló explícitamente en Clase 7: <em>"memorizar la definición... Tiene estas cuatro características. Todas son preguntas de examen"</em> (<em>Free run/one shot</em>, dirección de conteo, rango en bits, fuente oscilador/externa).
+</li><li>
+<strong>USB 2.0 (topología de 7 niveles, 3 velocidades y 4 modos de transferencia)</strong>: En Clase 8 afirmó explícitamente que <em>"el máximo nivel, pregunta de examen, es siete"</em> y los modos de operación de USB 2.0; en Clase 9 evaluó los 4 modos (<em>Control</em>, <em>Bulk</em>, <em>Interrupt</em>, <em>Isochronous</em>) y en Clase 15 confirmó su presencia en evaluaciones.
+</li><li>
+<strong>Protocolos de interconexión (tabla comparativa completa)</strong>: En Clase 9 exigió: <em>"cuando yo termino el tema, ustedes se tienen que saber de memoria las características de cada uno: topología, configuración maestro-esclavo o pares, frecuencia, nombre y número de líneas"</em> (I²C, SMBus, SPI/QSPI, I²S, UART N81, RS-232 vs. RS-485, One-Wire).
+</li><li>
+<strong>Funcionamiento general y orden de la secuencia de arranque (<em>Bootstrap</em>)</strong>: En Clase 12 aclaró ante pregunta de un alumno que no pide memorizar las 32 cajas ni direcciones hexadecimales, pero sí el <strong>orden general de fases</strong> (RESET → modo protegido → cachés → DRAM → interrupciones → detección APs con SIPI/semáforo → PCI → SO).
+</li><li>
+<strong>Los 6 pasos de una llamada a servicio del sistema operativo</strong>: En Clase 13 presentó la lista diciendo explícitamente <strong>"Pregunta de examen"</strong>: enmascaramiento por <em>linker</em>, argumentos + EAX, trampa (int 80h), cambio de nivel, desenmascaramiento/ejecución en kernel (sys_brk) y retorno.
+</li><li>
+<strong>Diferencia entre unidades mínimas de ejecución (Proceso, Hilo en GPOS y Tarea en RTOS) y estados de proceso</strong>: En Clases 13 y 15 dedicó gran énfasis a que FreeRTOS solo usa tareas y no procesos, a la transición running → wait → ready (nunca wait → running), y a que la arquitectura de RTOS verifica accesos en compilación.
+</li><li>
+<strong>Ejercicios de Planificación en Tiempo Real (MLF y Regla de Oro) y cota del 70% de RMS</strong>: En Clase 18 resolvió tres ejercicios numéricos en vivo (<em>"si fuera examen, voy a volver a ejecutar la tarea P1"</em>), bautizó Σ Ci/Ti ≤ 1 como la <strong>"regla de oro"</strong> y precisó que <strong>la demostración matemática del límite del 70% de RMS NO viene</strong>, solo el criterio y la cota.
+</li><li>
+<strong>Los 5 algoritmos de asignación de memoria del MAS y cálculo de tabla de paginación</strong>: En Clase 19 dijo explícitamente <em>"esto nos lleva a los cinco algoritmos que vienen en el examen sobre fragmentación / alocación de memoria"</em> (<em>First, Next, Best, Worst, Quick Fit</em>) y resolvió paso a paso el ejercicio de 64 KB / 16 bits.
+</li><li>
+<strong>Temporizador asíncrono periódico sincronizado con semáforo binario y comportamiento de delay</strong>: En Clase 20 planteó el problema de bar() cada 10 ms con duraciones de 3, 15 y 25 ms como <em>"pregunta para entrar a Google"</em> y clasificó los 3 comportamientos del <em>scheduler</em> para delay (0, 0–100 ms sin garantía, &gt;100 ms).
+</li><li>
+<strong>Controladores dedicados vs. genéricos y sistemas de archivos embebidos (initramfs)</strong>: En Clase 21 afirmó textualmente <em>"dos tipos de controladores y esto es pregunta de examen: los dedicados y los genéricos"</em>, y advirtió sobre initramfs: <em>"si no han oído este, están en el hoyo, joven; ese sí se lo tienen que saber"</em>.
+</li><li>
+<strong>Memoria virtual, desgaste de SSD y zram (evidencia moderada)</strong>: Aunque no los etiquetó con la frase "pregunta de examen", en Clase 20 resolvió cálculos numéricos en vivo (ancho de banda 25.6 GB/s, vida útil con 3.2 × 107 s/año) y demostró /dev/zram0 en terminal.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-conexiones-clave"><summary><span class="stitle">CONEXIONES CLAVE</span></summary>
+<ul><li>
+Arquitectura del sistema embebido → resuelve intrínsecamente → restricciones de costo, batería y confiabilidad.
+</li><li>
+Taxonomía de Flynn → clasifica → procesadores según sus flujos de instrucciones y datos.
+</li><li>
+Predecodificador con microfusión → convierte → instrucciones CISC complejas en microoperaciones RISC paralelas.
+</li><li>
+Bus coherente → sincroniza → escrituras entre memoria caché y DRAM principal.
+</li><li>
+Mapa de memoria del sistema → prohíbe cachear → direcciones mapeadas a registros de periféricos.
+</li><li>
+DRAM capacitiva → requiere → ciclos de refresco cada ~60 ms para no perder datos.
+</li><li>
+Memoria Flash matricial → agrupa escrituras en → clústeres de bloques para acelerar escritura y balancear desgaste.
+</li><li>
+Modo de direccionamiento indexado → calcula → dirección de datos usando registro índice más desplazamiento.
+</li><li>
+Modo de direccionamiento relativo → calcula → dirección de la siguiente instrucción usando el Contador de Programa.
+</li><li>
+Controlador de interrupciones (ICU) → elimina → el desperdicio de CPU del <em>busy wait</em> o <em>polling</em>.
+</li><li>
+Desencadenamiento por flanco → evita → que periféricos serie lentos bloqueen procesadores rápidos durante todo el byte.
+</li><li>
+Controlador DMA → transfiere → datos entre periféricos y RAM saltándose al CPU.
+</li><li>
+<em>Timer</em> de hardware → provee → la interrupción periódica base (<em>reloj del sistema</em>) para todo sistema operativo.
+</li><li>
+Par trenzado diferencial en USB → detecta → errores por ruido eléctrico con hardware mínimo.
+</li><li>
+Modo isócrono de USB → simula → transmisión síncrona mediante reserva fija de ancho de banda.
+</li><li>
+Colector abierto con <em>pull-up</em> en I²C → permite → comunicar dispositivos de 3.3 V y 5 V en un mismo bus.
+</li><li>
+Protocolo QSPI → carga → el firmware de BIOS/UEFI desde Flash ROM a gran velocidad.
+</li><li>
+Estándar RS-485 diferencial → extiende → comunicaciones UART multipunto hasta 1.2 km frente a los 15 m de RS-232.
+</li><li>
+Procesador de arranque (BSP) → despierta mediante SIPI → a los procesadores de aplicación (AP) en condición de carrera con semáforo.
+</li><li>
+<em>Linker</em> → enmascara → llamadas de librería generando identificadores de 128 bits antes de la trampa int 80h.
+</li><li>
+Hilos en GPOS → comparten → memoria virtual y prioridad dentro de un mismo proceso padre.
+</li><li>
+Tareas en RTOS → dependen de → un superproceso raíz verificando accesos y <em>deadlines</em> desde compilación.
+</li><li>
+Estado bloqueado (wait) → transita obligatoriamente hacia → la cola ready antes de volver a running.
+</li><li>
+<em>Minimal Laxity First</em> (MLF) → prioriza → la tarea con menor diferencia entre tiempo restante al <em>deadline</em> y trabajo pendiente.
+</li><li>
+Regla de Oro → exige → que la suma de consumos entre periodos sea menor o igual al 100%.
+</li><li>
+<em>Rate Monotonic Scheduling</em> (RMS) → acota → el uso seguro del procesador al ~70% desde 4 o más tareas.
+</li><li>
+Paginación de memoria → impide → que las tablas administrativas consuman más RAM que la memoria disponible.
+</li><li>
+<em>Memory Allocation System</em> (MAS) → combate → la fragmentación mediante algoritmos de encaje (<em>Fit</em>) o <em>memory pools</em>.
+</li><li>
+<em>Memory Pools</em> afinados en el <em>linker script</em> → aseguran → sistemas embebidos predecibles sin fragmentación en C/C++.
+</li><li>
+Particionado inteligente + zram → protegen → las unidades SSD/MicroSD contra el desgaste por ciclos de escritura.
+</li><li>
+Semáforo binario + hilo trabajador → evitan → instancias simultáneas cuando un <em>timer</em> asíncrono tarda más que su periodo.
+</li><li>
+Conteo de <em>jiffies</em> sin NTP → acumula → una deriva de 4 a 10 minutos al año en el reloj de Linux.
+</li><li>
+Controladores dedicados → informan → al sistema operativo la arquitectura interna y recursos propios del núcleo CPU.
+</li><li>
+Escritura asíncrona (write) + flush → consolidan → datos en búferes de RAM antes de volcarlos al disco físico.
+</li><li>
+Bitácora (<em>journaling</em>) en ext4 o JFFS → garantiza → consistencia mediante transacciones atómicas y <em>rollback</em> ante apagones.
+</li></ul>
+<p>📝 Si quieres, puedo armarte un <strong>simulador de examen final</strong> con 10–15 preguntas difíciles estilo Matamoros (mezclando cálculo de tablas de páginas, MLF, RMS, QSPI/UART y casos de init_timer/semáforos) para que te pongas a prueba antes del examen.</p>
+</details>
+<details class="section-block sec" id="gf-anexo-clases-que-no-estaban-en-el-cuader"><summary><span class="stitle">Anexo · Clases que no estaban en el cuaderno de NotebookLM</span></summary>
+<p><em>Resumen para estudiar de cada una, tomado de los apuntes por clase del sitio (decimo/FSE/FSE-Resumenes/).</em></p>
+<h3>Clase 14 · Primer examen parcial (Unidades 1 y 2) (miércoles 14 oct 2026)</h3>
+<p>Calificación completa: el método funcionó. Para el segundo parcial, misma estrategia con la Unidad 3: definiciones exactas (como la del timer) y el funcionamiento de cada mecanismo con sus números.</p>
+</details>
+</div>
+</body>
+</html>

@@ -1,0 +1,89 @@
+% Lab 7c report - Temperature display on a 16x2 LCD over I2C. Compile with XeLaTeX (twice): xelatex 19-OEPR-L07.tex
+\documentclass[12pt,letterpaper]{article}
+
+\usepackage[letterpaper,margin=2.5cm,headheight=46pt,headsep=0.3cm]{geometry}
+\usepackage{fontspec}
+\IfFontExistsTF{Arial}{\setmainfont{Arial}\setsansfont{Arial}}%
+  {\setmainfont{Liberation Sans}\setsansfont{Liberation Sans}}
+\IfFontExistsTF{Menlo}{\setmonofont{Menlo}[Scale=0.85]}%
+  {\setmonofont{Liberation Mono}[Scale=0.85]}
+\usepackage[english]{babel}
+\usepackage{microtype}
+\usepackage{indentfirst}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage[obeyspaces,spaces]{url}
+\urlstyle{tt}
+\usepackage[round,authoryear]{natbib}
+
+\setlength{\parindent}{1cm}
+\setlength{\parskip}{0pt}
+\emergencystretch=2em
+\setlength{\bibsep}{2pt}
+\renewcommand{\refname}{References}
+
+\titleformat{\section}{\normalfont\bfseries}{\thesection.}{0.5em}{}
+\titlespacing*{\section}{0pt}{8pt}{3pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[R]{\thepage}
+\fancypagestyle{firstpage}{%
+  \fancyhf{}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \fancyhead[L]{\parbox[b]{\textwidth}{\raggedright
+Universidad Nacional Aut\'onoma de M\'exico --- Facultad de Ingenier\'ia\\
+Fundamentos de Sistemas Embebidos --- Lab 7c: Temperature on a 16$\times$2 LCD\\
+Rafael Ortega de la Paz | 420054085}}%
+  \fancyfoot[R]{\thepage}%
+}
+
+\begin{document}
+\thispagestyle{firstpage}
+
+\section{Introduction}
+This lab is about driving a character display from a single-board computer and using it to show live sensor data. The goal was to write, from a Raspberry Pi 4 and over the I\textsuperscript{2}C bus, the surname of a team member on the first line of a 16$\times$2 liquid crystal display and the temperature on the second, and then extend the program to show Celsius and Fahrenheit, scroll the surnames of the whole team as a marquee and serve two web pages: one to control the marquee and one to plot the temperature log. The manual uses a DS18B20 on the 1-Wire bus and an LCD with a PCF8574 I\textsuperscript{2}C adapter, but a footnote allows the LM35 circuit of Lab 6 instead. We reused the Lab 6b setup, where a Raspberry Pi Pico W reads the LM35 and answers as an I\textsuperscript{2}C target, and since our display came without the adapter, we programmed the Pico to do the adapter's job, so the Raspberry Pi keeps using the algorithms of the manual unchanged.
+
+\section{Background}
+\citet{linke2008} describes 1-Wire as a bus that carries data, and even power in parasitic mode, over a single line with a pull-up. It is the bus of the DS18B20 proposed by the manual \citep{matamoros2025}; we did not use it because the sensor was the LM35, whose output rises by 10 mV/\textdegree C \citep{ti2017}.
+
+The NXP specification \citeyearpar{nxp2021} defines I\textsuperscript{2}C as a two-wire bus, SDA and SCL, open-drain with pull-up resistors, where the controller generates the clock and addresses each target with 7 bits followed by a read/write bit. The manual says the most significant bit selects reading or writing, but in the specification it is the least significant bit of the address byte. As \citet{molloy2016} notes, the Raspberry Pi already has 1.8\,k$\Omega$ pull-ups to 3.3 V on GPIO2 and GPIO3, so no external resistors are needed, and several targets can share the bus as long as their addresses differ.
+
+The LCD 1602 uses the Hitachi HD44780 controller. According to Hitachi \citeyearpar{hitachi1998}, it has eight data lines and three control lines: RS selects the instruction register (0) or the data register (1), R/W selects reading or writing, and E latches the bus on its falling edge. In 4-bit mode only D4--D7 are used and each byte travels as two nibbles, high first. The sequence \path{0x33}, \path{0x32}, \path{0x28}, \path{0x0C}, \path{0x01} of the manual switches the controller to 4 bits, two lines, display on without cursor, and clears it; the cursor moves to $(x,y)$ with the command $\mathtt{0x80}+\mathtt{0x40}\,y+x$. The PCF8574, in turn, is a quasi-bidirectional 8-bit port whose pins P0--P7 simply copy the byte written by the controller \citep{nxp2013}. On LCD adapters P0 drives RS, P1 R/W, P2 E, P3 the backlight and P4--P7 the data lines D4--D7, which is why the algorithms of the manual send every nibble twice, first with E = 1 (\path{0x04}) and then with E = 0 (mask \path{0xFB}), to produce the falling edge.
+
+\section{Development}
+\emph{Wiring.} The Pico W sat across the breadboard with its USB port powered by the Raspberry Pi, and its VBUS pin (pin 40) fed the 5 V rail used by the LM35 and the display. The LM35 kept the full-range circuit of Lab 6b: two 1N914 diodes shunted by 18\,k$\Omega$ under its ground pin, $V_{OUT+}$ on GP27 (ADC1), $V_{OUT-}$ on GP26 (ADC0) and a 12\,k$\Omega$ resistor on ADC\_VREF, which measured 3.330 V. On the LCD, VDD went to 5 V, GND, R/W and K to ground, A to 5 V through 330\,$\Omega$, and VO to a 10\,k$\Omega$/1\,k$\Omega$ divider (about 0.45 V) for contrast. GP2 drove RS, GP3 drove E and GP4--GP7 drove D4--D7. The Raspberry Pi pins 3 (SDA), 5 (SCL) and 6 (GND) went to pins 1 (GP0), 2 (GP1) and 3 of the Pico. Tying R/W to ground keeps the display always in write mode, so it never puts 5 V on lines that reach the 3.3 V Pico; in the other direction the HD44780 powered at 5 V reads anything above about 2.2 V as a logic 1 \citep{hitachi1998}. Before powering the board we found that the jumpers carrying VBUS and GND to the upper rails were swapped, which would have left the LM35 unpowered and put 5 V on the ADC\_VREF resistor, and we exchanged them.
+
+\emph{The Pico as a PCF8574.} Since MicroPython only offers I\textsuperscript{2}C as a controller, \path{main.py} uses the \path{i2cslave.py} library of Lab 6b to answer at \path{0x0A}. Every byte the Raspberry Pi writes goes to \path{put_port()}, which copies bit 0 to RS and bits 4--7 to D4--D7 and sets E (bit 2) last, so the data is already stable when the display latches it on the falling edge; bits 1 and 3 are ignored because R/W is grounded and the backlight is always on. When the Raspberry Pi reads 4 bytes, the Pico answers with the temperature packed as a little-endian float, which it refreshes every 250 ms by averaging 16 readings of $T=(N_{+}-N_{-})\,V_{REF}/655.36$ without blocking the bus. Saving the program from Thonny while the Pico ran another one left \path{main.py} empty, so \path{i2cdetect -y 1} showed nothing although SDA and SCL measured 3.18 V; after uploading it again the Raspberry Pi listed the Pico at \path{0a}.
+
+\emph{Raspberry Pi.} I\textsuperscript{2}C, \path{i2c-tools} and \path{python3-smbus2} were already set up from Lab 6, and the Lab 5 kiosk that used GPIO2 and GPIO3 was still disabled as \path{/etc/rc.local.p5}. The module \path{lcd.py} keeps \path{send_word()} exactly as in the manual, with the address changed to \path{0x0A}, and implements Algorithms 1 and 2 in a single \path{_send(value, rs)}. Algorithm 1 of the manual obtains the low nibble with \path{(cmd & 0xf0) << 4}, which always gives zero; the correct mask is \path{0x0F}. Its comments in Algorithm 2 also say RS = 0, although \path{0x05} sets RS = 1. \path{init()} is Algorithm 3, and \path{write(x, y, text)} moves the cursor and sends each character, translating the degree sign to code \path{0xDF} of the HD44780 character ROM.
+
+\emph{Experiment 1.} \path{read_temp()} builds a 4-byte read message with \path{smbus2.i2c_msg.read}, runs it with \path{i2c_rdwr} and decodes it with \path{struct.unpack('<f', ...)}. The console printed the time and 25.3\,\textdegree C once per second, rose to 29.5\,\textdegree C when the sensor was held and then cooled down gradually.
+
+\emph{Experiments 2 and 3.} After \path{init()}, the program writes the surname LUNA at $(0,0)$ and every second rewrites the whole second line, padded to 16 characters so no digits of the previous value remain. The display showed 25.6\,\textdegree C at rest and up to 29.8\,\textdegree C while the LM35 was warmed.
+
+\emph{Experiment 4.} \path{temp_text()} builds the second line for C, F or both, with $F = 1.8\,C + 32$. The display showed 25.5\,\textdegree C / 77.6\,\textdegree F and, after warming, 30.1\,\textdegree C / 86.1\,\textdegree F, both consistent with the formula.
+
+\emph{Experiment 5.} The class \path{Marquesina} stores ``ORTEGA VALDES LUNA'' with trailing spaces and, at each step, advances a circular index and returns the 16 characters that fit. A single loop writes the marquee every 0.35 s and the temperature every second, so there are never two writes to the display at the same time. Letters that seem doubled in the video are the slow response of the liquid crystal caught by the camera, not a data error.
+
+\emph{Experiment 6.} The program runs two threads. The display thread is the only one that touches the I\textsuperscript{2}C bus; it reads the shared settings, advances the marquee and updates the temperature. The other thread is a \path{ThreadingHTTPServer} on port 8080 that serves the page, receives changes through \path{POST /api/config} and validates them (speed between 100 and 1000 ms, direction left or right, scale C, F or both) before storing them, and a \path{threading.Lock} keeps both threads from using the settings at once. The page asks \path{/api/estado} every 300 ms and draws a mirror of the display. From a phone we changed the speed from 350 to 650 ms per step, reversed the direction and switched to both scales, and the display followed each change.
+
+\emph{Experiment 7.} This is the program of experiment 3 plus a log and a web server. Every second the temperature is shown on the display and, if it is within $-10$ to 110\,\textdegree C, stored in a list; when the minute changes, the mean is appended to \path{bitacora.csv} as \path{YYYY-MM-DD HH:MM,temperature}, opening the file in mode \path{'a'} so the history is kept. The page requests \path{/api/historial?min=...} and draws the curve on a canvas with a resolution of one minute for the last hour, 6 h, 24 h or the whole log, with its minimum, maximum and mean. The first run stamped the records with 14 October, because the Raspberry Pi has no backup clock and NTP was not synchronizing, so we set the time zone with \path{timedatectl}, set the date by hand with \path{date -s} and restarted the log.
+
+\section{Conclusions}
+All seven experiments worked with the LM35 and without the PCF8574. Replacing the adapter with the Pico showed that the protocol of the manual does not depend on that chip but on the meaning of each bit of the byte sent: E latches each nibble on its falling edge and RS separates commands from data, so the same \path{lcd.py} would drive a real adapter by changing only the address. The Pico answered both the display bytes and the temperature request at one address, and the web server of experiment 6 showed that the bus should be accessed by a single thread while other threads handle the requests.
+
+Most of the time went into the setup rather than the code: swapped supply rails, a program erased while saving it to the Pico, an unsynchronized clock that would have dated the log wrongly, and two errors in the algorithms of the manual that would have sent the low nibble as zero.
+
+\begin{thebibliography}{9}
+\bibitem[Hitachi(1998)]{hitachi1998} Hitachi (1998). \emph{HD44780U (LCD-II) Dot Matrix Liquid Crystal Display Controller/Driver}, ADE-207-272(Z).
+\bibitem[Linke(2008)]{linke2008} Linke, B. (2008). \emph{Overview of 1-Wire Technology and Its Use}. Maxim Integrated, Tutorial 1796.
+\bibitem[Matamoros(2025)]{matamoros2025} Matamoros de Maria y Campos, J. M. (2025). \emph{Pr\'actica 7: Desplegado de temperatura en un display digital usando la Raspberry Pi}. Fundamentos de Sistemas Embebidos, UNAM.
+\bibitem[Molloy(2016)]{molloy2016} Molloy, D. (2016). \emph{Exploring Raspberry Pi: Interfacing to the Real World with Embedded Linux}. Wiley.
+\bibitem[NXP Semiconductors(2013)]{nxp2013} NXP Semiconductors (2013). \emph{PCF8574; PCF8574A Remote 8-bit I/O expander for I\textsuperscript{2}C-bus with interrupt}, Rev. 5.
+\bibitem[NXP Semiconductors(2021)]{nxp2021} NXP Semiconductors (2021). \emph{UM10204: I\textsuperscript{2}C-bus specification and user manual}, Rev. 7.0.
+\bibitem[Texas Instruments(2017)]{ti2017} Texas Instruments (2017). \emph{LM35 Precision Centigrade Temperature Sensors}, SNIS159H.
+\end{thebibliography}
+
+\end{document}

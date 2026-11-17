@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="no-aplica">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía para el examen final — Seguridad Informática Básica</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261117b">
+<script src="../../assets/app.js?v=20261117b" defer></script>
+<style>
+.gf h3{margin:1.2em 0 .4em} .gf h4{margin:1em 0 .3em;opacity:.9}
+.gf .tabla-scroll{overflow-x:auto} .gf table td,.gf table th{font-size:.9em;vertical-align:top}
+.gf p.nota{border-left:3px solid var(--c);padding:.3em .8em;opacity:.9}
+.gf li{margin:.25em 0}
+</style>
+</head>
+<body style="--c:#E8735C">
+<div class="wrap gf">
+<!-- Generado por scripts/build_guias_finales.py. No editar a mano. -->
+<a class="back" href="index.html">← Seguridad Informática Básica</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>📘 Guía para el examen final</h2>
+  <p class="prof">Seguridad Informática Básica · semestre 2027-1 · hecha con NotebookLM a partir de los audios de clase y el material del profesor (16 nov 2026).</p>
+  <p class="prof">Las fechas y cálculos de NotebookLM pueden fallar: ante la duda, revisa la página de la clase que cita.</p>
+</div>
+<div class="files">
+  <a class="btn" href="https://docs.google.com/document/d/1kElhsg7coX46Yx_M1CEWED3phoRe-IeL3epGx42dxRM/edit" target="_blank">📄 Original en Drive</a>
+  <a class="btn" href="https://docs.google.com/document/d/1_U1AzAhjld-K4CymGqSvkK43idNyWCBea4SNZlTPRtM/edit" target="_blank">📝 Apuntes y resumen (Drive)</a>
+  <a class="btn" href="https://drive.google.com/file/d/1JR69n3Uu10ErKszrFn69Von1IV0CYPgK/view" target="_blank">🧠 Mapa mental detallado</a>
+  <a class="btn" href="../../decimo/SIB/SIB-Resumenes/SIB-mapa-examen-2.pdf" target="_blank">🗺️ Mapa de examen</a>
+  <a class="btn" href="resumenes.html">📚 Guías por clase</a>
+</div>
+<details class="section-block sec" id="gf-hilo-conductor" open><summary><span class="stitle">HILO CONDUCTOR</span></summary>
+<p>La historia de la materia parte de una verdad fundamental: <strong>la seguridad no es un destino fijo ni garantiza un 100% de protección, sino un ciclo dinámico y continuo (PDCA)</strong> donde toda organización busca proteger sus bienes mediante un esquema guiado por <strong>tres preguntas en orden estricto</strong>: <em>¿qué quiero proteger?</em>, <em>¿de qué lo quiero proteger?</em> y <em>¿cómo lo voy a proteger?</em>. Para evitar reinventar la rueda y poder demostrar cumplimiento mediante <strong>auditorías</strong> internas o externas, el curso primero ubica ese ciclo dentro de la evolución de la <strong>normatividad y los estándares internacionales</strong> —pasando de criterios militares rígidos centrados en productos (como TCSEC) a sistemas integrales de gestión de la información en toda la organización (como la familia ISO/IEC 27000, NIST y COBIT). Con ese marco normativo en mano, se baja a la operación respondiendo las tres preguntas en orden: primero se delimita el <strong>entorno</strong>, los <strong>bienes</strong> y las necesidades de protección (<strong>servicios de seguridad</strong>) junto con las herramientas (<strong>mecanismos</strong>) que las satisfacen; después se responde <em>¿de qué protegerlos?</em> analizando el choque entre <strong>amenazas</strong> externas o internas y <strong>vulnerabilidades</strong> u omisiones (medidas con bases y métricas como CVE, NVD y CVSS), choque que al concretarse produce <strong>ataques</strong> ejecutados por <strong>perpetradores</strong> mediante técnicas de intrusión.</p>
+<p class="">Una vez comprendido qué proteger y contra qué, el curso cierra respondiendo <em>¿cómo protegerlo?</em> desde el gobierno institucional hasta la recuperación operativa. Primero se redactan políticas de seguridad claras, obligatorias y sin ambigüedades, y se formalizan mediante modelos de seguridad (de control de acceso, flujo de información e integridad) que dictan quién puede hacer qué sobre cada recurso. Como ninguna prevención evita el 100% de los incidentes, esas reglas se respaldan con planes de contingencia (DRP) divididos en subplanes temporales (<em>antes, durante y después</em>) para sobrevivir a desastres y recuperar la operación en el menor tiempo posible. Finalmente, el análisis y la gestión de riesgos cierra el círculo como la brújula que alimenta tanto a las políticas como a los planes de contingencia: prioriza infraestructuras y procesos críticos bajo una lógica económica (<em>que el ataque cueste más que el bien y la protección cueste menos que el bien</em>), combina métodos cuantitativos y cualitativos en matrices de riesgos consistentes y retroalimenta nuevamente al ciclo continuo cada vez que hay cambios significativos. <em>(Nota sobre fuentes: las Clases 1–10 y 12–20 provienen de audios y</em> <em>SIB-Clase2.pdf</em> <em>; el audio de la Clase 11 no está cargado porque correspondió a la aplicación del primer examen parcial).</em></p>
+</details>
+<details class="section-block sec" id="gf-unidad-1-fundamentos-ciclo-de-vida-de-la"><summary><span class="stitle">UNIDAD 1: Fundamentos, Ciclo de Vida de la Seguridad y Auditorías (Clase 1)</span></summary>
+<p><strong>a) Qué problema resuelve y cómo se conecta:</strong> Resuelve la idea falsa de que poner una contraseña o un candado basta para estar seguro para siempre, estableciendo que la seguridad es un proceso dinámico que requiere revisión periódica para no quedar obsoleta. Es el punto de partida del curso sobre el cual se montan los estándares, las evaluaciones y la mejora continua.</p>
+<h4>b) Conceptos clave:</h4>
+<ul><li>
+<strong>Las tres preguntas de seguridad:</strong> Son el núcleo de cualquier esquema de seguridad: 1) <em>¿Qué quiero proteger?</em> (identificar y jerarquizar bienes), 2) <em>¿De qué lo quiero proteger?</em> (amenazas y vulnerabilidades) y 3) <em>¿Cómo lo voy a proteger?</em> (mecanismos y planes). <em>Analogía:</em> Antes de armar una maleta para un viaje, primero ves qué vas a llevar, luego qué clima habrá y al final eliges qué ropa empacar; si empacas primero sin saber a dónde vas, gastarás en abrigos inútiles. <em>Ejemplo de clase:</em> El ejercicio de reflexión donde alumnos protegían celulares, camas o motos olvidando su propio cuerpo o vista (bienes tangibles como el ojo/córnea frente a intangibles como la vista).
+</li><li>
+<strong>Contexto de seguridad y sus relaciones:</strong> Conjunto de entidades que interactúan en todo proceso: <strong>propietarios/dueños/responsables</strong>, <strong>bienes/activos</strong> (tangibles o intangibles), <strong>mecanismos de seguridad</strong> (medidas de defensa o herramientas), <strong>vulnerabilidades</strong> (debilidades o puntos débiles), <strong>amenazas</strong>, <strong>agentes amenazantes</strong> (sujetos que pueden causar daño, incluyendo uno mismo) y <strong>riesgos</strong>. <em>Analogía:</em> Es el tablero completo de un partido: el dueño del balón, el balón, los defensas, los huecos en la defensa, las jugadas rivales y la probabilidad de gol. <em>Ejemplo de clase:</em> En el salón de clases somos <em>responsables</em> (no dueños) del cañón, pizarrón y sillas; una computadora mal aislada puede electrocutar a un empleado (donde el empleado es un bien y la PC actúa como agente amenazante), generando quemaduras internas y ausencias laborales sin retorno de inversión.
+</li><li>
+<strong>Pérdidas:</strong> Se clasifican en <strong>total</strong>, <strong>parcial</strong> o <strong>nula</strong> (cuando hay una pérdida mínima o insignificante que la empresa puede absorber sin impacto grave).
+</li><li>
+<strong>Ciclo de vida de la seguridad (Ciclo PDCA):</strong> Ciclo dinámico de mejora continua adoptado de los principios de calidad <em>(el nombre del "padre de la calidad" citado en el pizarrón aparece garabateado en la transcripción de</em> <em>SIB-Clase1.m4a</em> <em>como "Velquez" o "caridad", por lo que el nombre exacto no puede confirmarse solo con el audio)</em>, compuesto por <strong>Planear, Hacer, Verificar y Actuar</strong>. <em>Analogía:</em> Es la rutina de entrenamiento físico: planeas dieta y ejercicios, los haces un mes, verificas tu peso/condición y actúas ajustando la rutina si no funcionó. <em>Ejemplo de clase:</em> Tras el sismo del 19 de septiembre de 2017, verificar que hacer un simulacro al año no basta y cambiarlo a uno mensual obliga a volver a planear fechas, responsables y avisos.
+</li><li>
+<strong>Auditorías y hallazgos:</strong> Revisión formal para verificar si el ciclo y los estándares se cumplen. Se dividen en <strong>internas (primer nivel)</strong>, hechas por personal de la misma entidad sin pago externo (ej. alguien de FES Aragón auditando a Ingeniería bajo la misma legislación UNAM), y <strong>externas</strong>, hechas por terceros: <strong>segundo nivel</strong> (otra institución que evalúa sin certificar, como el IPN revisando a Ingeniería) o <strong>tercer nivel</strong> (autoridad certificadora acreditada que emite el certificado). <em>Ejemplo numérico de clase:</em> Deben hacerse <strong>mínimo 2 auditorías al año</strong> (idealmente cada 6 meses, aunque a veces sea a los 4 o 5 meses); en la facultad se auditaban <strong>31 laboratorios</strong> buscando ampliar el alcance a <strong>33</strong> —si uno solo incumple, <strong>toda la empresa pierde el certificado</strong> — y una auditoría externa puede durar toda una semana de 10:00 a 18:00–19:00 horas.
+</li></ul>
+<h4>c) Comparación y pasos en tabla:</h4>
+<div class="tabla-scroll"><table><tr><th>Ciclo PDCA (SIB-Clase1.m4a)</th><th>Qué se hace en cada fase</th><th>Hallazgos de Auditoría (SIB-Clase1.m4a)</th><th>Significado e impacto</th></tr><tr><td><strong>P — Planear</strong></td><td>Identificar bienes, jerarquía, riesgos y diseñar el esquema de seguridad (recursos y presupuesto).</td><td><strong>Oportunidad de mejora</strong></td><td>El proceso cumple y funciona, pero el auditor sugiere optimizarlo (ej. digitalizar formatos); es opcional.</td></tr><tr><td><strong>D — Hacer (Implementar)</strong></td><td>Ejecutar lo planeado (ej. realizar realmente los simulacros).</td><td><strong>Observación</strong></td><td>Algo que dices hacer no se está haciendo o falla sin afectar aún el proceso; exige plan de corrección.</td></tr><tr><td><strong>C — Verificar</strong></td><td>Monitorear, reportar y auditar si los controles funcionan adecuadamente.</td><td><strong>No conformidad</strong></td><td>Incumplimiento grave que pone en riesgo el proceso; impide obtener, ampliar o mantener la certificación si no se subsana en el plazo dado.</td></tr><tr><td><strong>A — Actuar</strong></td><td>Tomar decisiones con base en conclusiones (cambiar, actualizar o retirar lo obsoleto) y reiniciar el ciclo.</td><td>—</td><td>—</td></tr></table></div>
+<h4>d) Errores comunes y puntos de examen:</h4>
+<ul><li>
+Creer que existe la <strong>seguridad al 100%</strong> (falso: todos los bienes tienen vulnerabilidades) o ver la seguridad como <strong>gasto</strong> en vez de <strong>inversión</strong>.
+</li><li>
+Olvidar que el <strong>eslabón más débil</strong> de la cadena de seguridad es el <strong>ser humano</strong>.
+</li><li>
+Poner mecanismos sin criterio (ej. poner 50 chapas y barrotes en ventanas sin considerar salidas en un sismo maximiza la vulnerabilidad y viola el principio de profundidad).
+</li><li>
+<strong>Error señalado tras el 1er examen ( SIB-Clase14.m4a ):</strong> Decir que el ciclo PDCA solo se aplica cuando hay auditorías; en realidad el PDCA es <strong>continuo</strong> y la auditoría es solo la herramienta para verificarlo.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-2-normatividad-y-estandares-de-se"><summary><span class="stitle">UNIDAD 2: Normatividad y Estándares de Seguridad (Clases 2 [PDF], 3 y 4)</span></summary>
+<p><strong>a) Qué problema resuelve y cómo se conecta:</strong> Después de entender el ciclo PDCA y las auditorías, surge la duda: <em>¿contra qué criterios objetivos se audita?</em>. La normatividad ofrece marcos reconocidos internacionalmente para no inventar criterios desde cero, generar confianza comercial y superar auditorías.</p>
+<h4>b) Conceptos clave:</h4>
+<ul><li>
+<strong>Norma vs. Estándar:</strong> Una <strong>norma</strong> es obligatoria por ley, mientras que un <strong>estándar</strong> es una recomendación adoptada voluntariamente (aunque en México se usan como sinónimos: la <strong>NOM</strong> es obligatoria y la <strong>NMX</strong> no es obligatoria). <em>Analogía:</em> El reglamento de tránsito (norma: multa si lo violas) frente a una guía de conducción eficiente (estándar: te conviene seguirla). <em>Ejemplo:</em> El modelo OSI (ISO 7498) exige que todo <em>switch</em> nuevo cumpla la capa 2.
+</li><li>
+<strong>Evolución de evaluación de productos hacia gestión empresarial:</strong>
+<ul><li>
+<strong>TCSEC ("Libro Naranja", EE. UU., 1983 / rev. 1985):</strong> Criterios militares del Departamento de Defensa centrados de forma monolítica en la <strong>confidencialidad</strong> de sistemas operativos mediante la <strong>TCB</strong> (<em>Trusted Computing Base</em>). Niveles de menor a mayor: <strong>D</strong> (protección mínima, ej. MS-DOS), <strong>C1–C2</strong> (protección discrecional; C2 añade auditoría), <strong>B1–B3</strong> (seguridad mandatoria etiquetada MAC, módulos y dominios) y <strong>A1</strong> (verificación matemática formal); cancelado en <strong>2002</strong>.
+</li><li>
+<strong>ITSEC ("Libro Blanco", Europa, 1990 / v1.2 en 1991):</strong> Armonizó criterios europeos separando <strong>funcionalidad</strong> (F1–F10) y <strong>garantía/aseguramiento</strong> (E0–E6), evaluando productos y sistemas completos contra el <em>Security Target</em> del fabricante.
+</li><li>
+<strong>CTCPEC (Canadá, 1988–1993):</strong> Enfoque híbrido que incorporó toda la <strong>tríada CIA</strong> (confidencialidad, integridad, disponibilidad) más <strong>controlabilidad ( accountability )</strong>, auditoría de ciclo de vida y pruebas de caja blanca/negra. <em>(Nota de discrepancia entre fuentes:</em> <em>SIB-Clase2.pdf</em> <em>lista 7 niveles</em> <em>T-0</em> <em>a</em> <em>T-6</em> <em>, mientras que en</em> <em>SIB-Clase3.m4a</em> <em>un alumno mencionó 8 niveles</em> <em>T-0</em> <em>a</em> <em>T-7</em> <em>)</em>.
+</li><li>
+<strong>Common Criteria / ISO/IEC 15408 (1998/2000–actual):</strong> Fusión de TCSEC, ITSEC y CTCPEC por EE. UU., Canadá, Reino Unido, Francia, Alemania y Países Bajos para evaluar productos TIC (<em>no empresas</em>). Maneja <strong>TOE</strong> (<em>Target of Evaluation</em> / objeto de evaluación), <strong>PP</strong> (<em>Protection Profile</em> / perfil de protección para una clase de productos), <strong>ST</strong> (<em>Security Target</em> / meta de seguridad), <strong>7 niveles EAL ( EAL1 a EAL7 )</strong> y <strong>3 partes</strong> (1: Introducción y modelo general, 2: Requerimientos de seguridad funcional, 3: Requerimientos de garantía/confianza; ampliada en ediciones 2022–2026).
+</li><li>
+<strong>De BS 7799 a la familia ISO/IEC 27000:</strong> El estándar británico <strong>BS 7799</strong> (1995 parte 1 de buenas prácticas; 1998 parte 2 de certificación) dio el salto histórico de evaluar productos a gestionar la <strong>información en toda la empresa</strong> mediante un <strong>SGSI / ISMS</strong>.
+</li><li>
+<strong>BS 7799-1 → ISO/IEC 17799 (2000: 10 secciones; 2005: 11 secciones) → ISO/IEC 27002 (renombrada en 2007):</strong> Guía de controles y buenas prácticas (<strong>cómo hacerlo</strong>; <strong>no certificable</strong>). Pasó de 14 dominios en 2013 a <strong>4 secciones en febrero de 2022</strong> (Organizacionales: 37, Humanos: 8, Físicos: 14, Tecnológicos: 34) y 2 anexos.
+</li><li>
+<strong>BS 7799-2 → ISO/IEC 27001 (2005; actual octubre 2022 + enmienda 2024):</strong> Establece los requisitos de un SGSI (<strong>qué hacer</strong>; <strong>sí es certificable</strong>; 10 cláusulas).
+</li><li>
+<strong>Otros marcos clave: HIPAA</strong> (ley federal EE. UU. de 1996 para proteger información médica PHI/ePHI mediante salvaguardas administrativas, físicas y técnicas); <strong>NIST</strong> (instituto EE. UU. de 1901; series SP 800, <em>Cybersecurity Framework</em> CSF 2.0 de 2024 y referencia para matrices de riesgo); y <strong>COBIT</strong> (ISACA, 1996; versión vigente COBIT 2019; gobierno y gestión de TI con 5 dominios EDM, APO, BAI, DSS, MEA y niveles de capacidad 0–5).
+</li></ul>
+</li></ul>
+<h4>c) Comparación en tabla ( SIB-Clase2.pdf , SIB-Clase3.m4a , SIB-Clase4.m4a ):</h4>
+<div class="tabla-scroll"><table><tr><th>Estándar / Norma</th><th>Enfoque</th><th>Niveles / Estructura</th><th>¿Vigente? / ¿Certificable?</th></tr><tr><td><strong>TCSEC (Libro Naranja)</strong></td><td>Sistemas operativos (militar EE. UU., confidencialidad)</td><td>Divisiones D, C1, C2, B1, B2, B3, A1</td><td>No vigente (cancelado 2002)</td></tr><tr><td><strong>ITSEC (Libro Blanco)</strong></td><td>Productos y sistemas (Europa)</td><td>Funcionalidad F1–F10 / Garantía E0–E6</td><td>No vigente (absorbido en CC)</td></tr><tr><td><strong>CTCPEC</strong></td><td>Productos (Canadá, CIA + controlabilidad)</td><td>T0–T6 [PDF] / T0–T7 [audio]</td><td>No vigente (absorbido en CC)</td></tr><tr><td><strong>Common Criteria (ISO 15408)</strong></td><td>Productos y sistemas TIC</td><td>EAL1–EAL7 / 3 áreas (PP, ST, TOE)</td><td>Vigente / Certifica productos</td></tr><tr><td><strong>ISO/IEC 27001</strong></td><td>Gestión de información empresarial (SGSI)</td><td>10 cláusulas (enfoque basado en riesgos)</td><td>Vigente (2022) / <strong>Certificable</strong></td></tr><tr><td><strong>ISO/IEC 27002</strong></td><td>Controles y buenas prácticas de SGSI</td><td>2022: 4 secciones (93 controles) y 2 anexos</td><td>Vigente (2022) / <strong>No certificable</strong></td></tr></table></div>
+<h4>d) Errores comunes y puntos de examen:</h4>
+<ul><li>
+Confundir <strong>ISO 27001</strong> (derivada de BS 7799-2, dice <em>qué hacer</em>, <strong>certificable</strong>) con <strong>ISO 27002</strong> (derivada de BS 7799-1 e ISO 17799, dice <em>cómo hacerlo</em>, <strong>no certificable</strong>).
+</li><li>
+En el cuestionario evaluado de SIB-Clase4.m4a, omitir el prefijo ISO/IEC (escribir solo 27000 o 27002) valía <strong>medio punto</strong>, y confundir la sigla de <strong>HIPAA</strong> (<em>H-I-P-A-A</em>, no "IPA") o <strong>CTCPEC</strong> quitaba aciertos.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-3-esquemas-entorno-servicios-y-me"><summary><span class="stitle">UNIDAD 3: Esquemas, Entorno, Servicios y Mecanismos de Seguridad (Clases 4, 5 y 14)</span></summary>
+<p><strong>a) Qué problema resuelve y cómo se conecta:</strong> Con las normas claras (como <em>Common Criteria</em> y su lógica de perfiles), el siguiente paso es diseñar un <strong>esquema de seguridad</strong> real para responder primero <em>¿qué necesito proteger?</em> antes de salir a comprar tecnología a ciegas.</p>
+<h4>b) Conceptos clave:</h4>
+<ul><li>
+<strong>Entorno de seguridad:</strong> Todo lo que rodea físicamente y lógicamente al activo (edificación, techo, clima, hardware, software, usuarios, políticas y la misión/visión de la organización). <em>Ejemplo:</em> Proteger el cañón del salón con una reja y candado sin revisar si el techo tiene goteras o si el proyecto se calienta falla porque ignora el entorno.
+</li><li>
+<strong>Objetivos de seguridad:</strong> Metas concretas derivadas del entorno; deben redactarse siempre como <strong>acciones (con verbos)</strong>, ser breves (<strong>máximo dos renglones</strong>) y especificar exactamente perfiles y horarios (ej. <em>"Solo el profesorado con clase en ese horario y el alumnado inscrito pueden manipular la PC"</em>).
+</li><li>
+<strong>Servicios de seguridad (= Necesidades):</strong> Son las <strong>necesidades de protección</strong> de la organización. Hay <strong>6 servicios</strong> (mientras que el modelo OSI 7498 solo contempla 5 porque da por sentada la disponibilidad):
+<ul><li>
+<strong>Confidencialidad:</strong> Mantener información en secreto solo para autorizados.
+</li><li>
+<strong>Integridad:</strong> Evitar modificaciones no autorizadas en información, bienes o incluso en la conducta/estado de las personas.
+</li><li>
+<strong>Disponibilidad:</strong> Garantizar acceso oportuno al servicio o bien cuando se necesita (como cuando falla el proyector Wi-Fi o el sistema de inscripciones).
+</li><li>
+<strong>Control de acceso:</strong> Permitir o restringir el paso o uso de un área, servicio o bien; <strong>siempre va unido a la autenticación</strong>.
+</li><li>
+<strong>Autenticación (o autentificación):</strong> Verificar identidades (de personas, servicios, procesos o bienes) mediante <strong>3 factores</strong>: <em>algo que se sabe</em> (contraseña), <em>algo que se tiene</em> (credencial, tarjeta, firma digital) y <em>algo que se es</em> (huella, iris, ID de proceso —hoy separados de "algo que se tiene" porque son únicos e irrepetibles—).
+</li><li>
+<strong>No repudio:</strong> Imposibilidad de negar haber realizado una acción (ej. firmar acuse de oficio verificado por perito calígrafo, o registrar comandos sudo ligados a llave SSH).
+</li></ul>
+</li><li>
+<strong>Equilibrio operacional:</strong> Los servicios se gradúan según el giro del negocio (ej. Liverpool deja abierto su catálogo web al público para que compren, y solo pide usuario/contraseña cuando vas a pagar).
+</li><li>
+<strong>Fenómeno o síndrome del bolero:</strong> Minimizar el peligro de personas cotidianas (boleros, personal de limpieza, desconocidos en el elevador) hablando de asuntos confidenciales frente a ellos, o publicando en redes (que se revisa con <em>egosurfing</em>).
+</li><li>
+<strong>Mecanismos de seguridad (Controles / Herramientas):</strong> Cualquier aplicación, técnica, objeto, regla, animal (perro guardián) o persona que <strong>satisface</strong> uno o varios servicios de seguridad.
+</li><li>
+<strong>Principio de profundidad:</strong> Usar múltiples capas o niveles de protección coordinados, cuidando que no se bloqueen ni vuelvan inútil al sistema (como olvidar una contraseña de una capa o instalar rejas en una casa de cartón o techo de asbesto).
+</li></ul>
+<h4>c) Clasificación de mecanismos y relación con servicios ( SIB-Clase14.m4a ):</h4>
+<div class="tabla-scroll"><table><tr><th>Criterio de clasificación</th><th>Categorías</th><th>Ejemplo visto en clase</th></tr><tr><td><strong>1. Por el servicio que implementa</strong></td><td>Confidencialidad, Integridad, Disponibilidad, Control de acceso, Autenticación, No repudio.</td><td>Sensor biométrico = Control de acceso + Autenticación; Puerta = Control de acceso.</td></tr><tr><td><strong>2. Por grado de importancia</strong></td><td><strong>Requeridos</strong> (mínimos indispensables) vs. <strong>Discrecionales</strong> (complementarios para subir el nivel).</td><td>Puerta y 1 chapa = requerido; poner 2 o 3 chapas extra o tomar vitamina C además de vacunarse = discrecional.</td></tr><tr><td><strong>3. Por cobertura (en modelo OSI)</strong></td><td><strong>Generales/Generalizados</strong> (cobertura amplia a toda la entidad) vs. <strong>Específicos</strong> (para un área, capa o protocolo delimitado).</td><td>Gafete para todos los empleados y visitantes = general; gafete solo para TI = específico.</td></tr><tr><td><strong>4. Por su acción/actividad</strong></td><td><strong>Preventivos</strong> (evitan antes), <strong>Correctivos</strong> (resuelven durante/después), <strong>Detectores/Detectives</strong> (identifican anomalías) y <strong>Disuasivos</strong> (convencen de no actuar).</td><td>Un <strong>antivirus</strong> puede cumplir las 4 funciones; un cartel <em>"Si tomas no manejes"</em> = disuasivo.</td></tr></table></div>
+<h4>d) Errores comunes y puntos de examen:</h4>
+<ul><li>
+Confundir <strong>servicios</strong> (necesidades) con <strong>mecanismos</strong> (herramientas).
+</li><li>
+En los <strong>11 pasos</strong> de perfiles de protección (SIB-Clase4.m4a), nunca imponer marcas o herramientas específicas (ej. <em>"pon una cerradura"</em>), sino la necesidad (<em>"controla el acceso"</em>), para evitar que te culpen si el modelo comprado falla.
+</li><li>
+Comprar sensores biométricos baratos que no detectan pulso/vida (alguien podría usar un dedo cortado o una huella levantada).
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-4-amenazas-vulnerabilidades-y-eva"><summary><span class="stitle">UNIDAD 4: Amenazas, Vulnerabilidades y Evaluación Técnica (Clases 6, 7, 8, 9 y 10)</span></summary>
+<p><strong>a) Qué problema resuelve y cómo se conecta:</strong> Una vez definidas las necesidades, hay que contestar la <strong>2.ª pregunta de seguridad</strong> (<em>¿de qué quiero proteger mis bienes?</em>) sin confundir lo que puede pasar (amenaza) con lo que nos falta (vulnerabilidad).</p>
+<h4>b) Conceptos clave:</h4>
+<ul><li>
+<strong>Amenaza:</strong> Actividad, evento o circunstancia <strong>latente</strong> que intenta o puede ocurrir y causar daño a la información o a cualquier bien. <em>Analogía:</em> Una nube cargada de lluvia sobre tu cabeza (todavía no te moja, pero está latente).
+</li><li>
+<strong>Riesgo:</strong> Producto de la ocurrencia de la amenaza y su consecuencia (Riesgo = Ocurrencia × Consecuencia); solo existe cuando una amenaza encuentra y explota una vulnerabilidad compatible.
+</li><li>
+<strong>Vulnerabilidad:</strong> Debilidad, brecha, omisión o <strong>"talón de Aquiles"</strong> en un bien o procedimiento que puede ser explotado (aprovechado) accidental o intencionalmente por una o varias amenazas. <em>Prueba de fuego dada en clase:</em> Se identifica preguntando <strong>¿qué me falta? / ¿qué omití? / ¿de qué carezco?</strong> (ej. ante la amenaza de mojarse, la vulnerabilidad es <em>carecer de paraguas</em>; ante ser confiado, es <em>carecer de desconfianza</em>). <em>Relación:</em> Nunca es 1 a 1, sino <strong>de uno a muchos</strong>. <em>Ejercicio del escudo (</em> <em>SIB-Clase9.m4a</em> <em>):</em> Cada alumno dibujó un escudo grande con sus propias debilidades humanas (tacos, chocolates, impuntualidad, equipos deportivos, colores) para concientizarse sobre dónde pueden ser atacados.
+</li><li>
+<strong>Tipos de análisis de vulnerabilidades: Estático</strong> (examinar cómo opera el sistema normalmente sin someterlo a pruebas de ejecución ni alterarlo; en código fuente es <strong>SAST</strong>), <strong>Dinámico</strong> (ejecutar el sistema bajo cargas extremas o datos atípicos para provocar fallos; en aplicaciones en ejecución es <strong>DAST</strong>), <strong>Análisis de Composición de Software (SCA)</strong> (revisar bibliotecas/dependencias obsoletas o sobrantes, ej. incluir 20 librerías cuando solo ocupabas 1) y <strong>Basado en red</strong> (detectar <em>firmware</em> obsoleto y evaluar niveles de confianza alto/medio/bajo).
+</li><li>
+<strong>Bases y métricas de vulnerabilidades:</strong>
+<ul><li>
+<strong>CVE ( Common Vulnerabilities and Exposures ):</strong> Catálogo público que asigna un ID único con formato CVE-AÑO-CONSECUTIVO (ej. CVE-2022-..., usando rangos asignados por fabricante o aplicación, como 10001 para Microsoft o 50000 para otro).
+</li><li>
+<strong>NVD ( National Vulnerability Database ):</strong> Repositorio nacional del <strong>NIST</strong> (EE. UU.) que administra y pondera las vulnerabilidades identificadas por CVE usando <strong>CVSS</strong>.
+</li><li>
+<strong>CVSS ( Common Vulnerability Scoring System ):</strong> Sistema de puntuación real de <strong>0.0 a 10.0</strong> (ej. 3.8, 8.1) que mide la severidad. En <strong>CVSS v2</strong> había 3 niveles (Bajo 0–3.9 verde, Mediano amarillo, Alto rojo), mientras que en <strong>CVSS v3 y v4</strong> la escala inicia en <strong>0.1</strong> y la categoría alta se divide en <strong>Alto (naranja)</strong> y <strong>Crítico (rojo)</strong> (7–8.9 y 9–10), lo que obliga a reclasificar riesgos antiguos como un 8.9. <em>(Nota: los límites decimales exactos de la categoría "mediano" en v3/v4 no se detallaron verbalmente en el audio).</em>
+</li></ul>
+</li></ul>
+<h4>c) Clasificaciones en tabla ( SIB-Clase6.m4a y SIB-Clase7.m4a ):</h4>
+<div class="tabla-scroll"><table><tr><th>Dimensión</th><th>Categorías vistas en clase</th><th>Datos clave / Ejemplos</th></tr><tr><td><strong>5 Fuentes de amenazas</strong></td><td>1) <strong>Factor humano</strong> <em>(principal)</em> , 2) Fallas de hardware, 3) Fallas de software, 4) Red (como conjunto), 5) Desastres naturales (<em>"actos de Dios"</em> ).</td><td>El humano configura, desarrolla y opera todo lo demás; un error de programación es amenaza interna.</td></tr><tr><td><strong>Clasificación general (flujo)</strong></td><td><strong>Intercepción</strong> (ver/escuchar/leer sin tocar), <strong>Interrupción/destrucción</strong> (disponibilidad), <strong>Modificación</strong> (integridad) y <strong>Suplantación/falsificación</strong> (emisor falso).</td><td>Seguir a alguien del salón al metro para anotar su horario = intercepción; alterar un 10 a 100 en una carta = modificación.</td></tr><tr><td><strong>Por objetivo y por lugar</strong></td><td><strong>Intencionadas/Conscientes</strong> vs. <strong>No intencionadas/Inconscientes</strong> ; <strong>Internas</strong> vs. <strong>Externas</strong> .</td><td>En organizaciones, <strong>85% a 95%</strong> son <strong>intencionadas</strong> e <strong>internas</strong> (o externas que logran entrar con ayuda interna, como una gotera o un correo abierto).</td></tr><tr><td><strong>6 Categorías de vulnerabilidades</strong></td><td>1) <strong>Humanas</strong> <em>(se cruzan con todas)</em> , 2) Hardware, 3) Red, 4) Software, 5) Naturales, 6) <strong>Físicas</strong> (construcción/edificaciones).</td><td>Celular que se rompe → falta de funda, mica o cuidado; personas daltónicas armando cables de red sin detección previa.</td></tr></table></div>
+<h4>d) Errores comunes y puntos de examen:</h4>
+<ul><li>
+Confundir vulnerabilidad con amenaza en ejercicios de oración (ej. decir que <em>"falta personal"</em> es una amenaza; falso, faltar personal es <strong>vulnerabilidad</strong>, la amenaza es que <em>alguien robe</em> por falta de vigilancia).
+</li><li>
+Invertir la redacción de una vulnerabilidad negando (ej. en <em>"quedarse sin red por confiar en PC Puma"</em>, la vulnerabilidad es carecer de <em>desconfianza</em>, no de "confianza").
+</li><li>
+Confiar en un solo escaneo de vulnerabilidades (pueden dar <strong>falsos positivos y falsos negativos</strong>) o usar números CVE inventados por una IA sin verificar en CVE/NVD.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-5-ataques-perpetradores-tecnicas-"><summary><span class="stitle">UNIDAD 5: Ataques, Perpetradores, Técnicas de Intrusión y Mitigación (Clases 10, 12, 13 y 14)</span></summary>
+<p><strong>a) Qué problema resuelve y cómo se conecta:</strong> Cuando una amenaza logra explotar una vulnerabilidad, nace el <strong>ataque</strong>. Conocer quién ataca y cómo irrumpe permite a la organización anticiparse y no actuar de forma improvisada cuando ya sufrió el daño.</p>
+<h4>b) Conceptos clave:</h4>
+<ul><li>
+<strong>Ataque:</strong> Culminación de una amenaza al explotar una o más vulnerabilidades; es todo aquello que <strong>ya sucedió o está sucediendo</strong> y generó un daño (total, parcial o nulo). Los ataques <strong>lógicos</strong> (ciberataques) pueden provocar ataques <strong>físicos</strong> (ej. difundir fotos íntimas provoca un paro cardíaco) y viceversa (que se caiga el techo destruye la PC aunque tenga contraseña de 15 caracteres). <em>Regla económica clave:</em> <strong>Recuperarse del ataque es más costoso que prevenirlo</strong> (por tiempo, dinero y personal desviado de sus labores; en <strong>ransomware</strong>, más del <strong>50%</strong> de las empresas pagan y <strong>nunca</strong> recuperan la clave).
+</li><li>
+<strong>Clasificación de ataques:</strong> Por objetivo (<strong>intencionados</strong> vs. <strong>no intencionados</strong> por descuido o ignorancia), por lugar (<strong>internos</strong> vs. <strong>externos</strong>, que siempre requieren una ruta física o virtual para volverse internos y tocar el bien, ej. intrusión desde la India a una IP de la UNAM), por visibilidad (<strong>pasivos</strong> —observan/leen/escuchan sin notarse, ej. revisar redes sociales o <em>sniffing</em> — vs. <strong>activos</strong> —dañan de inmediato—) y por acción (<strong>modificación, interrupción, intercepción y suplantación/falsificación</strong>).
+</li><li>
+<strong>Etapas del ataque (3 en intencionados vs. 2 en no intencionados):</strong>
+<ul><li>
+<strong>Planeación/Preparación (la más larga, semanas o meses; ligada a reconocimiento en MITRE ATT\&amp;CK) :</strong> Definir objetivo, recursos humanos, recursos monetarios (ej. en el ejercicio <em>Incidente en Salud Integral</em>, alumnos estimaron precios de expedientes médicos en mercado negro entre \$60 y \$300 por registro o paquetes masivos de $0.55–$0.60), fecha/hora y planes A–Z. <em>(Falta en ataques no intencionados)</em>.
+</li><li>
+<strong>Activación:</strong> Acción que dispara el ataque (un puerto abierto como el 22, una regla permit mal puesta arriba de deny, una bomba lógica, abrir un PDF malicioso y habilitar edición).
+</li><li>
+<strong>Ejecución (Análisis de resultados):</strong> Tanto el atacante como la organización analizan si funcionó, qué falló y qué corregir.
+</li></ul>
+</li><li>
+<strong>Perpetradores / Atacantes vs. Agente amenazante:</strong> El <strong>agente amenazante</strong> <em>podría</em> dañar, pero el <strong>atacante/perpetrador</strong> es el sujeto que <strong>ya comete o cometió</strong> el ilícito (y un atacante no siempre es igual al tipo de ataque). Se dividen en <strong>insiders</strong> (internos, los más peligrosos porque conocen fallas y credenciales) y <strong>outsiders</strong> (externos, que dependen de internos para tener éxito). Tipos según actividad: <em>spammer</em> (correo masivo), <em>spoofer</em> (suplantación), <em>phisher</em> e <em>ingeniero social</em>, <strong>cracker</strong> (busca recompensa: dinero, equipo o fama), <strong>hacktivista</strong> (mencionado en audio como "activistas"), <strong>lamer / script kiddy</strong> (novato que ejecuta scripts sin saber y hasta se daña solo) y <strong>carder</strong> (clonación de tarjetas). Entre <strong>hackers</strong> existen sombrero <strong>blanco</strong> (éticos, buscan fallas para proteger), <strong>negro</strong> (atacan para dañar), <strong>gris</strong> (alternan ambas posturas) y <strong>azul</strong> (usado por Microsoft); en defensa se organizan en <strong>Blue Team</strong> (defensivo) y <strong>Red Team</strong> (ofensivo).
+</li></ul>
+<h4>c) Técnicas de intrusión y su mitigación ( SIB-Clase10.m4a , SIB-Clase13.m4a , SIB-Clase14.m4a ):</h4>
+<div class="tabla-scroll"><table><tr><th>Categoría</th><th>Técnicas de intrusión vistas</th><th>Mitigación vista en clase</th></tr><tr><td><strong>Redes</strong></td><td><strong>Escaneo de puertos</strong> , <strong>MITM</strong> (<em>Man in the Middle</em> en Wi-Fi abierta como PC Puma), <strong>Sniffing</strong> (tráfico en modo promiscuo), <strong>DoS / DDoS</strong> (saturación; ej. salas A y B con 50–100 alumnos en la misma IP), <strong>Hoax</strong> (alertas falsas para borrar archivos del sistema).</td><td>Cerrar puertos innecesarios, reglas de filtrado en <strong>firewall</strong> , <strong>IDS/IPS</strong> , segmentar la red, verificar antes de borrar.</td></tr><tr><td><strong>Software y sistemas</strong></td><td><strong>Exploits</strong> , <strong>Desbordamiento de búfer</strong> (<em>buffer overflow</em> ), <strong>Inyección SQL</strong> , software obsoleto sin recursos para migrar.</td><td>Actualizaciones, parches y pruebas en <strong>sandbox</strong> (entorno aislado, nunca directo en producción).</td></tr><tr><td><strong>Ingeniería social</strong></td><td>Llamadas intimidatorias/engaño (<em>"compra de \$30,000"</em> , <em>"mamá me secuestraron"</em> ), <strong>Phishing</strong> (masivo) vs. <strong>Spear phishing</strong> (dirigido con datos personales), <strong>Pretexting</strong> (escenario engañoso, ej. billete tirado junto al cajero).</td><td><strong>Autenticación multifactor (MFA)</strong> , detectores de voz/iris, no regalar datos en redes, capacitación vivencial.</td></tr><tr><td><strong>Malware</strong></td><td>Virus, gusanos, <strong>Troyanos</strong> (aparentan ser PDF/audio/video), <strong>Ransomware</strong> (secuestro por rescate/clave), <strong>Spyware</strong> , <strong>Rootkits</strong> (ocultan y dan privilegios totales), ataques de diccionario (admin/admin o usuario = contraseña).</td><td><strong>Un solo antivirus</strong> (no 2 o 3 porque saturan), antimalware, <strong>listas blancas</strong> de apps, cuidar <strong>listas negras</strong> (ej. dominio Outlook baneado), cambiar credenciales por defecto.</td></tr><tr><td><strong>Físicos</strong></td><td>Robo de equipos, <strong>keyloggers de hardware</strong> , inyección de hardware (USB maliciosa), <strong>robo hormiga</strong> (cables, teclas, ratones).</td><td>Control de acceso físico (bitácoras, torniquetes, mochilas), cámaras, cifrado, bloqueo de sesión, rotación de contraseñas sin repetir (patito1/patito2), uniformes.</td></tr></table></div>
+<h4>d) Errores comunes y puntos de examen:</h4>
+<ul><li>
+<strong>Preguntado en el examen anterior ( SIB-Clase13.m4a ):</strong> Confundir <strong>agente amenazante</strong> (sujeto con potencial de dañar), <strong>atacante/perpetrador</strong> (sujeto que ya ejecuta el ilícito) y <strong>ataque</strong> (la acción ejecutada).
+</li><li>
+Subir un respaldo de una web comprometida (ej. index.html con carita feliz en unam.mx) sin detectar ni eliminar el script oculto o la carpeta que dispara el ataque.
+</li><li>
+Instalar múltiples antivirus al mismo tiempo o creer que todos los hackers son malos.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-6-politicas-de-seguridad-y-modelo"><summary><span class="stitle">UNIDAD 6: Políticas de Seguridad y Modelos de Seguridad (Clases 15, 16, 17 y 18)</span></summary>
+<p><strong>a) Qué problema resuelve y cómo se conecta:</strong> Para responder la <strong>3.ª pregunta ( ¿cómo proteger? )</strong> de manera institucional y no improvisada, las organizaciones necesitan reglas obligatorias (<strong>políticas</strong>) que eliminen la excusa de la ignorancia, y estructuras lógicas o matemáticas (<strong>modelos</strong>) que traduzcan esas reglas en permisos verificables sobre sistemas y datos.</p>
+<h4>b) Conceptos clave — Políticas de Seguridad:</h4>
+<ul><li>
+<strong>Definición y alcance:</strong> Conjunto de reglas y procedimientos formales obligatorios que guían la protección de bienes y eliminan la excusa de la ignorancia; las <strong>Políticas de Seguridad Informática / en Cómputo (PSI / PCI / PCC / PSC)</strong> son un <strong>subconjunto</strong> de las políticas generales de seguridad.
+</li><li>
+<strong>Vigencia y actualización:</strong> Tienen <strong>vigencia permanente</strong> y <strong>no se actualizan por fechas fijas</strong> (no cada semana, semestre o año), sino únicamente <strong>cuando hay cambios significativos</strong> (fusiones, nueva tecnología, cambio de giro, puestos, áreas o tras incidentes como el examen en línea de la UNAM).
+</li><li>
+<strong>Los 7 Principios Fundamentales (sin escribir su nombre en la política, sino reflejados en el texto) :</strong>
+<ul><li>
+<strong>Autorización</strong> (indicar claramente qué sí o no se permite y quién autoriza).
+</li><li>
+<strong>Mínimo privilegio</strong> (delimitar qué puesto hace qué).
+</li><li>
+<strong>Separación de bienes/funciones</strong> (no concentrar tareas críticas en una sola persona para evitar fraude o parálisis si falta).
+</li><li>
+<strong>Reglas de auditoría</strong> (definir cómo y quién revisa los procesos o aplica pruebas).
+</li><li>
+<strong>Redundancia</strong> (<strong>positiva</strong>: definir cómo, cuándo y quién hace respaldos; vs. <strong>negativa</strong>: respaldos caóticos tipo proyecto_final_bueno_1 en una USB olvidada).
+</li><li>
+<strong>Reducción del riesgo</strong> (reglas para disminuir riesgos lo más posible).
+</li><li>
+<strong>Responsabilidad individual</strong> <em>(obligatoria en todas las políticas: indicar exactamente a quién aplica)</em>.
+</li></ul>
+</li><li>
+<strong>Filosofías y reglas de redacción ( SIB-Clase16.m4a ):</strong>
+<ul><li>
+<strong>Filosofía restrictiva (positiva):</strong> <em>Todo está prohibido a excepción de lo que expresamente se permite</em> (se redacta con <em>"se permite / se puede"</em>; ej. <em>"Solo se permite comer manzanas"</em>).
+</li><li>
+<strong>Filosofía permisiva:</strong> <em>Todo está permitido excepto lo que se prohíbe</em> (se redacta con <em>"se prohíbe"</em>; ej. <em>"Se prohíbe comer manzanas"</em>).
+</li><li>
+Redactar en <strong>tiempo presente</strong>, <strong>evitar la palabra "no"</strong> (por psicología inversa/PNL: <em>"no corro"</em> hace que el cerebro lea <em>"corro"</em>; sustituir por <em>"evita correr"</em>), <strong>indicar sujeto/dueño exacto</strong> (incluir a <strong>servicio social, prácticas profesionales, invitados y auditores</strong> internos o pagados), usar lenguaje sin tecnicismos ni siglas sin definir la primera vez, incluir reglas de capacitación y respetar leyes superiores (como la Constitución).
+</li></ul>
+</li><li>
+<strong>Equipo multidisciplinario:</strong> Nunca las redacta una sola persona; requiere <strong>autoridad/líder</strong>, <strong>representante jurídico</strong>, <strong>apoyo de redacción/estilo</strong>, <strong>psicólogo laboral</strong> (evita reglas que causen ansiedad o dañen autoestima), <strong>administrador de sistemas</strong> (solo cuando haya sistemas involucrados) y <strong>usuario típico</strong> de prueba.
+</li><li>
+<strong>Las 7 etapas en orden ( SIB-Clase17.m4a ):</strong> 1) Planteamiento de objetivos, 2) Preparación (convocar y llegar con propuestas), 3) Redacción (revisar alineación en junta), 4) Edición y apoyo editorial (formato y ortografía), 5) <strong>Aprobación</strong> (por comisión independiente con sello/QR/leyenda y <strong>control de versiones</strong> 01, 02, 03…), 6) Difusión (física/digital, examen aprobatorio mínimo 8, pósters con texto e imagen) y 7) Aplicación y revisión periódica.
+</li><li>
+<strong>Componentes de la documentación ( SIB-Clase17.m4a ):</strong> Ámbito de aplicación (de media a 5 hojas), análisis de riesgos, enunciados por secciones, sanciones y premios (ej. 7.5 días de sueldo), <strong>referencia a protocolos existentes sin reescribirlos</strong> (ej. Comisión Local de Seguridad), usos éticos/FAQs, procedimientos de incidentes/contingencias (ej. ciberataque a refrigeradores en Francia/Finlandia con pérdidas dobles o triples sobre 50,000 €), <strong>glosario de términos obligatorio en todas</strong> y anexos necesarios.
+</li></ul>
+<h4>c) Conceptos clave — Modelos de Seguridad ( SIB-Clase17.m4a ):</h4>
+<ul><li>
+<strong>Definición:</strong> Representación conceptual o matemática de sujetos, recursos, operaciones y reglas que determinan los comportamientos autorizados mediante estados válidos y transiciones.
+</li><li>
+<strong>Modelo Abstracto vs. Concreto:</strong> El <strong>abstracto</strong> describe reglas generales o matemáticas sin detalles de implementación (<em>"Sujeto A hace actividad 1"</em>); el <strong>concreto</strong> aterriza las reglas en el mundo real <em>"con nombres y apellidos"</em> (<em>"Juan puede crear bases de datos"</em>).
+</li><li>
+<strong>Comparación de modelos vistos en clase:</strong>
+</li></ul>
+<div class="tabla-scroll"><table><tr><th>Categoría</th><th>Modelo</th><th>Cómo funciona y ejemplo real de clase</th></tr><tr><td><strong>Control de acceso</strong></td><td><strong>Matriz de acceso</strong></td><td>Tabla bidimensional de sujetos vs. objetos cuya intersección indica derechos/obligaciones (ej. Lis usa la PC, Natalia nada, otra persona la limpia).</td></tr><tr><td><strong>Control de acceso</strong></td><td><strong>HRU</strong> <em>(Harrison, Ruzzo, Ullman)</em></td><td>Extensión matemática de la matriz que analiza cambios en el tiempo evaluando <strong>condiciones</strong> (ej. Lis usa la PC <em>solo si</em> trabaja ahí, en horario laboral y con Wi-Fi 7 disponible).</td></tr><tr><td><strong>Control de acceso</strong></td><td><strong>Take-Grant (TG)</strong></td><td>Grafo dirigido con 2 reglas: <strong>Take</strong> (un superior toma atribuciones del subordinado; ej. la jefa de depto asienta actas si la profesora falta) y <strong>Grant</strong> (un superior delega credenciales a un inferior; ej. jefe a secretaria).</td></tr><tr><td><strong>Control de acceso</strong></td><td><strong>Bell-LaPadula</strong></td><td>Política multinivel para <strong>confidencialidad</strong> (secreto, ultrasecreto, confidencial): jerarquías altas acceden a niveles bajos, pero un nivel inferior nunca accede arriba (ej. alumnos no asientan sus propias calificaciones).</td></tr><tr><td><strong>Flujo de información</strong></td><td><strong>Teoría de la Información / Entropía</strong></td><td>La <strong>entropía</strong> es el <strong>grado de incertidumbre</strong> , inversamente proporcional a la información disponible: a mayor incertidumbre, menos deduce un atacante (ej. cuestionari_ = baja entropía vs. ____a donde los alumnos dijeron salsa/araña/pizza y la profesora pensó <strong>"torta"</strong> ). Prohíbe contraseñas en <em>post-its</em> o Rodrigo/Rodrigo contra <em>shoulder surfing</em> .</td></tr><tr><td><strong>Integridad</strong></td><td><strong>Biba (1977)</strong></td><td>Política multinivel de integridad: sujeto y activo deben estar <strong>exactamente al mismo nivel</strong> para modificar datos (evita que secretarias autoricen compras por teléfono sin el director o suplantaciones con voz de IA).</td></tr><tr><td><strong>Integridad</strong></td><td><strong>Clark-Wilson</strong></td><td>Usa <strong>transacciones bien formadas</strong> y <strong>separación de funciones</strong> , combinando <strong>integridad y confidencialidad</strong> : tener el mismo nivel o puesto no permite leer ni modificar todo (respaldado con avisos de privacidad).</td></tr></table></div>
+<h4>d) Errores comunes y puntos de examen ( SIB-Clase18.m4a ):</h4>
+<ul><li>
+<strong>Retroalimentación crítica para el proyecto:</strong> Escribir literalmente <em>"Principio fundamental: mínimo privilegio"</em> como título/etiqueta en la regla (debe ir <strong>implícito en la redacción</strong>); escribir <em>"una persona revisará las muestras"</em> sin cargo exacto; poner <em>"a menos que esté autorizado"</em> sin decir qué cargo autoriza; y olvidar a <strong>servicio social, prácticas profesionales, invitados y auditores</strong>.
+</li><li>
+Omitir el <strong>glosario de términos</strong> (obligatorio en todas las documentaciones) o reescribir protocolos de emergencia que ya existen en la institución.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-7-planes-de-contingencia-drp-clas"><summary><span class="stitle">UNIDAD 7: Planes de Contingencia / DRP (Clases 17 y 18)</span></summary>
+<p><strong>a) Qué problema resuelve y cómo se conecta:</strong> Incluso con buenas políticas y modelos, ocurrirán fallas o desastres; los <strong>planes de contingencia</strong> (que van referenciados en la sección de incidentes de las políticas y dependen del análisis de riesgos) aseguran que la organización sea <strong>resiliente</strong> y vuelva a operar en el menor tiempo posible sin caer en pánico.</p>
+<h4>b) Conceptos clave:</h4>
+<ul><li>
+<strong>Plan de contingencias (DRP):</strong> Conjunto de protocolos planeados y documentados (en plural porque cubren distintas eventualidades; sinónimos: <strong>Disaster Recovery Plan</strong>, protocolos de calidad, emergencia o recuperación) para recuperarse de desastres y retomar operaciones. Deben elaborarse en <strong>1 a 2 meses</strong> por un <strong>equipo interno del área</strong> (no externos ajenos ni otras áreas como finanzas haciendo el de cómputo) y <strong>separarse por rubro</strong> (sismos, incendios, bases de datos) sin revolverlos.
+</li><li>
+<strong>4 Fases de un plan de contingencias ( SIB-Clase17.m4a ):</strong> 1) <strong>Evaluación</strong> (revisar si hay planes o si quedaron obsoletos, ej. citando un "departamento H" inexistente), 2) <strong>Planeación</strong> (basada obligatoriamente en el análisis de riesgos), 3) <strong>Ejecución</strong> (aplicarlo en la crisis) y 4) <strong>Pruebas de viabilidad</strong> (comprobar con simulacros si funciona; ej. el colapso del Colegio Rébsamen demostró un plan no viable por la estructura).
+</li><li>
+<strong>Procedimientos preventivos vs. correctivos ( SIB-Clase17.m4a ):</strong> Los <strong>preventivos</strong> buscan evitar la eventualidad (verificar vigencia y tipo de extintor, dar cursos); los <strong>correctivos</strong> actúan cuando ya ocurrió y se dividen en <strong>planificados</strong> (persona certificada usando el extintor o cargando entre varios a quien se paralizó en la puerta) y <strong>no planificados</strong> (reacciones instintivas peligrosas del sismo de 2017: gritar, empujar, desmayarse, aventar agua a fuego eléctrico o un saco a alguien electrocutado).
+</li><li>
+<strong>Los 3 Subplanes temporales ( SIB-Clase18.m4a ):</strong>
+<ul><li>
+<strong>Plan de Respaldo (Antes):</strong> Preventivo (copias de respaldo en nube + control de versiones; localizar/revisar extintor y capacitar relevos A/B/C; contratar seguros de vida antes del siniestro; revisar cableado y cierre de llaves).
+</li><li>
+<strong>Plan de Emergencia (Durante):</strong> Correctivo planificado (desconectar servidor de la red y avisar a la extensión; que el titular o relevo accione el extintor; en incendio en casa: avisar, evacuar con mascotas/personas, avanzar agachado con paño húmedo, llamar al 911 afuera, y si arde la ropa <strong>no correr: detenerse, tirarse y rodar</strong>).
+</li><li>
+<strong>Plan de Recuperación (Después):</strong> Restablecer operación (encender servidor tras tiempo razonable, validar que cesó el borrado y restaurar último respaldo; recargar extintor, usar seguros o indemnizaciones; reingresar a casa solo tras dictamen de bomberos/protección civil, investigar causa y actualizar plan).
+</li></ul>
+</li><li>
+<strong>5 Pasos para planificar e implementar ( SIB-Clase18.m4a ):</strong> 1) Identificación / análisis de riesgos (3 preguntas), 2) Evaluación de riesgos (estrategias de recuperación), 3) Desarrollo de estrategias (prioridades; <strong>una estrategia es planeada y no genera más problemas</strong> —ej. saltar por la ventana para bajar rápido al sótano no es estrategia porque lleva al hospital o la muerte, mejor usar escaleras derechas o elevador según movilidad—), 4) Desarrollo de procedimientos (recuperación rápida con lo disponible, ej. RTP y patrullas tras incendio en el metro) y 5) Pruebas de entrenamiento, plan de mantenimiento y <strong>ELABORACIÓN DE DOCUMENTACIÓN</strong> (visual y escrita, sin desechar planes funcionales de administraciones previas).
+</li></ul>
+<h4>c) Ventajas y desventajas en tabla ( SIB-Clase18.m4a ):</h4>
+<div class="tabla-scroll"><table><tr><th>Ventajas</th><th>Desventajas</th></tr><tr><td>Elimina el caos y evita maniobras médicas improvisadas peligrosas.</td><td>Menor flexibilidad operativa al seguir un protocolo fijo.</td></tr><tr><td>Permite actuar aunque sea la primera vez que ocurre el siniestro.</td><td>Alto consumo de tiempo y recursos para capacitación y simulacros (especialmente al inicio o con personal nuevo inmediato).</td></tr><tr><td>Fomenta la cultura de seguridad, concientización y ética de reportar incidentes.</td><td>Imposibilidad de prever todos los escenarios (sesgo por experiencia limitada del autor).</td></tr><tr><td>Acerca la respuesta entre autoridades y personal, aumentando resiliencia y valorando bienes.</td><td><strong>Exceso de confianza</strong> (falsa sensación de seguridad en papel sin probar tiempos ni capacidad física) y <strong>desactualización</strong> (ej. limpiar la bolita de un ratón mecánico).</td></tr><tr><td>—</td><td><strong>Asignar responsabilidades críticas a servicio social, practicantes o visitas</strong> sin contrato laboral formal <em>(marcado como "importantísimo")</em> .</td></tr></table></div>
+<h4>d) Errores comunes y puntos de examen:</h4>
+<ul><li>
+Pretender hacer copias de seguridad o contratar pólizas <strong>durante o después</strong> del siniestro, o restaurar una base de datos mientras sigue el borrado activo.
+</li><li>
+Confiar en que las certificaciones sustituyen a los planes de contingencia (sin DRP, ante un fallo atípico las empresas quiebran).
+</li><li>
+En emergencias de avión/evacuación: el adulto se pone el equipo antes que el menor para poder auxiliarlo.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-8-analisis-y-gestion-de-riesgos-c"><summary><span class="stitle">UNIDAD 8: Análisis y Gestión de Riesgos (Clases 19 y 20)</span></summary>
+<p><strong>a) Qué problema resuelve y cómo se conecta:</strong> Es el cimiento cuantitativo, cualitativo y estratégico que alimenta tanto a las <strong>políticas de seguridad</strong> como a los <strong>planes de contingencia</strong>, respondiendo con rigor en orden a las <strong>3 preguntas de seguridad</strong> para saber qué proteger primero, cuánto invertir y qué riesgos residuales aceptar.</p>
+<h4>b) Conceptos clave:</h4>
+<ul><li>
+<strong>Terminología base ( SIB-Clase19.m4a ):</strong>
+<ul><li>
+<strong>Aceptación del riesgo:</strong> Decisión consciente del dueño sobre si está dispuesto a tolerar que ocurra el problema y asumir sus consecuencias.
+</li><li>
+<strong>Manejo del riesgo:</strong> Controles para minimizar riesgos no aceptados; <strong>nunca debe costar más (en tiempo, dinero y esfuerzo) que el bien mismo</strong>, salvo bienes sin precio como vidas humanas (protegidas con seguros de gastos médicos mayores).
+</li><li>
+<strong>Evaluación del riesgo:</strong> Comparar contra metodologías/tablas o contra análisis previos —<strong>si hay varios previos, tomar siempre el último realizado</strong>, nunca el primero—.
+</li><li>
+<strong>Pérdidas esperadas:</strong> Suponer siempre el <strong>peor escenario</strong> antes de que ocurra (dejando todo aviso grave <strong>por escrito y con acuse/sello</strong>).
+</li><li>
+<strong>Riesgo residual:</strong> Nivel mínimo de riesgo que permanece tras aplicar controles y que se acepta (ej. vacunarse para tolerar una gripe leve en casa en vez de terminar intubado; o un seguro que cubre el 80%, dejando un 20% de riesgo residual).
+</li></ul>
+</li><li>
+<strong>Recopilación de información y apoyo directivo ( SIB-Clase19.m4a ):</strong> Se usan entrevistas, cuestionarios y <em>checklists</em> con <strong>lenguaje amigable</strong> (no preguntar por "ciberataques" a quien no sabe informática), encuestas fluidas sin rangos sesgados (10–20, 30–40 omitiendo el 0), avisos de privacidad/confidencialidad y <strong>evidencia comprobable</strong> (videos o cuestionarios firmados con diferente formato/letra). Sin apoyo de la <strong>alta dirección</strong> (<em>"carta blanca"</em> con límites), la gente no coopera.
+</li><li>
+<strong>Análisis Cuantitativo vs. Cualitativo ( SIB-Clase19.m4a ):</strong> El <strong>cuantitativo</strong> usa dinero, porcentajes, gráficas y fórmulas como <strong>ALE (Expectativa de Pérdida Anual)</strong> (ilustrado con fallos como <em>Pontiac Aztek</em> con &gt;80% de autos sin vender en 2003, último <em>VW</em> de Puebla y <em>Windows 8</em>); el <strong>cualitativo</strong> evalúa cualidades mediante <strong>colores</strong>, <strong>figuras</strong> (caritas, puntos) o <strong>palabras</strong> (alto/medio/bajo). <strong>Deben usarse ambos juntos</strong>.
+</li><li>
+<strong>Periodicidad, FODA y jerarquía de áreas ( SIB-Clase19.m4a ):</strong> Se realiza <strong>cada vez que hay cambios significativos</strong> (igual que las políticas: fusiones, cambio de misión/visión, nuevas tecnologías, cambios de puestos). Áreas no técnicas usan la <strong>matriz FODA</strong> como resumen rápido. En entidades grandes (ej. Facultad de Ingeniería con 7 departamentos), se analiza <strong>por departamento y de abajo hacia arriba</strong> antes de subir a división.
+</li><li>
+<strong>Desigualdad económica de seguridad ( SIB-Clase20.m4a ):</strong> Costo del ataque (dinero, tiempo, esfuerzo)&gt;Valor del bien (recurso)&gt;Costo de la protección <em>Ejemplos con números reales:</em> Si un celular cuesta <strong>\$10,000</strong>, robarlo debe costarle al atacante más de \$10,000 (salvo que obtenga \$20,000 de datos adentro), y protegerlo no debe costar \$50,000 o \$100,000 ("sale más caro el caldo que las albóndigas"); en IBM, si comprar dispositivos de \$23,000 y pagar $2,000a5personas($10,000) cuesta más que los \$5,000 que vale la BD en el mercado negro (o si el retraso empuja el ataque al día siguiente cuando los empleados vuelven de Nueva York), el ataque fracasa. En redes se inyecta tráfico constante las 24 h para elevar la incertidumbre y el costo en tiempo del atacante. <em>Excepción:</em> Las personas y empleados clave no tienen precio (<em>priceless</em>), por lo que la protección hacia ellos nunca es excesiva.
+</li><li>
+<strong>Gestión de riesgos, infraestructuras y procesos críticos y escenarios ( SIB-Clase20.m4a ):</strong> La <strong>gestión</strong> administra los riesgos y enlaza con DRP. Las <strong>infraestructuras críticas</strong> son vitales para operar (en casa: internet, luz, agua, gas). Los <strong>procesos críticos</strong> son actividades esenciales jerarquizadas que no pueden parar en ningún escenario (ej. en McDonald's: <strong>cobranza</strong> —porque si regalan Cajitas Felices quiebran—, refrigeración, pedidos, preparación, inventarios, proveedores). Los <strong>escenarios de riesgo</strong> describen detalladamente amenazas, vulnerabilidades y respuestas ante lo peor (ej. quedarse sin agua y contratar pipa o cerrar).
+</li><li>
+<strong>5 Técnicas rápidas ( SIB-Clase20.m4a ):</strong> 1) <strong>What if</strong> (preguntas hipotéticas encadenadas), 2) <strong>APR (Análisis Preliminar de Riesgos)</strong> (línea base al inicio por escrito para comparar <em>antes vs. después</em>), 3) <strong>Los cinco porqués</strong> (<strong>exactamente 5</strong> preguntas sucesivas para hallar la causa raíz), 4) <strong>FMEA</strong> (clasifica fallas midiendo <strong>frecuencia, gravedad/impacto y quién/cómo las detectó</strong>) y 5) <strong>Checklist</strong> (lista detallada con incisos Sí/No verificables).
+</li><li>
+<strong>Matriz de riesgos NIST ( SIB-Clase20.m4a ):</strong> Tabla donde Nivel de riesgo = Probabilidad × Impacto (ej. matriz 5 × 5 del 1 al 25), usando colores <strong>NIST</strong> (rojo = alto, amarillo/naranja = moderado, verde = muy bajo) y <strong>rangos mutuamente excluyentes</strong> con justificación escrita.
+</li></ul>
+<h4>c) Los 8 pasos del Análisis de Riesgos ( SIB-Clase19.m4a ) y ejemplo de Matriz NIST ( SIB-Clase20.m4a ):</h4>
+<div class="tabla-scroll"><table><tr><th>Pregunta de seguridad</th><th>Pasos obligatorios si no se sigue una metodología específica (SIB-Clase19.m4a)</th></tr><tr><td><strong>1. ¿Qué proteger?</strong></td><td><strong>Paso 1:</strong> Identificar bienes indispensables y evaluar su valor (cuantitativo, cualitativo o ambos) y jerarquía <em>(15 bienes en el proyecto)</em> .</td></tr><tr><td><strong>2. ¿De qué proteger?</strong></td><td><strong>Pasos 2, 3 y 4:</strong> Identificar y describir con claridad amenazas; identificar y describir con precisión vulnerabilidades; determinar impacto y frecuencia de ocurrencia (con estadísticas reales).</td></tr><tr><td><strong>3. ¿Cómo proteger?</strong></td><td><strong>Pasos 5, 6 y 7:</strong> Identificar controles actuales y qué hacen; determinar riesgos residuales (en conclusiones); emitir recomendaciones <strong>sin marcas ni proveedores</strong> (solo características o perfiles).</td></tr><tr><td><strong>Transversal</strong></td><td><strong>Paso 8:</strong> Elaborar el <strong>informe</strong> con evidencias firmadas/grabadas, introducción, conclusiones, referencias, <strong>sin poner las 3 preguntas literalmente como títulos</strong> .</td></tr></table></div>
+<p><em>Ejemplo válido de rangos en Matriz NIST</em> <em>5 × 5</em> <em>(</em> <em>Probabilidad × Impacto</em> <em>):</em> <strong>1 a 5 = Bajo (Verde)</strong>, <strong>6 a 12 = Medio (Amarillo)</strong>, <strong>15 a 25 = Alto (Rojo)</strong>.</p>
+<h4>d) Errores comunes y puntos de examen:</h4>
+<ul><li>
+En <strong>matrices de riesgo</strong>: traslapar rangos (1–5 y 5–12), pintar el mismo puntaje (4 o 5) de dos colores distintos según criterio subjetivo ("de contentillo"), o quitar los números dejando solo palabras y colores.
+</li><li>
+Hacer el análisis de riesgos en solitario (debe hacerse en <strong>grupos con distintas capacidades</strong>: observación, escucha, tacto) o comunicar hallazgos en "pláticas de café junto al microondas" sin dejarlo por escrito.
+</li><li>
+En el <strong>informe del proyecto</strong>: incluir marcas/proveedores, olvidar evidencias, poner títulos literales de las 3 preguntas, o cotizar un trabajo sin revisar primero las condiciones de la empresa.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-lo-que-mas-probablemente-viene-en-el-fin" open><summary><span class="stitle">LO QUE MÁS PROBABLEMENTE VIENE EN EL FINAL</span></summary>
+<ul><li>
+<strong>Diagrama del contexto de seguridad y diferencia entre Agente Amenazante, Atacante y Ataque:</strong> Volvió a aparecer en el primer examen parcial, y la profesora recalcó explícitamente en SIB-Clase13.m4a que suelen confundirlos (agente amenazante = potencial, atacante = sujeto en el ilícito, ataque = acción consumada).
+</li><li>
+<strong>Ciclo PDCA continuo vs. Auditorías (internas/externas y hallazgos):</strong> En SIB-Clase14.m4a corrigió explícitamente un error masivo del primer examen: el PDCA no se hace solo cuando hay auditoría, sino continuamente. Además, en SIB-Clase1.m4a explicó con detalle las auditorías de 1.º, 2.º y 3.º nivel y los tres tipos de hallazgos (oportunidad de mejora, observación, no conformidad).
+</li><li>
+<strong>Evolución e identificación de Normatividad y Estándares (en especial ISO 27001 vs. 27002 y Common Criteria):</strong> Ya aplicó un examen rápido de 10 preguntas sobre estos estándares en SIB-Clase4.m4a y recalcó en SIB-Clase3.m4a la diferencia entre norma obligatoria vs. estándar, qué hacer (27001, certificable) vs. cómo hacerlo (27002, no certificable) y las partes/EAL de ISO 15408.
+</li><li>
+<strong>Los 6 Servicios de seguridad (en especial los 3 factores de autenticación) y las 4 clasificaciones de Mecanismos + Principio de profundidad:</strong> Ocupó dos clases teóricas completas y una práctica larga en parejas (SIB-Clase5.m4a y SIB-Clase14.m4a), enfatizando cómo los mecanismos satisfacen necesidades y por qué el modelo OSI solo considera 5 servicios.
+</li><li>
+<strong>Diferenciación estricta entre Amenaza y Vulnerabilidad (redacción "qué falta / de qué carezco") + CVSS/CVE/NVD:</strong> Dedicó cuatro sesiones (SIB-Clase6.m4a a SIB-Clase10.m4a) con ejercicios de 20 reactivos para corregir la confusión entre acción dañina y carencia, y comparó las escalas de CVSS v2 vs. v3/v4.
+</li><li>
+<strong>Clasificación de ataques, las 3 etapas de ataques intencionados y mitigación:</strong> Realizó un ejercicio en equipo sobre el hospital (<em>Salud Integral</em>, SIB-Clase12.m4a) para desglosar preparación, activación y ejecución, y remarcó que prevenir cuesta menos que recuperarse (SIB-Clase10.m4a, SIB-Clase13.m4a, SIB-Clase14.m4a).
+</li><li>
+<strong>Reglas de redacción de Políticas de Seguridad (principios sin nombrarlos, filosofías, sin "no", figuras fuera del organigrama y 7 etapas):</strong> Evaluó minuciosamente una práctica de 15 políticas (SIB-Clase16.m4a), dedicó gran parte de SIB-Clase18.m4a a corregir errores y advirtió explícitamente que no deben repetirse en el proyecto.
+</li><li>
+<strong>Modelos de seguridad (Concretos vs. Abstractos, Matriz, HRU, Take-Grant, Bell-LaPadula, Entropía, Biba vs. Clark-Wilson):</strong> Pidió definiciones para participación y resolvió ejemplos en el pizarrón para cada modelo (SIB-Clase17.m4a), contrastando en especial la entropía inversa, <em>Take</em> vs. <em>Grant</em> y Biba vs. Clark-Wilson.
+</li><li>
+<strong>Planes de contingencia (DRP): 4 fases, procedimientos preventivos/correctivos, 3 subplanes temporales y 5 pasos:</strong> Resolvió ejercicios de bases de datos, extintores, bajar al sótano e incendios en casa (SIB-Clase17.m4a y SIB-Clase18.m4a), proyectó el esquema de 5 pasos y señaló como <em>"importantísimo"</em> no delegar roles críticos a servicio social.
+</li><li>
+<strong>Desigualdad económica de costos, 3 preguntas en orden, 8 pasos, 5 técnicas rápidas y Matriz de Riesgos NIST:</strong> Concentró las últimas dos sesiones (SIB-Clase19.m4a y SIB-Clase20.m4a) en estos temas con ejercicios numéricos (celular de \$10,000, BD de IBM, McDonald's), anunció que en el proyecto van 15 bienes sin marcas y pidió repasar matrices NIST para otro ejercicio antes del final. <em>(Nota: la profesora aún definirá si el examen final será individual o en equipo y si se aplica martes o jueves de la última semana</em> <em>).</em>
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-conexiones-clave"><summary><span class="stitle">CONEXIONES CLAVE</span></summary>
+<ul><li>
+Tres preguntas de seguridad -&gt; estructuran -&gt; Esquema de seguridad y análisis de riesgos.
+</li><li>
+Ciclo PDCA -&gt; garantiza mediante mejora continua -&gt; Dinamismo de la seguridad.
+</li><li>
+Auditoría (1.º, 2.º y 3.º nivel) -&gt; verifica -&gt; Cumplimiento del ciclo PDCA y estándares.
+</li><li>
+No conformidad en auditoría -&gt; impide o revoca -&gt; Certificación de la organización.
+</li><li>
+TCSEC, ITSEC y CTCPEC -&gt; convergen en -&gt; Common Criteria (ISO/IEC 15408).
+</li><li>
+BS 7799 (Partes 1 y 2) -&gt; evoluciona hacia -&gt; ISO/IEC 27002 e ISO/IEC 27001.
+</li><li>
+ISO/IEC 27002 (no certificable) -&gt; apoya la implementación de -&gt; SGSI certificable de ISO/IEC 27001.
+</li><li>
+Entorno de seguridad -&gt; condiciona -&gt; Objetivos de seguridad y elección de controles.
+</li><li>
+Servicios de seguridad (necesidades) -&gt; son satisfechos por -&gt; Mecanismos o controles de seguridad.
+</li><li>
+Control de acceso -&gt; requiere obligatoriamente -&gt; Autenticación previa de identidad.
+</li><li>
+Principio de profundidad -&gt; combina múltiples capas de -&gt; Mecanismos de seguridad compatibles.
+</li><li>
+Factor humano -&gt; representa -&gt; Principal fuente de amenazas y eslabón más débil.
+</li><li>
+Amenaza latente -&gt; explota -&gt; Una o varias vulnerabilidades (omisiones o carencias).
+</li><li>
+Ocurrencia de amenaza × consecuencia -&gt; determina -&gt; Nivel de riesgo sobre un bien.
+</li><li>
+Vulnerabilidad identificada en CVE -&gt; recibe ponderación de severidad en -&gt; NVD mediante CVSS.
+</li><li>
+Agente amenazante -&gt; se convierte en -&gt; Perpetrador o atacante al cometer el ilícito.
+</li><li>
+Ataque externo -&gt; necesita ruta física o virtual (con ayuda interna) para -&gt; Volverse interno y dañar el bien.
+</li><li>
+Ataques intencionados -&gt; siguen tres etapas -&gt; Planeación, activación y ejecución/análisis.
+</li><li>
+Prevención planificada -&gt; cuesta menos en tiempo, dinero y personal que -&gt; Recuperación tras un ataque.
+</li><li>
+Cambios significativos -&gt; detonan la actualización de -&gt; Políticas de seguridad y análisis de riesgos.
+</li><li>
+Principios fundamentales -&gt; deben reflejarse implícitamente sin nombrarse en -&gt; Redacción de políticas.
+</li><li>
+Psicólogo laboral y representante jurídico -&gt; previenen sesgos e ilegalidades en -&gt; Equipo redactor de políticas.
+</li><li>
+Modelo abstracto -&gt; se aterriza con identidades reales en -&gt; Modelo concreto.
+</li><li>
+Matriz de acceso -&gt; incorpora evaluación de condiciones temporales y tecnológicas en -&gt; Modelo HRU.
+</li><li>
+Alta entropía (incertidumbre) -&gt; dificulta que un atacante deduzca secretos en -&gt; Modelos de flujo de información.
+</li><li>
+Modelo Biba (mismo nivel) -&gt; se amplía con transacciones bien formadas y confidencialidad en -&gt; Modelo Clark-Wilson.
+</li><li>
+Análisis de riesgos -&gt; sirve como base obligatoria (Paso 1) para diseñar -&gt; Planes de contingencia (DRP).
+</li><li>
+Subplanes de Respaldo, Emergencia y Recuperación -&gt; ordenan cronológicamente procedimientos -&gt; Preventivos y correctivos.
+</li><li>
+Desigualdad económica de seguridad -&gt; exige que el costo del ataque supere al bien y -&gt; Protecciones cuesten menos que el bien.
+</li><li>
+Infraestructuras críticas -&gt; soportan la operación continua de -&gt; Procesos críticos jerarquizados.
+</li><li>
+Técnicas rápidas (What if, APR, 5 porqués, FMEA, Checklist) -&gt; alimentan con evidencias -&gt; Matriz de riesgos NIST.
+</li><li>
+Rangos mutuamente excluyentes (Probabilidad × Impacto) -&gt; evitan evaluaciones subjetivas en -&gt; Matriz de riesgos.
+</li></ul>
+<p>🎯 ¿Quieres que armemos un examen simulacro completo (con preguntas abiertas, casos de matrices NIST, clasificación de subplanes y detección de errores en políticas) para poner a prueba esta guía?</p>
+</details>
+</div>
+</body>
+</html>

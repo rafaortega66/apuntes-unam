@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="no-aplica">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía para el examen final — Reconocimiento de Patrones</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261117b">
+<script src="../../assets/app.js?v=20261117b" defer></script>
+<style>
+.gf h3{margin:1.2em 0 .4em} .gf h4{margin:1em 0 .3em;opacity:.9}
+.gf .tabla-scroll{overflow-x:auto} .gf table td,.gf table th{font-size:.9em;vertical-align:top}
+.gf p.nota{border-left:3px solid var(--c);padding:.3em .8em;opacity:.9}
+.gf li{margin:.25em 0}
+</style>
+</head>
+<body style="--c:#45B8A8">
+<div class="wrap gf">
+<!-- Generado por scripts/build_guias_finales.py. No editar a mano. -->
+<a class="back" href="index.html">← Reconocimiento de Patrones</a>
+<div class="detail-head" style="border-color:#45B8A8"><h2>📘 Guía para el examen final</h2>
+  <p class="prof">Reconocimiento de Patrones · semestre 2027-1 · hecha con NotebookLM a partir de los audios de clase y el material del profesor (16 nov 2026).</p>
+  <p class="prof">Las fechas y cálculos de NotebookLM pueden fallar: ante la duda, revisa la página de la clase que cita.</p>
+</div>
+<div class="files">
+  <a class="btn" href="https://docs.google.com/document/d/1KIjXNfAu3HNb_u0f9eZ5BW4n2MF3Ih1a9OYjjjjZRfs/edit" target="_blank">📄 Original en Drive</a>
+  <a class="btn" href="https://docs.google.com/document/d/1JLhvnxOuCkfadJVRzaB8cBuf2wVN30ZUmzj0v-bzATs/edit" target="_blank">📝 Apuntes y resumen (Drive)</a>
+  <a class="btn" href="https://drive.google.com/file/d/1XDD3QuG9tcZ1EOVjUJAbFWS2k4P-lgdn/view" target="_blank">🧠 Mapa mental detallado</a>
+  <a class="btn" href="resumenes.html">📚 Guías por clase</a>
+</div>
+<p class="nota">Aclaración sobre las fuentes del cuaderno: Este cuaderno contiene 19 transcripciones de audio de las clases (RP-Clase1.m4a a RP-Clase21.m4a, faltando las grabaciones de las Clases 10 y 15). No hay archivos separados de diapositivas ni PDFs escritos cargados en el cuaderno; cuando se mencionan valores ambiguos o con ruido en las transcripciones automáticas, se indica expresamente. Además, el contenido de Máquinas de Soporte Vectorial (SVM) (correspondiente a la Clase 15 ausente) se cubre a partir del repaso detallado que dio el profesor al inicio de la Clase 16 y sus menciones en las Clases 17 y 19.</p>
+<details class="section-block sec" id="gf-1-hilo-conductor" open><summary><span class="stitle">1. HILO CONDUCTOR</span></summary>
+<p>Todo sistema de reconocimiento de patrones arranca con una pregunta práctica: cómo lograr que una máquina perciba el mundo físico —imágenes, audio o texto— y tome decisiones confiables sobre él. Como una computadora no entiende objetos ni sonidos directamente, el primer paso es la <strong>detección</strong> y la <strong>extracción de características</strong>: transformar datos crudos en vectores numéricos compactos y discriminantes (como momentos geométricos, GLCM o HOG para imágenes, y descriptores temporales, espectrales o MFCC para audio). Sin embargo, extraer demasiadas variables dispara la <strong>maldición de la dimensionalidad</strong>, haciendo que los modelos sobreajusten y que las distancias pierdan sentido. Por eso, antes de clasificar, hay que depurar el espacio de entrada mediante <strong>selección de características</strong> (quedarse con las variables más útiles) o <strong>reducción de dimensionalidad</strong> como PCA y LDA (proyectarlas a un espacio más compacto sin perder la varianza o la separabilidad entre clases). Con los datos listos, necesitamos reglas rigurosas de <strong>evaluación</strong> —matrices de confusión, precisión, recall, curvas ROC, validación cruzada y vigilancia contra fuga de datos y <em>data drift</em> — porque entrenar un modelo que memoriza sin generalizar no sirve en el mundo real.</p>
+<p class="">Ya con un espacio bien representado y una forma confiable de medir errores, entra el núcleo de decisión: los modelos de agrupamiento y clasificación. La historia comienza con funciones de decisión lineales y cuadráticas clásicas que trazan fronteras geométricas en el espacio de características, y luego se bifurca según si conocemos o no las etiquetas: cuando no hay etiquetas, los algoritmos no supervisados descubren grupos naturales por distancia o cuantización (K-Means, LBG, ISODATA) o por densidad sin asumir formas esféricas (DBSCAN); cuando sí hay etiquetas, pasamos a modelos supervisados que deciden por probabilidad y teoría de Bayes (QDA, LDA, Naive Bayes), por memoria local de vecinos (KNN), por fronteras lineales optimizadas con descenso de gradiente y regularización (Regresión Logística), o maximizando el margen con trucos de kernel (SVM). Cuando los datos tabulares presentan fronteras complejas no lineales, evolucionamos hacia árboles de decisión (regiones rectangulares por pureza Gini/entropía) y ensambles que combinan múltiples árboles débiles en paralelo (Random Forest) o secuencialmente corrigiendo residuos (Gradient Boosting). Finalmente, para no depender de extraer características a mano en datos masivos con estructura espacial o secuencial (donde los modelos tabulares fallan), damos el salto al aprendizaje profundo: perceptrones multicapa, redes convolucionales (CNN) y autoencoders para imágenes, y modelos secuenciales (RNN/LSTM) hasta llegar al Transformer con autoatención y <em>embeddings</em> contextuales, capaz de procesar texto, audio o imagen de forma agnóstica y paralela.</p>
+</details>
+<details class="section-block sec" id="gf-unidad-1-fundamentos-del-sistema-de-reco"><summary><span class="stitle">Unidad 1: Fundamentos del Sistema de Reconocimiento y Extracción de Características</span></summary>
+<p><em>(Clases 1 y 11)</em></p>
+<h4>(a) Qué problema resuelve y cómo se conecta</h4>
+<p>Un sistema de reconocimiento de patrones consta de cuatro etapas: <strong>detección</strong> (tomar mediciones del patrón), <strong>extracción de características</strong>, <strong>clasificación</strong> y <strong>evaluación del modelo</strong>. Esta unidad resuelve el problema inicial de convertir datos crudos (píxeles o señales de onda) en vectores numéricos medibles con cuatro propiedades deseables: <strong>discriminabilidad</strong> (separar clases), <strong>compacidad</strong> (dimensión reducida), <strong>robustez</strong> (tolerar ruido y variaciones intraclase) y <strong>bajo costo computacional</strong>. Prepara la entrada numérica para todas las unidades posteriores.</p>
+<h4>(b) Conceptos clave</h4>
+<ul><li>
+<strong>Patrón y Aprendizaje Supervisado vs. No Supervisado</strong> <em>(Clase 11)</em>: Un <strong>patrón</strong> es cualquier objeto, proceso o entidad que puede ser descrito y distinguido de otros; es <strong>supervisado</strong> cuando se conoce de antemano la etiqueta de clase (ej. perro, gato) y <strong>no supervisado</strong> cuando se desconocen las etiquetas y el número de clases. <em>Analogía:</em> es como clasificar fruta con etiquetas ya pegadas en la caja vs. ordenar fruta desconocida por parecido físico. <em>Ejemplo:</em> el reconocimiento supervisado clasifica especies o diagnósticos médicos, mientras el no supervisado agrupa pacientes por similitud de características sin diagnóstico previo.
+</li><li>
+<strong>Momentos Geométricos y Momentos de Hu</strong> <em>(Clases 1 y 11)</em>: Descriptores de <strong>forma</strong> para imágenes binarias/objetos que corrigen progresivamente variaciones geométricas en cuatro niveles: <strong>espaciales</strong> (mpq), <strong>centrados</strong> (μpq, invariantes a traslación), <strong>normalizados</strong> (ηpq=μpq/μ00^(1+(p+q)/2), invariantes a traslación y escala, pero aún variantes a rotación) y <strong>Momentos de Hu</strong>, invariantes a <strong>traslación, escala y rotación</strong>. <em>Analogía:</em> medir la silueta de una llave desde su propio centro y en proporción a su tamaño para reconocerla aunque esté girada o lejos de la cámara. <em>Ejemplo de examen (Clase 11):</em> dada una imagen en forma de "H", se calculó μ00=m00=5, xˉ=2.4, m11=27⟹μ11=27−2.4(12)=−1.8, μ20=3.2, μ02=3.2, obteniendo η11=−0.072, η20=η02=0.128 y finalmente Hu2=(η20−η02)2+4η112=0.020736 (en escala logarítmica 1.6832).
+</li><li>
+<strong>GLCM (Matriz de Coocurrencia de Niveles de Gris)</strong> <em>(Clases 1 y 11)</em>: Descriptor de <strong>textura</strong> que cuenta con qué frecuencia ocurren pares de intensidades luminosas a una <strong>distancia</strong> dada y en una <strong>dirección</strong> θ (ej. oeste-este o norte-sur), y luego se divide entre el total de cuentas (tras sumar su transpuesta para volverla simétrica) para obtener una matriz de probabilidades y extraer medidas como <strong>contraste</strong>, <strong>energía</strong>, <strong>ASM</strong> y <strong>entropía</strong>. <em>Analogía:</em> recorrer una tela con una regla de 1 cm mirando qué tan seguido junto a un hilo blanco hay un hilo negro. <em>Ejemplo (Clase 11):</em> en el ejercicio 34 del examen, se dio una imagen cuantizada para calcular GLCM norte-sur a distancia de 1 píxel, normalizando por el total (ej. 40 en la explicación) antes de aplicar ASM=∑pij2, Energía=√(ASM) y Contraste=∑pij(i−j)2.
+</li><li>
+<strong>HOG (Histograma de Gradientes Orientados)</strong> <em>(Clase 1)</em>: Descriptor de <strong>forma y bordes</strong> que codifica magnitudes y orientaciones de los cambios de intensidad luminosa en regiones locales. <em>Analogía:</em> trazar sobre una foto un mapa de pequeñas flechas que señalan hacia dónde cambia la luz en cada cuadrito, resumiendo el contorno y estructura interna del objeto. <em>Ejemplo real de clase:</em> una imagen original de 1090×612 píxeles se recorta a 196×438 y se redimensiona al estándar de 64×128<strong>píxeles</strong>; se aplican filtros detectores de bordes 1×3 (eje X, detecta bordes verticales) y 3×1 (eje Y, detecta bordes horizontales), se calcula magnitud √(Gx2+Gy2) y orientación tan−1(Gy/Gx) ajustada a [0^∘,180^∘) (restando 180^∘), se divide en celdas de 8×8, se agrupan bloques de 4 celdas (36 valores normalizados con L2 o L1) y al deslizarlos sobre toda la imagen resulta un vector de 3,780<strong>características</strong>. También se mencionaron <strong>SIFT</strong> (puntos clave mediante diferencia de gaussianas, vector de 128<strong>características</strong> por punto, robusto a escala, rotación, luz y perspectiva moderada) y <strong>SURF</strong> (versión más rápida hacia 2004).
+</li><li>
+<strong>Descriptores de Audio (Temporales, Espectrales y MFCC)</strong> <em>(Clases 1 y 11)</em>: El audio es una señal 1D de amplitud en el tiempo. <em>Analogía:</em> estudiar una canción midiendo qué tan fuerte suena (temporal), qué notas agudas o graves contiene (espectral) y cómo la percibiría el oído humano (tiempo-frecuencia MFCC). <em>Ejemplos concretos con números reales de la Clase 1:</em>
+<ul><li>
+<strong>Temporales:</strong> Energía y <strong>RMS</strong> (raíz de la energía promedio en ventana, ej. 4 muestras); <strong>Tasa de Cruces por Cero (ZCR)</strong>, que cuenta cambios de signo (alto = ruido/percusivo, bajo = armónico; en el ejemplo de ventana 0.3, 0.5, -0.2... dio 0.4); <strong>Autocorrelación</strong> (desplazar la señal sobre sí misma).
+</li><li>
+<strong>Espectrales (vía FFT, que asume estacionariedad): Centroide espectral</strong> (para frecuencias 100,500,1000,2000 Hz con amplitudes 0.1,0.5,0.3,0.1 da 760 Hz); <strong>Ancho de banda espectral</strong> (498.4 Hz); <strong>Spectral Rolloff</strong> (punto donde se acumula el 85% de la amplitud total 1.2, es decir 1.02, alcanzado en el bin 3 a 150 Hz); <strong>Flujo espectral</strong> (cambio cuadrático entre frames t y t−1, resultado 0.27); <strong>Spectral Flatness</strong> (media geométrica 0.144 / media aritmética 0.15 = 0.96, espectro plano).
+</li><li>
+<strong>MFCC (Coeficientes Cepstrales en Frecuencia Mel):</strong> siguen <strong>7 pasos en orden estricto</strong>: (1) <strong>Preénfasis</strong> (filtro paso altas x[n]−αx[n−1]), (2) <strong>Framing</strong> (ventanas de 20<strong>a</strong> 40 ms con 50% de solapamiento), (3) <strong>Ventana de Hamming</strong> (atenúa extremos para evitar artefactos de la FFT), (4) <strong>FFT</strong> y espectro de potencia, (5) <strong>Banco de</strong> 20<strong>a</strong> 40<strong>filtros triangulares en escala Mel</strong> (Mel(f)=2595log10(1+f/700), lineal en bajas frecuencias y logarítmica en altas), (6) <strong>Logaritmo</strong> de la energía de cada filtro, y (7) <strong>Transformada Coseno Discreta (DCT)</strong> (sin inversa, por lo que no reconstruye el audio original). Se descarta el coeficiente C0 (solo energía promedio) y se conservan C1<strong>a</strong> C12<strong>o</strong> C13, más sus derivadas <strong>Delta</strong> (velocidad) y <strong>Delta-Delta</strong> (aceleración), construyendo por ejemplo un vector final de 80<strong>características</strong> por audio al aplicar estadísticos y descriptores espectrales.
+</li></ul>
+</li></ul>
+<h4>(c) Tabla resumen: Pasos y fórmulas clave de la Unidad 1</h4>
+<div class="tabla-scroll"><table><tr><th>Descriptor</th><th>Qué mide</th><th>Pasos o fórmula clave</th><th>Salida típica en clase</th></tr><tr><td><strong>Momentos de Hu</strong> <em>(Cl. 1, 11)</em></td><td>Forma invariante</td><td>mpq→μpq→ηpq=(μpq)/(μ00^(1+(p+q)/2))→Huk</td><td>Hu2=0.020736 (log 1.6832)</td></tr><tr><td><strong>GLCM</strong> <em>(Cl. 1, 11)</em></td><td>Textura</td><td>Definir (θ,d=1)→ simétrica →÷ total →ASM,√(ASM),Contraste</td><td>6 características (N-S y O-E)</td></tr><tr><td><strong>HOG</strong> <em>(Cl. 1)</em></td><td>Forma/Bordes</td><td>Normalizar →64×128→ gradientes 1×3,3×1→ celdas 8×8→ bloques 4 celdas</td><td>Vector de 3,780 valores</td></tr><tr><td><strong>MFCC</strong> <em>(Cl. 1, 11)</em></td><td>Envolvente perceptual audio</td><td>Preénfasis → Framing → Hamming → FFT → Banco Mel →log→ DCT</td><td>Coefs. 1–13 (+Δ,ΔΔ)</td></tr></table></div>
+<h4>(d) Errores comunes y puntos de examen</h4>
+<ul><li>
+En <strong>GLCM</strong>, olvidar sumar la transpuesta o <strong>olvidar normalizar</strong> entre el conteo total antes de calcular ASM, energía y contraste.
+</li><li>
+En <strong>Momentos Geométricos</strong>, recordar que μ10=μ01=0 siempre, y que los <strong>momentos normalizados</strong> son invariantes a escala y traslación, pero <strong>aún varían con la rotación</strong> (solo Hu es invariante a rotación).
+</li><li>
+En <strong>MFCC</strong>, confundir el orden exacto de los 7 pasos (en el primer examen fue pregunta directa) o creer que con los MFCC se puede reconstruir el audio original (la DCT usada aquí no tiene inversa para volver al audio).
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-2-seleccion-de-caracteristicas-y-"><summary><span class="stitle">Unidad 2: Selección de Características y Reducción de Dimensionalidad</span></summary>
+<p><em>(Clases 2, 3, 4, 5 y 11)</em></p>
+<h4>(a) Qué problema resuelve y cómo se conecta</h4>
+<p>Tras extraer miles de características (como los 3,780 valores de HOG), aparece la <strong>maldición de la dimensionalidad</strong>: los datos se vuelven dispersos, crece el costo computacional, aumenta el riesgo de sobreajuste, las distancias pierden sentido, se degrada el rendimiento y es imposible visualizar. Esta unidad resuelve ese problema por dos vías: <strong>seleccionar</strong> un subconjunto de las variables originales o <strong>proyectar</strong> todas hacia un espacio nuevo de menor dimensión.</p>
+<h4>(b) Conceptos clave</h4>
+<ul><li>
+<strong>Selección de Características: Filtrado, Wrapper y Embebido</strong> <em>(Clases 2 y 11)</em>:
+<ul><li>
+<em>Filtrado:</em> evalúa características <strong>antes</strong> de entrenar el modelo usando criterios estadísticos independientes (ej. correlación de Pearson).
+</li><li>
+<em>Wrapper:</em> evalúa subconjuntos usando el desempeño real del clasificador <strong>después</strong> de entrenarlo. <em>Ejemplos numéricos de Clase 2 con variables A, B, C, D:</em> en <strong>Forward Selection</strong> se arranca vacío, gana B (70%), se prueba B+A, B+C, B+D (gana B+A), luego B+A+C (80%), pero B+A+C+D empeora 1% y se detiene (orden: B, A, C); en <strong>Backward Selection</strong> se entrena con todas (82%), al quitar A sube a 83%, al quitar D sube a 84%, y al intentar quitar B o C cae 24% y 14%, quedando B y C (84%); en <strong>Exhaustive Feature Selection</strong> se prueban todas las combinaciones (gana B+C con 84%), garantizando el óptimo global pero volviéndose inviable desde más de 15 o 20 características.
+</li><li>
+<em>Embebido:</em> selecciona <strong>durante</strong> el entrenamiento dentro del mismo algoritmo (ej. <strong>norma L1 / Lasso</strong>, que manda pesos irrelevantes a 0, o <strong>árboles de decisión</strong>, que normalizan importancias y filtran por umbral como &gt;0.5).
+</li><li>
+<em>Analogía:</em> elegir qué materias llevar a un examen por su índice en el temario (filtrado), probando combinaciones en simulacros reales (wrapper), o dejando que el propio método descarte temas mientras estudias (embebido).
+</li></ul>
+</li><li>
+<strong>PCA (Análisis de Componentes Principales) y SVD</strong> <em>(Clases 2, 3, 5 y 11)</em>: Técnica <strong>no supervisada</strong> que transforma variables posiblemente correlacionadas en nuevas variables <strong>ortogonales y no correlacionadas</strong> (combinaciones lineales llamadas componentes principales), ordenadas por la cantidad de <strong>varianza</strong> que capturan. <em>Analogía:</em> tomarle una foto a un objeto 3D desde el ángulo exacto donde su sombra se ve más estirada y muestra mejor su silueta. <em>Detalle técnico y casos reales:</em> el número total de vectores propios que arroja PCA es siempre igual al <strong>número de características originales</strong> (D); la proyección es Z=X_cW de tamaño N×K. Como calcular la matriz de covarianza explícita es costoso y exige matriz cuadrada, en cómputo se usa <strong>SVD</strong> (Xc=UΣVT), donde los vectores propios son VT y los valores propios se obtienen elevando los valores singulares <strong>al cuadrado</strong> (σi2). <em>Criterios para elegir</em> K*:* <strong>Regla del codo</strong>, <strong>umbral de varianza</strong> (ej. 90–95%) y <strong>Criterio de Kaiser</strong> (λ&gt;1, aporta más información que una variable estandarizada original).
+<ul><li>
+<em>Casos reales vistos (Clases 3 y 5):</em> En <strong>Iris</strong> (4 características), PC1 explica 92.46% y PC2 5.31% (acumulado 97.7%). En <strong>Wine</strong> (178 observaciones, 13 características químicas con escalas muy distintas), sin estandarizar el PC1 concentra el 99.809% de la varianza artificialmente por escala, mientras que estandarizado Kaiser y el codo eligen 3 componentes, 90% requiere 8 y 95% requiere 10. En <strong>Eigenfaces</strong> (400 imágenes de 64×64), las primeras componentes capturan la geometría general del rostro y las últimas solo detalles finos o "estática", reconstruyendo rostros nítidos entre 100 y 300 componentes (recordando volver a sumar la media centrada al reconstruir).
+</li></ul>
+</li><li>
+<strong>LDA (Análisis Discriminante Lineal) como reducción de dimensionalidad</strong> <em>(Clases 4 y 11)</em>: Método <strong>supervisado</strong> que proyecta los datos hacia los ejes que maximizan la <strong>separabilidad entre clases</strong> (cociente entre dispersión entre clases SB y dispersión intraclase SW). Hace <strong>tres supuestos fuertes</strong>: distribución gaussiana, matriz de covarianza igual para todas las clases y separabilidad lineal. Su número máximo de dimensiones está limitado por el número de clases o características. En el ejercicio 35 del examen (Clase 11), resolviendo SW−1S_Bw=λw se obtuvo λ1=7.74 y el vector propio w=(2.34,1)T. Se mencionaron además <strong>t-SNE</strong> (visualización) y <strong>Kernel PCA</strong> (lleva a mayor dimensión vía kernel antes de aplicar PCA).
+</li></ul>
+<h4>(c) Comparación PCA vs. LDA</h4>
+<div class="tabla-scroll"><table><tr><th>Criterio</th><th>PCA <em>(Clases 2, 3, 5, 11)</em></th><th>LDA <em>(Clases 4, 11)</em></th></tr><tr><td><strong>Tipo</strong></td><td>No supervisado (sin etiquetas)</td><td>Supervisado (requiere etiquetas)</td></tr><tr><td><strong>Objetivo</strong></td><td>Maximizar la <strong>varianza</strong> de los datos</td><td>Maximizar la <strong>separabilidad</strong> entre clases</td></tr><tr><td><strong>Sensibilidad</strong></td><td>Muy sensible a la escala (exige <strong>estandarizar</strong> , no solo centrar)</td><td>Asume gaussiana, misma Σ y separabilidad lineal</td></tr></table></div>
+<h4>(d) Errores comunes y puntos de examen</h4>
+<ul><li>
+<strong>Confundir centrar con estandarizar:</strong> centrar es solo restar la media (x−xˉ); estandarizar es restar la media y dividir entre la desviación estándar ((x−xˉ)/(σ)). Si no se estandariza en datasets heterogéneos como <em>Wine</em>, una sola variable de gran magnitud secuestra la primera componente.
+</li><li>
+<strong>Criterio de Kaiser:</strong> se eligen componentes con <strong>valor propio</strong> λ&gt;1, NO las que explican más de 0.1% o 1% de la varianza (error cometido por un alumno en la Clase 5 y corregido por el profesor).
+</li><li>
+<strong>Valores singulares en SVD:</strong> en SVD los valores de Σ deben <strong>elevarse al cuadrado</strong> para equivaler a los eigenvalores λ de la matriz de covarianza.
+</li><li>
+<strong>PCA vs. separación de clases:</strong> tener alta varianza en PCA <strong>no garantiza</strong> separabilidad de clases porque no usa etiquetas.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-3-evaluacion-de-modelos-validacio"><summary><span class="stitle">Unidad 3: Evaluación de Modelos, Validación y Fallas en Producción</span></summary>
+<p><em>(Clases 4, 6 y 11)</em></p>
+<h4>(a) Qué problema resuelve y cómo se conecta</h4>
+<p>Construir un modelo es solo el 50% del trabajo; el resto es evaluarlo correctamente para asegurar que <strong>generalice</strong> a datos nunca vistos y no caiga en falsa confianza. Esta unidad dota al curso de las métricas y protocolos de validación que se exigirán en todos los clasificadores y prácticas siguientes.</p>
+<h4>(b) Conceptos clave</h4>
+<ul><li>
+<strong>Matriz de Confusión y Métricas Derivadas</strong> <em>(Clases 4, 6 y 11)</em>: Tabla con clases reales en filas y predicciones en columnas (diagonal = aciertos <strong>TP</strong> y <strong>TN</strong>; fuera de diagonal = errores <strong>FP</strong> o falsa alarma de incendio, y <strong>FN</strong> o incendio no detectado). <em>Ejemplo crítico de Clase 4:</em> en 1,000 pacientes (950 sanos y 50 con cáncer), un modelo que dice siempre "sano" logra 95%<strong>de exactitud</strong>, pero tiene 0% de <em>recall</em> (deja morir a los 50 enfermos). En el ejemplo de correos <em>spam</em>, se obtuvo 90% de accuracy y 85.7% en precisión, recall y F1.
+</li><li>
+<strong>Curva ROC y AUC</strong> <em>(Clases 4, 6 y 11)</em>: Para modelos que entregan probabilidades continuas, evalúa el desempeño moviendo el umbral de decisión (desde 0.1 hasta 1.0). Grafica <strong>Eje X = FPR</strong> (1−Especificidad) contra <strong>Eje Y = TPR</strong> (Sensibilidad / Recall). El <strong>AUC</strong> (área bajo la curva) mide la capacidad discriminativa: 1 perfecto, 0.9<strong>–</strong> 1 excelente, 0.7<strong>–</strong> 0.9 bueno, 0.5<strong>–</strong> 0.7 regular, 0.5 aleatorio (moneda al aire) y &lt;0.5 peor que el azar (conviene invertir la predicción).
+</li><li>
+<strong>Underfitting (Alto Sesgo) vs. Overfitting (Alta Varianza)</strong> <em>(Clases 4 y 18)</em>: En <em>underfitting</em>, el error es alto tanto en entrenamiento como en validación (faltó complejidad, características o entrenamiento). En <em>overfitting</em>, la exactitud de entrenamiento es muy alta (ej. 96–100%) pero cae fuerte en validación/prueba porque memorizó ruido (se corrige con más datos, regularización, <em>dropout</em> o parada temprana).
+</li><li>
+<strong>Estrategias de Validación</strong> <em>(Clases 4 y 11)</em>:
+<ul><li>
+<strong>Hold-out:</strong> divide en <strong>3 conjuntos</strong>: entrenamiento (60–80%), validación (10–20% para ajustar hiperparámetros) y prueba (solo para evaluación final).
+</li><li>
+<strong>K-Fold Cross-Validation:</strong> separa primero el conjunto de <strong>prueba</strong> (que NO se toca durante las iteraciones), y divide el entrenamiento en K particiones iguales (ej. K=5,9,11), entrenando K veces dejando un <em>fold</em> distinto para validación en cada iteración.
+</li><li>
+<strong>Stratified K-Fold:</strong> mantiene en cada <em>fold</em> la proporción original de clases cuando hay <strong>datos desbalanceados</strong> (como fraudes bancarios 0.1%, cáncer 1–5%, intrusión de red 0.5%).
+</li></ul>
+</li><li>
+<strong>Data Leakage (Fuga de Datos) y Data Drift</strong> <em>(Clases 4 y 11)</em>: La <strong>fuga de datos</strong> ocurre cuando información de validación o prueba contamina el entrenamiento, produciendo métricas artificialmente optimistas: fuga <strong>temporal</strong> (usar futuro para predecir pasado), fuga de <strong>procesamiento</strong> (calcular PCA o normalización usando estadísticas de validación/test) y fuga del <strong>target</strong>. El <strong>Data Drift</strong> ocurre cuando la distribución estadística de los datos en producción cambia respecto al entrenamiento (puede ser <strong>abrupto</strong>, <strong>gradual</strong> o <strong>incremental</strong>); se detecta monitoreando estadísticas en producción y se corrige reentrenando con una ventana de datos actualizada.
+</li></ul>
+<h4>(c) Fórmulas de métricas de evaluación (Clases 4, 6 y 11)</h4>
+<div class="tabla-scroll"><table><tr><th>Métrica</th><th>Fórmula</th><th>Qué responde</th></tr><tr><td><strong>Exactitud (Accuracy)</strong></td><td>(TP+TN)/(TP+TN+FP+FN)</td><td>Porcentaje global de aciertos.</td></tr><tr><td><strong>Precisión</strong></td><td>(TP)/(TP+FP)</td><td>De los que predije positivos, ¿cuántos sí lo eran?</td></tr><tr><td><strong>Recall / Sensibilidad (TPR)</strong></td><td>(TP)/(TP+FN)</td><td>De todos los positivos reales, ¿cuántos logré capturar?</td></tr><tr><td><strong>Especificidad</strong></td><td>(TN)/(TN+FP)</td><td>De todos los negativos reales, ¿cuántos identifiqué?</td></tr><tr><td><strong>F1-Score</strong></td><td>Media armónica de Precisión y Recall</td><td>Castiga extremos: si P=1 y R=0, media aritmética =0.5, pero F1=0.</td></tr><tr><td><strong>Exactitud Balanceada</strong></td><td>(Sensibilidad+Especificidad)/(2)</td><td>Promedio equilibrado por clase.</td></tr></table></div>
+<h4>(d) Errores comunes y puntos de examen</h4>
+<ul><li>
+<strong>Confundir los ejes de la curva ROC:</strong> en el examen (pregunta 18, Clase 11) se aclaró que eje X es <strong>FPR</strong> (1−especificidad) y eje Y es <strong>TPR</strong> (sensibilidad/recall), nunca 1−sensibilidad ni <em>recall</em> contra especificidad.
+</li><li>
+<strong>Usar Test dentro de K-Fold:</strong> en validación cruzada, el conjunto de <em>test</em> <strong>jamás se usa en cada iteración</strong>; se reserva estrictamente hasta el final.
+</li><li>
+<strong>Aplicar PCA o estandarización sobre todo el dataset antes de dividir:</strong> genera <em>fuga de procesamiento</em>.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-4-clasificadores-clasicos-funcion"><summary><span class="stitle">Unidad 4: Clasificadores Clásicos — Funciones de Decisión y Sistemas Ortogonales</span></summary>
+<p><em>(Clases 6 y 11)</em></p>
+<h4>(a) Qué problema resuelve y cómo se conecta</h4>
+<p>Una vez reducidas y validadas las características, entramos a la etapa de <strong>clasificación</strong>: diseñar una función matemática que tome un vector x∈Rn y decida a qué clase pertenece. Introduce la geometría de fronteras e hiperplanos que fundamentará a LDA, Regresión Logística y SVM.</p>
+<h4>(b) Conceptos clave</h4>
+<ul><li>
+<strong>Espacio de Características vs. Espacio de Pesos, Clase, Región y Frontera</strong> <em>(Clases 6 y 11)</em>: En el <strong>espacio de características</strong>, cada punto es un <strong>patrón</strong> (ejemplo) y responde "¿dónde está cada patrón?"; en el <strong>espacio de pesos</strong>, cada punto/región representa <strong>posibles clasificadores válidos</strong> y responde "¿qué clasificador separa las clases?". Una <strong>región de decisión</strong> es el subespacio donde todo patrón se asigna a la misma clase, y una <strong>frontera de decisión</strong> es la superficie donde d(x)=0 o donde dos funciones discriminantes se igualan (gi(x)=gj(x)).
+</li><li>
+<strong>Funciones de Decisión (Lineales, Cuadráticas y No Lineales)</strong> <em>(Clases 6 y 11)</em>: Una función lineal d(x)=w^Tx+w0 traza un <strong>hiperplano</strong> en cualquier dimensión; clasifica por el <strong>signo</strong> (&gt;0 clase 1, &lt;0 clase 2) y la distancia perpendicular del punto al hiperplano depende de d(x)/∥w∥. Una función cuadrática x^TAx+b^Tx+c añade flexibilidad con riesgo de sobreajuste.
+<ul><li>
+<em>Ejemplo 2 clases (Clase 6):</em> con w=(−3,0.75,1)T y x=(1,x1,x2)T, para el punto (4,3) resulta (−3)(1)+(0.75)(4)+(1)(3)=+3&gt;0 (clase ω1); para (0,0) da −3&lt;0 (clase ω2).
+</li></ul>
+</li><li>
+<strong>Clasificación Multiclase (OVR, OVO y Linear Machine) y Funciones Generalizadas</strong> <em>(Clases 6 y 11)</em>:
+<ul><li>
+<strong>Uno contra el Resto (OVR):</strong> una función por clase; asigna la clase i solo si di(x)&gt;0 y todas las demás &lt;0. <em>Ejercicio resuelto de Clase 6:</em> con D1=−x1+x2, D2=x1+x2−5 y D3=−x2+1, el punto (6,5) da (−1,+6,−4)→ω2; el punto (0,2) da (+2,−3,−1)→ω1; (6,4) da (−2,+5,−3)→ω2; en cambio, (2,6) da (+,+,−) cayendo en una <strong>región indeterminada o ambigua</strong>.
+</li><li>
+<strong>Uno contra Uno (OVO):</strong> compara por pares dij(x)&gt;0 para todo j=i (ej. 1 vs 2, 1 vs 3, 1 vs 4); reduce regiones ambiguas pero aún puede tenerlas.
+</li><li>
+<strong>Linear Machine:</strong> asigna la clase cuyo valor escalar gi(x) sea el <strong>máximo</strong> frente a todas las demás (gi(x)&gt;gj(x) ∀j=i), eliminando las regiones indeterminadas.
+</li><li>
+<strong>Funciones Generalizadas:</strong> combinan salidas de distintos clasificadores fi ponderadas por pesos wi (antecedente directo de los <strong>ensambles</strong>).
+</li></ul>
+</li><li>
+<strong>Sistemas de Funciones Ortogonales</strong> <em>(Clase 6)</em>: Descomponen una función de decisión compleja no lineal en una suma ponderada de polinomios sencillos e independientes (sin redundancia y numéricamente estables). Sus dominios válidos son críticos: <strong>Legendre</strong> en [−1,1] (formas/intensidad en imágenes), <strong>Laguerre</strong> en [0,∞) y <strong>Hermite</strong> en (−∞,∞) (audio/voz y distribuciones normales).
+</li></ul>
+<h4>(c) Tabla comparativa: Polinomios Ortogonales y Estrategias Multiclase</h4>
+<div class="tabla-scroll"><table><tr><th>Sistema Ortogonal <em>(Clase 6)</em></th><th>Dominio válido</th><th>Aplicación principal</th></tr><tr><td><strong>Legendre</strong></td><td>[−1,1]</td><td>Formas geométricas normalizadas e intensidad en imágenes.</td></tr><tr><td><strong>Laguerre</strong></td><td>[0,∞)</td><td>Patrones no negativos en ese dominio.</td></tr><tr><td><strong>Hermite</strong></td><td>(−∞,∞)</td><td>Voz/audio y datos con distribución normal.</td></tr></table></div>
+<h4>(d) Errores comunes y puntos de examen</h4>
+<ul><li>
+En <strong>OVR</strong>, creer que si dos funciones dan negativo ya es ambiguo: solo es <strong>región indeterminada</strong> cuando hay más de una función positiva o ninguna positiva; la regla válida exige <strong>exactamente una positiva y el resto negativas</strong>.
+</li><li>
+Recordar que en una <strong>función discriminante general</strong> (Linear Machine), un patrón se clasifica en la clase cuya función sea la <strong>mayor</strong>, no donde valga 0 (donde vale 0 o donde gi=gj es la <strong>frontera de decisión</strong>).
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-5-aprendizaje-no-supervisado-clus"><summary><span class="stitle">Unidad 5: Aprendizaje No Supervisado (Clustering) y Métricas Internas</span></summary>
+<p><em>(Clases 7, 8, 9, 11 y 12)</em></p>
+<h4>(a) Qué problema resuelve y cómo se conecta</h4>
+<p>Cuando no existen etiquetas previas en los datos, ya no podemos entrenar funciones de decisión supervisadas: debemos descubrir la estructura intrínseca agrupando observaciones similares en <strong>clusters</strong> (cohesión intracluster alta y separación intercluster alta) y evaluar esos grupos sin etiquetas mediante métricas internas. Además, el <strong>Segundo Examen Parcial</strong> inicia oficialmente a partir de <strong>DBSCAN</strong> dentro de este módulo.</p>
+<h4>(b) Conceptos clave</h4>
+<ul><li>
+<strong>Métricas de Distancia y Similitud</strong> <em>(Clase 7)</em>: La distancia de <strong>Minkowski</strong> generaliza: con p=1 es <strong>Manhattan</strong> (diferencias absolutas), con p=2 es <strong>Euclidiana</strong>, con p→∞ es <strong>Chebyshev</strong>. La distancia de <strong>Mahalanobis</strong> mide qué tan cerca está un punto de una <em>distribución</em> tomando en cuenta su <strong>matriz de covarianza</strong> (correlaciones entre variables). Otras medidas: similitud <strong>coseno</strong> (ángulo), <strong>Pearson</strong> (correlación lineal) y <strong>Jaccard</strong> (conjuntos binarios).
+</li><li>
+<strong>K-Means y K-Means++</strong> <em>(Clases 7, 9 y 11)</em>: Agrupa datos en K<strong>clusters fijos</strong> buscando minimizar implícitamente la <strong>inercia</strong> (suma de distancias cuadradas de cada punto a su centroide). <em>Analogía:</em> ubicar K antenas en una ciudad, asignar cada casa a la antena más cercana, mover cada antena al centro promedio de sus casas y repetir hasta que no cambien. <em>K-Means++</em> mejora la inicialización eligiendo el primer centroide al azar y seleccionando los siguientes con probabilidad proporcional a su distancia al primer centroide, reduciendo iteraciones (en la Práctica 2 bajó el promedio de 7.3 a 4.3 iteraciones en sintéticos, y en <strong>Wine</strong> —178 obs, 13 var— logró un <em>Adjusted Rand Index</em> de ∼0.895–0.91). Si un cluster queda vacío, se reinicializa aleatoriamente. <strong>Limitación mayor:</strong> asume clusters <strong>esféricos</strong> isotrópicos, por lo que falla en fronteras no lineales (ej. medias lunas), y es sensible a escala y <em>outliers</em>.
+</li><li>
+<strong>LBG (Linde-Buzo-Gray)</strong> <em>(Clases 7, 8 y 11)</em>: Diseña un <em>codebook</em> de <em>codewords</em> para <strong>cuantización vectorial</strong>, buscando minimizar la <strong>distorsión</strong>. Arranca con un único centroide igual a la <strong>media global</strong> (inicialización muy estable) y aplica <em>splitting</em> añadiendo ±ϵ (ej. 0.1) y actualizando hasta cumplir tolerancia de distorsión, por lo que el tamaño del <em>codebook</em> siempre es <strong>potencia de 2</strong> (2,4,8,16…). Forma regiones de <strong>Voronoi</strong> y puede usarse como clasificador entrenando un <em>codebook</em> por clase.
+</li><li>
+<strong>ISODATA</strong> <em>(Clases 7, 8, 9 y 11)</em>: Evolución de K-Means basada en <strong>heurísticas</strong> (sin garantía matemática de óptimo) que puede <strong>modificar dinámicamente el número de clusters</strong> mediante tres operaciones: <strong>eliminar</strong> clusters con menos de nmin puntos, <strong>dividir</strong> un cluster en dos (±0.5σj sobre el eje de mayor desviación estándar) si σj&gt;σmax, y <strong>fusionar</strong> dos centroides (ponderados por su número de puntos) si su distancia es menor a dmin. <em>Ejemplo Práctica 2 (Clase 9):</em> iniciando con K=6 o con K=3 en datos sintéticos de 4 grupos, convergieron igualmente a 4 clusters con la misma inercia (2086). Sigue limitado a clusters esféricos.
+</li><li>
+<strong>Métricas Internas de Clustering</strong> <em>(Clases 8 y 9)</em>: Evalúan clusters sin etiquetas:
+<ul><li>
+<strong>Índice de Dunn</strong> ([0,∞), <strong>mayor es mejor</strong>): (mindistancia entre clusters)/(maxdiámetro de un cluster). <em>Ejemplo Clase 8:</em> con grupos S1={1,2,3},S2={7,8},S3={15,16,17}, la distancia mínima entre clusters es 4 (entre 3 y 7) y el diámetro máximo es 12 (de 1 a 13? No, de 1 a 3 es 2, de 7 a 8 es 1, de 15 a 17 es 2 —en la transcripción dice diámetro máximo 12 dando 4/12=0.333 [dudoso en audio por lectura del gráfico]).
+</li><li>
+<strong>Índice de Davies-Bouldin (DBI)</strong> ([0,∞), <strong>menor es mejor</strong>): promedio del máximo Rij=(si+sj)/(dij) por cluster; en el ejemplo de Clase 8 dio 0.188.
+</li><li>
+<strong>Coeficiente de Silueta</strong> ([−1,1], <strong>cercano a</strong> 1<strong>es mejor</strong>): s(i)=(b(i)−a(i))/(max(a(i),b(i))), donde a(i) es la distancia media a su propio cluster y b(i) la menor distancia media a otro cluster. <em>Ejemplo Clase 8:</em> para x=2 en S1, a=1, b=5.5? No, a=1 y s=(b−a)/max⟹ 0.818; para x=7 en S2, a=1, b=5 (media hacia S1 = 5, hacia S3 = 9) ⟹ 0.8. Interpretación: &lt;0.25 sin estructura, 0.26–0.5 débil, 0.5–0.7 razonable, 0.71–1 excelente; negativo indica mala asignación.
+</li></ul>
+</li><li>
+<strong>DBSCAN</strong> <em>(Clases 12 y 14)</em>: Algoritmo no supervisado <strong>basado en densidad</strong> que agrupa regiones densas separadas por zonas poco densas, descubre automáticamente el número de clusters K, traza <strong>fronteras no lineales arbitrarias</strong> (círculos concéntricos, medias lunas) e <strong>identifica outliers como ruido</strong> en una sola pasada. Usa dos parámetros: ε (radio máximo de vecindad, estimado con el codo de la gráfica de K-distancias) y <strong>MinPts</strong> (mínimo de puntos en ese radio; heurística inicial entre d+1 y 2d, ej. para 2 características entre 3 y 4). Clasifica puntos en: <strong>punto núcleo</strong> (≥MinPts en su radio ε), <strong>punto frontera</strong> (&lt;MinPts pero dentro de ε de un núcleo), y <strong>punto ruido</strong> (ni núcleo ni frontera). <strong>Limitaciones:</strong> sensible a ε y MinPts, falla cuando hay <strong>densidades variables</strong> entre clusters, y es costoso con datos muy grandes o alta dimensionalidad.
+</li></ul>
+<h4>(c) Comparación de Algoritmos de Clustering</h4>
+<div class="tabla-scroll"><table><tr><th>Algoritmo</th><th>Parámetro K</th><th>Forma de Frontera</th><th>Criterio / Qué optimiza</th><th>¿Detecta ruido?</th></tr><tr><td><strong>K-Means / ++</strong> <em>(Cl. 7, 9)</em></td><td>Fijo de entrada</td><td>Esférica</td><td>Minimiza inercia</td><td>No</td></tr><tr><td><strong>LBG</strong> <em>(Cl. 7, 8)</em></td><td>Potencias de 2</td><td>Regiones Voronoi</td><td>Minimiza distorsión</td><td>No</td></tr><tr><td><strong>ISODATA</strong> <em>(Cl. 7, 9)</em></td><td>Dinámico (divide, une, elimina)</td><td>Esférica</td><td>Heurísticas (σmax,dmin,nmin)</td><td>Elimina clusters chicos</td></tr><tr><td><strong>DBSCAN</strong> <em>(Cl. 12)</em></td><td>Automático</td><td><strong>Arbitraria / No lineal</strong></td><td>Densidad (ε, MinPts)</td><td><strong>Sí (puntos ruido)</strong></td></tr></table></div>
+<h4>(d) Errores comunes y puntos de examen</h4>
+<ul><li>
+<strong>Inercia en ISODATA:</strong> al reducir centroides (ej. de 6 a 4), la inercia puede <strong>subir</strong> (de 1902.79 a 2086.95); esto NO es un error, pues menos centroides implican distancias sumadas mayores.
+</li><li>
+<strong>Ruido en DBSCAN:</strong> un punto rodeado de puntos de un cluster puede quedar como <strong>ruido</strong> si en su radio ε no queda encerrado ningún <strong>punto núcleo</strong>. Además, un punto etiquetado inicialmente como ruido sí puede cambiar a <strong>punto frontera</strong> durante la expansión de un núcleo.
+</li><li>
+En el primer examen se preguntó explícitamente qué asume K-Means (<strong>forma esférica isotrópica</strong>), qué minimiza LBG (<strong>distorsión</strong>) y la diferencia K-Means vs. ISODATA.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-6-clasificadores-probabilisticos-"><summary><span class="stitle">Unidad 6: Clasificadores Probabilísticos (Bayes, QDA, LDA, GNB) y Basados en Instancias (KNN)</span></summary>
+<p><em>(Clases 8, 11, 12, 13, 14 y 19)</em></p>
+<h4>(a) Qué problema resuelve y cómo se conecta</h4>
+<p>Pasamos del agrupamiento sin etiquetas al aprendizaje <strong>supervisado</strong>, incorporando la probabilidad y teoría de decisión de Bayes (para considerar costos asimétricos de error) o la proximidad directa en memoria con KNN.</p>
+<h4>(b) Conceptos clave</h4>
+<ul><li>
+<strong>Teoría de Decisión Bayesiana y Riesgo Condicional</strong> <em>(Clase 8)</em>: Usa la <strong>regla de Bayes</strong> P(ωi∣x)=(p(x∣ωi)P(ωi))/(p(x)) eliminando la evidencia p(x) porque es igual para todas las clases. Incorpora una matriz de pérdida λij (simétrica 0/1 o <strong>asimétrica</strong>, ej. en cáncer donde un falso negativo cuesta más que un falso positivo) y elige la acción αi que <strong>minimiza el riesgo esperado</strong>. <em>Ejemplo numérico (Clase 8):</em> con P(ω1∣x)=0.7, P(ω2∣x)=0.3 y pérdida 0/1, R(α1)=0(0.7)+1(0.3)=0.3 y R(α2)=1(0.7)+0(0.3)=0.7⟹ se elige ω1.
+</li><li>
+<strong>Clasificadores Gaussianos de Bayes: QDA, LDA y GNB</strong> <em>(Clases 8, 11, 12 y 13)</em>: Para estimar la verosimilitud p(x∣ωi) se asume distribución <strong>normal multivariada</strong> y se aplica logaritmo natural, quedando la función discriminante en términos de tres componentes: <strong>distancia de Mahalanobis</strong>, ln∣Σi∣ y lnP(ωi). Según qué se asuma sobre la matriz de covarianza Σ surgen tres modelos:
+<ul><li>
+<strong>QDA:</strong> matriz Σk <strong>diferente para cada clase</strong> → fronteras cuadráticas.
+</li><li>
+<strong>LDA:</strong> matriz Σ <strong>compartida</strong> por todas las clases → fronteras lineales.
+</li><li>
+<strong>Gaussian Naive Bayes (GNB):</strong> matriz <strong>diagonal</strong> (solo varianzas) asumiendo <strong>independencia condicional</strong> entre características.
+</li><li>
+<em>Naive Bayes Discreto y Suavizado de Laplace (Clases 8 y 12):</em> en conteo de palabras (<em>spam</em> vs <em>no spam</em> en 8 correos), si una palabra no aparece en una clase (0), anula todo el producto de probabilidades. Se corrige con <strong>suavizado</strong> sumando 1 / conteo total (ej. +1/12) a <strong>todas</strong> las palabras en <strong>ambas clases</strong> para que la densidad siga sumando 1.
+</li><li>
+<em>Casos reales vistos (Clases 8 y 13):</em> En <strong>Iris</strong> (120 train / 30 test), GNB falla en 1 ejemplo y QDA alcanza 100%. En la <strong>Práctica 3</strong>: (1) segmentación por color RGB (etiquetado temporal con HSV para 4 imágenes = 1,440,000 píxeles) mostró el desbalance del fondo (76%); al meter una imagen de prueba con una <strong>papa</strong> (clase no vista), QDA no tiene categoría "desconocido" y la clasificó como plátano/huevo por cercanía cromática; (2) en <strong>Breast Cancer</strong> (569 obs, 30 características, 212 malignas/357 benignas, split 80/20 estratificado = 455/114, regularización 10−4 en QDA para invertibilidad), QDA y LDA empataron en 95.61% y GNB cayó a 92.98% porque ignora correlaciones entre variables.
+</li></ul>
+</li><li>
+<strong>KNN (K-Nearest Neighbors)</strong> <em>(Clases 12, 14 y 19)</em>: Algoritmo <strong>supervisado, no paramétrico y basado en instancias ("perezoso")</strong>: no tiene fase de entrenamiento, simplemente memoriza el dataset y en inferencia mide la distancia del nuevo punto a todos los ejemplos, ordena y asigna por voto mayoritario de los k vecinos más cercanos (también sirve para regresión e <strong>imputación de datos faltantes</strong>). <em>Efecto de</em> k*:* k muy pequeño (k=1) captura ruido y sobreajusta con fronteras irregulares; k muy grande (30,50,100) suaviza demasiado, subajusta y decae al azar (50%). <em>Práctica 4 (Clase 19):</em> un equipo obtuvo el pico en k=41 (y 81 atípico), pero reconoció que un k menor daría mayor estabilidad.
+</li></ul>
+<h4>(c) Comparación de los 3 Clasificadores Bayesianos Gaussianos (Clases 8, 11, 12, 13)</h4>
+<div class="tabla-scroll"><table><tr><th>Clasificador</th><th>Supuesto sobre Σ</th><th>Frontera</th><th>Parámetros por estimar</th><th>Ventaja / Desventaja en clase</th></tr><tr><td><strong>QDA</strong></td><td>Σk propia por clase</td><td>Cuadrática</td><td>μk,Σk,P(ωk)</td><td>Muy flexible con muchos datos (RGB), requiere regularizar diagonal (10−4)</td></tr><tr><td><strong>LDA</strong></td><td>Σ compartida</td><td>Lineal</td><td>μk,Σ,P(ωk)</td><td>Menos parámetros que QDA; rindió igual en <em>Breast Cancer</em> (95.61%)</td></tr><tr><td><strong>GNB</strong></td><td>Diagonal (independencia)</td><td>Cuadrática/eje-alineada</td><td>μkj,σkj2,P(ωk)</td><td>Funciona con pocas muestras (100); cae si hay correlación o variables irrelevantes</td></tr></table></div>
+<h4>(d) Errores comunes y puntos de examen</h4>
+<ul><li>
+En el primer examen se preguntó explícitamente qué necesita la pseudoprobabilidad bayesiana gaussiana (<strong>Mahalanobis,</strong> ln∣Σ∣<strong>y</strong> P(ωi), NO matriz de correlación) y la diferencia de Σ entre QDA, LDA y GNB.
+</li><li>
+En <strong>suavizado de Laplace</strong>, olvidar aplicarlo a <strong>todas</strong> las clases descompensa la distribución de probabilidad (debe sumar 1).
+</li><li>
+En <strong>KNN</strong>, nunca quedarse con k=1 aunque dé el pico de exactitud en un experimento simple, porque sobreajusta al ruido; además, al ser basado en distancias, es <strong>obligatorio normalizar</strong> las características y es lento en predicción.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-7-regresion-logistica-y-maquinas-"><summary><span class="stitle">Unidad 7: Regresión Logística y Máquinas de Soporte Vectorial (SVM)</span></summary>
+<p><em>(Clases 14, 16 y 19)</em></p>
+<h4>(a) Qué problema resuelve y cómo se conecta</h4>
+<p>Frente a KNN (lento en inferencia y sin parámetros) y los modelos generativos bayesianos (que asumen normalidad), la <strong>Regresión Logística</strong> aprende directamente una frontera lineal probabilística rápida y altamente interpretable ("el caballo de batalla de la industria"), mientras que <strong>SVM</strong> busca la frontera lineal óptima maximizando el margen e introduce el truco del kernel para problemas no linealmente separables.</p>
+<h4>(b) Conceptos clave</h4>
+<ul><li>
+<strong>Regresión Logística, Función Sigmoide y Entropía Cruzada Binaria</strong> <em>(Clases 14 y 19)</em>: Modela la probabilidad de pertenecer a la clase 1 pasando la combinación lineal z=θ^Tx por la función <strong>sigmoide</strong>: σ(z)=(1)/(1+e−z)∈(0,1). En escala logarítmica (<em>log-odds</em> ln(p)/(1−p)), el comportamiento es lineal. <strong>Regla clave de implementación:</strong> siempre añadir x0=1 <strong>al inicio</strong> del vector de características para multiplicar al sesgo θ0. No se usa error cuadrático medio porque con la sigmoide se vuelve <strong>no convexo</strong>; se usa <strong>Entropía Cruzada Binaria (BCE)</strong>, que es <strong>convexa</strong> (garantiza mínimo global): J(θ)=−(1)/(m)∑[ylny^+(1−y)ln(1−y^)]. Al derivarla con regla de la cadena, el gradiente se simplifica a (1)/(m)∑(y^−y)x. Se entrena con tasas α≈0.1–0.5 mediante lote completo (<em>batch</em>), minilotes o descenso estocástico (SGD). Es un modelo de <strong>caja blanca</strong> (interpretable mediante los pesos θ) frente a redes neuronales de caja negra. Para multiclase usa <strong>OVR</strong> o <strong>Softmax</strong> (entropía cruzada multiclase).
+</li><li>
+<strong>Regularización L1 (Lasso) vs. L2 (Ridge) y Pesado por Clase</strong> <em>(Clases 14 y 19)</em>: Sin regularización, las magnitudes de θ crecen sin control (en datasets reales llegan a ±25,000, 50,000, 100,000 o 1,000,000), disparando el costo de memoria y cómputo en producción (ej. 18 millones de inferencias al día) y dificultando la interpretación.
+<ul><li>
+<strong>L1 (Lasso):</strong> añade (λ)/(m)∑∣θj∣ (gradiente (λ)/(m)signo(θj)); tiene la propiedad de <strong>mandar exactamente a cero</strong> los pesos de características irrelevantes (si λ es muy grande anula casi todo).
+</li><li>
+<strong>L2 (Ridge):</strong> añade (λ)/(2m)∑θj2 (gradiente (λ)/(m)θj); <strong>no hace cero</strong> los pesos, los <strong>acota en valores pequeños y los estabiliza rápidamente</strong> a través de las épocas (alrededor de ∼15 épocas en la Práctica 4).
+</li><li>
+<strong>Pesado por Clase ( Class Weighting ):</strong> ante desbalanceo, asigna pesos wk=(m)/(K⋅mk) en la función de costo. <em>Ejemplo numérico Clase 14:</em> con 1,000 datos (950 clase 0 y 50 clase 1), w0=(1000)/(2⋅950)=0.526 y w1=(1000)/(2⋅50)=10 (el error en la clase minoritaria pesa ∼19–20 veces más).
+</li></ul>
+</li><li>
+<strong>SVM (Máquinas de Soporte Vectorial)</strong> <em>(Repaso en Clase 16)</em>: Busca el hiperplano que separa las clases <strong>maximizando el margen</strong> (distancia entre los <strong>vectores de soporte</strong>). Su versión simple asume separabilidad lineal; para datos no separables usa dos herramientas: (1) <strong>variables de holgura</strong> (dar tolerancia explícita a ciertos errores) y (2) <strong>truco del kernel</strong> (proyectar implícitamente a mayor dimensión donde sí sean linealmente separables). Multiclase aplica OVO u OVR.
+</li></ul>
+<h4>(c) Comparación L1 vs. L2 y Regresión Logística vs. Redes</h4>
+<div class="tabla-scroll"><table><tr><th>Técnica / Modelo</th><th>Comportamiento de pesos θ</th><th>Estabilidad e interpretabilidad</th></tr><tr><td><strong>Sin Regularización</strong> <em>(Cl. 14, 19)</em></td><td>Crecen sin control (±50,000 a 1,000,000)</td><td>Alto costo en inferencia masiva; difícil de interpretar</td></tr><tr><td><strong>L1 (Lasso)</strong> <em>(Cl. 14, 19)</em></td><td>Manda a <strong>cero</strong> variables irrelevantes</td><td>Sigue variando entre épocas; selecciona características</td></tr><tr><td><strong>L2 (Ridge)</strong> <em>(Cl. 14, 19)</em></td><td>Penaliza haciéndolos <strong>pequeños</strong> (no cero)</td><td>Se estabiliza rápido (~15 épocas) y facilita interpretar</td></tr></table></div>
+<h4>(d) Errores comunes y puntos de examen</h4>
+<ul><li>
+<strong>Dónde se aplica el pesado por clase (advertencia explícita "ojo" del profesor en Clase 19):</strong> se aplica <strong>estrictamente sobre la clase</strong>, <strong>NUNCA sobre las características/variables</strong> ni sobre ejemplos aislados (error de un alumno al exponer).
+</li><li>
+<strong>Signo de los pesos</strong> θ<strong>en Regresión Logística:</strong> un peso negativo <strong>no significa que la variable importe menos</strong>; los pesos positivos empujan hacia una clase y los negativos hacia la otra, operando juntos como combinación lineal.
+</li><li>
+<strong>Agregar</strong> x0=1<strong>al final:</strong> debe ir siempre <strong>al inicio</strong> para alinear θ0 con x0.
+</li><li>
+<strong>Lote completo en Regresión Logística:</strong> funciona sin caer en mínimos locales porque la BCE es <strong>convexa</strong>.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-8-arboles-de-decision-y-metodos-d"><summary><span class="stitle">Unidad 8: Árboles de Decisión y Métodos de Ensamble</span></summary>
+<p><em>(Clases 16, 17, 18 y 21)</em></p>
+<h4>(a) Qué problema resuelve y cómo se conecta</h4>
+<p>La regresión logística solo traza fronteras lineales y SVM con kernel es poco interpretable. Los <strong>árboles de decisión</strong> dividen el espacio con reglas "si-entonces" formando <strong>regiones hiperrectangulares</strong> altamente interpretables y sin exigir normalización ni codificación de variables categóricas. Como un solo árbol es inestable y tiende a sobreajustar, los <strong>ensambles</strong> combinan muchos árboles débiles para lograr modelos mucho más precisos y generalizables.</p>
+<h4>(b) Conceptos clave</h4>
+<ul><li>
+<strong>Árboles CART, Impureza (Entropía y Gini) y Umbrales</strong> <em>(Clases 16 y 21)</em>: Algoritmo <strong>voraz</strong> con nodo raíz, nodos internos, hojas y ramas. En cada nodo evalúa todas las características y umbrales posibles (para numéricas ordena y prueba puntos medios (xi+xi+1)/2, ej. 15,20,22,27→t1=17.5,t2=21; para categóricas prueba divisiones binarias directamente). Usa dos métricas de impureza (donde 0 es puro):
+<ul><li>
+<strong>Entropía</strong> ( en 2 clases): −∑p_ilog2(pi).
+</li><li>
+<strong>Índice Gini</strong> ([0,0.5] en 2 clases): 1−∑pi2. <em>Ejemplos de Clase 16:</em> en un nodo con 7 de clase A y 3 de clase B (0.7 y 0.3), Entropía =0.881 y Gini =1−(0.72+0.32)=0.420 (alta impureza). En la tabla edad/ingresos (5 casos, umbral edad ≤35), izquierdo (2 casos: 1/2,1/2) da Gini =0.5, derecho (3 casos: 1/3,2/3) da Gini =0.444, y el Gini ponderado es (2)/(5)(0.5)+(3)/(5)(0.444)=0.466. En el ejemplo de enfermedad (8 casos: 4 sí, 4 no), la raíz parte en 0.5, y al empatar fiebre/tos/dolor de cabeza (0.375 en hijos), elige la <strong>primera evaluada</strong> (fiebre).
+</li></ul>
+</li><li>
+<strong>Sobreajuste, Pre-poda, Post-poda (</strong> Cost-Complexity<strong>) y Pesado por Clase</strong> <em>(Clase 16)</em>: Un árbol sin límite llega a hojas de 1 ejemplo (100% en train, caída fuerte en test). Se controla con <strong>pre-poda</strong> (max_depth, mínimo de muestras por nodo, mínimo de muestras por hoja, mínimo decaimiento de impureza) o <strong>post-poda</strong> usando αcrítico=(R(t)−R(Tt))/(∣Tt∣−1). <em>Ejemplo numérico de poda (Clase 16):</em> de 40 ejemplos totales, el subárbol Tt tiene Hoja 1 (8 A, 2 B → error 0.2) y Hoja 2 (7 A, 3 B → error 0.3), dando R(Tt)=(10)/(40)(0.2)+(10)/(40)(0.3)=0.125; colapsado en el nodo t (15 A, 5 B) falla en 5/40=0.125=R(t)⟹αt=(0.125−0.125)/(2−1)=0&lt;αglobal=0.1, por lo que <strong>se poda</strong>. Con <strong>pesado por clase</strong> en un nodo de 90 A (peso 1) y 10 B (peso 10), las proporciones ponderadas pasan de 0.9/0.1 a 90/190 vs 100/190.
+</li><li>
+<strong>Ensambles: Bagging (Random Forest), Stacking y Boosting (Gradient Boosting)</strong> <em>(Clases 16, 17 y 18)</em>:
+<ul><li>
+<strong>Bagging / Random Forest (paralelo):</strong> entrena muchos árboles independientes (sin podar) con dos fuentes de diversidad: <strong>Bootstrap</strong> (muestreo aleatorio uniforme <strong>con reemplazo</strong> de tamaño N, que deja en cada árbol 63.2% de muestras dentro y 36.8%<strong>fuera</strong>, llamadas <strong>Out-of-Bag / OOB</strong>, pues limn→∞(1−1/n)n=e−1≈0.368) y <strong>selección aleatoria de un subconjunto de características</strong> en cada división. Aumenta la varianza de cada árbol débil pero al promediar votos <strong>cancela los errores y reduce el sesgo/sobreajuste</strong> (ej. clase 0 pasa de 0.84 en CART a 0.95 en Random Forest con 40 árboles, accuracy de 0.91 a 0.95).
+</li><li>
+<strong>Stacking:</strong> dos niveles; el nivel 0 entrena modelos distintos (ej. logística, SVM, GNB) y sus predicciones alimentan a un <strong>metamodelo</strong> en nivel 1 que aprende en quién confiar más.
+</li><li>
+<strong>Boosting / Gradient Boosting (secuencial):</strong> cada modelo nuevo intenta corregir los errores del anterior. AdaBoost repondera ejemplos; <strong>Gradient Boosting</strong> optimiza en el <strong>espacio de funciones</strong> (no de pesos del árbol) ajustando cada árbol nuevo a las <strong>pseudo-residuales</strong> (gradiente negativo de cualquier función de pérdida diferenciable) mediante Fm(x)=Fm−1(x)+ηγjm. <strong>XGBoost</strong> añade paralelización y regularización para acelerar su lentitud secuencial. <em>Ejemplo numérico binario (Clase 17):</em> comprar producto según edad (3 sí, 3 no): inicialización F0=ln(3/3)=0⟹p0=0.5, residuos ±0.5; árbol divide en edad &lt;32; gamas por hoja γ=(∑residuos)/(∑p(1−p))=−2 y +2; con η=0.5, F1=0+0.5(±2)=±1⟹σ(±1) mueve las probabilidades a 0.27<strong>y</strong> 0.73, reduciendo residuos a ±0.27. Para <strong>multiclase</strong> (ej. gato, perro, caballo), entrena K secuencias en paralelo con <em>One-Hot</em> y combina al final con <strong>Softmax</strong>. <em>Limitación crítica:</em> domina datos tabulares pero <strong>falla en datos espaciales (imágenes) y temporales/secuenciales (audio, series de tiempo)</strong>, y es mucho más lento (en Breast Cancer: Logística 35 s, Árbol 2 s, RF 134 s, Gradient Boosting 1300 s).
+</li></ul>
+</li></ul>
+<h4>(c) Comparación de los 3 Métodos de Ensamble (Clases 17 y 18)</h4>
+<div class="tabla-scroll"><table><tr><th>Método</th><th>Arquitectura</th><th>Muestreo / Datos</th><th>Qué mejora principalmente</th></tr><tr><td><strong>Bagging (Random Forest)</strong></td><td>Paralela, voto por mayoría</td><td>Bootstrap con reemplazo (63.2%/36.8% OOB) + m características</td><td>Reduce varianza de árboles sin podar</td></tr><tr><td><strong>Stacking</strong></td><td>Dos niveles (nivel 0 + metamodelo nivel 1)</td><td>Modelos base heterogéneos</td><td>Aprende a ponderar qué modelo acierta según el dato</td></tr><tr><td><strong>Boosting (Gradient Boosting)</strong></td><td>Secuencial aditiva</td><td>Pseudo-residuales (−∇L)</td><td>Corrige errores sucesivos; alta precisión tabular</td></tr></table></div>
+<h4>(d) Errores comunes y puntos de examen</h4>
+<ul><li>
+<strong>Tipo de pregunta confirmada para el segundo parcial (Clase 21):</strong> en la última tarea pidió calcular a mano el <strong>Gini del nodo raíz y dos nodos internos</strong>, determinar qué clase predice cada hoja y listar qué ejemplos caen en cada hoja.
+</li><li>
+<strong>Gini ponderado:</strong> no olvidar multiplicar el Gini de cada hijo por su proporción de muestras respecto al nodo padre (Nizq/N y Nder/N).
+</li><li>
+<strong>Gradient Boosting NO optimiza pesos internos con gradiente:</strong> el gradiente se usa en el <strong>espacio de funciones</strong> para calcular los pseudo-residuales, no para actualizar parámetros internos de los árboles.
+</li><li>
+<strong>Dependencias que NO modela Gradient Boosting</strong> (preguntado explícitamente al grupo en Clase 18): datos <strong>secuenciales/temporales</strong> (audio, series) y datos <strong>espaciales</strong> (píxeles de imágenes).
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-9-redes-neuronales-artificiales-c"><summary><span class="stitle">Unidad 9: Redes Neuronales Artificiales, Convolucionales (CNN) y Autoencoders</span></summary>
+<p><em>(Clases 18, 20 y 21)</em></p>
+<h4>(a) Qué problema resuelve y cómo se conecta</h4>
+<p>Como los métodos tabulares anteriores requieren características extraídas manualmente y no capturan relaciones espaciales ni secuenciales, surgen las <strong>redes neuronales profundas</strong>: capaces de aproximar funciones no lineales arbitrarias y <strong>extraer automáticamente sus propias características</strong> desde datos crudos (radiografías, imágenes, audio).</p>
+<h4>(b) Conceptos clave</h4>
+<ul><li>
+<strong>Perceptrón, MLP, Activaciones No Lineales y Entrenamiento</strong> <em>(Clases 18 y 21)</em>: El <strong>perceptrón</strong> (Rosenblatt 1957/1958) calcula ϕ(w^Tx+b); puede resolver compuertas lineales como AND y OR, pero en 1969 se demostró que <strong>no puede resolver XOR</strong> porque no es linealmente separable. Para resolverlo nace el <strong>Perceptrón Multicapa (MLP)</strong> (Teorema de Aproximación Universal), que requiere <strong>capas ocultas + funciones de activación no lineales</strong> (sin no linealidad, múltiples capas colapsan en una sola combinación lineal gigante). <em>Salidas según tarea:</em> <strong>lineal</strong> + MSE para regresión, <strong>sigmoide</strong> + BCE para clasificación binaria, y <strong>Softmax</strong> + entropía cruzada multiclase para multiclase. <em>Entrenamiento en 4 pasos:</em> (1) <em>Forward pass</em>, (2) cálculo de pérdida, (3) <em>Backward pass</em> (retropropagación por <strong>regla de la cadena</strong> reutilizando derivadas intermedias), y (4) actualización con optimizadores (<strong>SGD, RMSProp, Adagrad, Adam</strong>, η≈10−4) para superar puntos silla en funciones de pérdida no convexas. Cada <strong>época</strong> recorre todos los minilotes de tamaño B, barajando los datos entre épocas para no memorizar el orden.
+</li><li>
+<strong>Problemas de Redes Profundas y Regularización</strong> <em>(Clase 18)</em>: Apilar muchas capas (ej. 50–100 capas) mejora el desempeño pero causa:
+<ul><li>
+<strong>Explosión del gradiente:</strong> actualizaciones gigantes cerca de la entrada → se resuelve con <strong>recorte de gradientes</strong> (<em>gradient clipping</em>) y <strong>Batch Normalization</strong> (normaliza cada canal/característica sobre los ejemplos del lote).
+</li><li>
+<strong>Desvanecimiento del gradiente:</strong> gradientes se vuelven casi cero al multiplicarse hacia atrás por usar activaciones <strong>saturadas</strong> (<strong>sigmoide</strong> o <strong>tanh</strong>, cuyas derivadas solo son grandes cerca de [−2,2]) → se resuelve con activaciones <strong>no saturadas</strong> (<strong>ReLU, LeakyReLU, GELU, SiLU</strong>) y <strong>conexiones residuales</strong>.
+</li><li>
+<strong>Sobreajuste en redes:</strong> se combate con inicialización adecuada (normal/uniforme), L1/L2, <strong>Early Stopping</strong>, <strong>Dropout</strong> (apaga neuronas aleatoriamente), <strong>Data Augmentation</strong>, <strong>Label Smoothing</strong> y aprendizaje multitarea.
+</li></ul>
+</li><li>
+<strong>Redes Neuronales Convolucionales (CNN) y ResNet</strong> <em>(Clase 20)</em>: Una red densa falla con imágenes porque: (1) una imagen RGB de 224×224×3 exige 150,528 neuronas de entrada y más de 150<strong>millones de parámetros</strong> en las dos primeras capas, y (2) aplanar destruye la <strong>vecindad espacial</strong>. La <strong>convolución</strong> refleja una señal respecto al origen, la desplaza y multiplica (es <strong>conmutativa</strong>: I∗K=K∗I), a diferencia de la <strong>correlación cruzada</strong> (no refleja y el orden <strong>sí</strong> altera el resultado). En una CNN, los pesos aprendidos son los <strong>coeficientes de los filtros ( kernels )</strong> (ej. un filtro 3×3×3 para imagen 28×28×3 solo necesita 27<strong>coeficientes</strong>). <em>Hiperparámetros:</em> número de filtros (= mapas de características), <strong>stride</strong> (desplazamiento, ej. 2) y <strong>padding</strong> (ceros en bordes). <em>Capas adicionales:</em> <strong>Max Pooling</strong> y <strong>Average Pooling</strong> (ninguno es universalmente mejor; depende del diseño), <strong>Global Average Pooling</strong> (promedia todo el mapa a 1 escalar antes de clasificar), <strong>convolución transpuesta</strong> (aumenta resolución en segmentación/generación) y <strong>convolución</strong> 1×1 (resume o cambia profundidad de mapas, ej. 8×8×3→8×8×1). <strong>ResNet (2015)</strong> sumó la entrada sin procesar a la salida procesada para evitar desvanecimiento/explosión del gradiente mediante <strong>bloques básicos</strong> (64 canales) y <strong>bloques bottleneck</strong> (256→64→256), logrando bajar el error en ImageNet de 7.4% (ResNet-34) a 5.7% (ResNet-152). Línea evolutiva: <em>LeNet (1998)</em> →<em>AlexNet (2012)</em> →<em>VGGNet / GoogLeNet</em> →<em>ResNet (2015)</em> →<em>MobileNet (2017)</em> →<em>EfficientNet</em> →<em>Vision Transformers (ViT)</em>.
+</li><li>
+<strong>Autoencoders, Data Augmentation y Transfer Learning</strong> <em>(Clase 20)</em>: Un <strong>autoencoder</strong> reconstruye su propia entrada pasando por un <em>Encoder</em>, un cuello de botella (<strong>espacio latente</strong> reducido, ej. 28×28×1→ vector de 10<strong>valores</strong>) y un <em>Decoder</em> (siempre <strong>con pérdida</strong>, a diferencia de WinRAR). Sirve para <strong>detección de anomalías</strong> (entrenado solo con transacciones normales, las anómalas arrojan error alto de reconstrucción), <strong>eliminación de ruido ( denoising )</strong>, compresión y recomendación. Cuando hay pocos datos (ej. 1,000–2,000 fotos de lunares de cáncer de piel), <strong>Data Augmentation</strong> transforma las imágenes existentes y <strong>Transfer Learning</strong> reutiliza los pesos de un modelo preentrenado en otra tarea masiva (100,000–1,000,000 de radiografías pulmonares), acelerando convergencia y evitando sobreajuste.
+</li></ul>
+<h4>(c) Resumen comparativo de arquitectura e ingeniería profunda</h4>
+<div class="tabla-scroll"><table><tr><th>Problema en Red Profunda <em>(Clases 18, 20)</em></th><th>Causa principal</th><th>Soluciones vistas en clase</th></tr><tr><td><strong>Falla en XOR / no linealidad</strong></td><td>Falta de capas ocultas o uso de activación lineal</td><td>MLP + activaciones no lineales</td></tr><tr><td><strong>Desvanecimiento del gradiente</strong></td><td>Multiplicación en cadena + sigmoide/tanh saturadas</td><td>ReLU, LeakyReLU, GELU, SiLU + <strong>Conexiones residuales</strong></td></tr><tr><td><strong>Explosión del gradiente</strong></td><td>Tasas altas, entradas grandes, mucha profundidad</td><td><strong>Recorte de gradientes</strong> + <strong>Batch Normalization</strong></td></tr><tr><td><strong>Explosión de parámetros en imagen</strong></td><td>Capas densas aplanadas (224×224×3→&gt;150M)</td><td>Convoluciones (filtros compartidos 3×3×3=27) + Pooling</td></tr><tr><td><strong>Escasez de datos</strong></td><td>Sobreajuste en redes grandes</td><td><em>Data Augmentation</em> + <em>Transfer Learning</em></td></tr></table></div>
+<h4>(d) Errores comunes y puntos de examen</h4>
+<ul><li>
+<strong>Ejercicio anunciado en la última tarea (Clase 21):</strong> diseñar a mano una red neuronal de <strong>3 neuronas con función escalón unitario</strong> para resolver una operación lógica no lineal.
+</li><li>
+<strong>Pesos en una CNN:</strong> los pesos no ponderan características ya extraídas; los pesos <strong>son los valores numéricos de los filtros</strong> y filtros distintos no "aportan más o menos", sino que extraen <strong>tipos distintos de información</strong> (bordes, desenfoque, esquinas).
+</li><li>
+<strong>Convolución vs. Correlación Cruzada:</strong> la convolución refleja y es <strong>conmutativa</strong>; la correlación cruzada no refleja y sí depende del orden.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-10-procesamiento-de-lenguaje-natu"><summary><span class="stitle">Unidad 10: Procesamiento de Lenguaje Natural (NLP), Modelos Secuenciales y Transformers</span></summary>
+<p><em>(Clases 20 y 21)</em></p>
+<h4>(a) Qué problema resuelve y cómo se conecta</h4>
+<p>Concluimos con el reconocimiento de patrones sintácticos/lenguaje. A diferencia de las imágenes, el lenguaje humano es <strong>secuencial</strong>: el orden importa (<em>"El perro mordió al hombre"</em> vs. <em>"El hombre mordió al perro"</em>). Esta unidad recorre la evolución desde modelos estadísticos discretos y redes recurrentes hasta la arquitectura agnóstica <strong>Transformer</strong>.</p>
+<h4>(b) Conceptos clave</h4>
+<ul><li>
+<strong>N-gramas, Representaciones Discretas y Gramática</strong> <em>(Clase 20)</em>: Los <strong>N-gramas</strong> predicen la siguiente palabra usando solo las n−1 anteriores (ej. <em>"me gusta aprender PLN"</em> → 3 bigramas, 2 trigramas; en el corpus del gato, tras <em>"el gato"</em> hay 67% <em>"come"</em> y el resto <em>"bebe"</em>, pero tras <em>"comer arroz"</em> da 0). Fallan por <strong>explosión combinatoria</strong> (con 1,000 palabras crece enormemente), <strong>contexto corto</strong> y <strong>dispersión / probabilidad cero</strong>. Las <strong>representaciones discretas</strong> incluyen <strong>One-Hot Encoding</strong>, <strong>Bolsa de Palabras</strong> (ignora orden) y <strong>TF-IDF</strong> (da peso alto a palabras raras en el corpus como <em>"felino"</em> [0.479] y bajo a comunes como <em>"el"</em>). Se distinguió <strong>sintaxis</strong> (estructura gramatical correcta, analizada con árboles de constituyentes y de dependencias en <em>parsing</em>) de <strong>semántica</strong> (sentido real) y la <strong>ambigüedad</strong> (<em>"Vi al hombre con el telescopio"</em>).
+</li><li>
+<strong>Embeddings, CBOW, Skip-gram, RNN y LSTM</strong> <em>(Clases 20 y 21)</em>: Los <strong>embeddings</strong> proyectan palabras a vectores densos continuos donde la cercanía refleja significado (<em>Word2Vec</em>, <em>GloVe</em>, <em>FastText</em>, frente a los <strong>contextuales</strong> donde <em>"banco"</em> cambia de vector según <em>"depositar dinero"</em> vs <em>"banco del parque"</em>). <strong>CBOW</strong> predice una palabra faltante a partir de su contexto; <strong>Skip-gram</strong> (más difícil) predice el contexto a partir de una sola palabra. Las <strong>RNN</strong> mantienen un estado oculto (memoria ht) combinando pasado y entrada actual xt, pero al encadenar capas densas con <strong>tangente hiperbólica (saturada)</strong> sufren <strong>desvanecimiento del gradiente</strong>, limitándose a 50<strong>–</strong> 100<strong>palabras</strong> y fallando en 1,000<strong>–</strong> 2,000<strong>palabras</strong>. Las celdas <strong>LSTM</strong> añaden una línea de estado superior casi limpia (similar a una <strong>conexión residual</strong>) y <strong>tres compuertas</strong> (<strong>olvido</strong>, <strong>entrada</strong> y <strong>salida</strong>). En arquitectura <em>Encoder-Decoder</em> comprimían la oración en un <strong>vector de contexto</strong> fijo (causando fallas gramaticales en traductores como Google Translate antiguo en textos largos), y su gran defecto es ser <strong>estrictamente secuenciales y difíciles de paralelizar</strong>.
+</li><li>
+<strong>Transformer, Codificación Posicional, Autoatención (</strong> Q,K,V<strong>), LayerNorm y RAG</strong> <em>(Clase 21)</em>: Propuesto en 2018 (<em>Attention Is All You Need</em>), es un modelo <strong>agnóstico</strong> (a diferencia de CNN/RNN de <strong>alto sesgo inductivo</strong>): convierte texto, parches de imagen o fragmentos de audio en <strong>tokens</strong> vectoriales y los procesa en <strong>paralelo</strong>.
+<ul><li>
+<strong>Positional Encoding:</strong> suma a cada <em>embedding</em> su posición original mediante funciones <strong>seno y coseno</strong> (alternando par/impar) o tablas entrenables.
+</li><li>
+<strong>Atención Multicabeza ("el corazón del Transformer"):</strong> proyecta los tokens con capas lineales a <strong>Queries (</strong> Q, qué busco), <strong>Keys (</strong> K, qué ofrezco) y <strong>Values (</strong> V, contenido real), y en cada cabeza calcula el <strong>producto punto escalado</strong>: multiplica Q⋅K, divide entre la dimensionalidad de las K, aplica <strong>Softmax</strong> (pesos entre 0 y 1 que suman 1) y multiplica por V; luego concatena las n cabezas y las pasa por una capa lineal que devuelve exactamente la dimensionalidad original.
+</li><li>
+<strong>Bloque Transformer:</strong> Atención Multicabeza → suma residual + <strong>Layer Normalization</strong> (normaliza sobre dimensiones de <strong>características</strong>, distinto a <em>BatchNorm</em> que normaliza sobre ejemplos del lote) → <strong>Feed-Forward</strong> (Lineal → <strong>GELU</strong> → <strong>Dropout</strong> → Lineal → <strong>Dropout</strong>) → suma residual + <strong>Layer Normalization</strong>. Mantiene idéntica dimensionalidad de entrada y salida, permitiendo apilar bloques.
+</li><li>
+<strong>Tareas y Ecosistema:</strong> Clasificación y <strong>Generación autoregresiva</strong> (anexa la salida predicha a la entrada y repite); <strong>RAG ( Retrieval-Augmented Generation )</strong> conecta una base de datos externa actualizada al Transformer para evitar alucinaciones sobre datos que no vio en entrenamiento (ej. horarios de la Facultad de Ingeniería). <em>Trade-off sesgo vs. datos:</em> entrenar desde cero una CNN (alto sesgo) requiere ∼1 millón de imágenes, mientras un Transformer requiere ∼300 millones (aunque con esos datos o vía <em>Transfer Learning</em> la supera). Derivados: <strong>BERT, GPT, ViT</strong> y <strong>Segment Anything</strong>.
+</li></ul>
+</li></ul>
+<h4>(c) Comparación de Arquitecturas Secuenciales / NLP (Clases 20 y 21)</h4>
+<div class="tabla-scroll"><table><tr><th>Modelo</th><th>Paralelización</th><th>Contexto largo</th><th>Sesgo inductivo / Datos desde cero</th><th>Limitación principal</th></tr><tr><td><strong>N-gramas</strong></td><td>No aplica (conteo)</td><td>Muy corto (n−1)</td><td>Basado en frecuencias del corpus</td><td>Explosión combinatoria y probabilidad cero</td></tr><tr><td><strong>RNN simple</strong></td><td>No (secuencial)</td><td>Corto (50–100 pal.)</td><td>Alto (asume secuencia)</td><td>Desvanecimiento del gradiente (tanh)</td></tr><tr><td><strong>LSTM</strong></td><td>No (secuencial)</td><td>Mejorado (3 compuertas)</td><td>Alto (asume secuencia)</td><td>Entrenamiento lento; cuello de botella en vector de contexto</td></tr><tr><td><strong>Transformer</strong></td><td><strong>Sí (total)</strong></td><td><strong>Muy largo (global)</strong></td><td><strong>Agnóstico</strong> (∼300M imgs vs 1M CNN)</td><td>Alto costo matricial, necesidad de datos y baja explicabilidad</td></tr></table></div>
+<h4>(d) Errores comunes y puntos de examen</h4>
+<ul><li>
+<strong>TF-IDF:</strong> un peso de 0 para <em>"felino"</em> en <em>"el perro come carne"</em> <strong>NO</strong> significa que el perro no sea un felino, sino simplemente que la palabra <em>"felino"</em> <strong>no aparece</strong> en ese documento.
+</li><li>
+<strong>Layer Normalization vs. Batch Normalization:</strong> <em>LayerNorm</em> normaliza sobre la dimensión de <strong>características</strong>; <em>BatchNorm</em> normaliza sobre los <strong>ejemplos</strong> del lote.
+</li><li>
+<strong>GPT:</strong> significa <em>Generative Pretrained Transformer</em>.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-3-lo-que-mas-probablemente-viene-en-el-f" open><summary><span class="stitle">3. LO QUE MÁS PROBABLEMENTE VIENE EN EL FINAL</span></summary>
+<p><strong>Nota importante sobre el alcance del próximo examen:</strong> En las Clases 11, 12 y 21, el profesor confirmó que solo habrá <strong>dos exámenes parciales</strong> en el semestre (a veces referido en Clase 20 como "segundo examen final"), y que el <strong>Segundo Examen (lunes 23 de noviembre)</strong> evaluará <strong>desde clasificadores de aprendizaje automático a partir de DBSCAN hasta Transformers</strong> (ya no entra el temario del Primer Parcial). La lista siguiente prioriza los puntos con mayor evidencia directa para este cierre, incluyendo también los pilares evaluados previamente por si necesitas una visión integral de toda la materia:</p>
+<ul><li>
+<strong>Cálculo manual de Índice Gini en Árboles de Decisión y clase de cada hoja</strong>
+<ul><li>
+<em>Evidencia:</em> En la Clase 21 el profesor dejó la última tarea con este ejercicio exacto (calcular Gini en nodo raíz y nodos internos, y decir qué clase predice cada hoja y qué ejemplos caen en ella), tras haber afirmado minutos antes que los ejercicios del examen salen de lo visto en clase y tareas.
+</li></ul>
+</li><li>
+<strong>Diseño a mano de un Perceptrón Multicapa (3 neuronas, activación escalón unitario)</strong>
+<ul><li>
+<em>Evidencia:</em> Es el segundo ejercicio explícito de la última tarea (Clase 21), conectando directamente con la demostración de Clase 18 de por qué una sola neurona no resuelve XOR y requiere capas ocultas.
+</li></ul>
+</li><li>
+<strong>DBSCAN: parámetros (</strong> ε<strong>, MinPts), clasificación de puntos (núcleo, frontera, ruido) y ventajas frente a K-Means</strong>
+<ul><li>
+<em>Evidencia:</em> El profesor señaló explícitamente en Clases 12 y 21 que el segundo examen arranca desde DBSCAN; además, fue el primer ejercicio de la tarea dejada en la Clase 16 (graficar puntos y clasificar núcleo, frontera y ruido dado ε y MinPts).
+</li></ul>
+</li><li>
+<strong>Cálculo con Naive Bayes (discreto con suavizado de Laplace y gaussiano continuo)</strong>
+<ul><li>
+<em>Evidencia:</em> En la Clase 16 dejó dos ejercicios completos de tarea (calcular a priori y verosimilitudes discretas por tabla, y medias/varianzas gaussianas continuas), además de insistir en Clase 12 en cómo aplicar el suavizado a todas las frecuencias para evitar ceros.
+</li></ul>
+</li><li>
+<strong>Regularización L1 (Lasso) vs. L2 (Ridge) y Regresión Logística (caja blanca,</strong> x0=1<strong>, convexidad de BCE)</strong>
+<ul><li>
+<em>Evidencia:</em> En la Clase 19 el profesor reabrió las gráficas de θ para dar una explicación magistral a todo el grupo (<em>"para que les quede más claro"</em>), contrastando sin regularización vs. L1 (manda a cero) vs. L2 (acota estable en ~15 épocas) y caja blanca vs. caja negra.
+</li></ul>
+</li><li>
+<strong>Regla estricta de Pesado por Clase ( Class Weighting )</strong>
+<ul><li>
+<em>Evidencia:</em> Al cierre de la Clase 19 enfatizó con <em>"ojo"</em>: el peso se aplica <strong>únicamente sobre las clases</strong> (nunca sobre características ni ejemplos), y en Clase 14 resolvió el cálculo numérico (950/50→0.526 y 10).
+</li></ul>
+</li><li>
+<strong>Gradient Boosting vs. Random Forest (Bootstrap/OOB</strong> 63.2%<strong>/</strong> 36.8%<strong>, pseudo-residuales, limitaciones)</strong>
+<ul><li>
+<em>Evidencia:</em> En Clases 17 y 18 repasó en vivo las diferencias entre Bagging (paralelo) y Boosting (secuencial en espacio de funciones), y preguntó directamente al grupo qué dos dependencias no modela Gradient Boosting (secuencial/temporal y espacial).
+</li></ul>
+</li><li>
+<strong>Redes Profundas: Desvanecimiento vs. Explosión del Gradiente y sus soluciones (ReLU/GELU, ResNet, BatchNorm)</strong>
+<ul><li>
+<em>Evidencia:</em> Concepto repetido y conectado transversalmente en <strong>tres clases consecutivas</strong>: Clase 18 (teoría de activaciones saturadas vs. no saturadas y clipping), Clase 20 (bloques residuales de ResNet) y Clase 21 (falla de RNN con tanh y autopista de LSTM / LayerNorm).
+</li></ul>
+</li><li>
+<strong>CNNs (por qué fallan las redes densas en imágenes, Convolución vs. Correlación Cruzada) y Autoencoders (detección de anomalías)</strong>
+<ul><li>
+<em>Evidencia:</em> En Clase 20 calculó el desbordamiento de parámetros (150,528 entradas y &gt;150M parámetros vs. 27 coeficientes de un filtro 3×3×3), distinguió la conmutatividad de la convolución y interrogó al grupo sobre la utilidad del cuello de botella de los autoencoders.
+</li></ul>
+</li><li>
+<strong>Transformers: por qué es agnóstico, Tokens, Positional Encoding, Autoatención (</strong> Q,K,V<strong>), LayerNorm y RAG</strong>
+<ul><li>
+<em>Evidencia:</em> En Clase 21 dedicó la mayor parte de la última sesión teórica a este tema, pidiendo explícitamente <em>"pongan atención"</em> al explicar el producto punto escalado de Q,K,V (corazón del Transformer) y preguntando al grupo sobre GPT y RAG.
+</li></ul>
+</li><li>
+<strong>Si se evalúa el bloque clásico (Primer Parcial, Clase 11):</strong> diferencias entre extracción y selección de características, 7 pasos de MFCCs, PCA vs. LDA, ejes de la curva ROC, K-Fold sin tocar Test, Data Drift/Leakage, distancia de Mahalanobis y cálculo a mano de Momentos de Hu, GLCM o LDA.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-4-conexiones-clave"><summary><span class="stitle">4. CONEXIONES CLAVE</span></summary>
+<ul><li>
+Detección -&gt; captura mediciones crudas para -&gt; Extracción de características
+</li><li>
+Momentos de Hu -&gt; garantizan invarianza geométrica frente a -&gt; Traslación, escala y rotación
+</li><li>
+GLCM normalizada -&gt; cuantifica cambios probabilísticos de luminosidad para describir -&gt; Textura de imágenes
+</li><li>
+Descriptor HOG -&gt; codifica orientaciones locales de gradientes para capturar -&gt; Forma y bordes
+</li><li>
+Banco de filtros Mel -&gt; imita la percepción logarítmica del oído humano para construir -&gt; Coeficientes MFCC
+</li><li>
+Exceso de características extraídas -&gt; provoca -&gt; Maldición de la dimensionalidad
+</li><li>
+Métodos Wrapper (Forward/Backward) -&gt; evalúan subconjuntos mediante el desempeño real de -&gt; Un clasificador entrenado
+</li><li>
+PCA no supervisado -&gt; proyecta hacia ejes ortogonales que maximizan -&gt; Varianza de los datos
+</li><li>
+Descomposición SVD -&gt; evita calcular explícitamente la matriz de covarianza para acelerar -&gt; PCA
+</li><li>
+Estandarización previa -&gt; evita que variables de gran magnitud dominen -&gt; PCA y distancias
+</li><li>
+LDA supervisado -&gt; proyecta maximizando la separabilidad entre clases asumiendo -&gt; Igual covarianza y gaussianidad
+</li><li>
+Matriz de confusión -&gt; desglosa TP, TN, FP y FN para calcular -&gt; Precisión, Recall y F1
+</li><li>
+Curva ROC -&gt; evalúa TPR contra FPR al variar -&gt; El umbral de decisión probabilístico
+</li><li>
+Validación cruzada K-Fold -&gt; rota particiones de validación dentro de entrenamiento reservando al final -&gt; El conjunto de prueba
+</li><li>
+Fuga de datos (<em>Data Leakage</em>) -&gt; contamina el entrenamiento con información de validación/test generando -&gt; Métricas falsamente optimistas
+</li><li>
+<em>Data Drift</em> en producción -&gt; desplaza la distribución estadística respecto al entrenamiento exigiendo -&gt; Reentrenamiento periódico
+</li><li>
+<em>Linear Machine</em> -&gt; selecciona el máximo valor escalar entre discriminantes para eliminar -&gt; Regiones ambiguas de OVR
+</li><li>
+Sistemas ortogonales (Legendre, Laguerre, Hermite) -&gt; descomponen fronteras complejas en -&gt; Sumas ponderadas de polinomios simples
+</li><li>
+K-Means++ -&gt; pondera distancias desde el primer centroide para mejorar -&gt; Inicialización de K-Means
+</li><li>
+Algoritmo LBG -&gt; divide centroides en potencias de dos para minimizar -&gt; Distorsión de cuantización vectorial
+</li><li>
+ISODATA -&gt; añade división, fusión y eliminación heurística para ajustar dinámicamente -&gt; Número de clusters
+</li><li>
+Algoritmo DBSCAN -&gt; agrupa regiones densas mediante ε y MinPts para detectar -&gt; Clusters arbitrarios y ruido
+</li><li>
+Distancia de Mahalanobis -&gt; incorpora la matriz de covarianza dentro de -&gt; Clasificadores Bayesianos Gaussianos
+</li><li>
+Suavizado de Laplace -&gt; suma una fracción positiva a todas las frecuencias para evitar -&gt; Probabilidades cero en Naive Bayes
+</li><li>
+Algoritmo KNN -&gt; memoriza instancias sin entrenar para decidir por mayoría según -&gt; Vecinos más cercanos
+</li><li>
+Entropía Cruzada Binaria -&gt; garantiza convexidad matemática para optimizar mediante gradiente -&gt; Regresión Logística
+</li><li>
+Regularización L1 (Lasso) -&gt; manda coeficientes irrelevantes a cero mientras L2 (Ridge) -&gt; Acota y estabiliza pesos
+</li><li>
+Máquinas de Soporte Vectorial -&gt; usan variables de holgura y truco del kernel para -&gt; Maximizar el margen en datos no separables
+</li><li>
+Árboles CART -&gt; minimizan impureza Gini o entropía para dividir el espacio en -&gt; Regiones hiperrectangulares
+</li><li>
+Random Forest -&gt; combina muestreo Bootstrap (63.2%/36.8% OOB) y selección aleatoria de variables para reducir -&gt; Varianza y sobreajuste
+</li><li>
+Gradient Boosting -&gt; entrena árboles secuenciales sobre pseudo-residuales para corregir -&gt; Errores de modelos previos
+</li><li>
+Funciones no saturadas y conexiones residuales -&gt; evitan la atenuación multiplicativa en backpropagation resolviendo -&gt; Desvanecimiento del gradiente
+</li><li>
+Capas convolucionales -&gt; comparten filtros pequeños sobre vecindarios locales para preservar -&gt; Estructura espacial en imágenes
+</li><li>
+Autoencoders -&gt; comprimen entradas hacia un espacio latente reducido para habilitar -&gt; Detección de anomalías y limpieza de ruido
+</li><li>
+Celdas LSTM -&gt; incorporan tres compuertas y línea de estado superior para retener memoria en -&gt; Secuencias largas
+</li><li>
+Arquitectura Transformer -&gt; sustituye la recurrencia mediante <em>Positional Encoding</em> y autoatención (Q,K,V) para procesar -&gt; Secuencias arbitrarias en paralelo
+</li><li>
+Enfoque RAG -&gt; conecta bases de datos actualizadas al Transformer para prevenir -&gt; Alucinaciones por falta de entrenamiento reciente
+</li></ul>
+<p>💡 <em>¿Quieres que armemos ejercicios tipo examen resueltos paso a paso para los tres cálculos clave del Segundo Parcial (DBSCAN con</em> ε*y MinPts, Índice Gini de un árbol ya construido y red de 3 neuronas con escalón unitario)?*</p>
+</details>
+<details class="section-block sec" id="gf-anexo-clases-que-no-estaban-en-el-cuader"><summary><span class="stitle">Anexo · Clases que no estaban en el cuaderno de NotebookLM</span></summary>
+<p><em>Resumen para estudiar de cada una, tomado de los apuntes por clase del sitio (decimo/RP/RP-Resumenes/).</em> <em>Las sesiones 1–3 del curso (Clase −2, −1 y 0) son anteriores a tu inscripción y se reconstruyeron con las diapositivas del profesor.</em></p>
+<h3>Clase −2 · Presentación del curso y conceptos básicos (lunes 17 ago 2026 (sesión 1 del curso))</h3>
+<p><em>Versión corta de lo que más probablemente se pregunta. Léela primero y vuelve a la Parte 1 si algo no queda claro.</em></p>
+<div class="tabla-scroll"><table><tr><th>Concepto</th><th>Para recordar</th></tr><tr><td>Patrón</td><td>Objeto, proceso o evento descriptible y distinguible</td></tr><tr><td>Sistema</td><td>Patrón → mediciones → características → clasificador → clase</td></tr><tr><td>Estimación vs. RP</td><td>Continuo vs. discreto</td></tr><tr><td>3 problemas</td><td>Representar, extraer/reducir, decidir</td></tr><tr><td>Maldición</td><td>Distancias casi iguales; sobreajuste; se reduce dimensión</td></tr><tr><td>Evaluación</td><td>Tareas 15 %, prácticas/examen 45 %, proyecto 40 %</td></tr></table></div>
+<h3>Clase −1 · Extracción de características I: estadísticas, ventanas e histograma (viernes 21 ago 2026 (sesión 2 del curso))</h3>
+<p><em>Versión corta de lo que más probablemente se pregunta. Léela primero y vuelve a la Parte 1 si algo no queda claro.</em></p>
+<div class="tabla-scroll"><table><tr><th>Concepto</th><th>Para recordar</th></tr><tr><td>Se busca</td><td>Discriminabilidad, compacidad, robustez, bajo costo</td></tr><tr><td>Skewness</td><td>Signo = hacia dónde va la cola</td></tr><tr><td>Curtosis</td><td>&gt; 0 colas pesadas; &lt; 0 ligeras</td></tr><tr><td>Ventanas</td><td>Con o sin traslape; concatenar, estadísticas de estadísticas, pooling</td></tr><tr><td>Histograma</td><td>Robusto y simple; pierde la posición</td></tr></table></div>
+<h3>Clase 0 · Momentos geométricos, Hu y textura con GLCM (lunes 24 ago 2026 (sesión 3 del curso))</h3>
+<p><em>Versión corta de lo que más probablemente se pregunta. Léela primero y vuelve a la Parte 1 si algo no queda claro.</em> <strong>Entró en el primer parcial</strong> Ejercicio 33: cadena de momentos hasta Hu (10 puntos). Ejercicio 34: GLCM norte-sur con ASM, energía y contraste (10 puntos).</p>
+<div class="tabla-scroll"><table><tr><th>Concepto</th><th>Para recordar</th></tr><tr><td>Espaciales</td><td>M00 área; centroide M10/M00, M01/M00</td></tr><tr><td>Centrales</td><td>Quitan traslación; μ10 = μ01 = 0</td></tr><tr><td>Normalizados</td><td>Quitan escala; i + j ≥ 2</td></tr><tr><td>Hu</td><td>7; quitan rotación; usar −signo·log₁₀</td></tr><tr><td>GLCM</td><td>d y θ → contar → + transpuesta → ÷ total</td></tr><tr><td>Descriptores</td><td>Contraste, homogeneidad, ASM, energía, entropía, correlación</td></tr></table></div>
+<h3>Clase 10 · Primer Examen Parcial (lunes 28 sep 2026 (sesión 13 del curso))</h3>
+<div class="tabla-scroll"><table><tr><th>Prioridad</th><th>Qué</th></tr><tr><td>1</td><td>LDA completo a mano (15 pts, el de más peso)</td></tr><tr><td>2</td><td>GLCM: simétrica + normalizada antes de los descriptores</td></tr><tr><td>3</td><td>Cadena de momentos hasta Hu y logaritmo</td></tr><tr><td>4</td><td>Orden de MFCC; métricas y ROC (sensibilidad, especificidad, FPR)</td></tr></table></div>
+<h3>Clase 15 · Máquinas de vectores de soporte (SVM) (viernes 16 oct 2026 (sesión 18 del curso))</h3>
+<p><em>Versión corta de lo que más probablemente se pregunta. Léela primero y vuelve a la Parte 1 si algo no queda claro.</em> <strong>Idea.</strong> Hiperplano de margen máximo; solo los vectores de soporte (αᵢ &gt; 0) lo definen. Restricción yᵢ(w·xᵢ + b) ≥ 1. <strong>Derivación (examen)</strong> λ = 2/(w·w) → M = 2/‖w‖ → maximizar M ≡ min ½‖w‖². Lagrange: w = Σ αᵢyᵢxᵢ y Σ αᵢyᵢ = 0; la dual solo usa productos punto.</p>
+<div class="tabla-scroll"><table><tr><th>Concepto</th><th>Para recordar</th></tr><tr><td>Margen suave</td><td>ξᵢ; min ½‖w‖² + CΣξᵢ; C grande = margen angosto, C chico = ancho</td></tr><tr><td>Kernel</td><td>K = φ(xᵢ)ᵀφ(xⱼ) sin calcular φ</td></tr><tr><td>Kernels</td><td>Lineal, polinomial (1 + xᵀx)ᵖ, RBF exp(−‖·‖²/2σ²), sigmoide tanh</td></tr><tr><td>Multiclase</td><td>Uno vs. resto o uno vs. uno</td></tr><tr><td>Ejemplos</td><td>Breast Cancer: gana lineal (0.982). German Credit: RBF engaña (todo "riesgo")</td></tr><tr><td>Desventajas</td><td>Lento con muchos datos, sensible al kernel, requiere escalar</td></tr></table></div>
+</details>
+</div>
+</body>
+</html>

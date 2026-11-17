@@ -333,6 +333,16 @@ correspondiente. **Lab OAC no se documenta en ningún lado** (el usuario lo usa 
 para hacer las prácticas como las pide el ing. Ricardo; corrección del 21 oct 2026).
 Sus `index/material/entregas` se mantienen.
 
+## Guías del examen final (17 nov 2026)
+
+`materias/<slug>/guia-final.html` (una por materia) y `guias-finales.html` (índice, enlazado en la portada) se **generan** con
+`python3 scripts/build_guias_finales.py` desde `decimo/<SIGLA>/<SIGLA>-Resumenes/fuente/<SIGLA>-guia-examen-final.md`
+(export a Markdown de los Docs «<SIGLA> · Guía para el examen final» de Drive, carpeta «Examen final 2027-1 · Guías y mapas mentales»).
+ASI además tiene `examen-final.html`, hecha a mano (repaso del examen del 18 nov).
+
+**Escritorio y Descargas** (ordenados el 17 nov 2026): lo escolar va a `decimo/`; lo demás a `~/Desktop/Fuera-del-sitio/` y
+`~/Downloads/Fuera-del-sitio/` (cada una con su `LEEME.md`). En el escritorio solo quedan los repos git.
+
 ## Tablero «En qué estoy trabajando» (portada, desde el 3 nov 2026)
 
 La portada (`index.html`) muestra arriba de las materias un tablero con el trabajo en curso en los

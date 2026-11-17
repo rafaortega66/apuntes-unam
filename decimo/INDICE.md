@@ -32,7 +32,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 
 | Entrega | Indicaciones | Entregado | Adicionales |
 |---|---|---|---|
-| ASI-EC01 | [ASI-EC01-indicaciones.md](ASI/ASI-EjerciciosClase/ASI-EC01/ASI-EC01-indicaciones.md) | _(sin entrega aún)_ | 1 |
+| ASI-EC01 | [ASI-EC01-indicaciones.md](ASI/ASI-EjerciciosClase/ASI-EC01/ASI-EC01-indicaciones.md) | [ServiciosWeb_Ortega_Valdes.pdf](ASI/ASI-EjerciciosClase/ASI-EC01/ASI-EC01-entregables/ServiciosWeb_Ortega_Valdes.pdf) | 1 |
 | ASI-EC02 | [ASI-EC02-indicaciones.md](ASI/ASI-EjerciciosClase/ASI-EC02/ASI-EC02-indicaciones.md) | [Infografia_RFC_Ortega.pdf](ASI/ASI-EjerciciosClase/ASI-EC02/ASI-EC02-entregables/Infografia_RFC_Ortega.pdf) | — |
 
 ### ASI-Exposiciones
@@ -82,8 +82,8 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 | FSE-P04 | [FSE-P04-indicaciones.pdf](FSE/FSE-Lab/FSE-P04/FSE-P04-indicaciones.pdf) | [19-OEPR-L04.pdf](FSE/FSE-Lab/FSE-P04/FSE-P04-entregables/19-OEPR-L04.pdf) | 3 |
 | FSE-P05 | [FSE-P05-indicaciones.pdf](FSE/FSE-Lab/FSE-P05/FSE-P05-indicaciones.pdf) | [19-OEPR-L05-adicionales.zip](FSE/FSE-Lab/FSE-P05/FSE-P05-entregables/19-OEPR-L05-adicionales.zip)<br>[19-OEPR-L05.pdf](FSE/FSE-Lab/FSE-P05/FSE-P05-entregables/19-OEPR-L05.pdf) | 1 |
 | FSE-P06 | [FSE-P06-indicaciones.pdf](FSE/FSE-Lab/FSE-P06/FSE-P06-indicaciones.pdf) | [19-OEPR-L06-adicionales.zip](FSE/FSE-Lab/FSE-P06/FSE-P06-entregables/19-OEPR-L06-adicionales.zip)<br>[19-OEPR-L06.pdf](FSE/FSE-Lab/FSE-P06/FSE-P06-entregables/19-OEPR-L06.pdf) | 10 |
-| FSE-P07 | [FSE-P07-indicaciones.pdf](FSE/FSE-Lab/FSE-P07/FSE-P07-indicaciones.pdf) | _(sin entrega aún)_ | 10 |
-| FSE-P08 | [FSE-P08-indicaciones.pdf](FSE/FSE-Lab/FSE-P08/FSE-P08-indicaciones.pdf) | _(sin entrega aún)_ | 1 |
+| FSE-P07 | [FSE-P07-indicaciones.pdf](FSE/FSE-Lab/FSE-P07/FSE-P07-indicaciones.pdf) | [19-OEPR-L07-adicionales.zip](FSE/FSE-Lab/FSE-P07/FSE-P07-entregables/19-OEPR-L07-adicionales.zip)<br>[19-OEPR-L07.pdf](FSE/FSE-Lab/FSE-P07/FSE-P07-entregables/19-OEPR-L07.pdf) | 22 |
+| FSE-P08 | [FSE-P08-indicaciones.pdf](FSE/FSE-Lab/FSE-P08/FSE-P08-indicaciones.pdf) | _(sin entrega aún)_ | 7 |
 | FSE-ProyFinal | [FSE-ProyFinal-indicaciones.pdf](FSE/FSE-Lab/FSE-ProyFinal/FSE-ProyFinal-indicaciones.pdf) | _(sin entrega aún)_ | — |
 
 ### FSE-Tareas
@@ -141,7 +141,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 | OAC-P01 | [OAC-P01-indicaciones.pdf](OAC/OAC-Lab/OAC-P01/OAC-P01-indicaciones.pdf) | [Practica-01-Pre-reporte.pdf](OAC/OAC-Lab/OAC-P01/OAC-P01-entregables/Practica-01-Pre-reporte.pdf)<br>[practica01_equipo07_OrtegaDeLaPaz.pdf](OAC/OAC-Lab/OAC-P01/OAC-P01-entregables/practica01_equipo07_OrtegaDeLaPaz.pdf) | 9 |
 | OAC-P02 | [OAC-P02-indicaciones.pdf](OAC/OAC-Lab/OAC-P02/OAC-P02-indicaciones.pdf) | [practica02_equipo07_Rea_OrtegaDeLaPaz.pdf](OAC/OAC-Lab/OAC-P02/OAC-P02-entregables/practica02_equipo07_Rea_OrtegaDeLaPaz.pdf) | 3 |
 | OAC-P03 | [OAC-P03-indicaciones.pdf](OAC/OAC-Lab/OAC-P03/OAC-P03-indicaciones.pdf) | [practica03_equipo07_Rea_Ortega.pdf](OAC/OAC-Lab/OAC-P03/OAC-P03-entregables/practica03_equipo07_Rea_Ortega.pdf) | 1 |
-| OAC-P04 | [OAC-P04-indicaciones-reporte.pdf](OAC/OAC-Lab/OAC-P04/OAC-P04-indicaciones-reporte.pdf)<br>[OAC-P04-indicaciones.md](OAC/OAC-Lab/OAC-P04/OAC-P04-indicaciones.md)<br>[OAC-P04-indicaciones.pdf](OAC/OAC-Lab/OAC-P04/OAC-P04-indicaciones.pdf) | [practica04_equipo07_Rea_Ortega.pdf](OAC/OAC-Lab/OAC-P04/OAC-P04-entregables/practica04_equipo07_Rea_Ortega.pdf) | 14 |
+| OAC-P04 | [OAC-P04-indicaciones-reporte.pdf](OAC/OAC-Lab/OAC-P04/OAC-P04-indicaciones-reporte.pdf)<br>[OAC-P04-indicaciones.md](OAC/OAC-Lab/OAC-P04/OAC-P04-indicaciones.md)<br>[OAC-P04-indicaciones.pdf](OAC/OAC-Lab/OAC-P04/OAC-P04-indicaciones.pdf) | [practica04_equipo07_Rea_Ortega.pdf](OAC/OAC-Lab/OAC-P04/OAC-P04-entregables/practica04_equipo07_Rea_Ortega.pdf) | 15 |
 | OAC-P05 | [OAC-P05-indicaciones.md](OAC/OAC-Lab/OAC-P05/OAC-P05-indicaciones.md)<br>[OAC-P05-indicaciones.pdf](OAC/OAC-Lab/OAC-P05/OAC-P05-indicaciones.pdf) | [previo1_grupo3_Ortega_delaPaz_Rafael.pdf](OAC/OAC-Lab/OAC-P05/OAC-P05-entregables/previo1_grupo3_Ortega_delaPaz_Rafael.pdf) | 2 |
 
 ### OAC-Proyectos
@@ -184,6 +184,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 |---|---|---|---|
 | RP-T01 | [RP-T01-indicaciones.pdf](RP/RP-Tareas/RP-T01/RP-T01-indicaciones.pdf) | [RP-T01-420054085.pdf](RP/RP-Tareas/RP-T01/RP-T01-entregables/RP-T01-420054085.pdf) | 1 |
 | RP-T02 | [RP-T02-indicaciones.md](RP/RP-Tareas/RP-T02/RP-T02-indicaciones.md)<br>[RP-T02-indicaciones.pdf](RP/RP-Tareas/RP-T02/RP-T02-indicaciones.pdf) | _(sin entrega aún)_ | 3 |
+| RP-T03 | [RP-T03-indicaciones.pdf](RP/RP-Tareas/RP-T03/RP-T03-indicaciones.pdf) | _(sin entrega aún)_ | — |
 
 ## SIB — Seguridad Informática Básica
 

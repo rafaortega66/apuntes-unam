@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="no-aplica">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía para el examen final — Minería de Datos</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261117b">
+<script src="../../assets/app.js?v=20261117b" defer></script>
+<style>
+.gf h3{margin:1.2em 0 .4em} .gf h4{margin:1em 0 .3em;opacity:.9}
+.gf .tabla-scroll{overflow-x:auto} .gf table td,.gf table th{font-size:.9em;vertical-align:top}
+.gf p.nota{border-left:3px solid var(--c);padding:.3em .8em;opacity:.9}
+.gf li{margin:.25em 0}
+</style>
+</head>
+<body style="--c:#A98BD1">
+<div class="wrap gf">
+<!-- Generado por scripts/build_guias_finales.py. No editar a mano. -->
+<a class="back" href="index.html">← Minería de Datos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>📘 Guía para el examen final</h2>
+  <p class="prof">Minería de Datos · semestre 2027-1 · hecha con NotebookLM a partir de los audios de clase y el material del profesor (16 nov 2026).</p>
+  <p class="prof">Las fechas y cálculos de NotebookLM pueden fallar: ante la duda, revisa la página de la clase que cita.</p>
+</div>
+<div class="files">
+  <a class="btn" href="https://docs.google.com/document/d/18DOhoWrCpib07wG_QY24YEFlecwCeawitLKimn37Zek/edit" target="_blank">📄 Original en Drive</a>
+  <a class="btn" href="https://docs.google.com/document/d/1xSlr_WSZeO7lX4Ilz1q5PlKbrUUDaLghGa5uCqt2wx4/edit" target="_blank">📝 Apuntes y resumen (Drive)</a>
+  <a class="btn" href="https://drive.google.com/file/d/1ZRUAWQFLvSqrcL4g6SMeetm9xIkQGQhs/view" target="_blank">🧠 Mapa mental detallado</a>
+  <a class="btn" href="resumenes.html">📚 Guías por clase</a>
+</div>
+<details class="section-block sec" id="gf-hilo-conductor" open><summary><span class="stitle">HILO CONDUCTOR</span></summary>
+<p>La materia cuenta el viaje completo para convertir datos crudos de una organización en decisiones inteligentes y sistemas en producción. Todo comienza en el <strong>terreno físico y tecnológico de los datos</strong> (Clases 1 a 7): antes de pensar en cualquier algoritmo, necesitas saber dónde vive la información, qué diferencia una base de datos pequeña de un repositorio empresarial, por qué los datos históricos estructurados se organizan en <em>Data Warehouses</em> y <em>Data Marts</em> mientras que los datos crudos y multimedia caen en <em>Data Lakes</em> o ecosistemas <em>Big Data</em> en memoria y en la nube, y cómo han surgido bases especializadas —sobre todo las vectoriales— para manejar texto, imágenes y audio. Pero tener una infraestructura impecable no sirve de nada si no sabes qué preguntarle ni bajo qué metodología actuar. Por eso el curso introduce primero la distinción entre <strong>modelos descriptivos (no supervisados)</strong> y <strong>modelos predictivos (supervisados)</strong> y luego recorre sistemáticamente cada familia de algoritmos según el problema de negocio (Clases 6 a 16). Arrancas explorando datos sin etiquetas mediante <strong>agrupamiento (<em>clustering</em>) y reducción de dimensionalidad (PCA)</strong> para segmentar clientes o productos (Clases 8, 9 y 11), pasas a descubrir qué artículos se compran juntos mediante <strong>reglas de asociación</strong> (Clases 9, 10, 12 y 13), y das el salto al aprendizaje supervisado: primero prediciendo valores numéricos continuos con <strong>regresión</strong> (Clases 11 y 14), luego tomando decisiones categóricas o binarias con <strong>clasificación</strong> —el algoritmo estrella del profesor— (Clases 12, 13 y 15), después proyectando variables ordenadas en el tiempo con <strong>series de tiempo</strong> (Clases 14, 15 y 18), y cerrando con <strong>redes neuronales artificiales</strong> capaces de aprender patrones complejos en tablas, imágenes y secuencias (Clases 16, 20 y 21). Finalmente, el cierre del curso (Clases 18, 20 y 21) amarra toda esa caja de herramientas dentro de la metodología industrial <strong>CRISP-DM</strong> y las técnicas formales de <strong>evaluación, validación cruzada, control de sobreajuste y monitoreo en producción</strong>, garantizando que un modelo no solo funcione en la computadora de pruebas sino que resista datos nuevos y genere valor real para el cliente.</p>
+</details>
+<details class="section-block sec" id="gf-unidad-1-fundamentos-de-datos-repositori"><summary><span class="stitle">Unidad 1: Fundamentos de Datos, Repositorios, Bases de Datos y Arquitectura Empresarial (Clases 1, 2, 3, 4, 6, 7 y 8)</span></summary>
+<h4>a) Qué problema resuelve y cómo se conecta con el resto del curso</h4>
+<p>Resuelve el problema de dónde almacenar, asegurar, integrar y consultar grandes volúmenes de información heterogénea antes de analizarla. La minería de datos analiza grandes conjuntos de datos ("nuestra carnita, nuestra esencia"), y sin comprender si los datos están en tablas transaccionales, almacenes históricos, lagos sin procesar o en la nube, es imposible extraer variables confiables para los algoritmos de las unidades siguientes.</p>
+<h4>b) Conceptos clave</h4>
+<ul><li>
+<strong>Minería de Datos</strong> <em>(Clase 1)</em>: Proceso de análisis de grandes conjuntos de datos para identificar patrones y dar respuestas a los clientes. <em>Analogía</em>: Es como refinar petróleo crudo en una planta para obtener combustibles útiles; los datos por sí solos son petróleo bruto. <em>Ejemplo</em>: Extraer patrones de tickets de compra o historial clínico para decidir estrategias comerciales o médicas.
+</li><li>
+<strong>Base de Datos vs. Repositorio de Datos vs. Servidor de Base de Datos</strong> <em>(Clases 1 y 3)</em>: Una <strong>base de datos</strong> es una colección estructurada (por ejemplo, en tablas) de tamaño pequeño o moderado con menor detalle histórico y de acceso restringido. Un <strong>repositorio de datos</strong> es un contenedor estructurado y jerárquico, generalmente centralizado, con <strong>metadatos</strong>, control de acceso, respaldos, historial controlado y capacidad para administrar grandes volúmenes (como terabytes) para múltiples usuarios. Un <strong>servidor de base de datos</strong> opera bajo un esquema <strong>cliente-servidor</strong>: no es el repositorio en sí, sino el equipo (hardware y software) que recibe solicitudes (por ejemplo vía HTML/ODBC/JDBC), valida seguridad, balancea la carga y se conecta a una o varias bases de datos. <em>Analogía</em>: La base de datos es una libreta de contabilidad personal; el repositorio es el archivo central del banco con bóveda, catálogo (metadatos) y permisos por rango; el servidor es la ventanilla y el oficial que verifica tu credencial antes de ir a buscar el expediente al archivo. <em>Ejemplo</em>: Un sistema escolar o de inventarios donde miles de accesos diarios consultan vía ODBC/JDBC sin tocar directamente los discos.
+</li><li>
+<strong>Data Warehouse, Data Mart y Data Lake (y Lakehouse)</strong> <em>(Clases 2, 3 y 6)</em>: Un <strong>Data Warehouse</strong> recopila, integra y organiza grandes cantidades de datos históricos y actuales en una estructura ordenada para ser la "única fuente confiable" de análisis y toma de decisiones; en la práctica, cerca del 70% se accede mediante <strong>virtualización</strong> (en tiempo real sin copiar todos los campos físicamente). Un <strong>Data Mart</strong> es un subconjunto específico del <em>warehouse</em> enfocado en un área o proyecto concreto (ej. distribución, finanzas o marketing). Un <strong>Data Lake</strong> almacena enormes volúmenes de datos crudos (estructurados, semiestructurados y no estructurados: audio, video, imágenes, logs, sensores) sin esquema rígido previo, lo que exige gobernanza y catalogación para evitar un "pantano de datos" (<em>data swamp</em>). Una arquitectura <strong>Lakehouse</strong> (como la expuesta para Databricks) fusiona la flexibilidad y bajo costo del <em>Data Lake</em> con la estructura y transacciones ACID del <em>Data Warehouse</em>. <em>Analogía</em>: El <em>Data Lake</em> es un río y presa donde entra agua con todo lo que arrastra; el <em>Data Warehouse</em> es la planta embotelladora con garrafones etiquetados por pureza; el <em>Data Mart</em> es la vitrina exclusiva para refrescos o lácteos. <em>Ejemplo real citado por el profesor</em>: Bancomer tardó ~3 años y gastó cerca de 5 millones de dólares en un <em>Data Warehouse</em> fallido con Teradata hace ~12–14 años; hoy, plataformas como SAP o Google permiten armarlo modularmente como "Lego" en 2 o 3 meses.
+</li><li>
+<strong>Big Data (5 Vs), Hadoop, Spark y Kafka</strong> <em>(Clases 3 y 7)</em>: Conjunto de tecnologías para procesar datos masivos caracterizados por volumen, velocidad, variedad, veracidad y valor. <strong>Apache Hadoop</strong> distribuye archivos en clústeres mediante <strong>HDFS</strong> (<em>Hadoop Distributed File System</em>) y los procesa por lotes con <strong>MapReduce</strong> (mapea/divide tareas entre nodos y agrupa resultados) gestionado por YARN. <strong>Apache Spark</strong> ejecuta el procesamiento directamente en <strong>memoria RAM</strong> (miles de veces más rápido que ir a disco), soporta Python (<em>PySpark</em>), Java y R, e incluye librerías de <em>streaming</em> y <em>Machine Learning</em>. <strong>Apache Kafka</strong> es una plataforma distribuida para ingesta y distribución de eventos en tiempo real (<em>streaming</em>). <em>Analogía</em>: Hadoop es una flota de camiones repartidores que guardan paquetes en bodegas (disco); Spark es una línea de chefs preparando todo sobre la mesa de trabajo (RAM) sin ir a la alacena en cada paso; Kafka es la banda transportadora en vivo que reparte pedidos al instante. <em>Ejemplo</em>: Procesamiento de millones de clics o telemetría de sensores cada pocos segundos.
+</li><li>
+<strong>On-Premise vs. Cloud</strong> <em>(Clases 1, 3 y 8)</em>: En <em>on-premise</em> la empresa compra, instala y mantiene su propio hardware y software (~30% de empresas); en <em>cloud</em> (Amazon AWS, Google Cloud, Microsoft Azure) se virtualizan servidores y almacenamiento bajo demanda (~70% de la información actual). <em>Analogía</em>: Comprar un camión propio con taller y chofer (<em>on-premise</em>) frente a rentar exactamente el espacio de carga que necesitas cada mes (<em>cloud</em>).
+</li><li>
+<strong>Bases de Datos Especializadas y Bases Vectoriales</strong> <em>(Clases 1, 4, 6 y 8)</em>:
+<ul><li>
+<em>Relacionales</em>: Tablas estructuradas con esquemas rígidos (ej. SQL Server, Oracle).
+</li><li>
+<em>Columnares</em>: Guardan datos por columnas en lugar de filas, optimizadas para lectura analítica rápida y compresión mediante diccionarios (ej. SAP HANA, donde 100 GB pueden comprimirse a 10–20 GB y campos repetidos como "México" 10,000 veces se sustituyen por un diccionario).
+</li><li>
+<em>Espaciales</em>: Almacenan coordenadas, áreas y distancias para mapeo y logística rápida.
+</li><li>
+<em>Documentales / NoSQL</em>: Guardan documentos flexibles sin esquema rígido de tabla (ej. MongoDB en formato BSON binario; útil para leyes, noticias, catálogos).
+</li><li>
+<em>En Memoria</em>: Residen totalmente en RAM para máxima velocidad (ej. SAP HANA).
+</li><li>
+<em>Series de Tiempo</em>: Optimizadas para registros indexados cronológicamente (ej. colecciones temporales desde MongoDB 5.0 o motores especializados).
+</li><li>
+<em>Vectoriales</em>: Convierten texto, imágenes, audio o video en vectores numéricos (<strong>embeddings</strong>), dividiendo textos largos en fragmentos (<strong>chunking</strong>), para realizar <strong>búsquedas aproximadas por similitud o contexto semántico</strong> en lugar de coincidencias exactas de SQL (ej. Pinecone, Milvus). <em>Analogía</em>: Una base SQL busca en un directorio telefónico el nombre exacto "Juan Pérez"; una base vectorial funciona como cuando tarareas una melodía y la aplicación encuentra las canciones más parecidas por su ritmo y tono. <em>Ejemplo</em>: La frase <em>"El cliente está satisfecho con el servicio"</em> se convierte en un vector numérico ([0.12, -0.34, ...]), o la pregunta <em>"¿dónde puedo reparar mi automóvil?"</em> recupera talleres mecánicos aunque la palabra "taller" no esté en la consulta.
+</li></ul>
+</li></ul>
+<h4>c) Comparación rápida de arquitecturas y tipos de almacenamiento (Clases 1–4, 6–8)</h4>
+<div class="tabla-scroll"><table><tr><th>Tecnología / Enfoque</th><th>Tipo de datos que acepta</th><th>Dónde procesa / Cómo busca</th><th>Caso de uso visto en clase</th></tr><tr><td><strong>BD Relacional (SQL)</strong></td><td>Estructurados en tablas</td><td>Disco/RAM; coincidencia exacta (= / &gt;)</td><td>Transacciones, inventarios, clientes</td></tr><tr><td><strong>BD Columnar / In-Memory</strong></td><td>Estructurados por columnas</td><td>RAM; compresión por diccionario</td><td>Analítica rápida en tiempo real (SAP HANA)</td></tr><tr><td><strong>Data Warehouse / Mart</strong></td><td>Estructurados e integrados</td><td>Virtualización (~70%) o ETL <em>batch</em></td><td>Fuente única de reportes y BI</td></tr><tr><td><strong>Data Lake</strong></td><td>Crudos, no estructurados y estructurados</td><td>Almacenamiento masivo en nube</td><td>Audios, videos, sensores, redes sociales</td></tr><tr><td><strong>BD Documental (NoSQL)</strong></td><td>Semi/no estructurados (JSON/BSON)</td><td>Colecciones sin esquema rígido</td><td>Periódicos, leyes, telemetría (MongoDB)</td></tr><tr><td><strong>BD Vectorial</strong></td><td>Vectores (<em>embeddings</em>) de texto/imagen/audio</td><td>Índices vectoriales; similitud semántica</td><td>Chatbots/RAG, recomendaciones, imágenes (Pinecone, Milvus)</td></tr><tr><td><strong>Hadoop vs. Spark</strong></td><td>Grandes volúmenes distribuidos (<em>Big Data</em>)</td><td>Hadoop: disco (HDFS + MapReduce); Spark: RAM</td><td>Procesamiento masivo distribuido</td></tr></table></div>
+<h4>d) Errores comunes y puntos recalcados para examen (Clases 1, 2, 3 y 4)</h4>
+<ul><li>
+<strong>Diagrama de arquitectura de datos</strong>: El profesor advirtió en Clase 4 que <strong>una pregunta de examen es crear una arquitectura de datos</strong> definiendo primero <strong>requerimientos funcionales</strong> (cualitativos: qué debe hacer) y <strong>no funcionales</strong> (rendimiento, escalabilidad, seguridad, tolerancia a fallos, respaldos), integrando fuentes, ETL/ELT o <em>streaming</em>, almacenamiento, capa analítica/minería y visualización.
+</li><li>
+<strong>Confundir Base de Datos con Repositorio o Data Warehouse</strong>: Un <em>Data Warehouse</em> no es solo una base de datos grande; integra gobierno, seguridad, conectividad (APIs, ODBC/JDBC) y servicios de negocio/analíticos.
+</li><li>
+<strong>Usar ETL rígido cuando conviene ELT</strong>: En arquitecturas modernas de nube (como Azure), guardar primero los datos crudos en un <em>Data Lake</em> (ELT) permite conservar la versión original antes de transformar.
+</li><li>
+<strong>Errores en presentaciones ejecutivas</strong>: El profesor relató que una <strong>sola falta de ortografía</strong> hizo que un director cancelara un proyecto millonario; además, las láminas ejecutivas deben ser limpias y breves (~10 láminas para ~20 minutos), dejando el detalle técnico en un documento anexo.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-2-paradigmas-de-aprendizaje-y-met"><summary><span class="stitle">Unidad 2: Paradigmas de Aprendizaje y Metodologías de Proyectos (KDD, Proceso Técnico y CRISP-DM) (Clases 1, 6, 7, 18, 20 y 21)</span></summary>
+<h4>a) Qué problema resuelve y cómo se conecta con la Unidad 1</h4>
+<p>Una vez que la arquitectura de datos está clara, el científico de datos necesita saber <strong>qué tipo de pregunta responde cada familia de algoritmos</strong> y <strong>qué pasos metodológicos seguir</strong> desde la reunión con los directivos hasta el mantenimiento en producción, evitando desperdiciar tiempo en problemas inviables o modelos sin impacto de negocio.</p>
+<h4>b) Conceptos clave</h4>
+<ul><li>
+<strong>Aprendizaje Supervisado vs. No Supervisado</strong> <em>(Clase 6)</em>: En el <strong>supervisado</strong>, el modelo aprende de datos históricos que ya tienen una <strong>etiqueta o variable objetivo</strong> (requiere partición, entrenamiento y validación); en el <strong>no supervisado</strong>, <strong>no hay etiquetas previas</strong> y el algoritmo busca patrones ocultos, ordenamientos o agrupaciones por sí mismo. <em>Analogía</em>: El supervisado es estudiar con una guía que ya trae las respuestas correctas atrás; el no supervisado es llegar a una biblioteca sin letreros y organizar los libros por parecido.
+</li><li>
+<strong>Modelo Predictivo vs. Modelo Descriptivo</strong> <em>(Clases 6 y 18)</em>: El <strong>predictivo</strong> (prácticamente siempre supervisado) usa datos <strong>etiquetados y en formato estructurado</strong> para <strong>pronosticar un valor o categoría a futuro</strong> (se evalúa con métricas de exactitud o error de regresión). El <strong>descriptivo</strong> (prácticamente siempre no supervisado) puede trabajar sin etiquetas y con datos menos estructurados para <strong>descubrir grupos, asociaciones o patrones</strong> (se evalúa por <strong>cohesión</strong> interna de los grupos o <strong>nivel de confianza</strong> en asociaciones). <em>Nota de clase</em>: Un árbol de decisión puede usarse de forma descriptiva para interpretar cómo se relacionan las variables, aunque su naturaleza sea predictiva supervisada.
+</li><li>
+<strong>KDD vs. Proceso Técnico de Minería de Datos vs. CRISP-DM</strong> <em>(Clases 1, 18 y 20)</em>:
+<ul><li>
+<strong>KDD (<em>Knowledge Discovery in Databases</em>)</strong>: Macroproceso de corte <strong>más académico y conceptual</strong>, centrado en descubrir patrones ocultos desde la entrevista inicial hasta la entrega, viendo la minería de datos como una fase técnica central (<em>kernel</em>) con menor énfasis en la integración operativa final.
+</li><li>
+<strong>Proceso Técnico de Minería de Datos (13 actividades)</strong> <em>(Clase 18)</em>: Es el detalle tecnológico del <em>kernel</em>, donde el ajuste de parámetros ocurre en <strong>tres momentos</strong> (ajuste inicial por defecto, <em>tuning</em> técnico para rendimiento y el <strong>"último apretoncito"</strong> tras validar con el cliente).
+</li><li>
+<strong>CRISP-DM (<em>Cross-Industry Standard Process for Data Mining</em>)</strong> <em>(Clases 20 y 21)</em>: Es el <strong>estándar universal de la industria</strong> (acordado por empresas como IBM, Microsoft, Oracle, Google, Amazon y SAP) para proyectos de minería de datos, <em>machine learning</em> y ciencia de datos. Se distingue por iniciar obligatoriamente con los <strong>objetivos de negocio</strong> y cerrar con el <strong>despliegue e impacto real</strong>, organizándose en 4 niveles (Nivel 1: 6 fases universales; Nivel 2: subtareas; Niveles 3–4: hasta ~500 actividades detalladas según herramienta). <em>Analogía</em>: KDD es un libro de teoría médica; el proceso de 13 actividades es el protocolo quirúrgico en quirófano; CRISP-DM es la norma ISO completa del hospital desde la admisión y presupuesto hasta el seguimiento postoperatorio en casa.
+</li><li>
+<em>Ejemplo vivo de Fase 1 CRISP-DM (Clase 20)</em>: Empresa de <em>e-commerce</em> con baja conversión web; se reúnen <strong>ventas, marketing y TI</strong> (no mantenimiento); fijan criterios de éxito de negocio (<strong>+10% ventas, -20% tiempo de respuesta</strong>) y de ciencia de datos (<strong>precisión &gt; 90%</strong>), identificando como limitante el <strong>presupuesto limitado</strong> y como riesgo datos de usuarios incompletos.
+</li></ul>
+</li></ul>
+<h4>c) Comparación estructural: Paradigmas y las 6 Fases de CRISP-DM (Clases 18, 20 y 21)</h4>
+<div class="tabla-scroll"><table><tr><th>Criterio</th><th>Modelo Predictivo</th><th>Modelo Descriptivo</th></tr><tr><td><strong>Aprendizaje típico</strong></td><td>Supervisado</td><td>No supervisado</td></tr><tr><td><strong>Datos requeridos</strong></td><td>Etiquetados y estructurados</td><td>Sin etiquetas (estructurados o no)</td></tr><tr><td><strong>Propósito / Salida</strong></td><td>Estimar un valor o clase a futuro</td><td>Descubrir grupos, asociaciones o patrones</td></tr><tr><td><strong>Evaluación</strong></td><td>Exactitud, ROC, F1, MSE/MAE/RMSE</td><td>Cohesión (Silueta), confianza, lift</td></tr><tr><td><strong>Algoritmos del curso</strong></td><td>Regresión, Clasificación, Series de tiempo, Redes Neuronales</td><td>Clustering (K-Means, DBSCAN, etc.), Asociación (Apriori, FP-Growth)</td></tr></table></div>
+<h4>Las 6 Fases de CRISP-DM y el Flujo de 13 Actividades:</h4>
+<ul><li>
+<strong>Entendimiento del Negocio</strong> <em>(Fase 1)</em>: Objetivos de negocio, inventario de recursos, limitantes, supuestos, riesgos, costo-beneficio, metas de negocio y metas técnicas de ciencia de datos. <em>(Se puede detener el proyecto si no es viable)</em>.
+</li><li>
+<strong>Entendimiento de los Datos</strong> <em>(Fase 2)</em>: Recopilación, descripción, exploración (<strong>EDA</strong>) y verificación de calidad/historial. <em>(Se puede detener si no hay historial suficiente, ej. solo 3–4 meses para series de tiempo)</em>.
+</li><li>
+<strong>Preparación de los Datos</strong> <em>(Fase 3)</em>: Inclusión/exclusión justificada, limpieza (imputación con mediana/media, duplicados, <em>outliers</em>), creación de atributos derivados, integración (<em>merge</em>) y formateo/normalización.
+</li><li>
+<strong>Modelado</strong> <em>(Fase 4 — el "kernel")</em>: Selección de algoritmo y variables (reducción de dimensionalidad), partición (80/20, 70/30 o <em>K-Folds</em>), entrenamiento inicial (<em>default</em>), y optimización de hiperparámetros (<em>tuning</em>).
+</li><li>
+<strong>Evaluación</strong> <em>(Fase 5)</em>: Evaluación técnica (métricas + validación cruzada) y evaluación con el negocio; aquí se da el <strong>"último apretoncito"</strong> a los hiperparámetros o variables tras validar con el cliente.
+</li><li>
+<strong>Despliegue (<em>Deployment</em>)</strong> <em>(Fase 6)</em>: Plan de implementación en producción, plan de monitoreo y mantenimiento (<strong>mínimo 3 a 6 meses</strong>), memoria técnica / informe final y revisión de lecciones aprendidas.
+</li></ul>
+<h4>d) Errores comunes y puntos recalcados para examen (Clases 18 y 20)</h4>
+<ul><li>
+<strong>Mapeo directo problema → modelo (pregunta explícita de examen en Clase 18)</strong>: El profesor resolvió 4 casos en clase y advirtió que vendrá uno similar centrado en distinguir <strong>clasificación binaria</strong>:
+<ul><li>
+<em>Sensores en máquinas para predecir fallas</em>: Serie de tiempo, regresión o árboles de decisión (si cada sensor es una variable).
+</li><li>
+<em>Monitoreo de transacciones bancarias en tiempo real para fraude</em>: <strong>Clasificación binaria</strong> (¿es anómalo o no?), <strong>NO</strong> serie de tiempo (Trinidad se equivocó diciendo series de tiempo y el profesor lo corrigió).
+</li><li>
+<em>Productos más vendidos por temporada, ubicación y festivos</em>: <strong>Serie de tiempo</strong> (modelo) con algoritmos como SARIMA.
+</li><li>
+<em>Agrupar clientes similares para promociones</em>: <strong>Agrupación (<em>clustering</em>)</strong> (ej. K-Means), <strong>NO</strong> clasificación (otro alumno confundió ambos).
+</li></ul>
+</li><li>
+<strong>Distinguir Modelo vs. Algoritmo</strong>: En el examen hay que responder el nivel correcto (ej. modelo = clasificación o serie de tiempo; algoritmo = Random Forest o SARIMA).
+</li><li>
+<strong>Tener clarísima la diferencia entre Predictivo y Descriptivo</strong>, así como el <strong>triple ajuste</strong> y el <strong>monitoreo mínimo de 3 a 6 meses</strong>.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-3-aprendizaje-no-supervisado-redu"><summary><span class="stitle">Unidad 3: Aprendizaje No Supervisado — Reducción de Dimensionalidad (PCA) y Clustering (Clases 6, 7, 8, 9 y 11)</span></summary>
+<h4>a) Qué problema resuelve y cómo se conecta con el tema anterior</h4>
+<p>Al iniciar un proyecto sin etiquetas previas (enfoque descriptivo de la Unidad 2), la empresa suele tener decenas de miles de tickets y decenas de variables con escalas incompatibles. Esta unidad resuelve cómo <strong>comprimir dimensiones redundantes</strong> y <strong>segmentar observaciones similares</strong> (clientes, productos, plantas o zonas) para diseñar estrategias diferenciadas en lugar de tratar a todos por igual.</p>
+<h4>b) Conceptos clave</h4>
+<ul><li>
+<strong>Estandarización (StandardScaler) y Transformación Logarítmica</strong> <em>(Clases 8, 9 y 11)</em>: Escalado que transforma variables con rangos muy dispares (ej. importes de \$6,000 vs. frecuencias de 2 días) a una escala comparable centrada en 0 (desviaciones estándar o rangos tipo [-1, 1] / ``), mientras la función logarítmica suaviza picos extremos o asimetrías. <em>Analogía</em>: Convertir pesos, dólares y yenes a una sola moneda antes de comparar quién gastó más.
+</li><li>
+<strong>PCA (Análisis de Componentes Principales) y t-SNE</strong> <em>(Clases 8 y 9)</em>: <strong>PCA</strong> es una técnica lineal de reducción de dimensionalidad que condensa muchas variables correlacionadas en unos pocos <strong>componentes principales</strong> nuevos que retienen la máxima varianza y permiten graficar en 2D o 3D y acelerar hasta 100 veces el procesamiento; <strong>t-SNE</strong> es una alternativa para estructuras <strong>no lineales</strong>. <em>Analogía</em>: Resumir las 25 calificaciones de un alumno en 2 índices compuestos: "habilidad matemática" y "habilidad verbal". <em>Ejemplo de clase</em>: En el ejemplo de clase del profesor, numerosas variables se comprimieron en 3 componentes interpretables (PC1: factores financieros/ingresos; PC2: penetración de marketing; PC3: fallas/retención), y en la Práctica 3.1 (58,903 registros agrupados en <strong>524 clientes únicos</strong>), un equipo usó PCA con PC1 = volumen/frecuencia de compra y PC2 = intensidad económica del ticket.
+</li><li>
+<strong>K-Means (<em>K-Medias</em>)</strong> <em>(Clases 8 y 11)</em>: Algoritmo de partición que agrupa datos en K clústeres de forma <strong>esférica/compacta</strong> minimizando las distancias cuadráticas (<strong>distancia euclidiana</strong>) hacia K centroides que se reubican iterativamente hasta estabilizarse. Es rápido y claro para marketing (~20,000 registros; si hay 100,000+ conviene estratificar primero). <em>Analogía</em>: Colocar K tiendas OXXO al azar en una ciudad, asignar cada casa a su tienda más cercana, mover cada tienda al centro de las casas asignadas y repetir hasta que ninguna tienda necesite moverse. <em>Ejemplo real</em>: Con 524 clientes en la Práctica 3.1, K-Means con K=3 o K=5 separó compradores ocasionales, clientes promedio y mayoristas/VIP.
+</li><li>
+<strong>Método del Codo (<em>Elbow Method</em>) e Inercia (WCSS)</strong> <em>(Clases 8 y 11)</em>: <strong>WCSS</strong> (<em>Within-Cluster Sum of Squares</em> / inercia) suma las distancias al cuadrado de cada punto a su centroide; al graficarla contra distintos valores de K, el punto de inflexión ("el codo") sugiere el K óptimo. El profesor recomienda probar también K-1 y K+1 (ej. si el codo da 7, probar 6 y 8).
+</li><li>
+<strong>DBSCAN</strong> <em>(Clases 8 y 11)</em>: Algoritmo basado en <strong>densidad y conectividad</strong> de puntos que <strong>descubre automáticamente el número de clústeres</strong>, puede formar figuras arbitrarias (como donas o medialunas) y marca puntos aislados como <strong>ruido (<em>outliers</em>)</strong>. Sus dos parámetros ("perillas") son <strong>épsilon (ε)</strong> (radio de vecindad) y <strong>mínimo de puntos</strong>. <em>Analogía</em>: Formar grupos en un concierto juntando a quienes están a menos de 1 metro de distancia en grupos de al menos 4 personas; los que quedan solos lejos de todos se marcan como "ruido". <em>Ejemplo de Práctica 3.1</em>: Un equipo obtuvo 2 clústeres y <strong>23.28% de ruido</strong> en Python (mientras que un ε mal calibrado de 0.3 dejó todo como ruido y 1.0 colapsó todo en 1 clúster).
+</li><li>
+<strong>Clustering Jerárquico (Aglomerativo y Divisivo)</strong> <em>(Clases 6, 8 y 11)</em>: Construye una jerarquía visualizada en un <strong>dendrograma</strong>: el <strong>aglomerativo</strong> (ascendente) parte de cada dato individual y va uniendo los pares más cercanos; el <strong>divisivo</strong> (descendente) parte de un solo grupo y lo divide sucesivamente. Útil en análisis genético, documentos y comunidades. <em>Ejemplo real del profesor</em>: En <strong>FEMSA Coca-Cola</strong> (~12,000 tiendas en Monterrey / 31,600 totales), lo usó en R para agrupar tiendas con comportamiento similar en venta de bebidas energéticas y replicar estrategias.
+</li><li>
+<strong>Mezclas Gaussianas (GMM) y Desplazamiento Medio (Mean Shift)</strong> <em>(Clases 6 y 8)</em>: <strong>GMM</strong> realiza agrupación probabilística ajustando campanas de Gauss según dispersión (útil para <strong>reconocimiento de voz</strong>, color/textura); <strong>Mean Shift</strong> desliza una ventana/radio buscando zonas de mayor concentración de puntos (útil para <strong>seguimiento de objetos en video</strong>, como saber dónde hay más tiempo de pantalla en un partido de básquetbol o hockey).
+</li><li>
+<strong>Métricas de evaluación en Clustering</strong> <em>(Clases 8 y 11)</em>: <strong>Coeficiente de Silueta (<em>Silhouette Score</em>)</strong> (mide qué tan compacto es cada clúster internamente y qué tan separado está de los demás) y <strong>Davies-Bouldin</strong> (menor valor indica mejor compactación/relación entre clústeres).
+</li></ul>
+<h4>c) Tabla comparativa de algoritmos de Clustering (Clases 8 y 9)</h4>
+<div class="tabla-scroll"><table><tr><th>Algoritmo</th><th>Criterio de agrupación</th><th>Parámetros clave ("perillas")</th><th>Ventaja principal</th><th>Aplicación típica vista</th></tr><tr><td><strong>K-Means</strong></td><td>Distancia euclidiana a centroides</td><td>Número K, iteraciones, semilla (random_state)</td><td>Rápido, compacto, fácil de explicar al negocio</td><td>Segmentación de clientes y marketing</td></tr><tr><td><strong>DBSCAN</strong></td><td>Densidad de puntos</td><td>Radio ε, mínimo de puntos</td><td>No pide K; detecta formas raras y ruido/<em>outliers</em></td><td>Resonancias médicas, anomalías, datos irregulares</td></tr><tr><td><strong>Jerárquico</strong></td><td>Similitud ascendente o divisiva</td><td>Método de enlace / corte en dendrograma</td><td>No requiere K inicial; visualiza jerarquías</td><td>Genética, documentos, tiendas FEMSA</td></tr><tr><td><strong>Mezclas Gaussianas</strong></td><td>Probabilidad bajo campanas de Gauss</td><td>Número de componentes gaussianos</td><td>Modela formas elípticas y pertenencia probabilística</td><td>Reconocimiento de voz, texturas</td></tr><tr><td><strong>Mean Shift</strong></td><td>Ventana deslizante hacia máxima densidad</td><td>Radio/ancho de ventana</td><td>Descubre modos/picos de densidad</td><td>Rastreo de objetos en video</td></tr></table></div>
+<h4>d) Errores comunes y puntos recalcados para examen (Clases 8, 9 y 11)</h4>
+<ul><li>
+<strong>Correr K-Means sin estandarizar ni aplicar PCA cuando hay muchas variables</strong>: Si no usas StandardScaler, las variables de magnitudes grandes (ej. miles de pesos) aplastan a las pequeñas (ej. frecuencia de compra).
+</li><li>
+<strong>Entregar clústeres sin "sabor" (interpretación de negocio)</strong>: El profesor advirtió que correr el algoritmo toma 20 minutos; la calificación y el valor real están en <strong>nombrar e interpretar cada segmento</strong> (ej. "especialistas de quesos", "mayoristas", "ocasionales") y verificar que sean estables, compactos y accionables.
+</li><li>
+<strong>Usar solo un algoritmo</strong>: En todas las prácticas el profesor exigió comparar <strong>al menos 2 o 3 algoritmos</strong> (K-Means, DBSCAN y Jerárquico/GMM) porque un mismo dataset produce agrupaciones muy distintas según la técnica.
+</li><li>
+<strong>Caso real Túnel Emisor Oriente</strong>: El profesor contó que tardaron ~2–3 meses con ~30 variables para segmentar 5 tipos de anillos de excavación porque sin la interpretación del cliente los clústeres carecían de sentido operativo.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-4-aprendizaje-no-supervisado-regl"><summary><span class="stitle">Unidad 4: Aprendizaje No Supervisado — Reglas de Asociación (Market Basket Analysis) (Clases 9, 10, 12 y 13)</span></summary>
+<h4>a) Qué problema resuelve y cómo se conecta con la Unidad 3</h4>
+<p>Mientras el <em>clustering</em> agrupa <strong>clientes</strong> o <strong>entidades completas</strong> por parecido general, las reglas de asociación responden otra pregunta sobre los mismos tickets transaccionales: <strong>qué productos o eventos suelen ocurrir juntos dentro de una misma canasta o registro</strong>. Además, pueden aplicarse <em>dentro</em> de un clúster específico (por ejemplo, analizar qué compran los clientes más fieles los fines de semana).</p>
+<h4>b) Conceptos clave</h4>
+<ul><li>
+<strong>Regla de Asociación (Antecedente → Consecuente)</strong> <em>(Clase 10)</em>: Expresión del tipo <em>"si ocurre A (antecedente), tiende a ocurrir B (consecuente)"</em>; por ejemplo, {pan, huevos} -&gt; {leche}. <em>Analogía</em>: Es como notar que en un restaurante quien pide café y pan dulce casi siempre termina pidiendo también un vaso de agua.
+</li><li>
+<strong>Soporte (<em>Support</em>)</strong> <em>(Clase 10)</em>: Frecuencia con la que aparecen juntos el antecedente y el consecuente respecto al total de transacciones. Sirve como filtro inicial para descartar coincidencias raras (ej. empezar con un umbral alto como 3% e ir bajándolo hasta 1% o 0.5% para no ahogarse en 90 reglas irrelevantes).
+</li><li>
+<strong>Confianza (<em>Confidence</em>)</strong> <em>(Clase 10)</em>: Proporción de las transacciones que contienen el antecedente X en las que también aparece el consecuente Y (mide qué tan probable es Y dado X). En clase el profesor señaló como referencia deseable valores por encima de 0.6–0.7 o 0.8 en asociaciones fuertes (según el volumen del catálogo; en comidas preparadas de menor frecuencia los equipos bajaron el umbral a 15%–30%). <em>Ejemplo</em>: Si 70 de cada 100 tickets con yogur griego de fresa también llevan yogur de moras, la confianza es 0.70.
+</li><li>
+<strong>Lift (Elevación / Mejora)</strong> <em>(Clase 10)</em>: Mide cuántas veces más probable es encontrar el consecuente cuando está presente el antecedente <strong>en comparación con una compra al azar</strong>. Si Lift = 1, no hay asociación real más allá de la casualidad; si Lift &gt; 1, la asociación es positiva y fuerte (ej. Lift = 8.39 en {chorizo, queso americano, queso fresco} -&gt; {crema dulce, pasta, salchicha} mostrado por el profesor, o Lift = 82 en yogur de pistache con vainilla reportado por un equipo).
+</li><li>
+<strong>Algoritmo Apriori</strong> <em>(Clase 10)</em>: Escanea iterativamente las transacciones, poda los ítems que no cumplen el soporte mínimo, genera combinaciones candidatas de tamaño creciente (pares, tríos) y vuelve a podar. Es muy fácil de entender y rápido en datasets pequeños, pero <strong>realiza múltiples escaneos</strong> y se degrada en memoria y tiempo cuando hay miles de productos y millones de registros.
+</li><li>
+<strong>Algoritmo Eclat</strong> <em>(Clase 10)</em>: En lugar de barrer fila por fila de transacciones, trabaja con formato vertical por producto generando listas de identificadores de tickets (<strong>tidlists</strong>) y calculando <strong>intersecciones de conjuntos</strong>; reduce la carga computacional en datos dispersos, aunque consume memoria si las listas son muy densas.
+</li><li>
+<strong>Algoritmo FP-Growth (<em>Frequent Pattern Growth</em>)</strong> <em>(Clase 10)</em>: Construye una estructura comprimida de árbol (<strong>FP-Tree</strong>) ordenando los productos por frecuencia tras solo <strong>dos escaneos</strong> del dataset y poda ramas por debajo del soporte mínimo. Es más complejo de entender, pero mucho más eficiente y escalable que Apriori en volúmenes grandes o en salud.
+</li></ul>
+<h4>c) Fórmulas y comparación de algoritmos (Clase 10)</h4>
+<div class="tabla-scroll"><table><tr><th>Métrica</th><th>Fórmula conceptual vista en clase</th><th>Qué indica / Criterio práctico</th></tr><tr><td><strong>Soporte</strong></td><td>(Transacciones con (X e Y))/(Total de transacciones)</td><td>Qué tan común es la combinación en toda la tienda; filtra ruido</td></tr><tr><td><strong>Confianza</strong></td><td>(Transacciones con (X e Y))/(Transacciones con X)</td><td>Probabilidad condicional de llevar Y dado que ya lleva X</td></tr><tr><td><strong>Lift</strong></td><td>(Confianza(X → Y))/(P(Y) (transacciones de Y / total))</td><td>Fuerza real vs. azar (Lift &gt; 1 útil; ordena mejores reglas)</td></tr></table></div>
+<h4>Comparación Apriori vs. Eclat vs. FP-Growth:</h4>
+<ul><li>
+<strong>Apriori</strong>: Múltiples escaneos del dataset; rápido en pocos datos, lento en catálogos masivos.
+</li><li>
+<strong>Eclat</strong>: Intersección de <em>tidlists</em>; menos carga computacional en datos dispersos, sensible a densidad en memoria.
+</li><li>
+<strong>FP-Growth</strong>: Solo ~2 escaneos construyendo un árbol comprimido (<em>FP-Tree</em>); conserva eficiencia a gran escala y coincide en reglas/métricas con Apriori bajo los mismos umbrales.
+</li></ul>
+<h4>d) Errores comunes y puntos recalcados para examen (Clases 9, 10, 12 y 13)</h4>
+<ul><li>
+<strong>Los 3 Niveles de Validación (marcado explícitamente como pregunta de examen en Clase 10)</strong>: (1) <strong>Validación técnica</strong> (soporte, confianza, lift); (2) <strong>Validación con usuarios operativos / gente de negocio</strong> (ver si las reglas tienen sentido operativo y qué productos quieren impulsar); y (3) <strong>Validación ejecutiva / estratégica</strong> (alinear con la estrategia de la dirección, como el caso real del profesor en C\&amp;A / "CNI" donde el director holandés quería crecer 50% y las tallas/colores variaban entre Monterrey, Veracruz y Chiapas).
+</li><li>
+<strong>Confundir una confianza alta con una buena regla cuando el consecuente es básico</strong>: Si casi todo el mundo compra jamón o leche por defecto, la confianza será alta aunque el <em>Lift</em> ronde 1 (no aporta promoción nueva). El profesor recalcó en Clase 10 que el <strong>valor del negocio está en hallar asociaciones inesperadas</strong> (como detergente + jugo de naranja) o potenciar productos nuevos junto a un ancla, no en hacer 2x1 en lo que la gente ya compra sola.
+</li><li>
+<strong>Granularidad errónea</strong>: En la Práctica 3.2 (11,344 tickets y ~469 productos), un equipo notó que analizar 479 SKU individuales generaba una matriz muy dispersa sin soporte mínimo, por lo que agruparon en <strong>62 líneas de producto</strong> (o 117 en otro equipo) para hallar reglas sólidas. En el caso B (comidas preparadas, ~2,480 tickets), al ser menor el volumen fue necesario bajar el soporte (ej. 0.5%–2%) y la confianza (15%–30%).
+</li><li>
+<strong>Aplicación fuera de supermercados</strong>: El profesor mostró su proyecto real con el IMSS en Chiapas y Oaxaca sobre <strong>~789,000 casos de dengue (2011–2015)</strong>, usando reglas de asociación para descubrir qué síntomas clínicos (hemorragia + hematemesis + melena) alertaban sobre dengue hemorrágico.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-5-aprendizaje-supervisado-modelos"><summary><span class="stitle">Unidad 5: Aprendizaje Supervisado — Modelos de Regresión (Clases 7, 11 y 14)</span></summary>
+<h4>a) Qué problema resuelve y cómo se conecta con las unidades anteriores</h4>
+<p>Dejamos el terreno puramente descriptivo para entrar al <strong>aprendizaje supervisado predictivo</strong>, donde ya existe una <strong>variable objetivo (Y) numérica y continua</strong>. Mientras la clasificación dirá <em>"sí o no"</em>, la regresión responde <strong>"¿cuánto?"</strong> (precio de una casa, porcentaje de alcohol en un vino, probabilidad continua de incumplimiento, costo de tratamiento).</p>
+<h4>b) Conceptos clave</h4>
+<ul><li>
+<strong>Regresión Lineal Simple y Múltiple</strong> <em>(Clase 11)</em>: Modela la relación lineal entre una (simple) o varias (múltiple) variables independientes X y una variable objetivo continua Y. <em>Analogía</em>: Calcular el costo total de un viaje en taxi sumando la tarifa base más un monto fijo por cada kilómetro recorrido y por cada minuto de espera. <em>Ejemplo de clase</em>: Estimar el precio de una casa en función de su superficie (precio = 34 + 4.8x) o sumando ubicación y antigüedad.
+</li><li>
+<strong>Regresión Polinomial</strong> <em>(Clase 11)</em>: Introduce términos polinómicos (exponentes de las variables independientes) para ajustar curvas cuando la relación entre los datos no es una línea recta. <em>Analogía</em>: Trazar una carretera con curvas suaves que sigue la forma de una montaña en lugar de intentar cruzarla con una regla recta.
+</li><li>
+<strong>Regresión Ridge vs. Lasso</strong> <em>(Clases 11 y 21)</em>: Ambas son regresiones regularizadas que manejan múltiples variables correlacionadas controlando el sobreajuste, pero actúan de forma opuesta: <strong>Ridge</strong> conserva y pondera las variables similares/colineales repartiendo peso entre ellas sin eliminarlas, mientras que <strong>Lasso</strong> penaliza y <strong>elimina variables no significativas</strong> dejando solo las más influyentes. <em>Analogía</em>: En un proyecto en equipo con tareas repetidas, Ridge reparte el trabajo proporcionalmente entre todos los integrantes; Lasso despide a los que no aportan valor único y deja solo a los indispensables. <em>Ejemplo de la Práctica 3.3 (vinos)</em>: Lasso descartó la mayoría de las 12 variables químicas dejando principalmente <strong>prolina</strong> y <strong>color intenso</strong> (y en sentido inverso ceniza alcalina).
+</li><li>
+<strong>Regresión con Árboles y Random Forest Regressor</strong> <em>(Clases 11 y 14)</em>: En lugar de ajustar una sola ecuación global, divide los datos en rangos mediante condiciones (ej. ingreso &gt; 50 o &gt; 83) y <strong>Random Forest</strong> promedia múltiples árboles aleatorios, capturando relaciones <strong>no lineales</strong> y siendo mucho más robusto ante valores atípicos (<em>outliers</em>). <em>Ejemplo de la Práctica 3.3 (178 vinos, 12 variables fisicoquímicas)</em>: La regresión lineal múltiple logró R2 ≈ 0.68 (error 0.17) en un equipo o 0.434 en RapidMiner en otro, mientras que <strong>Random Forest</strong> ganó consistentemente con R2 ≈ 0.75–0.77 y menor error (0.12–0.13), permitiendo evitar costosas pruebas físicas de laboratorio.
+</li><li>
+<strong>SVR (<em>Support Vector Regression</em>)</strong> <em>(Clase 11)</em>: Variante de máquinas de vectores de soporte para valores continuos que ajusta un "tubo" o franja de tolerancia alrededor del plano de predicción.
+</li><li>
+<strong>Métricas de evaluación de Regresión</strong> <em>(Clases 11, 14 y 18)</em>:
+<ul><li>
+<strong>R2 (Coeficiente de determinación)</strong>: Mide cuánta varianza de la variable dependiente explica el modelo; entre más cercano a 1, mejor ajuste.
+</li><li>
+<strong>MSE / RMSE (Error Cuadrático Medio y su raíz)</strong>: Mide el promedio de los errores al cuadrado (penalizando más los errores grandes); entre más cercano a 0, mejor.
+</li><li>
+<strong>MAE (Error Absoluto Medio)</strong>: Promedio del valor absoluto de las diferencias entre lo predicho y lo real.
+</li></ul>
+</li></ul>
+<h4>c) Fórmulas y tabla comparativa (Clases 11 y 14)</h4>
+<p><em>(Nota: En el audio de la Clase 11 el profesor mostró las gráficas y mencionó en voz alta la estructura lineal y = a + bx —en transcripción "y = bx + 1..." / "y + a + x"— y el ejemplo numérico 34 + 4.8x; las ecuaciones completas de Ridge, Lasso, R2 y MSE no se dictaron término a término).</em></p>
+<div class="tabla-scroll"><table><tr><th>Algoritmo de Regresión</th><th>Cómo modela</th><th>Fortaleza clave</th><th>Limitación / Cuándo evitar</th></tr><tr><td><strong>Lineal (Simple / Múltiple)</strong></td><td>Recta o hiperplano lineal</td><td>Muy fácil de interpretar con coeficientes</td><td>Falla si los datos tienen curvaturas no lineales</td></tr><tr><td><strong>Polinomial</strong></td><td>Curva con potencias de X</td><td>Se adapta a relaciones curvas</td><td>Riesgo de sobreajuste y complejidad si sube el grado</td></tr><tr><td><strong>Ridge</strong></td><td>Pondera variables colineales</td><td>No descarta variables útiles que se parecen</td><td>No hace selección automática eliminando variables</td></tr><tr><td><strong>Lasso</strong></td><td>Recorta variables no significativas</td><td>Simplifica modelos eliminando variables de poco aporte</td><td>Puede descartar variables correlacionadas útiles</td></tr><tr><td><strong>Random Forest</strong></td><td>Ensamble de árboles por partición</td><td>Captura no linealidades; resiste <em>outliers</em>; alta precisión</td><td>Menor interpretabilidad de fórmula directa</td></tr></table></div>
+<h4>d) Errores comunes y puntos recalcados para examen (Clases 11 y 14)</h4>
+<ul><li>
+<strong>Qué hacer si las métricas (R2, error) salen mal (pregunta hecha por el profesor en Clase 11)</strong>: (1) Verificar limpieza y <strong>estandarización</strong> de las variables (en vinos, prolina y magnesio tenían magnitudes de cientos frente a decimales en matiz); (2) revisar la <strong>selección de variables</strong> (quitar las que meten ruido o son irrelevantes como el ID de muestra); (3) revisar <em>outliers</em> o fechas atípicas en el historial; (4) probar otro tipo de modelo (ej. de lineal a Random Forest o polinomial); o (5) <strong>aceptar honestamente que no hay datos suficientes para calcularlo</strong>.
+</li><li>
+<strong>Sobreajuste por muestreo sesgado</strong>: Si en entrenamiento R2 sale altísimo y en prueba se desploma (o viceversa por muestra pequeña de 178 vinos), se debe usar <em>K-Fold Cross-Validation</em> y probar varias semillas (random_state), no confiar en un único corte 70/30.
+</li><li>
+<strong>Principio de parsimonia en variables</strong>: En la Práctica 3.3, reducir de 12 variables químicas a solo las <strong>5 más significativas</strong> apenas bajó R2 en 0.03–0.04, demostrando que las demás aportaban casi puro ruido.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-6-aprendizaje-supervisado-modelos"><summary><span class="stitle">Unidad 6: Aprendizaje Supervisado — Modelos de Clasificación (Clases 6, 7, 12, 13, 15 y 16)</span></summary>
+<h4>a) Qué problema resuelve y cómo se conecta con la Unidad 5</h4>
+<p>El profesor lo definió como el <strong>"algoritmo estrella"</strong>, el número uno que recomienda dominar al 200%. A diferencia de la regresión (variable continua), la clasificación resuelve problemas supervisados donde la <strong>variable objetivo es discreta o categórica</strong>: generalmente <strong>binaria</strong> (sí/no, tiene diabetes/no tiene, fraude/legítimo, aprueba crédito/rechaza, abandona/se queda) o <strong>multiclase</strong> (bajo/medio/alto, 6 tipos de paisaje).</p>
+<h4>b) Conceptos clave y los 6 Algoritmos</h4>
+<ul><li>
+<strong>Preprocesamiento, Discretización (<em>Binning</em>) y Selección de Variables</strong> <em>(Clases 12 y 13)</em>: Antes de clasificar, es vital hacer EDA (histogramas, <em>boxplots</em>, mapas de calor), eliminar variables sin varianza, redundantes o sesgadas (como la variable trampa embarazos cuando hay hombres y mujeres), imputar ceros imposibles (glucosa 0 o presión 0 con la mediana) y agrupar variables continuas en intervalos o <strong>bins</strong> (ej. temperatura alta/media/baja o edades de 10 en 10 años para optimizar árboles). <em>Analogía</em>: Antes de clasificar frutas por tamaño, pones etiquetas de "Chica, Mediana, Grande" en lugar de medir milímetro por milímetro.
+</li><li>
+<strong>1. Árboles de Decisión (<em>Decision Trees</em>)</strong> <em>(Clases 12 y 13)</em>: Divide iterativamente los datos mediante preguntas condicionales sobre los atributos hasta formar hojas de decisión; usa criterios matemáticos de desigualdad/impureza como el <strong>Índice de Gini</strong> o la <strong>Entropía</strong>. Sus hiperparámetros clave son el criterio (gini o entropy), la <strong>profundidad máxima</strong> (max_depth / <strong>poda</strong> para evitar que crezca demasiado y sobreajuste) y el tamaño de hoja. <em>Analogía</em>: El juego de "Adivina Quién" donde cada pregunta ("¿glucosa &gt; 142?", "¿edad &gt; 30?") parte al grupo hasta llegar a la respuesta. <em>Ejemplo de clase</em>: Decidir si jugar golf según clima, humedad y viento, o reglas médicas claras en diabetes (donde un equipo podó a 4 niveles logrando ~68% de detección interpretable por médicos).
+</li><li>
+<strong>2. Bosques Aleatorios (<em>Random Forest</em>)</strong> <em>(Clases 12, 13, 15 y 16)</em>: Ensamble que entrena múltiples árboles de decisión sobre subconjuntos aleatorios de datos y variables y combina sus votaciones, logrando mucha mayor estabilidad y precisión. Sus hiperparámetros incluyen <strong>número de árboles</strong>, tamaño mínimo del nodo, cantidad de características, profundidad y semilla aleatoria (random_state, que el profesor sugiere variar ej. 35 vs. 50 para probar estabilidad). <em>Ejemplo de clase</em>: En los proyectos de diabetes (829 registros clínicos), Random Forest fue el ganador recurrente (~75%–83% de exactitud), identificando glucosa, IMC y edad como las variables de mayor importancia.
+</li><li>
+<strong>3. Regresión Logística</strong> <em>(Clases 7, 12 y 13)</em>: Modelo lineal para clasificación binaria que calcula la probabilidad de pertenecer a la clase positiva ajustando una curva logística sobre el historial, fácil de interpretar mediante razones de momios (<em>odds ratios</em>). Parámetros: número de iteraciones y <strong>umbral de decisión</strong> (por defecto 0.5). <em>Ejemplo</em>: En un equipo de diabetes, aumentar una desviación estándar en glucosa multiplicaba los momios por 2.47 (p = 0.001) y en IMC por 2.1.
+</li><li>
+<strong>4. Naive Bayes (<em>Bayes Ingenuo</em>)</strong> <em>(Clases 12 y 13)</em>: Basado en el teorema de Bayes, evalúa la probabilidad de cada variable independiente respecto a una línea base; se usa muchísimo en <strong>análisis de texto, detección de spam y análisis de sentimientos</strong>. Tiene dos variantes principales vistas en clase: <strong>Gaussiana</strong> (para variables numéricas continuas, ej. biología/medicina) y <strong>Multinomial</strong> (para conteos/frecuencias de palabras en texto). <em>Analogía</em>: Leer un correo y sumar puntos de sospecha por cada palabra clave ("premio", "urgente", "clic") de forma independiente para decidir si es spam.
+</li><li>
+<strong>5. K-Vecinos Más Cercanos (<em>KNN</em>)</strong> <em>(Clases 12 y 13)</em>: Algoritmo basado en distancia que clasifica una observación nueva asignándole la clase mayoritaria entre sus K vecinos históricos más cercanos. Parámetros: número de vecinos (K) y métrica de distancia (<strong>Euclidiana</strong> o <strong>Manhattan</strong>, siendo Manhattan útil por tomar valores absolutos cuando hay datos dispersos o negativos). <em>Analogía</em>: Llegar a una fiesta sin saber de qué carrera es la gente y asumir que eres de la misma facultad que las 5 personas que tienes más cerca.
+</li><li>
+<strong>6. Máquinas de Vectores de Soporte (<em>SVM</em>)</strong> <em>(Clases 12 y 13)</em>: Busca trazar un <strong>hiperplano</strong> óptimo en el espacio multidimensional que separe las clases maximizando la franja o <strong>margen</strong> entre ellas; muy útil en control de calidad industrial, imágenes, spam y fraude. Parámetros: <strong>kernel</strong> (<strong>lineal</strong>, <strong>RBF/radial</strong>, <strong>polinomial</strong>), penalización por error (C) y ancho del margen. <em>Analogía</em>: Poner una avenida lo más ancha posible entre dos colonias rivales de modo que quede la máxima distancia libre hasta las casas de ambos lados.
+</li><li>
+<strong>Métricas de Evaluación y Desbalanceo de Clases</strong> <em>(Clases 12, 13, 15 y 16)</em>:
+<ul><li>
+<strong>Matriz de Confusión</strong>: Cruza valores reales contra predichos mostrando <strong>Verdaderos Positivos (VP)</strong>, <strong>Verdaderos Negativos (VN)</strong>, <strong>Falsos Positivos (FP — falsa alarma)</strong> y <strong>Falsos Negativos (FN — caso real que el modelo no detectó)</strong>.
+</li><li>
+<strong>Exactitud (<em>Accuracy</em>)</strong>: Porcentaje total de aciertos; <strong>es engañosa cuando hay clases desbalanceadas</strong> (en el dataset de diabetes, 64.78% no tenían diabetes; un modelo tonto que dijera "todos sanos" ya sacaría ~65% de exactitud; si una clase domina al 95%, el modelo se sesga y se aplican técnicas de <strong>oversampling / undersampling</strong>).
+</li><li>
+<strong>Precisión (<em>Precision</em>)</strong>: Qué porcentaje de los que el modelo predijo como positivos realmente lo son.
+</li><li>
+<strong>Sensibilidad (<em>Recall</em>)</strong>: De todos los casos positivos reales, cuántos logró detectar el modelo. <em>(En medicina es la métrica más crítica para no mandar enfermos a casa)</em>.
+</li><li>
+<strong>F1-Score</strong>: <strong>Media armónica</strong> entre Precisión y Sensibilidad.
+</li><li>
+<strong>Curva ROC y Área Bajo la Curva (AUC)</strong>: Mide la capacidad del modelo para distinguir entre clases en distintos umbrales; cuanto más cercana a 1, mejor.
+</li></ul>
+</li></ul>
+<h4>c) Mapa rápido de algoritmos de clasificación y sus parámetros (Clases 12 y 13)</h4>
+<div class="tabla-scroll"><table><tr><th>Algoritmo</th><th>Lógica central</th><th>Hiperparámetros vistos en clase</th><th>Uso destacado mencionado</th></tr><tr><td><strong>Árbol de Decisión</strong></td><td>Reglas por división de nodos</td><td>Criterio (Gini / Entropía), profundidad máxima (max_depth / poda)</td><td>Reglas interpretables para médicos o crédito</td></tr><tr><td><strong>Random Forest</strong></td><td>Múltiples árboles aleatorios</td><td>Nº de árboles, profundidad, tamaño nodo, variables, random_state</td><td>Diagnósticos médicos, fraude, biología computacional</td></tr><tr><td><strong>Regresión Logística</strong></td><td>Probabilidad sigmoide lineal</td><td>Nº de iteraciones, umbral (<em>threshold</em>, default 0.5)</td><td>Churn de clientes, enfermedades, fraude</td></tr><tr><td><strong>Naive Bayes</strong></td><td>Teorema de Bayes (independencia)</td><td>Tipo: <strong>Gaussiana</strong> vs. <strong>Multinomial</strong></td><td>Texto, spam, análisis de sentimientos</td></tr><tr><td><strong>KNN</strong></td><td>Votación de K vecinos cercanos</td><td>Nº de vecinos K, distancia (<strong>Euclidiana</strong> / <strong>Manhattan</strong>)</td><td>Clasificación por cercanía en datos/texto</td></tr><tr><td><strong>SVM</strong></td><td>Hiperplano de máximo margen</td><td><strong>Kernel</strong> (lineal, RBF, polinomial), penalización, ancho de margen</td><td>Calidad industrial, imágenes, spam, fraude</td></tr></table></div>
+<h4>d) Errores comunes y puntos recalcados para examen (Clases 12, 13, 15, 16 y 18)</h4>
+<ul><li>
+<strong>No inspeccionar por ID quiénes son los Falsos Positivos y Falsos Negativos</strong>: En las exposiciones de diabetes (Clase 15 y 16), el profesor recalcó que <strong>no basta con imprimir el número de FP y FN</strong>; el analista debe extraer la <strong>lista con los identificadores exactos de esas personas</strong> (ej. persona #1, #14, #25), revisar sus valores (ej. en un equipo los FN tenían glucosa promedio de 119.5 frente a 165 en diabéticos claros, y los FP tenían 143 de glucosa e IMC 38) y definir acciones concretas.
+</li><li>
+<strong>Dejar el umbral fijo en 0.5 cuando el falso negativo cuesta vidas</strong>: En diagnóstico médico (diabetes o cáncer), bajar el umbral (ej. de 0.5 a 0.35, o ajustar sensibilidad) reduce drásticamente los falsos negativos aunque genere algunos falsos positivos que luego se confirman en laboratorio.
+</li><li>
+<strong>No detectar variables sesgadas o imposibles</strong>: En el dataset de diabetes, el profesor incluyó a propósito la variable <strong>embarazos</strong> mezclando hombres y mujeres para comprobar si los alumnos la detectaban y limpiaban; además, había <strong>ceros</strong> en glucosa, presión, insulina y grosor de piel que representaban datos faltantes (y ~50% de nulos en insulina).
+</li><li>
+<strong>Regla de oro para el examen</strong>: Si la pregunta plantea una decisión dicotómica (<em>¿es anómalo o no?, ¿abandona o no?, ¿tiene la enfermedad o no?</em>), el modelo es <strong>clasificación binaria</strong>.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-7-pronostico-de-series-de-tiempo-"><summary><span class="stitle">Unidad 7: Pronóstico de Series de Tiempo (Clases 14, 15 y 18)</span></summary>
+<h4>a) Qué problema resuelve y cómo se conecta con las unidades anteriores</h4>
+<p>A diferencia de la regresión o clasificación estándar donde el orden de las filas no importa, aquí el <strong>eje X es obligatoriamente el tiempo en intervalos iguales</strong> (horas, días, semanas, meses). Resuelve problemas de pronóstico hacia el futuro (demanda, inventarios, consumo eléctrico, tráfico) ponderando con mayor fuerza el pasado reciente.</p>
+<h4>b) Conceptos clave</h4>
+<ul><li>
+<strong>Requisitos de una Serie de Tiempo</strong> <em>(Clases 14 y 18)</em>: Intervalos equidistantes (no mezclar días con meses; no inventar datos diarios si solo tienes mensuales) e <strong>historial suficiente</strong> (el profesor recomienda mínimo <strong>2 a 4 años</strong> para capturar ciclos estacionales; con 3–4 meses la incertidumbre es inaceptable y se frena el proyecto).
+</li><li>
+<strong>Componentes de una Serie de Tiempo</strong> <em>(Clases 14 y 15)</em>:
+<ul><li>
+<strong>Tendencia</strong>: Dirección general ascendente o descendente a largo plazo (lineal o no lineal).
+</li><li>
+<strong>Estacionalidad</strong>: Fluctuaciones que se repiten de forma regular <strong>dentro de un año</strong> o periodo fijo (ej. picos cada marzo o en Navidad).
+</li><li>
+<strong>Ciclicidad</strong>: Oscilaciones largas <strong>mayores a un año</strong> (ej. ciclos económicos o sexenios).
+</li><li>
+<strong>Componentes Irregulares / Outliers</strong>: Eventos atípicos inesperados (pandemia COVID-19, huracán, noche de ofertas) que deben investigarse antes de decidir si se excluyen o se modelan.
+</li></ul>
+</li><li>
+<strong>Estacionariedad vs. Estacionalidad</strong> <em>(Clase 15)</em>: El profesor recalcó no confundirlas: <strong>estacional</strong> significa que varía siguiendo estaciones o periodos repetitivos del calendario; <strong>estacionaria</strong> significa que la serie no tiene tendencia marcada (su media y varianza son estables en el tiempo), condición que exige ARIMA para funcionar.
+</li><li>
+<strong>Prueba ADF, ACF, PACF y Ruido Blanco</strong> <em>(Clases 15 y 18)</em>:
+<ul><li>
+<strong>ADF (Dickey-Fuller Aumentada)</strong>: Prueba estadística para verificar si la serie ya es estacionaria.
+</li><li>
+<strong>ACF (Autocorrelación) y PACF (Autocorrelación Parcial)</strong>: Gráficas que miden cuánto depende un periodo actual de sus rezagos (<em>lags</em>) pasados; PACF elimina los efectos intermedios para evaluar el rezago directo.
+</li><li>
+<strong>Ruido Blanco</strong>: Residuos completamente aleatorios e independientes entre sí (media cero y varianza constante); si los residuos son ruido blanco (ej. p &gt; 0.05 en las pruebas usadas por los equipos), significa que el modelo ya extrajo todo el patrón útil y lo que sobra es puro azar.
+</li></ul>
+</li><li>
+<strong>Suavizamiento Exponencial (Simple, Doble y Triple / Holt-Winters)</strong> <em>(Clases 14 y 15)</em>: Modela el futuro dando más peso exponencial a los datos recientes: el <strong>simple</strong> trabaja solo con el nivel, el <strong>doble</strong> añade <strong>tendencia</strong> (β) y el <strong>triple (Holt-Winters)</strong> incorpora nivel (α), tendencia (β) y <strong>estacionalidad</strong> (γ). <em>Analogía</em>: Es como ajustar el termostato de casa poniendo más atención a la temperatura de los últimos minutos que a la de hace tres días, recordando además que todos los días a las 3 p.m. entra el sol.
+</li><li>
+<strong>ARIMA y SARIMA</strong> <em>(Clases 14, 15 y 18)</em>: Modelos estadísticos que trabajan sobre una <strong>serie estacionaria</strong> combinando tres componentes mediante los hiperparámetros <strong>(p, d, q)</strong>: <strong>AR (p, Autorregresivo)</strong> usa valores pasados recientes; <strong>I (d, Integración)</strong> aplica diferenciación para volver estacionaria la serie; <strong>MA (q, Media Móvil)</strong> corrige el modelo usando los errores/residuos pasados. <strong>ARMA</strong> omite la diferenciación; <strong>SARIMA</strong> añade términos estacionales al esquema ARIMA (útil cuando hay estacionalidad compleja o cambios de nivel). <em>Analogía</em>: Para adivinar el tráfico de hoy, ARIMA mira cómo estuvo el tráfico ayer (AR), mide si respecto a la semana pasada va subiendo o bajando (I) y corrige según cuánto se equivocó su predicción de ayer (MA).
+</li></ul>
+<h4>c) Comparación de modelos y métricas (Clases 14, 15 y 18)</h4>
+<div class="tabla-scroll"><table><tr><th>Criterio</th><th>Holt-Winters (Triple Exponencial)</th><th>ARIMA</th><th>SARIMA</th></tr><tr><td><strong>Exige estacionariedad</strong></td><td>No</td><td>Sí (vía diferenciación d)</td><td>Sí + componente estacional</td></tr><tr><td><strong>Maneja estacionalidad</strong></td><td>Sí (estacionalidad regular clara)</td><td>No directamente</td><td>Sí (estacionalidad anual/compleja)</td></tr><tr><td><strong>Parámetros ("perillas")</strong></td><td>α (nivel), β (tendencia), γ (estacionalidad)</td><td>(p, d, q)</td><td>(p, d, q) + estacionales (ej. s=12)</td></tr><tr><td><strong>Fortaleza en caso Tempra</strong></td><td>Mejor en estacionalidad regular, corto plazo (1–3 meses) y con anomalías (ej. Guadalajara 2018)</td><td>Más estable a mediano/largo plazo (&gt;6 meses) según equipo</td><td>Mejor en cambios estructurales de nivel (CDMX 11.48%, Morelia 23.60%, Puebla 29.43%)</td></tr></table></div>
+<p><em>Métricas clave</em>: <strong>MAE</strong> (Error Absoluto Medio), <strong>RMSE</strong> (Raíz del Error Cuadrático Medio, penaliza errores grandes) y <strong>MAPE</strong> (Error Porcentual Absoluto Medio, independiente de la escala y muy popular en negocios). <em>Caso real Práctica 3.5 (Ventas de Tempra — datos de los equipos)</em>: Dataset de <strong>420 registros</strong> (7 estados × 60 meses, 2016–2020), entrenado con 48 meses (2016–2019) y probado con 12 meses (2020). Hallaron picos en marzo (potenciado por compras de pánico de COVID-19 en 2020), caídas en agosto, registros anómalos en cero/190 en Guadalajara 2018 (donde SARIMA falló con <strong>94.73% de error</strong> frente a Holt-Winters) y duplicidad exacta entre Querétaro y Veracruz.</p>
+<h4>d) Errores comunes y puntos recalcados para examen (Clases 14, 15 y 18)</h4>
+<ul><li>
+<strong>Ejercicio visual y de sectores (pregunta explícita de examen en Clase 15)</strong>: El profesor proyectó gráficas de series y dijo <strong><em>"esta es una pregunta de examen"</strong></em>: saber identificar a simple vista en una gráfica si tiene <strong>tendencia</strong>, <strong>estacionalidad</strong> o si es <strong>estacionaria</strong> (y qué algoritmo elegir en comercio/ventas, banca por hora del día o consumo eléctrico por hora).
+</li><li>
+<strong>Aplanar datos cambiando la escala temporal</strong>: En la Práctica 3.5, usar escala <strong>trimestral</strong> borró el pico de marzo y la caída de agosto aumentando el error, por lo que debió mantenerse la escala <strong>mensual</strong> (tampoco se pueden inventar datos diarios/semanales si la fuente es mensual).
+</li><li>
+<strong>Validación móvil recomendada por el profesor</strong>: En lugar de proyectar ciegamente 12 meses, usar ventanas como <strong>6 y 1</strong> (correr 6 meses, pronosticar el 7.º como si no existiera y contrastarlo con la realidad) o reentrenar cada 1–3 meses con pronóstico móvil.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-8-redes-neuronales-artificiales-c"><summary><span class="stitle">Unidad 8: Redes Neuronales Artificiales (Clases 16, 20 y 21)</span></summary>
+<h4>a) Qué problema resuelve y cómo se conecta con las unidades anteriores</h4>
+<p>Cuando los datos son masivos o altamente complejos (como miles de imágenes médicas o satelitales, secuencias largas de texto/clima o tablas con patrones muy profundos no lineales), los algoritmos clásicos de clasificación y regresión alcanzan su límite. Las redes neuronales artificiales cierran la caja de herramientas de algoritmos integrando clasificación, regresión y extracción automática de características.</p>
+<h4>b) Conceptos clave</h4>
+<ul><li>
+<strong>Neurona Biológica vs. Neurona Artificial</strong> <em>(Clase 16)</em>: El cerebro humano cuenta con decenas de miles de millones de neuronas (el profesor citó ~38,000 millones y luego corrigió a <strong>86,000 millones</strong>) que reciben estímulos por <strong>dendritas</strong>, los procesan, transmiten por el <strong>axón</strong> y se comunican mediante <strong>sinapsis</strong> (conexiones químicas/eléctricas según sensibilidad). La <strong>neurona artificial</strong> imita esto recibiendo entradas (x1, x2, …, xn), multiplicándolas por <strong>pesos</strong> (w1, w2, …, wn) en una <strong>suma ponderada</strong>, sumándole un <strong>sesgo (<em>bias</em>)</strong> que se ajusta iterativamente para afinar el aprendizaje, y pasando el resultado por una <strong>función de activación</strong>.
+<ul><li>
+<em>Fórmula vista en clase</em>: ActivaciónBig(Σi (xi · wi) + biasBig).
+</li><li>
+<em>Analogía</em>: Decidir si salir con paraguas: tus entradas son las nubes, la humedad y el pronóstico de la app; cada una tiene distinto "peso" según cuánto confíes en ella; el <em>bias</em> es qué tan friolento o precavido eres tú por defecto; si la suma supera cierto umbral, la función de activación dispara la decisión "Sí, lleva paraguas".
+</li></ul>
+</li><li>
+<strong>Funciones de Activación principales</strong> <em>(Clase 16)</em>:
+<ul><li>
+<strong>ReLU</strong>: Devuelve 0 o el valor positivo (muy usada en capas ocultas; en las exposiciones destacaron que evita el desvanecimiento del gradiente).
+</li><li>
+<strong>Sigmoide</strong>: Mapea valores entre 0 y 1 (ideal para salidas de probabilidad binaria).
+</li><li>
+<strong>Softmax</strong>: Convierte las salidas de la última capa en un <strong>vector de probabilidades</strong> que suman 1 para <strong>clasificación multiclase</strong> (ej. cebra 70%, caballo 20%, perro 10%, o 6 tipos de uso de suelo / 10 prendas de ropa).
+</li></ul>
+</li><li>
+<strong>Entrenamiento e Hiperparámetros</strong> <em>(Clases 16, 20 y 21)</em>:
+<ul><li>
+<strong>Época (<em>Epoch</em>)</strong>: Una vuelta completa de entrenamiento sobre todo el dataset, combinando <strong>propagación hacia adelante</strong> (calcula error) y <strong>propagación hacia atrás</strong> (ajusta pesos y <em>bias</em>). Si pones muy pocas no aprende; demasiadas memoriza y gasta cómputo.
+</li><li>
+<strong>Tamaño de lote (<em>Batch Size</em>)</strong>: Cantidad de registros procesados antes de actualizar los pesos (ej. lotes de 32 o 128).
+</li><li>
+<strong>Tasa de aprendizaje (<em>Learning Rate</em>)</strong> y optimizador (ej. Adam = 0.001): Controlan qué tan rápido ajusta sus pasos la red.
+</li><li>
+<strong>Búsqueda automática</strong>: <strong>Grid Search</strong> (matriz de combinaciones), <strong>Random Search</strong> (combinaciones aleatorias) y <strong>AutoML / Keras</strong> (sugieren capas y neuronas automáticamente).
+</li></ul>
+</li><li>
+<strong>Las 3 Arquitecturas principales + Autoencoder</strong> <em>(Clases 16, 20 y 21)</em>:
+<ul><li>
+<strong>MLP (Perceptrón Multicapa)</strong>: Capas densas conectadas entre sí; ideal para <strong>datos tabulares estructurados</strong>. <em>Ejemplos Práctica 3.6</em>: Retención universitaria UCI (4,424 alumnos, 121 entradas tras One-Hot, 16 neuronas ReLU, regularización α=1, 80% acierto en deserción); <em>churn</em> en telecomunicaciones (~7,000 clientes IBM, capas 64 y 32, peso 1.88 al abandono, umbral 0.3, recall = 0.78); ocupación de oficina (12,000 registros con luz/CO2/humedad/temperatura); y <em>scouteo</em> de futbolistas con <strong>MLP + Autoencoder</strong> (70 -&gt; 48 -&gt; 36 -&gt; 12 neuronas y regreso) para comprimir métricas de 12,000 jugadores y hallar similitudes.
+</li><li>
+<strong>CNN (Red Neuronal Convolucional)</strong>: Simula la visión humana mediante <strong>filtros convolucionales</strong> (ej. bloques 3x3 con 32, 64, 128, 256 filtros) que extraen bordes y texturas, capas de reducción (<strong>pooling</strong>) y una capa <strong>Flatten</strong> que convierte los mapas en un vector plano para clasificar. <em>Ejemplos Práctica 3.6</em>: Clasificación de uso de suelo Intel (17,000 imágenes 150x150x3, ~1.24M de parámetros frente a ~17M que habría requerido un MLP, logrando <strong>87% train / 86% val / 86% test</strong>); neumonía en 5,126 radiografías de tórax (1 canal); clasificación de 26 clases de malware convertido a imagen (256x256, 53% -&gt; 81%); peluches comparando CNN desde cero contra <strong>MobileNetV2</strong> (<em>transfer learning</em>) + mapas <strong>Grad-CAM</strong>; y <strong>Fashion-MNIST</strong> (70,000 imágenes 28x28, donde <strong>CNN ganó con 92.39%</strong> frente a MLP 89.66% y RNN 89.37%, reduciendo 26% el error aunque tardó 32.4 min sin GPU).
+</li><li>
+<strong>RNN / LSTM (Red Neuronal Recurrente)</strong>: Posee "memoria" para procesar <strong>secuencias</strong> donde el orden importa (texto, audio, series de tiempo). <em>Ejemplos Práctica 3.6</em>: Clima con bloques secuenciales de 10 días (4 capas, 50 nodos), precios de acciones Walmart/Costco, y afluencia diaria de la <strong>Línea 3 del Metro</strong> con <strong>LSTM</strong> (50 unidades de memoria sobre ~2,000 días post-pandemia, <strong>MAE = 46,000 pasajeros</strong>, ~7%–8% de error en días normales).
+</li></ul>
+</li></ul>
+<h4>c) Tabla guía: ¿Qué Red Neuronal elegir según el dato? (Clases 16, 20 y 21)</h4>
+<div class="tabla-scroll"><table><tr><th>Tipo de dato</th><th>Arquitectura recomendada</th><th>Mecanismo distintivo</th><th>Técnicas anti-sobreajuste vistas</th></tr><tr><td><strong>Tabulares</strong> (columnas independientes)</td><td><strong>MLP</strong></td><td>Capas densas; One-Hot + StandardScaler</td><td>Regularización α, Dropout (0.3), Batch Normalization, mantener capas simples</td></tr><tr><td><strong>Imágenes / Espacial</strong></td><td><strong>CNN</strong></td><td>Convoluciones (3x3), Pooling, Flatten, filtros crecientes</td><td>Dropout (50%), <em>Data Augmentation</em> (rotación/zoom, cuidando no alterar color si es el rasgo), <em>Early Stopping</em></td></tr><tr><td><strong>Secuencias / Series / Texto</strong></td><td><strong>RNN / LSTM</strong></td><td>Celdas con memoria de estados pasados</td><td>Ventanas temporales coherentes, Dropout, paro temprano (<em>early stopping</em>)</td></tr></table></div>
+<h4>d) Errores comunes y puntos recalcados para examen (Clases 16, 20 y 21)</h4>
+<ul><li>
+<strong>Sobreajuste por memorización temprana o exceso de capas</strong>: En el caso de neumonía, llegar a ~100% en la época 10 significó memorización hasta aplicar <em>data augmentation</em>, <em>dropout</em> 50% y <em>early stopping</em>; en el proyecto de internet de Mariana, su MLP simple de una sola capa (32 neuronas) <strong>no superó a un modelo lineal</strong>, y al añadir más capas solo empeoraba por sobreajuste.
+</li><li>
+<strong>Aumento de datos inadecuado</strong>: En el proyecto de peluches idénticos que solo cambiaban de color, aplicar <em>data augmentation</em> alterando el tono cromático habría destruido la información clave.
+</li><li>
+<strong>Regla de oro de generalización expuesta en clase</strong>: Comparar exactitud entre entrenamiento, validación y prueba (&lt; 3 puntos de diferencia = buena generalización; 3–8 = ligero sobreajuste; &gt; 8 = memorización).
+</li><li>
+<strong>Retroalimentación continua</strong>: El profesor aclaró una duda de Ortega: aunque la red es supervisada en su diseño y ajuste de hiperparámetros, una vez entrenada y desplegada se vuelve autónoma y puede seguir mejorando al recibir nuevos lotes de datos.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-unidad-9-evaluacion-integral-validacion-"><summary><span class="stitle">Unidad 9: Evaluación Integral, Validación Cruzada, Ajuste y Despliegue (Clases 18, 20 y 21)</span></summary>
+<h4>a) Qué problema resuelve y cómo se conecta con todo el curso</h4>
+<p>Es el filtro final de calidad antes de entregar cualquier proyecto (regresión, clasificación, clustering, series o redes neuronales) al cliente bajo CRISP-DM. Resuelve cómo comprobar que las métricas no fueron producto de la suerte de una partición 70/30 sesgada, cómo corregir errores graves en la matriz de confusión y cómo garantizar que el modelo resista datos futuros en producción.</p>
+<h4>b) Conceptos clave</h4>
+<ul><li>
+<strong>Validación Cruzada (<em>K-Folds</em>) y sus variantes</strong> <em>(Clases 20 y 21)</em>: Divide los datos en K particiones (ej. 5-Fold), entrenando en K-1 bloques y probando en el restante de manera rotativa hasta que todos fueron prueba una vez, y <strong>promedia los <em>scores</em> de todas las vueltas</strong>. Mientras 70/30 puede bastar en modelos sencillos de marketing, los modelos complejos o científicos/médicos exigen <em>K-Fold</em>. Variantes clave: <strong>K-Fold aleatorio</strong> (baraja antes), <strong>Stratified K-Fold</strong> (conserva proporción de clases), <strong>Repeated K-Fold</strong> (repite varias veces con distinta aleatoriedad) y <strong>Group K-Fold</strong> (mantiene juntos todos los registros de un mismo paciente o usuario para no mezclar su historial entre entrenamiento y prueba).
+</li><li>
+<strong>Underfitting vs. Good Fitting vs. Overfitting</strong> <em>(Clases 20 y 21)</em>:
+<ul><li>
+<strong>Underfitting (Subajuste)</strong>: El modelo es demasiado sencillo (pocos datos, pocas variables útiles o mucha correlación entre ellas); rinde <strong>mal en entrenamiento y mal en prueba</strong>. Solución: ser sincero con el cliente y enriquecer el dataset con nuevas variables relevantes.
+</li><li>
+<strong>Overfitting (Sobreajuste)</strong>: El modelo memoriza el entrenamiento (por corte 70/30 sesgado, variables sobrantes o demasiadas épocas); rinde <strong>excelente en entrenamiento y mal en prueba</strong>.
+</li><li>
+<strong>Good Fitting (Buen ajuste)</strong>: Entrenamiento bueno y prueba buena y consistente.
+</li></ul>
+</li><li>
+<strong>Selección y Reducción de Variables</strong> <em>(Clase 21)</em>: Evaluar variable por variable mediante matrices de correlación (eliminando colineales), pruebas estadísticas como <strong>Chi-cuadrada</strong> y <strong>ANOVA</strong> (para verificar diferencias significativas), y <strong>eliminación recursiva de características (<em>feature elimination</em>)</strong> descartando las que aportan casi cero (ej. 0.001%), sin recortar en exceso. <em>Caso real del profesor</em>: Redujo un dataset industrial de <strong>500 registros y ~760 variables</strong> (bombas, torque, presión) a <strong>~25–30 variables clave</strong>.
+</li><li>
+<strong>Muestreo, Estratificación y Binning</strong> <em>(Clase 21)</em>: Ante millones de tickets o lecturas de sensores cada segundo casi idénticas, se recomienda <strong>estratificar</strong> (por región norte/sur, tienda o categoría como lácteos sin mezclar zapatos) o <strong>agregar por intervalos</strong> (ej. promediar sensores cada 5 minutos). El <strong>Binning</strong> agrupa valores continuos en rangos manejables (ej. edades 0–10, 10–20, 20–30, 30–40) para reducir ruido y variables.
+</li><li>
+<strong>Principio de Longitud Mínima</strong> <em>(Clase 21)</em>: Busca el punto medio equilibrado entre la <strong>simplicidad</strong> del modelo (que genera mucho error) y su <strong>complejidad excesiva</strong> (que reduce el error pero provoca sobreajuste).
+</li><li>
+<strong>Umbrales de aceptación por dominio y costo del error</strong> <em>(Clases 20 y 21)</em>:
+<ul><li>
+<em>Ventas / Negocio general</em>: Arriba de <strong>80%</strong> suele considerarse bueno.
+</li><li>
+<em>Medicina / Impacto científico crítico</em>: Se exige <strong>90% o más</strong>, sabiendo que <strong>nunca existe el 100%</strong> y el techo práctico ronda <strong>93%–94%</strong>.
+</li><li>
+<em>Matriz de confusión según dominio</em>: En <strong>medicina</strong> (ej. cáncer sano / nivel 3 / nivel 5) se toleran más falsos positivos para evitar falsos negativos mortales; en <strong>crédito bancario y fraudes</strong> se cuida reducir los falsos positivos para no aprobar clientes riesgosos ni bloquear tarjetas legítimas.
+</li></ul>
+</li></ul>
+<h4>c) Tabla de diagnóstico y pasos de corrección (Clases 18, 20 y 21)</h4>
+<div class="tabla-scroll"><table><tr><th>Síntoma / Problema</th><th>Diagnóstico</th><th>Acciones correctivas concretas vistas en clase</th></tr><tr><td>Train bajo, Test bajo</td><td><strong>Underfitting</strong></td><td>Pedir/agregar variables ricas al cliente, reducir correlación redundante</td></tr><tr><td>Train excelente, Test malo</td><td><strong>Overfitting</strong></td><td><strong>1)</strong> Regularización Ridge/Lasso; <strong>2)</strong> <em>Dropout</em> en redes; <strong>3)</strong> Simplificar/podar árboles; <strong>4)</strong> <em>K-Fold Cross-Validation</em>; <strong>5)</strong> <em>Data augmentation</em> y depuración variable por variable</td></tr><tr><td>Errores graves en Matriz de Confusión (ej. FN en cáncer)</td><td>Umbral o variables inadecuadas</td><td><strong>1)</strong> Revisar matriz e IDs de FP/FN; <strong>2)</strong> Ajustar umbral; <strong>3)</strong> Balancear clases; <strong>4)</strong> Mejorar variables; <strong>5)</strong> Probar 2–3 algoritmos; <strong>6)</strong> Evaluar precisión, <em>recall</em>, F1</td></tr><tr><td>Métricas colapsan al llegar el mes n+1 o n+2</td><td>Modelo <strong>no resistente al cambio</strong></td><td>Modelo mal construido; reentrenar con <em>K-Folds</em>, revisar deriva/variables y monitorear 3–6 meses</td></tr></table></div>
+<h4>d) Errores comunes y puntos recalcados para examen (Clases 18, 20 y 21)</h4>
+<ul><li>
+<strong>Tres criterios obligatorios de éxito de un modelo (Clase 18)</strong>: (1) Resolver el reto empresarial aportando valor real; (2) <strong>resistir el cambio de datos</strong> cuando entran meses nuevos (n+1, n+2); y (3) <strong>comparar al menos dos modelos</strong> antes de elegir (K-Means vs. DBSCAN, Holt-Winters vs. SARIMA, etc.).
+</li><li>
+<strong>Tiempo de monitoreo en producción</strong>: Mínimo de <strong>3 a 6 meses</strong> después de implementar.
+</li><li>
+<strong>Creer en un 100% real</strong>: El profesor enfatizó que si un modelo en pruebas da 100%, probablemente memorizó; el máximo realista ronda 93%–94%.
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-lo-que-mas-probablemente-viene-en-el-fin" open><summary><span class="stitle">LO QUE MÁS PROBABLEMENTE VIENE EN EL FINAL</span></summary>
+<ul><li>
+<strong>Mapeo de problemas de negocio a tipo de modelo y algoritmo (con foco en Clasificación Binaria)</strong> * <em>Evidencia</em>: En Clase 18, tras corregir a un alumno en el caso de fraude bancario en tiempo real, el profesor dijo <strong>explícitamente</strong>: <em>"Recuerden esa parte binaria de clasificación, es muy importante; en el examen vendrá una pregunta como estas... no es la misma, pero va a ser similar"</em>.
+</li><li>
+<strong>Diferencias entre Modelo Predictivo y Modelo Descriptivo (y Supervisado vs. No Supervisado)</strong> * <em>Evidencia</em>: Lo recalcó en Clases 6 y 18 diciendo: <em>"Ese es un punto bien importante. Tienen que tener bien claro qué cosa es un modelo predictivo y descriptivo"</em>, exigiendo conocer qué tipo de datos requiere cada uno (etiquetados/estructurados vs. sin etiquetas) y sus métricas.
+</li><li>
+<strong>Diferencia entre Regresión y Clasificación</strong> * <em>Evidencia</em>: En Clases 6, 12 y 13 lo preguntó directamente a los alumnos (Martínez) y reiteró que la clasificación es su algoritmo estrella, diferenciándose de la regresión porque predice categorías discretas/binarias en lugar de un valor numérico continuo.
+</li><li>
+<strong>Identificación visual de gráficas de Series de Tiempo (Tendencia, Estacionalidad, Estacionaria) y elección del modelo</strong> * <em>Evidencia</em>: En Clase 15 proyectó gráficas y anunció <strong>explícitamente</strong>: <em>"Esta es una pregunta de examen"</em>, pidiendo distinguir tendencia, estacionalidad y series estacionarias, y asignar Holt-Winters, ARIMA o SARIMA a casos de comercio, banca o consumo eléctrico.
+</li><li>
+<strong>Interpretación de la Matriz de Confusión (FP vs. FN), ajuste de umbral y acciones por dominio</strong> * <em>Evidencia</em>: En Clases 12, 13, 15, 16 y 21 insistió en que la matriz de confusión es el elemento de mayor valoración: exigió en las prácticas sacar la lista por ID de falsos positivos/negativos, y en Clase 21 explicó el caso de cáncer señalando cuándo tolerar más FP (medicina) vs. reducir FP (crédito bancario).
+</li><li>
+<strong>Diagnóstico de <em>Underfitting</em>, <em>Overfitting</em> y <em>Good Fitting</em> + 5 formas de prevenir el sobreajuste</strong> * <em>Evidencia</em>: En Clase 21 señaló directamente: <em>"muchos de ustedes mismos ya me lo han hasta contestado en el examen"</em>, desglosando cómo se ve cada uno en entrenamiento vs. prueba y cómo corregirlo (Ridge/Lasso, <em>dropout</em>, poda, <em>K-Folds</em>, <em>data augmentation</em>).
+</li><li>
+<strong>Proceso integral de Minería de Datos, triple ajuste de hiperparámetros y criterios de robustez</strong> * <em>Evidencia</em>: Al cerrar el Tema 3 en Clase 18 (13 actividades, triple ajuste incluyendo el <em>"último apretoncito"</em>, monitoreo 3–6 meses, resistencia al cambio de datos n+1 y comparación ≥ 2 modelos), sentenció: <em>"Eso es el examen. El examen va a ser exactamente sobre todo el tema"</em>.
+</li><li>
+<strong>CRISP-DM (6 fases) frente a KDD y al proceso técnico</strong> * <em>Evidencia</em>: En Clases 20 y 21 dedicó la teoría central a contrastar KDD (académico) vs. CRISP-DM (estándar industrial de 6 fases desde negocio hasta despliegue), confirmando que el examen del tercer parcial cubre <em>"todo lo que hemos visto"</em>.
+</li><li>
+<strong>Los 3 Niveles de Validación y métricas de Reglas de Asociación (Soporte, Confianza, Lift)</strong> * <em>Evidencia</em>: En Clase 10, al enumerar los 3 niveles de validación (técnica/métricas, operativa/negocio y ejecutiva), dijo <strong>explícitamente</strong>: <em>"Es pregunta de examen"</em>.
+</li><li>
+<strong>Diseño de una Arquitectura de Datos y tipos de bases de datos (Warehouse, Lake, Vectorial)</strong>
+<ul><li>
+<em>Evidencia</em>: En Clase 4 afirmó textualmente: <em>"Una de las preguntas que [viene en] examen es crear arquitectura de [datos]"</em>, señalando que se deben definir requerimientos funcionales y no funcionales; además insistió en distinguir Data Warehouse, Data Lake y bases vectoriales.
+</li></ul>
+</li><li>
+<strong>Validación Cruzada (<em>K-Folds</em>, <em>Stratified</em>, <em>Group K-Fold</em>) y Selección de Red Neuronal (MLP vs. CNN vs. RNN)</strong>
+<ul><li>
+<em>Evidencia</em>: Aunque son prácticas que ya aplicaron, en Clase 21 resumió formalmente por qué 70/30 no basta en medicina (<em>Group K-Fold</em>), y en Clases 16, 20 y 21 evaluó la justificación de arquitectura según el tipo de dato (tabular → MLP, imagen → CNN, secuencia → RNN).
+</li></ul>
+</li></ul>
+</details>
+<details class="section-block sec" id="gf-conexiones-clave"><summary><span class="stitle">CONEXIONES CLAVE</span></summary>
+<ul><li>
+Arquitectura de datos -&gt; provee y asegura -&gt; datos confiables para el modelado
+</li><li>
+Repositorio de datos -&gt; añade metadatos y seguridad sobre -&gt; bases de datos convencionales
+</li><li>
+Data Lake -&gt; almacena datos crudos y multimedia antes de -&gt; estructurarse en un Data Warehouse
+</li><li>
+Data Mart -&gt; extrae una vista especializada desde -&gt; el Data Warehouse corporativo
+</li><li>
+Base de datos columnar en RAM -&gt; acelera consultas analíticas frente a -&gt; tablas tradicionales en disco
+</li><li>
+Base de datos vectorial -&gt; convierte texto e imágenes en <em>embeddings</em> para -&gt; búsquedas por similitud semántica
+</li><li>
+Spark -&gt; procesa en memoria RAM superando en velocidad a -&gt; MapReduce en disco de Hadoop
+</li><li>
+CRISP-DM -&gt; amplía con enfoque de negocio y despliegue al -&gt; marco académico KDD
+</li><li>
+Fase 4 de CRISP-DM (Modelado) -&gt; aloja el núcleo técnico llamado -&gt; proceso de Minería de Datos
+</li><li>
+Falta de historial suficiente -&gt; obliga a cancelar en Fase 2 -&gt; proyectos de Series de Tiempo
+</li><li>
+Modelos descriptivos -&gt; emplean aprendizaje no supervisado para -&gt; descubrir clústeres y asociaciones
+</li><li>
+Modelos predictivos -&gt; exigen datos etiquetados y estructurados para -&gt; estimar valores o clases futuras
+</li><li>
+StandardScaler -&gt; iguala magnitudes numéricas para -&gt; evitar sesgos en PCA, K-Means y KNN
+</li><li>
+PCA -&gt; reduce variables correlacionadas en componentes principales para -&gt; visualizar y acelerar el clustering
+</li><li>
+Método del Codo (WCSS) -&gt; sugiere el número óptimo K para -&gt; inicializar K-Means
+</li><li>
+DBSCAN -&gt; agrupa por densidad ε superando a K-Means al -&gt; detectar ruido y formas no esféricas
+</li><li>
+Coeficiente de Silueta -&gt; mide cohesión y separación para -&gt; comparar algoritmos de clustering
+</li><li>
+Reglas de asociación -&gt; buscan combinaciones frecuentes en tickets que -&gt; complementan la segmentación de clientes
+</li><li>
+Lift mayor a 1 -&gt; confirma una asociación real por encima de -&gt; compras básicas coincidentes al azar
+</li><li>
+FP-Growth -&gt; comprime transacciones en un <em>FP-Tree</em> escalando mejor que -&gt; Apriori en grandes volúmenes
+</li><li>
+Regresión -&gt; predice una variable objetivo continua a diferencia de -&gt; la clasificación discreta o binaria
+</li><li>
+Lasso -&gt; elimina variables no significativas mientras que -&gt; Ridge conserva y pondera las colineales
+</li><li>
+Clasificación binaria -&gt; responde decisiones dicotómicas críticas como -&gt; fraude bancario o diagnóstico médico
+</li><li>
+Matriz de confusión -&gt; desglosa falsos positivos y falsos negativos para -&gt; calibrar el umbral de decisión
+</li><li>
+F1-Score y Recall -&gt; evalúan modelos desbalanceados mejor que -&gt; la exactitud (<em>accuracy</em>) simple
+</li><li>
+Prueba ADF y diferenciación -&gt; transforman una serie no estacionaria para -&gt; hacerla apta para ARIMA y SARIMA
+</li><li>
+Holt-Winters -&gt; modela nivel, tendencia y estacionalidad sin exigir -&gt; estacionariedad previa como ARIMA
+</li><li>
+Neurona artificial -&gt; pondera entradas más <em>bias</em> mediante -&gt; funciones de activación (ReLU, Sigmoide, Softmax)
+</li><li>
+Arquitectura CNN -&gt; extrae patrones espaciales en imágenes reduciendo parámetros frente a -&gt; redes densas MLP
+</li><li>
+Validación cruzada (<em>K-Folds</em>) -&gt; promedia múltiples rotaciones de prueba para -&gt; evitar particiones 70/30 sesgadas y sobreajuste
+</li><li>
+Dropout, poda y regularización -&gt; previenen la memorización detectada cuando -&gt; el entrenamiento supera ampliamente a la prueba
+</li><li>
+Principio de longitud mínima -&gt; equilibra simplicidad contra complejidad buscando -&gt; minimizar error sin caer en sobreajuste
+</li><li>
+Criterio de robustez empresarial -&gt; exige comparar mínimo dos modelos y -&gt; resistir datos nuevos en monitoreo de 3 a 6 meses
+</li></ul>
+<p>🎯 ¿Quieres que armemos un <strong>examen simulacro completo</strong> (con ejercicios de mapeo de problemas, gráficas de series de tiempo, una matriz de confusión para diagnosticar y una arquitectura de datos) o prefieres repasar primero alguno de los bloques técnicos que sientas más flojo?</p>
+</details>
+<details class="section-block sec" id="gf-anexo-clases-que-no-estaban-en-el-cuader"><summary><span class="stitle">Anexo · Clases que no estaban en el cuaderno de NotebookLM</span></summary>
+<p><em>Resumen para estudiar de cada una, tomado de los apuntes por clase del sitio (decimo/MD/MD-Resumenes/).</em></p>
+<h3>Clase 19 · Segundo Examen Parcial (jueves 5 nov 2026)</h3>
+<p><em>Lo que conviene verificar al recibir la calificación.</em></p>
+<div class="tabla-scroll"><table><tr><th>Pendiente</th><th>Qué hacer</th></tr><tr><td>Calificación</td><td>Anotarla cuando la den</td></tr><tr><td>Redes neuronales (capas y neuronas)</td><td>Repasar la Clase 16, porque esa parte quedó sin responder</td></tr><tr><td>Entrega en Classroom</td><td>Confirmar el estado del examen y de la práctica MLP</td></tr></table></div>
+</details>
+</div>
+</body>
+</html>
