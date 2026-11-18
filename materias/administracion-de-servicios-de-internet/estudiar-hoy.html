@@ -127,6 +127,23 @@ pre.code { white-space: pre; font-size: calc(var(--fs) * .72); line-height: 1.55
 .pz-all li { margin:.3em 0; cursor:pointer; }
 .pz-all li.ok { color:var(--ok); } .pz-all li.rep { color:var(--warn); }
 
+/* respuesta lista para copiar */
+.pz-ans { margin-top:14px; background:rgba(0,0,0,.22); border-radius:10px; padding:16px 18px; color:#f4f1de; font-size:calc(var(--fs) * .85); line-height:1.5; }
+.pz-ans table { width:100%; border-collapse:collapse; margin:10px 0; }
+.pz-ans th { text-align:left; color:#ffd166; font-size:.85em; padding:6px 10px; border-bottom:2px solid rgba(255,209,102,.5); }
+.pz-ans td { padding:6px 10px; border-bottom:1px solid rgba(255,255,255,.12); vertical-align:top; }
+.pz-ans td:first-child { font-weight:700; color:#fff; white-space:nowrap; }
+.pz-ans .def { background:rgba(255,255,255,.06); border-radius:8px; padding:10px 14px; margin:0 0 10px; }
+.pz-ans .trap { border-left:4px solid #ffd166; padding:6px 12px; margin:10px 0; background:rgba(255,209,102,.1); border-radius:0 8px 8px 0; }
+.pz-ans .flow { font-weight:600; color:#a8e6cf; margin:8px 0; }
+.pz-ans .k { color:#ffd166; font-weight:700; }
+.pz-ans b { color:#fff; }
+.pz-ans h4 { color:#ffd166; font-family:'Fraunces', serif; margin:14px 0 4px; font-size:1em; }
+.pz-ans ul { margin:4px 0; padding-left:1.3em; } .pz-ans li { margin:3px 0; font-size:1em; line-height:1.5; }
+.pz-ans pre.sql { white-space:pre; overflow-x:auto; font-size:.82em; line-height:1.5; background:rgba(0,0,0,.3); padding:12px 14px; border-radius:8px; margin:8px 0; color:#f4f1de; }
+.pz-ans code { background:rgba(255,255,255,.1); color:#fff; }
+@media (max-width:600px){ .pz-ans { padding:12px; } .pz-ans td, .pz-ans th { padding:5px 6px; } .pz-ans td:first-child { white-space:normal; } }
+
 @media (max-width: 600px) {
   :root { --fs: 18px; } :root[data-fs="2"]{--fs:18px} :root[data-fs="3"]{--fs:21px} :root[data-fs="4"]{--fs:24px}
   body { padding-top: 44px; } .eh-tabs { top: 44px; }
@@ -346,7 +363,7 @@ pre.code { white-space: pre; font-size: calc(var(--fs) * .72); line-height: 1.55
     <p class="pz-why" id="pz-why"></p>
     <p class="task" id="pz-task"></p>
     <div class="pz-step" id="pz-step"></div>
-    <pre id="pz-resp"></pre>
+    <div class="pz-ans" id="pz-resp"></div>
     <div class="pz-hidden" id="pz-hid">🙈 Respuesta oculta. Borra el pizarrón y escribe todo lo que recuerdes.</div>
   </div>
   <div class="pz-act" id="pz-act"></div>
@@ -411,47 +428,155 @@ pre.code { white-space: pre; font-size: calc(var(--fs) * .72); line-height: 1.55
   // ===== pizarrón guiado, de mayor a menor prioridad =====
   var PZ=[
    {t:'Qué es un RFC + la tabla de los 9',p:'#1 · RFC',w:'«en el examen voy a añadir los de los RFCs» (Clase 17); lo último del curso.',
-    q:'Arriba: qué es un RFC en una línea y la trampa protocolo ≠ RFC. Abajo, 4 columnas: RFC · protocolo · puerto · una frase. Las 9 filas.',
-    r:'RFC = Request for Comments (1969): documento técnico\n  PÚBLICO, GRATUITO e INMUTABLE de la IETF que define un protocolo.\n  No se edita: sale uno nuevo que lo actualiza o lo vuelve obsoleto.\n  Usa MUST / SHOULD / MAY.\nTrampa: protocolo ≠ RFC → LDAP es el protocolo, 4510 el documento.\n\n2616 · HTTP/1.1 · 80\n   petición-respuesta SIN ESTADO · 1xx–5xx · GET/POST/PUT/DELETE\n3501 · IMAP · 143/993\n   el correo SE QUEDA en el servidor · 4 estados\n1939 · POP3 · 110/995\n   DESCARGA y borra · 3 estados\n4510 · LDAPv3\n   mapa de la familia 4511–4521 · usuarios y permisos\n1700 · Números IANA\n   6 = TCP · 17 = UDP · puertos 20/21, 22, 25, 53, 80\n854 · Telnet · 23\n   SIN CIFRAR · NVT · WILL/WONT/DO/DONT → SSH (22)\n1034 · DNS · 53\n   jerárquico y distribuido · capa 7\n3898 · NIS en DHCPv6\n   códigos 27–30 · obsoleto por inseguro → LDAP/AD\n8446 · TLS 1.3\n   1 RTT · AEAD (AES-GCM) · DH efímero · sin MD5/SHA-1/RC4'},
+    q:'Arriba: qué es un RFC y la trampa. Abajo: la tabla de los 9 (RFC · protocolo · puerto · dato clave).',
+    r:`<div class="def"><b>RFC</b> = <i>Request for Comments</i> (1969)<br>Documento técnico de la <b>IETF</b>: <span class="k">público · gratuito · inmutable</span><br>Define cómo funciona un protocolo. No se edita: sale un RFC nuevo.<br>Usa <b>MUST · SHOULD · MAY</b>.</div>
+<div class="trap">⚠ Protocolo ≠ RFC → <b>LDAP</b> es el protocolo; <b>4510</b> es el documento.</div>
+<table><tr><th>RFC</th><th>Protocolo</th><th>Puerto</th><th>Dato clave</th></tr>
+<tr><td>2616</td><td>HTTP/1.1</td><td>80</td><td>sin estado · códigos 1xx–5xx</td></tr>
+<tr><td>3501</td><td>IMAP</td><td>143 / 993</td><td>correo <span class="k">se queda</span> en el servidor · 4 estados</td></tr>
+<tr><td>1939</td><td>POP3</td><td>110 / 995</td><td><span class="k">descarga y borra</span> · 3 estados</td></tr>
+<tr><td>4510</td><td>LDAPv3</td><td>—</td><td>mapa de los RFC 4511–4521 · usuarios y permisos</td></tr>
+<tr><td>1700</td><td>IANA</td><td>—</td><td><span class="k">6 = TCP · 17 = UDP</span></td></tr>
+<tr><td>854</td><td>Telnet</td><td>23</td><td>sin cifrar → lo reemplazó SSH (22)</td></tr>
+<tr><td>1034</td><td>DNS</td><td>53</td><td>jerárquico y distribuido</td></tr>
+<tr><td>3898</td><td>NIS en DHCPv6</td><td>—</td><td>códigos 27–30 · obsoleto (inseguro)</td></tr>
+<tr><td>8446</td><td>TLS 1.3</td><td>—</td><td><span class="k">1 RTT</span> · AEAD · sin MD5/SHA-1/RC4</td></tr></table>`},
    {t:'IMAP vs. POP3: estados y borrado',p:'#1 · RFC',w:'Preguntó en la exposición «¿IMAP o POP?» y «¿qué desventaja tiene IMAP?».',
-    q:'Dibuja los estados de IMAP y de POP3 con flechas. Luego: con 4 correos haces DELE 2, RSET y se cae antes de QUIT, ¿cuántos quedan? ¿Desventaja de IMAP?',
-    r:'IMAP (3501, 143/993):  No autenticado → Autenticado → Seleccionado → Cierre\n                        correos se quedan en el servidor\nPOP3 (1939, 110/995):  Autorización → Transacción → Update (solo con QUIT)\n                        descarga y borra del servidor\n\nDELE 2 → solo MARCA · RSET → desmarca · se cae antes de QUIT → quedan los 4\n\nDesventaja de IMAP: dependes del servidor y su almacenamiento crece sin fin.\nEl profesor: la mayoría sigue usando POP para descargar y liberar espacio.'},
+    q:'Dibuja los estados de IMAP y de POP3 con flechas. Luego: 4 correos, haces DELE 2, RSET y se cae antes de QUIT: ¿cuántos quedan?',
+    r:`<table><tr><th></th><th>IMAP (3501)</th><th>POP3 (1939)</th></tr>
+<tr><td>Puertos</td><td>143 / 993</td><td>110 / 995</td></tr>
+<tr><td>Correos</td><td>se quedan en el servidor</td><td>se descargan y se borran</td></tr>
+<tr><td>Estados</td><td>4</td><td>3</td></tr></table>
+<div class="flow">IMAP: No autenticado → Autenticado → Seleccionado → Cierre</div>
+<div class="flow">POP3: Autorización → Transacción → Update</div>
+<h4>DELE 2, RSET, se cae antes de QUIT</h4>
+<ul><li>DELE solo <b>marca</b> · RSET <b>desmarca</b></li><li>Solo se borra de verdad en Update, con <b>QUIT</b></li><li>→ <span class="k">quedan los 4</span></li></ul>
+<h4>Desventaja de IMAP</h4><ul><li>Dependes del servidor y su almacenamiento crece sin fin</li><li>El profesor: la mayoría sigue usando POP (descarga y libera espacio)</li></ul>`},
    {t:'Detalles de cada RFC',p:'#1 · RFC',w:'Lo que dijeron los equipos y lo que preguntó el profesor (Clases 17–19).',
-    q:'Para HTTP, Telnet, NIS en DHCPv6 y TLS 1.3 escribe el dato fino. GET vs. POST. ¿Qué pasó en Japón?',
-    r:'HTTP 2616: GET pide (solo lectura) · POST envía. Reemplazado por RFC 7230–7235\n           (luego HTTP/2 y HTTP/3).\nTelnet 854: NVT (terminal virtual de red); negocia WILL / WONT / DO / DONT.\n           Todo sin cifrar → lo reemplazó SSH (22).\nNIS 3898: 27 IP NIS · 28 IP NIS+ · 29 dominio NIS · 30 dominio NIS+.\nTLS 1.3 8446: handshake 2 RTT → 1 RTT; obliga AEAD (AES-GCM) y Diffie-Hellman\n           efímero; quitó MD5, SHA-1 y RC4.\n1700: hoy histórico (RFC 3232).\nJapón: cayeron ~300 bancos por depender de un mismo servidor central.'},
+    q:'GET vs. POST. Telnet: NVT y sus 4 comandos. Los códigos 27–30. Qué cambió TLS 1.3. ¿Qué pasó en Japón?',
+    r:`<table><tr><th>Tema</th><th>Qué escribir</th></tr>
+<tr><td>HTTP</td><td>GET <b>pide</b> (solo lectura) · POST <b>envía</b><br>Reemplazado por RFC 7230–7235 → HTTP/2, HTTP/3</td></tr>
+<tr><td>Telnet</td><td>NVT = terminal virtual de red<br>Negocia: <b>WILL · WONT · DO · DONT</b><br>Sin cifrar → SSH (22)</td></tr>
+<tr><td>NIS (3898)</td><td>27 IP NIS · 28 IP NIS+<br>29 dominio NIS · 30 dominio NIS+</td></tr>
+<tr><td>TLS 1.3</td><td>2 RTT → <b>1 RTT</b><br>Obliga AEAD (AES-GCM) + Diffie-Hellman efímero<br>Quitó MD5, SHA-1, RC4</td></tr>
+<tr><td>IANA (1700)</td><td>Hoy histórico (RFC 3232)</td></tr>
+<tr><td>Japón</td><td>Cayeron ~300 bancos por depender de un mismo servidor central</td></tr></table>`},
    {t:'Servidor vs. repositorio, DIK y CID',p:'#2',w:'«parece muy obvio, pero luego en el examen me ponen ahí cada barbaridad» (Clase 3).',
-    q:'Define servidor (y por qué un repositorio no lo es). Dibuja la pirámide DIK. Escribe CID con el significado de cada letra.',
-    r:'Servidor: equipo (hardware o software) que ofrece y comparte servicios o recursos\n          a uno o más clientes a través de una red, y EJECUTA PROCESOS.\nRepositorio (Git): solo almacena datos; no los ejecuta.\n\n        /\\        Conocimiento (decisiones)\n       /  \\       Información (datos con contexto)\n      /____\\      Datos\n\nC = Confidencialidad (solo autorizados)\nI = Integridad (los datos no se alteran)\nD = Disponibilidad (accesible cuando se necesita)'},
+    q:'Define servidor y por qué un repositorio no lo es. Dibuja la pirámide DIK. Escribe CID.',
+    r:`<div class="def"><b>Servidor</b>: equipo (hardware o software) que <b>ofrece y comparte servicios o recursos</b> a uno o más clientes <b>a través de una red</b>, y <span class="k">ejecuta procesos</span>.</div>
+<div class="trap">⚠ Repositorio (Git): solo <b>almacena</b>, no ejecuta.</div>
+<h4>Pirámide DIK (de abajo hacia arriba)</h4>
+<div class="flow">Datos → Información (datos con contexto) → Conocimiento (decisiones)</div>
+<h4>CID</h4><table><tr><td>C</td><td>Confidencialidad: solo autorizados</td></tr><tr><td>I</td><td>Integridad: los datos no se alteran</td></tr><tr><td>D</td><td>Disponibilidad: accesible cuando se necesita</td></tr></table>`},
    {t:'Cubo OLAP y tipos de medida',p:'#3 · OLAP',w:'«de ahí sí podemos sacar un buen [ejercicio] para su examen» (Clase 10); salió mal en el parcial.',
-    q:'Qué es un cubo OLAP. Dibuja uno con 3 dimensiones y sus jerarquías. Una medida aditiva, una semiaditiva y una no aditiva.',
-    r:'Cubo OLAP: estructura CONCEPTUAL (no un archivo) que organiza MEDIDAS numéricas\nalrededor de DIMENSIONES para responder una pregunta.\nPrimero se definen medida y dimensiones; después se responde la pregunta.\n\nTiempo:  Año → Trimestre → Mes → Día\nLugar:   País → Estado → Ciudad\n(Producto como 3.ª dimensión)\n\nAditiva:     ventas (se suma en todas las dimensiones)\nSemiaditiva: saldo bancario (no se suma en el tiempo)\nNo aditiva:  porcentajes, promedios (calculadas)'},
+    q:'Qué es un cubo OLAP. Dibuja uno con 3 dimensiones y sus jerarquías. Una medida de cada tipo.',
+    r:`<div class="def"><b>Cubo OLAP</b>: estructura <span class="k">conceptual</span> (no un archivo) que organiza <b>medidas</b> numéricas alrededor de <b>dimensiones</b> para responder una pregunta.<br>Primero defines medida y dimensiones; después respondes.</div>
+<h4>Jerarquías (de lo general a lo particular)</h4>
+<div class="flow">Tiempo: Año → Trimestre → Mes → Día</div>
+<div class="flow">Lugar: País → Estado → Ciudad</div>
+<h4>Tipos de medida</h4>
+<table><tr><th>Tipo</th><th>Regla</th><th>Ejemplo</th></tr>
+<tr><td>Aditiva</td><td>se suma en todas las dimensiones</td><td>ventas</td></tr>
+<tr><td>Semiaditiva</td><td>se suma solo en algunas</td><td>saldo bancario (no en el tiempo)</td></tr>
+<tr><td>No aditiva</td><td>calculada, no se suma</td><td>porcentajes, promedios</td></tr></table>`},
    {t:'Data Warehouse, ETL y los 3 esquemas',p:'#3 · OLAP',w:'Mismo tema que salió mal en el parcial (Clases 10, 11, 13).',
-    q:'Dibuja estrella, copo de nieve y constelación con su forma normal. El flujo fuentes → ETL → DW → tablero, y la regla DW / base transaccional. Slice, dice, drill-down.',
-    r:'Data Warehouse: repositorio HISTÓRICO e integrado de varias fuentes, para análisis.\n\nESTRELLA (1FN):      1 tabla de hechos + dimensiones directas\nCOPO DE NIEVE (2FN): 1 tabla de hechos; dimensiones divididas en subdimensiones\nCONSTELACIÓN (3FN):  varias tablas de hechos que comparten dimensiones\n\nFuentes (ERP, Excel, PDF) → Extracción · Transformación (limpieza, Power Query)\n                          · Carga → DATA WAREHOUSE → tablero\nDW ──✗──→ base transaccional   (NUNCA se regresan datos)\n\nslice = una rebanada · dice = varias condiciones · drill-down = bajar al detalle\nENOE: sumar en vez de promediar/contar crea brechas falsas.'},
+    q:'Qué es un DW y su regla. ETL. Los 3 esquemas con su forma normal. Slice, dice, drill-down.',
+    r:`<div class="def"><b>Data Warehouse</b>: repositorio <b>histórico e integrado</b> de varias fuentes, para análisis.</div>
+<div class="trap">⚠ Nunca se regresan datos del DW a la base transaccional.</div>
+<div class="flow">Fuentes (ERP, Excel, PDF) → <b>E</b>xtracción → <b>T</b>ransformación → <b>C</b>arga → DW → tablero</div>
+<table><tr><th>Esquema</th><th>FN</th><th>Estructura</th></tr>
+<tr><td>Estrella</td><td>1FN</td><td>1 tabla de hechos + dimensiones directas</td></tr>
+<tr><td>Copo de nieve</td><td>2FN</td><td>1 tabla de hechos; dimensiones divididas en subdimensiones</td></tr>
+<tr><td>Constelación</td><td>3FN</td><td>varias tablas de hechos que comparten dimensiones</td></tr></table>
+<table><tr><td>Slice</td><td>una rebanada</td></tr><tr><td>Dice</td><td>varias condiciones</td></tr><tr><td>Drill-down</td><td>bajar al detalle</td></tr></table>`},
    {t:'Oracle: usuario → rol → privilegios',p:'#4 · Oracle',w:'«Yo pondría mucha alta atención» (Clase 14). Posible código a mano.',
-    q:'Escribe el SQL: crear usuario, crear rol, darle privilegios al rol, dar el rol al usuario, tablespace y COMMIT. Explica DATE vs. TIMESTAMP y USER vs. SHOW USER.',
-    r:'CREATE USER auditor IDENTIFIED BY clave;\nCREATE ROLE rol_app;\nGRANT CREATE SESSION, CREATE TABLE, CREATE TRIGGER TO rol_app;\nGRANT rol_app TO auditor;\nGRANT UNLIMITED TABLESPACE TO auditor;  -- DIRECTO al usuario (en rol: ORA-01950)\nCOMMIT;   -- sin COMMIT otros usuarios no ven los cambios; se consulta usuario.tabla\n\nSYSDATE en DATE      → solo la fecha\nSYSDATE en TIMESTAMP → fecha, hora y fracciones de segundo\nUSER = función · SHOW USER = comando\n(nombres de ejemplo)'},
+    q:'Escribe el SQL en orden: usuario, rol, privilegios al rol, rol al usuario, tablespace, COMMIT. Luego DATE vs. TIMESTAMP.',
+    r:`<div class="flow">Orden: Usuario → Rol → Privilegios</div>
+<pre class="sql">CREATE USER auditor IDENTIFIED BY clave;
+CREATE ROLE rol_app;
+GRANT CREATE SESSION, CREATE TABLE TO rol_app;
+GRANT rol_app TO auditor;
+GRANT UNLIMITED TABLESPACE TO auditor;
+COMMIT;</pre>
+<ul><li><b>UNLIMITED TABLESPACE</b> va <span class="k">directo al usuario</span>, no al rol</li>
+<li>Sin <b>COMMIT</b> los otros usuarios no ven los cambios · se consulta <code>usuario.tabla</code></li></ul>
+<table><tr><td>DATE</td><td>solo la fecha</td></tr><tr><td>TIMESTAMP</td><td>fecha + hora + fracciones de segundo</td></tr><tr><td>USER</td><td>función</td></tr><tr><td>SHOW USER</td><td>comando</td></tr></table>`},
    {t:'Oracle: trigger de auditoría',p:'#4 · Oracle',w:'Clase 14: un solo trigger con INSERTING / UPDATING / DELETING.',
-    q:'Escribe un trigger AFTER INSERT OR UPDATE OR DELETE que guarde en una bitácora el usuario, la hora y los valores :OLD y :NEW.',
-    r:'CREATE OR REPLACE TRIGGER trg_auditoria\nAFTER INSERT OR UPDATE OR DELETE ON auditor.empleados\nFOR EACH ROW\nBEGIN\n  IF INSERTING THEN\n    INSERT INTO bitacora VALUES (USER, SYSTIMESTAMP, \'INSERT\', NULL, :NEW.sueldo);\n  ELSIF UPDATING THEN\n    INSERT INTO bitacora VALUES (USER, SYSTIMESTAMP, \'UPDATE\', :OLD.sueldo, :NEW.sueldo);\n  ELSIF DELETING THEN\n    INSERT INTO bitacora VALUES (USER, SYSTIMESTAMP, \'DELETE\', :OLD.sueldo, NULL);\n  END IF;\nEND;\n\nTrigger: se ejecuta solo, BEFORE o AFTER de INSERT / UPDATE / DELETE.\n:OLD = dato anterior · :NEW = dato nuevo   (tabla y columnas de ejemplo)'},
+    q:'Escribe un trigger que guarde en una bitácora cada INSERT, UPDATE y DELETE usando :OLD y :NEW.',
+    r:`<pre class="sql">CREATE OR REPLACE TRIGGER trg_aud
+AFTER INSERT OR UPDATE OR DELETE ON empleados
+FOR EACH ROW
+BEGIN
+  IF INSERTING THEN
+    INSERT INTO bitacora VALUES (USER, SYSTIMESTAMP, 'INSERT', NULL, :NEW.sueldo);
+  ELSIF UPDATING THEN
+    INSERT INTO bitacora VALUES (USER, SYSTIMESTAMP, 'UPDATE', :OLD.sueldo, :NEW.sueldo);
+  ELSIF DELETING THEN
+    INSERT INTO bitacora VALUES (USER, SYSTIMESTAMP, 'DELETE', :OLD.sueldo, NULL);
+  END IF;
+END;</pre>
+<ul><li>Trigger: se ejecuta <b>solo</b>, BEFORE o AFTER de INSERT / UPDATE / DELETE</li>
+<li><span class="k">:OLD</span> = dato anterior · <span class="k">:NEW</span> = dato nuevo</li>
+<li>Nombres de tabla y columnas: de ejemplo</li></ul>`},
    {t:'Linux: comandos, permisos y directorios',p:'#5 · Linux',w:'Clase 1 + «me voy a basar en el extra» (escribir comandos).',
-    q:'Los 8 directorios con su uso. Qué hacen which, whereis, ps aux, mkdir -m 700 -p a/b/c, cat a b > c, cat -n, ls -l/-a/-s, pwd. Valores de r, w, x y la regla.',
-    r:'/boot arranque y kernel · /bin comandos esenciales · /etc configuración\n/home usuarios · /usr programas (no de usuarios) · /var y /tmp temporales\n/dev dispositivos · /opt software adicional\n\nwhich   = solo la ruta del ejecutable\nwhereis = todas las carpetas del paquete\nps aux  = a todos los usuarios · u recursos (CPU/RAM) · x sin terminal\n          (top en vivo · kill mata por PID)\nmkdir -m 700 -p a/b/c = crea toda la ruta con permisos rwx solo dueño\ncat a b > c = une en c · cat -n numera · ls -l detalles, -a ocultos, -s tamaño\npwd = carpeta actual\n\nr=4 w=2 x=1 para dueño · grupo · otros.  NUNCA 777 ni x a otros.'},
+    q:'Los 8 directorios con su uso. Qué hace cada comando. Permisos.',
+    r:`<table><tr><th>Directorio</th><th>Para qué</th></tr>
+<tr><td>/boot</td><td>arranque y kernel</td></tr><tr><td>/bin</td><td>comandos esenciales</td></tr><tr><td>/etc</td><td>configuración</td></tr><tr><td>/home</td><td>usuarios</td></tr><tr><td>/usr</td><td>programas (no de usuarios)</td></tr><tr><td>/var, /tmp</td><td>temporales</td></tr><tr><td>/dev</td><td>dispositivos</td></tr><tr><td>/opt</td><td>software adicional</td></tr></table>
+<table><tr><th>Comando</th><th>Qué hace</th></tr>
+<tr><td>which</td><td>solo la ruta del ejecutable</td></tr><tr><td>whereis</td><td>todas las carpetas del paquete</td></tr>
+<tr><td>ps aux</td><td>a todos · u CPU/RAM · x sin terminal</td></tr>
+<tr><td>mkdir -m 700 -p</td><td>-m permisos · -p crea toda la ruta</td></tr>
+<tr><td>cat a b &gt; c</td><td>une a y b en c · cat -n numera</td></tr>
+<tr><td>ls -l -a -s</td><td>detalles · ocultos · tamaño</td></tr></table>
+<div class="trap">Permisos: r = 4 · w = 2 · x = 1 (dueño · grupo · otros). <b>Nunca 777.</b></div>`},
    {t:'Nmap, Metasploit y puertos',p:'#6 · Nmap',w:'Resumió las 5 banderas al cierre de la Clase 9.',
-    q:'Las 5 banderas de Nmap. Los pasos de Metasploit. Todos los puertos que recuerdes. ¿Qué es el protocolo 6 y el 17?',
-    r:'-sn  hosts activos\n-sS  escaneo sigiloso (SYN)\n-sV  versiones de los servicios\n-O   sistema operativo\n-A   agresivo y completo (deja rastro)\n\nmsfconsole → use … → show options → set RHOSTS … → exploit\n(siempre en máquina virtual y con autorización)\n\n20/21 FTP · 22 SSH · 23 Telnet · 25 SMTP · 53 DNS · 80 HTTP · 110/995 POP3\n143/993 IMAP · 443 HTTPS · 445 SMB · 1521 Oracle · 3306 MySQL\nProtocolo IP: 6 = TCP · 17 = UDP'},
+    q:'Las 5 banderas de Nmap. Pasos de Metasploit. Puertos.',
+    r:`<table><tr><th>Bandera</th><th>Qué hace</th></tr>
+<tr><td>-sn</td><td>hosts activos</td></tr><tr><td>-sS</td><td>escaneo sigiloso</td></tr><tr><td>-sV</td><td>versiones de servicios</td></tr><tr><td>-O</td><td>sistema operativo</td></tr><tr><td>-A</td><td>agresivo, todo (deja rastro)</td></tr></table>
+<div class="flow">Metasploit: msfconsole → use … → show options → set RHOSTS … → exploit</div>
+<table><tr><th>Puerto</th><th>Servicio</th><th>Puerto</th><th>Servicio</th></tr>
+<tr><td>20/21</td><td>FTP</td><td>110/995</td><td>POP3</td></tr>
+<tr><td>22</td><td>SSH</td><td>143/993</td><td>IMAP</td></tr>
+<tr><td>23</td><td>Telnet</td><td>443</td><td>HTTPS</td></tr>
+<tr><td>25</td><td>SMTP</td><td>445</td><td>SMB</td></tr>
+<tr><td>53</td><td>DNS</td><td>1521</td><td>Oracle</td></tr>
+<tr><td>80</td><td>HTTP</td><td>3306</td><td>MySQL</td></tr></table>`},
    {t:'Requerimientos y nube',p:'#7',w:'6 ejercicios en vivo (Clase 3); «los presupuestos en la nube son en dólares… importantísimo».',
-    q:'Los 3 tipos de requerimientos con un ejemplo. Clasifica: varios servidores para disponibilidad / el usuario inicia sesión / respuesta < 2 s. ¿Cómo se cobra y presupuesta la nube?',
-    r:'De sistema:     hardware, servidores, ancho de banda\nFuncional:      QUÉ hace («el usuario debe iniciar sesión»)\nNo funcional:   CÓMO se mide («responde en < 2 s», «fácil de usar»)\n\nvarios servidores → de sistema · inicia sesión → funcional · < 2 s → no funcional\n\nNube (Azure, AWS, Google Cloud): sin tarifa fija, se paga por consumo;\npresupuesto en DÓLARES con alertas (ej. 40 % previsto, 50 % real).\nUML: componentes, despliegue, casos de uso; debe coincidir con el código.'},
+    q:'Los 3 tipos de requerimientos con ejemplo. Cómo se cobra la nube.',
+    r:`<table><tr><th>Tipo</th><th>Qué es</th><th>Ejemplo</th></tr>
+<tr><td>De sistema</td><td>hardware, servidores, red</td><td>varios servidores para disponibilidad</td></tr>
+<tr><td>Funcional</td><td><b>qué</b> hace</td><td>el usuario inicia sesión</td></tr>
+<tr><td>No funcional</td><td><b>cómo</b> se mide</td><td>responde en &lt; 2 s</td></tr></table>
+<h4>Nube (Azure, AWS, Google Cloud)</h4>
+<ul><li>Sin tarifa fija: se paga <b>por consumo</b></li><li>Presupuesto en <span class="k">dólares</span>, con alertas (ej. 40 % previsto, 50 % real)</li></ul>`},
    {t:'DHCP (DORA) y DNS',p:'#8',w:'«no se puede tener más de una puerta de enlace» (Clase 4).',
-    q:'Dibuja DORA entre cliente y servidor. Componentes del ámbito. Riesgos y cómo se mitigan. ISC DHCP vs. Kea. ¿Qué hace DNS?',
-    r:'Cliente ──Discover──→ Servidor\nCliente ←──Offer───── Servidor\nCliente ──Request───→ Servidor\nCliente ←───Ack────── Servidor   → IP, máscara, puerta de enlace, DNS\n\nÁmbito (sin .0 ni .255) · concesión (lease) · UNA sola puerta de enlace\n· DNS (8.8.8.8, 8.8.4.4) · reservas (IP fija por MAC) · exclusiones\nRiesgos: DoS agotando el ámbito, DHCP/DNS falsos → firewall, DMZ, VPN\nISC DHCP (texto plano, 1 hilo) descontinuado 2022 → Kea (JSON, multihilo, IPv4/6)\nDNS: traduce nombres de dominio a direcciones IP.'},
+    q:'DORA con flechas. Qué entrega DHCP. Kea vs. ISC. Qué hace DNS.',
+    r:`<div class="flow">Discover → Offer → Request → Acknowledge</div>
+<ul><li>DHCP entrega: IP · máscara · <span class="k">una sola</span> puerta de enlace · DNS</li>
+<li>Ámbito sin .0 ni .255 · concesión (lease) · reservas (IP por MAC) · exclusiones</li>
+<li>Riesgos: DoS, DHCP/DNS falsos → firewall, DMZ, VPN</li>
+<li>ISC DHCP descontinuado (2022) → <b>Kea</b> (JSON, multihilo)</li>
+<li><b>DNS</b>: traduce nombres de dominio a IP</li></ul>`},
    {t:'Tradicional vs. Ágil y MS Project',p:'#9',w:'«Scrum no es una metodología; la metodología es ágil» (Clase 2).',
-    q:'Tabla tradicional vs. ágil (requisitos, entregas, cliente, documentación, cambios, rol). Triángulo de hierro. Ágil vs. Scrum. Los 3 tipos de recursos de Project.',
-    r:'              TRADICIONAL (Cascada/PMBOK)   ÁGIL (Scrum)\nRequisitos    fijos desde el inicio         cambian\nEntregas      una al final                  frecuentes, sprints de 2–4 semanas\nCliente       al inicio y al final          siempre\nDocumentación extensa                       ligera (backlog, historias)\nCambios       costosos                      bienvenidos (+~15 % al presupuesto)\nRol           Project Manager               Scrum Master, Product Owner, equipo\n\nTriángulo de hierro: alcance · costo · tiempo\nÁGIL = la metodología · SCRUM = el marco que la implementa\nPilares ágiles: iterativo, incremental, colaborativo, adaptable\nProject: Trabajo (personas por tiempo) · Material (se compra y entrega) · Costo (fijos)'},
+    q:'Tabla tradicional vs. ágil. Triángulo de hierro. Ágil vs. Scrum. Recursos de Project.',
+    r:`<table><tr><th></th><th>Tradicional</th><th>Ágil</th></tr>
+<tr><td>Requisitos</td><td>fijos</td><td>cambian</td></tr>
+<tr><td>Entregas</td><td>una al final</td><td>sprints de 2–4 semanas</td></tr>
+<tr><td>Cliente</td><td>inicio y final</td><td>siempre</td></tr>
+<tr><td>Cambios</td><td>caros</td><td>bienvenidos</td></tr>
+<tr><td>Rol</td><td>Project Manager</td><td>Scrum Master, Product Owner</td></tr></table>
+<ul><li>Triángulo de hierro: <b>alcance · costo · tiempo</b></li>
+<li><span class="k">Ágil = metodología · Scrum = marco que la implementa</span></li>
+<li>Project: <b>Trabajo</b> (personas) · <b>Material</b> (se compra) · <b>Costo</b> (fijos: luz, renta)</li></ul>`},
    {t:'Von Neumann vs. Harvard RISC, Big Data e IA',p:'#10',w:'Clase 1 (ejercicio del % de ALU) y debate de la Clase 17.',
-    q:'Dibuja Von Neumann y Harvard RISC. Las 4 etapas del pipeline. % de uso de ALU con 3 y con 5 instrucciones. Qué da precisión en Big Data. Digitalizar vs. transformación digital.',
-    r:'Von Neumann: UNA memoria (programa, datos, pila) → cuello de botella\nHarvard RISC: memoria de instrucciones (solo lectura) y de datos SEPARADAS,\n              load/store, pipeline → 1 instrucción por ciclo\nPipeline: Fetch → Decode → Execute → Write Back\n1 de 3 usa la ALU = 33 %  ·  1 de 5 = 20 % (80 % desperdicio)\n\nBig Data: más datos ≠ más precisión; la dan la CALIDAD y un protocolo de captura.\nIA: no es objetiva, puede alucinar → human-in-the-loop.\nDigitalizar (papel→digital) ≠ digitalizar procesos (facturas, ERP)\n≠ transformación digital (rediseñar el negocio: Netflix DVD → streaming)'}
+    q:'Von Neumann vs. Harvard RISC. Pipeline. % de ALU. Big Data.',
+    r:`<table><tr><th>Von Neumann</th><th>Harvard RISC</th></tr>
+<tr><td>una sola memoria → cuello de botella</td><td>memorias separadas (instrucciones / datos) · load/store</td></tr></table>
+<div class="flow">Pipeline: Fetch → Decode → Execute → Write Back = 1 instrucción por ciclo</div>
+<ul><li>1 de 3 usa la ALU = <b>33 %</b> · 1 de 5 = <b>20 %</b></li>
+<li>Big Data: más datos ≠ más precisión → importa la <span class="k">calidad</span></li>
+<li>IA: puede alucinar → supervisión humana</li>
+<li>Digitalizar ≠ digitalizar procesos ≠ <b>transformación digital</b> (Netflix: DVD → streaming)</li></ul>`}
   ];
   var pzSt=get('eh-pz',{}), pzI=get('eh-pzi',0), pzStep=0;
   var STEPS=['Paso 1 de 3 · CÓPIALO en el pizarrón (mirando la respuesta)','Paso 2 de 3 · DE MEMORIA: bórralo y escribe todo lo que recuerdes','Paso 3 de 3 · CORRIGE con otro color lo que te faltó'];
@@ -463,7 +588,7 @@ pre.code { white-space: pre; font-size: calc(var(--fs) * .72); line-height: 1.55
     document.getElementById('pz-why').textContent=b.w;
     document.getElementById('pz-task').textContent=b.q;
     document.getElementById('pz-step').textContent=STEPS[pzStep];
-    document.getElementById('pz-resp').textContent=b.r;
+    document.getElementById('pz-resp').innerHTML=b.r;
     document.getElementById('pz-resp').style.display=pzStep===1?'none':'block';
     document.getElementById('pz-hid').style.display=pzStep===1?'block':'none';
     var act=document.getElementById('pz-act');

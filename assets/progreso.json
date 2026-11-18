@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-18T17:53:21+00:00",
+ "generatedAt": "2026-11-18T18:08:35+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -1021,6 +1021,11 @@
  },
  "gitlog": [
   {
+   "hash": "62a0cd7",
+   "fecha": "2026-11-18T11:53:21-06:00",
+   "mensaje": "ASI Estudiar hoy: pizarrón guiado (14 preguntas de mayor a menor prioridad; copiar → de memoria → corregir)"
+  },
+  {
    "hash": "53c8536",
    "fecha": "2026-11-18T11:42:48-06:00",
    "mensaje": "Tablero al 18 nov: exámenes ASI (hoy), SIB y MD 3 (24 nov), proyectos OAC y Lab FSE, ACS programa final sin fecha, FSE examen 2 sin fecha (Classroom + NotebookLM); fecha del examen de SIB en su mapa"
@@ -1314,11 +1319,6 @@
    "hash": "8f5a26f",
    "fecha": "2026-10-26T11:03:07-06:00",
    "mensaje": "MD: agregar Clase 15 (22 oct) — exposiciones de la Práctica 3.4 (diabetes) y series de tiempo (ARIMA, ruido blanco, elección de modelo)"
-  },
-  {
-   "hash": "5dc378e",
-   "fecha": "2026-10-21T16:22:23-06:00",
-   "mensaje": "CLAUDE.md: RP deck de la Clase 16 ya está en el sitio"
   }
  ]
 }
