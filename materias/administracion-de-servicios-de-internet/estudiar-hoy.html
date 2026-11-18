@@ -103,6 +103,30 @@ h2.t { font-family: 'Fraunces', serif; font-size: calc(var(--fs) * 1.5); margin:
 /* código */
 pre.code { white-space: pre; font-size: calc(var(--fs) * .72); line-height: 1.55; background: #0E1015; border: 1px solid rgba(255,255,255,.08); border-radius: 10px; padding: 14px 16px; overflow-x: auto; color: #C9D1D9; }
 
+
+/* pizarrón guiado */
+.pz-top { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin:0 0 12px; }
+.pz-n { font:600 15px 'IBM Plex Mono', monospace; color:var(--c); }
+.pz-dots { display:flex; gap:5px; flex-wrap:wrap; }
+.pz-dots i { width:14px; height:14px; border-radius:50%; background:rgba(255,255,255,.12); cursor:pointer; }
+.pz-dots i.ok { background:var(--ok); } .pz-dots i.rep { background:var(--warn); } .pz-dots i.cur { outline:2px solid #ffd166; outline-offset:2px; }
+.board.pz { min-height: 360px; }
+.pz-pri { display:inline-block; font:700 13px 'IBM Plex Mono', monospace; color:#1f2a24; background:#ffd166; border-radius:999px; padding:4px 12px; margin-bottom:10px; }
+.pz-why { color:#bfc8b8; font-size:.82em; margin:0 0 12px; font-style:italic; }
+.pz-step { font:700 calc(var(--fs) * .85) 'Inter', sans-serif; color:#ffd166; margin:6px 0 0; }
+.board.pz pre { font-size: calc(var(--fs) * .78); }
+.pz-hidden { display:none; margin-top:14px; padding:40px 16px; text-align:center; border:2px dashed rgba(255,255,255,.25); border-radius:10px; color:#e8e4c9; }
+.pz-act { display:flex; gap:10px; margin:14px 0 10px; }
+.pz-act button { flex:1; font:700 18px 'Inter', sans-serif; border:0; border-radius:14px; padding:18px 12px; cursor:pointer; color:#fff; background:color-mix(in srgb, var(--c) 35%, var(--white)); }
+.pz-act button.si { background:color-mix(in srgb, var(--ok) 35%, var(--white)); }
+.pz-act button.no { background:color-mix(in srgb, var(--warn) 30%, var(--white)); }
+.pz-nav { display:flex; gap:8px; }
+.pz-nav button { flex:1; font:600 15px 'Inter', sans-serif; color:var(--ink); background:var(--white); border:1.5px solid rgba(255,255,255,.13); border-radius:10px; padding:10px; cursor:pointer; }
+.pz-all { display:none; margin:14px 0 0; padding-left:1.4em; }
+.pz-all.open { display:block; }
+.pz-all li { margin:.3em 0; cursor:pointer; }
+.pz-all li.ok { color:var(--ok); } .pz-all li.rep { color:var(--warn); }
+
 @media (max-width: 600px) {
   :root { --fs: 18px; } :root[data-fs="2"]{--fs:18px} :root[data-fs="3"]{--fs:21px} :root[data-fs="4"]{--fs:24px}
   body { padding-top: 44px; } .eh-tabs { top: 44px; }
@@ -127,10 +151,10 @@ pre.code { white-space: pre; font-size: calc(var(--fs) * .72); line-height: 1.55
 </div>
 
 <nav class="eh-tabs"><div class="eh-tabs-in">
-  <button data-p="plan" class="on">⏱ Plan</button>
-  <button data-p="temas">📚 Temas</button>
-  <button data-p="pizarron">🧑‍🏫 Pizarrón</button>
+  <button data-p="pizarron" class="on">🧑‍🏫 Pizarrón</button>
   <button data-p="tarjetas">🃏 Tarjetas</button>
+  <button data-p="temas">📚 Temas</button>
+  <button data-p="plan">⏱ Plan</button>
   <span class="sp"></span>
   <span class="fs"><button data-d="-1">A−</button> <button data-d="1">A+</button></span>
 </div></nav>
@@ -138,7 +162,7 @@ pre.code { white-space: pre; font-size: calc(var(--fs) * .72); line-height: 1.55
 <div class="eh">
 
 <!-- ================= PLAN ================= -->
-<section class="panel on" id="p-plan">
+<section class="panel" id="p-plan">
   <h2 class="t">Plan para hoy</h2>
   <p class="lead">Ordenado por lo que el profesor dijo que viene. Toca un bloque cuando lo termines. El bloque de ahorita se marca solo.</p>
   <ol class="plan" id="plan">
@@ -312,130 +336,22 @@ pre.code { white-space: pre; font-size: calc(var(--fs) * .72); line-height: 1.55
 
 <!-- ================= PIZARRÓN ================= -->
 <section class="panel" id="p-pizarron">
-  <h2 class="t">Para tu puerta-pizarrón</h2>
-  <p class="lead">Cada ejercicio: escríbelo <b>de memoria</b> en el pizarrón, después abre la respuesta y corrige con otro color. Lo que falló, bórralo y escríbelo otra vez. Recordar sin ver fija mucho más que releer.</p>
-
-  <div class="board">
-    <span class="time">10 min</span><h3>1 · La tabla de los 9 RFC</h3>
-    <p class="task">Dibuja 4 columnas: <b>RFC · protocolo · puerto · una frase</b>. Llena las 9 filas sin ver. Arriba escribe qué es un RFC en una línea.</p>
-    <details><summary>Ver respuesta</summary><pre>RFC = documento público, gratuito e INMUTABLE de la IETF que define un protocolo
-      (no se edita: sale uno nuevo). Protocolo ≠ RFC (LDAP ≠ 4510).
-
-2616  HTTP/1.1       80        petición-respuesta sin estado, 1xx–5xx, GET/POST/PUT/DELETE
-3501  IMAP           143/993   correo se queda en servidor · 4 estados
-1939  POP3           110/995   descarga y borra · 3 estados · DELE marca, QUIT borra
-4510  LDAPv3         —         mapa de la familia 4511–4521 · usuarios y permisos
-1700  IANA           —         6 = TCP · 17 = UDP · puertos 20/21, 22, 25, 53, 80
-854   Telnet         23        sin cifrar · NVT · WILL/WONT/DO/DONT → SSH (22)
-1034  DNS            53        jerárquico y distribuido · capa 7
-3898  NIS en DHCPv6  —         códigos 27–30 · obsoleto por inseguro → LDAP/AD
-8446  TLS 1.3        —         1 RTT · AEAD (AES-GCM) · DH efímero · sin MD5/SHA-1/RC4</pre></details>
+  <div class="pz-top">
+    <span class="pz-n" id="pz-n"></span>
+    <span class="pz-dots" id="pz-dots"></span>
   </div>
-
-  <div class="board">
-    <span class="time">10 min</span><h3>2 · Estados de IMAP y POP3</h3>
-    <p class="task">Dibuja los dos diagramas de estados con flechas. Abajo: ¿qué pasa con 4 correos si haces <b>DELE 2, RSET</b> y se cae antes de QUIT?</p>
-    <details><summary>Ver respuesta</summary><pre>IMAP (3501):  No autenticado → Autenticado → Seleccionado → Cierre
-POP3 (1939):  Autorización → Transacción → Update (solo con QUIT)
-
-DELE 2 → solo MARCA · RSET → desmarca · se cae antes de QUIT
-→ quedan los 4 (el borrado real solo ocurre en Update)</pre></details>
+  <div class="board pz">
+    <div class="pz-pri" id="pz-pri"></div>
+    <h3 id="pz-tit"></h3>
+    <p class="pz-why" id="pz-why"></p>
+    <p class="task" id="pz-task"></p>
+    <div class="pz-step" id="pz-step"></div>
+    <pre id="pz-resp"></pre>
+    <div class="pz-hidden" id="pz-hid">🙈 Respuesta oculta. Borra el pizarrón y escribe todo lo que recuerdes.</div>
   </div>
-
-  <div class="board">
-    <span class="time">12 min</span><h3>3 · Oracle completo</h3>
-    <p class="task">Escribe: crear usuario, crear rol con privilegios, dar el rol al usuario, tablespace, y un <b>trigger de auditoría</b> que registre INSERT/UPDATE/DELETE con :OLD y :NEW.</p>
-    <details><summary>Ver respuesta</summary><pre>CREATE USER auditor IDENTIFIED BY clave;
-CREATE ROLE rol_app;
-GRANT CREATE SESSION, CREATE TABLE, CREATE TRIGGER TO rol_app;
-GRANT rol_app TO auditor;
-GRANT UNLIMITED TABLESPACE TO auditor;   -- DIRECTO al usuario (en rol: ORA-01950)
-COMMIT;                                  -- sin COMMIT los otros no ven los cambios
-
-CREATE OR REPLACE TRIGGER trg_auditoria
-AFTER INSERT OR UPDATE OR DELETE ON auditor.empleados
-FOR EACH ROW
-BEGIN
-  IF INSERTING THEN
-    INSERT INTO bitacora VALUES (USER, SYSTIMESTAMP, 'INSERT', NULL, :NEW.sueldo);
-  ELSIF UPDATING THEN
-    INSERT INTO bitacora VALUES (USER, SYSTIMESTAMP, 'UPDATE', :OLD.sueldo, :NEW.sueldo);
-  ELSIF DELETING THEN
-    INSERT INTO bitacora VALUES (USER, SYSTIMESTAMP, 'DELETE', :OLD.sueldo, NULL);
-  END IF;
-END;
-
-:OLD = antes · :NEW = después · DATE = solo fecha · TIMESTAMP = fecha+hora+fracciones
-(nombres de tabla y columnas: de ejemplo)</pre></details>
-  </div>
-
-  <div class="board">
-    <span class="time">10 min</span><h3>4 · Los 3 esquemas del Data Warehouse</h3>
-    <p class="task">Dibuja <b>estrella</b>, <b>copo de nieve</b> y <b>constelación</b> con una tabla de hechos «Ventas». Pon la forma normal de cada uno. Al lado: el flujo ETL → DW → tablero, y una flecha tachada del DW a la base transaccional.</p>
-    <details><summary>Ver respuesta</summary><pre>ESTRELLA (1FN)        Tiempo ─┐
-                      Producto ─┼─ [VENTAS] ─┬─ Cliente
-                                            └─ Tienda
-COPO DE NIEVE (2FN)   igual, pero Producto → Categoría → Departamento
-                      (dimensiones divididas en subdimensiones)
-CONSTELACIÓN (3FN)    [VENTAS] y [INVENTARIO] comparten Tiempo y Producto
-
-Fuentes (ERP, Excel, PDF) → E · T · C → DATA WAREHOUSE → tablero (slice/dice/drill-down)
-DW ──✗──→ base transaccional   (NUNCA se regresan datos)</pre></details>
-  </div>
-
-  <div class="board">
-    <span class="time">6 min</span><h3>5 · Un cubo OLAP</h3>
-    <p class="task">Dibuja un cubo con 3 dimensiones y su jerarquía (Tiempo, Lugar, Producto). Escribe una medida <b>aditiva</b>, una <b>semiaditiva</b> y una <b>no aditiva</b>.</p>
-    <details><summary>Ver respuesta</summary><pre>Cubo = concepto (no archivo): MEDIDAS alrededor de DIMENSIONES para responder una pregunta
-Tiempo:  Año → Trimestre → Mes → Día
-Lugar:   País → Estado → Ciudad
-Aditiva:     ventas (se suma en todo)
-Semiaditiva: saldo bancario (no se suma en el tiempo)
-No aditiva:  porcentajes, promedios (calculadas)</pre></details>
-  </div>
-
-  <div class="board">
-    <span class="time">8 min</span><h3>6 · Linux + Nmap a mano</h3>
-    <p class="task">Escribe: los 8 directorios con su uso; qué hacen <b>which, whereis, ps aux, mkdir -m 700 -p, cat a b &gt; c, ls -lsa</b>; las 5 banderas de Nmap; los pasos de Metasploit.</p>
-    <details><summary>Ver respuesta</summary><pre>/boot arranque+kernel · /bin comandos · /etc config · /home usuarios
-/usr programas · /var,/tmp temporales · /dev dispositivos · /opt software extra
-
-which = ruta del ejecutable · whereis = todas las carpetas del paquete
-ps aux: a todos · u CPU/RAM · x sin terminal
-mkdir -m 700 -p a/b/c  → permisos rwx solo dueño + crea padres
-cat a b > c  → une en c · ls -l detalles, -s tamaño, -a ocultos
-Permisos r=4 w=2 x=1 (dueño·grupo·otros) · NUNCA 777
-
-Nmap: -sn hosts · -sS sigiloso · -sV versiones · -O sist. operativo · -A agresivo
-Metasploit: msfconsole → use … → show options → set RHOSTS … → exploit</pre></details>
-  </div>
-
-  <div class="board">
-    <span class="time">6 min</span><h3>7 · DORA + puertos</h3>
-    <p class="task">Dibuja cliente y servidor DHCP con las 4 flechas de DORA. Abajo, todos los puertos que recuerdes con su servicio.</p>
-    <details><summary>Ver respuesta</summary><pre>Cliente ──Discover──→ Servidor
-Cliente ←──Offer───── Servidor
-Cliente ──Request───→ Servidor
-Cliente ←───Ack────── Servidor   (IP, máscara, UNA puerta de enlace, DNS)
-
-20/21 FTP · 22 SSH · 23 Telnet · 25 SMTP · 53 DNS · 80 HTTP · 110/995 POP3
-143/993 IMAP · 443 HTTPS · 445 SMB · 1521 Oracle · 3306 MySQL
-protocolo IP: 6 = TCP · 17 = UDP</pre></details>
-  </div>
-
-  <div class="board">
-    <span class="time">6 min</span><h3>8 · Las definiciones «obvias»</h3>
-    <p class="task">Escribe con tus palabras: <b>servidor</b> (y por qué no es un repositorio), <b>DIK</b>, <b>CID</b>, los 3 tipos de <b>requerimientos</b> con un ejemplo, y <b>Ágil vs. Scrum</b>.</p>
-    <details><summary>Ver respuesta</summary><pre>Servidor: equipo (hw o sw) que ofrece y comparte servicios/recursos a clientes
-          por una red y EJECUTA procesos. Repositorio (Git): solo almacena.
-DIK: Datos → Información (con contexto) → Conocimiento (decisiones)
-CID: Confidencialidad · Integridad · Disponibilidad
-Req. de sistema: hardware, servidores, ancho de banda
-Req. funcional: QUÉ hace («el usuario inicia sesión»)
-Req. no funcional: CÓMO se mide («responde en < 2 s»)
-Ágil = la metodología · Scrum = el marco que la implementa
-Tradicional: triángulo de hierro = alcance · costo · tiempo</pre></details>
-  </div>
+  <div class="pz-act" id="pz-act"></div>
+  <div class="pz-nav"><button id="pz-prev">← Anterior</button><button id="pz-list">☰ Todas</button><button id="pz-next">Siguiente →</button></div>
+  <ol class="pz-all" id="pz-all"></ol>
 </section>
 
 <!-- ================= TARJETAS ================= -->
@@ -470,9 +386,9 @@ Tradicional: triángulo de hierro = alcance · costo · tiempo</pre></details>
   // pestañas
   var tabs=document.querySelectorAll('.eh-tabs button[data-p]');
   function show(p){tabs.forEach(function(t){t.classList.toggle('on',t.dataset.p===p)});
-    document.querySelectorAll('.panel').forEach(function(s){s.classList.toggle('on',s.id==='p-'+p)});put('eh-tab',p);window.scrollTo(0,0)}
+    document.querySelectorAll('.panel').forEach(function(s){s.classList.toggle('on',s.id==='p-'+p)});put('eh-tab2',p);window.scrollTo(0,0)}
   tabs.forEach(function(t){t.onclick=function(){show(t.dataset.p)}});
-  show(get('eh-tab','plan'));
+  show(get('eh-tab2','pizarron'));
 
   // cuenta regresiva y bloque actual
   var EX=new Date('2026-11-18T17:00:00-06:00');
@@ -490,6 +406,88 @@ Tradicional: triángulo de hierro = alcance · costo · tiempo</pre></details>
     if(done[li.dataset.s])li.classList.add('done');
     li.onclick=function(){li.classList.toggle('done');done[li.dataset.s]=li.classList.contains('done');put('eh-plan',done)};
   });
+
+
+  // ===== pizarrón guiado, de mayor a menor prioridad =====
+  var PZ=[
+   {t:'Qué es un RFC + la tabla de los 9',p:'#1 · RFC',w:'«en el examen voy a añadir los de los RFCs» (Clase 17); lo último del curso.',
+    q:'Arriba: qué es un RFC en una línea y la trampa protocolo ≠ RFC. Abajo, 4 columnas: RFC · protocolo · puerto · una frase. Las 9 filas.',
+    r:'RFC = Request for Comments (1969): documento técnico\n  PÚBLICO, GRATUITO e INMUTABLE de la IETF que define un protocolo.\n  No se edita: sale uno nuevo que lo actualiza o lo vuelve obsoleto.\n  Usa MUST / SHOULD / MAY.\nTrampa: protocolo ≠ RFC → LDAP es el protocolo, 4510 el documento.\n\n2616 · HTTP/1.1 · 80\n   petición-respuesta SIN ESTADO · 1xx–5xx · GET/POST/PUT/DELETE\n3501 · IMAP · 143/993\n   el correo SE QUEDA en el servidor · 4 estados\n1939 · POP3 · 110/995\n   DESCARGA y borra · 3 estados\n4510 · LDAPv3\n   mapa de la familia 4511–4521 · usuarios y permisos\n1700 · Números IANA\n   6 = TCP · 17 = UDP · puertos 20/21, 22, 25, 53, 80\n854 · Telnet · 23\n   SIN CIFRAR · NVT · WILL/WONT/DO/DONT → SSH (22)\n1034 · DNS · 53\n   jerárquico y distribuido · capa 7\n3898 · NIS en DHCPv6\n   códigos 27–30 · obsoleto por inseguro → LDAP/AD\n8446 · TLS 1.3\n   1 RTT · AEAD (AES-GCM) · DH efímero · sin MD5/SHA-1/RC4'},
+   {t:'IMAP vs. POP3: estados y borrado',p:'#1 · RFC',w:'Preguntó en la exposición «¿IMAP o POP?» y «¿qué desventaja tiene IMAP?».',
+    q:'Dibuja los estados de IMAP y de POP3 con flechas. Luego: con 4 correos haces DELE 2, RSET y se cae antes de QUIT, ¿cuántos quedan? ¿Desventaja de IMAP?',
+    r:'IMAP (3501, 143/993):  No autenticado → Autenticado → Seleccionado → Cierre\n                        correos se quedan en el servidor\nPOP3 (1939, 110/995):  Autorización → Transacción → Update (solo con QUIT)\n                        descarga y borra del servidor\n\nDELE 2 → solo MARCA · RSET → desmarca · se cae antes de QUIT → quedan los 4\n\nDesventaja de IMAP: dependes del servidor y su almacenamiento crece sin fin.\nEl profesor: la mayoría sigue usando POP para descargar y liberar espacio.'},
+   {t:'Detalles de cada RFC',p:'#1 · RFC',w:'Lo que dijeron los equipos y lo que preguntó el profesor (Clases 17–19).',
+    q:'Para HTTP, Telnet, NIS en DHCPv6 y TLS 1.3 escribe el dato fino. GET vs. POST. ¿Qué pasó en Japón?',
+    r:'HTTP 2616: GET pide (solo lectura) · POST envía. Reemplazado por RFC 7230–7235\n           (luego HTTP/2 y HTTP/3).\nTelnet 854: NVT (terminal virtual de red); negocia WILL / WONT / DO / DONT.\n           Todo sin cifrar → lo reemplazó SSH (22).\nNIS 3898: 27 IP NIS · 28 IP NIS+ · 29 dominio NIS · 30 dominio NIS+.\nTLS 1.3 8446: handshake 2 RTT → 1 RTT; obliga AEAD (AES-GCM) y Diffie-Hellman\n           efímero; quitó MD5, SHA-1 y RC4.\n1700: hoy histórico (RFC 3232).\nJapón: cayeron ~300 bancos por depender de un mismo servidor central.'},
+   {t:'Servidor vs. repositorio, DIK y CID',p:'#2',w:'«parece muy obvio, pero luego en el examen me ponen ahí cada barbaridad» (Clase 3).',
+    q:'Define servidor (y por qué un repositorio no lo es). Dibuja la pirámide DIK. Escribe CID con el significado de cada letra.',
+    r:'Servidor: equipo (hardware o software) que ofrece y comparte servicios o recursos\n          a uno o más clientes a través de una red, y EJECUTA PROCESOS.\nRepositorio (Git): solo almacena datos; no los ejecuta.\n\n        /\\        Conocimiento (decisiones)\n       /  \\       Información (datos con contexto)\n      /____\\      Datos\n\nC = Confidencialidad (solo autorizados)\nI = Integridad (los datos no se alteran)\nD = Disponibilidad (accesible cuando se necesita)'},
+   {t:'Cubo OLAP y tipos de medida',p:'#3 · OLAP',w:'«de ahí sí podemos sacar un buen [ejercicio] para su examen» (Clase 10); salió mal en el parcial.',
+    q:'Qué es un cubo OLAP. Dibuja uno con 3 dimensiones y sus jerarquías. Una medida aditiva, una semiaditiva y una no aditiva.',
+    r:'Cubo OLAP: estructura CONCEPTUAL (no un archivo) que organiza MEDIDAS numéricas\nalrededor de DIMENSIONES para responder una pregunta.\nPrimero se definen medida y dimensiones; después se responde la pregunta.\n\nTiempo:  Año → Trimestre → Mes → Día\nLugar:   País → Estado → Ciudad\n(Producto como 3.ª dimensión)\n\nAditiva:     ventas (se suma en todas las dimensiones)\nSemiaditiva: saldo bancario (no se suma en el tiempo)\nNo aditiva:  porcentajes, promedios (calculadas)'},
+   {t:'Data Warehouse, ETL y los 3 esquemas',p:'#3 · OLAP',w:'Mismo tema que salió mal en el parcial (Clases 10, 11, 13).',
+    q:'Dibuja estrella, copo de nieve y constelación con su forma normal. El flujo fuentes → ETL → DW → tablero, y la regla DW / base transaccional. Slice, dice, drill-down.',
+    r:'Data Warehouse: repositorio HISTÓRICO e integrado de varias fuentes, para análisis.\n\nESTRELLA (1FN):      1 tabla de hechos + dimensiones directas\nCOPO DE NIEVE (2FN): 1 tabla de hechos; dimensiones divididas en subdimensiones\nCONSTELACIÓN (3FN):  varias tablas de hechos que comparten dimensiones\n\nFuentes (ERP, Excel, PDF) → Extracción · Transformación (limpieza, Power Query)\n                          · Carga → DATA WAREHOUSE → tablero\nDW ──✗──→ base transaccional   (NUNCA se regresan datos)\n\nslice = una rebanada · dice = varias condiciones · drill-down = bajar al detalle\nENOE: sumar en vez de promediar/contar crea brechas falsas.'},
+   {t:'Oracle: usuario → rol → privilegios',p:'#4 · Oracle',w:'«Yo pondría mucha alta atención» (Clase 14). Posible código a mano.',
+    q:'Escribe el SQL: crear usuario, crear rol, darle privilegios al rol, dar el rol al usuario, tablespace y COMMIT. Explica DATE vs. TIMESTAMP y USER vs. SHOW USER.',
+    r:'CREATE USER auditor IDENTIFIED BY clave;\nCREATE ROLE rol_app;\nGRANT CREATE SESSION, CREATE TABLE, CREATE TRIGGER TO rol_app;\nGRANT rol_app TO auditor;\nGRANT UNLIMITED TABLESPACE TO auditor;  -- DIRECTO al usuario (en rol: ORA-01950)\nCOMMIT;   -- sin COMMIT otros usuarios no ven los cambios; se consulta usuario.tabla\n\nSYSDATE en DATE      → solo la fecha\nSYSDATE en TIMESTAMP → fecha, hora y fracciones de segundo\nUSER = función · SHOW USER = comando\n(nombres de ejemplo)'},
+   {t:'Oracle: trigger de auditoría',p:'#4 · Oracle',w:'Clase 14: un solo trigger con INSERTING / UPDATING / DELETING.',
+    q:'Escribe un trigger AFTER INSERT OR UPDATE OR DELETE que guarde en una bitácora el usuario, la hora y los valores :OLD y :NEW.',
+    r:'CREATE OR REPLACE TRIGGER trg_auditoria\nAFTER INSERT OR UPDATE OR DELETE ON auditor.empleados\nFOR EACH ROW\nBEGIN\n  IF INSERTING THEN\n    INSERT INTO bitacora VALUES (USER, SYSTIMESTAMP, \'INSERT\', NULL, :NEW.sueldo);\n  ELSIF UPDATING THEN\n    INSERT INTO bitacora VALUES (USER, SYSTIMESTAMP, \'UPDATE\', :OLD.sueldo, :NEW.sueldo);\n  ELSIF DELETING THEN\n    INSERT INTO bitacora VALUES (USER, SYSTIMESTAMP, \'DELETE\', :OLD.sueldo, NULL);\n  END IF;\nEND;\n\nTrigger: se ejecuta solo, BEFORE o AFTER de INSERT / UPDATE / DELETE.\n:OLD = dato anterior · :NEW = dato nuevo   (tabla y columnas de ejemplo)'},
+   {t:'Linux: comandos, permisos y directorios',p:'#5 · Linux',w:'Clase 1 + «me voy a basar en el extra» (escribir comandos).',
+    q:'Los 8 directorios con su uso. Qué hacen which, whereis, ps aux, mkdir -m 700 -p a/b/c, cat a b > c, cat -n, ls -l/-a/-s, pwd. Valores de r, w, x y la regla.',
+    r:'/boot arranque y kernel · /bin comandos esenciales · /etc configuración\n/home usuarios · /usr programas (no de usuarios) · /var y /tmp temporales\n/dev dispositivos · /opt software adicional\n\nwhich   = solo la ruta del ejecutable\nwhereis = todas las carpetas del paquete\nps aux  = a todos los usuarios · u recursos (CPU/RAM) · x sin terminal\n          (top en vivo · kill mata por PID)\nmkdir -m 700 -p a/b/c = crea toda la ruta con permisos rwx solo dueño\ncat a b > c = une en c · cat -n numera · ls -l detalles, -a ocultos, -s tamaño\npwd = carpeta actual\n\nr=4 w=2 x=1 para dueño · grupo · otros.  NUNCA 777 ni x a otros.'},
+   {t:'Nmap, Metasploit y puertos',p:'#6 · Nmap',w:'Resumió las 5 banderas al cierre de la Clase 9.',
+    q:'Las 5 banderas de Nmap. Los pasos de Metasploit. Todos los puertos que recuerdes. ¿Qué es el protocolo 6 y el 17?',
+    r:'-sn  hosts activos\n-sS  escaneo sigiloso (SYN)\n-sV  versiones de los servicios\n-O   sistema operativo\n-A   agresivo y completo (deja rastro)\n\nmsfconsole → use … → show options → set RHOSTS … → exploit\n(siempre en máquina virtual y con autorización)\n\n20/21 FTP · 22 SSH · 23 Telnet · 25 SMTP · 53 DNS · 80 HTTP · 110/995 POP3\n143/993 IMAP · 443 HTTPS · 445 SMB · 1521 Oracle · 3306 MySQL\nProtocolo IP: 6 = TCP · 17 = UDP'},
+   {t:'Requerimientos y nube',p:'#7',w:'6 ejercicios en vivo (Clase 3); «los presupuestos en la nube son en dólares… importantísimo».',
+    q:'Los 3 tipos de requerimientos con un ejemplo. Clasifica: varios servidores para disponibilidad / el usuario inicia sesión / respuesta < 2 s. ¿Cómo se cobra y presupuesta la nube?',
+    r:'De sistema:     hardware, servidores, ancho de banda\nFuncional:      QUÉ hace («el usuario debe iniciar sesión»)\nNo funcional:   CÓMO se mide («responde en < 2 s», «fácil de usar»)\n\nvarios servidores → de sistema · inicia sesión → funcional · < 2 s → no funcional\n\nNube (Azure, AWS, Google Cloud): sin tarifa fija, se paga por consumo;\npresupuesto en DÓLARES con alertas (ej. 40 % previsto, 50 % real).\nUML: componentes, despliegue, casos de uso; debe coincidir con el código.'},
+   {t:'DHCP (DORA) y DNS',p:'#8',w:'«no se puede tener más de una puerta de enlace» (Clase 4).',
+    q:'Dibuja DORA entre cliente y servidor. Componentes del ámbito. Riesgos y cómo se mitigan. ISC DHCP vs. Kea. ¿Qué hace DNS?',
+    r:'Cliente ──Discover──→ Servidor\nCliente ←──Offer───── Servidor\nCliente ──Request───→ Servidor\nCliente ←───Ack────── Servidor   → IP, máscara, puerta de enlace, DNS\n\nÁmbito (sin .0 ni .255) · concesión (lease) · UNA sola puerta de enlace\n· DNS (8.8.8.8, 8.8.4.4) · reservas (IP fija por MAC) · exclusiones\nRiesgos: DoS agotando el ámbito, DHCP/DNS falsos → firewall, DMZ, VPN\nISC DHCP (texto plano, 1 hilo) descontinuado 2022 → Kea (JSON, multihilo, IPv4/6)\nDNS: traduce nombres de dominio a direcciones IP.'},
+   {t:'Tradicional vs. Ágil y MS Project',p:'#9',w:'«Scrum no es una metodología; la metodología es ágil» (Clase 2).',
+    q:'Tabla tradicional vs. ágil (requisitos, entregas, cliente, documentación, cambios, rol). Triángulo de hierro. Ágil vs. Scrum. Los 3 tipos de recursos de Project.',
+    r:'              TRADICIONAL (Cascada/PMBOK)   ÁGIL (Scrum)\nRequisitos    fijos desde el inicio         cambian\nEntregas      una al final                  frecuentes, sprints de 2–4 semanas\nCliente       al inicio y al final          siempre\nDocumentación extensa                       ligera (backlog, historias)\nCambios       costosos                      bienvenidos (+~15 % al presupuesto)\nRol           Project Manager               Scrum Master, Product Owner, equipo\n\nTriángulo de hierro: alcance · costo · tiempo\nÁGIL = la metodología · SCRUM = el marco que la implementa\nPilares ágiles: iterativo, incremental, colaborativo, adaptable\nProject: Trabajo (personas por tiempo) · Material (se compra y entrega) · Costo (fijos)'},
+   {t:'Von Neumann vs. Harvard RISC, Big Data e IA',p:'#10',w:'Clase 1 (ejercicio del % de ALU) y debate de la Clase 17.',
+    q:'Dibuja Von Neumann y Harvard RISC. Las 4 etapas del pipeline. % de uso de ALU con 3 y con 5 instrucciones. Qué da precisión en Big Data. Digitalizar vs. transformación digital.',
+    r:'Von Neumann: UNA memoria (programa, datos, pila) → cuello de botella\nHarvard RISC: memoria de instrucciones (solo lectura) y de datos SEPARADAS,\n              load/store, pipeline → 1 instrucción por ciclo\nPipeline: Fetch → Decode → Execute → Write Back\n1 de 3 usa la ALU = 33 %  ·  1 de 5 = 20 % (80 % desperdicio)\n\nBig Data: más datos ≠ más precisión; la dan la CALIDAD y un protocolo de captura.\nIA: no es objetiva, puede alucinar → human-in-the-loop.\nDigitalizar (papel→digital) ≠ digitalizar procesos (facturas, ERP)\n≠ transformación digital (rediseñar el negocio: Netflix DVD → streaming)'}
+  ];
+  var pzSt=get('eh-pz',{}), pzI=get('eh-pzi',0), pzStep=0;
+  var STEPS=['Paso 1 de 3 · CÓPIALO en el pizarrón (mirando la respuesta)','Paso 2 de 3 · DE MEMORIA: bórralo y escribe todo lo que recuerdes','Paso 3 de 3 · CORRIGE con otro color lo que te faltó'];
+  function pzRender(){
+    var b=PZ[pzI];
+    document.getElementById('pz-n').textContent='Pregunta '+(pzI+1)+' de '+PZ.length;
+    document.getElementById('pz-pri').textContent='Prioridad '+b.p;
+    document.getElementById('pz-tit').textContent=(pzI+1)+'. '+b.t;
+    document.getElementById('pz-why').textContent=b.w;
+    document.getElementById('pz-task').textContent=b.q;
+    document.getElementById('pz-step').textContent=STEPS[pzStep];
+    document.getElementById('pz-resp').textContent=b.r;
+    document.getElementById('pz-resp').style.display=pzStep===1?'none':'block';
+    document.getElementById('pz-hid').style.display=pzStep===1?'block':'none';
+    var act=document.getElementById('pz-act');
+    if(pzStep===0) act.innerHTML='<button data-a="mem">Ya lo copié → ahora de memoria</button>';
+    else if(pzStep===1) act.innerHTML='<button data-a="ver">Ya lo escribí → ver respuesta</button>';
+    else act.innerHTML='<button class="no" data-a="rep">↺ Me faltó: otra vez de memoria</button><button class="si" data-a="ok">✓ Me salió → siguiente</button>';
+    act.querySelectorAll('button').forEach(function(x){x.onclick=function(){pzDo(x.dataset.a)}});
+    var dots=document.getElementById('pz-dots'), all=document.getElementById('pz-all'); dots.innerHTML=''; all.innerHTML='';
+    PZ.forEach(function(q,k){
+      var d=document.createElement('i'); d.className=(pzSt[k]||'')+(k===pzI?' cur':''); d.title=(k+1)+'. '+q.t; d.onclick=function(){pzGo(k)}; dots.appendChild(d);
+      var li=document.createElement('li'); li.className=pzSt[k]||''; li.textContent=q.t+' ('+q.p+')'+(pzSt[k]==='ok'?' ✓':pzSt[k]==='rep'?' ↺':''); li.onclick=function(){pzGo(k);all.classList.remove('open')}; all.appendChild(li);
+    });
+  }
+  function pzGo(k){pzI=Math.max(0,Math.min(PZ.length-1,k));pzStep=0;put('eh-pzi',pzI);pzRender();window.scrollTo(0,0)}
+  function pzDo(a){
+    if(a==='mem'||a==='rep'){pzStep=1;if(a==='rep'){pzSt[pzI]='rep';put('eh-pz',pzSt)}}
+    else if(a==='ver')pzStep=2;
+    else if(a==='ok'){pzSt[pzI]='ok';put('eh-pz',pzSt);if(pzI<PZ.length-1){pzGo(pzI+1);return}}
+    pzRender();window.scrollTo(0,0);
+  }
+  document.getElementById('pz-prev').onclick=function(){pzGo(pzI-1)};
+  document.getElementById('pz-next').onclick=function(){pzGo(pzI+1)};
+  document.getElementById('pz-list').onclick=function(){document.getElementById('pz-all').classList.toggle('open')};
+  pzRender();
 
   // tarjetas (fuentes: resumen de Drive, página del examen y preguntas de NotebookLM)
   var C=[
