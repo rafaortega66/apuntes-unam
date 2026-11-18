@@ -1,13 +1,22 @@
 {
-  "actualizado": "2026-11-17T14:30:00-06:00",
-  "nota": "Lo que Classroom marca como pendiente (Assigned + Missing, leído el 17 nov 2026) + Tarea 5 de ACS (ACS no usa Classroom). Banners con el mínimo de palabras. Servicio social NO va aquí (sitio público).",
+  "actualizado": "2026-11-18T11:45:00-06:00",
+  "nota": "Actualizado el 18 nov 2026 con lo que dijo el usuario + Classroom (To-do, 18 nov) + NotebookLM (ACS 21–23, MD 18–21, FSE 18–21). Banners con el mínimo de palabras. Servicio social NO va aquí (sitio público).",
   "items": [
+    {
+      "materia": "ASI",
+      "color": "#7C9CD6",
+      "titulo": "Examen final",
+      "estado": "en-curso",
+      "resumen": "HOY mié 18 nov, 17:00 (D004)",
+      "link": "materias/administracion-de-servicios-de-internet/examen-final.html"
+    },
     {
       "materia": "MD",
       "color": "#A98BD1",
       "titulo": "Proyecto final",
       "estado": "en-curso",
-      "resumen": "Jue 19 nov, 13:00"
+      "resumen": "Jue 19 nov, 13:00",
+      "falta": ["Presentaciones desde el jue 19 y en la última clase"]
     },
     {
       "materia": "RP",
@@ -38,13 +47,57 @@
       "resumen": "Sáb 21 nov, 23:59"
     },
     {
+      "materia": "OAC",
+      "color": "#45B8A8",
+      "titulo": "Proyecto final",
+      "estado": "en-curso",
+      "resumen": "Lun 23 o mié 25 nov · cierra la materia"
+    },
+    {
+      "materia": "SIB",
+      "color": "#E8735C",
+      "titulo": "Examen final",
+      "estado": "en-curso",
+      "resumen": "Mar 24 nov, 9:00 · entra todo"
+    },
+    {
+      "materia": "MD",
+      "color": "#A98BD1",
+      "titulo": "Examen 3",
+      "estado": "en-curso",
+      "resumen": "Mar 24 nov (probable) · en computadora",
+      "falta": ["El profesor dijo «el martes», entre el jue 19 y la última clase (jue 26)"]
+    },
+    {
+      "materia": "Lab FSE",
+      "color": "#E8735C",
+      "titulo": "Proyecto final",
+      "estado": "en-curso",
+      "resumen": "Mar 24 nov (se puede recorrer 1 semana)"
+    },
+    {
       "materia": "ACS",
       "color": "#E8735C",
       "titulo": "Tarea 5 — sniffer",
       "chat": "Tarea 5",
       "chat_url": "https://claude.ai/chat/c9c89e68-a671-402a-aebd-6cdd280ecb35",
       "estado": "en-curso",
-      "resumen": "Sigue: captura de ifconfig lo"
+      "resumen": "El profesor ya la está calificando",
+      "falta": ["Captura de ifconfig lo"]
+    },
+    {
+      "materia": "ACS",
+      "color": "#E8735C",
+      "titulo": "Programa final — FTP cifrado",
+      "estado": "esperando",
+      "resumen": "Sin fecha; puede acabar antes del 27 nov"
+    },
+    {
+      "materia": "FSE",
+      "color": "#A98BD1",
+      "titulo": "Examen 2",
+      "estado": "esperando",
+      "resumen": "Sin fecha · Unidad 3"
     },
     {
       "materia": "MD",

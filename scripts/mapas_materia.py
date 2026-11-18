@@ -29,7 +29,7 @@ SLUG = {"ASI": "administracion-de-servicios-de-internet", "ACS": "arquitectura-c
 # Datos de cada examen próximo. Fuente: audios de clase (vía NotebookLM) y páginas de clase.
 EXAMENES = {
     "SIB": dict(n=2, desde=1, hasta=None, titulo="examen final",
-                fecha="última semana del semestre (martes o jueves; la profesora aún no fija el día)",
+                fecha="martes 24 nov 2026, 9:00 (lo confirmó el usuario el 18 nov 2026)",
                 formato="Entra TODO el curso («para el siguiente examen lo que tengo que evaluar es todo», "
                         "audio SIB-Clase19); aún por definir si es individual o en equipo"),
     "FSE": dict(n=2, desde=13, hasta=None, fecha="",
