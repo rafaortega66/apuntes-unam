@@ -5,35 +5,46 @@
 <meta name="formato" content="no-aplica">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Guía para el examen final — Seguridad Informática Básica</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20261117b">
-<script src="../../assets/app.js?v=20261117b" defer></script>
-<style>
-.gf h3{margin:1.2em 0 .4em} .gf h4{margin:1em 0 .3em;opacity:.9}
-.gf .tabla-scroll{overflow-x:auto} .gf table td,.gf table th{font-size:.9em;vertical-align:top}
-.gf p.nota{border-left:3px solid var(--c);padding:.3em .8em;opacity:.9}
-.gf li{margin:.25em 0}
-</style>
+<link rel="stylesheet" href="../../assets/style.css?v=20261117c">
+<link rel="stylesheet" href="../../assets/guia-final.css?v=20261117c">
+<script>try{var f=localStorage.getItem('gf-fs');if(f)document.documentElement.dataset.fs=f}catch(e){}</script>
+<script src="../../assets/app.js?v=20261117c" defer></script>
 </head>
-<body style="--c:#E8735C">
-<div class="wrap gf">
+<body class="gf-body" style="--c:#E8735C">
 <!-- Generado por scripts/build_guias_finales.py. No editar a mano. -->
-<a class="back" href="index.html">← Seguridad Informática Básica</a>
-<div class="detail-head" style="border-color:#E8735C"><h2>📘 Guía para el examen final</h2>
-  <p class="prof">Seguridad Informática Básica · semestre 2027-1 · hecha con NotebookLM a partir de los audios de clase y el material del profesor (16 nov 2026).</p>
-  <p class="prof">Las fechas y cálculos de NotebookLM pueden fallar: ante la duda, revisa la página de la clase que cita.</p>
-</div>
-<div class="files">
-  <a class="btn" href="https://docs.google.com/document/d/1kElhsg7coX46Yx_M1CEWED3phoRe-IeL3epGx42dxRM/edit" target="_blank">📄 Original en Drive</a>
-  <a class="btn" href="https://docs.google.com/document/d/1_U1AzAhjld-K4CymGqSvkK43idNyWCBea4SNZlTPRtM/edit" target="_blank">📝 Apuntes y resumen (Drive)</a>
-  <a class="btn" href="https://drive.google.com/file/d/1JR69n3Uu10ErKszrFn69Von1IV0CYPgK/view" target="_blank">🧠 Mapa mental detallado</a>
-  <a class="btn" href="../../decimo/SIB/SIB-Resumenes/SIB-mapa-examen-2.pdf" target="_blank">🗺️ Mapa de examen</a>
+<div class="gf-progress" id="gf-progress"></div>
+<header class="gf-hero"><div class="gf-hero-in">
+  <a class="back" href="index.html">← Seguridad Informática Básica</a><br>
+  <span class="gf-sigla">SIB · EXAMEN FINAL</span>
+  <h1>Guía para el examen final</h1>
+  <p class="gf-materia">Seguridad Informática Básica</p>
+  <p class="gf-meta">Semestre 2027-1 · hecha con NotebookLM a partir de los audios de clase y el material del profesor (16 nov 2026). Las fechas y cálculos de NotebookLM pueden fallar: ante la duda, revisa la página de la clase que cita.</p>
+  <div class="gf-links">
+    <a class="btn" href="https://docs.google.com/document/d/1kElhsg7coX46Yx_M1CEWED3phoRe-IeL3epGx42dxRM/edit" target="_blank">📄 Original en Drive</a>
+    <a class="btn" href="https://docs.google.com/document/d/1_U1AzAhjld-K4CymGqSvkK43idNyWCBea4SNZlTPRtM/edit" target="_blank">📝 Apuntes y resumen (Drive)</a>
+    <a class="btn" href="https://drive.google.com/file/d/1JR69n3Uu10ErKszrFn69Von1IV0CYPgK/view" target="_blank">🧠 Mapa mental detallado</a>
+    <a class="btn" href="../../decimo/SIB/SIB-Resumenes/SIB-mapa-examen-2.pdf" target="_blank">🗺️ Mapa de examen</a>
   <a class="btn" href="resumenes.html">📚 Guías por clase</a>
-</div>
-<details class="section-block sec" id="gf-hilo-conductor" open><summary><span class="stitle">HILO CONDUCTOR</span></summary>
+  </div>
+</div></header>
+<div class="gf-tools"><div class="gf-tools-in">
+  <button class="gf-toc-btn" id="gf-toc-btn" type="button">☰ Índice</button>
+  <span class="gf-now" id="gf-now">SIB</span>
+  <button type="button" id="gf-all" title="Abrir o cerrar todas las secciones">Abrir todo</button>
+  <span class="gf-fs" role="group" aria-label="Tamaño de letra">
+    <button type="button" data-d="-1" title="Letra más chica">A−</button>
+    <button type="button" data-d="0" title="Tamaño normal">A</button>
+    <button type="button" data-d="1" class="big" title="Letra más grande">A+</button>
+  </span>
+</div></div>
+<div class="gf-layout">
+  <nav class="gf-toc" id="gf-toc" aria-label="Índice"><h2>Contenido</h2><ol><li><a href="#gf-hilo-conductor"><span class="tn">🧵</span>Hilo conductor</a></li><li><a href="#gf-unidad-1-fundamentos-ciclo-de-vida-de-la"><span class="tn">1</span>Fundamentos, Ciclo de Vida de la Seguridad y Auditorías</a></li><li><a href="#gf-unidad-2-normatividad-y-estandares-de-se"><span class="tn">2</span>Normatividad y Estándares de Seguridad</a></li><li><a href="#gf-unidad-3-esquemas-entorno-servicios-y-me"><span class="tn">3</span>Esquemas, Entorno, Servicios y Mecanismos de Seguridad</a></li><li><a href="#gf-unidad-4-amenazas-vulnerabilidades-y-eva"><span class="tn">4</span>Amenazas, Vulnerabilidades y Evaluación Técnica</a></li><li><a href="#gf-unidad-5-ataques-perpetradores-tecnicas-"><span class="tn">5</span>Ataques, Perpetradores, Técnicas de Intrusión y Mitigación</a></li><li><a href="#gf-unidad-6-politicas-de-seguridad-y-modelo"><span class="tn">6</span>Políticas de Seguridad y Modelos de Seguridad</a></li><li><a href="#gf-unidad-7-planes-de-contingencia-drp-clas"><span class="tn">7</span>Planes de Contingencia / DRP</a></li><li><a href="#gf-unidad-8-analisis-y-gestion-de-riesgos-c"><span class="tn">8</span>Análisis y Gestión de Riesgos</a></li><li><a href="#gf-lo-que-mas-probablemente-viene-en-el-fin"><span class="tn">🎯</span>Lo que más probablemente viene en el final</a></li><li><a href="#gf-conexiones-clave"><span class="tn">🔗</span>Conexiones clave</a></li></ol></nav>
+  <main class="gf-main">
+<details class="section-block sec" id="gf-hilo-conductor" open data-toc="Hilo conductor" data-num="🧵"><summary><span class="snum ico">🧵</span><span class="stitle">Hilo conductor</span></summary>
 <p>La historia de la materia parte de una verdad fundamental: <strong>la seguridad no es un destino fijo ni garantiza un 100% de protección, sino un ciclo dinámico y continuo (PDCA)</strong> donde toda organización busca proteger sus bienes mediante un esquema guiado por <strong>tres preguntas en orden estricto</strong>: <em>¿qué quiero proteger?</em>, <em>¿de qué lo quiero proteger?</em> y <em>¿cómo lo voy a proteger?</em>. Para evitar reinventar la rueda y poder demostrar cumplimiento mediante <strong>auditorías</strong> internas o externas, el curso primero ubica ese ciclo dentro de la evolución de la <strong>normatividad y los estándares internacionales</strong> —pasando de criterios militares rígidos centrados en productos (como TCSEC) a sistemas integrales de gestión de la información en toda la organización (como la familia ISO/IEC 27000, NIST y COBIT). Con ese marco normativo en mano, se baja a la operación respondiendo las tres preguntas en orden: primero se delimita el <strong>entorno</strong>, los <strong>bienes</strong> y las necesidades de protección (<strong>servicios de seguridad</strong>) junto con las herramientas (<strong>mecanismos</strong>) que las satisfacen; después se responde <em>¿de qué protegerlos?</em> analizando el choque entre <strong>amenazas</strong> externas o internas y <strong>vulnerabilidades</strong> u omisiones (medidas con bases y métricas como CVE, NVD y CVSS), choque que al concretarse produce <strong>ataques</strong> ejecutados por <strong>perpetradores</strong> mediante técnicas de intrusión.</p>
 <p class="">Una vez comprendido qué proteger y contra qué, el curso cierra respondiendo <em>¿cómo protegerlo?</em> desde el gobierno institucional hasta la recuperación operativa. Primero se redactan políticas de seguridad claras, obligatorias y sin ambigüedades, y se formalizan mediante modelos de seguridad (de control de acceso, flujo de información e integridad) que dictan quién puede hacer qué sobre cada recurso. Como ninguna prevención evita el 100% de los incidentes, esas reglas se respaldan con planes de contingencia (DRP) divididos en subplanes temporales (<em>antes, durante y después</em>) para sobrevivir a desastres y recuperar la operación en el menor tiempo posible. Finalmente, el análisis y la gestión de riesgos cierra el círculo como la brújula que alimenta tanto a las políticas como a los planes de contingencia: prioriza infraestructuras y procesos críticos bajo una lógica económica (<em>que el ataque cueste más que el bien y la protección cueste menos que el bien</em>), combina métodos cuantitativos y cualitativos en matrices de riesgos consistentes y retroalimenta nuevamente al ciclo continuo cada vez que hay cambios significativos. <em>(Nota sobre fuentes: las Clases 1–10 y 12–20 provienen de audios y</em> <em>SIB-Clase2.pdf</em> <em>; el audio de la Clase 11 no está cargado porque correspondió a la aplicación del primer examen parcial).</em></p>
 </details>
-<details class="section-block sec" id="gf-unidad-1-fundamentos-ciclo-de-vida-de-la"><summary><span class="stitle">UNIDAD 1: Fundamentos, Ciclo de Vida de la Seguridad y Auditorías (Clase 1)</span></summary>
+<details class="section-block sec" id="gf-unidad-1-fundamentos-ciclo-de-vida-de-la" data-toc="Fundamentos, Ciclo de Vida de la Seguridad y Auditorías" data-num="1"><summary><span class="snum">1</span><span class="stitle">Fundamentos, Ciclo de Vida de la Seguridad y Auditorías<span class="sclases">Clase 1</span></span></summary>
 <p><strong>a) Qué problema resuelve y cómo se conecta:</strong> Resuelve la idea falsa de que poner una contraseña o un candado basta para estar seguro para siempre, estableciendo que la seguridad es un proceso dinámico que requiere revisión periódica para no quedar obsoleta. Es el punto de partida del curso sobre el cual se montan los estándares, las evaluaciones y la mejora continua.</p>
 <h4>b) Conceptos clave:</h4>
 <ul><li>
@@ -60,7 +71,7 @@ Poner mecanismos sin criterio (ej. poner 50 chapas y barrotes en ventanas sin co
 <strong>Error señalado tras el 1er examen ( SIB-Clase14.m4a ):</strong> Decir que el ciclo PDCA solo se aplica cuando hay auditorías; en realidad el PDCA es <strong>continuo</strong> y la auditoría es solo la herramienta para verificarlo.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-2-normatividad-y-estandares-de-se"><summary><span class="stitle">UNIDAD 2: Normatividad y Estándares de Seguridad (Clases 2 [PDF], 3 y 4)</span></summary>
+<details class="section-block sec" id="gf-unidad-2-normatividad-y-estandares-de-se" data-toc="Normatividad y Estándares de Seguridad" data-num="2"><summary><span class="snum">2</span><span class="stitle">Normatividad y Estándares de Seguridad<span class="sclases">Clases 2 [PDF], 3 y 4</span></span></summary>
 <p><strong>a) Qué problema resuelve y cómo se conecta:</strong> Después de entender el ciclo PDCA y las auditorías, surge la duda: <em>¿contra qué criterios objetivos se audita?</em>. La normatividad ofrece marcos reconocidos internacionalmente para no inventar criterios desde cero, generar confianza comercial y superar auditorías.</p>
 <h4>b) Conceptos clave:</h4>
 <ul><li>
@@ -94,7 +105,7 @@ Confundir <strong>ISO 27001</strong> (derivada de BS 7799-2, dice <em>qué hacer
 En el cuestionario evaluado de SIB-Clase4.m4a, omitir el prefijo ISO/IEC (escribir solo 27000 o 27002) valía <strong>medio punto</strong>, y confundir la sigla de <strong>HIPAA</strong> (<em>H-I-P-A-A</em>, no "IPA") o <strong>CTCPEC</strong> quitaba aciertos.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-3-esquemas-entorno-servicios-y-me"><summary><span class="stitle">UNIDAD 3: Esquemas, Entorno, Servicios y Mecanismos de Seguridad (Clases 4, 5 y 14)</span></summary>
+<details class="section-block sec" id="gf-unidad-3-esquemas-entorno-servicios-y-me" data-toc="Esquemas, Entorno, Servicios y Mecanismos de Seguridad" data-num="3"><summary><span class="snum">3</span><span class="stitle">Esquemas, Entorno, Servicios y Mecanismos de Seguridad<span class="sclases">Clases 4, 5 y 14</span></span></summary>
 <p><strong>a) Qué problema resuelve y cómo se conecta:</strong> Con las normas claras (como <em>Common Criteria</em> y su lógica de perfiles), el siguiente paso es diseñar un <strong>esquema de seguridad</strong> real para responder primero <em>¿qué necesito proteger?</em> antes de salir a comprar tecnología a ciegas.</p>
 <h4>b) Conceptos clave:</h4>
 <ul><li>
@@ -136,7 +147,7 @@ En los <strong>11 pasos</strong> de perfiles de protección (SIB-Clase4.m4a), nu
 Comprar sensores biométricos baratos que no detectan pulso/vida (alguien podría usar un dedo cortado o una huella levantada).
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-4-amenazas-vulnerabilidades-y-eva"><summary><span class="stitle">UNIDAD 4: Amenazas, Vulnerabilidades y Evaluación Técnica (Clases 6, 7, 8, 9 y 10)</span></summary>
+<details class="section-block sec" id="gf-unidad-4-amenazas-vulnerabilidades-y-eva" data-toc="Amenazas, Vulnerabilidades y Evaluación Técnica" data-num="4"><summary><span class="snum">4</span><span class="stitle">Amenazas, Vulnerabilidades y Evaluación Técnica<span class="sclases">Clases 6, 7, 8, 9 y 10</span></span></summary>
 <p><strong>a) Qué problema resuelve y cómo se conecta:</strong> Una vez definidas las necesidades, hay que contestar la <strong>2.ª pregunta de seguridad</strong> (<em>¿de qué quiero proteger mis bienes?</em>) sin confundir lo que puede pasar (amenaza) con lo que nos falta (vulnerabilidad).</p>
 <h4>b) Conceptos clave:</h4>
 <ul><li>
@@ -168,7 +179,7 @@ Invertir la redacción de una vulnerabilidad negando (ej. en <em>"quedarse sin r
 Confiar en un solo escaneo de vulnerabilidades (pueden dar <strong>falsos positivos y falsos negativos</strong>) o usar números CVE inventados por una IA sin verificar en CVE/NVD.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-5-ataques-perpetradores-tecnicas-"><summary><span class="stitle">UNIDAD 5: Ataques, Perpetradores, Técnicas de Intrusión y Mitigación (Clases 10, 12, 13 y 14)</span></summary>
+<details class="section-block sec" id="gf-unidad-5-ataques-perpetradores-tecnicas-" data-toc="Ataques, Perpetradores, Técnicas de Intrusión y Mitigación" data-num="5"><summary><span class="snum">5</span><span class="stitle">Ataques, Perpetradores, Técnicas de Intrusión y Mitigación<span class="sclases">Clases 10, 12, 13 y 14</span></span></summary>
 <p><strong>a) Qué problema resuelve y cómo se conecta:</strong> Cuando una amenaza logra explotar una vulnerabilidad, nace el <strong>ataque</strong>. Conocer quién ataca y cómo irrumpe permite a la organización anticiparse y no actuar de forma improvisada cuando ya sufrió el daño.</p>
 <h4>b) Conceptos clave:</h4>
 <ul><li>
@@ -198,7 +209,7 @@ Subir un respaldo de una web comprometida (ej. index.html con carita feliz en un
 Instalar múltiples antivirus al mismo tiempo o creer que todos los hackers son malos.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-6-politicas-de-seguridad-y-modelo"><summary><span class="stitle">UNIDAD 6: Políticas de Seguridad y Modelos de Seguridad (Clases 15, 16, 17 y 18)</span></summary>
+<details class="section-block sec" id="gf-unidad-6-politicas-de-seguridad-y-modelo" data-toc="Políticas de Seguridad y Modelos de Seguridad" data-num="6"><summary><span class="snum">6</span><span class="stitle">Políticas de Seguridad y Modelos de Seguridad<span class="sclases">Clases 15, 16, 17 y 18</span></span></summary>
 <p><strong>a) Qué problema resuelve y cómo se conecta:</strong> Para responder la <strong>3.ª pregunta ( ¿cómo proteger? )</strong> de manera institucional y no improvisada, las organizaciones necesitan reglas obligatorias (<strong>políticas</strong>) que eliminen la excusa de la ignorancia, y estructuras lógicas o matemáticas (<strong>modelos</strong>) que traduzcan esas reglas en permisos verificables sobre sistemas y datos.</p>
 <h4>b) Conceptos clave — Políticas de Seguridad:</h4>
 <ul><li>
@@ -254,7 +265,7 @@ Redactar en <strong>tiempo presente</strong>, <strong>evitar la palabra "no"</st
 Omitir el <strong>glosario de términos</strong> (obligatorio en todas las documentaciones) o reescribir protocolos de emergencia que ya existen en la institución.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-7-planes-de-contingencia-drp-clas"><summary><span class="stitle">UNIDAD 7: Planes de Contingencia / DRP (Clases 17 y 18)</span></summary>
+<details class="section-block sec" id="gf-unidad-7-planes-de-contingencia-drp-clas" data-toc="Planes de Contingencia / DRP" data-num="7"><summary><span class="snum">7</span><span class="stitle">Planes de Contingencia / DRP<span class="sclases">Clases 17 y 18</span></span></summary>
 <p><strong>a) Qué problema resuelve y cómo se conecta:</strong> Incluso con buenas políticas y modelos, ocurrirán fallas o desastres; los <strong>planes de contingencia</strong> (que van referenciados en la sección de incidentes de las políticas y dependen del análisis de riesgos) aseguran que la organización sea <strong>resiliente</strong> y vuelva a operar en el menor tiempo posible sin caer en pánico.</p>
 <h4>b) Conceptos clave:</h4>
 <ul><li>
@@ -286,7 +297,7 @@ Confiar en que las certificaciones sustituyen a los planes de contingencia (sin 
 En emergencias de avión/evacuación: el adulto se pone el equipo antes que el menor para poder auxiliarlo.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-8-analisis-y-gestion-de-riesgos-c"><summary><span class="stitle">UNIDAD 8: Análisis y Gestión de Riesgos (Clases 19 y 20)</span></summary>
+<details class="section-block sec" id="gf-unidad-8-analisis-y-gestion-de-riesgos-c" data-toc="Análisis y Gestión de Riesgos" data-num="8"><summary><span class="snum">8</span><span class="stitle">Análisis y Gestión de Riesgos<span class="sclases">Clases 19 y 20</span></span></summary>
 <p><strong>a) Qué problema resuelve y cómo se conecta:</strong> Es el cimiento cuantitativo, cualitativo y estratégico que alimenta tanto a las <strong>políticas de seguridad</strong> como a los <strong>planes de contingencia</strong>, respondiendo con rigor en orden a las <strong>3 preguntas de seguridad</strong> para saber qué proteger primero, cuánto invertir y qué riesgos residuales aceptar.</p>
 <h4>b) Conceptos clave:</h4>
 <ul><li>
@@ -329,7 +340,7 @@ Hacer el análisis de riesgos en solitario (debe hacerse en <strong>grupos con d
 En el <strong>informe del proyecto</strong>: incluir marcas/proveedores, olvidar evidencias, poner títulos literales de las 3 preguntas, o cotizar un trabajo sin revisar primero las condiciones de la empresa.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-lo-que-mas-probablemente-viene-en-el-fin" open><summary><span class="stitle">LO QUE MÁS PROBABLEMENTE VIENE EN EL FINAL</span></summary>
+<details class="section-block sec gf-key" id="gf-lo-que-mas-probablemente-viene-en-el-fin" open data-toc="Lo que más probablemente viene en el final" data-num="🎯"><summary><span class="snum ico">🎯</span><span class="stitle">Lo que más probablemente viene en el final</span></summary>
 <ul><li>
 <strong>Diagrama del contexto de seguridad y diferencia entre Agente Amenazante, Atacante y Ataque:</strong> Volvió a aparecer en el primer examen parcial, y la profesora recalcó explícitamente en SIB-Clase13.m4a que suelen confundirlos (agente amenazante = potencial, atacante = sujeto en el ilícito, ataque = acción consumada).
 </li><li>
@@ -352,7 +363,7 @@ En el <strong>informe del proyecto</strong>: incluir marcas/proveedores, olvidar
 <strong>Desigualdad económica de costos, 3 preguntas en orden, 8 pasos, 5 técnicas rápidas y Matriz de Riesgos NIST:</strong> Concentró las últimas dos sesiones (SIB-Clase19.m4a y SIB-Clase20.m4a) en estos temas con ejercicios numéricos (celular de \$10,000, BD de IBM, McDonald's), anunció que en el proyecto van 15 bienes sin marcas y pidió repasar matrices NIST para otro ejercicio antes del final. <em>(Nota: la profesora aún definirá si el examen final será individual o en equipo y si se aplica martes o jueves de la última semana</em> <em>).</em>
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-conexiones-clave"><summary><span class="stitle">CONEXIONES CLAVE</span></summary>
+<details class="section-block sec" id="gf-conexiones-clave" data-toc="Conexiones clave" data-num="🔗"><summary><span class="snum ico">🔗</span><span class="stitle">Conexiones clave</span></summary>
 <ul><li>
 Tres preguntas de seguridad -&gt; estructuran -&gt; Esquema de seguridad y análisis de riesgos.
 </li><li>
@@ -420,6 +431,34 @@ Rangos mutuamente excluyentes (Probabilidad × Impacto) -&gt; evitan evaluacione
 </li></ul>
 <p>🎯 ¿Quieres que armemos un examen simulacro completo (con preguntas abiertas, casos de matrices NIST, clasificación de subplanes y detección de errores en políticas) para poner a prueba esta guía?</p>
 </details>
+  </main>
 </div>
+<button class="gf-top" id="gf-top" type="button" title="Volver arriba">↑</button>
+<script>
+(function(){
+  var root=document.documentElement, secs=[].slice.call(document.querySelectorAll('.gf-main details.sec'));
+  var links=[].slice.call(document.querySelectorAll('.gf-toc a')), toc=document.getElementById('gf-toc');
+  function setFs(v){v=Math.max(1,Math.min(5,v));root.dataset.fs=v;document.body.dataset.fs=v;try{localStorage.setItem('gf-fs',v)}catch(e){}}
+  setFs(+(root.dataset.fs||2));
+  document.querySelectorAll('.gf-fs button').forEach(function(b){b.onclick=function(){var d=+b.dataset.d;setFs(d?(+root.dataset.fs+d):2)}});
+  var all=document.getElementById('gf-all');
+  function syncAll(){all.textContent=secs.every(function(s){return s.open})?'Cerrar todo':'Abrir todo'}
+  all.onclick=function(){var o=!secs.every(function(s){return s.open});secs.forEach(function(s){s.open=o});syncAll()};
+  secs.forEach(function(s){s.addEventListener('toggle',syncAll)}); syncAll();
+  links.forEach(function(a){a.onclick=function(){var d=document.getElementById(a.hash.slice(1));if(d)d.open=true;toc.classList.remove('open');syncAll()}});
+  document.getElementById('gf-toc-btn').onclick=function(){toc.classList.toggle('open')};
+  if(location.hash){var t=document.getElementById(location.hash.slice(1));if(t&&t.tagName==='DETAILS')t.open=true}
+  var bar=document.getElementById('gf-progress'), top=document.getElementById('gf-top'), now=document.getElementById('gf-now'), base=now.textContent;
+  top.onclick=function(){window.scrollTo({top:0,behavior:'smooth'})};
+  function onScroll(){
+    var h=document.documentElement.scrollHeight-innerHeight; bar.style.width=(h>0?scrollY/h*100:0)+'%';
+    top.classList.toggle('show',scrollY>600);
+    var cur=null; secs.forEach(function(s){if(s.getBoundingClientRect().top<170)cur=s});
+    links.forEach(function(a){a.classList.toggle('on',cur&&a.hash==='#'+cur.id)});
+    now.textContent=cur?base+' · '+cur.dataset.toc:base;
+  }
+  addEventListener('scroll',onScroll,{passive:true}); onScroll();
+})();
+</script>
 </body>
 </html>

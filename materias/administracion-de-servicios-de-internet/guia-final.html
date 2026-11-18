@@ -5,35 +5,46 @@
 <meta name="formato" content="no-aplica">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Guía para el examen final — Administración de Servicios de Internet</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20261117b">
-<script src="../../assets/app.js?v=20261117b" defer></script>
-<style>
-.gf h3{margin:1.2em 0 .4em} .gf h4{margin:1em 0 .3em;opacity:.9}
-.gf .tabla-scroll{overflow-x:auto} .gf table td,.gf table th{font-size:.9em;vertical-align:top}
-.gf p.nota{border-left:3px solid var(--c);padding:.3em .8em;opacity:.9}
-.gf li{margin:.25em 0}
-</style>
+<link rel="stylesheet" href="../../assets/style.css?v=20261117c">
+<link rel="stylesheet" href="../../assets/guia-final.css?v=20261117c">
+<script>try{var f=localStorage.getItem('gf-fs');if(f)document.documentElement.dataset.fs=f}catch(e){}</script>
+<script src="../../assets/app.js?v=20261117c" defer></script>
 </head>
-<body style="--c:#7C9CD6">
-<div class="wrap gf">
+<body class="gf-body" style="--c:#7C9CD6">
 <!-- Generado por scripts/build_guias_finales.py. No editar a mano. -->
-<a class="back" href="index.html">← Administración de Servicios de Internet</a>
-<div class="detail-head" style="border-color:#7C9CD6"><h2>📘 Guía para el examen final</h2>
-  <p class="prof">Administración de Servicios de Internet · semestre 2027-1 · hecha con NotebookLM a partir de los audios de clase y el material del profesor (16 nov 2026).</p>
-  <p class="prof">Las fechas y cálculos de NotebookLM pueden fallar: ante la duda, revisa la página de la clase que cita.</p>
-</div>
-<div class="files">
-  <a class="btn" href="https://docs.google.com/document/d/1jhbhQWg9nWUX9Px6uBr-bMdaofB0ESfnrTV-fPn3UnY/edit" target="_blank">📄 Original en Drive</a>
-  <a class="btn" href="https://docs.google.com/document/d/1QOPXf275iYkitd4E6XimdhAxFfP8pfzF7WxZEyp1F3s/edit" target="_blank">📝 Apuntes y resumen (Drive)</a>
-  <a class="btn" href="https://drive.google.com/file/d/1GdsSfaS1vmDQ8qhMVHJ6-FnjGQPSz6ly/view" target="_blank">🧠 Mapa mental detallado</a>
-  <a class="btn" href="examen-final.html">📝 Repaso del examen</a>
+<div class="gf-progress" id="gf-progress"></div>
+<header class="gf-hero"><div class="gf-hero-in">
+  <a class="back" href="index.html">← Administración de Servicios de Internet</a><br>
+  <span class="gf-sigla">ASI · EXAMEN FINAL</span>
+  <h1>Guía para el examen final</h1>
+  <p class="gf-materia">Administración de Servicios de Internet</p>
+  <p class="gf-meta">Semestre 2027-1 · hecha con NotebookLM a partir de los audios de clase y el material del profesor (16 nov 2026). Las fechas y cálculos de NotebookLM pueden fallar: ante la duda, revisa la página de la clase que cita.</p>
+  <div class="gf-links">
+    <a class="btn" href="https://docs.google.com/document/d/1jhbhQWg9nWUX9Px6uBr-bMdaofB0ESfnrTV-fPn3UnY/edit" target="_blank">📄 Original en Drive</a>
+    <a class="btn" href="https://docs.google.com/document/d/1QOPXf275iYkitd4E6XimdhAxFfP8pfzF7WxZEyp1F3s/edit" target="_blank">📝 Apuntes y resumen (Drive)</a>
+    <a class="btn" href="https://drive.google.com/file/d/1GdsSfaS1vmDQ8qhMVHJ6-FnjGQPSz6ly/view" target="_blank">🧠 Mapa mental detallado</a>
+    <a class="btn" href="examen-final.html">📝 Repaso del examen</a>
   <a class="btn" href="../../decimo/ASI/ASI-Resumenes/ASI-mapa-examen-2.pdf" target="_blank">🗺️ Mapa de examen</a>
   <a class="btn" href="resumenes.html">📚 Guías por clase</a>
-</div>
-<details class="section-block sec" id="gf-1-hilo-conductor" open><summary><span class="stitle">1. HILO CONDUCTOR</span></summary>
+  </div>
+</div></header>
+<div class="gf-tools"><div class="gf-tools-in">
+  <button class="gf-toc-btn" id="gf-toc-btn" type="button">☰ Índice</button>
+  <span class="gf-now" id="gf-now">ASI</span>
+  <button type="button" id="gf-all" title="Abrir o cerrar todas las secciones">Abrir todo</button>
+  <span class="gf-fs" role="group" aria-label="Tamaño de letra">
+    <button type="button" data-d="-1" title="Letra más chica">A−</button>
+    <button type="button" data-d="0" title="Tamaño normal">A</button>
+    <button type="button" data-d="1" class="big" title="Letra más grande">A+</button>
+  </span>
+</div></div>
+<div class="gf-layout">
+  <nav class="gf-toc" id="gf-toc" aria-label="Índice"><h2>Contenido</h2><ol><li><a href="#gf-1-hilo-conductor"><span class="tn">🧵</span>Hilo conductor</a></li><li><a href="#gf-unidad-1-fundamentos-de-arquitectura-com"><span class="tn">1</span>Fundamentos de Arquitectura Computacional y Administración en Linux</a></li><li><a href="#gf-unidad-2-gestion-requerimientos-y-modela"><span class="tn">2</span>Gestión, Requerimientos y Modelado de Proyectos de Servicios</a></li><li><a href="#gf-unidad-3-servidores-nube-y-servicios-ese"><span class="tn">3</span>Servidores, Nube y Servicios Esenciales de Red (DHCP y DNS)</a></li><li><a href="#gf-unidad-4-ciberseguridad-practica-kali-me"><span class="tn">4</span>Ciberseguridad Práctica (Kali, Metasploit, Nmap) y Auditoría de Bases de Datos (Oracle)</a></li><li><a href="#gf-unidad-5-servicios-de-datos-cubos-olap-d"><span class="tn">5</span>Servicios de Datos, Cubos OLAP, Data Warehouse e Inteligencia de Negocios</a></li><li><a href="#gf-unidad-6-transformacion-digital-nuevas-t"><span class="tn">6</span>Transformación Digital, Nuevas Tecnologías e IA en Profesiones</a></li><li><a href="#gf-unidad-7-estandares-oficiales-de-interne"><span class="tn">7</span>Estándares Oficiales de Internet (RFCs) y Protocolos Fundamentales</a></li><li><a href="#gf-3-lo-que-mas-probablemente-viene-en-el-f"><span class="tn">🎯</span>Lo que más probablemente viene en el final</a></li><li><a href="#gf-4-conexiones-clave"><span class="tn">🔗</span>Conexiones clave</a></li><li><a href="#gf-anexo-clases-que-no-estaban-en-el-cuader"><span class="tn">📎</span>Anexo · Clases que no estaban en el cuaderno de NotebookLM</a></li></ol></nav>
+  <main class="gf-main">
+<details class="section-block sec" id="gf-1-hilo-conductor" open data-toc="Hilo conductor" data-num="🧵"><summary><span class="snum ico">🧵</span><span class="stitle">Hilo conductor</span></summary>
 <p>El curso parte desde la base física y lógica de la máquina hasta los estándares globales que gobiernan internet: primero se entiende cómo ejecuta instrucciones un procesador, cómo se elimina el cuello de botella de Von Neumann mediante arquitecturas RISC con <em>pipeline</em> y cómo se organiza y administra un sistema operativo Linux por consola (permisos, directorios y procesos), porque todo servicio de internet corre en última instancia sobre hardware y un sistema operativo (Clase 1). Una vez dominada la máquina local, antes de levantar cualquier infraestructura, se aprende a planificar y controlar el trabajo de ingeniería eligiendo entre metodologías tradicionales (Cascada/PMBOK) y ágiles (Scrum), definiendo qué hace un servidor frente a un simple repositorio, levantando requerimientos (funcionales, no funcionales y de sistema) y modelando la arquitectura en UML para que el código coincida con el diseño (Clases 2, 3, 5, 6, 7). Con el proyecto planificado y los requerimientos claros, se construye y protege la infraestructura: primero se despliegan servicios en la nube (controlando presupuestos y alertas en dólares) y servicios esenciales de red local/corporativa (DHCP y DNS) para automatizar el direccionamiento y evitar conflictos (Clases 3, 4); luego se evalúa la seguridad real de esos servidores mediante pentesting (Metasploit y Nmap en Kali Linux) y se blinda la capa de datos auditando quién modifica la información mediante usuarios, roles, privilegios y <em>triggers</em> en Oracle (Clases 8, 9, 14). A partir de esos datos ya resguardados y auditados, se da el salto analítico para convertir datos crudos en decisiones ejecutivas usando cubos OLAP, Data Warehouse, Power BI y encuestas reales como la ENOE (Clases 10, 11, 13); finalmente, el curso conecta la tecnología con el negocio y la normatividad: analiza cómo la transformación digital, la IA y el <em>Big Data</em> redefinen las profesiones sin reemplazar el criterio de calidad y auditoría humana, y cierra regresando a la raíz teórica oficial del temario mediante los <strong>RFCs</strong>, que documentan las reglas exactas de cada protocolo visto en el semestre (HTTP, IMAP, POP3, LDAP, IANA, Telnet, DNS, DHCPv6/NIS y TLS 1.3) (Clases 15, 16, 17, 18, 19).</p>
 </details>
-<details class="section-block sec" id="gf-unidad-1-fundamentos-de-arquitectura-com"><summary><span class="stitle">UNIDAD 1: Fundamentos de Arquitectura Computacional y Administración en Linux (Clase 1)</span></summary>
+<details class="section-block sec" id="gf-unidad-1-fundamentos-de-arquitectura-com" data-toc="Fundamentos de Arquitectura Computacional y Administración en Linux" data-num="1"><summary><span class="snum">1</span><span class="stitle">Fundamentos de Arquitectura Computacional y Administración en Linux<span class="sclases">Clase 1</span></span></summary>
 <h4>(a) Problema que resuelve y conexión con el curso</h4>
 <p>Explica por qué los procesadores reales necesitan arquitecturas eficientes más allá de las matemáticas ideales y cómo operar por línea de comandos el sistema operativo base (Linux) donde se instalarán los servidores de las unidades siguientes (Clase 1).</p>
 <h4>(b) Conceptos clave</h4>
@@ -92,7 +103,7 @@ Usar permiso 777 o dejar permiso x abierto a otros usuarios.
 Creer que whereis y which devuelven lo mismo, o que cat solo sirve para leer un archivo.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-2-gestion-requerimientos-y-modela"><summary><span class="stitle">UNIDAD 2: Gestión, Requerimientos y Modelado de Proyectos de Servicios (Clases 2, 3, 5, 6, 7)</span></summary>
+<details class="section-block sec" id="gf-unidad-2-gestion-requerimientos-y-modela" data-toc="Gestión, Requerimientos y Modelado de Proyectos de Servicios" data-num="2"><summary><span class="snum">2</span><span class="stitle">Gestión, Requerimientos y Modelado de Proyectos de Servicios<span class="sclases">Clases 2, 3, 5, 6, 7</span></span></summary>
 <h4>(a) Problema que resuelve y conexión con el tema anterior</h4>
 <p>Antes de configurar servicios sobre Linux, un equipo de ingeniería debe decidir cómo planificar entregas, presupuesto, responsabilidades, requisitos y planos técnicos para no perder alcance, dinero ni coherencia entre lo diseñado y lo programado (Clases 2, 3, 5, 7).</p>
 <h4>(b) Conceptos clave</h4>
@@ -157,7 +168,7 @@ Creer que whereis y which devuelven lo mismo, o que cat solo sirve para leer un 
 <em>(Nota de transparencia: En el audio de Clase 7 solo se nombran explícitamente los diagramas de componentes, despliegue y casos de uso; la lista completa de la diapositiva proyectada no fue leída en voz alta ``.)</em>
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-3-servidores-nube-y-servicios-ese"><summary><span class="stitle">UNIDAD 3: Servidores, Nube y Servicios Esenciales de Red (DHCP y DNS) (Clases 3, 4)</span></summary>
+<details class="section-block sec" id="gf-unidad-3-servidores-nube-y-servicios-ese" data-toc="Servidores, Nube y Servicios Esenciales de Red (DHCP y DNS)" data-num="3"><summary><span class="snum">3</span><span class="stitle">Servidores, Nube y Servicios Esenciales de Red (DHCP y DNS)<span class="sclases">Clases 3, 4</span></span></summary>
 <h4>(a) Problema que resuelve y conexión con el tema anterior</h4>
 <p>Una vez definidos los requerimientos de sistema, debemos elegir dónde hospedar la infraestructura (local o nube como Azure) y automatizar la comunicación entre clientes y servidores sin configurar direcciones IP a mano ni confundir almacenamiento pasivo con procesamiento activo (Clases 3, 4).</p>
 <h4>(b) Conceptos clave</h4>
@@ -217,7 +228,7 @@ Creer que whereis y which devuelven lo mismo, o que cat solo sirve para leer un 
 <strong>Configurar múltiples <em>gateways</strong></em> buscando velocidad (multiplica la superficie de ataque) o no reiniciar el servicio tras editar el archivo de configuración DHCP.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-4-ciberseguridad-practica-kali-me"><summary><span class="stitle">UNIDAD 4: Ciberseguridad Práctica (Kali, Metasploit, Nmap) y Auditoría de Bases de Datos (Oracle) (Clases 8, 9, 14)</span></summary>
+<details class="section-block sec" id="gf-unidad-4-ciberseguridad-practica-kali-me" data-toc="Ciberseguridad Práctica (Kali, Metasploit, Nmap) y Auditoría de Bases de Datos (Oracle)" data-num="4"><summary><span class="snum">4</span><span class="stitle">Ciberseguridad Práctica (Kali, Metasploit, Nmap) y Auditoría de Bases de Datos (Oracle)<span class="sclases">Clases 8, 9, 14</span></span></summary>
 <h4>(a) Problema que resuelve y conexión con el tema anterior</h4>
 <p>Una vez desplegados los servicios web y de red, hay que verificar qué puertos e información exponen hacia afuera (auditoría externa) y proteger e investigar quién inserta, modifica o elimina datos dentro del servidor de base de datos (auditoría interna) (Clases 8, 9, 14).</p>
 <h4>(b) Conceptos clave</h4>
@@ -269,7 +280,7 @@ Creer que SYSDATE solo devuelve la fecha (depende del tipo de columna: DATE vs T
 Confundir <strong>Trigger</strong> (automático ante INSERT/UPDATE/DELETE) con <strong>Procedimiento almacenado</strong> (se invoca manualmente), o hacer 3 triggers separados cuando el profesor pidió 1 solo usando INSERTING/UPDATING/DELETING con :OLD y :NEW.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-5-servicios-de-datos-cubos-olap-d"><summary><span class="stitle">UNIDAD 5: Servicios de Datos, Cubos OLAP, Data Warehouse e Inteligencia de Negocios (Clases 10, 11, 13)</span></summary>
+<details class="section-block sec" id="gf-unidad-5-servicios-de-datos-cubos-olap-d" data-toc="Servicios de Datos, Cubos OLAP, Data Warehouse e Inteligencia de Negocios" data-num="5"><summary><span class="snum">5</span><span class="stitle">Servicios de Datos, Cubos OLAP, Data Warehouse e Inteligencia de Negocios<span class="sclases">Clases 10, 11, 13</span></span></summary>
 <h4>(a) Problema que resuelve y conexión con el tema anterior</h4>
 <p>Con los datos almacenados y auditados en Oracle, las organizaciones necesitan analizar históricos desde múltiples perspectivas sin frenar las bases operativas ni caer en consultas JOIN lentas o en gráficos estadísticos engañosos (Clases 10, 11, 13).</p>
 <h4>(b) Conceptos clave</h4>
@@ -317,7 +328,7 @@ Confundir <strong>Trigger</strong> (automático ante INSERT/UPDATE/DELETE) con <
 <strong>No revisar el modelo relacional antes de responder:</strong> En la Clase 13 advirtió explícitamente que si no armas bien el modelo entidad-relación entre los 5 archivos, todas las respuestas salen mal. <em>(Los cubos OLAP fueron explícitamente anunciados para el examen parcial previo ``, por lo que siguen siendo base del examen final integral.)</em>
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-6-transformacion-digital-nuevas-t"><summary><span class="stitle">UNIDAD 6: Transformación Digital, Nuevas Tecnologías e IA en Profesiones (Clases 15, 16, 17)</span></summary>
+<details class="section-block sec" id="gf-unidad-6-transformacion-digital-nuevas-t" data-toc="Transformación Digital, Nuevas Tecnologías e IA en Profesiones" data-num="6"><summary><span class="snum">6</span><span class="stitle">Transformación Digital, Nuevas Tecnologías e IA en Profesiones<span class="sclases">Clases 15, 16, 17</span></span></summary>
 <h4>(a) Problema que resuelve y conexión con el tema anterior</h4>
 <p>Los datos y modelos analíticos culminan en automatización e inteligencia artificial; esta unidad evalúa cómo integrarlas estratégicamente en empresas y oficios reales sin perder el negocio, el criterio humano ni la calidad de los datos (Clases 15, 16, 17).</p>
 <h4>(b) Conceptos clave</h4>
@@ -366,7 +377,7 @@ Negar el desplazamiento laboral en la explicación oral cuando en la propia diap
 Usar IA sin supervisión humana (especialmente en finanzas/dineros, decisiones médicas o enviando prácticas sin quitar la línea del chat de IA), o que los empleados usen IA por su cuenta sin políticas ni auditoría de la empresa.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-7-estandares-oficiales-de-interne"><summary><span class="stitle">UNIDAD 7: Estándares Oficiales de Internet (RFCs) y Protocolos Fundamentales (Clases 17, 18, 19)</span></summary>
+<details class="section-block sec" id="gf-unidad-7-estandares-oficiales-de-interne" data-toc="Estándares Oficiales de Internet (RFCs) y Protocolos Fundamentales" data-num="7"><summary><span class="snum">7</span><span class="stitle">Estándares Oficiales de Internet (RFCs) y Protocolos Fundamentales<span class="sclases">Clases 17, 18, 19</span></span></summary>
 <h4>(a) Problema que resuelve y conexión con el tema anterior</h4>
 <p>Todo servicio visto en el semestre (Linux, HTTP, correo, directorios, IP/puertos, acceso remoto, DNS, DHCP y cifrado) no funciona por improvisación: la <strong>IETF</strong> estandariza sus reglas en documentos públicos llamados <strong>RFC</strong> para garantizar interoperabilidad mundial entre sistemas distintos (Clases 17, 18, 19).</p>
 <h4>(b) Conceptos clave</h4>
@@ -462,7 +473,7 @@ Creer que en POP3 DELE borra los correos de inmediato (solo marca; borra en esta
 Olvidar que en el RFC 3898 los códigos 27–30 deben enviarse <strong>dos veces</strong> (en la búsqueda inicial y en el <em>request</em> formal) y que el RFC no implementa NIS, solo lo transporta.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-3-lo-que-mas-probablemente-viene-en-el-f" open><summary><span class="stitle">3. LO QUE MÁS PROBABLEMENTE VIENE EN EL FINAL</span></summary>
+<details class="section-block sec gf-key" id="gf-3-lo-que-mas-probablemente-viene-en-el-f" open data-toc="Lo que más probablemente viene en el final" data-num="🎯"><summary><span class="snum ico">🎯</span><span class="stitle">Lo que más probablemente viene en el final</span></summary>
 <p><em>(Fecha del examen final confirmada en Clase 19: <strong>miércoles 18 de noviembre</strong>, individual, en hojas blancas, sin celular, abarcando todo el curso.)</em></p>
 <ul><li>
 <strong>Definición precisa de Servidor vs. Repositorio y tipos de Requerimientos:</strong> <em>Evidencia fuerte</em> — en Clase 3, el profesor advirtió explícitamente <em>"parece muy obvio, pero luego en el examen me ponen ahí cada barbaridad"</em> al dar la definición de servidor, y resolvió 5 ejercicios en vivo diferenciando requerimientos funcionales, no funcionales y de sistema.
@@ -486,15 +497,43 @@ Olvidar que en el RFC 3898 los códigos 27–30 deben enviarse <strong>dos veces
 <strong>Principios CID en servidores, Presupuestos en Nube (dólares y alertas) y Banderas de Nmap / Metasploit:</strong> <em>Evidencia moderada</em> — temas repetidos en múltiples clases (CID en Clase 3; alertas 0.40/0.50 en Clase 3; banderas -sn, -sS, -sV, -O, -A resumidas al cierre de Clase 9 y conectadas en Clase 14 para rastrear IP del atacante desde el <em>trigger</em>).
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-4-conexiones-clave"><summary><span class="stitle">4. CONEXIONES CLAVE</span></summary>
+<details class="section-block sec" id="gf-4-conexiones-clave" data-toc="Conexiones clave" data-num="🔗"><summary><span class="snum ico">🔗</span><span class="stitle">Conexiones clave</span></summary>
 <p>Procesador Von Neumann -&gt; genera -&gt; Cuello de botella en acceso único a memoria (Clase 1) Arquitectura Harvard RISC -&gt; separa -&gt; Memorias de instrucciones y datos para lograr pipeline (Clase 1) Sistema operativo Linux -&gt; aloja -&gt; Servicios de red con permisos, usuarios y procesos (Clase 1) Metodología tradicional PMBOK -&gt; fija -&gt; Alcance, costo y tiempo con cambios formales costosos (Clase 2) Metodología ágil -&gt; implementa -&gt; Entregas incrementales mediante el marco Scrum (Clase 2) Microsoft Project -&gt; clasifica -&gt; Recursos en trabajo, material y costo fijo (Clase 2) Levantamiento de requerimientos -&gt; distingue -&gt; Qué hace el sistema (funcional) de cómo se mide (no funcional) (Clase 3) Diagramas UML -&gt; obligan -&gt; Coherencia exacta con el código del proyecto final (Clase 7) Repositorio -&gt; almacena -&gt; Datos brutos que un servidor sí procesa y comparte en red (Clase 3) Principios CID -&gt; garantizan -&gt; Disponibilidad, integridad y confidencialidad de todo servidor (Clase 3) Servicios en la nube -&gt; requieren -&gt; Presupuestos en dólares con alertas de costo previsto y real (Clase 3) Servidor DHCP -&gt; automatiza -&gt; Asignación de IP, máscara, gateway y DNS mediante proceso DORA (Clase 4) Kea DHCP -&gt; sustituye -&gt; Al obsoleto ISC DHCP aportando configuración JSON y multihilo (Clase 4) Firewall, DMZ y VPN -&gt; mitigan -&gt; Ataques DoS, inyección SQL y servidores DHCP/DNS falsos (Clase 4) Metasploit -&gt; inyecta -&gt; Tráfico auxiliar para descubrir puertos, IPs y arquitectura expuesta (Clases 8, 9) Nmap -&gt; mapea -&gt; Hosts activos, puertos, versiones, SO y vulnerabilidades de una red (Clase 9) Jerarquía Oracle -&gt; ordena -&gt; Seguridad creando primero usuario, luego rol y luego privilegios (Clase 14) Tablespace en Oracle -&gt; requiere -&gt; Privilegio UNLIMITED TABLESPACE directo al usuario (Clase 14) Trigger de auditoría -&gt; registra -&gt; Usuario, fecha nanosegundos, :OLD y :NEW ante DML (Clase 14) Proceso ETL -&gt; alimenta -&gt; Cubos OLAP y Data Warehouse desde orígenes heterogéneos (Clases 10, 11) Data Warehouse -&gt; prohíbe -&gt; Regresar datos a la BD transaccional para preservar integridad (Clases 10, 11) Esquemas analíticos -&gt; normalizan -&gt; Estrella (1FN), Copo de nieve (2FN) y Constelación (3FN) (Clase 10) Medidas no aditivas -&gt; calculan -&gt; Valores derivados mediante fórmulas que no deben sumarse directo (Clase 10) Power BI sobre ENOE -&gt; revela -&gt; Sesgos entre sumas totales, promedios y recuentos reales (Clase 11) Transformación digital -&gt; rediseña -&gt; El modelo de negocio más allá de solo escanear o digitalizar procesos (Clase 15) Big Data -&gt; depende -&gt; De calidad y protocolos de captura más que de cantidad de datos (Clase 17) Automatización con IA -&gt; exige -&gt; Supervisión <em>human-in-the-loop</em> y rol de auditoría humana (Clases 16, 17) Documentos RFC -&gt; estandarizan -&gt; Reglas inmutables de protocolos e identificadores IANA (Clases 17, 18) HTTP/1.1 (RFC 2616) -&gt; evoluciona -&gt; Hacia series 7230–7235, HTTP/2 y HTTP/3 al dividirse por monolítico (Clase 18) POP3 (RFC 1939) -&gt; descarga -&gt; Correos localmente borrándolos del servidor frente a IMAP (RFC 3501) (Clase 18) Telnet (RFC 854) -&gt; cede -&gt; Ante SSH (RFC 4251) por transmitir tráfico remoto sin cifrado (Clase 18) TLS 1.3 (RFC 8446) -&gt; protege -&gt; Comunicaciones en 1-RTT mediante AEAD (AES-GCM) y claves efímeras Diffie-Hellman (Clase 19)</p>
 <p>💡 Si quieres repasar antes del miércoles 18, puedo armarte un <strong>simulador de examen final tipo extraordinario</strong> (con ejercicios de código en papel en Linux, Oracle SQL/Triggers, cálculo de pipeline/project y preguntas trampa de RFCs y OLAP) para que lo resuelvas y lo revisemos juntos.</p>
 </details>
-<details class="section-block sec" id="gf-anexo-clases-que-no-estaban-en-el-cuader"><summary><span class="stitle">Anexo · Clases que no estaban en el cuaderno de NotebookLM</span></summary>
+<details class="section-block sec" id="gf-anexo-clases-que-no-estaban-en-el-cuader" data-toc="Anexo · Clases que no estaban en el cuaderno de NotebookLM" data-num="📎"><summary><span class="snum ico">📎</span><span class="stitle">Anexo · Clases que no estaban en el cuaderno de NotebookLM</span></summary>
 <p><em>Resumen para estudiar de cada una, tomado de los apuntes por clase del sitio (decimo/ASI/ASI-Resumenes/).</em></p>
 <h3>Clase 12 · Examen (miércoles 7 oct 2026)</h3>
 <p>Si tienes el enunciado o tu calificación, agrégalos en decimo/ASI/ para completar este resumen.</p>
 </details>
+  </main>
 </div>
+<button class="gf-top" id="gf-top" type="button" title="Volver arriba">↑</button>
+<script>
+(function(){
+  var root=document.documentElement, secs=[].slice.call(document.querySelectorAll('.gf-main details.sec'));
+  var links=[].slice.call(document.querySelectorAll('.gf-toc a')), toc=document.getElementById('gf-toc');
+  function setFs(v){v=Math.max(1,Math.min(5,v));root.dataset.fs=v;document.body.dataset.fs=v;try{localStorage.setItem('gf-fs',v)}catch(e){}}
+  setFs(+(root.dataset.fs||2));
+  document.querySelectorAll('.gf-fs button').forEach(function(b){b.onclick=function(){var d=+b.dataset.d;setFs(d?(+root.dataset.fs+d):2)}});
+  var all=document.getElementById('gf-all');
+  function syncAll(){all.textContent=secs.every(function(s){return s.open})?'Cerrar todo':'Abrir todo'}
+  all.onclick=function(){var o=!secs.every(function(s){return s.open});secs.forEach(function(s){s.open=o});syncAll()};
+  secs.forEach(function(s){s.addEventListener('toggle',syncAll)}); syncAll();
+  links.forEach(function(a){a.onclick=function(){var d=document.getElementById(a.hash.slice(1));if(d)d.open=true;toc.classList.remove('open');syncAll()}});
+  document.getElementById('gf-toc-btn').onclick=function(){toc.classList.toggle('open')};
+  if(location.hash){var t=document.getElementById(location.hash.slice(1));if(t&&t.tagName==='DETAILS')t.open=true}
+  var bar=document.getElementById('gf-progress'), top=document.getElementById('gf-top'), now=document.getElementById('gf-now'), base=now.textContent;
+  top.onclick=function(){window.scrollTo({top:0,behavior:'smooth'})};
+  function onScroll(){
+    var h=document.documentElement.scrollHeight-innerHeight; bar.style.width=(h>0?scrollY/h*100:0)+'%';
+    top.classList.toggle('show',scrollY>600);
+    var cur=null; secs.forEach(function(s){if(s.getBoundingClientRect().top<170)cur=s});
+    links.forEach(function(a){a.classList.toggle('on',cur&&a.hash==='#'+cur.id)});
+    now.textContent=cur?base+' · '+cur.dataset.toc:base;
+  }
+  addEventListener('scroll',onScroll,{passive:true}); onScroll();
+})();
+</script>
 </body>
 </html>

@@ -5,35 +5,46 @@
 <meta name="formato" content="no-aplica">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Guía para el examen final — Reconocimiento de Patrones</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20261117b">
-<script src="../../assets/app.js?v=20261117b" defer></script>
-<style>
-.gf h3{margin:1.2em 0 .4em} .gf h4{margin:1em 0 .3em;opacity:.9}
-.gf .tabla-scroll{overflow-x:auto} .gf table td,.gf table th{font-size:.9em;vertical-align:top}
-.gf p.nota{border-left:3px solid var(--c);padding:.3em .8em;opacity:.9}
-.gf li{margin:.25em 0}
-</style>
+<link rel="stylesheet" href="../../assets/style.css?v=20261117c">
+<link rel="stylesheet" href="../../assets/guia-final.css?v=20261117c">
+<script>try{var f=localStorage.getItem('gf-fs');if(f)document.documentElement.dataset.fs=f}catch(e){}</script>
+<script src="../../assets/app.js?v=20261117c" defer></script>
 </head>
-<body style="--c:#45B8A8">
-<div class="wrap gf">
+<body class="gf-body" style="--c:#45B8A8">
 <!-- Generado por scripts/build_guias_finales.py. No editar a mano. -->
-<a class="back" href="index.html">← Reconocimiento de Patrones</a>
-<div class="detail-head" style="border-color:#45B8A8"><h2>📘 Guía para el examen final</h2>
-  <p class="prof">Reconocimiento de Patrones · semestre 2027-1 · hecha con NotebookLM a partir de los audios de clase y el material del profesor (16 nov 2026).</p>
-  <p class="prof">Las fechas y cálculos de NotebookLM pueden fallar: ante la duda, revisa la página de la clase que cita.</p>
-</div>
-<div class="files">
-  <a class="btn" href="https://docs.google.com/document/d/1KIjXNfAu3HNb_u0f9eZ5BW4n2MF3Ih1a9OYjjjjZRfs/edit" target="_blank">📄 Original en Drive</a>
-  <a class="btn" href="https://docs.google.com/document/d/1JLhvnxOuCkfadJVRzaB8cBuf2wVN30ZUmzj0v-bzATs/edit" target="_blank">📝 Apuntes y resumen (Drive)</a>
-  <a class="btn" href="https://drive.google.com/file/d/1XDD3QuG9tcZ1EOVjUJAbFWS2k4P-lgdn/view" target="_blank">🧠 Mapa mental detallado</a>
-  <a class="btn" href="resumenes.html">📚 Guías por clase</a>
-</div>
+<div class="gf-progress" id="gf-progress"></div>
+<header class="gf-hero"><div class="gf-hero-in">
+  <a class="back" href="index.html">← Reconocimiento de Patrones</a><br>
+  <span class="gf-sigla">RP · EXAMEN FINAL</span>
+  <h1>Guía para el examen final</h1>
+  <p class="gf-materia">Reconocimiento de Patrones</p>
+  <p class="gf-meta">Semestre 2027-1 · hecha con NotebookLM a partir de los audios de clase y el material del profesor (16 nov 2026). Las fechas y cálculos de NotebookLM pueden fallar: ante la duda, revisa la página de la clase que cita.</p>
+  <div class="gf-links">
+    <a class="btn" href="https://docs.google.com/document/d/1KIjXNfAu3HNb_u0f9eZ5BW4n2MF3Ih1a9OYjjjjZRfs/edit" target="_blank">📄 Original en Drive</a>
+    <a class="btn" href="https://docs.google.com/document/d/1JLhvnxOuCkfadJVRzaB8cBuf2wVN30ZUmzj0v-bzATs/edit" target="_blank">📝 Apuntes y resumen (Drive)</a>
+    <a class="btn" href="https://drive.google.com/file/d/1XDD3QuG9tcZ1EOVjUJAbFWS2k4P-lgdn/view" target="_blank">🧠 Mapa mental detallado</a>
+    <a class="btn" href="resumenes.html">📚 Guías por clase</a>
+  </div>
+</div></header>
+<div class="gf-tools"><div class="gf-tools-in">
+  <button class="gf-toc-btn" id="gf-toc-btn" type="button">☰ Índice</button>
+  <span class="gf-now" id="gf-now">RP</span>
+  <button type="button" id="gf-all" title="Abrir o cerrar todas las secciones">Abrir todo</button>
+  <span class="gf-fs" role="group" aria-label="Tamaño de letra">
+    <button type="button" data-d="-1" title="Letra más chica">A−</button>
+    <button type="button" data-d="0" title="Tamaño normal">A</button>
+    <button type="button" data-d="1" class="big" title="Letra más grande">A+</button>
+  </span>
+</div></div>
+<div class="gf-layout">
+  <nav class="gf-toc" id="gf-toc" aria-label="Índice"><h2>Contenido</h2><ol><li><a href="#gf-1-hilo-conductor"><span class="tn">🧵</span>Hilo conductor</a></li><li><a href="#gf-unidad-1-fundamentos-del-sistema-de-reco"><span class="tn">1</span>Fundamentos del Sistema de Reconocimiento y Extracción de Características</a></li><li><a href="#gf-unidad-2-seleccion-de-caracteristicas-y-"><span class="tn">2</span>Selección de Características y Reducción de Dimensionalidad</a></li><li><a href="#gf-unidad-3-evaluacion-de-modelos-validacio"><span class="tn">3</span>Evaluación de Modelos, Validación y Fallas en Producción</a></li><li><a href="#gf-unidad-4-clasificadores-clasicos-funcion"><span class="tn">4</span>Clasificadores Clásicos — Funciones de Decisión y Sistemas Ortogonales</a></li><li><a href="#gf-unidad-5-aprendizaje-no-supervisado-clus"><span class="tn">5</span>Aprendizaje No Supervisado (Clustering) y Métricas Internas</a></li><li><a href="#gf-unidad-6-clasificadores-probabilisticos-"><span class="tn">6</span>Clasificadores Probabilísticos (Bayes, QDA, LDA, GNB) y Basados en Instancias (KNN)</a></li><li><a href="#gf-unidad-7-regresion-logistica-y-maquinas-"><span class="tn">7</span>Regresión Logística y Máquinas de Soporte Vectorial (SVM)</a></li><li><a href="#gf-unidad-8-arboles-de-decision-y-metodos-d"><span class="tn">8</span>Árboles de Decisión y Métodos de Ensamble</a></li><li><a href="#gf-unidad-9-redes-neuronales-artificiales-c"><span class="tn">9</span>Redes Neuronales Artificiales, Convolucionales (CNN) y Autoencoders</a></li><li><a href="#gf-unidad-10-procesamiento-de-lenguaje-natu"><span class="tn">10</span>Procesamiento de Lenguaje Natural (NLP), Modelos Secuenciales y Transformers</a></li><li><a href="#gf-3-lo-que-mas-probablemente-viene-en-el-f"><span class="tn">🎯</span>Lo que más probablemente viene en el final</a></li><li><a href="#gf-4-conexiones-clave"><span class="tn">🔗</span>Conexiones clave</a></li><li><a href="#gf-anexo-clases-que-no-estaban-en-el-cuader"><span class="tn">📎</span>Anexo · Clases que no estaban en el cuaderno de NotebookLM</a></li></ol></nav>
+  <main class="gf-main">
 <p class="nota">Aclaración sobre las fuentes del cuaderno: Este cuaderno contiene 19 transcripciones de audio de las clases (RP-Clase1.m4a a RP-Clase21.m4a, faltando las grabaciones de las Clases 10 y 15). No hay archivos separados de diapositivas ni PDFs escritos cargados en el cuaderno; cuando se mencionan valores ambiguos o con ruido en las transcripciones automáticas, se indica expresamente. Además, el contenido de Máquinas de Soporte Vectorial (SVM) (correspondiente a la Clase 15 ausente) se cubre a partir del repaso detallado que dio el profesor al inicio de la Clase 16 y sus menciones en las Clases 17 y 19.</p>
-<details class="section-block sec" id="gf-1-hilo-conductor" open><summary><span class="stitle">1. HILO CONDUCTOR</span></summary>
+<details class="section-block sec" id="gf-1-hilo-conductor" open data-toc="Hilo conductor" data-num="🧵"><summary><span class="snum ico">🧵</span><span class="stitle">Hilo conductor</span></summary>
 <p>Todo sistema de reconocimiento de patrones arranca con una pregunta práctica: cómo lograr que una máquina perciba el mundo físico —imágenes, audio o texto— y tome decisiones confiables sobre él. Como una computadora no entiende objetos ni sonidos directamente, el primer paso es la <strong>detección</strong> y la <strong>extracción de características</strong>: transformar datos crudos en vectores numéricos compactos y discriminantes (como momentos geométricos, GLCM o HOG para imágenes, y descriptores temporales, espectrales o MFCC para audio). Sin embargo, extraer demasiadas variables dispara la <strong>maldición de la dimensionalidad</strong>, haciendo que los modelos sobreajusten y que las distancias pierdan sentido. Por eso, antes de clasificar, hay que depurar el espacio de entrada mediante <strong>selección de características</strong> (quedarse con las variables más útiles) o <strong>reducción de dimensionalidad</strong> como PCA y LDA (proyectarlas a un espacio más compacto sin perder la varianza o la separabilidad entre clases). Con los datos listos, necesitamos reglas rigurosas de <strong>evaluación</strong> —matrices de confusión, precisión, recall, curvas ROC, validación cruzada y vigilancia contra fuga de datos y <em>data drift</em> — porque entrenar un modelo que memoriza sin generalizar no sirve en el mundo real.</p>
 <p class="">Ya con un espacio bien representado y una forma confiable de medir errores, entra el núcleo de decisión: los modelos de agrupamiento y clasificación. La historia comienza con funciones de decisión lineales y cuadráticas clásicas que trazan fronteras geométricas en el espacio de características, y luego se bifurca según si conocemos o no las etiquetas: cuando no hay etiquetas, los algoritmos no supervisados descubren grupos naturales por distancia o cuantización (K-Means, LBG, ISODATA) o por densidad sin asumir formas esféricas (DBSCAN); cuando sí hay etiquetas, pasamos a modelos supervisados que deciden por probabilidad y teoría de Bayes (QDA, LDA, Naive Bayes), por memoria local de vecinos (KNN), por fronteras lineales optimizadas con descenso de gradiente y regularización (Regresión Logística), o maximizando el margen con trucos de kernel (SVM). Cuando los datos tabulares presentan fronteras complejas no lineales, evolucionamos hacia árboles de decisión (regiones rectangulares por pureza Gini/entropía) y ensambles que combinan múltiples árboles débiles en paralelo (Random Forest) o secuencialmente corrigiendo residuos (Gradient Boosting). Finalmente, para no depender de extraer características a mano en datos masivos con estructura espacial o secuencial (donde los modelos tabulares fallan), damos el salto al aprendizaje profundo: perceptrones multicapa, redes convolucionales (CNN) y autoencoders para imágenes, y modelos secuenciales (RNN/LSTM) hasta llegar al Transformer con autoatención y <em>embeddings</em> contextuales, capaz de procesar texto, audio o imagen de forma agnóstica y paralela.</p>
 </details>
-<details class="section-block sec" id="gf-unidad-1-fundamentos-del-sistema-de-reco"><summary><span class="stitle">Unidad 1: Fundamentos del Sistema de Reconocimiento y Extracción de Características</span></summary>
+<details class="section-block sec" id="gf-unidad-1-fundamentos-del-sistema-de-reco" data-toc="Fundamentos del Sistema de Reconocimiento y Extracción de Características" data-num="1"><summary><span class="snum">1</span><span class="stitle">Fundamentos del Sistema de Reconocimiento y Extracción de Características</span></summary>
 <p><em>(Clases 1 y 11)</em></p>
 <h4>(a) Qué problema resuelve y cómo se conecta</h4>
 <p>Un sistema de reconocimiento de patrones consta de cuatro etapas: <strong>detección</strong> (tomar mediciones del patrón), <strong>extracción de características</strong>, <strong>clasificación</strong> y <strong>evaluación del modelo</strong>. Esta unidad resuelve el problema inicial de convertir datos crudos (píxeles o señales de onda) en vectores numéricos medibles con cuatro propiedades deseables: <strong>discriminabilidad</strong> (separar clases), <strong>compacidad</strong> (dimensión reducida), <strong>robustez</strong> (tolerar ruido y variaciones intraclase) y <strong>bajo costo computacional</strong>. Prepara la entrada numérica para todas las unidades posteriores.</p>
@@ -67,7 +78,7 @@ En <strong>Momentos Geométricos</strong>, recordar que μ10=μ01=0 siempre, y q
 En <strong>MFCC</strong>, confundir el orden exacto de los 7 pasos (en el primer examen fue pregunta directa) o creer que con los MFCC se puede reconstruir el audio original (la DCT usada aquí no tiene inversa para volver al audio).
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-2-seleccion-de-caracteristicas-y-"><summary><span class="stitle">Unidad 2: Selección de Características y Reducción de Dimensionalidad</span></summary>
+<details class="section-block sec" id="gf-unidad-2-seleccion-de-caracteristicas-y-" data-toc="Selección de Características y Reducción de Dimensionalidad" data-num="2"><summary><span class="snum">2</span><span class="stitle">Selección de Características y Reducción de Dimensionalidad</span></summary>
 <p><em>(Clases 2, 3, 4, 5 y 11)</em></p>
 <h4>(a) Qué problema resuelve y cómo se conecta</h4>
 <p>Tras extraer miles de características (como los 3,780 valores de HOG), aparece la <strong>maldición de la dimensionalidad</strong>: los datos se vuelven dispersos, crece el costo computacional, aumenta el riesgo de sobreajuste, las distancias pierden sentido, se degrada el rendimiento y es imposible visualizar. Esta unidad resuelve ese problema por dos vías: <strong>seleccionar</strong> un subconjunto de las variables originales o <strong>proyectar</strong> todas hacia un espacio nuevo de menor dimensión.</p>
@@ -104,7 +115,7 @@ En <strong>MFCC</strong>, confundir el orden exacto de los 7 pasos (en el primer
 <strong>PCA vs. separación de clases:</strong> tener alta varianza en PCA <strong>no garantiza</strong> separabilidad de clases porque no usa etiquetas.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-3-evaluacion-de-modelos-validacio"><summary><span class="stitle">Unidad 3: Evaluación de Modelos, Validación y Fallas en Producción</span></summary>
+<details class="section-block sec" id="gf-unidad-3-evaluacion-de-modelos-validacio" data-toc="Evaluación de Modelos, Validación y Fallas en Producción" data-num="3"><summary><span class="snum">3</span><span class="stitle">Evaluación de Modelos, Validación y Fallas en Producción</span></summary>
 <p><em>(Clases 4, 6 y 11)</em></p>
 <h4>(a) Qué problema resuelve y cómo se conecta</h4>
 <p>Construir un modelo es solo el 50% del trabajo; el resto es evaluarlo correctamente para asegurar que <strong>generalice</strong> a datos nunca vistos y no caiga en falsa confianza. Esta unidad dota al curso de las métricas y protocolos de validación que se exigirán en todos los clasificadores y prácticas siguientes.</p>
@@ -138,7 +149,7 @@ En <strong>MFCC</strong>, confundir el orden exacto de los 7 pasos (en el primer
 <strong>Aplicar PCA o estandarización sobre todo el dataset antes de dividir:</strong> genera <em>fuga de procesamiento</em>.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-4-clasificadores-clasicos-funcion"><summary><span class="stitle">Unidad 4: Clasificadores Clásicos — Funciones de Decisión y Sistemas Ortogonales</span></summary>
+<details class="section-block sec" id="gf-unidad-4-clasificadores-clasicos-funcion" data-toc="Clasificadores Clásicos — Funciones de Decisión y Sistemas Ortogonales" data-num="4"><summary><span class="snum">4</span><span class="stitle">Clasificadores Clásicos — Funciones de Decisión y Sistemas Ortogonales</span></summary>
 <p><em>(Clases 6 y 11)</em></p>
 <h4>(a) Qué problema resuelve y cómo se conecta</h4>
 <p>Una vez reducidas y validadas las características, entramos a la etapa de <strong>clasificación</strong>: diseñar una función matemática que tome un vector x∈Rn y decida a qué clase pertenece. Introduce la geometría de fronteras e hiperplanos que fundamentará a LDA, Regresión Logística y SVM.</p>
@@ -173,7 +184,7 @@ En <strong>OVR</strong>, creer que si dos funciones dan negativo ya es ambiguo: 
 Recordar que en una <strong>función discriminante general</strong> (Linear Machine), un patrón se clasifica en la clase cuya función sea la <strong>mayor</strong>, no donde valga 0 (donde vale 0 o donde gi=gj es la <strong>frontera de decisión</strong>).
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-5-aprendizaje-no-supervisado-clus"><summary><span class="stitle">Unidad 5: Aprendizaje No Supervisado (Clustering) y Métricas Internas</span></summary>
+<details class="section-block sec" id="gf-unidad-5-aprendizaje-no-supervisado-clus" data-toc="Aprendizaje No Supervisado (Clustering) y Métricas Internas" data-num="5"><summary><span class="snum">5</span><span class="stitle">Aprendizaje No Supervisado (Clustering) y Métricas Internas</span></summary>
 <p><em>(Clases 7, 8, 9, 11 y 12)</em></p>
 <h4>(a) Qué problema resuelve y cómo se conecta</h4>
 <p>Cuando no existen etiquetas previas en los datos, ya no podemos entrenar funciones de decisión supervisadas: debemos descubrir la estructura intrínseca agrupando observaciones similares en <strong>clusters</strong> (cohesión intracluster alta y separación intercluster alta) y evaluar esos grupos sin etiquetas mediante métricas internas. Además, el <strong>Segundo Examen Parcial</strong> inicia oficialmente a partir de <strong>DBSCAN</strong> dentro de este módulo.</p>
@@ -209,7 +220,7 @@ Recordar que en una <strong>función discriminante general</strong> (Linear Mach
 En el primer examen se preguntó explícitamente qué asume K-Means (<strong>forma esférica isotrópica</strong>), qué minimiza LBG (<strong>distorsión</strong>) y la diferencia K-Means vs. ISODATA.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-6-clasificadores-probabilisticos-"><summary><span class="stitle">Unidad 6: Clasificadores Probabilísticos (Bayes, QDA, LDA, GNB) y Basados en Instancias (KNN)</span></summary>
+<details class="section-block sec" id="gf-unidad-6-clasificadores-probabilisticos-" data-toc="Clasificadores Probabilísticos (Bayes, QDA, LDA, GNB) y Basados en Instancias (KNN)" data-num="6"><summary><span class="snum">6</span><span class="stitle">Clasificadores Probabilísticos (Bayes, QDA, LDA, GNB) y Basados en Instancias (KNN)</span></summary>
 <p><em>(Clases 8, 11, 12, 13, 14 y 19)</em></p>
 <h4>(a) Qué problema resuelve y cómo se conecta</h4>
 <p>Pasamos del agrupamiento sin etiquetas al aprendizaje <strong>supervisado</strong>, incorporando la probabilidad y teoría de decisión de Bayes (para considerar costos asimétricos de error) o la proximidad directa en memoria con KNN.</p>
@@ -243,7 +254,7 @@ En <strong>suavizado de Laplace</strong>, olvidar aplicarlo a <strong>todas</str
 En <strong>KNN</strong>, nunca quedarse con k=1 aunque dé el pico de exactitud en un experimento simple, porque sobreajusta al ruido; además, al ser basado en distancias, es <strong>obligatorio normalizar</strong> las características y es lento en predicción.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-7-regresion-logistica-y-maquinas-"><summary><span class="stitle">Unidad 7: Regresión Logística y Máquinas de Soporte Vectorial (SVM)</span></summary>
+<details class="section-block sec" id="gf-unidad-7-regresion-logistica-y-maquinas-" data-toc="Regresión Logística y Máquinas de Soporte Vectorial (SVM)" data-num="7"><summary><span class="snum">7</span><span class="stitle">Regresión Logística y Máquinas de Soporte Vectorial (SVM)</span></summary>
 <p><em>(Clases 14, 16 y 19)</em></p>
 <h4>(a) Qué problema resuelve y cómo se conecta</h4>
 <p>Frente a KNN (lento en inferencia y sin parámetros) y los modelos generativos bayesianos (que asumen normalidad), la <strong>Regresión Logística</strong> aprende directamente una frontera lineal probabilística rápida y altamente interpretable ("el caballo de batalla de la industria"), mientras que <strong>SVM</strong> busca la frontera lineal óptima maximizando el margen e introduce el truco del kernel para problemas no linealmente separables.</p>
@@ -275,7 +286,7 @@ En <strong>KNN</strong>, nunca quedarse con k=1 aunque dé el pico de exactitud 
 <strong>Lote completo en Regresión Logística:</strong> funciona sin caer en mínimos locales porque la BCE es <strong>convexa</strong>.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-8-arboles-de-decision-y-metodos-d"><summary><span class="stitle">Unidad 8: Árboles de Decisión y Métodos de Ensamble</span></summary>
+<details class="section-block sec" id="gf-unidad-8-arboles-de-decision-y-metodos-d" data-toc="Árboles de Decisión y Métodos de Ensamble" data-num="8"><summary><span class="snum">8</span><span class="stitle">Árboles de Decisión y Métodos de Ensamble</span></summary>
 <p><em>(Clases 16, 17, 18 y 21)</em></p>
 <h4>(a) Qué problema resuelve y cómo se conecta</h4>
 <p>La regresión logística solo traza fronteras lineales y SVM con kernel es poco interpretable. Los <strong>árboles de decisión</strong> dividen el espacio con reglas "si-entonces" formando <strong>regiones hiperrectangulares</strong> altamente interpretables y sin exigir normalización ni codificación de variables categóricas. Como un solo árbol es inestable y tiende a sobreajustar, los <strong>ensambles</strong> combinan muchos árboles débiles para lograr modelos mucho más precisos y generalizables.</p>
@@ -312,7 +323,7 @@ En <strong>KNN</strong>, nunca quedarse con k=1 aunque dé el pico de exactitud 
 <strong>Dependencias que NO modela Gradient Boosting</strong> (preguntado explícitamente al grupo en Clase 18): datos <strong>secuenciales/temporales</strong> (audio, series) y datos <strong>espaciales</strong> (píxeles de imágenes).
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-9-redes-neuronales-artificiales-c"><summary><span class="stitle">Unidad 9: Redes Neuronales Artificiales, Convolucionales (CNN) y Autoencoders</span></summary>
+<details class="section-block sec" id="gf-unidad-9-redes-neuronales-artificiales-c" data-toc="Redes Neuronales Artificiales, Convolucionales (CNN) y Autoencoders" data-num="9"><summary><span class="snum">9</span><span class="stitle">Redes Neuronales Artificiales, Convolucionales (CNN) y Autoencoders</span></summary>
 <p><em>(Clases 18, 20 y 21)</em></p>
 <h4>(a) Qué problema resuelve y cómo se conecta</h4>
 <p>Como los métodos tabulares anteriores requieren características extraídas manualmente y no capturan relaciones espaciales ni secuenciales, surgen las <strong>redes neuronales profundas</strong>: capaces de aproximar funciones no lineales arbitrarias y <strong>extraer automáticamente sus propias características</strong> desde datos crudos (radiografías, imágenes, audio).</p>
@@ -344,7 +355,7 @@ En <strong>KNN</strong>, nunca quedarse con k=1 aunque dé el pico de exactitud 
 <strong>Convolución vs. Correlación Cruzada:</strong> la convolución refleja y es <strong>conmutativa</strong>; la correlación cruzada no refleja y sí depende del orden.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-10-procesamiento-de-lenguaje-natu"><summary><span class="stitle">Unidad 10: Procesamiento de Lenguaje Natural (NLP), Modelos Secuenciales y Transformers</span></summary>
+<details class="section-block sec" id="gf-unidad-10-procesamiento-de-lenguaje-natu" data-toc="Procesamiento de Lenguaje Natural (NLP), Modelos Secuenciales y Transformers" data-num="10"><summary><span class="snum">10</span><span class="stitle">Procesamiento de Lenguaje Natural (NLP), Modelos Secuenciales y Transformers</span></summary>
 <p><em>(Clases 20 y 21)</em></p>
 <h4>(a) Qué problema resuelve y cómo se conecta</h4>
 <p>Concluimos con el reconocimiento de patrones sintácticos/lenguaje. A diferencia de las imágenes, el lenguaje humano es <strong>secuencial</strong>: el orden importa (<em>"El perro mordió al hombre"</em> vs. <em>"El hombre mordió al perro"</em>). Esta unidad recorre la evolución desde modelos estadísticos discretos y redes recurrentes hasta la arquitectura agnóstica <strong>Transformer</strong>.</p>
@@ -376,7 +387,7 @@ En <strong>KNN</strong>, nunca quedarse con k=1 aunque dé el pico de exactitud 
 <strong>GPT:</strong> significa <em>Generative Pretrained Transformer</em>.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-3-lo-que-mas-probablemente-viene-en-el-f" open><summary><span class="stitle">3. LO QUE MÁS PROBABLEMENTE VIENE EN EL FINAL</span></summary>
+<details class="section-block sec gf-key" id="gf-3-lo-que-mas-probablemente-viene-en-el-f" open data-toc="Lo que más probablemente viene en el final" data-num="🎯"><summary><span class="snum ico">🎯</span><span class="stitle">Lo que más probablemente viene en el final</span></summary>
 <p><strong>Nota importante sobre el alcance del próximo examen:</strong> En las Clases 11, 12 y 21, el profesor confirmó que solo habrá <strong>dos exámenes parciales</strong> en el semestre (a veces referido en Clase 20 como "segundo examen final"), y que el <strong>Segundo Examen (lunes 23 de noviembre)</strong> evaluará <strong>desde clasificadores de aprendizaje automático a partir de DBSCAN hasta Transformers</strong> (ya no entra el temario del Primer Parcial). La lista siguiente prioriza los puntos con mayor evidencia directa para este cierre, incluyendo también los pilares evaluados previamente por si necesitas una visión integral de toda la materia:</p>
 <ul><li>
 <strong>Cálculo manual de Índice Gini en Árboles de Decisión y clase de cada hoja</strong>
@@ -432,7 +443,7 @@ En <strong>KNN</strong>, nunca quedarse con k=1 aunque dé el pico de exactitud 
 <strong>Si se evalúa el bloque clásico (Primer Parcial, Clase 11):</strong> diferencias entre extracción y selección de características, 7 pasos de MFCCs, PCA vs. LDA, ejes de la curva ROC, K-Fold sin tocar Test, Data Drift/Leakage, distancia de Mahalanobis y cálculo a mano de Momentos de Hu, GLCM o LDA.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-4-conexiones-clave"><summary><span class="stitle">4. CONEXIONES CLAVE</span></summary>
+<details class="section-block sec" id="gf-4-conexiones-clave" data-toc="Conexiones clave" data-num="🔗"><summary><span class="snum ico">🔗</span><span class="stitle">Conexiones clave</span></summary>
 <ul><li>
 Detección -&gt; captura mediciones crudas para -&gt; Extracción de características
 </li><li>
@@ -510,7 +521,7 @@ Enfoque RAG -&gt; conecta bases de datos actualizadas al Transformer para preven
 </li></ul>
 <p>💡 <em>¿Quieres que armemos ejercicios tipo examen resueltos paso a paso para los tres cálculos clave del Segundo Parcial (DBSCAN con</em> ε*y MinPts, Índice Gini de un árbol ya construido y red de 3 neuronas con escalón unitario)?*</p>
 </details>
-<details class="section-block sec" id="gf-anexo-clases-que-no-estaban-en-el-cuader"><summary><span class="stitle">Anexo · Clases que no estaban en el cuaderno de NotebookLM</span></summary>
+<details class="section-block sec" id="gf-anexo-clases-que-no-estaban-en-el-cuader" data-toc="Anexo · Clases que no estaban en el cuaderno de NotebookLM" data-num="📎"><summary><span class="snum ico">📎</span><span class="stitle">Anexo · Clases que no estaban en el cuaderno de NotebookLM</span></summary>
 <p><em>Resumen para estudiar de cada una, tomado de los apuntes por clase del sitio (decimo/RP/RP-Resumenes/).</em> <em>Las sesiones 1–3 del curso (Clase −2, −1 y 0) son anteriores a tu inscripción y se reconstruyeron con las diapositivas del profesor.</em></p>
 <h3>Clase −2 · Presentación del curso y conceptos básicos (lunes 17 ago 2026 (sesión 1 del curso))</h3>
 <p><em>Versión corta de lo que más probablemente se pregunta. Léela primero y vuelve a la Parte 1 si algo no queda claro.</em></p>
@@ -527,6 +538,34 @@ Enfoque RAG -&gt; conecta bases de datos actualizadas al Transformer para preven
 <p><em>Versión corta de lo que más probablemente se pregunta. Léela primero y vuelve a la Parte 1 si algo no queda claro.</em> <strong>Idea.</strong> Hiperplano de margen máximo; solo los vectores de soporte (αᵢ &gt; 0) lo definen. Restricción yᵢ(w·xᵢ + b) ≥ 1. <strong>Derivación (examen)</strong> λ = 2/(w·w) → M = 2/‖w‖ → maximizar M ≡ min ½‖w‖². Lagrange: w = Σ αᵢyᵢxᵢ y Σ αᵢyᵢ = 0; la dual solo usa productos punto.</p>
 <div class="tabla-scroll"><table><tr><th>Concepto</th><th>Para recordar</th></tr><tr><td>Margen suave</td><td>ξᵢ; min ½‖w‖² + CΣξᵢ; C grande = margen angosto, C chico = ancho</td></tr><tr><td>Kernel</td><td>K = φ(xᵢ)ᵀφ(xⱼ) sin calcular φ</td></tr><tr><td>Kernels</td><td>Lineal, polinomial (1 + xᵀx)ᵖ, RBF exp(−‖·‖²/2σ²), sigmoide tanh</td></tr><tr><td>Multiclase</td><td>Uno vs. resto o uno vs. uno</td></tr><tr><td>Ejemplos</td><td>Breast Cancer: gana lineal (0.982). German Credit: RBF engaña (todo "riesgo")</td></tr><tr><td>Desventajas</td><td>Lento con muchos datos, sensible al kernel, requiere escalar</td></tr></table></div>
 </details>
+  </main>
 </div>
+<button class="gf-top" id="gf-top" type="button" title="Volver arriba">↑</button>
+<script>
+(function(){
+  var root=document.documentElement, secs=[].slice.call(document.querySelectorAll('.gf-main details.sec'));
+  var links=[].slice.call(document.querySelectorAll('.gf-toc a')), toc=document.getElementById('gf-toc');
+  function setFs(v){v=Math.max(1,Math.min(5,v));root.dataset.fs=v;document.body.dataset.fs=v;try{localStorage.setItem('gf-fs',v)}catch(e){}}
+  setFs(+(root.dataset.fs||2));
+  document.querySelectorAll('.gf-fs button').forEach(function(b){b.onclick=function(){var d=+b.dataset.d;setFs(d?(+root.dataset.fs+d):2)}});
+  var all=document.getElementById('gf-all');
+  function syncAll(){all.textContent=secs.every(function(s){return s.open})?'Cerrar todo':'Abrir todo'}
+  all.onclick=function(){var o=!secs.every(function(s){return s.open});secs.forEach(function(s){s.open=o});syncAll()};
+  secs.forEach(function(s){s.addEventListener('toggle',syncAll)}); syncAll();
+  links.forEach(function(a){a.onclick=function(){var d=document.getElementById(a.hash.slice(1));if(d)d.open=true;toc.classList.remove('open');syncAll()}});
+  document.getElementById('gf-toc-btn').onclick=function(){toc.classList.toggle('open')};
+  if(location.hash){var t=document.getElementById(location.hash.slice(1));if(t&&t.tagName==='DETAILS')t.open=true}
+  var bar=document.getElementById('gf-progress'), top=document.getElementById('gf-top'), now=document.getElementById('gf-now'), base=now.textContent;
+  top.onclick=function(){window.scrollTo({top:0,behavior:'smooth'})};
+  function onScroll(){
+    var h=document.documentElement.scrollHeight-innerHeight; bar.style.width=(h>0?scrollY/h*100:0)+'%';
+    top.classList.toggle('show',scrollY>600);
+    var cur=null; secs.forEach(function(s){if(s.getBoundingClientRect().top<170)cur=s});
+    links.forEach(function(a){a.classList.toggle('on',cur&&a.hash==='#'+cur.id)});
+    now.textContent=cur?base+' · '+cur.dataset.toc:base;
+  }
+  addEventListener('scroll',onScroll,{passive:true}); onScroll();
+})();
+</script>
 </body>
 </html>

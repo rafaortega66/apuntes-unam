@@ -5,34 +5,45 @@
 <meta name="formato" content="no-aplica">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Guía para el examen final — Fundamentos de Sistemas Embebidos</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20261117b">
-<script src="../../assets/app.js?v=20261117b" defer></script>
-<style>
-.gf h3{margin:1.2em 0 .4em} .gf h4{margin:1em 0 .3em;opacity:.9}
-.gf .tabla-scroll{overflow-x:auto} .gf table td,.gf table th{font-size:.9em;vertical-align:top}
-.gf p.nota{border-left:3px solid var(--c);padding:.3em .8em;opacity:.9}
-.gf li{margin:.25em 0}
-</style>
+<link rel="stylesheet" href="../../assets/style.css?v=20261117c">
+<link rel="stylesheet" href="../../assets/guia-final.css?v=20261117c">
+<script>try{var f=localStorage.getItem('gf-fs');if(f)document.documentElement.dataset.fs=f}catch(e){}</script>
+<script src="../../assets/app.js?v=20261117c" defer></script>
 </head>
-<body style="--c:#A98BD1">
-<div class="wrap gf">
+<body class="gf-body" style="--c:#A98BD1">
 <!-- Generado por scripts/build_guias_finales.py. No editar a mano. -->
-<a class="back" href="index.html">← Fundamentos de Sistemas Embebidos</a>
-<div class="detail-head" style="border-color:#A98BD1"><h2>📘 Guía para el examen final</h2>
-  <p class="prof">Fundamentos de Sistemas Embebidos · semestre 2027-1 · hecha con NotebookLM a partir de los audios de clase y el material del profesor (16 nov 2026).</p>
-  <p class="prof">Las fechas y cálculos de NotebookLM pueden fallar: ante la duda, revisa la página de la clase que cita.</p>
-</div>
-<div class="files">
-  <a class="btn" href="https://docs.google.com/document/d/1MDfj1ayv8KlybmUOZIMJEjV0mshScoi-AwayxL3bV10/edit" target="_blank">📄 Original en Drive</a>
-  <a class="btn" href="https://docs.google.com/document/d/1d534lgJF7VyRr3iqVfk_tFMGIDQ_k90JzydHd0qbQlU/edit" target="_blank">📝 Apuntes y resumen (Drive)</a>
-  <a class="btn" href="https://drive.google.com/file/d/1Wipwbb5Fpro5IDL-hTPl4r7m19h-JdR4/view" target="_blank">🧠 Mapa mental detallado</a>
-  <a class="btn" href="../../decimo/FSE/FSE-Resumenes/FSE-mapa-examen-2.pdf" target="_blank">🗺️ Mapa de examen</a>
+<div class="gf-progress" id="gf-progress"></div>
+<header class="gf-hero"><div class="gf-hero-in">
+  <a class="back" href="index.html">← Fundamentos de Sistemas Embebidos</a><br>
+  <span class="gf-sigla">FSE · EXAMEN FINAL</span>
+  <h1>Guía para el examen final</h1>
+  <p class="gf-materia">Fundamentos de Sistemas Embebidos</p>
+  <p class="gf-meta">Semestre 2027-1 · hecha con NotebookLM a partir de los audios de clase y el material del profesor (16 nov 2026). Las fechas y cálculos de NotebookLM pueden fallar: ante la duda, revisa la página de la clase que cita.</p>
+  <div class="gf-links">
+    <a class="btn" href="https://docs.google.com/document/d/1MDfj1ayv8KlybmUOZIMJEjV0mshScoi-AwayxL3bV10/edit" target="_blank">📄 Original en Drive</a>
+    <a class="btn" href="https://docs.google.com/document/d/1d534lgJF7VyRr3iqVfk_tFMGIDQ_k90JzydHd0qbQlU/edit" target="_blank">📝 Apuntes y resumen (Drive)</a>
+    <a class="btn" href="https://drive.google.com/file/d/1Wipwbb5Fpro5IDL-hTPl4r7m19h-JdR4/view" target="_blank">🧠 Mapa mental detallado</a>
+    <a class="btn" href="../../decimo/FSE/FSE-Resumenes/FSE-mapa-examen-2.pdf" target="_blank">🗺️ Mapa de examen</a>
   <a class="btn" href="resumenes.html">📚 Guías por clase</a>
-</div>
-<details class="section-block sec" id="gf-hilo-conductor" open><summary><span class="stitle">HILO CONDUCTOR</span></summary>
+  </div>
+</div></header>
+<div class="gf-tools"><div class="gf-tools-in">
+  <button class="gf-toc-btn" id="gf-toc-btn" type="button">☰ Índice</button>
+  <span class="gf-now" id="gf-now">FSE</span>
+  <button type="button" id="gf-all" title="Abrir o cerrar todas las secciones">Abrir todo</button>
+  <span class="gf-fs" role="group" aria-label="Tamaño de letra">
+    <button type="button" data-d="-1" title="Letra más chica">A−</button>
+    <button type="button" data-d="0" title="Tamaño normal">A</button>
+    <button type="button" data-d="1" class="big" title="Letra más grande">A+</button>
+  </span>
+</div></div>
+<div class="gf-layout">
+  <nav class="gf-toc" id="gf-toc" aria-label="Índice"><h2>Contenido</h2><ol><li><a href="#gf-hilo-conductor"><span class="tn">🧵</span>Hilo conductor</a></li><li><a href="#gf-unidad-1-introduccion-a-los-sistemas-emb"><span class="tn">1</span>Introducción a los Sistemas Embebidos</a></li><li><a href="#gf-unidad-2-organizacion-arquitectura-y-pla"><span class="tn">2</span>Organización, Arquitectura y Plataformas de Sistemas Embebidos</a></li><li><a href="#gf-unidad-3-sistemas-operativos-para-plataf"><span class="tn">3</span>Sistemas Operativos para Plataformas Embebidas</a></li><li><a href="#gf-lo-que-mas-probablemente-viene-en-el-fin"><span class="tn">🎯</span>Lo que más probablemente viene en el final</a></li><li><a href="#gf-conexiones-clave"><span class="tn">🔗</span>Conexiones clave</a></li><li><a href="#gf-anexo-clases-que-no-estaban-en-el-cuader"><span class="tn">📎</span>Anexo · Clases que no estaban en el cuaderno de NotebookLM</a></li></ol></nav>
+  <main class="gf-main">
+<details class="section-block sec" id="gf-hilo-conductor" open data-toc="Hilo conductor" data-num="🧵"><summary><span class="snum ico">🧵</span><span class="stitle">Hilo conductor</span></summary>
 <p>La historia del curso comienza entendiendo qué hace distinto a un <strong>sistema embebido</strong>: no es una computadora general, sino un sistema dedicado sujeto a restricciones estrictas de costo, energía, memoria y confiabilidad cuya <strong>arquitectura</strong> debe resolver esos desafíos desde el diseño (Diapositivas clase 1). Al bajar al silicio para diseñar esa arquitectura, el primer protagonista es el <strong>procesador</strong> (desde microcontroladores simples de 8 bits hasta ARM Cortex, ESP32, RP2040 y CPUs Intel) junto con su <strong>mapa de memoria</strong>, donde el hardware separa o unifica instrucciones, datos y periféricos, y distingue entre memorias volátiles rápidas y memorias no volátiles persistentes que interactúan mediante <strong>modos de direccionamiento</strong> (Clases 2–6; Diapositivas clases 2–4). Pero un procesador aislado no sirve si no reacciona al mundo físico ni mide el tiempo: por eso aparecen el <strong>controlador de interrupciones (ICU)</strong> para dejar de desperdiciar ciclos consultando pines, los <strong>timers de hardware</strong> para marcar el pulso periódico del sistema, y los buses externos (<strong>USB</strong>) e internos (<strong>I²C, SMBus, SPI, I²S, UART, RS-232/485, One-Wire</strong>) para hablar con sensores, actuadores y memorias, culminando el bloque de hardware con la <strong>secuencia de arranque (<em>bootstrap</em>)</strong> que despierta al procesador desde el vector de RESET hasta dejar todo listo para cargar software (Clases 7–12; Diapositivas clases 5–8). Cuando el sistema embebido crece y un simple ciclo infinito ya no basta, entra en escena el <strong>sistema operativo</strong> como árbitro de los tres recursos fundamentales que heredamos del hardware: el procesador, la memoria y los periféricos (Clases 7, 12, 13). Para usar esos recursos, las aplicaciones cruzan una frontera protegida mediante llamadas al sistema y se organizan como <strong>procesos, hilos o tareas</strong> (Clases 13, 15). A partir de ahí, el curso desarma cada componente del núcleo del sistema operativo: primero el <strong><em>scheduler</strong></em>, que decide quién usa la CPU en cada instante y cómo garantizar plazos en <strong>tiempo real</strong> (Clases 17–18); después el <strong><em>Memory Allocation System</strong></em> <strong>(MAS)</strong>, que evita tablas gigantes mediante <strong>paginación</strong>, combate la <strong>fragmentación</strong> con algoritmos de asignación o <strong>pozos de memoria</strong> y protege los discos flash del desgaste usando <strong>particionado</strong> y <strong>zram</strong> (Clases 19–20); luego los <strong>relojes y temporizadores por software</strong>, que convierten un solo <em>timer</em> físico en retardos síncronos, tareas periódicas seguras y hora civil sincronizada por <strong>NTP</strong> (Clase 20); y finalmente los <strong>manejadores de dispositivos (<em>drivers</em>)</strong> y los <strong>sistemas de archivos</strong>, que estandarizan el acceso al hardware y garantizan que los datos persistan en RAM o flash sin corromperse ante apagones (Clase 21).</p>
 </details>
-<details class="section-block sec" id="gf-unidad-1-introduccion-a-los-sistemas-emb"><summary><span class="stitle">UNIDAD 1: Introducción a los Sistemas Embebidos</span></summary>
+<details class="section-block sec" id="gf-unidad-1-introduccion-a-los-sistemas-emb" data-toc="Introducción a los Sistemas Embebidos" data-num="1"><summary><span class="snum">1</span><span class="stitle">Introducción a los Sistemas Embebidos</span></summary>
 <h3>1.1 Sistema, Sistema Embebido y Arquitectura</h3>
 <ul><li>
 <strong>(a) Problema que resuelve y conexión</strong>: Antes de elegir procesadores o sistemas operativos, se necesita definir qué es un sistema embebido y por qué sus restricciones de ingeniería obligan a diseñar hardware y software a la medida (Diapositivas clase 1).
@@ -53,7 +64,7 @@
 <strong>(d) Puntos clave para examen</strong>: Distinguir por qué una tableta o PDA no es un sistema embebido real, y recordar que definir la arquitectura resuelve los desafíos de costo, batería y confiabilidad de manera intrínseca (Diapositivas clase 1).
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-2-organizacion-arquitectura-y-pla"><summary><span class="stitle">UNIDAD 2: Organización, Arquitectura y Plataformas de Sistemas Embebidos</span></summary>
+<details class="section-block sec" id="gf-unidad-2-organizacion-arquitectura-y-pla" data-toc="Organización, Arquitectura y Plataformas de Sistemas Embebidos" data-num="2"><summary><span class="snum">2</span><span class="stitle">Organización, Arquitectura y Plataformas de Sistemas Embebidos</span></summary>
 <h3>2.1 El Procesador: Taxonomía, CISC vs. RISC y Plataformas Comerciales</h3>
 <ul><li>
 <strong>(a) Problema que resuelve y conexión</strong>: Elegida la arquitectura general en la Unidad 1, hay que seleccionar la unidad central de cómputo entendiendo cómo procesa flujos de instrucciones y datos, por qué difiere su conjunto de instrucciones y qué compilador/hardware exige (Clases 2–4; Diapositivas clase 2).
@@ -174,7 +185,7 @@ Cargar imagen del sistema operativo y saltar al cargador (<em>bootloader</em>) �
 <strong>(d) Puntos clave para examen</strong>: Un alumno preguntó en Clase 12 si debían memorizar las 32 cajas exactas o el orden general; el profesor aclaró que se pregunta el <strong>funcionamiento general y el orden correcto de las fases</strong> (no las direcciones hexadecimales ni los 32 pasos de memoria).
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-3-sistemas-operativos-para-plataf"><summary><span class="stitle">UNIDAD 3: Sistemas Operativos para Plataformas Embebidas</span></summary>
+<details class="section-block sec" id="gf-unidad-3-sistemas-operativos-para-plataf" data-toc="Sistemas Operativos para Plataformas Embebidas" data-num="3"><summary><span class="snum">3</span><span class="stitle">Sistemas Operativos para Plataformas Embebidas</span></summary>
 <h3>3.1 Interfaz de Aplicación, Procesos, Hilos y Tareas</h3>
 <ul><li>
 <strong>(a) Problema que resuelve y conexión</strong>: Una vez que el <em>bootstrap</em> entrega el control al sistema operativo (Linux o RTOS como FreeRTOS/VxWorks), el SO debe aislar la memoria de cada programa (para evitar fallos de segmento o corrupciones como desbordar la pila hacia el kernel) y ofrecer una puerta segura para pedir servicios del núcleo (Clases 12–13).
@@ -305,7 +316,7 @@ Cargar imagen del sistema operativo y saltar al cargador (<em>bootloader</em>) �
 <strong>(d) Puntos recalcados para examen</strong>: Distinguir <strong>controladores dedicados vs. genéricos</strong> (<em>"pregunta de examen"</em>), conocer <strong>initramfs</strong> (<em>"si no han oído este, están en el hoyo... ese sí se lo tienen que saber"</em>), y comprender la diferencia entre <strong>write asíncrono + flush</strong> y sistemas <strong>con/sin bitácora</strong> (Clase 21).
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-lo-que-mas-probablemente-viene-en-el-fin" open><summary><span class="stitle">LO QUE MÁS PROBABLEMENTE VIENE EN EL FINAL</span></summary>
+<details class="section-block sec gf-key" id="gf-lo-que-mas-probablemente-viene-en-el-fin" open data-toc="Lo que más probablemente viene en el final" data-num="🎯"><summary><span class="snum ico">🎯</span><span class="stitle">Lo que más probablemente viene en el final</span></summary>
 <ul><li>
 <strong>Definición y 4 características de los <em>Timers</em> de hardware</strong>: El profesor señaló explícitamente en Clase 7: <em>"memorizar la definición... Tiene estas cuatro características. Todas son preguntas de examen"</em> (<em>Free run/one shot</em>, dirección de conteo, rango en bits, fuente oscilador/externa).
 </li><li>
@@ -330,7 +341,7 @@ Cargar imagen del sistema operativo y saltar al cargador (<em>bootloader</em>) �
 <strong>Memoria virtual, desgaste de SSD y zram (evidencia moderada)</strong>: Aunque no los etiquetó con la frase "pregunta de examen", en Clase 20 resolvió cálculos numéricos en vivo (ancho de banda 25.6 GB/s, vida útil con 3.2 × 107 s/año) y demostró /dev/zram0 en terminal.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-conexiones-clave"><summary><span class="stitle">CONEXIONES CLAVE</span></summary>
+<details class="section-block sec" id="gf-conexiones-clave" data-toc="Conexiones clave" data-num="🔗"><summary><span class="snum ico">🔗</span><span class="stitle">Conexiones clave</span></summary>
 <ul><li>
 Arquitectura del sistema embebido → resuelve intrínsecamente → restricciones de costo, batería y confiabilidad.
 </li><li>
@@ -404,11 +415,39 @@ Bitácora (<em>journaling</em>) en ext4 o JFFS → garantiza → consistencia me
 </li></ul>
 <p>📝 Si quieres, puedo armarte un <strong>simulador de examen final</strong> con 10–15 preguntas difíciles estilo Matamoros (mezclando cálculo de tablas de páginas, MLF, RMS, QSPI/UART y casos de init_timer/semáforos) para que te pongas a prueba antes del examen.</p>
 </details>
-<details class="section-block sec" id="gf-anexo-clases-que-no-estaban-en-el-cuader"><summary><span class="stitle">Anexo · Clases que no estaban en el cuaderno de NotebookLM</span></summary>
+<details class="section-block sec" id="gf-anexo-clases-que-no-estaban-en-el-cuader" data-toc="Anexo · Clases que no estaban en el cuaderno de NotebookLM" data-num="📎"><summary><span class="snum ico">📎</span><span class="stitle">Anexo · Clases que no estaban en el cuaderno de NotebookLM</span></summary>
 <p><em>Resumen para estudiar de cada una, tomado de los apuntes por clase del sitio (decimo/FSE/FSE-Resumenes/).</em></p>
 <h3>Clase 14 · Primer examen parcial (Unidades 1 y 2) (miércoles 14 oct 2026)</h3>
 <p>Calificación completa: el método funcionó. Para el segundo parcial, misma estrategia con la Unidad 3: definiciones exactas (como la del timer) y el funcionamiento de cada mecanismo con sus números.</p>
 </details>
+  </main>
 </div>
+<button class="gf-top" id="gf-top" type="button" title="Volver arriba">↑</button>
+<script>
+(function(){
+  var root=document.documentElement, secs=[].slice.call(document.querySelectorAll('.gf-main details.sec'));
+  var links=[].slice.call(document.querySelectorAll('.gf-toc a')), toc=document.getElementById('gf-toc');
+  function setFs(v){v=Math.max(1,Math.min(5,v));root.dataset.fs=v;document.body.dataset.fs=v;try{localStorage.setItem('gf-fs',v)}catch(e){}}
+  setFs(+(root.dataset.fs||2));
+  document.querySelectorAll('.gf-fs button').forEach(function(b){b.onclick=function(){var d=+b.dataset.d;setFs(d?(+root.dataset.fs+d):2)}});
+  var all=document.getElementById('gf-all');
+  function syncAll(){all.textContent=secs.every(function(s){return s.open})?'Cerrar todo':'Abrir todo'}
+  all.onclick=function(){var o=!secs.every(function(s){return s.open});secs.forEach(function(s){s.open=o});syncAll()};
+  secs.forEach(function(s){s.addEventListener('toggle',syncAll)}); syncAll();
+  links.forEach(function(a){a.onclick=function(){var d=document.getElementById(a.hash.slice(1));if(d)d.open=true;toc.classList.remove('open');syncAll()}});
+  document.getElementById('gf-toc-btn').onclick=function(){toc.classList.toggle('open')};
+  if(location.hash){var t=document.getElementById(location.hash.slice(1));if(t&&t.tagName==='DETAILS')t.open=true}
+  var bar=document.getElementById('gf-progress'), top=document.getElementById('gf-top'), now=document.getElementById('gf-now'), base=now.textContent;
+  top.onclick=function(){window.scrollTo({top:0,behavior:'smooth'})};
+  function onScroll(){
+    var h=document.documentElement.scrollHeight-innerHeight; bar.style.width=(h>0?scrollY/h*100:0)+'%';
+    top.classList.toggle('show',scrollY>600);
+    var cur=null; secs.forEach(function(s){if(s.getBoundingClientRect().top<170)cur=s});
+    links.forEach(function(a){a.classList.toggle('on',cur&&a.hash==='#'+cur.id)});
+    now.textContent=cur?base+' · '+cur.dataset.toc:base;
+  }
+  addEventListener('scroll',onScroll,{passive:true}); onScroll();
+})();
+</script>
 </body>
 </html>

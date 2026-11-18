@@ -11,7 +11,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-CSSV = '20261117b'
+CSSV = '20261117c'
 
 DRIVE_DOC = 'https://docs.google.com/document/d/{}/edit'
 DRIVE_PDF = 'https://drive.google.com/file/d/{}/view'
@@ -60,6 +60,35 @@ def slugify(s, used):
         slug, n = f'{base}-{n}', n + 1
     used.add(slug)
     return slug
+
+
+ACRONIMOS = {'linux': 'Linux', 'tcp': 'TCP', 'c': 'C'}
+
+
+def sentence_case(t):
+    """Títulos en MAYÚSCULAS -> «Oración», respetando siglas conocidas."""
+    if t != t.upper():
+        return t
+    def fix(w):
+        core = w.strip(',():')
+        return w.replace(core, ACRONIMOS[core]) if core in ACRONIMOS else w
+    s = ' '.join(fix(w) for w in t.lower().split(' '))
+    return s[:1].upper() + s[1:]
+
+
+def titulo_seccion(txt):
+    """'UNIDAD 3: Servidores … (Clases 3, 4)' -> ('3', 'Servidores …', 'Clases 3, 4')."""
+    t = re.sub(r'^\d+\.\s*', '', txt).strip()
+    clases = ''
+    m = re.search(r'\s*\((Clases?[^()]*(?:\[[^\]]*\][^()]*)?)\)\s*$', t)
+    if m:
+        clases, t = m.group(1), t[:m.start()].strip()
+    m = re.match(r'(?i)unidad\s+(\d+)\s*[:.\-—]\s*(.*)', t)
+    if m:
+        return m.group(1), sentence_case(m.group(2)), clases
+    low = t.lower()
+    ico = '🧵' if 'hilo' in low else '🎯' if 'probablemente' in low else '🔗' if 'conexiones' in low else '📎' if low.startswith('anexo') else '•'
+    return ico, sentence_case(t), clases
 
 
 def convert(md, sigla):
@@ -150,8 +179,13 @@ def convert(md, sigla):
                 sid = slugify(text, used)
                 low = txt.lower()
                 abierto = ' open' if ('probablemente' in low or 'hilo conductor' in low) else ''
-                out.append(f'<details class="section-block sec" id="gf-{sid}"{abierto}>'
-                           f'<summary><span class="stitle">{html.escape(txt)}</span></summary>')
+                key = ' gf-key' if 'probablemente' in low else ''
+                num, titulo, clases = titulo_seccion(txt)
+                ico = ' ico' if not num.isdigit() else ''
+                sc = f'<span class="sclases">{html.escape(clases)}</span>' if clases else ''
+                out.append(f'<details class="section-block sec{key}" id="gf-{sid}"{abierto} data-toc="{html.escape(titulo)}" data-num="{num}">'
+                           f'<summary><span class="snum{ico}">{num}</span>'
+                           f'<span class="stitle">{html.escape(titulo)}{sc}</span></summary>')
                 section_open = True
             else:
                 tag = 'h3' if level == 3 else 'h4'
@@ -199,30 +233,69 @@ PAGE = '''<!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Guía para el examen final — {nombre}</title>
 <link rel="stylesheet" href="../../assets/style.css?v={cssv}">
+<link rel="stylesheet" href="../../assets/guia-final.css?v={cssv}">
+<script>try{{var f=localStorage.getItem('gf-fs');if(f)document.documentElement.dataset.fs=f}}catch(e){{}}</script>
 <script src="../../assets/app.js?v={cssv}" defer></script>
-<style>
-.gf h3{{margin:1.2em 0 .4em}} .gf h4{{margin:1em 0 .3em;opacity:.9}}
-.gf .tabla-scroll{{overflow-x:auto}} .gf table td,.gf table th{{font-size:.9em;vertical-align:top}}
-.gf p.nota{{border-left:3px solid var(--c);padding:.3em .8em;opacity:.9}}
-.gf li{{margin:.25em 0}}
-</style>
 </head>
-<body style="--c:{color}">
-<div class="wrap gf">
+<body class="gf-body" style="--c:{color}">
 <!-- Generado por scripts/build_guias_finales.py. No editar a mano. -->
-<a class="back" href="index.html">← {nombre}</a>
-<div class="detail-head" style="border-color:{color}"><h2>📘 Guía para el examen final</h2>
-  <p class="prof">{nombre} · semestre 2027-1 · hecha con NotebookLM a partir de los audios de clase y el material del profesor (16 nov 2026).</p>
-  <p class="prof">Las fechas y cálculos de NotebookLM pueden fallar: ante la duda, revisa la página de la clase que cita.</p>
-</div>
-<div class="files">
-  <a class="btn" href="{drive_guia}" target="_blank">📄 Original en Drive</a>
-  <a class="btn" href="{drive_resumen}" target="_blank">📝 Apuntes y resumen (Drive)</a>
-  <a class="btn" href="{drive_mapa}" target="_blank">🧠 Mapa mental detallado</a>
-  {extra}<a class="btn" href="resumenes.html">📚 Guías por clase</a>
-</div>
+<div class="gf-progress" id="gf-progress"></div>
+<header class="gf-hero"><div class="gf-hero-in">
+  <a class="back" href="index.html">← {nombre}</a><br>
+  <span class="gf-sigla">{sigla} · EXAMEN FINAL</span>
+  <h1>Guía para el examen final</h1>
+  <p class="gf-materia">{nombre}</p>
+  <p class="gf-meta">Semestre 2027-1 · hecha con NotebookLM a partir de los audios de clase y el material del profesor (16 nov 2026). Las fechas y cálculos de NotebookLM pueden fallar: ante la duda, revisa la página de la clase que cita.</p>
+  <div class="gf-links">
+    <a class="btn" href="{drive_guia}" target="_blank">📄 Original en Drive</a>
+    <a class="btn" href="{drive_resumen}" target="_blank">📝 Apuntes y resumen (Drive)</a>
+    <a class="btn" href="{drive_mapa}" target="_blank">🧠 Mapa mental detallado</a>
+    {extra}<a class="btn" href="resumenes.html">📚 Guías por clase</a>
+  </div>
+</div></header>
+<div class="gf-tools"><div class="gf-tools-in">
+  <button class="gf-toc-btn" id="gf-toc-btn" type="button">☰ Índice</button>
+  <span class="gf-now" id="gf-now">{sigla}</span>
+  <button type="button" id="gf-all" title="Abrir o cerrar todas las secciones">Abrir todo</button>
+  <span class="gf-fs" role="group" aria-label="Tamaño de letra">
+    <button type="button" data-d="-1" title="Letra más chica">A−</button>
+    <button type="button" data-d="0" title="Tamaño normal">A</button>
+    <button type="button" data-d="1" class="big" title="Letra más grande">A+</button>
+  </span>
+</div></div>
+<div class="gf-layout">
+  <nav class="gf-toc" id="gf-toc" aria-label="Índice"><h2>Contenido</h2><ol>{toc}</ol></nav>
+  <main class="gf-main">
 {cuerpo}
+  </main>
 </div>
+<button class="gf-top" id="gf-top" type="button" title="Volver arriba">↑</button>
+<script>
+(function(){{
+  var root=document.documentElement, secs=[].slice.call(document.querySelectorAll('.gf-main details.sec'));
+  var links=[].slice.call(document.querySelectorAll('.gf-toc a')), toc=document.getElementById('gf-toc');
+  function setFs(v){{v=Math.max(1,Math.min(5,v));root.dataset.fs=v;document.body.dataset.fs=v;try{{localStorage.setItem('gf-fs',v)}}catch(e){{}}}}
+  setFs(+(root.dataset.fs||2));
+  document.querySelectorAll('.gf-fs button').forEach(function(b){{b.onclick=function(){{var d=+b.dataset.d;setFs(d?(+root.dataset.fs+d):2)}}}});
+  var all=document.getElementById('gf-all');
+  function syncAll(){{all.textContent=secs.every(function(s){{return s.open}})?'Cerrar todo':'Abrir todo'}}
+  all.onclick=function(){{var o=!secs.every(function(s){{return s.open}});secs.forEach(function(s){{s.open=o}});syncAll()}};
+  secs.forEach(function(s){{s.addEventListener('toggle',syncAll)}}); syncAll();
+  links.forEach(function(a){{a.onclick=function(){{var d=document.getElementById(a.hash.slice(1));if(d)d.open=true;toc.classList.remove('open');syncAll()}}}});
+  document.getElementById('gf-toc-btn').onclick=function(){{toc.classList.toggle('open')}};
+  if(location.hash){{var t=document.getElementById(location.hash.slice(1));if(t&&t.tagName==='DETAILS')t.open=true}}
+  var bar=document.getElementById('gf-progress'), top=document.getElementById('gf-top'), now=document.getElementById('gf-now'), base=now.textContent;
+  top.onclick=function(){{window.scrollTo({{top:0,behavior:'smooth'}})}};
+  function onScroll(){{
+    var h=document.documentElement.scrollHeight-innerHeight; bar.style.width=(h>0?scrollY/h*100:0)+'%';
+    top.classList.toggle('show',scrollY>600);
+    var cur=null; secs.forEach(function(s){{if(s.getBoundingClientRect().top<170)cur=s}});
+    links.forEach(function(a){{a.classList.toggle('on',cur&&a.hash==='#'+cur.id)}});
+    now.textContent=cur?base+' · '+cur.dataset.toc:base;
+  }}
+  addEventListener('scroll',onScroll,{{passive:true}}); onScroll();
+}})();
+</script>
 </body>
 </html>
 '''
@@ -265,7 +338,9 @@ def main():
             extra += '<a class="btn" href="examen-final.html">📝 Repaso del examen</a>\n  '
         for p in sorted((ROOT / 'decimo' / sigla / f'{sigla}-Resumenes').glob(f'{sigla}-mapa-examen*.pdf')):
             extra += f'<a class="btn" href="../../decimo/{sigla}/{sigla}-Resumenes/{p.name}" target="_blank">🗺️ Mapa de examen</a>\n  '
-        page = PAGE.format(nombre=nombre, color=color, cssv=CSSV, cuerpo=cuerpo, extra=extra,
+        toc = ''.join(f'<li><a href="#{i}"><span class="tn">{html.escape(n) if n.isdigit() else n}</span>{t}</a></li>'
+                      for i, t, n in re.findall(r'<details class="section-block sec[^"]*" id="([^"]+)"[^>]*data-toc="([^"]*)" data-num="([^"]*)"', cuerpo))
+        page = PAGE.format(nombre=nombre, color=color, cssv=CSSV, cuerpo=cuerpo, extra=extra, sigla=sigla, toc=toc,
                            drive_guia=DRIVE_DOC.format(g), drive_resumen=DRIVE_DOC.format(r),
                            drive_mapa=DRIVE_PDF.format(mapa))
         (ROOT / 'materias' / slug / 'guia-final.html').write_text(page, encoding='utf-8')

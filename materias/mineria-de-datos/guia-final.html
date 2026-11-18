@@ -5,33 +5,44 @@
 <meta name="formato" content="no-aplica">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Guía para el examen final — Minería de Datos</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20261117b">
-<script src="../../assets/app.js?v=20261117b" defer></script>
-<style>
-.gf h3{margin:1.2em 0 .4em} .gf h4{margin:1em 0 .3em;opacity:.9}
-.gf .tabla-scroll{overflow-x:auto} .gf table td,.gf table th{font-size:.9em;vertical-align:top}
-.gf p.nota{border-left:3px solid var(--c);padding:.3em .8em;opacity:.9}
-.gf li{margin:.25em 0}
-</style>
+<link rel="stylesheet" href="../../assets/style.css?v=20261117c">
+<link rel="stylesheet" href="../../assets/guia-final.css?v=20261117c">
+<script>try{var f=localStorage.getItem('gf-fs');if(f)document.documentElement.dataset.fs=f}catch(e){}</script>
+<script src="../../assets/app.js?v=20261117c" defer></script>
 </head>
-<body style="--c:#A98BD1">
-<div class="wrap gf">
+<body class="gf-body" style="--c:#A98BD1">
 <!-- Generado por scripts/build_guias_finales.py. No editar a mano. -->
-<a class="back" href="index.html">← Minería de Datos</a>
-<div class="detail-head" style="border-color:#A98BD1"><h2>📘 Guía para el examen final</h2>
-  <p class="prof">Minería de Datos · semestre 2027-1 · hecha con NotebookLM a partir de los audios de clase y el material del profesor (16 nov 2026).</p>
-  <p class="prof">Las fechas y cálculos de NotebookLM pueden fallar: ante la duda, revisa la página de la clase que cita.</p>
-</div>
-<div class="files">
-  <a class="btn" href="https://docs.google.com/document/d/18DOhoWrCpib07wG_QY24YEFlecwCeawitLKimn37Zek/edit" target="_blank">📄 Original en Drive</a>
-  <a class="btn" href="https://docs.google.com/document/d/1xSlr_WSZeO7lX4Ilz1q5PlKbrUUDaLghGa5uCqt2wx4/edit" target="_blank">📝 Apuntes y resumen (Drive)</a>
-  <a class="btn" href="https://drive.google.com/file/d/1ZRUAWQFLvSqrcL4g6SMeetm9xIkQGQhs/view" target="_blank">🧠 Mapa mental detallado</a>
-  <a class="btn" href="resumenes.html">📚 Guías por clase</a>
-</div>
-<details class="section-block sec" id="gf-hilo-conductor" open><summary><span class="stitle">HILO CONDUCTOR</span></summary>
+<div class="gf-progress" id="gf-progress"></div>
+<header class="gf-hero"><div class="gf-hero-in">
+  <a class="back" href="index.html">← Minería de Datos</a><br>
+  <span class="gf-sigla">MD · EXAMEN FINAL</span>
+  <h1>Guía para el examen final</h1>
+  <p class="gf-materia">Minería de Datos</p>
+  <p class="gf-meta">Semestre 2027-1 · hecha con NotebookLM a partir de los audios de clase y el material del profesor (16 nov 2026). Las fechas y cálculos de NotebookLM pueden fallar: ante la duda, revisa la página de la clase que cita.</p>
+  <div class="gf-links">
+    <a class="btn" href="https://docs.google.com/document/d/18DOhoWrCpib07wG_QY24YEFlecwCeawitLKimn37Zek/edit" target="_blank">📄 Original en Drive</a>
+    <a class="btn" href="https://docs.google.com/document/d/1xSlr_WSZeO7lX4Ilz1q5PlKbrUUDaLghGa5uCqt2wx4/edit" target="_blank">📝 Apuntes y resumen (Drive)</a>
+    <a class="btn" href="https://drive.google.com/file/d/1ZRUAWQFLvSqrcL4g6SMeetm9xIkQGQhs/view" target="_blank">🧠 Mapa mental detallado</a>
+    <a class="btn" href="resumenes.html">📚 Guías por clase</a>
+  </div>
+</div></header>
+<div class="gf-tools"><div class="gf-tools-in">
+  <button class="gf-toc-btn" id="gf-toc-btn" type="button">☰ Índice</button>
+  <span class="gf-now" id="gf-now">MD</span>
+  <button type="button" id="gf-all" title="Abrir o cerrar todas las secciones">Abrir todo</button>
+  <span class="gf-fs" role="group" aria-label="Tamaño de letra">
+    <button type="button" data-d="-1" title="Letra más chica">A−</button>
+    <button type="button" data-d="0" title="Tamaño normal">A</button>
+    <button type="button" data-d="1" class="big" title="Letra más grande">A+</button>
+  </span>
+</div></div>
+<div class="gf-layout">
+  <nav class="gf-toc" id="gf-toc" aria-label="Índice"><h2>Contenido</h2><ol><li><a href="#gf-hilo-conductor"><span class="tn">🧵</span>Hilo conductor</a></li><li><a href="#gf-unidad-1-fundamentos-de-datos-repositori"><span class="tn">1</span>Fundamentos de Datos, Repositorios, Bases de Datos y Arquitectura Empresarial</a></li><li><a href="#gf-unidad-2-paradigmas-de-aprendizaje-y-met"><span class="tn">2</span>Paradigmas de Aprendizaje y Metodologías de Proyectos (KDD, Proceso Técnico y CRISP-DM)</a></li><li><a href="#gf-unidad-3-aprendizaje-no-supervisado-redu"><span class="tn">3</span>Aprendizaje No Supervisado — Reducción de Dimensionalidad (PCA) y Clustering</a></li><li><a href="#gf-unidad-4-aprendizaje-no-supervisado-regl"><span class="tn">4</span>Aprendizaje No Supervisado — Reglas de Asociación (Market Basket Analysis)</a></li><li><a href="#gf-unidad-5-aprendizaje-supervisado-modelos"><span class="tn">5</span>Aprendizaje Supervisado — Modelos de Regresión</a></li><li><a href="#gf-unidad-6-aprendizaje-supervisado-modelos"><span class="tn">6</span>Aprendizaje Supervisado — Modelos de Clasificación</a></li><li><a href="#gf-unidad-7-pronostico-de-series-de-tiempo-"><span class="tn">7</span>Pronóstico de Series de Tiempo</a></li><li><a href="#gf-unidad-8-redes-neuronales-artificiales-c"><span class="tn">8</span>Redes Neuronales Artificiales</a></li><li><a href="#gf-unidad-9-evaluacion-integral-validacion-"><span class="tn">9</span>Evaluación Integral, Validación Cruzada, Ajuste y Despliegue</a></li><li><a href="#gf-lo-que-mas-probablemente-viene-en-el-fin"><span class="tn">🎯</span>Lo que más probablemente viene en el final</a></li><li><a href="#gf-conexiones-clave"><span class="tn">🔗</span>Conexiones clave</a></li><li><a href="#gf-anexo-clases-que-no-estaban-en-el-cuader"><span class="tn">📎</span>Anexo · Clases que no estaban en el cuaderno de NotebookLM</a></li></ol></nav>
+  <main class="gf-main">
+<details class="section-block sec" id="gf-hilo-conductor" open data-toc="Hilo conductor" data-num="🧵"><summary><span class="snum ico">🧵</span><span class="stitle">Hilo conductor</span></summary>
 <p>La materia cuenta el viaje completo para convertir datos crudos de una organización en decisiones inteligentes y sistemas en producción. Todo comienza en el <strong>terreno físico y tecnológico de los datos</strong> (Clases 1 a 7): antes de pensar en cualquier algoritmo, necesitas saber dónde vive la información, qué diferencia una base de datos pequeña de un repositorio empresarial, por qué los datos históricos estructurados se organizan en <em>Data Warehouses</em> y <em>Data Marts</em> mientras que los datos crudos y multimedia caen en <em>Data Lakes</em> o ecosistemas <em>Big Data</em> en memoria y en la nube, y cómo han surgido bases especializadas —sobre todo las vectoriales— para manejar texto, imágenes y audio. Pero tener una infraestructura impecable no sirve de nada si no sabes qué preguntarle ni bajo qué metodología actuar. Por eso el curso introduce primero la distinción entre <strong>modelos descriptivos (no supervisados)</strong> y <strong>modelos predictivos (supervisados)</strong> y luego recorre sistemáticamente cada familia de algoritmos según el problema de negocio (Clases 6 a 16). Arrancas explorando datos sin etiquetas mediante <strong>agrupamiento (<em>clustering</em>) y reducción de dimensionalidad (PCA)</strong> para segmentar clientes o productos (Clases 8, 9 y 11), pasas a descubrir qué artículos se compran juntos mediante <strong>reglas de asociación</strong> (Clases 9, 10, 12 y 13), y das el salto al aprendizaje supervisado: primero prediciendo valores numéricos continuos con <strong>regresión</strong> (Clases 11 y 14), luego tomando decisiones categóricas o binarias con <strong>clasificación</strong> —el algoritmo estrella del profesor— (Clases 12, 13 y 15), después proyectando variables ordenadas en el tiempo con <strong>series de tiempo</strong> (Clases 14, 15 y 18), y cerrando con <strong>redes neuronales artificiales</strong> capaces de aprender patrones complejos en tablas, imágenes y secuencias (Clases 16, 20 y 21). Finalmente, el cierre del curso (Clases 18, 20 y 21) amarra toda esa caja de herramientas dentro de la metodología industrial <strong>CRISP-DM</strong> y las técnicas formales de <strong>evaluación, validación cruzada, control de sobreajuste y monitoreo en producción</strong>, garantizando que un modelo no solo funcione en la computadora de pruebas sino que resista datos nuevos y genere valor real para el cliente.</p>
 </details>
-<details class="section-block sec" id="gf-unidad-1-fundamentos-de-datos-repositori"><summary><span class="stitle">Unidad 1: Fundamentos de Datos, Repositorios, Bases de Datos y Arquitectura Empresarial (Clases 1, 2, 3, 4, 6, 7 y 8)</span></summary>
+<details class="section-block sec" id="gf-unidad-1-fundamentos-de-datos-repositori" data-toc="Fundamentos de Datos, Repositorios, Bases de Datos y Arquitectura Empresarial" data-num="1"><summary><span class="snum">1</span><span class="stitle">Fundamentos de Datos, Repositorios, Bases de Datos y Arquitectura Empresarial<span class="sclases">Clases 1, 2, 3, 4, 6, 7 y 8</span></span></summary>
 <h4>a) Qué problema resuelve y cómo se conecta con el resto del curso</h4>
 <p>Resuelve el problema de dónde almacenar, asegurar, integrar y consultar grandes volúmenes de información heterogénea antes de analizarla. La minería de datos analiza grandes conjuntos de datos ("nuestra carnita, nuestra esencia"), y sin comprender si los datos están en tablas transaccionales, almacenes históricos, lagos sin procesar o en la nube, es imposible extraer variables confiables para los algoritmos de las unidades siguientes.</p>
 <h4>b) Conceptos clave</h4>
@@ -76,7 +87,7 @@
 <strong>Errores en presentaciones ejecutivas</strong>: El profesor relató que una <strong>sola falta de ortografía</strong> hizo que un director cancelara un proyecto millonario; además, las láminas ejecutivas deben ser limpias y breves (~10 láminas para ~20 minutos), dejando el detalle técnico en un documento anexo.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-2-paradigmas-de-aprendizaje-y-met"><summary><span class="stitle">Unidad 2: Paradigmas de Aprendizaje y Metodologías de Proyectos (KDD, Proceso Técnico y CRISP-DM) (Clases 1, 6, 7, 18, 20 y 21)</span></summary>
+<details class="section-block sec" id="gf-unidad-2-paradigmas-de-aprendizaje-y-met" data-toc="Paradigmas de Aprendizaje y Metodologías de Proyectos (KDD, Proceso Técnico y CRISP-DM)" data-num="2"><summary><span class="snum">2</span><span class="stitle">Paradigmas de Aprendizaje y Metodologías de Proyectos (KDD, Proceso Técnico y CRISP-DM)<span class="sclases">Clases 1, 6, 7, 18, 20 y 21</span></span></summary>
 <h4>a) Qué problema resuelve y cómo se conecta con la Unidad 1</h4>
 <p>Una vez que la arquitectura de datos está clara, el científico de datos necesita saber <strong>qué tipo de pregunta responde cada familia de algoritmos</strong> y <strong>qué pasos metodológicos seguir</strong> desde la reunión con los directivos hasta el mantenimiento en producción, evitando desperdiciar tiempo en problemas inviables o modelos sin impacto de negocio.</p>
 <h4>b) Conceptos clave</h4>
@@ -130,7 +141,7 @@
 <strong>Tener clarísima la diferencia entre Predictivo y Descriptivo</strong>, así como el <strong>triple ajuste</strong> y el <strong>monitoreo mínimo de 3 a 6 meses</strong>.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-3-aprendizaje-no-supervisado-redu"><summary><span class="stitle">Unidad 3: Aprendizaje No Supervisado — Reducción de Dimensionalidad (PCA) y Clustering (Clases 6, 7, 8, 9 y 11)</span></summary>
+<details class="section-block sec" id="gf-unidad-3-aprendizaje-no-supervisado-redu" data-toc="Aprendizaje No Supervisado — Reducción de Dimensionalidad (PCA) y Clustering" data-num="3"><summary><span class="snum">3</span><span class="stitle">Aprendizaje No Supervisado — Reducción de Dimensionalidad (PCA) y Clustering<span class="sclases">Clases 6, 7, 8, 9 y 11</span></span></summary>
 <h4>a) Qué problema resuelve y cómo se conecta con el tema anterior</h4>
 <p>Al iniciar un proyecto sin etiquetas previas (enfoque descriptivo de la Unidad 2), la empresa suele tener decenas de miles de tickets y decenas de variables con escalas incompatibles. Esta unidad resuelve cómo <strong>comprimir dimensiones redundantes</strong> y <strong>segmentar observaciones similares</strong> (clientes, productos, plantas o zonas) para diseñar estrategias diferenciadas en lugar de tratar a todos por igual.</p>
 <h4>b) Conceptos clave</h4>
@@ -164,7 +175,7 @@
 <strong>Caso real Túnel Emisor Oriente</strong>: El profesor contó que tardaron ~2–3 meses con ~30 variables para segmentar 5 tipos de anillos de excavación porque sin la interpretación del cliente los clústeres carecían de sentido operativo.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-4-aprendizaje-no-supervisado-regl"><summary><span class="stitle">Unidad 4: Aprendizaje No Supervisado — Reglas de Asociación (Market Basket Analysis) (Clases 9, 10, 12 y 13)</span></summary>
+<details class="section-block sec" id="gf-unidad-4-aprendizaje-no-supervisado-regl" data-toc="Aprendizaje No Supervisado — Reglas de Asociación (Market Basket Analysis)" data-num="4"><summary><span class="snum">4</span><span class="stitle">Aprendizaje No Supervisado — Reglas de Asociación (Market Basket Analysis)<span class="sclases">Clases 9, 10, 12 y 13</span></span></summary>
 <h4>a) Qué problema resuelve y cómo se conecta con la Unidad 3</h4>
 <p>Mientras el <em>clustering</em> agrupa <strong>clientes</strong> o <strong>entidades completas</strong> por parecido general, las reglas de asociación responden otra pregunta sobre los mismos tickets transaccionales: <strong>qué productos o eventos suelen ocurrir juntos dentro de una misma canasta o registro</strong>. Además, pueden aplicarse <em>dentro</em> de un clúster específico (por ejemplo, analizar qué compran los clientes más fieles los fines de semana).</p>
 <h4>b) Conceptos clave</h4>
@@ -204,7 +215,7 @@
 <strong>Aplicación fuera de supermercados</strong>: El profesor mostró su proyecto real con el IMSS en Chiapas y Oaxaca sobre <strong>~789,000 casos de dengue (2011–2015)</strong>, usando reglas de asociación para descubrir qué síntomas clínicos (hemorragia + hematemesis + melena) alertaban sobre dengue hemorrágico.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-5-aprendizaje-supervisado-modelos"><summary><span class="stitle">Unidad 5: Aprendizaje Supervisado — Modelos de Regresión (Clases 7, 11 y 14)</span></summary>
+<details class="section-block sec" id="gf-unidad-5-aprendizaje-supervisado-modelos" data-toc="Aprendizaje Supervisado — Modelos de Regresión" data-num="5"><summary><span class="snum">5</span><span class="stitle">Aprendizaje Supervisado — Modelos de Regresión<span class="sclases">Clases 7, 11 y 14</span></span></summary>
 <h4>a) Qué problema resuelve y cómo se conecta con las unidades anteriores</h4>
 <p>Dejamos el terreno puramente descriptivo para entrar al <strong>aprendizaje supervisado predictivo</strong>, donde ya existe una <strong>variable objetivo (Y) numérica y continua</strong>. Mientras la clasificación dirá <em>"sí o no"</em>, la regresión responde <strong>"¿cuánto?"</strong> (precio de una casa, porcentaje de alcohol en un vino, probabilidad continua de incumplimiento, costo de tratamiento).</p>
 <h4>b) Conceptos clave</h4>
@@ -240,7 +251,7 @@
 <strong>Principio de parsimonia en variables</strong>: En la Práctica 3.3, reducir de 12 variables químicas a solo las <strong>5 más significativas</strong> apenas bajó R2 en 0.03–0.04, demostrando que las demás aportaban casi puro ruido.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-6-aprendizaje-supervisado-modelos"><summary><span class="stitle">Unidad 6: Aprendizaje Supervisado — Modelos de Clasificación (Clases 6, 7, 12, 13, 15 y 16)</span></summary>
+<details class="section-block sec" id="gf-unidad-6-aprendizaje-supervisado-modelos" data-toc="Aprendizaje Supervisado — Modelos de Clasificación" data-num="6"><summary><span class="snum">6</span><span class="stitle">Aprendizaje Supervisado — Modelos de Clasificación<span class="sclases">Clases 6, 7, 12, 13, 15 y 16</span></span></summary>
 <h4>a) Qué problema resuelve y cómo se conecta con la Unidad 5</h4>
 <p>El profesor lo definió como el <strong>"algoritmo estrella"</strong>, el número uno que recomienda dominar al 200%. A diferencia de la regresión (variable continua), la clasificación resuelve problemas supervisados donde la <strong>variable objetivo es discreta o categórica</strong>: generalmente <strong>binaria</strong> (sí/no, tiene diabetes/no tiene, fraude/legítimo, aprueba crédito/rechaza, abandona/se queda) o <strong>multiclase</strong> (bajo/medio/alto, 6 tipos de paisaje).</p>
 <h4>b) Conceptos clave y los 6 Algoritmos</h4>
@@ -287,7 +298,7 @@
 <strong>Regla de oro para el examen</strong>: Si la pregunta plantea una decisión dicotómica (<em>¿es anómalo o no?, ¿abandona o no?, ¿tiene la enfermedad o no?</em>), el modelo es <strong>clasificación binaria</strong>.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-7-pronostico-de-series-de-tiempo-"><summary><span class="stitle">Unidad 7: Pronóstico de Series de Tiempo (Clases 14, 15 y 18)</span></summary>
+<details class="section-block sec" id="gf-unidad-7-pronostico-de-series-de-tiempo-" data-toc="Pronóstico de Series de Tiempo" data-num="7"><summary><span class="snum">7</span><span class="stitle">Pronóstico de Series de Tiempo<span class="sclases">Clases 14, 15 y 18</span></span></summary>
 <h4>a) Qué problema resuelve y cómo se conecta con las unidades anteriores</h4>
 <p>A diferencia de la regresión o clasificación estándar donde el orden de las filas no importa, aquí el <strong>eje X es obligatoriamente el tiempo en intervalos iguales</strong> (horas, días, semanas, meses). Resuelve problemas de pronóstico hacia el futuro (demanda, inventarios, consumo eléctrico, tráfico) ponderando con mayor fuerza el pasado reciente.</p>
 <h4>b) Conceptos clave</h4>
@@ -332,7 +343,7 @@
 <strong>Validación móvil recomendada por el profesor</strong>: En lugar de proyectar ciegamente 12 meses, usar ventanas como <strong>6 y 1</strong> (correr 6 meses, pronosticar el 7.º como si no existiera y contrastarlo con la realidad) o reentrenar cada 1–3 meses con pronóstico móvil.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-8-redes-neuronales-artificiales-c"><summary><span class="stitle">Unidad 8: Redes Neuronales Artificiales (Clases 16, 20 y 21)</span></summary>
+<details class="section-block sec" id="gf-unidad-8-redes-neuronales-artificiales-c" data-toc="Redes Neuronales Artificiales" data-num="8"><summary><span class="snum">8</span><span class="stitle">Redes Neuronales Artificiales<span class="sclases">Clases 16, 20 y 21</span></span></summary>
 <h4>a) Qué problema resuelve y cómo se conecta con las unidades anteriores</h4>
 <p>Cuando los datos son masivos o altamente complejos (como miles de imágenes médicas o satelitales, secuencias largas de texto/clima o tablas con patrones muy profundos no lineales), los algoritmos clásicos de clasificación y regresión alcanzan su límite. Las redes neuronales artificiales cierran la caja de herramientas de algoritmos integrando clasificación, regresión y extracción automática de características.</p>
 <h4>b) Conceptos clave</h4>
@@ -386,7 +397,7 @@
 <strong>Retroalimentación continua</strong>: El profesor aclaró una duda de Ortega: aunque la red es supervisada en su diseño y ajuste de hiperparámetros, una vez entrenada y desplegada se vuelve autónoma y puede seguir mejorando al recibir nuevos lotes de datos.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-9-evaluacion-integral-validacion-"><summary><span class="stitle">Unidad 9: Evaluación Integral, Validación Cruzada, Ajuste y Despliegue (Clases 18, 20 y 21)</span></summary>
+<details class="section-block sec" id="gf-unidad-9-evaluacion-integral-validacion-" data-toc="Evaluación Integral, Validación Cruzada, Ajuste y Despliegue" data-num="9"><summary><span class="snum">9</span><span class="stitle">Evaluación Integral, Validación Cruzada, Ajuste y Despliegue<span class="sclases">Clases 18, 20 y 21</span></span></summary>
 <h4>a) Qué problema resuelve y cómo se conecta con todo el curso</h4>
 <p>Es el filtro final de calidad antes de entregar cualquier proyecto (regresión, clasificación, clustering, series o redes neuronales) al cliente bajo CRISP-DM. Resuelve cómo comprobar que las métricas no fueron producto de la suerte de una partición 70/30 sesgada, cómo corregir errores graves en la matriz de confusión y cómo garantizar que el modelo resista datos futuros en producción.</p>
 <h4>b) Conceptos clave</h4>
@@ -428,7 +439,7 @@
 <strong>Creer en un 100% real</strong>: El profesor enfatizó que si un modelo en pruebas da 100%, probablemente memorizó; el máximo realista ronda 93%–94%.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-lo-que-mas-probablemente-viene-en-el-fin" open><summary><span class="stitle">LO QUE MÁS PROBABLEMENTE VIENE EN EL FINAL</span></summary>
+<details class="section-block sec gf-key" id="gf-lo-que-mas-probablemente-viene-en-el-fin" open data-toc="Lo que más probablemente viene en el final" data-num="🎯"><summary><span class="snum ico">🎯</span><span class="stitle">Lo que más probablemente viene en el final</span></summary>
 <ul><li>
 <strong>Mapeo de problemas de negocio a tipo de modelo y algoritmo (con foco en Clasificación Binaria)</strong> * <em>Evidencia</em>: En Clase 18, tras corregir a un alumno en el caso de fraude bancario en tiempo real, el profesor dijo <strong>explícitamente</strong>: <em>"Recuerden esa parte binaria de clasificación, es muy importante; en el examen vendrá una pregunta como estas... no es la misma, pero va a ser similar"</em>.
 </li><li>
@@ -459,7 +470,7 @@
 </li></ul>
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-conexiones-clave"><summary><span class="stitle">CONEXIONES CLAVE</span></summary>
+<details class="section-block sec" id="gf-conexiones-clave" data-toc="Conexiones clave" data-num="🔗"><summary><span class="snum ico">🔗</span><span class="stitle">Conexiones clave</span></summary>
 <ul><li>
 Arquitectura de datos -&gt; provee y asegura -&gt; datos confiables para el modelado
 </li><li>
@@ -529,12 +540,40 @@ Criterio de robustez empresarial -&gt; exige comparar mínimo dos modelos y -&gt
 </li></ul>
 <p>🎯 ¿Quieres que armemos un <strong>examen simulacro completo</strong> (con ejercicios de mapeo de problemas, gráficas de series de tiempo, una matriz de confusión para diagnosticar y una arquitectura de datos) o prefieres repasar primero alguno de los bloques técnicos que sientas más flojo?</p>
 </details>
-<details class="section-block sec" id="gf-anexo-clases-que-no-estaban-en-el-cuader"><summary><span class="stitle">Anexo · Clases que no estaban en el cuaderno de NotebookLM</span></summary>
+<details class="section-block sec" id="gf-anexo-clases-que-no-estaban-en-el-cuader" data-toc="Anexo · Clases que no estaban en el cuaderno de NotebookLM" data-num="📎"><summary><span class="snum ico">📎</span><span class="stitle">Anexo · Clases que no estaban en el cuaderno de NotebookLM</span></summary>
 <p><em>Resumen para estudiar de cada una, tomado de los apuntes por clase del sitio (decimo/MD/MD-Resumenes/).</em></p>
 <h3>Clase 19 · Segundo Examen Parcial (jueves 5 nov 2026)</h3>
 <p><em>Lo que conviene verificar al recibir la calificación.</em></p>
 <div class="tabla-scroll"><table><tr><th>Pendiente</th><th>Qué hacer</th></tr><tr><td>Calificación</td><td>Anotarla cuando la den</td></tr><tr><td>Redes neuronales (capas y neuronas)</td><td>Repasar la Clase 16, porque esa parte quedó sin responder</td></tr><tr><td>Entrega en Classroom</td><td>Confirmar el estado del examen y de la práctica MLP</td></tr></table></div>
 </details>
+  </main>
 </div>
+<button class="gf-top" id="gf-top" type="button" title="Volver arriba">↑</button>
+<script>
+(function(){
+  var root=document.documentElement, secs=[].slice.call(document.querySelectorAll('.gf-main details.sec'));
+  var links=[].slice.call(document.querySelectorAll('.gf-toc a')), toc=document.getElementById('gf-toc');
+  function setFs(v){v=Math.max(1,Math.min(5,v));root.dataset.fs=v;document.body.dataset.fs=v;try{localStorage.setItem('gf-fs',v)}catch(e){}}
+  setFs(+(root.dataset.fs||2));
+  document.querySelectorAll('.gf-fs button').forEach(function(b){b.onclick=function(){var d=+b.dataset.d;setFs(d?(+root.dataset.fs+d):2)}});
+  var all=document.getElementById('gf-all');
+  function syncAll(){all.textContent=secs.every(function(s){return s.open})?'Cerrar todo':'Abrir todo'}
+  all.onclick=function(){var o=!secs.every(function(s){return s.open});secs.forEach(function(s){s.open=o});syncAll()};
+  secs.forEach(function(s){s.addEventListener('toggle',syncAll)}); syncAll();
+  links.forEach(function(a){a.onclick=function(){var d=document.getElementById(a.hash.slice(1));if(d)d.open=true;toc.classList.remove('open');syncAll()}});
+  document.getElementById('gf-toc-btn').onclick=function(){toc.classList.toggle('open')};
+  if(location.hash){var t=document.getElementById(location.hash.slice(1));if(t&&t.tagName==='DETAILS')t.open=true}
+  var bar=document.getElementById('gf-progress'), top=document.getElementById('gf-top'), now=document.getElementById('gf-now'), base=now.textContent;
+  top.onclick=function(){window.scrollTo({top:0,behavior:'smooth'})};
+  function onScroll(){
+    var h=document.documentElement.scrollHeight-innerHeight; bar.style.width=(h>0?scrollY/h*100:0)+'%';
+    top.classList.toggle('show',scrollY>600);
+    var cur=null; secs.forEach(function(s){if(s.getBoundingClientRect().top<170)cur=s});
+    links.forEach(function(a){a.classList.toggle('on',cur&&a.hash==='#'+cur.id)});
+    now.textContent=cur?base+' · '+cur.dataset.toc:base;
+  }
+  addEventListener('scroll',onScroll,{passive:true}); onScroll();
+})();
+</script>
 </body>
 </html>

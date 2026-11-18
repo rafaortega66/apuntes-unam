@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-17T22:05:32+00:00",
+ "generatedAt": "2026-11-18T00:42:19+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -1021,6 +1021,11 @@
  },
  "gitlog": [
   {
+   "hash": "8650161",
+   "fecha": "2026-11-17T16:22:37-06:00",
+   "mensaje": "Guía para el examen final por materia (7 páginas generadas desde las guías de NotebookLM en Drive) + índice en la portada; Descargas y escritorio ordenados"
+  },
+  {
    "hash": "e9c5128",
    "fecha": "2026-11-17T15:43:09-06:00",
    "mensaje": "Tablero: solo pendientes de Classroom (17 nov) + Tarea 5 de ACS, banners mínimos; estado «Atrasada»; Proyecto final ASI vence el 20 nov (Classroom)"
@@ -1314,11 +1319,6 @@
    "hash": "64f8758",
    "fecha": "2026-10-21T15:52:21-06:00",
    "mensaje": "FSE: agregar Clase 16 (21 oct) — elección del kernel de Linux embebido, raíz / y distribuciones, reglas de la Práctica 8; Lab OAC no se documenta (CLAUDE.md)"
-  },
-  {
-   "hash": "d9525f5",
-   "fecha": "2026-10-21T11:25:42-06:00",
-   "mensaje": "OAC: subir los 4 reportes en PDF entregados (T01, T02, Proy01, Proy02) y la versión enviada del filtro IIR"
   }
  ]
 }

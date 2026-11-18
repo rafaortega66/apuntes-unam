@@ -5,35 +5,46 @@
 <meta name="formato" content="no-aplica">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Guía para el examen final — Arquitectura Cliente-Servidor</title>
-<link rel="stylesheet" href="../../assets/style.css?v=20261117b">
-<script src="../../assets/app.js?v=20261117b" defer></script>
-<style>
-.gf h3{margin:1.2em 0 .4em} .gf h4{margin:1em 0 .3em;opacity:.9}
-.gf .tabla-scroll{overflow-x:auto} .gf table td,.gf table th{font-size:.9em;vertical-align:top}
-.gf p.nota{border-left:3px solid var(--c);padding:.3em .8em;opacity:.9}
-.gf li{margin:.25em 0}
-</style>
+<link rel="stylesheet" href="../../assets/style.css?v=20261117c">
+<link rel="stylesheet" href="../../assets/guia-final.css?v=20261117c">
+<script>try{var f=localStorage.getItem('gf-fs');if(f)document.documentElement.dataset.fs=f}catch(e){}</script>
+<script src="../../assets/app.js?v=20261117c" defer></script>
 </head>
-<body style="--c:#E8735C">
-<div class="wrap gf">
+<body class="gf-body" style="--c:#E8735C">
 <!-- Generado por scripts/build_guias_finales.py. No editar a mano. -->
-<a class="back" href="index.html">← Arquitectura Cliente-Servidor</a>
-<div class="detail-head" style="border-color:#E8735C"><h2>📘 Guía para el examen final</h2>
-  <p class="prof">Arquitectura Cliente-Servidor · semestre 2027-1 · hecha con NotebookLM a partir de los audios de clase y el material del profesor (16 nov 2026).</p>
-  <p class="prof">Las fechas y cálculos de NotebookLM pueden fallar: ante la duda, revisa la página de la clase que cita.</p>
-</div>
-<div class="files">
-  <a class="btn" href="https://docs.google.com/document/d/1NeYIiZeyNwmtHDzR47WpThlRyYFDc20t08GeO-QP-lI/edit" target="_blank">📄 Original en Drive</a>
-  <a class="btn" href="https://docs.google.com/document/d/1ELLf3oMJ5i-f0PS7EiQ7FB_y3HvNln5Hvm6h9KzKR_U/edit" target="_blank">📝 Apuntes y resumen (Drive)</a>
-  <a class="btn" href="https://drive.google.com/file/d/1i204QLbxnoZ0j5es2cWGmDgKv-Ss78GN/view" target="_blank">🧠 Mapa mental detallado</a>
-  <a class="btn" href="resumenes.html">📚 Guías por clase</a>
-</div>
+<div class="gf-progress" id="gf-progress"></div>
+<header class="gf-hero"><div class="gf-hero-in">
+  <a class="back" href="index.html">← Arquitectura Cliente-Servidor</a><br>
+  <span class="gf-sigla">ACS · EXAMEN FINAL</span>
+  <h1>Guía para el examen final</h1>
+  <p class="gf-materia">Arquitectura Cliente-Servidor</p>
+  <p class="gf-meta">Semestre 2027-1 · hecha con NotebookLM a partir de los audios de clase y el material del profesor (16 nov 2026). Las fechas y cálculos de NotebookLM pueden fallar: ante la duda, revisa la página de la clase que cita.</p>
+  <div class="gf-links">
+    <a class="btn" href="https://docs.google.com/document/d/1NeYIiZeyNwmtHDzR47WpThlRyYFDc20t08GeO-QP-lI/edit" target="_blank">📄 Original en Drive</a>
+    <a class="btn" href="https://docs.google.com/document/d/1ELLf3oMJ5i-f0PS7EiQ7FB_y3HvNln5Hvm6h9KzKR_U/edit" target="_blank">📝 Apuntes y resumen (Drive)</a>
+    <a class="btn" href="https://drive.google.com/file/d/1i204QLbxnoZ0j5es2cWGmDgKv-Ss78GN/view" target="_blank">🧠 Mapa mental detallado</a>
+    <a class="btn" href="resumenes.html">📚 Guías por clase</a>
+  </div>
+</div></header>
+<div class="gf-tools"><div class="gf-tools-in">
+  <button class="gf-toc-btn" id="gf-toc-btn" type="button">☰ Índice</button>
+  <span class="gf-now" id="gf-now">ACS</span>
+  <button type="button" id="gf-all" title="Abrir o cerrar todas las secciones">Abrir todo</button>
+  <span class="gf-fs" role="group" aria-label="Tamaño de letra">
+    <button type="button" data-d="-1" title="Letra más chica">A−</button>
+    <button type="button" data-d="0" title="Tamaño normal">A</button>
+    <button type="button" data-d="1" class="big" title="Letra más grande">A+</button>
+  </span>
+</div></div>
+<div class="gf-layout">
+  <nav class="gf-toc" id="gf-toc" aria-label="Índice"><h2>Contenido</h2><ol><li><a href="#gf-hilo-conductor"><span class="tn">🧵</span>Hilo conductor</a></li><li><a href="#gf-unidad-1-linux-anatomia-de-un-proceso-pe"><span class="tn">1</span>Linux, anatomía de un proceso, permisos y manejo de errores</a></li><li><a href="#gf-unidad-2-ciclo-de-vida-sincronizacion-se"><span class="tn">2</span>Ciclo de vida, sincronización, señales y procesos especiales</a></li><li><a href="#gf-unidad-3-fundamentos-de-redes-y-sockets-"><span class="tn">3</span>Fundamentos de redes y sockets TCP en C (tema 3)</a></li><li><a href="#gf-unidad-4-criptografia-simetrica-transfer"><span class="tn">4</span>Criptografía simétrica, transferencia de archivos y ciberseguridad (tema 4)</a></li><li><a href="#gf-lo-que-mas-probablemente-viene-en-el-fin"><span class="tn">🎯</span>Lo que más probablemente viene en el final</a></li><li><a href="#gf-conexiones-clave"><span class="tn">🔗</span>Conexiones clave</a></li><li><a href="#gf-anexo-clases-que-no-estaban-en-el-cuader"><span class="tn">📎</span>Anexo · Clases que no estaban en el cuaderno de NotebookLM</a></li></ol></nav>
+  <main class="gf-main">
 <p class="nota"><em>Nota sobre las fuentes consultadas: esta guía integra únicamente el contenido de las 20 clases disponibles en el cuaderno (</em> <em>ACS-Clase1.m4a</em> <em>a</em> <em>ACS-Clase4.m4a</em> <em>,</em> <em>ACS-Clase6.m4a</em> <em>a</em> <em>ACS-Clase18.m4a</em> <em>y</em> <em>ACS-Clase21.m4a</em> <em>a</em> <em>ACS-Clase23.m4a</em> <em>) y los fragmentos de presentaciones y código que el profesor mostró y leyó en ellas. No existen archivos PDF independientes adjuntos ni grabaciones de las Clases 5, 19 y 20 en el cuaderno, por lo que cualquier detalle exclusivo de esas tres sesiones (como el enunciado completo de la Tarea 5 o la revisión de</em> <em>desencriptador.c</em> <em>si ocurrió allí) no figura en las fuentes.</em></p>
-<details class="section-block sec" id="gf-hilo-conductor" open><summary><span class="stitle">HILO CONDUCTOR</span></summary>
+<details class="section-block sec" id="gf-hilo-conductor" open data-toc="Hilo conductor" data-num="🧵"><summary><span class="snum ico">🧵</span><span class="stitle">Hilo conductor</span></summary>
 <p>La materia parte de una idea central: antes de construir aplicaciones distribuidas en red, hay que entender qué es un proceso vivo dentro del sistema operativo Linux, cómo se organiza su memoria, con qué privilegios se ejecuta y cómo nace, se comunica o muere. Por eso el curso arranca estudiando la imagen de un proceso, sus segmentos en memoria y el control de permisos e identificadores de usuario (UID/eUID), para luego dominar el ciclo de vida de los procesos mediante llamadas al sistema (fork(), exec(), kill()) y señales (signal()), descubriendo el riesgo de bloqueos mutuos (<em>deadlock</em>), procesos huérfanos y procesos zombie. Con esa base de sistemas operativos dominada, el curso da el salto a la red definiendo la arquitectura cliente-servidor como procesos de software que dialogan a través de <strong>sockets</strong> (tratados en Unix/Linux como descriptores de archivo) usando direcciones IP y puertos lógicos.</p>
 <p class="">A partir de ahí, el desarrollo avanza por capas incrementales de complejidad hasta culminar en una aplicación distribuida segura: primero se construye el flujo básico en C (socket–bind–listen–accept–connect–send/recv), luego se destripa el saludo de tres vías TCP, la cola de espera del kernel, los puertos efímeros y la fragmentación por tamaños de búfer. Después se resuelve la escalabilidad pasando de un servidor secuencial (uno a la vez) a servidores concurrentes con fork() y, al chocar con la memoria aislada de los hijos, a la multiplexación en un solo proceso con select() para chats grupales. Finalmente, al demostrar con un <em>sniffer</em> de capa 2 (SOCK_RAW) que todo el texto y los archivos viajan expuestos en texto plano por la red, se introduce la criptografía simétrica con OpenSSL (AES-256-CBC y relleno PKCS) y la transferencia completa de directorios y archivos binarios, mostrando cómo los mismos módulos técnicos que permiten construir un FTP encriptado explican también el funcionamiento real de ataques como el <em>ransomware</em> y el DDoS.</p>
 </details>
-<details class="section-block sec" id="gf-unidad-1-linux-anatomia-de-un-proceso-pe"><summary><span class="stitle">UNIDAD 1: LINUX, ANATOMÍA DE UN PROCESO, PERMISOS Y MANEJO DE ERRORES</span></summary>
+<details class="section-block sec" id="gf-unidad-1-linux-anatomia-de-un-proceso-pe" data-toc="Linux, anatomía de un proceso, permisos y manejo de errores" data-num="1"><summary><span class="snum">1</span><span class="stitle">Linux, anatomía de un proceso, permisos y manejo de errores</span></summary>
 <h3>(a) Qué problema resuelve y cómo se conecta con el curso</h3>
 <p>Un cliente y un servidor en C son <strong>procesos de software en ejecución</strong>. Antes de abrir conexiones de red, es indispensable comprender cómo el kernel asigna memoria a un ejecutable, cómo lo identifica y aísla, bajo qué usuario corre (privilegios) y cómo reporta errores de sistema cuando una llamada falla.</p>
 <h3>(b) Conceptos clave</h3>
@@ -94,7 +105,7 @@ Colocar espacios después de las comas en ps -e -o pid,ppid,user,stat,cmd provoc
 Asumir que el número máximo de códigos de error es fijo (131 vs 133 según la distribución Linux).
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-2-ciclo-de-vida-sincronizacion-se"><summary><span class="stitle">UNIDAD 2: CICLO DE VIDA, SINCRONIZACIÓN, SEÑALES Y PROCESOS ESPECIALES</span></summary>
+<details class="section-block sec" id="gf-unidad-2-ciclo-de-vida-sincronizacion-se" data-toc="Ciclo de vida, sincronización, señales y procesos especiales" data-num="2"><summary><span class="snum">2</span><span class="stitle">Ciclo de vida, sincronización, señales y procesos especiales</span></summary>
 <h3>(a) Qué problema resuelve y cómo se conecta con el tema anterior</h3>
 <p>Una vez entendida la imagen de un proceso aislado, un servidor de red necesita crear múltiples procesos para atender clientes en paralelo, reemplazar ejecutables, controlar cuándo y cómo terminan los hijos y evitar que dejen basura en la tabla de procesos del sistema.</p>
 <h3>(b) Conceptos clave</h3>
@@ -152,7 +163,7 @@ No encerrar execl() en if (execl(...) == -1) con exit(EXIT_FAILURE): si el coman
 Intentar matar con Ctrl+C un proceso que está en <em>background</em>: primero debe traerse a <em>foreground</em> con fg &lt;num&gt; (o enviar kill -9 &lt;PID&gt;).
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-3-fundamentos-de-redes-y-sockets-"><summary><span class="stitle">UNIDAD 3: FUNDAMENTOS DE REDES Y SOCKETS TCP EN C (TEMA 3)</span></summary>
+<details class="section-block sec" id="gf-unidad-3-fundamentos-de-redes-y-sockets-" data-toc="Fundamentos de redes y sockets TCP en C (tema 3)" data-num="3"><summary><span class="snum">3</span><span class="stitle">Fundamentos de redes y sockets TCP en C (tema 3)</span></summary>
 <h3>(a) Qué problema resuelve y cómo se conecta con el tema anterior</h3>
 <p>Los procesos ya saben nacer y enviarse señales dentro de una misma máquina, pero en la realidad las aplicaciones (WhatsApp, Netflix, bancos) son procesos corriendo en computadoras distintas separadas por redes. Los <strong>sockets</strong> permiten comunicar esos procesos a través de la red reutilizando el mismo concepto Unix de descriptores de archivo.</p>
 <h3>(b) Conceptos clave</h3>
@@ -238,7 +249,7 @@ En select(), olvidar reiniciar FD_ZERO y reinsertar descriptores en cada vuelta 
 Olvidar configurar tcp_syncookies = 0 y tcp_syn_retries = 1 (en vez de 5 = 63 s o 6 = 180 s) al probar el rechazo por desbordamiento de cola en la Tarea 4.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-unidad-4-criptografia-simetrica-transfer"><summary><span class="stitle">UNIDAD 4: CRIPTOGRAFÍA SIMÉTRICA, TRANSFERENCIA DE ARCHIVOS Y CIBERSEGURIDAD (TEMA 4)</span></summary>
+<details class="section-block sec" id="gf-unidad-4-criptografia-simetrica-transfer" data-toc="Criptografía simétrica, transferencia de archivos y ciberseguridad (tema 4)" data-num="4"><summary><span class="snum">4</span><span class="stitle">Criptografía simétrica, transferencia de archivos y ciberseguridad (tema 4)</span></summary>
 <h3>(a) Qué problema resuelve y cómo se conecta con el tema anterior</h3>
 <p>Como demostró el <em>sniffer</em> de capa 2, enviar mensajes o PDFs en claro permite que cualquiera en la red reconstruya la información. Además, hasta la Unidad 3 no se había programado un cliente-servidor propio para transferir directorios y archivos binarios completos. Esta unidad une criptografía simétrica OpenSSL (EVP) con transferencia de archivos por bloques para obtener un FTP seguro y comprender el <em>ransomware</em>.</p>
 <h3>(b) Conceptos clave</h3>
@@ -307,7 +318,7 @@ Usar llaves distintas entre cliente y servidor: los bytes cifrados llegan idént
 No omitir "." y ".." al recorrer directorios con readdir(), usar int en lugar de long para el tamaño de archivo, o colocar accept() dentro del while(1) en el servidor receptor de múltiples archivos.
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-lo-que-mas-probablemente-viene-en-el-fin" open><summary><span class="stitle">LO QUE MÁS PROBABLEMENTE VIENE EN EL FINAL</span></summary>
+<details class="section-block sec gf-key" id="gf-lo-que-mas-probablemente-viene-en-el-fin" open data-toc="Lo que más probablemente viene en el final" data-num="🎯"><summary><span class="snum ico">🎯</span><span class="stitle">Lo que más probablemente viene en el final</span></summary>
 <ul><li>
 <strong>Diferenciación entre Cliente y Servidor en código y gestión de los dos sockets ( fds vs fdc )</strong>
 <ul><li>
@@ -365,7 +376,7 @@ No omitir "." y ".." al recorrer directorios con readdir(), usar int en lugar de
 </li></ul>
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-conexiones-clave"><summary><span class="stitle">CONEXIONES CLAVE</span></summary>
+<details class="section-block sec" id="gf-conexiones-clave" data-toc="Conexiones clave" data-num="🔗"><summary><span class="snum ico">🔗</span><span class="stitle">Conexiones clave</span></summary>
 <ul><li>
 Imagen del proceso -&gt; divide memoria en -&gt; Segmentos estáticos (Text, Data, BSS) y dinámicos (Heap, Stack)
 </li><li>
@@ -436,7 +447,7 @@ servidor_recibe_archivos.c -&gt; coloca accept() antes de while(1) para -&gt; Re
 Sockets en segundo plano + encriptador -&gt; reproducen la mecánica -&gt; De exfiltración y secuestro de datos de un <em>ransomware</em>
 </li></ul>
 </details>
-<details class="section-block sec" id="gf-anexo-clases-que-no-estaban-en-el-cuader"><summary><span class="stitle">Anexo · Clases que no estaban en el cuaderno de NotebookLM</span></summary>
+<details class="section-block sec" id="gf-anexo-clases-que-no-estaban-en-el-cuader" data-toc="Anexo · Clases que no estaban en el cuaderno de NotebookLM" data-num="📎"><summary><span class="snum ico">📎</span><span class="stitle">Anexo · Clases que no estaban en el cuaderno de NotebookLM</span></summary>
 <p><em>Resumen para estudiar de cada una, tomado de los apuntes por clase del sitio (decimo/ACS/ACS-Resumenes/).</em></p>
 <h3>Clase 5 · Estados de un proceso, señales, wait() y zombies (martes 8 sep 2026)</h3>
 <p><em>Versión corta de lo que más probablemente se pregunta. Léela primero y vuelve a la Parte 1 si algo no queda claro.</em></p>
@@ -492,6 +503,34 @@ RAND_bytes y llave.key en "wb"; compilar con -lcrypto.
 <strong>Ordena el ciclo de cifrado EVP.</strong> CTX_new → EncryptInit_ex → EncryptUpdate → EncryptFinal_ex (→ CTX_free).
 </li></ul>
 </details>
+  </main>
 </div>
+<button class="gf-top" id="gf-top" type="button" title="Volver arriba">↑</button>
+<script>
+(function(){
+  var root=document.documentElement, secs=[].slice.call(document.querySelectorAll('.gf-main details.sec'));
+  var links=[].slice.call(document.querySelectorAll('.gf-toc a')), toc=document.getElementById('gf-toc');
+  function setFs(v){v=Math.max(1,Math.min(5,v));root.dataset.fs=v;document.body.dataset.fs=v;try{localStorage.setItem('gf-fs',v)}catch(e){}}
+  setFs(+(root.dataset.fs||2));
+  document.querySelectorAll('.gf-fs button').forEach(function(b){b.onclick=function(){var d=+b.dataset.d;setFs(d?(+root.dataset.fs+d):2)}});
+  var all=document.getElementById('gf-all');
+  function syncAll(){all.textContent=secs.every(function(s){return s.open})?'Cerrar todo':'Abrir todo'}
+  all.onclick=function(){var o=!secs.every(function(s){return s.open});secs.forEach(function(s){s.open=o});syncAll()};
+  secs.forEach(function(s){s.addEventListener('toggle',syncAll)}); syncAll();
+  links.forEach(function(a){a.onclick=function(){var d=document.getElementById(a.hash.slice(1));if(d)d.open=true;toc.classList.remove('open');syncAll()}});
+  document.getElementById('gf-toc-btn').onclick=function(){toc.classList.toggle('open')};
+  if(location.hash){var t=document.getElementById(location.hash.slice(1));if(t&&t.tagName==='DETAILS')t.open=true}
+  var bar=document.getElementById('gf-progress'), top=document.getElementById('gf-top'), now=document.getElementById('gf-now'), base=now.textContent;
+  top.onclick=function(){window.scrollTo({top:0,behavior:'smooth'})};
+  function onScroll(){
+    var h=document.documentElement.scrollHeight-innerHeight; bar.style.width=(h>0?scrollY/h*100:0)+'%';
+    top.classList.toggle('show',scrollY>600);
+    var cur=null; secs.forEach(function(s){if(s.getBoundingClientRect().top<170)cur=s});
+    links.forEach(function(a){a.classList.toggle('on',cur&&a.hash==='#'+cur.id)});
+    now.textContent=cur?base+' · '+cur.dataset.toc:base;
+  }
+  addEventListener('scroll',onScroll,{passive:true}); onScroll();
+})();
+</script>
 </body>
 </html>

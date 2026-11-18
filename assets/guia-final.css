@@ -1,0 +1,169 @@
+/* Modo lectura de las guías para el examen final (materias/<slug>/guia-final.html).
+   Texto grande por defecto, índice lateral fijo, control de tamaño de letra.
+   Generado junto con scripts/build_guias_finales.py. */
+
+body.gf-body { padding: 0 0 120px; --fs: 19px; }
+:root[data-fs="1"] body.gf-body { --fs: 17px; }
+:root[data-fs="2"] body.gf-body { --fs: 19px; }
+:root[data-fs="3"] body.gf-body { --fs: 21px; }
+:root[data-fs="4"] body.gf-body { --fs: 23px; }
+:root[data-fs="5"] body.gf-body { --fs: 26px; }
+
+/* barra de progreso de lectura */
+.gf-progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; background: var(--c); z-index: 60; transition: width .1s linear; }
+
+/* encabezado con el color de la materia */
+.gf-hero {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--c) 22%, transparent), transparent);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 44px 24px 30px;
+}
+.gf-hero-in { max-width: 1180px; margin: 0 auto; }
+.gf-hero .back { font-size: 15px; }
+.gf-sigla {
+  display: inline-block; margin: 18px 0 10px; padding: 4px 12px; border-radius: 999px;
+  font: 600 13px 'IBM Plex Mono', monospace; letter-spacing: .08em;
+  color: var(--c); border: 1.5px solid var(--c); background: color-mix(in srgb, var(--c) 12%, transparent);
+}
+.gf-hero h1 { font-family: 'Fraunces', serif; font-size: clamp(34px, 5vw, 52px); line-height: 1.08; margin: 0 0 6px; }
+.gf-hero .gf-materia { font-family: 'Fraunces', serif; font-size: clamp(20px, 2.4vw, 26px); color: var(--c); margin: 0 0 14px; }
+.gf-hero .gf-meta { font-size: 15.5px; line-height: 1.6; color: var(--ink-soft); margin: 0; max-width: 820px; }
+.gf-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+.gf-links .btn { font-size: 15px; padding: 9px 18px; }
+.gf-links .btn:hover { border-color: var(--c); color: var(--c); }
+
+/* barra de herramientas pegada arriba */
+.gf-tools {
+  position: sticky; top: 0; z-index: 50;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.gf-tools-in { max-width: 1180px; margin: 0 auto; padding: 10px 24px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.gf-tools .gf-now { flex: 1; min-width: 0; font: 600 15px 'Inter', sans-serif; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gf-tools button {
+  font: 600 14px 'Inter', sans-serif; color: var(--ink); background: var(--white);
+  border: 1.5px solid rgba(255,255,255,0.14); border-radius: 10px; padding: 7px 12px; cursor: pointer; line-height: 1;
+}
+.gf-tools button:hover { border-color: var(--c); color: var(--c); }
+.gf-tools .gf-fs { display: inline-flex; border: 1.5px solid rgba(255,255,255,0.14); border-radius: 10px; overflow: hidden; }
+.gf-tools .gf-fs button { border: 0; border-radius: 0; background: var(--white); padding: 7px 13px; }
+.gf-tools .gf-fs button + button { border-left: 1px solid rgba(255,255,255,0.1); }
+.gf-tools .gf-fs .big { font-size: 18px; }
+.gf-tools .gf-toc-btn { display: none; }
+
+/* cuerpo: índice + texto */
+.gf-layout { max-width: 1180px; margin: 0 auto; padding: 30px 24px 0; display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 48px; align-items: start; }
+.gf-toc { position: sticky; top: 70px; max-height: calc(100vh - 90px); overflow-y: auto; padding-right: 6px; }
+.gf-toc h2 { font: 600 12px 'IBM Plex Mono', monospace; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); margin: 0 0 12px; }
+.gf-toc ol { list-style: none; margin: 0; padding: 0; }
+.gf-toc a {
+  display: block; padding: 8px 12px; margin: 2px 0; border-left: 3px solid transparent; border-radius: 0 8px 8px 0;
+  color: var(--ink-soft); text-decoration: none; font-size: 15px; line-height: 1.35;
+}
+.gf-toc a:hover { color: var(--ink); background: rgba(255,255,255,0.04); }
+.gf-toc a.on { color: var(--ink); border-left-color: var(--c); background: color-mix(in srgb, var(--c) 12%, transparent); font-weight: 600; }
+
+.gf-main { max-width: 800px; font-size: var(--fs); }
+
+/* secciones = tarjetas */
+.gf-main details.sec {
+  margin: 0 0 22px; border-radius: 16px; background: var(--white);
+  border: 1px solid rgba(255,255,255,0.07); border-top: 4px solid var(--c);
+  scroll-margin-top: 80px;
+}
+.gf-main details.sec > summary {
+  list-style: none; cursor: pointer; padding: 22px 28px; display: flex; align-items: center; gap: 14px;
+}
+.gf-main details.sec > summary::-webkit-details-marker { display: none; }
+.gf-main details.sec > summary::after {
+  content: '＋'; margin-left: auto; flex: none; color: var(--c); font-size: 1.1em; transition: transform .2s;
+}
+.gf-main details.sec[open] > summary::after { content: '－'; }
+.gf-main details.sec > summary .stitle {
+  font-family: 'Fraunces', serif; font-weight: 600; font-size: calc(var(--fs) * 1.3); line-height: 1.2; color: var(--ink);
+  text-transform: none;
+}
+.gf-main details.sec > summary .snum {
+  flex: none; width: 2em; height: 2em; border-radius: 50%; display: grid; place-items: center;
+  font: 600 calc(var(--fs) * .75) 'IBM Plex Mono', monospace; color: var(--paper); background: var(--c);
+}
+.gf-main details.sec > :not(summary) { margin-left: 28px; margin-right: 28px; }
+.gf-main details.sec > :last-child { margin-bottom: 28px; }
+
+/* tipografía de lectura */
+.gf-main p, .gf-main ul, .gf-main li { font-size: var(--fs); line-height: 1.75; white-space: normal; }
+.gf-main p { margin: 0 0 1em; max-width: 70ch; }
+.gf-main ul { margin: 0 0 1em; padding-left: 1.3em; }
+.gf-main li { margin: .35em 0; max-width: 68ch; }
+.gf-main li::marker { color: var(--c); }
+.gf-main ul ul { margin: .3em 0 .3em; }
+.gf-main strong { color: #fff; font-weight: 600; }
+.gf-main em { color: var(--ink); }
+.gf-main h3 {
+  font-family: 'Fraunces', serif; font-size: calc(var(--fs) * 1.15); font-weight: 600; line-height: 1.3;
+  margin: 1.6em 0 .6em; padding-top: 1em; border-top: 1px solid rgba(255,255,255,0.07); color: var(--c);
+}
+.gf-main h4 { font-family: 'Fraunces', serif; font-size: calc(var(--fs) * 1.05); font-weight: 600; margin: 1.3em 0 .45em; color: var(--ink); }
+.gf-main code { font-size: .88em; background: rgba(255,255,255,0.07); padding: .1em .35em; border-radius: 5px; }
+.gf-main a { color: var(--c); }
+.gf-main p.nota {
+  border-left: 4px solid var(--c); background: color-mix(in srgb, var(--c) 9%, transparent);
+  padding: .8em 1.1em; border-radius: 0 10px 10px 0; font-size: calc(var(--fs) * .92);
+}
+.gf-main .tabla-scroll { overflow-x: auto; margin: 0 0 1.2em; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); }
+.gf-main table { width: 100%; border-collapse: collapse; }
+.gf-main th, .gf-main td { font-size: calc(var(--fs) * .85); line-height: 1.55; padding: .7em .9em; text-align: left !important; vertical-align: top; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.gf-main th { background: color-mix(in srgb, var(--c) 14%, transparent); color: var(--ink); text-transform: none; font-size: calc(var(--fs) * .8); }
+
+/* la sección «lo que más probablemente viene» resalta */
+.gf-main details.sec.gf-key { background: color-mix(in srgb, var(--c) 8%, var(--white)); border-color: color-mix(in srgb, var(--c) 40%, transparent); }
+
+.gf-top {
+  position: fixed; right: 24px; bottom: 90px; z-index: 40; width: 46px; height: 46px; border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,0.15); background: var(--white); color: var(--ink); font-size: 20px;
+  cursor: pointer; opacity: 0; pointer-events: none; transition: opacity .2s;
+}
+.gf-top.show { opacity: 1; pointer-events: auto; }
+.gf-top:hover { border-color: var(--c); color: var(--c); }
+
+/* pantallas medianas y celular: índice como panel desplegable */
+@media (max-width: 1080px) {
+  .gf-layout { grid-template-columns: minmax(0, 1fr); gap: 0; padding-top: 20px; }
+  .gf-main { max-width: none; }
+  .gf-tools .gf-toc-btn { display: inline-block; }
+  .gf-toc {
+    display: none; position: fixed; top: 58px; left: 12px; right: 12px; max-height: 70vh; z-index: 55;
+    background: var(--white); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; padding: 16px;
+    box-shadow: 0 20px 50px rgba(0,0,0,.5);
+  }
+  .gf-toc.open { display: block; }
+}
+@media (max-width: 600px) {
+  body.gf-body, :root[data-fs="2"] body.gf-body { --fs: 18px; }
+  :root[data-fs="1"] body.gf-body { --fs: 16px; }
+  :root[data-fs="3"] body.gf-body { --fs: 20px; }
+  :root[data-fs="4"] body.gf-body { --fs: 22px; }
+  :root[data-fs="5"] body.gf-body { --fs: 24px; }
+  .gf-hero { padding: 28px 16px 22px; }
+  .gf-tools-in, .gf-layout { padding-left: 16px; padding-right: 16px; }
+  .gf-main details.sec > summary { padding: 18px 18px; }
+  .gf-main details.sec > :not(summary) { margin-left: 18px; margin-right: 18px; }
+  .gf-tools .gf-now { display: none; }
+}
+
+/* anula el estilo general de details.sec */
+.gf-main details.sec > summary { border-top: none; margin-bottom: 0; font-size: inherit; align-items: center; }
+.gf-main details.sec > summary::before { display: none; }
+.gf-main details.sec > summary .stitle { flex: 1 1 auto; min-width: 0; }
+.gf-main details.sec > summary .sclases { display: block; margin-top: .35em; font: 500 calc(var(--fs) * .7) 'IBM Plex Mono', monospace; color: var(--ink-soft); }
+.gf-main details.sec > summary .snum.ico { background: color-mix(in srgb, var(--c) 18%, transparent); font-size: calc(var(--fs) * .95); }
+.gf-toc a .tn { display: inline-block; min-width: 1.7em; font: 600 12px 'IBM Plex Mono', monospace; color: var(--c); }
+
+/* convivir con la barra superior fija del sitio (app.js, 46px) */
+body.gf-body.has-topbar { padding-top: 46px; }
+body.gf-body.has-topbar .gf-tools { top: 46px; }
+body.gf-body.has-topbar .gf-toc { top: 116px; max-height: calc(100vh - 136px); }
+body.gf-body.has-topbar .gf-main details.sec { scroll-margin-top: 120px; }
+@media (max-width: 1080px) { body.gf-body.has-topbar .gf-toc { top: 104px; max-height: 70vh; } }
+@media (max-width: 600px) { body.gf-body.has-topbar { padding-top: 44px; } body.gf-body.has-topbar .gf-tools { top: 44px; } }
