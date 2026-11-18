@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-18T18:08:35+00:00",
+ "generatedAt": "2026-11-18T21:30:41+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -1021,6 +1021,11 @@
  },
  "gitlog": [
   {
+   "hash": "4675e6a",
+   "fecha": "2026-11-18T12:08:35-06:00",
+   "mensaje": "ASI Estudiar hoy: respuestas del pizarrón como tablas y listas claras, texto más chico"
+  },
+  {
    "hash": "62a0cd7",
    "fecha": "2026-11-18T11:53:21-06:00",
    "mensaje": "ASI Estudiar hoy: pizarrón guiado (14 preguntas de mayor a menor prioridad; copiar → de memoria → corregir)"
@@ -1314,11 +1319,6 @@
    "hash": "26cdcb0",
    "fecha": "2026-10-26T11:06:30-06:00",
    "mensaje": "RP: agregar Clase 17 (23 oct) — Boosting, Gradient Boosting, ejercicio binario y multiclase con softmax, XGBoost"
-  },
-  {
-   "hash": "8f5a26f",
-   "fecha": "2026-10-26T11:03:07-06:00",
-   "mensaje": "MD: agregar Clase 15 (22 oct) — exposiciones de la Práctica 3.4 (diabetes) y series de tiempo (ARIMA, ruido blanco, elección de modelo)"
   }
  ]
 }

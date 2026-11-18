@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="no-aplica">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test del examen final — ASI</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261118a">
+<script src="../../assets/app.js?v=20261118a" defer></script>
+<style>
+:root { --c:#7C9CD6; --ok:#45B8A8; --bad:#E8735C; }
+body { padding: 46px 0 120px; }
+.tf { max-width: 760px; margin: 0 auto; padding: 0 16px; font-size: 19px; line-height: 1.55; }
+.tf h1 { font-family: 'Fraunces', serif; font-size: clamp(28px, 6vw, 42px); margin: 22px 0 4px; }
+.tf .sub { color: var(--ink-soft); font-size: 15px; margin: 0 0 16px; }
+.bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 14px; }
+.bar select, .bar button { font: 600 15px 'Inter', sans-serif; color: var(--ink); background: var(--white); border: 1.5px solid rgba(255,255,255,.15); border-radius: 10px; padding: 8px 12px; cursor: pointer; }
+.bar button:hover { border-color: var(--c); color: var(--c); }
+.score { font: 600 15px 'IBM Plex Mono', monospace; color: var(--ink-soft); margin-left: auto; }
+.prog { height: 6px; background: rgba(255,255,255,.08); border-radius: 3px; overflow: hidden; margin-bottom: 16px; }
+.prog i { display: block; height: 100%; width: 0; background: var(--c); transition: width .2s; }
+.card { background: var(--white); border: 1px solid rgba(255,255,255,.08); border-top: 4px solid var(--c); border-radius: 16px; padding: 22px 22px 18px; }
+.tema { font: 600 12px 'IBM Plex Mono', monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--c); }
+.q { font-size: 21px; font-weight: 600; color: #fff; margin: 8px 0 16px; line-height: 1.4; }
+.opts { display: grid; gap: 10px; }
+.opt { text-align: left; font: 500 18px/1.4 'Inter', sans-serif; color: var(--ink); background: rgba(255,255,255,.04); border: 1.5px solid rgba(255,255,255,.14); border-radius: 12px; padding: 12px 14px; cursor: pointer; }
+.opt:hover:not(:disabled) { border-color: var(--c); }
+.opt .k { display: inline-block; width: 1.6em; color: var(--ink-soft); font-family: 'IBM Plex Mono', monospace; }
+.opt.ok { border-color: var(--ok); background: color-mix(in srgb, var(--ok) 18%, transparent); color: #fff; }
+.opt.bad { border-color: var(--bad); background: color-mix(in srgb, var(--bad) 18%, transparent); }
+.opt:disabled { cursor: default; }
+.exp { display: none; margin-top: 14px; padding: 12px 14px; border-left: 4px solid var(--ok); background: rgba(255,255,255,.04); border-radius: 0 10px 10px 0; font-size: 17px; }
+.exp.show { display: block; }
+.exp.wrong { border-left-color: var(--bad); }
+.next { margin-top: 14px; width: 100%; font: 700 17px 'Inter', sans-serif; color: var(--paper); background: var(--c); border: 0; border-radius: 12px; padding: 13px; cursor: pointer; display: none; }
+.next.show { display: block; }
+.end { text-align: center; padding: 30px 10px; }
+.end .big { font: 700 54px 'IBM Plex Mono', monospace; color: var(--c); }
+.hint { color: var(--ink-soft); font-size: 14px; margin-top: 12px; }
+@media (max-width: 600px) { .tf { font-size: 17px; } .q { font-size: 19px; } .opt { font-size: 16px; } .score { margin-left: 0; width: 100%; } }
+</style>
+</head>
+<body>
+<main class="tf">
+  <a class="back" href="index.html">← ASI</a>
+  <h1>Test del examen final</h1>
+  <p class="sub">Opción múltiple con lo que viene en el acordeón (guía del examen final + NotebookLM). Responde y lee la explicación. Las que falles las puedes repetir al final.</p>
+  <div class="bar">
+    <select id="tema"></select>
+    <button id="reset">↺ Empezar de nuevo</button>
+    <button id="fails">Solo las que fallé</button>
+    <span class="score" id="score"></span>
+  </div>
+  <div class="prog"><i id="prog"></i></div>
+  <div id="box"></div>
+  <p class="hint">Teclado: 1–4 para responder · Enter para la siguiente.</p>
+</main>
+<script>
+var Q=[
+// RFC
+['RFC','¿Qué significa RFC?',['Request for Comments','Registro Federal de Contribuyentes','Remote Function Call','Request for Connection'],0,'Request for Comments: documentos técnicos de la IETF (Steve Crocker, ARPANET, 1969).'],
+['RFC','¿Qué pasa cuando hay que corregir un RFC ya publicado?',['Se edita el mismo documento','Se publica un RFC nuevo que lo reemplaza o actualiza','La IANA lo modifica','Se borra'],1,'Los RFC son públicos, gratuitos e inmutables: no se editan, sale otro RFC.'],
+['RFC','En la Clase 18 el profe preguntó: ¿LDAP es el protocolo o el RFC?',['LDAP es el RFC','LDAP es el protocolo; el RFC 4510 es el documento','Son lo mismo','LDAP es un puerto'],1,'⚠ Protocolo ≠ RFC. LDAP = protocolo; 4510 = documento normativo (mapa de los RFC 4511–4521).'],
+['RFC','¿Cuál NO es una categoría de RFC?',['Standard Track','Informational','Historic','Premium'],3,'Categorías: Standard Track, BCP, Informational, Experimental, Historic.'],
+['RFC','¿Qué RFC define HTTP/1.1?',['1939','2616','3501','854'],1,'RFC 2616 (1999), puerto 80. Quedó obsoleto: se dividió en RFC 7230–7235 → HTTP/2, HTTP/3.'],
+['RFC','HTTP/1.1 es un protocolo…',['con estado','sin estado (stateless), petición-respuesta','de correo','cifrado por defecto'],1,'Cada petición es independiente. Códigos: 1xx info · 2xx éxito · 3xx redirección · 4xx cliente · 5xx servidor.'],
+['RFC','Un código 404 pertenece a…',['2xx éxito','3xx redirección','4xx error del cliente','5xx error del servidor'],2,'4xx = error del cliente. 5xx = error del servidor.'],
+['RFC','¿Qué método HTTP es seguro y solo de lectura?',['POST','GET','DELETE','PUT'],1,'GET pide (lectura). POST envía. PUT y DELETE son idempotentes.'],
+['RFC','¿Qué RFC define IMAP?',['3501','1939','1034','8446'],0,'IMAP = RFC 3501, puertos 143 / 993.'],
+['RFC','¿Qué RFC define POP3?',['3501','2616','1939','1700'],2,'POP3 = RFC 1939, puertos 110 / 995.'],
+['RFC','En el RFC 1700 (IANA), el protocolo 6 es ___ y el 17 es ___',['UDP · TCP','TCP · UDP','IP · ICMP','HTTP · DNS'],1,'6 = TCP · 17 = UDP. El RFC 1700 hoy es histórico (lo reemplazó el RFC 3232).'],
+['RFC','¿Por qué se reemplazó Telnet (RFC 854)?',['Era muy lento','Enviaba todo sin cifrar → SSH (puerto 22)','No soportaba IPv6','Por licencias'],1,'Telnet (puerto 23) usa NVT y negocia WILL/WONT/DO/DONT, pero sin cifrar. Lo reemplazó SSH (RFC 4251).'],
+['RFC','¿Qué es NVT en Telnet?',['Un puerto','Network Virtual Terminal: terminal virtual de red','Un tipo de cifrado','Un servidor DNS'],1,'NVT traduce entre hosts distintos (ASCII 7 bits + bit de control).'],
+['RFC','El RFC 1034 define…',['DNS: jerárquico y distribuido, puerto 53','DHCP','TLS','LDAP'],0,'DNS traduce nombres de dominio a IP; es descentralizado para evitar un punto único de falla.'],
+['RFC','En el RFC 3898, ¿qué código es la IP de un servidor NIS+?',['27','28','29','30'],1,'27 IP NIS · 28 IP NIS+ · 29 dominio NIS · 30 dominio NIS+.'],
+['RFC','¿Qué hace el RFC 3898 con NIS?',['Lo implementa','Solo lo transporta por DHCPv6','Lo cifra','Lo reemplaza por DNS'],1,'Solo transporta los parámetros NIS por DHCPv6; los códigos se piden 2 veces. Obsoleto por inseguro → LDAP / Active Directory.'],
+['RFC','¿Qué mejoró TLS 1.3 (RFC 8446) en el handshake?',['De 3 RTT a 2 RTT','De 2 RTT a 1 RTT','Lo eliminó','De 1 RTT a 0'],1,'2 RTT → 1 RTT. Obliga AEAD (AES-GCM) y Perfect Forward Secrecy (Diffie-Hellman efímero).'],
+['RFC','¿Qué algoritmos eliminó TLS 1.3?',['AES y GCM','MD5, SHA-1 y RC4','Diffie-Hellman','RSA y AES'],1,'Quitó MD5, SHA-1 y RC4. Protege contra Man-in-the-Middle.'],
+// IMAP / POP3
+['IMAP/POP3','¿Cuál es la diferencia principal entre IMAP y POP3?',['IMAP descarga y borra; POP3 deja el correo en el servidor','IMAP deja el correo en el servidor; POP3 lo descarga y lo borra','Son iguales','POP3 es cifrado'],1,'IMAP: el correo se queda en el servidor (varios dispositivos). POP3: descarga y borra.'],
+['IMAP/POP3','¿Cuántos estados tiene IMAP?',['2','3','4','5'],2,'No autenticado → Autenticado → Seleccionado → Cierre.'],
+['IMAP/POP3','¿Cuáles son los 3 estados de POP3?',['Login → Select → Logout','Autorización → Transacción → Update','Discover → Offer → Ack','Fetch → Decode → Execute'],1,'Autorización (USER, PASS, APOP) → Transacción (STAT, LIST, RETR, DELE, RSET) → Update (QUIT).'],
+['IMAP/POP3','Tienes 4 correos, haces DELE 2, luego RSET y se cae la conexión antes de QUIT. ¿Cuántos quedan?',['2','3','4','0'],2,'DELE solo marca y RSET desmarca. Solo se borra en Update, con QUIT. Quedan los 4.'],
+['IMAP/POP3','¿Qué desventaja tiene IMAP?',['No funciona en varios dispositivos','Dependes del servidor y su almacenamiento crece sin fin','Borra los correos','No tiene cifrado'],1,'Por eso, según el profe, la mayoría sigue usando POP.'],
+['IMAP/POP3','En IMAP, ¿qué se necesita para borrar definitivamente un correo marcado como Deleted?',['QUIT','RSET','EXPUNGE','DELE'],2,'La bandera Deleted solo marca; EXPUNGE borra. Respuestas de IMAP: OK / NO / BAD.'],
+// Servidor
+['Servidor','¿Cuál es la definición correcta de servidor?',['Lugar donde se guardan archivos','Equipo HW o SW que ofrece y comparte servicios a clientes por red y ejecuta procesos','Una computadora muy potente','Un repositorio como Git'],1,'El profe: «parece muy obvio, pero luego en el examen me ponen ahí cada barbaridad».'],
+['Servidor','¿Por qué un repositorio (Git) NO es un servidor?',['Porque es gratis','Porque solo almacena, no ejecuta procesos','Porque no usa red','Porque es de Microsoft'],1,'Si subes código a Git, ahí no corre. Un servidor sí ejecuta.'],
+['Servidor','Pirámide DIK, de abajo hacia arriba:',['Información → Datos → Conocimiento','Datos → Información → Conocimiento','Conocimiento → Datos → Información','Datos → Conocimiento → Información'],1,'Datos → Información (datos con contexto) → Conocimiento (decisiones).'],
+['Servidor','En CID, la «I» significa…',['Información','Integridad: los datos no se alteran','Internet','Identidad'],1,'Confidencialidad (solo autorizados) · Integridad (no se alteran) · Disponibilidad (accesible cuando se necesita).'],
+['Servidor','Que la app del banco se caiga cuando quieres sacar dinero viola…',['Confidencialidad','Integridad','Disponibilidad','Ninguno'],2,'Disponibilidad = accesible cuando se necesita.'],
+// Requerimientos
+['Requerimientos','«El usuario debe loguearse» es un requerimiento…',['Funcional','No funcional','De sistema','De costo'],0,'Funcional = qué hace el sistema.'],
+['Requerimientos','«Tiempo de respuesta menor a 2 segundos» es…',['Funcional','No funcional','De sistema','No es requerimiento'],1,'No funcional = cómo se mide (rapidez, facilidad de uso).'],
+['Requerimientos','«Múltiples servidores para garantizar disponibilidad» es…',['Funcional','No funcional','De sistema','De usuario'],2,'De sistema = hardware, servidores, red, ancho de banda.'],
+['Requerimientos','«Interfaz sencilla y fácil de usar» es…',['Funcional','No funcional','De sistema','De diseño'],1,'Se mide → no funcional.'],
+['Requerimientos','¿En qué moneda se hacen los presupuestos en la nube?',['Pesos','Dólares estadounidenses','Euros','Depende del proveedor'],1,'«Importantísimo»: siempre en dólares, con alertas (ej. previsto 40 %, real 50 %). Se paga por consumo, sin tarifa fija.'],
+// Metodologías
+['Metodologías','Según el profe, ¿qué es Scrum?',['La metodología ágil','Un marco que implementa la metodología ágil','Una metodología tradicional','Un software'],1,'«Scrum no es una metodología; la metodología es ágil».'],
+['Metodologías','¿Qué forma el triángulo de hierro?',['Alcance, costo y tiempo','Calidad, precio y cliente','Análisis, diseño y pruebas','Sprint, daily y review'],0,'Alcance · costo · tiempo (metodología tradicional).'],
+['Metodologías','¿Cuánto dura un sprint?',['1 día','2 a 4 semanas','6 meses','1 año'],1,'Ágil: entregas frecuentes en sprints de 2–4 semanas; el cliente participa siempre.'],
+['Metodologías','¿Quién es el rol central en la metodología tradicional?',['Scrum Master','Product Owner','Project Manager','El cliente'],2,'Tradicional: Project Manager. Ágil: Scrum Master + Product Owner + equipo.'],
+['Metodologías','En MS Project, la luz y la renta son recursos de tipo…',['Trabajo','Material','Costo','Tiempo'],2,'Trabajo = personas · Material = se compra/entrega · Costo = gastos fijos (luz, renta, internet).'],
+['Metodologías','Los 4 pilares del Manifiesto Ágil (2001):',['Iterativo, incremental, colaborativo, adaptable','Rápido, barato, bueno, bonito','Análisis, diseño, código, pruebas','Alcance, costo, tiempo, calidad'],0,'Iterativo · incremental · colaborativo · adaptable.'],
+// DHCP
+['DHCP/DNS','El orden del proceso DORA es:',['Discover → Offer → Request → Acknowledge','Data → Offer → Reply → Accept','Discover → Request → Offer → Ack','Offer → Discover → Request → Ack'],0,'Discover (difusión) → Offer → Request → Acknowledge.'],
+['DHCP/DNS','¿Cuántas puertas de enlace se deben configurar en DHCP?',['Las que se pueda, para más velocidad','Solo una','Dos','Una por equipo'],1,'«No se puede tener más de una puerta de enlace»: varias multiplican los puntos de ataque.'],
+['DHCP/DNS','¿Qué direcciones se excluyen del ámbito?',['.1 y .254','.0 (red) y .255 (broadcast)','.100 a .200','Ninguna'],1,'El ámbito va sin .0 ni .255. Además: lease, reservas (IP por MAC) y exclusiones.'],
+['DHCP/DNS','Una reserva en DHCP es…',['Una IP que nunca se asigna','Una IP fija ligada a una dirección MAC','Un rango de IPs','El tiempo de concesión'],1,'Reserva = IP por MAC. Exclusión = IP que nunca se asigna. Lease = tiempo de concesión.'],
+['DHCP/DNS','¿Qué sustituyó a ISC DHCP (descontinuado en 2022)?',['Kea DHCP: JSON, multihilo, IPv4/IPv6','BIND','Samba','Apache'],0,'ISC: texto plano, un hilo. Kea: JSON, multihilo, IPv4/IPv6, API, alta disponibilidad.'],
+['DHCP/DNS','¿Con qué se mitigan los ataques a DHCP/DNS (DoS, servidores falsos)?',['Firewall, DMZ y VPN','Más puertas de enlace','Desactivar DNS','Permisos 777'],0,'Firewall · DMZ · VPN.'],
+// Ciberseguridad
+['Ciberseguridad','¿Qué hace nmap -sn?',['Escaneo sigiloso','Detecta solo los hosts activos','Detecta versiones','Detecta el sistema operativo'],1,'-sn hosts activos · -sS sigiloso · -sV versiones · -O SO · -A agresivo.'],
+['Ciberseguridad','¿Qué bandera de Nmap detecta el sistema operativo?',['-sV','-O','-A','-sS'],1,'-O = sistema operativo.'],
+['Ciberseguridad','¿Qué escaneo de Nmap es el más completo pero deja rastro?',['-sn','-sS','-A','-O'],2,'-A = agresivo: máxima información, fácil de detectar.'],
+['Ciberseguridad','Orden en Metasploit:',['exploit → use → set RHOSTS','msfconsole → use → show options → set RHOSTS → exploit','nmap → use → exploit','set RHOSTS → msfconsole → use'],1,'use es como un import; set RHOSTS asigna el objetivo; exploit ejecuta.'],
+['Ciberseguridad','Un hacker gris es…',['Malicioso','Ético/defensivo','En aprendizaje','Un pentester certificado'],2,'Blanco = ético · Negro = malicioso · Gris = aprendizaje.'],
+['Ciberseguridad','¿Diferencia entre asesoría y consultoría?',['Asesoría: le enseñas al personal (barata); consultoría: lo resuelves sin enseñar (cara)','Son lo mismo','Consultoría es más barata','Asesoría no incluye seguridad'],0,'Asesoría = enseñar al personal interno. Consultoría = resolver y entregar.'],
+['Ciberseguridad','¿Qué puerto usa Oracle?',['3306','1521','445','443'],1,'1521 Oracle (2484 seguro) · 3306 MySQL · 445 SMB · 443 HTTPS.'],
+['Ciberseguridad','El puerto 22 es…',['Telnet','FTP','SSH','SMTP'],2,'20/21 FTP · 22 SSH · 23 Telnet · 25 SMTP · 53 DNS · 80 HTTP.'],
+// Oracle
+['Oracle','Orden correcto de la seguridad en Oracle:',['Privilegios → Rol → Usuario','Usuario → Rol → Privilegios','Rol → Usuario → Privilegios','Usuario → Privilegios → Rol'],1,'CREATE USER → CREATE ROLE → GRANT privilegios TO rol → GRANT rol TO usuario.'],
+['Oracle','¿Qué privilegio va DIRECTO al usuario y no por el rol?',['CREATE SESSION','CREATE TABLE','UNLIMITED TABLESPACE','SELECT ANY TABLE'],2,'UNLIMITED TABLESPACE se da directo al usuario.'],
+['Oracle','Insertas datos y otro usuario no los ve. ¿Qué falta?',['ROLLBACK','COMMIT','GRANT','DROP'],1,'Sin COMMIT nadie más ve los cambios. Se consulta como usuario.tabla.'],
+['Oracle','¿Qué operación NO requiere COMMIT?',['INSERT','UPDATE','DROP TABLE','DELETE'],2,'DROP TABLE no requiere COMMIT.'],
+['Oracle','SYSDATE guardado en una columna TIMESTAMP devuelve…',['Solo la fecha','Fecha, hora y fracciones de segundo','Solo la hora','Un error'],1,'En DATE solo fecha; en TIMESTAMP fecha + hora + nanosegundos.'],
+['Oracle','En un trigger, :OLD y :NEW son…',['El dato anterior y el dato nuevo','El usuario viejo y el nuevo','Dos tablas','Dos triggers'],0,':OLD = anterior · :NEW = nuevo. El profe pidió un solo trigger con INSERTING / UPDATING / DELETING.'],
+['Oracle','Diferencia entre trigger y procedimiento almacenado:',['Ninguna','El trigger se ejecuta solo (BEFORE/AFTER de DML); el procedimiento se llama manualmente','El procedimiento es automático','El trigger solo sirve para SELECT'],1,'Trigger = automático ante INSERT/UPDATE/DELETE.'],
+['Oracle','USER y SHOW USER:',['USER es comando y SHOW USER función','USER es función y SHOW USER es comando','Son iguales','Ninguno existe'],1,'USER = función · SHOW USER = comando.'],
+// Linux
+['Linux','¿En qué directorio está la configuración del sistema?',['/bin','/etc','/usr','/var'],1,'/etc = configuración.'],
+['Linux','¿Para qué es /usr?',['Carpetas de usuarios','Programas y bibliotecas','Temporales','Arranque'],1,'⚠ /usr NO es de usuarios: los usuarios van en /home.'],
+['Linux','¿Qué directorio tiene el arranque y el kernel?',['/bin','/boot','/dev','/opt'],1,'/boot = arranque y kernel (no confundir con /bin).'],
+['Linux','Diferencia entre which y whereis:',['Son iguales','which: solo la ruta del ejecutable; whereis: todas las carpetas del paquete','whereis solo el ejecutable','which busca archivos de texto'],1,'which = ruta del ejecutable · whereis = todas las carpetas.'],
+['Linux','En ps aux, la «x» significa…',['Todos los usuarios','Recursos CPU/RAM','Procesos sin terminal asociada','Matar procesos'],2,'a = todos · u = CPU/RAM · x = sin terminal (lo primero a revisar si entra un virus).'],
+['Linux','¿Qué hace mkdir -p a/b/c?',['Asigna permisos','Crea toda la ruta aunque no existan las carpetas padre','Borra carpetas','Muestra el árbol'],1,'-p = toda la ruta · -m = permisos (ej. mkdir -m 700).'],
+['Linux','¿Qué hace cat a.txt b.txt > c.txt?',['Borra a y b','Une a y b, en ese orden, en c','Compara a y b','Copia c en a y b'],1,'cat también concatena; cat -n numera líneas.'],
+['Linux','Permiso 700 significa…',['Todos leen, escriben y ejecutan','Solo el dueño lee, escribe y ejecuta','Nadie tiene permisos','Solo el grupo'],1,'r = 4, w = 2, x = 1 → 7 = rwx para el dueño; 0 grupo; 0 otros. Nunca 777.'],
+['Linux','¿Qué hace ls -a?',['Muestra detalles','Muestra archivos ocultos','Muestra el tamaño','Ordena por fecha'],1,'-l detalles · -a ocultos · -s tamaño.'],
+// OLAP / DW
+['OLAP/DW','¿Qué es un cubo OLAP?',['Un archivo de Excel','Una estructura conceptual que organiza medidas alrededor de dimensiones','Una base transaccional','Un servidor'],1,'No es un archivo físico. Primero defines medida y dimensiones; después respondes.'],
+['OLAP/DW','Al armar un cubo, ¿qué va primero?',['La pregunta y al final la medida','La medida y las dimensiones, luego la pregunta','El gráfico','El dashboard'],1,'Error típico: empezar por la pregunta.'],
+['OLAP/DW','El saldo bancario es una medida…',['Aditiva','Semiaditiva','No aditiva','Dimensión'],1,'Semiaditiva: se suma en algunas dimensiones (por cliente) pero no en el tiempo.'],
+['OLAP/DW','Un porcentaje o un promedio es una medida…',['Aditiva','Semiaditiva','No aditiva','Jerárquica'],2,'No aditiva: calculada, no se suma. Aditiva: ventas.'],
+['OLAP/DW','Jerarquía correcta de la dimensión tiempo:',['Día → Mes → Año','Año → Trimestre → Mes → Día','Mes → Año → Día','Trimestre → Año → Día'],1,'De lo general a lo particular.'],
+['OLAP/DW','Regla crítica del Data Warehouse:',['Se actualiza en tiempo real','Nunca se regresan datos del DW a la base transaccional','Solo tiene datos de hoy','Reemplaza a la base transaccional'],1,'El DW es histórico e integrado; regresar datos rompe la integridad.'],
+['OLAP/DW','¿Qué significa ETL?',['Extracción, Transformación, Carga','Entrada, Tabla, Lectura','Exportar, Transferir, Leer','Esquema, Tabla, Llave'],0,'Fuentes (ERP, Excel, PDF) → Extracción → Transformación → Carga → DW.'],
+['OLAP/DW','Esquema con una tabla de hechos y dimensiones directas:',['Estrella (1FN)','Copo de nieve (2FN)','Constelación (3FN)','Relacional'],0,'Estrella 1FN · Copo de nieve 2FN (subdimensiones) · Constelación 3FN (varias tablas de hechos).'],
+['OLAP/DW','Esquema con varias tablas de hechos que comparten dimensiones:',['Estrella','Copo de nieve','Constelación','Snowflake'],2,'Constelación = 3FN.'],
+['OLAP/DW','Bajar de año a mes a día es…',['Slice','Dice','Drill-down','ETL'],2,'Slice = una rebanada · Dice = varias condiciones · Drill-down = al detalle.'],
+// Arquitectura / otros
+['Arquitectura','¿Cuál es el problema de Von Neumann?',['Tiene dos memorias','Una sola memoria para programa y datos → cuello de botella','No tiene ALU','No ejecuta instrucciones'],1,'Harvard RISC separa memoria de instrucciones y de datos (load/store, pipeline).'],
+['Arquitectura','Si de 3 instrucciones solo 1 usa la ALU, el uso es…',['20 %','33 %','50 %','66 %'],1,'1 de 3 = 33 %; 1 de 5 = 20 %.'],
+['Arquitectura','Etapas del pipeline:',['Fetch → Decode → Execute → Write Back','Load → Store → Run','Discover → Offer → Request → Ack','Input → Output'],0,'Con pipeline: 1 instrucción terminada por ciclo.'],
+['Arquitectura','Según el profe, ¿más datos (Big Data) dan más precisión?',['Sí, siempre','No: importa la calidad y el protocolo de captura','Solo con IA','Solo en la nube'],1,'Lo preguntó a todo el grupo en la Clase 17.'],
+['Arquitectura','Rediseñar el modelo de negocio (Netflix: DVD → streaming) es…',['Digitalizar','Digitalizar procesos','Transformación digital','Big Data'],2,'Digitalizar = papel → digital · Digitalizar procesos = herramientas en tareas actuales · Transformación = nuevo modelo de negocio.'],
+['Arquitectura','¿Cómo debe usarse la IA según el curso?',['Sin supervisión','Como apoyo, con supervisión humana (human-in-the-loop)','Para reemplazar a todos','Solo en finanzas'],1,'La IA no es objetiva y puede alucinar.']
+];
+var K='tf-asi';var st;try{st=JSON.parse(localStorage.getItem(K))}catch(e){}
+if(!st)st={ok:{},bad:{}};
+function save(){try{localStorage.setItem(K,JSON.stringify(st))}catch(e){}}
+var temas=['Todos'];Q.forEach(function(q){if(temas.indexOf(q[0])<0)temas.push(q[0])});
+var sel=document.getElementById('tema');temas.forEach(function(t){var o=document.createElement('option');o.textContent=t;sel.appendChild(o)});
+var deck=[],pos=0,right=0,done=0,onlyFails=false,answered=false;
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function build(){var t=sel.value;deck=[];Q.forEach(function(q,i){if((t==='Todos'||q[0]===t)&&(!onlyFails||st.bad[i]))deck.push(i)});shuffle(deck);pos=0;right=0;done=0;show()}
+function upd(){document.getElementById('score').textContent=right+' / '+done+' correctas · '+(deck.length?Math.min(pos+1,deck.length):0)+' de '+deck.length;document.getElementById('prog').style.width=(deck.length?done/deck.length*100:0)+'%'}
+function show(){var box=document.getElementById('box');answered=false;
+ if(!deck.length){box.innerHTML='';box.appendChild(el('div','card end','<p>No hay preguntas falladas en este tema. 🎉</p>'));upd();return}
+ if(pos>=deck.length){var pc=Math.round(right/done*100);box.innerHTML='';box.appendChild(el('div','card end','<div class="big">'+pc+' %</div><p>'+right+' de '+done+' correctas.</p><p>Usa «Solo las que fallé» para repetir las que te faltaron.</p>'));upd();return}
+ var i=deck[pos],q=Q[i];var ord=shuffle([0,1,2,3]);
+ var c=el('div','card','');c.appendChild(el('div','tema',q[0]));c.appendChild(el('div','q',q[1]));
+ var opts=el('div','opts','');var btns=[];
+ ord.forEach(function(oi,n){var b=document.createElement('button');b.className='opt';b.innerHTML='<span class="k">'+(n+1)+'</span>';b.appendChild(document.createTextNode(q[2][oi]));b.onclick=function(){answer(oi,b)};b.dataset.oi=oi;btns.push(b);opts.appendChild(b)});
+ c.appendChild(opts);var ex=el('div','exp','');ex.textContent=q[4];c.appendChild(ex);
+ var nx=document.createElement('button');nx.className='next';nx.textContent='Siguiente →';nx.onclick=function(){pos++;show()};c.appendChild(nx);
+ box.innerHTML='';box.appendChild(c);
+ function answer(oi,b){if(answered)return;answered=true;done++;var good=oi===q[3];
+  btns.forEach(function(x){x.disabled=true;if(+x.dataset.oi===q[3])x.classList.add('ok')});
+  if(good){right++;st.ok[i]=1;delete st.bad[i]}else{b.classList.add('bad');st.bad[i]=1;ex.classList.add('wrong')}
+  save();ex.classList.add('show');nx.classList.add('show');upd();nx.focus()}
+ window._ans=function(n){if(btns[n])btns[n].click()};window._next=function(){if(answered){pos++;show()}};upd()}
+function el(t,c,h){var e=document.createElement(t);e.className=c;e.innerHTML=h;return e}
+sel.onchange=function(){onlyFails=false;build()};
+document.getElementById('reset').onclick=function(){onlyFails=false;build()};
+document.getElementById('fails').onclick=function(){onlyFails=true;build()};
+document.addEventListener('keydown',function(e){if(e.target.tagName==='SELECT')return;if(e.key>='1'&&e.key<='4'&&window._ans)window._ans(+e.key-1);if(e.key==='Enter'&&window._next){e.preventDefault();window._next()}});
+build();
+</script>
+</body>
+</html>
