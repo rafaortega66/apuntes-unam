@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-18T21:30:41+00:00",
+ "generatedAt": "2026-11-18T21:36:01+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -1021,6 +1021,11 @@
  },
  "gitlog": [
   {
+   "hash": "ea532a8",
+   "fecha": "2026-11-18T15:30:42-06:00",
+   "mensaje": "ASI: test interactivo del examen final (87 preguntas de opción múltiple) y acordeón en PDF"
+  },
+  {
    "hash": "4675e6a",
    "fecha": "2026-11-18T12:08:35-06:00",
    "mensaje": "ASI Estudiar hoy: respuestas del pizarrón como tablas y listas claras, texto más chico"
@@ -1314,11 +1319,6 @@
    "hash": "ddf9b3f",
    "fecha": "2026-10-26T11:11:19-06:00",
    "mensaje": "RP: agregar Clase 18 (26 oct) — redes neuronales, perceptrón multicapa, retropropagación y regularización; avisar de anuncios repetidos en Clase 17"
-  },
-  {
-   "hash": "26cdcb0",
-   "fecha": "2026-10-26T11:06:30-06:00",
-   "mensaje": "RP: agregar Clase 17 (23 oct) — Boosting, Gradient Boosting, ejercicio binario y multiclase con softmax, XGBoost"
   }
  ]
 }

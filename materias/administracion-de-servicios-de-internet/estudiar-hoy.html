@@ -98,6 +98,15 @@ h2.t { font-family: 'Fraunces', serif; font-size: calc(var(--fs) * 1.5); margin:
 .fc-act button { flex: 1; font: 700 17px 'Inter', sans-serif; border-radius: 14px; padding: 16px; cursor: pointer; border: 0; }
 .fc-act .no { background: color-mix(in srgb, var(--warn) 25%, var(--white)); color: #fff; }
 .fc-act .si { background: color-mix(in srgb, var(--ok) 30%, var(--white)); color: #fff; }
+.fc { position: relative; touch-action: pan-y; user-select: none; -webkit-user-select: none; transition: transform .18s ease, opacity .18s ease; }
+.fc.out-l { transform: translateX(-40px); opacity: 0; } .fc.out-r { transform: translateX(40px); opacity: 0; }
+.fc .mark { position: absolute; top: 14px; right: 18px; font: 700 13px 'IBM Plex Mono', monospace; }
+.fc .mark.ok { color: var(--ok); } .fc .mark.no { color: var(--warn); }
+.fc-nav { display: flex; gap: 10px; margin-top: 12px; }
+.fc-nav button { font: 700 26px 'Inter', sans-serif; color: var(--ink); background: var(--white); border: 1.5px solid rgba(255,255,255,.14); border-radius: 14px; padding: 10px 0; width: 72px; cursor: pointer; line-height: 1; }
+.fc-nav .rev { flex: 1; width: auto; font-size: 17px; color: var(--paper); background: var(--c); border: 0; }
+.fc-nav button:disabled { opacity: .35; cursor: default; }
+@media (max-width: 600px) { .fc { min-height: 56vh; padding: 22px 20px; } .fc-nav button { width: 64px; padding: 14px 0; } .fc-act button { padding: 18px; } }
 .fc-keys { font-size: 13.5px !important; color: var(--ink-soft); margin-top: 10px; text-align: center; }
 
 /* código */
@@ -374,7 +383,7 @@ pre.code { white-space: pre; font-size: calc(var(--fs) * .72); line-height: 1.55
 <!-- ================= TARJETAS ================= -->
 <section class="panel" id="p-tarjetas">
   <h2 class="t">Tarjetas de memoria</h2>
-  <p class="lead">Lee la pregunta, contesta en voz alta o en el pizarrón, y luego toca la tarjeta. Las que marques «repasar» vuelven al final de la fila.</p>
+  <p class="lead">Lee la pregunta, contesta en voz alta o en el pizarrón, y luego voltea la tarjeta. Márcala «Lo sé» o «Repasar»; luego «Solo las que fallé» te deja repetir las de repasar.</p>
   <div class="fc-bar">
     <select id="fc-u"><option value="">Todas las unidades</option></select>
     <button id="fc-mix">🔀 Desordenar</button>
@@ -382,9 +391,10 @@ pre.code { white-space: pre; font-size: calc(var(--fs) * .72); line-height: 1.55
     <button id="fc-reset">Reiniciar</button>
     <span class="st" id="fc-pos"></span>
   </div>
-  <div class="fc" id="fc"><div class="tag" id="fc-tag"></div><div class="q" id="fc-q"></div><div class="a" id="fc-a"></div><div class="hint">Toca para ver la respuesta (o barra espaciadora)</div></div>
+  <div class="fc" id="fc"><div class="tag" id="fc-tag"></div><div class="q" id="fc-q"></div><div class="a" id="fc-a"></div><div class="hint">Toca la tarjeta para ver la respuesta · desliza ← → para cambiar</div><div class="mark" id="fc-mark"></div></div>
+  <div class="fc-nav"><button id="fc-prev" aria-label="Anterior">‹</button><button class="rev" id="fc-rev">Ver respuesta</button><button id="fc-next" aria-label="Siguiente">›</button></div>
   <div class="fc-act"><button class="no" id="fc-no">↺ Repasar</button><button class="si" id="fc-si">✓ Lo sé</button></div>
-  <p class="fc-keys">Teclado: espacio = voltear · ← = repasar · → = lo sé</p>
+  <p class="fc-keys">Teclado: espacio = ver respuesta · ← anterior · → siguiente · ↑ lo sé · ↓ repasar<br>Touch: toca para voltear · desliza a la izquierda = siguiente, a la derecha = anterior</p>
 </section>
 
 </div>
@@ -681,21 +691,42 @@ END;</pre>
   function stat(){var n=Object.keys(known).filter(function(k){return known[k]}).length;document.getElementById('fcst').textContent=n+'/'+C.length}
   function render(){
     stat(); el.classList.remove('show');
-    if(!deck.length){document.getElementById('fc-tag').textContent='';document.getElementById('fc-q').textContent=onlyFail?'No hay tarjetas falladas. 🎉':'Listo: terminaste la fila.';document.getElementById('fc-a').innerHTML='';document.getElementById('fc-pos').textContent='';return}
-    var c=C[deck[i%deck.length]];
-    document.getElementById('fc-tag').textContent=c[0]+(known[deck[i%deck.length]]?' · ✓ ya la sabías':'');
+    var mk=document.getElementById('fc-mark');
+    if(!deck.length){document.getElementById('fc-tag').textContent='';document.getElementById('fc-q').textContent=onlyFail?'No hay tarjetas falladas. 🎉':'No hay tarjetas.';document.getElementById('fc-a').innerHTML='';document.getElementById('fc-pos').textContent='';mk.textContent='';return}
+    if(i<0)i=0; if(i>=deck.length)i=deck.length-1;
+    var k=deck[i], c=C[k];
+    document.getElementById('fc-tag').textContent=c[0];
     document.getElementById('fc-q').textContent=c[1];
     document.getElementById('fc-a').innerHTML=c[2];
-    document.getElementById('fc-pos').textContent='quedan '+(deck.length);
+    document.getElementById('fc-pos').textContent=(i+1)+' / '+deck.length;
+    mk.className='mark'+(failed[k]?' no':known[k]?' ok':''); mk.textContent=failed[k]?'↺ repasar':known[k]?'✓ la sé':'';
+    document.getElementById('fc-prev').disabled=i===0;
+    document.getElementById('fc-next').disabled=i===deck.length-1;
+    document.getElementById('fc-rev').textContent='Ver respuesta';
   }
+  function go(d){
+    if(!deck.length)return; var n=i+d; if(n<0||n>=deck.length)return;
+    el.classList.add(d>0?'out-l':'out-r');
+    setTimeout(function(){i=n;render();el.classList.remove('out-l','out-r')},140);
+  }
+  function flip(){el.classList.toggle('show');document.getElementById('fc-rev').textContent=el.classList.contains('show')?'Ocultar respuesta':'Ver respuesta'}
   function answer(ok){
-    if(!deck.length)return;
-    var k=deck.splice(i%Math.max(deck.length,1),1)[0];
-    if(ok){known[k]=true;delete failed[k]}else{failed[k]=true;known[k]=false;deck.push(k)}
+    if(!deck.length)return; var k=deck[i];
+    if(ok){known[k]=true;delete failed[k]}else{failed[k]=true;known[k]=false}
     put('eh-known',known);put('eh-failed',failed);
-    if(i>=deck.length)i=0; render();
+    if(i<deck.length-1)go(1); else render();
   }
-  el.onclick=function(){el.classList.toggle('show')};
+  // toque y deslizamiento
+  var sx=0,sy=0,moved=false;
+  el.addEventListener('touchstart',function(e){var t=e.touches[0];sx=t.clientX;sy=t.clientY;moved=false},{passive:true});
+  el.addEventListener('touchmove',function(e){var t=e.touches[0];var dx=t.clientX-sx;if(Math.abs(dx)>10&&Math.abs(dx)>Math.abs(t.clientY-sy)){moved=true;el.style.transform='translateX('+dx*0.6+'px)'}},{passive:true});
+  el.addEventListener('touchend',function(e){var t=e.changedTouches[0];var dx=t.clientX-sx,dy=t.clientY-sy;el.style.transform='';
+    if(moved&&Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){go(dx<0?1:-1)} else if(!moved&&Math.abs(dx)<10&&Math.abs(dy)<10){flip()}
+    e.preventDefault()});
+  el.onclick=function(){flip()};
+  document.getElementById('fc-prev').onclick=function(){go(-1)};
+  document.getElementById('fc-next').onclick=function(){go(1)};
+  document.getElementById('fc-rev').onclick=function(){flip()};
   document.getElementById('fc-si').onclick=function(){answer(true)};
   document.getElementById('fc-no').onclick=function(){answer(false)};
   document.getElementById('fc-mix').onclick=function(){build(true)};
@@ -703,8 +734,12 @@ END;</pre>
   document.getElementById('fc-reset').onclick=function(){known={};failed={};put('eh-known',known);put('eh-failed',failed);build(false)};
   sel.onchange=function(){build(false)};
   document.addEventListener('keydown',function(e){
-    if(!document.getElementById('p-tarjetas').classList.contains('on')||e.target.tagName==='SELECT')return;
-    if(e.key===' '){e.preventDefault();el.classList.toggle('show')} else if(e.key==='ArrowRight')answer(true); else if(e.key==='ArrowLeft')answer(false);
+    if(!document.getElementById('p-tarjetas').classList.contains('on')||e.target.tagName==='SELECT'||e.target.tagName==='INPUT')return;
+    if(e.key===' '){e.preventDefault();flip()}
+    else if(e.key==='ArrowRight'){e.preventDefault();go(1)}
+    else if(e.key==='ArrowLeft'){e.preventDefault();go(-1)}
+    else if(e.key==='ArrowUp'){e.preventDefault();answer(true)}
+    else if(e.key==='ArrowDown'){e.preventDefault();answer(false)}
   });
   build(false);
 })();
