@@ -334,6 +334,8 @@ def main():
             continue
         cuerpo, _ = convert(src.read_text(encoding='utf-8'), sigla)
         extra = ''
+        if (ROOT / 'materias' / slug / 'estudiar-hoy.html').exists():
+            extra += '<a class="btn" href="estudiar-hoy.html">⚡ Estudiar hoy</a>\n  '
         if (ROOT / 'materias' / slug / 'examen-final.html').exists():
             extra += '<a class="btn" href="examen-final.html">📝 Repaso del examen</a>\n  '
         for p in sorted((ROOT / 'decimo' / sigla / f'{sigla}-Resumenes').glob(f'{sigla}-mapa-examen*.pdf')):

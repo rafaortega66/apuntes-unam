@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-18T00:42:19+00:00",
+ "generatedAt": "2026-11-18T17:32:37+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -1021,6 +1021,11 @@
  },
  "gitlog": [
   {
+   "hash": "9c108c6",
+   "fecha": "2026-11-17T18:42:19-06:00",
+   "mensaje": "Guías del examen final: modo lectura (texto grande por defecto, índice lateral, A−/A/A+, abrir todo, progreso); OAC: caracteres dañados corregidos"
+  },
+  {
    "hash": "8650161",
    "fecha": "2026-11-17T16:22:37-06:00",
    "mensaje": "Guía para el examen final por materia (7 páginas generadas desde las guías de NotebookLM en Drive) + índice en la portada; Descargas y escritorio ordenados"
@@ -1314,11 +1319,6 @@
    "hash": "158444e",
    "fecha": "2026-10-21T16:05:10-06:00",
    "mensaje": "FSE: registrar la entrega de la Tarea 08 (21 oct) — 19-OEPR-T08.pdf; quitar su pendiente"
-  },
-  {
-   "hash": "64f8758",
-   "fecha": "2026-10-21T15:52:21-06:00",
-   "mensaje": "FSE: agregar Clase 16 (21 oct) — elección del kernel de Linux embebido, raíz / y distribuciones, reglas de la Práctica 8; Lab OAC no se documenta (CLAUDE.md)"
   }
  ]
 }

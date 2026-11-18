@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="no-aplica">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estudiar hoy — Examen final ASI</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261118a">
+<script>try{var f=localStorage.getItem('eh-fs');if(f)document.documentElement.dataset.fs=f}catch(e){}</script>
+<script src="../../assets/app.js?v=20261118a" defer></script>
+<style>
+:root { --c:#7C9CD6; --ok:#45B8A8; --warn:#E8735C; --fs:20px; }
+:root[data-fs="1"]{--fs:17px} :root[data-fs="2"]{--fs:20px} :root[data-fs="3"]{--fs:23px} :root[data-fs="4"]{--fs:26px}
+body { padding: 46px 0 120px; }
+.eh { max-width: 900px; margin: 0 auto; padding: 0 20px; font-size: var(--fs); line-height: 1.65; }
+.eh p, .eh li { font-size: var(--fs); line-height: 1.65; }
+.eh strong { color: #fff; }
+.eh code, .eh pre { font-family: 'IBM Plex Mono', monospace; }
+.eh code { font-size: .88em; background: rgba(255,255,255,.08); padding: .05em .35em; border-radius: 5px; }
+
+/* cabecera con cuenta regresiva */
+.eh-head { padding: 26px 0 18px; }
+.eh-head .back { font-size: 15px; }
+.eh-head h1 { font-family: 'Fraunces', serif; font-size: clamp(32px, 6vw, 50px); line-height: 1.05; margin: 14px 0 6px; }
+.eh-head .sub { color: var(--ink-soft); font-size: 16px; margin: 0; }
+.eh-count { display: flex; flex-wrap: wrap; gap: 12px; margin: 18px 0 4px; }
+.eh-count .box { background: var(--white); border: 1px solid rgba(255,255,255,.08); border-top: 4px solid var(--c); border-radius: 14px; padding: 12px 18px; }
+.eh-count .big { font: 700 34px 'IBM Plex Mono', monospace; color: var(--c); line-height: 1.1; }
+.eh-count .lbl { font-size: 14px; color: var(--ink-soft); }
+.eh-src { font-size: 14.5px !important; color: var(--ink-soft); margin-top: 10px; }
+.eh-src a { color: var(--c); }
+
+/* pestañas pegadas */
+.eh-tabs { position: sticky; top: 46px; z-index: 40; background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,.07); }
+.eh-tabs-in { max-width: 900px; margin: 0 auto; padding: 10px 20px; display: flex; gap: 8px; align-items: center; overflow-x: auto; }
+.eh-tabs button { flex: none; font: 600 15px 'Inter', sans-serif; color: var(--ink); background: var(--white); border: 1.5px solid rgba(255,255,255,.13); border-radius: 999px; padding: 9px 16px; cursor: pointer; }
+.eh-tabs button.on { background: var(--c); color: #0d1020; border-color: var(--c); }
+.eh-tabs .sp { flex: 1; }
+.eh-tabs .fs button { padding: 9px 12px; border-radius: 10px; }
+
+.panel { display: none; padding-top: 22px; }
+.panel.on { display: block; }
+h2.t { font-family: 'Fraunces', serif; font-size: calc(var(--fs) * 1.5); margin: 10px 0 6px; }
+.lead { color: var(--ink-soft); margin: 0 0 18px; }
+
+/* plan */
+.plan { list-style: none; padding: 0; margin: 0; }
+.plan li { display: flex; gap: 14px; align-items: flex-start; background: var(--white); border: 1px solid rgba(255,255,255,.07); border-radius: 14px; padding: 14px 18px; margin: 0 0 10px; cursor: pointer; }
+.plan li .h { flex: none; font: 600 15px 'IBM Plex Mono', monospace; color: var(--c); width: 6.2em; padding-top: .25em; }
+.plan li .chk { flex: none; width: 26px; height: 26px; border-radius: 8px; border: 2px solid var(--c); margin-top: .15em; display: grid; place-items: center; font-weight: 700; color: #0d1020; }
+.plan li.done { opacity: .5; }
+.plan li.done .chk { background: var(--ok); border-color: var(--ok); }
+.plan li.done .chk::after { content: '✓'; }
+.plan li.now { border-color: var(--c); box-shadow: 0 0 0 2px color-mix(in srgb, var(--c) 40%, transparent); }
+.plan li b { display: block; }
+.plan li span.d { color: var(--ink-soft); font-size: .88em; }
+
+/* tarjetas de tema */
+.u { background: var(--white); border: 1px solid rgba(255,255,255,.07); border-left: 5px solid var(--c); border-radius: 16px; padding: 20px 24px; margin: 0 0 18px; }
+.u h3 { font-family: 'Fraunces', serif; font-size: calc(var(--fs) * 1.25); margin: 0 0 4px; line-height: 1.25; }
+.u .why { font-size: .82em; color: var(--ink-soft); margin: 0 0 12px; }
+.u .why b { color: var(--warn); }
+.u ul { padding-left: 1.2em; margin: .4em 0; }
+.u li { margin: .3em 0; }
+.u li::marker { color: var(--c); }
+.u details { margin-top: 10px; }
+.u details > summary { cursor: pointer; color: var(--c); font-weight: 600; font-size: .9em; }
+.tbl { overflow-x: auto; margin: 10px 0; border: 1px solid rgba(255,255,255,.08); border-radius: 10px; }
+.tbl table { width: 100%; border-collapse: collapse; }
+.tbl th, .tbl td { font-size: calc(var(--fs) * .82); line-height: 1.45; padding: .55em .8em; text-align: left; vertical-align: top; border-bottom: 1px solid rgba(255,255,255,.07); }
+.tbl th { background: color-mix(in srgb, var(--c) 16%, transparent); }
+.tbl td:first-child { font-family: 'IBM Plex Mono', monospace; color: var(--c); white-space: nowrap; }
+.quote { border-left: 4px solid var(--warn); background: color-mix(in srgb, var(--warn) 9%, transparent); padding: .6em 1em; border-radius: 0 10px 10px 0; margin: 10px 0; font-size: .92em; }
+
+/* pizarrón */
+.board { background: #1f2a24; border: 10px solid #5a4632; border-radius: 12px; padding: 20px 24px; margin: 0 0 20px; box-shadow: inset 0 0 40px rgba(0,0,0,.4); }
+.board h3 { font-family: 'Fraunces', serif; color: #f4f1de; margin: 0 0 6px; font-size: calc(var(--fs) * 1.2); }
+.board .task { color: #e8e4c9; margin: 0 0 10px; }
+.board .task b { color: #ffd166; }
+.board details > summary { cursor: pointer; display: inline-block; font-weight: 600; font-size: .9em; color: #1f2a24; background: #ffd166; border-radius: 999px; padding: 6px 14px; list-style: none; }
+.board details > summary::-webkit-details-marker { display: none; }
+.board details[open] > summary { background: #e8e4c9; }
+.board pre { white-space: pre-wrap; font-size: calc(var(--fs) * .78); line-height: 1.55; color: #f4f1de; background: rgba(0,0,0,.25); border-radius: 8px; padding: 14px 16px; margin: 12px 0 0; overflow-x: auto; }
+.board .time { float: right; font: 600 13px 'IBM Plex Mono', monospace; color: #ffd166; }
+
+/* tarjetas de memoria */
+.fc-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 14px; }
+.fc-bar select, .fc-bar button { font: 600 15px 'Inter', sans-serif; color: var(--ink); background: var(--white); border: 1.5px solid rgba(255,255,255,.13); border-radius: 10px; padding: 9px 12px; }
+.fc-bar .st { margin-left: auto; font: 600 14px 'IBM Plex Mono', monospace; color: var(--ink-soft); }
+.fc { min-height: 300px; background: var(--white); border: 1px solid rgba(255,255,255,.08); border-top: 5px solid var(--c); border-radius: 18px; padding: 26px 28px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; }
+.fc .tag { font: 600 13px 'IBM Plex Mono', monospace; color: var(--c); margin-bottom: 10px; }
+.fc .q { font-family: 'Fraunces', serif; font-size: calc(var(--fs) * 1.3); line-height: 1.3; }
+.fc .a { display: none; margin-top: 18px; padding-top: 16px; border-top: 1px dashed rgba(255,255,255,.18); font-size: var(--fs); }
+.fc.show .a { display: block; }
+.fc .hint { margin-top: 18px; font-size: 14px; color: var(--ink-soft); }
+.fc.show .hint { display: none; }
+.fc-act { display: flex; gap: 10px; margin-top: 14px; }
+.fc-act button { flex: 1; font: 700 17px 'Inter', sans-serif; border-radius: 14px; padding: 16px; cursor: pointer; border: 0; }
+.fc-act .no { background: color-mix(in srgb, var(--warn) 25%, var(--white)); color: #fff; }
+.fc-act .si { background: color-mix(in srgb, var(--ok) 30%, var(--white)); color: #fff; }
+.fc-keys { font-size: 13.5px !important; color: var(--ink-soft); margin-top: 10px; text-align: center; }
+
+/* código */
+pre.code { white-space: pre; font-size: calc(var(--fs) * .72); line-height: 1.55; background: #0E1015; border: 1px solid rgba(255,255,255,.08); border-radius: 10px; padding: 14px 16px; overflow-x: auto; color: #C9D1D9; }
+
+@media (max-width: 600px) {
+  :root { --fs: 18px; } :root[data-fs="2"]{--fs:18px} :root[data-fs="3"]{--fs:21px} :root[data-fs="4"]{--fs:24px}
+  body { padding-top: 44px; } .eh-tabs { top: 44px; }
+  .eh, .eh-tabs-in { padding-left: 16px; padding-right: 16px; }
+  .u, .board { padding: 16px 16px; } .fc { padding: 22px 18px; }
+  .plan li .h { width: 4.8em; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+<div class="eh">
+<header class="eh-head">
+  <a class="back" href="index.html">← Administración de Servicios de Internet</a>
+  <h1>Examen final de ASI: hoy</h1>
+  <p class="sub">Miércoles 18 nov 2026 · 17:00 · D004 · individual, en hojas blancas, sin celular · entra todo el curso + los 9 RFC.</p>
+  <div class="eh-count">
+    <div class="box"><div class="big" id="cd">--:--</div><div class="lbl">para el examen (17:00)</div></div>
+    <div class="box"><div class="big" id="fcst">0/0</div><div class="lbl">tarjetas que ya sabes</div></div>
+  </div>
+  <p class="eh-src">Hecha con: el resumen nuevo de Drive (<a href="https://docs.google.com/document/d/1QOPXf275iYkitd4E6XimdhAxFfP8pfzF7WxZEyp1F3s/edit" target="_blank">ASI · Apuntes y resumen</a>), la <a href="examen-final.html">página del examen</a> (citas del profesor en los audios, vía NotebookLM) y la <a href="guia-final.html">guía larga</a>. No se agregó nada que no esté en esas fuentes.</p>
+</header>
+</div>
+
+<nav class="eh-tabs"><div class="eh-tabs-in">
+  <button data-p="plan" class="on">⏱ Plan</button>
+  <button data-p="temas">📚 Temas</button>
+  <button data-p="pizarron">🧑‍🏫 Pizarrón</button>
+  <button data-p="tarjetas">🃏 Tarjetas</button>
+  <span class="sp"></span>
+  <span class="fs"><button data-d="-1">A−</button> <button data-d="1">A+</button></span>
+</div></nav>
+
+<div class="eh">
+
+<!-- ================= PLAN ================= -->
+<section class="panel on" id="p-plan">
+  <h2 class="t">Plan para hoy</h2>
+  <p class="lead">Ordenado por lo que el profesor dijo que viene. Toca un bloque cuando lo termines. El bloque de ahorita se marca solo.</p>
+  <ol class="plan" id="plan">
+    <li data-s="11:30" data-e="12:20"><span class="chk"></span><span class="h">11:30–12:20</span><span><b>RFC: qué es un RFC + los 9</b><span class="d">Lee «Temas → RFC». Luego en el pizarrón: la tabla de los 9 de memoria (número · protocolo · puerto · dato clave).</span></span></li>
+    <li data-s="12:20" data-e="13:00"><span class="chk"></span><span class="h">12:20–13:00</span><span><b>Oracle: usuario → rol → privilegios + trigger</b><span class="d">Escribe el SQL completo en el pizarrón sin ver. Compara. Repite hasta que salga limpio.</span></span></li>
+    <li data-s="13:00" data-e="13:40"><span class="chk"></span><span class="h">13:00–13:40</span><span><b>OLAP y Data Warehouse</b><span class="d">Fue lo que salió mal en el parcial. Dibuja estrella, copo de nieve y constelación; clasifica medidas.</span></span></li>
+    <li data-s="13:40" data-e="14:10"><span class="chk"></span><span class="h">13:40–14:10</span><span><b>Comer</b><span class="d">Sin pantalla. Mientras, repasa en voz alta los puertos.</span></span></li>
+    <li data-s="14:10" data-e="14:45"><span class="chk"></span><span class="h">14:10–14:45</span><span><b>Linux + Nmap</b><span class="d">Comandos, permisos, directorios y las 5 banderas: escríbelos a mano.</span></span></li>
+    <li data-s="14:45" data-e="15:20"><span class="chk"></span><span class="h">14:45–15:20</span><span><b>Servidor/DIK/CID, requerimientos, nube, DHCP/DNS, metodologías</b><span class="d">Lectura rápida de «Temas» + tarjetas de esas unidades.</span></span></li>
+    <li data-s="15:20" data-e="15:50"><span class="chk"></span><span class="h">15:20–15:50</span><span><b>Tarjetas: todas, en desorden</b><span class="d">Las que marques «repasar» vuelven. Meta: 80 % o más.</span></span></li>
+    <li data-s="15:50" data-e="16:30"><span class="chk"></span><span class="h">15:50–16:30</span><span><b>Último repaso y salir</b><span class="d">Solo la tabla de RFC y el SQL de Oracle. Lleva hojas blancas y pluma.</span></span></li>
+  </ol>
+  <div class="quote"><b>Lo que dijo el profesor (audios):</b> «todo, todo, todo, todo. Por eso se llama examen final» (Clase 17) · «en el examen voy a añadir los de los RFCs» · en hojas blancas, no opción múltiple (Clase 13) · sobre escribir código: «me voy a basar en el [extra]». No se dijo cuántas preguntas trae ni cuánto vale.</div>
+</section>
+
+<!-- ================= TEMAS ================= -->
+<section class="panel" id="p-temas">
+  <h2 class="t">Temas, en orden de probabilidad</h2>
+  <p class="lead">Arriba lo esencial (resumen de Drive); en «Más detalle», lo de la página del examen.</p>
+
+  <div class="u" id="t-rfc">
+    <h3>1 · RFC: qué es un RFC y los 9 expuestos</h3>
+    <p class="why"><b>Por qué:</b> «en el examen voy a añadir los de los RFCs» (Clase 17); fueron lo último del curso (Clases 18–19).</p>
+    <ul>
+      <li>Un <strong>RFC</strong> (<em>Request for Comments</em>, desde 1969) es un documento técnico <strong>público, gratuito e inmutable</strong> de la IETF que define cómo funciona un protocolo. No se edita: se publica uno nuevo que lo actualiza o lo vuelve obsoleto. Usa MUST, SHOULD, MAY.</li>
+      <li><strong>Trampa:</strong> el protocolo y el RFC son cosas distintas. LDAP es el protocolo; el RFC 4510 es el documento. HTTP ≠ RFC 2616.</li>
+    </ul>
+    <div class="tbl"><table>
+      <tr><th>RFC</th><th>Protocolo</th><th>Puerto</th><th>Para recordar</th></tr>
+      <tr><td>2616</td><td>HTTP/1.1</td><td>80</td><td>Petición-respuesta <b>sin estado</b>; códigos 1xx–5xx; GET, POST, PUT, DELETE. Reemplazado por RFC 7230–7235 (luego HTTP/2 y HTTP/3).</td></tr>
+      <tr><td>3501</td><td>IMAP</td><td>143 / 993</td><td>Los correos <b>se quedan en el servidor</b>; 4 estados: no autenticado → autenticado → seleccionado → cierre.</td></tr>
+      <tr><td>1939</td><td>POP3</td><td>110 / 995</td><td><b>Descarga y borra</b>; 3 estados: autorización → transacción → update. DELE solo marca; borra al hacer QUIT.</td></tr>
+      <tr><td>4510</td><td>LDAPv3</td><td>—</td><td>Mapa de la familia 4511–4521; gestiona usuarios y permisos en red.</td></tr>
+      <tr><td>1700</td><td>Números IANA</td><td>—</td><td>Protocolo <b>6 = TCP</b>, <b>17 = UDP</b>; puertos 20/21, 22, 25, 53, 80. Hoy histórico (RFC 3232).</td></tr>
+      <tr><td>854</td><td>Telnet</td><td>23</td><td>Terminal remota <b>sin cifrar</b> (NVT; WILL, WONT, DO, DONT). Reemplazado por SSH (22).</td></tr>
+      <tr><td>1034</td><td>DNS</td><td>53</td><td>Resolución de nombres <b>jerárquica y distribuida</b>; capa 7.</td></tr>
+      <tr><td>3898</td><td>NIS en DHCPv6</td><td>—</td><td>Códigos 27–30; obsoleto por inseguro (en la práctica, LDAP / Active Directory).</td></tr>
+      <tr><td>8446</td><td>TLS 1.3</td><td>—</td><td>Handshake de <b>1 RTT</b>; AEAD (AES-GCM) y claves efímeras Diffie-Hellman; elimina MD5, SHA-1 y RC4.</td></tr>
+    </table></div>
+    <details><summary>Más detalle (preguntas que hizo en las exposiciones y diferencias con el RFC Editor)</summary>
+      <ul>
+        <li>HTTP: «¿cómo se aplica en un GET o un POST?» → GET pide (solo lectura), POST envía.</li>
+        <li>«¿IMAP o POP?» → el equipo dijo IMAP (varios dispositivos), pero él aclaró que la mayoría sigue usando POP para descargar y liberar espacio. Desventaja de IMAP: dependes del servidor y su almacenamiento crece sin fin.</li>
+        <li>«¿Qué pasó en Japón?» → cayeron ~300 bancos por depender de un mismo servidor central.</li>
+        <li>POP3: con 4 correos, DELE 2, RSET y se cae la conexión antes de QUIT → quedan los 4.</li>
+        <li>Tu infografía encontró diferencias con el RFC Editor: 8446 lo obsoletó el 9846 (jul 2026, mismo TLS 1.3); 1034 es de 1987; 854 sigue siendo STD 8 (lo que cayó fue su uso); 3898 no tiene RFC que lo reemplace. <b>Contesta lo dicho en clase y añade la precisión en una línea.</b></li>
+      </ul>
+    </details>
+  </div>
+
+  <div class="u" id="t-servidor">
+    <h3>2 · Servidor vs. repositorio, DIK y CID</h3>
+    <p class="why"><b>Por qué:</b> «parece muy obvio, pero luego en el examen me ponen ahí cada barbaridad» (Clase 3).</p>
+    <ul>
+      <li><strong>Servidor:</strong> equipo (hardware o software) que ofrece y comparte servicios o recursos a uno o más clientes a través de una red, y <strong>ejecuta procesos</strong>. Un <strong>repositorio</strong> (como Git) solo almacena; no ejecuta.</li>
+      <li><strong>DIK:</strong> Datos → Información (datos con contexto) → Conocimiento (decisiones).</li>
+      <li><strong>CID:</strong> Confidencialidad (solo autorizados), Integridad (los datos no se alteran), Disponibilidad (accesible cuando se necesita).</li>
+    </ul>
+  </div>
+
+  <div class="u" id="t-olap">
+    <h3>3 · OLAP, Data Warehouse y esquemas</h3>
+    <p class="why"><b>Por qué:</b> «de ahí sí podemos sacar un buen [ejercicio] para su examen» (Clase 10); fue lo que salió mal en el parcial.</p>
+    <ul>
+      <li><strong>Cubo OLAP:</strong> estructura <strong>conceptual</strong> (no un archivo) que organiza <strong>medidas</strong> numéricas alrededor de <strong>dimensiones</strong> para responder una pregunta. Primero defines medida y dimensiones; luego respondes.</li>
+      <li>Las dimensiones tienen <strong>jerarquías</strong>: Año → Trimestre → Mes → Día; País → Estado → Ciudad.</li>
+      <li>Medidas <strong>aditivas</strong> (se suman en todas las dimensiones: ventas), <strong>semiaditivas</strong> (en algunas: el saldo bancario no se suma en el tiempo), <strong>no aditivas</strong> (calculadas: porcentajes, promedios).</li>
+      <li><strong>Data Warehouse:</strong> repositorio histórico e integrado de varias fuentes, para análisis. <strong>Nunca</strong> se regresan datos a la base transaccional. Operaciones: <em>slice</em> (una rebanada), <em>dice</em> (varias condiciones), <em>drill-down</em> (bajar al detalle).</li>
+      <li><strong>ETL:</strong> Extracción (ERP, Excel, PDF…) → Transformación (limpieza, Power Query) → Carga.</li>
+    </ul>
+    <div class="tbl"><table>
+      <tr><th>Esquema</th><th>Forma normal</th><th>Estructura</th></tr>
+      <tr><td>Estrella</td><td>1FN</td><td>1 tabla de hechos + dimensiones directas</td></tr>
+      <tr><td>Copo de nieve</td><td>2FN</td><td>1 tabla de hechos; dimensiones divididas en subdimensiones</td></tr>
+      <tr><td>Constelación</td><td>3FN</td><td>Varias tablas de hechos que comparten dimensiones</td></tr>
+    </table></div>
+    <details><summary>Más detalle</summary><ul>
+      <li>Roles: <b>modelador</b> (tablas y relaciones), <b>arquitecto de datos</b> (optimiza, calcula espacio), <b>DBA</b> (seguridad, usuarios, roles), <b>analista</b> (qué, cómo y cuándo; el científico de datos usa estadística avanzada).</li>
+      <li>ENOE: usar suma en vez de promedio o recuento crea brechas falsas (la suma de ingresos parecía el doble para hombres, pero había más hombres en la muestra).</li>
+      <li>Gobernanza: no se usan datos públicos de los últimos 5 años sin permiso.</li>
+    </ul></details>
+  </div>
+
+  <div class="u" id="t-oracle">
+    <h3>4 · Oracle: auditoría con usuarios, roles y trigger</h3>
+    <p class="why"><b>Por qué:</b> «Yo pondría mucha alta atención» (Clase 14). Posible código a mano.</p>
+    <ul>
+      <li>Jerarquía: <strong>Usuario → Rol → Privilegios</strong>.</li>
+      <li><code>UNLIMITED TABLESPACE</code> va <strong>directo al usuario</strong>, no por rol (en un rol da ORA-01950).</li>
+      <li><strong>COMMIT</strong> confirma: sin él otros usuarios no ven los cambios. Otra cuenta consulta con <code>usuario.tabla</code>.</li>
+      <li><code>SYSDATE</code> en <strong>DATE</strong> guarda solo la fecha; <strong>TIMESTAMP</strong> guarda fecha, hora y fracciones de segundo (sirve para ordenar eventos de auditoría del mismo segundo).</li>
+      <li><strong>Trigger:</strong> se ejecuta solo, BEFORE o AFTER de un INSERT, UPDATE o DELETE; uno solo cubre INSERTING/UPDATING/DELETING. <code>:OLD</code> = dato anterior, <code>:NEW</code> = dato nuevo.</li>
+      <li><code>USER</code> es una función; <code>SHOW USER</code> es un comando.</li>
+    </ul>
+    <p style="font-size:.85em;color:var(--ink-soft)">El SQL completo para practicar está en «Pizarrón».</p>
+  </div>
+
+  <div class="u" id="t-linux">
+    <h3>5 · Linux: comandos, permisos y directorios</h3>
+    <p class="why"><b>Por qué:</b> Clase 1 + «me voy a basar en el extra» (escribir comandos).</p>
+    <div class="tbl"><table>
+      <tr><th>Comando</th><th>Qué hace</th></tr>
+      <tr><td>which / whereis</td><td>which: solo la ruta del ejecutable · whereis: todas las carpetas del paquete</td></tr>
+      <tr><td>ps aux</td><td>a = todos los usuarios · u = CPU/RAM · x = sin terminal. top en vivo; kill mata por PID</td></tr>
+      <tr><td>mkdir -m 700 -p a/b/c</td><td>-m fija permisos al crear · -p crea toda la ruta</td></tr>
+      <tr><td>cat a b &gt; c · cat -n</td><td>une archivos en uno nuevo · numera líneas</td></tr>
+      <tr><td>ls -l / -a / -s</td><td>detalles / ocultos / tamaño</td></tr>
+      <tr><td>pwd</td><td>carpeta actual</td></tr>
+    </table></div>
+    <ul>
+      <li>Permisos para dueño · grupo · otros: r=4, w=2, x=1. <strong>Nunca 777</strong> ni x a otros.</li>
+      <li><code>/boot</code> arranque y kernel (no confundir con /bin) · <code>/bin</code> comandos esenciales · <code>/etc</code> configuración · <code>/home</code> usuarios · <code>/usr</code> programas (no usuarios) · <code>/var</code>, <code>/tmp</code> temporales · <code>/dev</code> dispositivos · <code>/opt</code> software extra.</li>
+      <li>Distros: Mint/Ubuntu (principiantes), Debian (servidores), Fedora (desarrollo), AlmaLinux/CentOS (copias de Red Hat), Arch (avanzados), Kali (ciberseguridad, +600 herramientas).</li>
+    </ul>
+  </div>
+
+  <div class="u" id="t-nmap">
+    <h3>6 · Nmap y Metasploit</h3>
+    <p class="why"><b>Por qué:</b> resumió las 5 banderas al cierre de la Clase 9.</p>
+    <ul>
+      <li><code>-sn</code> hosts activos · <code>-sS</code> sigiloso (SYN) · <code>-sV</code> versiones · <code>-O</code> sistema operativo · <code>-A</code> agresivo y completo (deja rastro).</li>
+      <li>Metasploit: <code>msfconsole</code> → <code>use …</code> → <code>show options</code> → <code>set RHOSTS …</code> → <code>exploit</code>. Siempre en máquina virtual y con autorización.</li>
+      <li>Puertos: 21 FTP, 22 SSH, 23 Telnet, 80 HTTP, 443 HTTPS, 445 SMB, 1521 Oracle, 3306 MySQL.</li>
+      <li>Roles: hacker blanco/negro/gris; pentester; CISO (responsable máximo); forense (recupera hasta ~80 % de un disco). Asesoría (enseñas, más barata) vs. consultoría (resuelves sin enseñar, más cara).</li>
+    </ul>
+  </div>
+
+  <div class="u" id="t-req">
+    <h3>7 · Requerimientos y nube</h3>
+    <p class="why"><b>Por qué:</b> 6 ejercicios en vivo en la Clase 3; «los presupuestos en la nube son en dólares… importantísimo».</p>
+    <ul>
+      <li><strong>De sistema:</strong> hardware, servidores, ancho de banda. <strong>Funcionales:</strong> qué hace («el usuario debe iniciar sesión»). <strong>No funcionales:</strong> cómo se mide («responde en &lt; 2 s», «fácil de usar»).</li>
+      <li>Nube (Azure, AWS, Google Cloud): sin tarifa fija, se paga por consumo; presupuestos en <strong>dólares</strong> con alertas (ej. 40 % previsto, 50 % real).</li>
+      <li><strong>UML</strong> documenta estructura y comportamiento (componentes, despliegue, casos de uso); debe coincidir con el código.</li>
+    </ul>
+  </div>
+
+  <div class="u" id="t-dhcp">
+    <h3>8 · DHCP y DNS</h3>
+    <p class="why"><b>Por qué:</b> «no se puede tener más de una puerta de enlace» (Clase 4).</p>
+    <ul>
+      <li><strong>DNS</strong> traduce nombres a IP. <strong>DHCP</strong> asigna IP, máscara, puerta de enlace y DNS con <strong>DORA</strong>: Discover, Offer, Request, Acknowledge.</li>
+      <li>Ámbito (sin .0 ni .255) · concesión (lease) · <strong>una sola</strong> puerta de enlace · DNS (8.8.8.8, 8.8.4.4) · reservas (IP fija por MAC) · exclusiones.</li>
+      <li>Riesgos: DoS agotando el ámbito, DHCP/DNS falsos; se mitigan con firewall, DMZ, VPN.</li>
+      <li><strong>ISC DHCP</strong> (texto plano, un hilo) descontinuado desde 2022 → <strong>Kea</strong> (JSON, multihilo, IPv4/IPv6, alta disponibilidad).</li>
+    </ul>
+  </div>
+
+  <div class="u" id="t-metod">
+    <h3>9 · Tradicional vs. Ágil y MS Project</h3>
+    <p class="why"><b>Por qué:</b> «Scrum no es una metodología; la metodología es ágil» (Clase 2).</p>
+    <ul>
+      <li><strong>Tradicional</strong> (Cascada/PMBOK): requisitos fijos, una entrega al final, cliente al inicio y al final, documentación extensa, cambios caros, Project Manager. <strong>Triángulo de hierro:</strong> alcance, costo, tiempo.</li>
+      <li><strong>Ágil:</strong> iterativo, incremental, colaborativo, adaptable; sprints de 2–4 semanas; Scrum Master, Product Owner y equipo; conviene sumar ~15 % al presupuesto por cambios. <strong>Ágil es la metodología; Scrum es el marco que la implementa.</strong></li>
+      <li>Recursos en Project: <strong>Trabajo</strong> (personas/equipos por tiempo), <strong>Material</strong> (se compra y se entrega), <strong>Costo</strong> (fijos: luz, internet, renta). Asignar por tarea, no al proyecto entero (51 días y $34,000 vs. 304 h y $812.50).</li>
+    </ul>
+  </div>
+
+  <div class="u" id="t-arq">
+    <h3>10 · Von Neumann vs. Harvard RISC, Big Data e IA</h3>
+    <p class="why"><b>Por qué:</b> Clase 1 (ejercicio de % de ALU) y debate de la Clase 17.</p>
+    <ul>
+      <li><strong>Von Neumann:</strong> una sola memoria para programa, datos y pila → cuello de botella.</li>
+      <li><strong>Harvard RISC:</strong> memoria de instrucciones y de datos separadas, load/store, <strong>pipeline</strong> Fetch → Decode → Execute → Write Back → 1 instrucción por ciclo.</li>
+      <li>Ejercicio: 1 de 3 instrucciones usa la ALU = 33 %; 1 de 5 = 20 % (80 % desperdicio).</li>
+      <li>Digitalizar (papel → digital) ≠ digitalizar procesos (facturas, ERP) ≠ <strong>transformación digital</strong> (rediseñar el negocio: Netflix de DVD a streaming).</li>
+      <li>IA: no es objetiva, puede alucinar, requiere <em>human-in-the-loop</em>. <strong>Big Data:</strong> más datos no es más precisión; la dan la calidad y un protocolo de captura.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= PIZARRÓN ================= -->
+<section class="panel" id="p-pizarron">
+  <h2 class="t">Para tu puerta-pizarrón</h2>
+  <p class="lead">Cada ejercicio: escríbelo <b>de memoria</b> en el pizarrón, después abre la respuesta y corrige con otro color. Lo que falló, bórralo y escríbelo otra vez. Recordar sin ver fija mucho más que releer.</p>
+
+  <div class="board">
+    <span class="time">10 min</span><h3>1 · La tabla de los 9 RFC</h3>
+    <p class="task">Dibuja 4 columnas: <b>RFC · protocolo · puerto · una frase</b>. Llena las 9 filas sin ver. Arriba escribe qué es un RFC en una línea.</p>
+    <details><summary>Ver respuesta</summary><pre>RFC = documento público, gratuito e INMUTABLE de la IETF que define un protocolo
+      (no se edita: sale uno nuevo). Protocolo ≠ RFC (LDAP ≠ 4510).
+
+2616  HTTP/1.1       80        petición-respuesta sin estado, 1xx–5xx, GET/POST/PUT/DELETE
+3501  IMAP           143/993   correo se queda en servidor · 4 estados
+1939  POP3           110/995   descarga y borra · 3 estados · DELE marca, QUIT borra
+4510  LDAPv3         —         mapa de la familia 4511–4521 · usuarios y permisos
+1700  IANA           —         6 = TCP · 17 = UDP · puertos 20/21, 22, 25, 53, 80
+854   Telnet         23        sin cifrar · NVT · WILL/WONT/DO/DONT → SSH (22)
+1034  DNS            53        jerárquico y distribuido · capa 7
+3898  NIS en DHCPv6  —         códigos 27–30 · obsoleto por inseguro → LDAP/AD
+8446  TLS 1.3        —         1 RTT · AEAD (AES-GCM) · DH efímero · sin MD5/SHA-1/RC4</pre></details>
+  </div>
+
+  <div class="board">
+    <span class="time">10 min</span><h3>2 · Estados de IMAP y POP3</h3>
+    <p class="task">Dibuja los dos diagramas de estados con flechas. Abajo: ¿qué pasa con 4 correos si haces <b>DELE 2, RSET</b> y se cae antes de QUIT?</p>
+    <details><summary>Ver respuesta</summary><pre>IMAP (3501):  No autenticado → Autenticado → Seleccionado → Cierre
+POP3 (1939):  Autorización → Transacción → Update (solo con QUIT)
+
+DELE 2 → solo MARCA · RSET → desmarca · se cae antes de QUIT
+→ quedan los 4 (el borrado real solo ocurre en Update)</pre></details>
+  </div>
+
+  <div class="board">
+    <span class="time">12 min</span><h3>3 · Oracle completo</h3>
+    <p class="task">Escribe: crear usuario, crear rol con privilegios, dar el rol al usuario, tablespace, y un <b>trigger de auditoría</b> que registre INSERT/UPDATE/DELETE con :OLD y :NEW.</p>
+    <details><summary>Ver respuesta</summary><pre>CREATE USER auditor IDENTIFIED BY clave;
+CREATE ROLE rol_app;
+GRANT CREATE SESSION, CREATE TABLE, CREATE TRIGGER TO rol_app;
+GRANT rol_app TO auditor;
+GRANT UNLIMITED TABLESPACE TO auditor;   -- DIRECTO al usuario (en rol: ORA-01950)
+COMMIT;                                  -- sin COMMIT los otros no ven los cambios
+
+CREATE OR REPLACE TRIGGER trg_auditoria
+AFTER INSERT OR UPDATE OR DELETE ON auditor.empleados
+FOR EACH ROW
+BEGIN
+  IF INSERTING THEN
+    INSERT INTO bitacora VALUES (USER, SYSTIMESTAMP, 'INSERT', NULL, :NEW.sueldo);
+  ELSIF UPDATING THEN
+    INSERT INTO bitacora VALUES (USER, SYSTIMESTAMP, 'UPDATE', :OLD.sueldo, :NEW.sueldo);
+  ELSIF DELETING THEN
+    INSERT INTO bitacora VALUES (USER, SYSTIMESTAMP, 'DELETE', :OLD.sueldo, NULL);
+  END IF;
+END;
+
+:OLD = antes · :NEW = después · DATE = solo fecha · TIMESTAMP = fecha+hora+fracciones
+(nombres de tabla y columnas: de ejemplo)</pre></details>
+  </div>
+
+  <div class="board">
+    <span class="time">10 min</span><h3>4 · Los 3 esquemas del Data Warehouse</h3>
+    <p class="task">Dibuja <b>estrella</b>, <b>copo de nieve</b> y <b>constelación</b> con una tabla de hechos «Ventas». Pon la forma normal de cada uno. Al lado: el flujo ETL → DW → tablero, y una flecha tachada del DW a la base transaccional.</p>
+    <details><summary>Ver respuesta</summary><pre>ESTRELLA (1FN)        Tiempo ─┐
+                      Producto ─┼─ [VENTAS] ─┬─ Cliente
+                                            └─ Tienda
+COPO DE NIEVE (2FN)   igual, pero Producto → Categoría → Departamento
+                      (dimensiones divididas en subdimensiones)
+CONSTELACIÓN (3FN)    [VENTAS] y [INVENTARIO] comparten Tiempo y Producto
+
+Fuentes (ERP, Excel, PDF) → E · T · C → DATA WAREHOUSE → tablero (slice/dice/drill-down)
+DW ──✗──→ base transaccional   (NUNCA se regresan datos)</pre></details>
+  </div>
+
+  <div class="board">
+    <span class="time">6 min</span><h3>5 · Un cubo OLAP</h3>
+    <p class="task">Dibuja un cubo con 3 dimensiones y su jerarquía (Tiempo, Lugar, Producto). Escribe una medida <b>aditiva</b>, una <b>semiaditiva</b> y una <b>no aditiva</b>.</p>
+    <details><summary>Ver respuesta</summary><pre>Cubo = concepto (no archivo): MEDIDAS alrededor de DIMENSIONES para responder una pregunta
+Tiempo:  Año → Trimestre → Mes → Día
+Lugar:   País → Estado → Ciudad
+Aditiva:     ventas (se suma en todo)
+Semiaditiva: saldo bancario (no se suma en el tiempo)
+No aditiva:  porcentajes, promedios (calculadas)</pre></details>
+  </div>
+
+  <div class="board">
+    <span class="time">8 min</span><h3>6 · Linux + Nmap a mano</h3>
+    <p class="task">Escribe: los 8 directorios con su uso; qué hacen <b>which, whereis, ps aux, mkdir -m 700 -p, cat a b &gt; c, ls -lsa</b>; las 5 banderas de Nmap; los pasos de Metasploit.</p>
+    <details><summary>Ver respuesta</summary><pre>/boot arranque+kernel · /bin comandos · /etc config · /home usuarios
+/usr programas · /var,/tmp temporales · /dev dispositivos · /opt software extra
+
+which = ruta del ejecutable · whereis = todas las carpetas del paquete
+ps aux: a todos · u CPU/RAM · x sin terminal
+mkdir -m 700 -p a/b/c  → permisos rwx solo dueño + crea padres
+cat a b > c  → une en c · ls -l detalles, -s tamaño, -a ocultos
+Permisos r=4 w=2 x=1 (dueño·grupo·otros) · NUNCA 777
+
+Nmap: -sn hosts · -sS sigiloso · -sV versiones · -O sist. operativo · -A agresivo
+Metasploit: msfconsole → use … → show options → set RHOSTS … → exploit</pre></details>
+  </div>
+
+  <div class="board">
+    <span class="time">6 min</span><h3>7 · DORA + puertos</h3>
+    <p class="task">Dibuja cliente y servidor DHCP con las 4 flechas de DORA. Abajo, todos los puertos que recuerdes con su servicio.</p>
+    <details><summary>Ver respuesta</summary><pre>Cliente ──Discover──→ Servidor
+Cliente ←──Offer───── Servidor
+Cliente ──Request───→ Servidor
+Cliente ←───Ack────── Servidor   (IP, máscara, UNA puerta de enlace, DNS)
+
+20/21 FTP · 22 SSH · 23 Telnet · 25 SMTP · 53 DNS · 80 HTTP · 110/995 POP3
+143/993 IMAP · 443 HTTPS · 445 SMB · 1521 Oracle · 3306 MySQL
+protocolo IP: 6 = TCP · 17 = UDP</pre></details>
+  </div>
+
+  <div class="board">
+    <span class="time">6 min</span><h3>8 · Las definiciones «obvias»</h3>
+    <p class="task">Escribe con tus palabras: <b>servidor</b> (y por qué no es un repositorio), <b>DIK</b>, <b>CID</b>, los 3 tipos de <b>requerimientos</b> con un ejemplo, y <b>Ágil vs. Scrum</b>.</p>
+    <details><summary>Ver respuesta</summary><pre>Servidor: equipo (hw o sw) que ofrece y comparte servicios/recursos a clientes
+          por una red y EJECUTA procesos. Repositorio (Git): solo almacena.
+DIK: Datos → Información (con contexto) → Conocimiento (decisiones)
+CID: Confidencialidad · Integridad · Disponibilidad
+Req. de sistema: hardware, servidores, ancho de banda
+Req. funcional: QUÉ hace («el usuario inicia sesión»)
+Req. no funcional: CÓMO se mide («responde en < 2 s»)
+Ágil = la metodología · Scrum = el marco que la implementa
+Tradicional: triángulo de hierro = alcance · costo · tiempo</pre></details>
+  </div>
+</section>
+
+<!-- ================= TARJETAS ================= -->
+<section class="panel" id="p-tarjetas">
+  <h2 class="t">Tarjetas de memoria</h2>
+  <p class="lead">Lee la pregunta, contesta en voz alta o en el pizarrón, y luego toca la tarjeta. Las que marques «repasar» vuelven al final de la fila.</p>
+  <div class="fc-bar">
+    <select id="fc-u"><option value="">Todas las unidades</option></select>
+    <button id="fc-mix">🔀 Desordenar</button>
+    <button id="fc-fail">Solo las que fallé</button>
+    <button id="fc-reset">Reiniciar</button>
+    <span class="st" id="fc-pos"></span>
+  </div>
+  <div class="fc" id="fc"><div class="tag" id="fc-tag"></div><div class="q" id="fc-q"></div><div class="a" id="fc-a"></div><div class="hint">Toca para ver la respuesta (o barra espaciadora)</div></div>
+  <div class="fc-act"><button class="no" id="fc-no">↺ Repasar</button><button class="si" id="fc-si">✓ Lo sé</button></div>
+  <p class="fc-keys">Teclado: espacio = voltear · ← = repasar · → = lo sé</p>
+</section>
+
+</div>
+
+<script>
+(function(){
+  function get(k,d){try{var v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}}
+  function put(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+  var root=document.documentElement;
+
+  // tamaño de letra
+  function setFs(v){v=Math.max(1,Math.min(4,v));root.dataset.fs=v;try{localStorage.setItem('eh-fs',v)}catch(e){}}
+  setFs(+(root.dataset.fs||2));
+  document.querySelectorAll('.fs button').forEach(function(b){b.onclick=function(){setFs(+root.dataset.fs+ +b.dataset.d)}});
+
+  // pestañas
+  var tabs=document.querySelectorAll('.eh-tabs button[data-p]');
+  function show(p){tabs.forEach(function(t){t.classList.toggle('on',t.dataset.p===p)});
+    document.querySelectorAll('.panel').forEach(function(s){s.classList.toggle('on',s.id==='p-'+p)});put('eh-tab',p);window.scrollTo(0,0)}
+  tabs.forEach(function(t){t.onclick=function(){show(t.dataset.p)}});
+  show(get('eh-tab','plan'));
+
+  // cuenta regresiva y bloque actual
+  var EX=new Date('2026-11-18T17:00:00-06:00');
+  function mins(s){var a=s.split(':');return +a[0]*60+ +a[1]}
+  function tick(){
+    var ms=EX-new Date(), el=document.getElementById('cd');
+    if(ms<=0){el.textContent='¡Ya!';}else{var h=Math.floor(ms/36e5),m=Math.floor(ms%36e5/6e4);el.textContent=h+' h '+(m<10?'0':'')+m+' min';}
+    var mx=new Date().toLocaleString('en-US',{timeZone:'America/Mexico_City',hour12:false,hour:'2-digit',minute:'2-digit'}).split(':');
+    var now=(+mx[0]%24)*60+ +mx[1];
+    document.querySelectorAll('#plan li').forEach(function(li){li.classList.toggle('now',now>=mins(li.dataset.s)&&now<mins(li.dataset.e))});
+  }
+  tick(); setInterval(tick,30000);
+  var done=get('eh-plan',{});
+  document.querySelectorAll('#plan li').forEach(function(li){
+    if(done[li.dataset.s])li.classList.add('done');
+    li.onclick=function(){li.classList.toggle('done');done[li.dataset.s]=li.classList.contains('done');put('eh-plan',done)};
+  });
+
+  // tarjetas (fuentes: resumen de Drive, página del examen y preguntas de NotebookLM)
+  var C=[
+   ['RFC','¿Qué es un RFC?','Request for Comments (desde 1969): documento técnico público, gratuito e <b>inmutable</b> de la IETF que define cómo funciona un protocolo. No se edita: se publica uno nuevo que lo actualiza o lo vuelve obsoleto. Usa MUST, SHOULD, MAY.'],
+   ['RFC','¿LDAP es el protocolo o el RFC?','LDAP es el <b>protocolo</b>; el RFC 4510 es el documento (mapa de la familia 4511–4521).'],
+   ['RFC','RFC 2616: ¿qué protocolo, puerto y característica principal?','HTTP/1.1, puerto 80. Petición-respuesta <b>sin estado</b>; códigos 1xx–5xx; GET, POST, PUT, DELETE. Reemplazado por RFC 7230–7235.'],
+   ['RFC','¿GET vs. POST?','GET pide (solo lectura); POST envía.'],
+   ['RFC','RFC 3501: protocolo, puertos y estados','IMAP, 143 / 993. Los correos se quedan en el servidor. 4 estados: no autenticado → autenticado → seleccionado → cierre.'],
+   ['RFC','RFC 1939: protocolo, puertos y estados','POP3, 110 / 995. Descarga y borra. 3 estados: autorización → transacción → update.'],
+   ['RFC','POP3 con 4 correos: DELE 2, RSET y se cae la conexión antes de QUIT. ¿Cuántos quedan?','Los 4. DELE solo marca, RSET desmarca y el borrado real solo ocurre en Update al hacer QUIT.'],
+   ['RFC','¿Qué desventaja tiene IMAP? ¿Qué usa la mayoría según el profesor?','Dependes del servidor y su almacenamiento crece sin fin. La mayoría sigue usando POP para descargar y liberar espacio.'],
+   ['RFC','RFC 1700: ¿qué define? ¿Qué son el 6 y el 17?','Números asignados por IANA. Protocolo 6 = TCP, 17 = UDP; puertos 20/21, 22, 25, 53, 80. Hoy histórico (RFC 3232).'],
+   ['RFC','RFC 854: protocolo, puerto, comandos y por qué se reemplazó','Telnet, 23. NVT; negocia con WILL, WONT, DO, DONT. Viaja sin cifrar → SSH (22).'],
+   ['RFC','RFC 1034: protocolo, puerto y cómo funciona','DNS, 53. Resolución de nombres jerárquica y distribuida (capa 7).'],
+   ['RFC','RFC 3898: ¿qué es y qué son los códigos 27–30?','Opciones NIS/NIS+ en DHCPv6: 27 IP NIS, 28 IP NIS+, 29 dominio NIS, 30 dominio NIS+. Obsoleto por inseguro (en la práctica, LDAP / Active Directory).'],
+   ['RFC','RFC 8446: ¿qué cambia TLS 1.3?','Handshake de 2 RTT → <b>1 RTT</b>; obliga AEAD (AES-GCM) y claves efímeras Diffie-Hellman; elimina MD5, SHA-1 y RC4.'],
+   ['RFC','¿Qué pasó en Japón (pregunta del profesor)?','Cayeron ~300 bancos por depender de un mismo servidor central.'],
+   ['Servidor','Define servidor. ¿En qué se distingue de un repositorio?','Equipo (hardware o software) que ofrece y comparte servicios o recursos a clientes a través de una red y <b>ejecuta procesos</b>. Un repositorio (Git) solo almacena.'],
+   ['Servidor','¿Qué es la pirámide DIK?','Datos → Información (datos con contexto) → Conocimiento (decisiones).'],
+   ['Servidor','¿Qué significa CID?','Confidencialidad (solo autorizados), Integridad (no se alteran), Disponibilidad (accesible cuando se necesita).'],
+   ['OLAP','¿Qué es un cubo OLAP?','Estructura <b>conceptual</b> (no un archivo) que organiza medidas numéricas alrededor de dimensiones para responder una pregunta.'],
+   ['OLAP','Medida aditiva, semiaditiva y no aditiva: un ejemplo de cada una','Aditiva: ventas. Semiaditiva: saldo bancario (no se suma en el tiempo). No aditiva: porcentajes, promedios.'],
+   ['OLAP','Jerarquía de la dimensión tiempo y de la de lugar','Año → Trimestre → Mes → Día. País → Estado → Ciudad.'],
+   ['OLAP','Estrella vs. copo de nieve vs. constelación','Estrella (1FN): 1 tabla de hechos + dimensiones directas. Copo de nieve (2FN): dimensiones divididas en subdimensiones. Constelación (3FN): varias tablas de hechos que comparten dimensiones.'],
+   ['OLAP','¿Qué es un Data Warehouse y qué regla tiene con la base transaccional?','Repositorio histórico e integrado de varias fuentes, para análisis. <b>Nunca</b> se regresan datos a la base transaccional.'],
+   ['OLAP','Slice, dice y drill-down','Slice: una rebanada. Dice: varias condiciones. Drill-down: bajar al detalle.'],
+   ['OLAP','¿Qué es ETL?','Extracción (ERP, Excel, PDF…), Transformación (limpieza, Power Query) y Carga.'],
+   ['OLAP','ENOE: ¿por qué la suma de ingresos parecía el doble para hombres?','Porque había más hombres en la muestra: usar suma en vez de promedio o recuento crea brechas falsas.'],
+   ['Oracle','Orden correcto para dar permisos en Oracle','Usuario → Rol → Privilegios: CREATE USER, CREATE ROLE, GRANT privilegios TO rol, GRANT rol TO usuario.'],
+   ['Oracle','¿A quién se le da UNLIMITED TABLESPACE?','<b>Directo al usuario</b>, no por rol (en un rol da ORA-01950).'],
+   ['Oracle','¿Para qué COMMIT? ¿Cómo ve otra cuenta la tabla?','COMMIT confirma los cambios; sin él otros usuarios no los ven. Se consulta como usuario.tabla.'],
+   ['Oracle','SYSDATE en DATE vs. TIMESTAMP','DATE guarda solo la fecha; TIMESTAMP guarda fecha, hora y fracciones de segundo (para ordenar eventos de auditoría del mismo segundo).'],
+   ['Oracle','¿Qué es un trigger? ¿Qué son :OLD y :NEW?','Bloque que se ejecuta solo, BEFORE o AFTER de un INSERT, UPDATE o DELETE (para bitácora de auditoría). :OLD = dato anterior; :NEW = dato nuevo.'],
+   ['Oracle','USER vs. SHOW USER','USER es una función; SHOW USER es un comando.'],
+   ['Linux','which vs. whereis','which: solo la ruta del ejecutable. whereis: todas las carpetas del paquete.'],
+   ['Linux','¿Qué significa cada letra de ps aux?','a = todos los usuarios · u = recursos (CPU/RAM) · x = procesos sin terminal.'],
+   ['Linux','¿Qué hace mkdir -m 700 -p a/b/c?','Crea toda la ruta a/b/c (-p) con permisos 700 (rwx solo para el dueño) (-m).'],
+   ['Linux','¿Para qué sirven /etc, /home, /usr, /bin y /boot?','/etc configuración · /home usuarios · /usr programas (no usuarios) · /bin comandos esenciales · /boot arranque y kernel.'],
+   ['Linux','Valores de r, w, x y regla de oro','r=4, w=2, x=1 para dueño, grupo y otros. Nunca 777 ni x a otros.'],
+   ['Nmap','Las 5 banderas de Nmap','-sn hosts activos · -sS sigiloso · -sV versiones · -O sistema operativo · -A agresivo y completo (deja rastro).'],
+   ['Nmap','Nmap encuentra abiertos 22, 23, 53, 80 y 1521. ¿Qué es cada uno?','22 SSH · 23 Telnet · 53 DNS · 80 HTTP · 1521 Oracle.'],
+   ['Nmap','Pasos en Metasploit','msfconsole → use … → show options → set RHOSTS … → exploit.'],
+   ['Nmap','Asesoría vs. consultoría','Asesoría: enseñas al personal, más barata. Consultoría: resuelves sin enseñar, más cara.'],
+   ['Requerimientos','Clasifica: (a) varios servidores para disponibilidad, (b) el usuario inicia sesión, (c) respuesta < 2 s','(a) de sistema · (b) funcional · (c) no funcional.'],
+   ['Requerimientos','¿En qué moneda son los presupuestos en la nube y cómo se controlan?','En dólares; se paga por consumo y se configuran alertas (ej. 40 % previsto, 50 % real).'],
+   ['DHCP','¿Qué es DORA?','Discover, Offer, Request, Acknowledge: el proceso con que DHCP asigna IP, máscara, puerta de enlace y DNS.'],
+   ['DHCP','¿Cuántas puertas de enlace se configuran en DHCP y por qué?','Solo una: varias multiplican los puntos de ataque.'],
+   ['DHCP','ISC DHCP vs. Kea','ISC DHCP (texto plano, un hilo) descontinuado desde 2022. Kea: JSON, multihilo, IPv4 e IPv6, alta disponibilidad.'],
+   ['Metodologías','¿Scrum es una metodología?','No: <b>Ágil es la metodología; Scrum es el marco que la implementa.</b>'],
+   ['Metodologías','¿Qué es el triángulo de hierro?','Alcance, costo y tiempo (metodología tradicional).'],
+   ['Metodologías','Tipos de recursos en MS Project','Trabajo (personas/equipos por tiempo), Material (se compra y se entrega), Costo (fijos: luz, internet, renta).'],
+   ['Arquitectura','Von Neumann vs. Harvard RISC','Von Neumann: una sola memoria → cuello de botella. Harvard RISC: memorias separadas, load/store y pipeline (Fetch, Decode, Execute, Write Back) → 1 instrucción por ciclo.'],
+   ['Arquitectura','5 instrucciones RISC y solo 1 usa la ALU: ¿% de uso?','20 % de uso (80 % desperdicio). Con 3 instrucciones: 33 %.'],
+   ['Arquitectura','¿Qué da precisión en Big Data?','La calidad y un protocolo de captura, no la cantidad.'],
+   ['Arquitectura','Digitalizar vs. digitalizar procesos vs. transformación digital','Papel → digital · usar herramientas digitales en las tareas actuales (facturas, ERP) · rediseñar el modelo de negocio (Netflix: DVD → streaming).']
+  ];
+  var units=[]; C.forEach(function(c){if(units.indexOf(c[0])<0)units.push(c[0])});
+  var sel=document.getElementById('fc-u'); units.forEach(function(u){var o=document.createElement('option');o.value=u;o.textContent=u;sel.appendChild(o)});
+  var known=get('eh-known',{}), failed=get('eh-failed',{}), deck=[], i=0, onlyFail=false;
+  var el=document.getElementById('fc');
+  function build(mix){
+    deck=C.map(function(c,k){return k}).filter(function(k){return (!sel.value||C[k][0]===sel.value)&&(!onlyFail||failed[k])});
+    if(mix)for(var j=deck.length-1;j>0;j--){var r=Math.floor(Math.random()*(j+1)),t=deck[j];deck[j]=deck[r];deck[r]=t}
+    i=0; render();
+  }
+  function stat(){var n=Object.keys(known).filter(function(k){return known[k]}).length;document.getElementById('fcst').textContent=n+'/'+C.length}
+  function render(){
+    stat(); el.classList.remove('show');
+    if(!deck.length){document.getElementById('fc-tag').textContent='';document.getElementById('fc-q').textContent=onlyFail?'No hay tarjetas falladas. 🎉':'Listo: terminaste la fila.';document.getElementById('fc-a').innerHTML='';document.getElementById('fc-pos').textContent='';return}
+    var c=C[deck[i%deck.length]];
+    document.getElementById('fc-tag').textContent=c[0]+(known[deck[i%deck.length]]?' · ✓ ya la sabías':'');
+    document.getElementById('fc-q').textContent=c[1];
+    document.getElementById('fc-a').innerHTML=c[2];
+    document.getElementById('fc-pos').textContent='quedan '+(deck.length);
+  }
+  function answer(ok){
+    if(!deck.length)return;
+    var k=deck.splice(i%Math.max(deck.length,1),1)[0];
+    if(ok){known[k]=true;delete failed[k]}else{failed[k]=true;known[k]=false;deck.push(k)}
+    put('eh-known',known);put('eh-failed',failed);
+    if(i>=deck.length)i=0; render();
+  }
+  el.onclick=function(){el.classList.toggle('show')};
+  document.getElementById('fc-si').onclick=function(){answer(true)};
+  document.getElementById('fc-no').onclick=function(){answer(false)};
+  document.getElementById('fc-mix').onclick=function(){build(true)};
+  document.getElementById('fc-fail').onclick=function(){onlyFail=!onlyFail;this.textContent=onlyFail?'Todas':'Solo las que fallé';build(false)};
+  document.getElementById('fc-reset').onclick=function(){known={};failed={};put('eh-known',known);put('eh-failed',failed);build(false)};
+  sel.onchange=function(){build(false)};
+  document.addEventListener('keydown',function(e){
+    if(!document.getElementById('p-tarjetas').classList.contains('on')||e.target.tagName==='SELECT')return;
+    if(e.key===' '){e.preventDefault();el.classList.toggle('show')} else if(e.key==='ArrowRight')answer(true); else if(e.key==='ArrowLeft')answer(false);
+  });
+  build(false);
+})();
+</script>
+</body>
+</html>
