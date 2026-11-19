@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-11-18T11:45:00-06:00",
+  "actualizado": "2026-11-19T12:00:00-06:00",
   "nota": "Actualizado el 18 nov 2026 con lo que dijo el usuario + Classroom (To-do, 18 nov) + NotebookLM (ACS 21–23, MD 18–21, FSE 18–21). Banners con el mínimo de palabras. Servicio social NO va aquí (sitio público).",
   "items": [
     {
@@ -16,7 +16,9 @@
       "titulo": "Proyecto final",
       "estado": "en-curso",
       "resumen": "Jue 19 nov, 13:00",
-      "falta": ["Presentaciones desde el jue 19 y en la última clase"]
+      "falta": [
+        "Presentaciones desde el jue 19 y en la última clase"
+      ]
     },
     {
       "materia": "RP",
@@ -65,8 +67,10 @@
       "color": "#A98BD1",
       "titulo": "Examen 3",
       "estado": "en-curso",
-      "resumen": "Mar 24 nov (probable) · en computadora",
-      "falta": ["El profesor dijo «el martes», entre el jue 19 y la última clase (jue 26)"]
+      "resumen": "Jue 26 nov (según la Clase 22) · en computadora · todo el curso",
+      "falta": [
+        "NotebookLM dice que en la Clase 22 (17 nov) lo recorrió del martes al jueves 26; confirmar en Classroom"
+      ]
     },
     {
       "materia": "Lab FSE",
@@ -82,15 +86,20 @@
       "chat": "Tarea 5",
       "chat_url": "https://claude.ai/chat/c9c89e68-a671-402a-aebd-6cdd280ecb35",
       "estado": "en-curso",
-      "resumen": "El profesor ya la está calificando",
-      "falta": ["Captura de ifconfig lo"]
+      "resumen": "El 17 nov el profesor dijo que la devuelve calificada «en estos días»; ya no hay más tareas",
+      "falta": [
+        "Captura de ifconfig lo"
+      ]
     },
     {
       "materia": "ACS",
       "color": "#E8735C",
       "titulo": "Programa final — FTP cifrado",
       "estado": "esperando",
-      "resumen": "Sin fecha; puede acabar antes del 27 nov"
+      "resumen": "Sin enunciado, equipos ni fecha en las clases 21–24 (quedó como tarea moral); en el Día 1 el proyecto final valía 50 %",
+      "falta": [
+        "La última clase fue el jue 19 nov (no fui): preguntar a un compañero o revisar Telegram si se dijo algo"
+      ]
     },
     {
       "materia": "FSE",

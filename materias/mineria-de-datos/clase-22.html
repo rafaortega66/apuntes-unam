@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 22 — Minería de Datos</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261110a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261103a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Minería de Datos</a>
+<div class="detail-head" style="border-color:#A98BD1"><h2>Clase 22</h2>
+  <p class="prof">M.C. José Concepción Roberto Olvera López · 17 nov 2026 · Tema 5 — Exposiciones de los alumnos con redes neuronales (autoencoder convolucional, MLP en datos tabulares, RNN/LSTM en series de tiempo) con la retroalimentación del profesor; inicio del Tema 5: reglas rudimentarias, modelación estadística y Big Data. Lineamientos del tercer examen (todo el curso) y del proyecto final.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>MD-Clase22.mp3</code>), 19 nov 2026. El profesor dijo explícitamente que el tercer examen cubre todo el curso; el resto de la sección de examen sale de lo que enfatizó. Los números de las exposiciones son los que presentaron los equipos. Continúa la <a href="clase-21.html">Clase 21</a>.</p>
+</div>
+<div class="files" id="guia-estudio-pdf"><a class="btn" href="../../decimo/MD/MD-Resumenes/MD-Clase22-resumen.pdf" target="_blank">📄 Guía de estudio (PDF): apuntes completos + resumen para estudiar</a> <a class="btn mapa-btn" href="../../decimo/MD/MD-Resumenes/MD-Clase22-mapa.pdf" target="_blank">🗺️ Mapa conceptual (PDF)</a></div>
+
+<details class="section-block sec" id="c22-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>El tercer examen cubre todo el curso.</strong><span class="evid">Evidencia: Lo dijo textualmente.</span></li>
+<li><strong>Reglas rudimentarias contra machine learning.</strong><span class="evid">Evidencia: Dijo que prepararía preguntas sobre ese contraste.</span></li>
+<li><strong>Big Data no es solo «muchos datos».</strong><span class="evid">Evidencia: Lo repitió como respuesta que se queda corta.</span></li>
+<li><strong>Modelación estadística contra machine learning.</strong><span class="evid">Evidencia: Lo explicó con ecuaciones de primer grado.</span></li>
+<li><strong>Qué red usar según los datos: CNN imágenes, MLP tablas, RNN/LSTM secuencias.</strong><span class="evid">Evidencia: Lo comentó en todas las exposiciones.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c22-exposiciones-autoencoder-convolucional"><summary><span class="stitle">1 · Exposiciones: autoencoder convolucional para defectos en botellas</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Una CNN armada como autoencoder para inspección visual de botellas sin necesitar miles de ejemplos de defectos.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Un artesano que se aprende de memoria cómo es una botella perfecta; al darle una dañada, intenta dibujarla sana y la diferencia entre su dibujo y la real revela el daño.<span class="rompe">Dónde deja de servir: si cambian mucho la iluminación o la posición, confunde sombras con defectos.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Datos:</strong> 209 imágenes normales para entrenar; para prueba, 20 con daño grande, 22 con daño pequeño, 21 con contaminación y 20 en buen estado. Las imágenes RGB de 900×900 se redujeron a 256×256 para aligerar el cómputo.</p>
+<p><strong>Entrenamiento:</strong> autoencoder con entrada y salida de 256×256×3, pérdida de error cuadrático medio (MSE), máximo 100 épocas.</p>
+<p><strong>Detección:</strong> se calcula un mapa de error de reconstrucción entre la imagen original y la reconstruida y se le aplica un umbral para obtener una máscara binaria de anomalías.</p>
+<p><strong>Resultados:</strong> a nivel imagen detecta bien las anomalías, pero falla al localizar el daño píxel por píxel. Al subir el umbral mejora la precisión pero baja mucho el recall.</p>
+<div class="errores"><p><strong>Error común:</strong> segmentar sin calibrar el umbral: salen muchos falsos positivos o se pierden defectos pequeños.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c22-exposiciones-perceptron-multicapa"><summary><span class="stitle">2 · Exposiciones: perceptrón multicapa (MLP) en datos tabulares</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Red densa hacia adelante para registros en renglones y columnas: fraude financiero y detección de intrusiones.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Un panel de analistas que revisa monto, hora e intentos de acceso; si la combinación de señales pasa de cierto nivel, marcan la transacción como sospechosa.<span class="rompe">Dónde deja de servir: no sirve donde importa la posición relativa, como en píxeles o palabras.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>¿Por qué no CNN en una tabla?</strong> Porque las columnas no tienen vecinos espaciales como los píxeles; la convolución no tiene sentido.</p>
+<p><strong>Fraude (473 casos fraudulentos):</strong> <code>RobustScaler</code> sobre tiempo y monto; partición 70 % entrenamiento, 15 % validación y 10 % prueba (así se presentó). Dos capas ocultas con ReLU, salida sigmoide, Batch Normalization y Early Stopping, que paró en la época 22. Con el umbral de decisión en 0.997: 56 fraudes detectados, 42,477 normales correctas, 15 falsos positivos y 11 falsos negativos (detecta 4 de cada 5 fraudes).</p>
+<p><strong>Intrusiones (NSL-KDD):</strong> 125,973 registros de entrenamiento/validación y 22,544 de prueba. Se quitaron variables constantes o irrelevantes como <code>num_outbound_cmds</code> (toda en ceros) y <code>difficulty_level</code>. Se probaron arquitecturas de 1 a 3 capas con regularización L2 (alpha), optimizando el F1-score.</p>
+<p><strong>Por qué importa:</strong> es el estándar para clasificar datos transaccionales y se lee con la matriz de confusión: falsas alarmas contra ataques o fraudes no detectados.</p>
+<div class="errores"><p><strong>Error común:</strong> dejar columnas con varianza cero o no regularizar, lo que lleva a sobreajuste.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c22-exposiciones-rnn-y"><summary><span class="stitle">3 · Exposiciones: RNN y LSTM en series de tiempo</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Redes con memoria interna para datos que dependen del tiempo.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Leer un libro recordando los capítulos anteriores para entender el giro actual, en vez de leer cada página aislada.<span class="rompe">Dónde deja de servir: no anticipa un choque externo sin precedentes en el historial.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Ozono (LSTM):</strong> predecir con 3 horas de anticipación si el ozono pasa de 90 ppm entre las 14:00 y 17:00, con 32 neuronas y una ventana de 12 horas. Entrenamiento 2015–2022, validación 2023 y prueba 2024. Acertó 60 %, contra 23 % de solo mirar el valor de 3 horas antes.</p>
+<p><strong>Actividad económica (IGAE del INEGI):</strong> serie mensual de 404 registros (1993–2026), partición 80/20 y ventanas de 12 meses. La primera versión, que predecía el valor del índice, dio MAE de 5.68 puntos y MAPE de 5.65 %. La segunda predijo los <strong>cambios mensuales</strong> escalados con <code>StandardScaler</code>: MAE de 1.94 y MAPE de 2.5 % (66 % menos error).</p>
+<p><strong>Por qué importa:</strong> transformar una serie no estacionaria en diferencias mejora mucho la generalización.</p>
+<div class="errores"><p><strong>Error común:</strong> predecir los valores brutos de una serie con tendencia sin diferenciarla.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c22-tema-5-reglas"><summary><span class="stitle">4 · Tema 5: reglas rudimentarias</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Modelos de decisión con condiciones simples hechas a mano («si pasa A, haz B»), basadas en la experiencia o en prácticas empíricas, sin aprendizaje automático.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Las reglas de cocina de la abuela: «si la masa está pegajosa, échale harina».<span class="rompe">Dónde deja de servir: no funcionan cuando intervienen decenas de factores que interactúan de forma no lineal.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>No requieren optimización ni entrenamiento. Ejemplos que dio:</p>
+<ul><li><strong>Regla 80/20 (Pareto):</strong> el 20 % de las causas genera el 80 % de los efectos; en optimización se atienden los 20 problemas o clientes principales en vez de los 100.</li><li><strong>Regla 3-2-1 de respaldos:</strong> 3 copias, en 2 medios distintos, 1 fuera del sitio.</li></ul>
+<table><tr><th></th><th>Reglas rudimentarias</th><th>Machine learning</th></tr><tr><td>Complejidad</td><td>Simples</td><td>Complejos</td></tr><tr><td>Interpretabilidad</td><td>Alta</td><td>Menor</td></tr><tr><td>Cómo se construye</td><td>Lógica manual humana</td><td>Aprendizaje automático</td></tr><tr><td>Variables</td><td>Muy pocas</td><td>Cientos a la vez</td></tr></table>
+<p>El profesor dijo que de estas reglas surgieron históricamente los árboles de decisión, los sistemas expertos y la lógica difusa, y que prepararía preguntas sobre este contraste.</p>
+<div class="errores"><p><strong>Error común:</strong> querer resolver problemas con muchas variables solo con reglas fijas.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c22-tema-5-modelacion"><summary><span class="stitle">5 · Tema 5: modelación estadística</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Transformar datos en ecuaciones (sobre todo lineales, de primer grado) basadas en supuestos teóricos, para explicar la relación entre variables y proyectar comportamientos.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Calcular la gasolina con gasto = distancia × consumo por km.<span class="rompe">Dónde deja de servir: falla cuando entran el tráfico, el desgaste del motor o el clima.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Se toma una variable dependiente (el ejemplo de clase: ventas mensuales) y se estima combinando linealmente pocas variables explicativas con coeficientes calculados estadísticamente. Requiere conocimiento formal de probabilidad y estadística, es sensible a la calidad de los datos y depende de que se cumplan sus supuestos.</p>
+<p><strong>Estadística contra machine learning:</strong> la estadística se centra en la inferencia y en explicar relaciones con pocas variables bajo supuestos formales; el machine learning busca precisión predictiva con muchos datos y alta dimensionalidad, de forma automática.</p>
+<div class="errores"><p><strong>Error común:</strong> suponer linealidad en fenómenos complejos o extrapolar fuera del rango donde valen los supuestos.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c22-tema-5-big"><summary><span class="stitle">6 · Tema 5: Big Data</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Toda la infraestructura, almacenamiento, herramientas de procesamiento y capacidad analítica para capturar, transformar y procesar enormes volúmenes y variedades de datos, en tiempo real y por lotes.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>La red de agua de una ciudad: no es «mucha agua», sino presas, acueductos, plantas de filtrado y tuberías para llevarla a donde se necesita.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p>El profesor recalcó que decir que Big Data son «muchos datos» o «grandes volúmenes» <strong>se queda corto</strong>.</p>
+<p><strong>Arquitectura:</strong></p>
+<ul><li><strong>Fuentes:</strong> bases SQL y NoSQL, ERP (compras, inventarios, contabilidad, facturación), CRM, sensores IoT, archivos planos y streaming (Kafka).</li><li><strong>Procesamiento y analítica:</strong> cómputo distribuido en memoria (Apache Spark), data lakes y data warehouses, entrenamiento con TensorFlow/PyTorch o MLflow.</li><li><strong>Salidas:</strong> dashboards, móviles y modelos en producción.</li></ul>
+<p><strong>Ejemplo bancario:</strong> millones de transacciones por segundo de cajeros, apps y sucursales que se procesan a la vez para conciliar operaciones y disparar la detección de fraudes.</p>
+<p><strong>Por qué importa:</strong> se conecta con la fase de despliegue de CRISP-DM.</p>
+<div class="errores"><p><strong>Error común:</strong> pensar que Big Data es solo tener discos enormes e ignorar la latencia, la integración de formatos y la velocidad de consulta.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c22-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Por qué definir Big Data como «muchos datos» es incompleto?</summary><p>Porque implica la arquitectura para integrar fuentes (ERP, IoT, streaming, SQL/NoSQL), procesarlas (Spark) y alimentar analítica, modelos y tableros.</p></details>
+<details class="qa"><summary>2. ¿Qué es la regla 3-2-1?</summary><p>3 copias de respaldo, en 2 medios distintos, 1 fuera del sitio.</p></details>
+<details class="qa"><summary>3. Regla rudimentaria contra machine learning.</summary><p>La regla es manual, rígida y con pocas variables; el ML aprende de los datos y maneja muchas variables.</p></details>
+<details class="qa"><summary>4. ¿Por qué falló la primera RNN del IGAE y cómo se corrigió?</summary><p>Predecía el valor bruto del índice; la segunda predijo cambios mensuales escalados y bajó el MAPE de 5.65 % a 2.5 %.</p></details>
+<details class="qa"><summary>5. ¿Por qué MLP y no CNN para fraude?</summary><p>Las columnas de una tabla no tienen vecindad espacial como los píxeles.</p></details>
+<details class="qa"><summary>6. ¿Qué pasó al subir el umbral en el autoencoder de botellas?</summary><p>Subió la precisión y bajó mucho el recall.</p></details>
+<details class="qa"><summary>7. ¿Qué es la modelación estadística y su limitación?</summary><p>Ecuaciones (lineales) que explican relaciones entre variables; depende de supuestos rígidos y es menos flexible ante relaciones no lineales.</p></details>
+<details class="qa"><summary>8. ¿Qué ventaja tuvo la LSTM del ozono?</summary><p>Acertó 60 % con 3 horas de anticipación contra 23 % de mirar el valor de 3 horas antes.</p></details>
+</details>
+
+<details class="section-block sec" id="c22-contexto"><summary><span class="stitle">Contexto (no examen)</span></summary>
+<ul><li>Durante las exposiciones se oyó por megáfono una protesta estudiantil sobre la falta de luz y agua en la facultad y otras demandas.</li><li>El profesor bromeó con que entrega las calificaciones en persona para que el alumno pueda inconformarse.</li></ul>
+</details>
+
+<details class="section-block sec" id="c22-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul><li><strong>Tercer examen parcial: todo el curso</strong> («me puedo hacer una pregunta de cualquiera de los cinco temas»), en computadora. Según NotebookLM, el profesor lo <strong>recorrió al jueves 26 de noviembre</strong> para dar más tiempo de estudio; conviene confirmarlo en Classroom.</li><li><strong>Proyecto final (individual):</strong> cada alumno tiene un caso asignado de una empresa ficticia con nombre y cobertura territorial. Las 6 fases de CRISP-DM, con énfasis en la Fase 1 (comprensión del negocio) y la Fase 6 (despliegue). <strong>Exactamente 10 diapositivas</strong> («ni una más, ni una menos»), diseño profesional con logotipo y colores formales, más el notebook de Python (no se penaliza si los datos son aproximados; importa la coherencia entre algoritmo y problema). Exposición de máximo 5 minutos por persona; NotebookLM dice que la entrega es el día de la sesión a la 1:00 p. m. (falta confirmar el día exacto).</li><li><strong>Calificaciones finales:</strong> en persona, en el horario de clase del martes siguiente.</li></ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Reglas rudimentarias: manuales, interpretables, pocas variables (Pareto 80/20, respaldo 3-2-1); origen de árboles de decisión, sistemas expertos y lógica difusa.</li>
+<li>Modelación estadística: ecuaciones con supuestos, inferencia, pocas variables.</li>
+<li>Big Data: fuentes heterogéneas + procesamiento distribuido + analítica + salidas.</li>
+<li>MLP para tablas (sin vecindad espacial); en series con tendencia, predecir diferencias.</li>
+<li>Umbral más alto → más precisión, menos recall.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

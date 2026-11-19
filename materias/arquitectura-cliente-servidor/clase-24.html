@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 24 — Arquitectura Cliente-Servidor</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261110a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261103a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Arquitectura Cliente-Servidor</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 24</h2>
+  <p class="prof">Mtro. Carlos Alberto Román Zamitiz · 17 nov 2026 · Tema 4 (transferencia de archivos) — Culminación del semestre: <code>cliente_envia_encriptado.c</code> y <code>servidor_recibe_desencriptado.c</code> mandan un directorio completo cifrado con AES-256-CBC, con el IV de 16 bytes al inicio de cada archivo; cómo compartir la llave simétrica y por qué un archivo de 31 bytes cifrado pesa 48.</p>
+  <p class="prof">Fuente: NotebookLM (audio <code>ACS-Clase24.m4a</code>), 19 nov 2026. El profesor no dictó preguntas de examen; la sección de examen sale de lo que recalcó y de la pregunta capciosa que hizo al grupo. Junta la Clase 22 (cifrar archivos) y la Clase 23 (transferir archivos). Continúa la <a href="clase-23.html">Clase 23</a>.</p>
+</div>
+<div class="files" id="guia-estudio-pdf"><a class="btn" href="../../decimo/ACS/ACS-Resumenes/ACS-Clase24-resumen.pdf" target="_blank">📄 Guía de estudio (PDF): apuntes completos + resumen para estudiar</a> <a class="btn mapa-btn" href="../../decimo/ACS/ACS-Resumenes/ACS-Clase24-mapa.pdf" target="_blank">🗺️ Mapa conceptual (PDF)</a></div>
+
+<details class="section-block sec" id="c24-examen" open><summary><span class="stitle">🎯 Lo que probablemente viene en el examen</span></summary>
+<ol class="examen-lista">
+<li><strong>Los tres envíos por archivo y que solo el contenido va cifrado.</strong><span class="evid">Evidencia: Lo escribió por pasos y recalcó que nombre y tamaño van en claro.</span></li>
+<li><strong>Calcular el tamaño del <code>.encrypt</code>: 31 bytes → 32 con relleno → 48 con el IV.</strong><span class="evid">Evidencia: Fue la pregunta capciosa al grupo.</span></li>
+<li><strong>Llave generada al arrancar contra llave en archivo.</strong><span class="evid">Evidencia: Dedicó la primera mitad de la clase a comparar disponibilidad y revocación.</span></li>
+<li><strong>Exclusiones al recorrer el directorio: «.», «..», la llave, los <code>.encrypt</code> y el propio ejecutable.</strong><span class="evid">Evidencia: Las mostró en el código y agregó la última en vivo.</span></li>
+<li><strong>El servidor lee primero 16 bytes (IV) y luego descifra con EVP.</strong><span class="evid">Evidencia: Fue el núcleo de <code>desencriptar_archivo</code>.</span></li>
+</ol>
+</details>
+
+<details class="section-block sec" id="c24-distribuir-la-llave"><summary><span class="stitle">1 · Distribuir la llave simétrica: el problema y ejemplos reales</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Con cifrado simétrico, cliente y servidor necesitan exactamente la misma llave (32 bytes); el problema es cómo repartirla sin comprometer la confidencialidad.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Un candado de combinación que deben conocer tú y el encargado de la bodega. Si el encargado cambia la combinación cada mañana, nadie con la de ayer puede entrar; si la anotan en un papel dentro de un cajón, ambos la consultan siempre, pero quien robe el papel abre todo.<span class="rompe">Dónde deja de servir: en un sistema asimétrico (como SSH) el candado se reparte abierto a todo el público y solo una persona guarda la llave que lo abre.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p>Abrió retomando el error de la clase anterior: si cliente y servidor no usan la misma llave exacta, el descifrado falla. Comparó dos diseños:</p>
+<ul><li><strong>El servidor genera la llave al arrancar</strong> (en RAM) y la distribuye. Desventaja: si el servidor se cae, se reinicia o hay un corte de luz, la llave cambia y las de los clientes anteriores ya no sirven. Ventaja: permite revocar accesos rápido si una llave fue robada.</li><li><strong>La llave ya existe en un archivo</strong> (<code>llave_archivo.key</code>), creada por un tercer programa generador, y ambos programas la leen. Persiste entre reinicios, pero hay que proteger ese archivo. Es el esquema que se usó en clase.</li></ul>
+<p><strong>Tarjeta bancaria con chip:</strong> el chip trae grabada la llave simétrica y el servidor del banco guarda la misma, ligada a la cuenta. Al meter la tarjeta y teclear el NIP, el cajero cifra y el banco descifra. Si roban tarjeta y NIP, se rompe la confidencialidad de la triada de seguridad. Para más seguridad, un chip puede guardar varias llaves (K1, K2, K3) y elegir una al azar en cada sesión.</p>
+<p><strong>¿La e.firma del SAT es simétrica o asimétrica?</strong> (pregunta de una alumna). La regla que dio: si te dan una sola llave privada (<code>.key</code>), es simétrico; si se manejan dos (pública y privada), es asimétrico. En el SAT el <code>.cer</code> es el certificado; en SSH se genera la pareja de llaves (la pública a veces con extensión <code>.pub</code>).</p>
+<p><strong>Por qué importa:</strong> liga la triada de seguridad (confidencialidad, integridad, disponibilidad) con cajeros, certificados y firmas digitales.</p>
+<div class="errores"><p><strong>Error común:</strong> confundir el certificado (<code>.cer</code>) con una llave simétrica.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c24-el-cliente-cliente"><summary><span class="stitle">2 · El cliente: <code>cliente_envia_encriptado.c</code></span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Lee la llave, recorre un directorio con <code>dirent.h</code>, omite lo que no debe mandar, cifra cada archivo y lo envía por TCP en tres pasos.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Un archivista que empaca papeles para otra sucursal: descarta las referencias al piso actual y al de arriba («.» y «..»), deja fuera la llave de la bodega para no regalarla en el paquete, mete cada hoja en una caja fuerte portátil, le pega al frente el código de arranque (IV) y se la da al mensajero.<span class="rompe">Dónde deja de servir: si le pides empacar la oficina donde él mismo está, se empacaría a sí mismo.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Uso:</strong> <code>./cliente_envia_encriptado &lt;IP_servidor&gt; &lt;puerto&gt; &lt;ruta_directorio&gt;</code> (valida <code>argc == 4</code>).</p>
+<p><strong>Llave:</strong> abre <code>llave_archivo.key</code> con <code>fopen</code> en <code>"rb"</code> y la carga en un arreglo de 32 bytes.</p>
+<p><strong>Recorrido:</strong> <code>opendir(ruta_directorio)</code> da un <code>DIR *carpeta</code>; con <code>readdir</code> recorre cada entrada usando <code>archivo-&gt;d_name</code>.</p>
+<p><strong>Exclusiones</strong> dentro del <code>while</code> (con <code>strcmp</code> y <code>strstr</code>):</p>
+<ul><li>«.» (directorio actual) y «..» (directorio padre).</li><li><code>llave_archivo.key</code>, para no cifrar ni mandar la llave por la red.</li><li>Archivos que ya terminan en <code>.encrypt</code>, para no cifrar dos veces.</li><li>El profesor se dio cuenta en vivo de que, si la ruta es la misma carpeta del ejecutable del cliente, hay que excluir también el propio ejecutable, o se cifra y se envía a sí mismo.</li></ul>
+<p><strong>Cifrado:</strong> arma la ruta de salida agregando <code>.encrypt</code> con <code>snprintf</code> y llama a <code>encriptar_archivo(ruta_completa, ruta_encriptada, llave)</code>.</p>
+<p><strong>Tres envíos por archivo:</strong></p>
+<ol><li><strong>Nombre</strong> del archivo (ya con <code>.encrypt</code>).</li><li><strong>Tamaño</strong> del archivo cifrado, obtenido con <code>stat</code> (<code>st_size</code>), como <code>long</code>.</li><li><strong>Contenido:</strong> abre el <code>.encrypt</code> en <code>"rb"</code> y manda bloques con <code>fread</code> + <code>send</code> hasta que <code>fread</code> devuelve 0.</li></ol>
+<p>El profesor lo escribió por pasos: el nombre y el tamaño viajan <strong>sin cifrar</strong>; lo único cifrado es el <strong>contenido</strong>, «que es realmente lo que nos interesa».</p>
+<p><strong>Por qué importa:</strong> manda por lotes cualquier cantidad de archivos uniendo el sistema de archivos, OpenSSL y los sockets TCP.</p>
+<div class="errores"><p><strong>Error común:</strong> no excluir <code>llave_archivo.key</code>, con lo que la llave terminaría en el servidor remoto.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c24-el-servidor-servidor"><summary><span class="stitle">3 · El servidor: <code>servidor_recibe_desencriptado.c</code></span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>Escucha en un puerto, acepta un cliente, recibe uno por uno los archivos cifrados y, para cada uno, saca el IV de los primeros 16 bytes y descifra el resto en un archivo <code>.decrypt</code>.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>El encargado de la bodega recibe las cajas fuertes: anota el nombre, mide el peso total para no perder piezas, despega el código de arranque (IV) del frente y, con la llave de su gaveta, abre la caja y guarda los documentos con la etiqueta <code>.decrypt</code> para no pisar los originales.<span class="rompe">Dónde deja de servir: el IV no es secreto; sin la llave no sirve de nada.</span></p></div>
+<span class="lbl">Cómo funciona</span>
+<p><strong>Uso:</strong> <code>./servidor_recibe_desencriptado &lt;puerto&gt;</code> (valida <code>argc == 2</code>). Carga los 32 bytes de <code>llave_archivo.key</code> en <code>"rb"</code>.</p>
+<p><strong>Socket:</strong> <code>socket()</code> → <code>sin_family = AF_INET</code>, <code>sin_addr.s_addr = INADDR_ANY</code>, <code>sin_port = htons(puerto)</code> → <code>bind()</code> → <code>listen()</code> → <code>accept()</code>.</p>
+<p><strong>Ciclo de recepción:</strong></p>
+<ol><li>Recibe el nombre (p. ej. <code>archivo1.txt.encrypt</code>). Si <code>recv</code> ≤ 0, el cliente terminó o se desconectó y sale del ciclo.</li><li>Recibe el tamaño total (un <code>long</code>).</li><li>Abre el archivo en <code>"wb"</code>, recibe los bloques con <code>recv</code> y los escribe con <code>fwrite</code>.</li></ol>
+<p><strong>Descifrado (<code>desencriptar_archivo</code>):</strong> abre el archivo recibido en <code>"rb"</code> y lee <strong>primero exactamente 16 bytes con <code>fread</code>: el IV</strong>, que el cliente escribió ahí antes de los datos cifrados. Crea el contexto con <code>EVP_CIPHER_CTX_new()</code>, llama a <code>EVP_DecryptInit_ex</code> con AES-256-CBC, la llave y ese IV, y procesa el resto en bloques con <code>EVP_DecryptUpdate</code> y <code>EVP_DecryptFinal_ex</code>. Cambia <code>.encrypt</code> por <code>.decrypt</code> para no sobrescribir el original si cliente y servidor corren en la misma carpeta.</p>
+<p>El código trae comentada una llamada a <code>remove()</code> (el equivalente en C de <code>rm</code>) para borrar el <code>.encrypt</code> temporal después de descifrarlo.</p>
+<p><strong>Por qué importa:</strong> cierra el ciclo de la arquitectura cliente-servidor segura; es el modelo de los programas de respaldo y sincronización seguros, y también la mecánica de un ransomware.</p>
+<div class="errores"><p><strong>Error común:</strong> no separar exactamente los primeros 16 bytes del IV antes de <code>EVP_DecryptInit_ex</code>, o imprimir datos cifrados con <code>printf("%s")</code>.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c24-demostracion-y-la"><summary><span class="stitle">4 · Demostración y la pregunta capciosa: de 31 a 48 bytes</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>En <code>/tmp/temporal</code> el profesor creó <code>archivo1.txt</code> y <code>archivo2.txt</code> y los mandó al servidor del puerto 4898.</p>
+<span class="lbl">Explicado en simple</span>
+<div class="simple"><p>Pesar el paquete en la báscula: además del mensaje con su relleno, pesa la etiqueta de apertura que va pegada al inicio de la caja.</p></div>
+<span class="lbl">Cómo funciona</span>
+<p><code>archivo1.txt</code> tenía una frase de prueba: 30 caracteres más el salto de línea <code>\n</code> que agrega Linux = <strong>31 bytes</strong>.</p>
+<p><strong>La pregunta al grupo:</strong> si AES trabaja en bloques de 16 bytes y el relleno PKCS sube al siguiente múltiplo (32), ¿por qué <code>archivo1.txt.encrypt</code> pesa <strong>48</strong>?</p>
+<p><strong>Respuesta:</strong> los 31 bytes se completan con 1 byte de relleno (valor <code>0x01</code>) y dan 32 bytes cifrados (dos bloques). Antes de ellos el programa escribe, sin cifrar, los <strong>16 bytes del IV</strong>: 16 + 32 = <strong>48 bytes</strong>.</p>
+<pre>./cliente_envia_encriptado 132.248.59.6 4898 /tmp/temporal</pre>
+<p>El cliente generó <code>archivo1.txt.encrypt</code> (48 bytes) y lo transmitió; el servidor recibió los 48, separó los 16 del IV, descifró los 32 y generó <code>archivo1.txt.decrypt</code> con los 31 bytes originales, comprobado con <code>cat</code>.</p>
+<p><strong>Por qué importa:</strong> junta el cálculo del relleno PKCS con el manejo de cabeceras en archivos binarios en una prueba medible.</p>
+<div class="errores"><p><strong>Error común:</strong> olvidar que el <code>\n</code> final cuenta como un byte, o no sumar los 16 bytes del IV al tamaño del archivo cifrado.</p></div>
+</div>
+</details>
+
+<details class="section-block sec" id="c24-prueba"><summary><span class="stitle">🧠 Ponte a prueba</span></summary>
+<details class="qa"><summary>1. ¿Qué argumentos pide <code>cliente_envia_encriptado</code>?</summary><p>Cuatro contando el ejecutable: IP del servidor, puerto y ruta del directorio.</p></details>
+<details class="qa"><summary>2. ¿Qué tres datos manda por archivo y cuál va cifrado?</summary><p>Nombre, tamaño y contenido; solo el contenido va cifrado.</p></details>
+<details class="qa"><summary>3. ¿Por qué el servidor guarda con <code>.decrypt</code>?</summary><p>Para no sobrescribir el original si cliente y servidor corren en la misma carpeta.</p></details>
+<details class="qa"><summary>4. Un <code>datos.txt</code> de 42 bytes: ¿cuánto pesa <code>datos.txt.encrypt</code>?</summary><p>64 bytes: 42 sube a 48 con 6 bytes de relleno, más 16 del IV.</p></details>
+<details class="qa"><summary>5. Llave generada al arrancar contra llave en archivo.</summary><p>La primera invalida a los clientes si el servidor se reinicia, pero permite revocar rápido; la segunda persiste, pero si se roba hay que reemplazarla en todos lados.</p></details>
+<details class="qa"><summary>6. ¿Cómo distingues simétrico de asimétrico según el profesor?</summary><p>Una sola llave privada = simétrico; dos llaves (pública y privada) = asimétrico.</p></details>
+<details class="qa"><summary>7. ¿Qué omite el cliente al recorrer el directorio?</summary><p>«.», «..», <code>llave_archivo.key</code>, los <code>.encrypt</code> y, si está en la misma carpeta, su propio ejecutable.</p></details>
+<details class="qa"><summary>8. ¿Qué función borra el <code>.encrypt</code> temporal en el servidor?</summary><p><code>remove()</code>, el equivalente en C de <code>rm</code>.</p></details>
+</details>
+
+<details class="section-block sec" id="c24-contexto"><summary><span class="stitle">Contexto (no examen)</span></summary>
+<ul><li>Por copiar y pegar, el cliente imprimía «llave de desencriptación cargada» y el servidor «llave de encriptación cargada»; prometió corregirlo.</li><li>Al dibujar la llave en el pizarrón bromeó con que nunca le sale bien.</li><li>Varios alumnos le dijeron que ya terminaban otras materias, así que confirmó que esta es la última semana del curso.</li></ul>
+</details>
+
+<details class="section-block sec" id="c24-pendiente"><summary><span class="stitle">Pendiente / próxima clase</span></summary>
+<ul><li><strong>Ya no hay tareas para entregar.</strong> El profesor dijo que tiene que devolver calificada la <strong>Tarea 5</strong> «en estos días».</li><li><strong>Tarea moral (no se entrega):</strong> probar el par cliente/servidor con archivos grandes (un PDF, un MP3, un video) y comprobar que el <code>.decrypt</code> abre igual que el original.</li><li><strong>Programa final:</strong> según NotebookLM, el «programa final» es este FTP cifrado que se fue armando en las clases 22–24; no hubo enunciado aparte, equipos, fecha de entrega ni rúbrica, y en las clases 23 y 24 quedó como tarea moral.</li><li><strong>Próxima clase (jueves 19 nov): la última del semestre</strong>, con ejemplos de serialización en Java. La semana siguiente ya no hay clase (el profesor da un curso del 23 al 27 nov). No mencionó otro examen.</li></ul>
+</details>
+
+<div class="puntos-clave"><h4>Puntos clave</h4><ul>
+<li>Cliente: <code>argc == 4</code> (IP, puerto, directorio); servidor: <code>argc == 2</code> (puerto); ambos leen <code>llave_archivo.key</code> (32 bytes).</li>
+<li>Nombre y tamaño (<code>long</code>, con <code>stat</code>) en claro; contenido cifrado con AES-256-CBC.</li>
+<li>Archivo cifrado = IV (16 bytes, sin cifrar) + datos con relleno PKCS al múltiplo de 16.</li>
+<li>Servidor: <code>fread</code> de 16 bytes → <code>EVP_DecryptInit_ex</code> → <code>Update</code> → <code>Final</code>; salida <code>.decrypt</code>.</li>
+<li>Una llave = simétrico; pareja pública/privada = asimétrico.</li>
+</ul></div>
+
+</div>
+</body>
+</html>

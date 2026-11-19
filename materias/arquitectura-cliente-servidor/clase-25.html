@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="estudio">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 25 — Arquitectura Cliente-Servidor</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261110a">
+<script>try{document.documentElement.dataset.view=localStorage.getItem('apuntes-view-v2')||'clase'}catch(e){document.documentElement.dataset.view='clase'}</script>
+<script src="../../assets/app.js?v=20261103a" defer></script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Arquitectura Cliente-Servidor</a>
+<div class="detail-head" style="border-color:#E8735C"><h2>Clase 25</h2>
+  <p class="prof">Mtro. Carlos Alberto Román Zamitiz · 19 nov 2026 · Tema 5 (sockets cifrados en Java) · clase reconstruida · Última clase del semestre. Según lo anunciado en la <a href="clase-24.html">Clase 24</a>, tocaban ejemplos de serialización en Java; el material que corresponde es el Tema 5 del sitio del profesor.</p>
+  <div class="aviso" style="margin-top:.6em;padding:.6em .8em;border-left:4px solid #E8735C;background:#E8735C18"><p>⚠️ <strong>No asistí a esta clase.</strong> No hay audio de esta sesión. Esta página solo resume lo que el profesor publica en su sitio para el Tema 5; no se inventa lo que se dijo en clase. Según la hoja RegistroClases: «ACS - Clase25 (NO FUI)».</p></div>
+</div>
+
+<details class="section-block sec" id="c25-tema5" open><summary><span class="stitle">1 · Material del Tema 5: sockets cifrados en Java</span></summary>
+<div class="concepto">
+<span class="lbl">Qué es</span>
+<p>La misma idea de las clases 20–24 (cliente y servidor que comparten una llave simétrica para cifrar y descifrar), ahora en Java. La llave es un objeto <code>Key</code> que se <strong>serializa</strong> a un archivo <code>llave.ser</code> para que cliente y servidor usen la misma.</p>
+<span class="lbl">Cómo funciona (según las descripciones del sitio del profesor)</span>
+<p><strong>Versión 1: el servidor genera la llave cada vez que se inicia.</strong></p>
+<ul>
+<li><code>ServidorCifrado01.java</code>: genera el objeto <code>Key</code> y lo guarda en <code>llave.ser</code>; recibe el mensaje cifrado del cliente y lo descifra.</li>
+<li><code>ClienteCifrado01.java</code>: lee la llave de <code>llave.ser</code>, lee un mensaje del teclado, lo cifra, lo envía y termina.</li>
+</ul>
+<p><strong>Versión 2: la llave se genera antes, una sola vez.</strong></p>
+<ul>
+<li><code>GeneradorLlave.java</code>: se corre antes del servidor; genera el objeto <code>Key</code> y lo guarda en <code>llave.ser</code>, así el servidor no crea una llave nueva en cada arranque.</li>
+<li><code>ServidorCifrado02.java</code>: recibe el mensaje cifrado, lo descifra y lo muestra; cierra la conexión de ese cliente y espera a otro. Se termina con Control-C.</li>
+<li><code>ClienteCifrado02.java</code>: lee la llave de <code>llave.ser</code>, lee un mensaje del teclado, lo cifra y lo envía.</li>
+</ul>
+<p><strong>Por qué importa:</strong> son los mismos dos diseños de distribución de llave que se compararon en la <a href="clase-24.html">Clase 24</a> (llave generada al arrancar contra llave en archivo), pero en Java.</p>
+<p>Material teórico en el sitio: «Notas de Criptografía en lenguaje Java» e «Implementando la criptografía en los sockets» (PDF, no revisados aquí). Todo está en <a href="https://cromanzamitiz.github.io/arquitectura-cliente-servidor/tema5/" target="_blank">el Tema 5 del sitio del profesor</a>.</p>
+</div>
+</details>
+
+<details class="section-block sec" id="c25-pendiente"><summary><span class="stitle">Pendiente / cierre del curso</span></summary>
+<ul>
+<li>Fue la <strong>última clase</strong>; la semana del 23 al 27 nov ya no hay clase (Clase 24).</li>
+<li>El profesor tiene que devolver calificada la <strong>Tarea 5</strong> (Clase 24).</li>
+<li><strong>Proyecto final:</strong> en el Día 1 dijo que vale 50 % con la especificación dos semanas antes de acabar el semestre, pero en los audios de las clases 21–24 no dio enunciado, equipos ni fecha; el FTP cifrado quedó como «tarea moral». Si hoy se dijo algo, no quedó grabado: hay que preguntar a un compañero o revisar el canal de Telegram.</li>
+<li>No se mencionó otro examen en las clases grabadas.</li>
+</ul>
+</details>
+
+</div>
+</body>
+</html>

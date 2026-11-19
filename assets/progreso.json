@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-18T21:36:01+00:00",
+ "generatedAt": "2026-11-19T17:50:56+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -425,6 +425,13 @@
     "resumen": "Tema 3 (3.6 manejadores de dispositivos · 3.7 sistemas de archivos) — Manejadores de dispositivos (funciones, controladores dedicados y genéricos, categorías y modelo POSIX) e introducción a los sistemas de archivos: FAT",
     "url": "materias/fundamentos-de-sistemas-embebidos/clase-21.html",
     "formato": "estudio"
+   },
+   {
+    "num": 22,
+    "fecha": "2026-11-18",
+    "resumen": "Sin apuntes · Según la Clase 21 , faltaban algunos sistemas de archivos.",
+    "url": "materias/fundamentos-de-sistemas-embebidos/clase-22.html",
+    "formato": "estudio"
    }
   ],
   "administracion-de-servicios-de-internet": [
@@ -723,6 +730,20 @@
     "resumen": "Tema 4 (transferencia de archivos) — Un FTP básico en C: recorrer directorios con dirent.h , protocolo de tres envíos por archivo (nombre, tamaño y contenido en bloques de 1,024 bytes) y accept() fuera del ciclo; aclarac",
     "url": "materias/arquitectura-cliente-servidor/clase-23.html",
     "formato": "estudio"
+   },
+   {
+    "num": 24,
+    "fecha": "2026-11-17",
+    "resumen": "Tema 4 (transferencia de archivos) — Culminación del semestre: cliente_envia_encriptado.c y servidor_recibe_desencriptado.c mandan un directorio completo cifrado con AES-256-CBC, con el IV de 16 bytes al inicio de cada a",
+    "url": "materias/arquitectura-cliente-servidor/clase-24.html",
+    "formato": "estudio"
+   },
+   {
+    "num": 25,
+    "fecha": "2026-11-19",
+    "resumen": "Tema 5 (sockets cifrados en Java) · clase reconstruida · Última clase del semestre. Según lo anunciado en la Clase 24 , tocaban ejemplos de serialización en Java; el material que corresponde es el Tema 5 del sitio del pr",
+    "url": "materias/arquitectura-cliente-servidor/clase-25.html",
+    "formato": "estudio"
    }
   ],
   "seguridad-informatica-basica": [
@@ -864,6 +885,20 @@
     "fecha": "2026-11-12",
     "resumen": "Tema 5 (análisis y gestión de riesgos) — La desigualdad de costos (ataque, bien y protección), gestión de riesgos con infraestructuras y procesos críticos y escenarios, cinco técnicas rápidas (What if, APR, cinco porqués",
     "url": "materias/seguridad-informatica-basica/clase-20.html",
+    "formato": "estudio"
+   },
+   {
+    "num": 21,
+    "fecha": "2026-11-17",
+    "resumen": "Qué es una auditoría informática, sus cuatro objetivos y sus ocho pasos, cómo comportarse ante un auditor; ética informática, códigos deontológicos, los 10 mandamientos del Computer Ethics Institute y un decálogo propio.",
+    "url": "materias/seguridad-informatica-basica/clase-21.html",
+    "formato": "estudio"
+   },
+   {
+    "num": 22,
+    "fecha": "2026-11-19",
+    "resumen": "Sin apuntes · Según la Clase 21 , el tema que seguía era la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP).",
+    "url": "materias/seguridad-informatica-basica/clase-22.html",
     "formato": "estudio"
    }
   ],
@@ -1015,11 +1050,23 @@
     "resumen": "Práctica 3.6 (redes neuronales) y Tema 4 (CRISP-DM y evaluación de modelos) — Segunda ronda de exposiciones de la Práctica 3.6 (CNN, MLP, LSTM y autoencoder) y continuación del Tema 4: repaso de CRISP-DM, variantes de va",
     "url": "materias/mineria-de-datos/clase-21.html",
     "formato": "estudio"
+   },
+   {
+    "num": 22,
+    "fecha": "2026-11-17",
+    "resumen": "Tema 5 — Exposiciones de los alumnos con redes neuronales (autoencoder convolucional, MLP en datos tabulares, RNN/LSTM en series de tiempo) con la retroalimentación del profesor; inicio del Tema 5: reglas rudimentarias, ",
+    "url": "materias/mineria-de-datos/clase-22.html",
+    "formato": "estudio"
    }
   ],
   "lab-de-organizacion-y-arquitectura-de-computadoras": []
  },
  "gitlog": [
+  {
+   "hash": "fefcf81",
+   "fecha": "2026-11-18T15:36:01-06:00",
+   "mensaje": "ASI Estudiar hoy: tarjetas con ← anterior, → siguiente, espacio para voltear, ↑/↓ marcar, y deslizar en touch"
+  },
   {
    "hash": "ea532a8",
    "fecha": "2026-11-18T15:30:42-06:00",
@@ -1314,11 +1361,6 @@
    "hash": "33c6bde",
    "fecha": "2026-10-26T11:13:58-06:00",
    "mensaje": "OAC: agregar Clase 14 (26 oct) — proyecto final (asm o mem32), red neuronal XOR en MicroPython y entrega el 25 nov"
-  },
-  {
-   "hash": "ddf9b3f",
-   "fecha": "2026-10-26T11:11:19-06:00",
-   "mensaje": "RP: agregar Clase 18 (26 oct) — redes neuronales, perceptrón multicapa, retropropagación y regularización; avisar de anuncios repetidos en Clase 17"
   }
  ]
 }

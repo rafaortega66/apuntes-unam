@@ -266,10 +266,18 @@
     },
     {
       "fecha": "2026-11-18",
-      "motivo": "ASI sin sesión presencial: el profesor dedica el horario a revisar y calificar (dicho en la Clase 17; falta confirmar)",
-      "confirmado": false,
+      "motivo": "ASI sin clase: fue el examen final (el usuario lo presentó; confirmado el 19 nov 2026). La hoja RegistroClases no le pone número de clase.",
+      "confirmado": true,
       "materias": [
         "ASI"
+      ]
+    },
+    {
+      "fecha": "2026-11-18",
+      "motivo": "OAC sin clase este miércoles (hoja RegistroClases: «OAC - no hubo clase»)",
+      "confirmado": true,
+      "materias": [
+        "OAC"
       ]
     }
   ]
