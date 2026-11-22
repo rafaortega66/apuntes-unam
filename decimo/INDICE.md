@@ -25,7 +25,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 
 ## ASI — Administración de Servicios de Internet
 
-- **ASI-Material**: 22 archivos (ASI/ASI-Material/)
+- **ASI-Material**: 16 archivos (ASI/ASI-Material/)
 
 
 ### ASI-EjerciciosClase
@@ -160,7 +160,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 
 ## RP — Reconocimiento de Patrones
 
-- **RP-Material**: 16 archivos (RP/RP-Material/)
+- **RP-Material**: 19 archivos (RP/RP-Material/)
 
 
 ### RP-Examenes
@@ -177,14 +177,23 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 | RP-P01 | [RP-P01-indicaciones.pdf](RP/RP-Practicas/RP-P01/RP-P01-indicaciones.pdf) | [RP-P01-420054085.pdf](RP/RP-Practicas/RP-P01/RP-P01-entregables/RP-P01-420054085.pdf)<br>[RP-P01-420054085.zip](RP/RP-Practicas/RP-P01/RP-P01-entregables/RP-P01-420054085.zip) | 29 |
 | RP-P02 | [RP-P02-indicaciones.pdf](RP/RP-Practicas/RP-P02/RP-P02-indicaciones.pdf) | [RP-P02-RO-SF.pdf](RP/RP-Practicas/RP-P02/RP-P02-entregables/RP-P02-RO-SF.pdf)<br>[RP-P02-programas.zip](RP/RP-Practicas/RP-P02/RP-P02-entregables/RP-P02-programas.zip) | 5 |
 | RP-P03 | [RP-P03-indicaciones.pdf](RP/RP-Practicas/RP-P03/RP-P03-indicaciones.pdf) | [Practica_3_Colab_1_Clasificacion_Imagenes_QDA.ipynb](RP/RP-Practicas/RP-P03/RP-P03-entregables/Practica_3_Colab_1_Clasificacion_Imagenes_QDA.ipynb)<br>[Practica_3_Colab_2_Breast_Cancer_QDA_LDA_GNB.ipynb](RP/RP-Practicas/RP-P03/RP-P03-entregables/Practica_3_Colab_2_Breast_Cancer_QDA_LDA_GNB.ipynb)<br>[RP-P03-RO-SF.pdf](RP/RP-Practicas/RP-P03/RP-P03-entregables/RP-P03-RO-SF.pdf) | 38 |
+| RP-P04 | [RP-P04-indicaciones.pdf](RP/RP-Practicas/RP-P04/RP-P04-indicaciones.pdf) | [RP-P04-Punto2-KNN.ipynb](RP/RP-Practicas/RP-P04/RP-P04-entregables/RP-P04-Punto2-KNN.ipynb)<br>[RP-P04-Punto3-RegresionLogistica.ipynb](RP/RP-Practicas/RP-P04/RP-P04-entregables/RP-P04-Punto3-RegresionLogistica.ipynb)<br>[RP-P04-RO-SF.pdf](RP/RP-Practicas/RP-P04/RP-P04-entregables/RP-P04-RO-SF.pdf) | 1 |
+| RP-P05 | [RP-P05-indicaciones.pdf](RP/RP-Practicas/RP-P05/RP-P05-indicaciones.pdf) | [Informe_Clasificacion_Supervisada.pdf](RP/RP-Practicas/RP-P05/RP-P05-entregables/Informe_Clasificacion_Supervisada.pdf) | 1 |
+
+### RP-Proyecto
+
+| Entrega | Indicaciones | Entregado | Adicionales |
+|---|---|---|---|
+| RP-Proy01 | [RP-Proy01-indicaciones.md](RP/RP-Proyecto/RP-Proy01/RP-Proy01-indicaciones.md)<br>[RP-Proy01-indicaciones.pptx](RP/RP-Proyecto/RP-Proy01/RP-Proy01-indicaciones.pptx) | _(sin entrega aún)_ | — |
 
 ### RP-Tareas
 
 | Entrega | Indicaciones | Entregado | Adicionales |
 |---|---|---|---|
 | RP-T01 | [RP-T01-indicaciones.pdf](RP/RP-Tareas/RP-T01/RP-T01-indicaciones.pdf) | [RP-T01-420054085.pdf](RP/RP-Tareas/RP-T01/RP-T01-entregables/RP-T01-420054085.pdf) | 1 |
-| RP-T02 | [RP-T02-indicaciones.md](RP/RP-Tareas/RP-T02/RP-T02-indicaciones.md)<br>[RP-T02-indicaciones.pdf](RP/RP-Tareas/RP-T02/RP-T02-indicaciones.pdf) | _(sin entrega aún)_ | 3 |
-| RP-T03 | [RP-T03-indicaciones.pdf](RP/RP-Tareas/RP-T03/RP-T03-indicaciones.pdf) | _(sin entrega aún)_ | — |
+| RP-T02 | [RP-T02-indicaciones.md](RP/RP-Tareas/RP-T02/RP-T02-indicaciones.md)<br>[RP-T02-indicaciones.pdf](RP/RP-Tareas/RP-T02/RP-T02-indicaciones.pdf) | [Tarea2_OrtegaDeLaPaz_Rafael_420054085.pdf](RP/RP-Tareas/RP-T02/RP-T02-entregables/Tarea2_OrtegaDeLaPaz_Rafael_420054085.pdf) | 3 |
+| RP-T03 | [RP-T03-indicaciones.pdf](RP/RP-Tareas/RP-T03/RP-T03-indicaciones.pdf) | [Tarea3_OrtegaDeLaPaz_Rafael_420054085.paf.pdf](RP/RP-Tareas/RP-T03/RP-T03-entregables/Tarea3_OrtegaDeLaPaz_Rafael_420054085.paf.pdf) | — |
+| RP-T04 | [RP-T04-indicaciones.md](RP/RP-Tareas/RP-T04/RP-T04-indicaciones.md)<br>[RP-T04-indicaciones.pdf](RP/RP-Tareas/RP-T04/RP-T04-indicaciones.pdf) | [RP-T04.pdf](RP/RP-Tareas/RP-T04/RP-T04-entregables/RP-T04.pdf) | — |
 
 ## SIB — Seguridad Informática Básica
 

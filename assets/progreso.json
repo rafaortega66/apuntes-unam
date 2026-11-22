@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-19T17:50:56+00:00",
+ "generatedAt": "2026-11-22T08:17:16+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -1063,6 +1063,11 @@
  },
  "gitlog": [
   {
+   "hash": "1b7b642",
+   "fecha": "2026-11-19T11:51:17-06:00",
+   "mensaje": "Clases del 17 al 19 nov según RegistroClases: ACS 24, SIB 21, MD 22 (NotebookLM); ACS 25, SIB 22, FSE 22 sin asistir"
+  },
+  {
    "hash": "fefcf81",
    "fecha": "2026-11-18T15:36:01-06:00",
    "mensaje": "ASI Estudiar hoy: tarjetas con ← anterior, → siguiente, espacio para voltear, ↑/↓ marcar, y deslizar en touch"
@@ -1356,11 +1361,6 @@
    "hash": "503d0f5",
    "fecha": "2026-10-26T11:26:19-06:00",
    "mensaje": "ASI: agregar Clase 15 (21 oct) — transformación digital, IA y prompts, habilidades y tarea en equipos de 3"
-  },
-  {
-   "hash": "33c6bde",
-   "fecha": "2026-10-26T11:13:58-06:00",
-   "mensaje": "OAC: agregar Clase 14 (26 oct) — proyecto final (asm o mem32), red neuronal XOR en MicroPython y entrega el 25 nov"
   }
  ]
 }
