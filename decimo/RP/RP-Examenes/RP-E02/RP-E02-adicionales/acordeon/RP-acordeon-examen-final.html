@@ -177,14 +177,24 @@ d: C3 .121 · C2 .682 · C4 .872 · C1 .891 · C5 1.084 → 3-NN = N,S,N → <b>
 4) w₁=.5−.5(−.731)=<b>.866</b> · w₂=−.5−.5(−.847)=<b>−.077</b> · b=−.5−.5(−.116)=<b>−.442</b>
 5) z = .27, 1.21, 1.85, 2.79 → p̂ = .567, .771, .864, .942 → L = <b>.629</b> (bajó) · todas → 1 → bien <b>2/4</b> (3 y 4).</div>
 
-<div class="c"><h>H Gini en un árbol (última tarea)</h>Por nodo: contar clases → <b>Gini=1−Σp²</b>. Hoja: clase mayoritaria + qué ejemplos caen (seguir las reglas por fila).
-Ej. 8 pacientes 4E/4S: raíz 1−.25−.25=<b>.5</b>. Fiebre alta 3E1S: 1−(3/4)²−(1/4)²=<b>.375</b>; baja 1E3S=.375 → ponderado .375; ganancia .125. Empate con tos/dolor → <b>fiebre</b> (la 1.ª). Alta+tos 2E → Gini 0 hoja; mixtos 1/1 → .5 → se parten con dolor de cabeza → 6 hojas.
+<div class="c"><h>H Gini en un árbol (T4)</h>12 ej.: A = 1,2,3,10,11,12 · B = 4–9. Árbol: raíz x₁≤3 · izq. x₂≤3 · der. x₃≤9.
+<b>Raíz</b> 6A/6B: 1−.5²−.5² = <b>.5</b>
+x₁≤3 → {1–6} (x₁=2,1,3,2,3,1) · x₁&gt;3 → {7–12}
+<b>Nodo izq.</b> {1–6} 3A/3B = <b>.5</b> · <b>Nodo der.</b> {7–12} 3A/3B = <b>.5</b> (la raíz sola no gana: ponderado .5)
+<table><tr><th>Hoja</th><th>regla</th><th>ej.</th><th>clase</th></tr>
+<tr><td>L1</td><td>x₁≤3, x₂≤3</td><td>1,2,3</td><td><b>A</b></td></tr>
+<tr><td>L2</td><td>x₁≤3, x₂&gt;3</td><td>4,5,6</td><td><b>B</b></td></tr>
+<tr><td>L3</td><td>x₁&gt;3, x₃≤9</td><td>7,8,9</td><td><b>B</b></td></tr>
+<tr><td>L4</td><td>x₁&gt;3, x₃&gt;9</td><td>10,11,12</td><td><b>A</b></td></tr></table>
+Las 4 hojas Gini 0 (puras). Receta: contar clases por nodo → 1−Σp² → ponderado Σ(n<sub>h</sub>/n)Gini<sub>h</sub>.
+Clase: 8 pacientes 4E/4S: raíz 1−.25−.25=<b>.5</b>. Fiebre alta 3E1S: 1−(3/4)²−(1/4)²=<b>.375</b>; baja 1E3S=.375 → ponderado .375; ganancia .125. Empate con tos/dolor → <b>fiebre</b> (la 1.ª). Alta+tos 2E → Gini 0 hoja; mixtos 1/1 → .5 → se parten con dolor de cabeza → 6 hojas.
 Edad ≤35 (1s/1n) .5 · &gt;35 (1s/2n) .444 → (2/5).5+(3/5).444 = <b>.466</b>.</div>
 
-<div class="c"><h>I Red de 3 neuronas, escalón (última tarea)</h>φ(z)=1 si z≥0, si no 0. Cada neurona = recta. <b>XOR</b> = 2 ocultas + 1 salida:
-h₁ = <b>OR</b>: φ(x₁+x₂−0.5) · h₂ = <b>NAND</b>: φ(−x₁−x₂+1.5) · y = <b>AND</b>(h₁,h₂): φ(h₁+h₂−1.5)
-<table><tr><th>x₁x₂</th><th>h₁</th><th>h₂</th><th>y</th></tr><tr><td>00</td><td>0</td><td>1</td><td>0</td></tr><tr><td>01</td><td>1</td><td>1</td><td>1</td></tr><tr><td>10</td><td>1</td><td>1</td><td>1</td></tr><tr><td>11</td><td>1</td><td>0</td><td>0</td></tr></table>
-XNOR: salida OR de (AND, NOR): h₁=φ(x₁+x₂−1.5), h₂=φ(−x₁−x₂+0.5), y=φ(h₁+h₂−0.5). Comprobar siempre la tabla de verdad.</div>
+<div class="c"><h>I Red de 3 neuronas, escalón (T4)</h>φ(z)=1 si z≥0, si no 0. Cada neurona = 1 recta; XNOR no es lineal → 2 ocultas + 1 salida.
+Fe de erratas: <b>XNOR = 00→1 · 01→0 · 10→0 · 11→1</b> (la tabla del PDF estaba mal).
+h₁ = <b>AND</b>: φ(x₁+x₂−1.5) · h₂ = <b>NOR</b>: φ(−x₁−x₂+0.5) · y = <b>OR</b>(h₁,h₂): φ(h₁+h₂−0.5)
+<table><tr><th>x₁x₂</th><th>z₁ h₁</th><th>z₂ h₂</th><th>z<sub>y</sub> y</th></tr><tr><td>00</td><td>−1.5 0</td><td>.5 1</td><td>.5 <b>1</b></td></tr><tr><td>01</td><td>−.5 0</td><td>−.5 0</td><td>−.5 <b>0</b></td></tr><tr><td>10</td><td>−.5 0</td><td>−.5 0</td><td>−.5 <b>0</b></td></tr><tr><td>11</td><td>.5 1</td><td>−1.5 0</td><td>.5 <b>1</b></td></tr></table>
+<b>XOR</b>: h₁ OR φ(x₁+x₂−.5), h₂ NAND φ(−x₁−x₂+1.5), y AND φ(h₁+h₂−1.5). Comprobar siempre la tabla.</div>
 
 <div class="c"><h>J Errores típicos</h>d=ε sí cuenta · minPts incluye al punto · Laplace a todas las clases · x₀=1 al <b>inicio</b> · logística con MSE · α muy grande · pesar características en vez de clases · olvidar estandarizar en KNN/SVM (árboles no) · γ de GB está en log-odds → pasar por σ · capas ocultas lineales · LayerNorm ≠ BatchNorm · convolución ≠ correlación cruzada.</div>
 </div>

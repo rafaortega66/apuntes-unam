@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-23T11:50:26+00:00",
+ "generatedAt": "2026-11-23T11:51:23+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -1063,6 +1063,11 @@
  },
  "gitlog": [
   {
+   "hash": "edb87f7",
+   "fecha": "2026-11-23T05:50:11-06:00",
+   "mensaje": "RP: acordeón para el segundo examen parcial (DBSCAN → Transformers + ejercicios de las Tareas 2 y 3 resueltos)"
+  },
+  {
    "hash": "ffefed5",
    "fecha": "2026-11-22T22:39:12-06:00",
    "mensaje": "RP: presentación Clase 18 (Procesamiento del lenguaje natural II), publicada hoy en Classroom"
@@ -1356,11 +1361,6 @@
    "hash": "a5145cc",
    "fecha": "2026-10-26T12:11:37-06:00",
    "mensaje": "SIB: audios verificados contra el cuaderno nuevo (ids y nombres alineados con la hoja); fuente de audio en las Clases 1-15; tarea de atacantes ligada a SIB-Clase13; CLAUDE.md sin la excepción de desfase"
-  },
-  {
-   "hash": "fa37348",
-   "fecha": "2026-10-26T11:33:21-06:00",
-   "mensaje": "SIB: agregar Clase 15 (22 oct) — inicio del Tema 4: políticas de seguridad y seis principios de redacción"
   }
  ]
 }
