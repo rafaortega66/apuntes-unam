@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-22T08:17:16+00:00",
+ "generatedAt": "2026-11-23T04:39:12+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -1063,6 +1063,11 @@
  },
  "gitlog": [
   {
+   "hash": "25b4a6b",
+   "fecha": "2026-11-22T02:17:17-06:00",
+   "mensaje": "RP: archivos de Classroom que faltaban (decks 15-17, T02-T04 entregadas, P04 por correo, P05, proyecto RAF-DB)"
+  },
+  {
    "hash": "1b7b642",
    "fecha": "2026-11-19T11:51:17-06:00",
    "mensaje": "Clases del 17 al 19 nov según RegistroClases: ACS 24, SIB 21, MD 22 (NotebookLM); ACS 25, SIB 22, FSE 22 sin asistir"
@@ -1356,11 +1361,6 @@
    "hash": "fe43596",
    "fecha": "2026-10-26T11:29:22-06:00",
    "mensaje": "ACS: agregar Clase 17 (22 oct) — Programa 06 en vivo, puertos efímeros, struct tm y select() para chat grupal"
-  },
-  {
-   "hash": "503d0f5",
-   "fecha": "2026-10-26T11:26:19-06:00",
-   "mensaje": "ASI: agregar Clase 15 (21 oct) — transformación digital, IA y prompts, habilidades y tarea en equipos de 3"
   }
  ]
 }

@@ -160,7 +160,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 
 ## RP — Reconocimiento de Patrones
 
-- **RP-Material**: 19 archivos (RP/RP-Material/)
+- **RP-Material**: 20 archivos (RP/RP-Material/)
 
 
 ### RP-Examenes
