@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<title>RP acordeón examen 2</title>
+<style>
+@page{size:letter landscape;margin:.18in}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,"Liberation Sans",Helvetica,sans-serif;font-size:4.75pt;line-height:1.17;color:#000;background:#fff}
+.page{display:flex;gap:.12in;align-items:flex-start}
+.strip{width:3.55in;column-count:3;column-gap:2px;border:.6pt solid #000;padding:1px}
+.c{break-inside:avoid;border:.5pt solid #000;margin-bottom:2px;padding:0 1.4px 1.2px}
+.c h{display:block;background:#000;color:#fff;font-weight:bold;margin:0 -1.4px 1px;padding:.3px 1.4px;font-size:4.9pt}
+b{font-weight:bold}
+table{border-collapse:collapse;width:100%;margin:.5px 0}
+td,th{border:.4pt solid #000;padding:0 .8px;vertical-align:top;text-align:left}
+th{font-weight:bold;background:#ddd}
+.t{display:block;text-align:center;font-weight:bold;font-size:5.6pt;border:.6pt solid #000;margin-bottom:2px;padding:.5px;column-span:all}
+.f{font-family:"DejaVu Sans Mono",monospace;font-size:4.4pt}
+.w{font-weight:bold}
+</style></head><body><div class="page">
+
+<!-- ===================== TIRA 1: TEORÍA ===================== -->
+<div class="strip">
+<span class="t">RP · 2.º examen · Teoría (DBSCAN → Transformers)</span>
+
+<div class="c"><h>1 DBSCAN</h>No supervisado, por <b>densidad</b>: halla solo el nº de clústeres y el <b>ruido</b> (no se fija K).
+<b>ε</b> radio máx. de vecindad · <b>minPts</b> mín. de puntos en ε (el punto cuenta).
+<b>Núcleo</b>: |N<sub>ε</sub>| ≥ minPts · <b>Frontera</b>: no es núcleo pero está en N<sub>ε</sub> de un núcleo · <b>Ruido</b>: ninguno. ⚠ Ruido puede volverse frontera después.</div>
+
+<div class="c"><h>2 DBSCAN: algoritmo · parámetros</h>1 pasada (≠ K-Means): visitar P → vecindad (d ≤ ε) → &lt; minPts = ruido temporal; ≥ minPts = núcleo, K+1, <b>expandir</b> con cola (vecino núcleo agrega sus vecinos).
+<b>minPts</b>: d+1 a 2d (2 caract. → 3–4). <b>ε</b>: gráfica de <b>K-distancia</b> ordenada → el <b>codo</b>.
+✔ formas arbitrarias (anillos, lunas), outliers. ✘ <b>densidades variables</b> (un solo ε), alta dimensión.</div>
+
+<div class="c"><h>3 Bayes: QDA · LDA · NB</h>Posterior ∝ P(ω<sub>k</sub>)·p(x|ω<sub>k</sub>); gana la mayor.
+<b>QDA</b> Σ<sub>k</sub> por clase · <b>LDA</b> Σ única compartida · <b>NB</b> diagonal (independencia condicional) → producto de P(x<sub>i</sub>|ω).
+Log de gaussiana: depende de P(ω), Σ y <b>Mahalanobis</b>.</div>
+
+<div class="c"><h>4 Naive Bayes discreto · Laplace</h>P(c)=n<sub>c</sub>/N · P(x<sub>i</sub>=v|c)=cuenta/n<sub>c</sub>.
+Puntaje = P(c)·∏P(x<sub>i</sub>|c); posterior = puntaje/Σ puntajes.
+Cero (palabra nunca vista) anula todo → <b>Laplace</b>: (cuenta+1)/(n<sub>c</sub>+k), k = nº de valores del atributo. ⚠ A <b>todas</b> las clases, no solo a una.</div>
+
+<div class="c"><h>5 NB gaussiano</h>Por clase: media x̄ y varianza de cada atributo.
+<span class="f">f(x)=1/√(2πσ²)·e^(−(x−μ)²/2σ²)</span>
+Puntaje = P(c)·f(x₁)·f(x₂). s² muestral ÷(n−1) (poblacional ÷n: usar la del profe).</div>
+
+<div class="c"><h>6 KNN</h>Supervisado, <b>no paramétrico</b>, basado en instancias, <b>perezoso</b> (no entrena: memoriza; predecir es lento).
+Pasos: distancias a todos → ordenar → K más cercanos → <b>voto mayoría</b> (regresión: promedio). Empate: azar / costo.
+K chico = sobreajuste (nunca K=1) · K grande = subajuste (moneda) · K por validación (exactitud vs K).
+<b>Estandarizar</b> antes (si no, domina la variable grande). KNN Imputer.</div>
+
+<div class="c"><h>7 Distancias · escalado</h>Euclidiana √Σ(Δ)² · Manhattan Σ|Δ| · Minkowski (Σ|Δ|<sup>p</sup>)<sup>1/p</sup> (p=1 Manh., p=2 Eucl.) · Mahalanobis (usa Σ).
+Min-max: x' = (x−min)/(max−min) ∈ [0,1]. Al punto nuevo se le aplican min y max <b>del entrenamiento</b>.</div>
+
+<div class="c"><h>8 Regresión logística: modelo</h>Lineal falla para clasificar: un outlier inclina la recta y mueve el umbral; sale de [0,1].
+<b>σ(z)=1/(1+e<sup>−z</sup>)</b>, z=θᵀx · h=P(y=1|x).
+Odds = e<sup>θᵀx</sup>; <b>logit</b> ln(odds)=θᵀx → frontera = hiperplano.
+<b>x₀ = 1 al inicio</b> (multiplica a θ₀). Caja <b>blanca</b>: θ<sub>i</sub> dice impacto y dirección (+ empuja a clase 1).</div>
+
+<div class="c"><h>9 Costo BCE</h><span class="f">J=−(1/m)Σ[y ln h+(1−y)ln(1−h)]</span>
+y=1: −ln h · y=0: −ln(1−h). <b>Convexa</b> (MSE+sigmoide no). Castiga confianza equivocada:
+y=1,h=.9 → .105 · y=1,h=.4 → .916 · y=0,h=.15 → .162 · y=0,h=.8 → 1.609.</div>
+
+<div class="c"><h>10 Descenso de gradiente</h>σ'(z)=σ(1−σ) · <b>∂J/∂θ<sub>j</sub>=(1/m)Σ(h−y)x<sub>j</sub></b> · ∂J/∂b=(1/m)Σ(h−y)
+<b>θ<sub>j</sub> := θ<sub>j</sub> − α·∂J/∂θ<sub>j</sub></b> (α .1–.5; redes ≈10⁻⁴). α grande diverge.
+<b>Batch</b> todos (preciso, caro) · <b>Minilotes</b> (industria) · <b>SGD</b> 1 ejemplo (rápido, ruidoso).</div>
+
+<div class="c"><h>11 Regularización L1 · L2</h><table><tr><th></th><th>Costo extra</th><th>Efecto</th></tr>
+<tr><td><b>L2 Ridge</b></td><td>(λ/2m)Σθ² · grad +(λ/m)θ</td><td>encoge, no anula; estable</td></tr>
+<tr><td><b>L1 Lasso</b></td><td>(λ/m)Σ|θ| · grad +(λ/m)sign θ</td><td>pesos inútiles = <b>0</b> (selección)</td></tr></table>
+λ enorme → todo 0 / subajuste. Sin regularizar θ crece (memoriza).</div>
+
+<div class="c"><h>12 Multiclase · pesado por clase</h><b>OvR</b>: K binarios, gana mayor prob. (no suman 1). <b>Softmax</b>: P<sub>k</sub>=e<sup>z<sub>k</sub></sup>/Σe<sup>z<sub>j</sub></sup> (suman 1), ŷ=argmax.
+<b>w<sub>k</sub> = m/(K·m<sub>k</sub>)</b>: 1000, 950/50 → w₀=1000/1900=<b>.526</b>, w₁=1000/100=<b>10</b> (≈19×). ⚠ Se aplica a la <b>clase</b>, nunca a características ni ejemplos.</div>
+
+<div class="c"><h>13 SVM: margen</h>Hiperplano w·x+b=0 que <b>maximiza el margen</b>; lo definen los <b>vectores de soporte</b> (α<sub>i</sub>&gt;0).
+y<sub>i</sub>(w·x<sub>i</sub>+b) ≥ 1 · <b>M = 2/‖w‖</b> → min ½‖w‖².
+Lagrange: w=Σα<sub>i</sub>y<sub>i</sub>x<sub>i</sub>, Σα<sub>i</sub>y<sub>i</sub>=0; dual solo con x<sub>i</sub>ᵀx<sub>j</sub> → kernel.</div>
+
+<div class="c"><h>14 SVM: holgura · kernel</h>Margen suave: y(wᵀx+b) ≥ 1−ξ, min ½‖w‖²+CΣξ. <b>C grande</b> pocos errores, margen angosto (sobreajuste) · <b>C chico</b> margen ancho.
+Kernel K=φ(x<sub>i</sub>)ᵀφ(x<sub>j</sub>) sin calcular φ: lineal xᵀx · polinomial (1+xᵀx)<sup>p</sup> · <b>RBF</b> e<sup>−‖Δ‖²/2σ²</sup> · sigmoide tanh.
+Binario → OvR / OvO. ✔ alta dim., pocos datos, robusto · ✘ lento, escalar es crucial. Breast Cancer: gana lineal .982.</div>
+
+<div class="c"><h>15 Árbol de decisión (CART)</h>Supervisado, no paramétrico, reglas si…entonces; raíz = atributo más informativo · nodos internos · <b>hojas</b> = clase mayoritaria · rama.
+Cortes ⟂ a ejes (hiperrectángulos) → <b>no estandarizar</b>; acepta categóricas. Voraz.
+<b>Gini = 1 − Σp<sub>i</sub>²</b> (binario: 0 puro, .5 máx) · <b>H = −Σp log₂p</b> (máx 1).
+7A/3B → 1−.49−.09 = <b>.42</b> (aún impuro).</div>
+
+<div class="c"><h>16 Árbol: corte · poda</h>Gini ponderado = Σ(n<sub>hijo</sub>/n)·Gini<sub>hijo</sub>; ganancia = Gini<sub>padre</sub> − ponderado. Continuos: probar <b>puntos medios</b> (x<sub>i</sub>+x<sub>i+1</sub>)/2. <b>Empate → la 1.ª característica evaluada.</b> Gini 0 → hoja.
+Pre-poda: max_depth, min_samples_split/leaf. Post-poda: <b>α<sub>c</sub>=[R(t)−R(T)]/(|T|−1)</b>; α<sub>c</sub> &lt; α → se poda. Ej.: hojas 8A2B y 7A3B (N=40): R(T)=.05+.075=.125, R(t)=5/40=.125 → α<sub>c</sub>=0 &lt; .1 → podar.</div>
+
+<div class="c"><h>17 Random Forest (bagging)</h>Árboles en <b>paralelo</b>, voto (clasif.) / promedio (regr.). <b>Bootstrap</b> N con reemplazo: (1−1/N)<sup>N</sup>→e<sup>−1</sup>=<b>.368</b> → cada árbol ve <b>63.2 %</b>; 36.8 % <b>OOB</b> = validación interna.
+<b>Subespacios</b>: m≈√D características por corte (árboles distintos). Reduce <b>varianza</b>; pierde interpretabilidad. Clase: árbol .91 → RF(40) .95.</div>
+
+<div class="c"><h>18 Boosting · Gradient Boosting</h><b>Secuencial</b>: débiles (árboles cortos), cada uno corrige residuos del anterior; suma ponderada. Stacking = metamodelo.
+GB = descenso de gradiente en el <b>espacio de funciones</b> (no pesos): árbol ajusta <b>pseudo-residuos</b> −∂L/∂f (MSE: y−f). f<sub>m</sub>=f<sub>m−1</sub>+ν·γ<sub>jm</sub>, γ = Σr / Σp(1−p).
+Ej.: 3 sí/3 no → f₀=ln(3/3)=0, p=.5, r=±.5; hojas γ=∓1.5/.75=∓2; ν=.5 → f₁=±1 → σ = .27/.73.
+Multiclase: K secuencias one-hot + softmax. ✘ lento, no capta lo <b>espacial ni temporal</b>. XGBoost: paralelo + L1/L2.</div>
+
+<div class="c"><h>19 Perceptrón · MLP</h><b>Y=φ(Σw<sub>i</sub>x<sub>i</sub>+b)</b>. Rosenblatt 1957–58; Minsky–Papert 1969: 1 neurona no hace <b>XOR</b>. GPU lo revivió.
+AND: w=1,1, b=−1.5, escalón. OR: b=−0.5. Solo frontera recta.
+MLP: capas ocultas <b>no lineales</b> (si son lineales colapsa a un modelo lineal). Aprox. universal: 1 capa oculta ancha basta en teoría; profundidad = menos parámetros.</div>
+
+<div class="c"><h>20 Salida · pérdida · entrenamiento</h><table><tr><td>Regresión</td><td>lineal</td><td>MSE</td></tr><tr><td>Binaria</td><td>sigmoide</td><td>BCE</td></tr><tr><td>K clases</td><td>softmax</td><td>CE multiclase</td></tr></table>
+Forward → pérdida → <b>backprop</b> (regla de la cadena, reutiliza derivadas) → W −= α∇L. Superficie no convexa (mínimos locales, puntos silla) → minilotes; <b>época</b> = pasar por todos, revolviendo.</div>
+
+<div class="c"><h>21 Gradiente · sobreajuste</h><b>Desvanecimiento</b>: sigmoide/tanh saturan (derivada≈0) · <b>Explosión</b>: producto crece.
+Soluciones: ReLU/LeakyReLU/GELU · <b>ResNet</b> f(x)+x · BatchNorm · clipping · init He/Xavier.
+Sobreajuste: train baja, val sube · subajuste: ambas altas. Regularizar: paro temprano, L1/L2, <b>dropout</b>, aumento de datos, suavizado de etiquetas.</div>
+
+<div class="c"><h>22 CNN</h>Densa: 224×224×3 = <b>150,528</b> entradas ×1024 ≈ <b>154 M</b> pesos y destruye vecindad. Filtro 3×3×3 = <b>27</b> coef. (pesos aprendidos).
+<b>Convolución</b> refleja + desplaza, conmutativa · <b>correlación cruzada</b> sin reflejar (orden importa) · autocorrelación consigo misma. 1D audio, 2D imagen, 3D video.
+Nº filtros = nº mapas · stride · padding. Max/avg/<b>global avg</b> pooling · conv. transpuesta ↑ resolución · 1×1 cambia canales.
+Conv+ReLU+pool → flatten/GAP → densa + softmax. ResNet H=F(x)+x (derivada 1). LeNet 98 · AlexNet 12 · ResNet 15.</div>
+
+<div class="c"><h>23 Autoencoder · NLP</h>Encoder comprime (784 → 8) → latente → decoder reconstruye (con pérdida). <b>Anomalías</b>: entrenar solo normales → error alto = anomalía. Denoising.
+Transfer learning (ImageNet) con pocos datos.
+<b>N-grama</b>: siguiente palabra depende de n−1 previas (Markov); explosión, contexto corto, prob. 0. <b>TF-IDF</b>. Embeddings estáticos (Word2Vec: rey−hombre+mujer≈reina) vs <b>contextuales</b> (BERT/GPT: «banco»).</div>
+
+<div class="c"><h>24 RNN · LSTM</h>CBOW: contexto → palabra · Skip-gram: palabra → contexto.
+<b>RNN</b>: estado h<sub>t</sub> + x<sub>t</sub>; tanh → <b>desvanecimiento</b> (50–100 palabras ok, 1000 falla).
+<b>LSTM</b>: línea de estado C<sub>t</sub> (como residual) + compuertas <b>olvido · entrada · salida</b>. Encoder–decoder (vector de contexto fijo). ✘ secuencial, no paraleliza.</div>
+
+<div class="c"><h>25 Transformer</h><i>Attention Is All You Need</i> (2017). <b>Agnóstico</b> (sin sesgo espacial/temporal), paralelo. <b>Token</b> = vector unidad. GPT = Generative Pretrained T. (usa decoder).
+Embedding + <b>codificación posicional</b> (senos/cosenos) → bloques → lineal → softmax.
+<b>Q</b> qué busco · <b>K</b> qué ofrezco · <b>V</b> contenido: <b>softmax(QKᵀ/√d<sub>k</sub>)·V</b>. Multicabeza: n en paralelo, concatenar + lineal.
+Bloque: atención → suma+<b>LayerNorm</b> → FFN (GELU, dropout) → suma+LayerNorm. LayerNorm = por muestra (sus características) · BatchNorm = por lote.
+<b>RAG</b>: consulta BD actualizada → no alucina. CNN ~1 M imgs vs Transformer ~300 M. BERT, ViT, SAM.</div>
+</div>
+
+<!-- ===================== TIRA 2: EJERCICIOS ===================== -->
+<div class="strip">
+<span class="t">RP · 2.º examen · Ejercicios tipo tarea (resueltos)</span>
+
+<div class="c"><h>A DBSCAN (T2): receta</h>1 Graficar. 2 Por punto N<sub>ε</sub>(p) incluyéndolo y |N|; descartar a ojo si |Δx| o |Δy| &gt; ε. ⚠ d = ε <b>sí</b> cuenta. 3 Núcleo / frontera / ruido. 4 Clústeres = núcleos conectados + sus fronteras.</div>
+
+<div class="c"><h>B DBSCAN (T2) ε=1.5 · minPts=3</h>A(1,1) B(1.5,2) C(2,1) D(2,2) E(1,2.5) F(6,6) G(6.5,7) H(7,6) I(7,7.5) J(4,4) K(8.5,2) L(3,2.5)
+d ≤ 1.5: AB 1.12 · AC 1 · AD 1.41 · <b>AE 1.5</b> · BC 1.12 · BD .5 · BE .71 · CD 1 · DE 1.12 · <b>DL 1.12</b> · FG 1.12 · FH 1 · GH 1.12 · GI .71 · <b>HI 1.5</b>. No: BL 1.58, CE/CL/FI/JL 1.80.
+<table><tr><th>p</th><th>N<sub>ε</sub></th><th>|N|</th><th>tipo</th></tr>
+<tr><td>A,B</td><td>ABCDE</td><td>5</td><td>núcleo</td></tr><tr><td>C</td><td>ABCD</td><td>4</td><td>núcleo</td></tr>
+<tr><td>D</td><td>ABCDEL</td><td>6</td><td>núcleo</td></tr><tr><td>E</td><td>ABDE</td><td>4</td><td>núcleo</td></tr>
+<tr><td>F</td><td>FGH</td><td>3</td><td>núcleo</td></tr><tr><td>G,H</td><td>FGHI</td><td>4</td><td>núcleo</td></tr>
+<tr><td>I</td><td>GHI</td><td>3</td><td>núcleo</td></tr><tr><td>L</td><td>DL</td><td>2</td><td><b>frontera</b> (en N(D))</td></tr>
+<tr><td>J,K</td><td>sí mismo</td><td>1</td><td><b>ruido</b></td></tr></table>
+<b>2 clústeres</b>: C1={A,B,C,D,E,L} · C2={F,G,H,I} · ruido {J,K}.</div>
+
+<div class="c"><h>C NB categórico (T2-A)</h>Sí = 6, No = 4 → P(Sí)=.6, P(No)=.4.
+<table><tr><th>valor</th><th>|Sí</th><th>|No</th></tr>
+<tr><td>Asist. Alta / Baja</td><td>5/6 · 1/6</td><td>1/4 · 3/4</td></tr>
+<tr><td>Tareas Comp / Inc</td><td>4/6 · 2/6</td><td>1/4 · 3/4</td></tr>
+<tr><td>Horas Muchas / Pocas</td><td>4/6 · 2/6</td><td>1/4 · 3/4</td></tr></table>
+Sin ceros → sin Laplace.
+x1=(Baja,Comp,Muchas): Sí .6·(1/6)(4/6)(4/6)=<b>.0444</b> · No .4·(3/4)(1/4)(1/4)=<b>.0188</b> → ÷.0632: <b>Sí .703</b>.
+x2=(Alta,Inc,Pocas): Sí .6·(5/6)(2/6)(2/6)=.0556 · No .4·(1/4)(3/4)(3/4)=.0563 → <b>No .503</b> (cerrado).</div>
+
+<div class="c"><h>D NB gaussiano (T2-B) x=(6.5 h, 7.5)</h>P(A)=5/8=.625 · P(R)=3/8=.375 · s² ÷(n−1).
+<table><tr><th></th><th>x̄ sueño</th><th>s²</th><th>x̄ prom</th><th>s²</th></tr>
+<tr><td>Aprueba</td><td>7</td><td>.5</td><td>8.6</td><td>.425</td></tr>
+<tr><td>Reprueba</td><td>5</td><td>1</td><td>6.667</td><td>.583</td></tr></table>
+A: f(6.5)=.4394, f(7.5)=.1474 → .625·.4394·.1474=<b>.0405</b>
+R: f(6.5)=.1295, f(7.5)=.2880 → .375·.1295·.2880=<b>.0140</b>
+→ <b>Aprueba</b> (posterior .743). Con ÷n: también Aprueba (.789).</div>
+
+<div class="c"><h>E KNN (T3-A) q=(4,3)</h>A: P1(1,2) P2(2,3) P3(3,1) P4(2,1) · B: P5(6,5) P6(7,7) P7(5,6) P8(6,7) P9(4,4)
+<b>Eucl.</b>: P9 1 B · P2 2 A · P3 2.24 A · P4 2.83 A · P5 2.83 B · P1 3.16 A · P7 3.16 B · P8 4.47 B · P6 5 B
+<b>Manh.</b>: P9 1 B · P2 2 A · P3 3 A · P1,P4,P5,P7 4 · P8 6 · P6 7
+k=1 → <b>B</b> (P9) · k=3 → P9,P2,P3 = 2A,1B → <b>A</b>, en ambas distancias.
+Cambia más por k que por la distancia: aquí la distancia no altera la decisión (sí el orden de empates).</div>
+
+<div class="c"><h>F KNN escalado (T3-B) nuevo (47, 33000)</h>C1 25/30k S · C2 30/32k S · C3 45/31k N · C4 50/52k N · C5 28/50k S
+<b>Sin escalar</b>: C2 1000 · C3 2000 · C1 3000 · C5 17000 · C4 19000 → 3-NN = S,N,S → <b>S</b>. Domina el <b>ingreso</b>.
+<b>Min-max</b>: edad (x−25)/25 · ingreso (x−30000)/22000 → nuevo (.88, .136); C1(0,0) C2(.2,.091) C3(.8,.045) C4(1,1) C5(.12,.909).
+d: C3 .121 · C2 .682 · C4 .872 · C1 .891 · C5 1.084 → 3-NN = N,S,N → <b>N</b>. <b>Sí cambió</b>: normalizar evita que una escala domine.</div>
+
+<div class="c"><h>G Logística (T3) w=(.5,−.5), b=−.5, η=.5</h>Datos: (1,2)→0 · (2,1)→0 · (3,4)→1 · (4,3)→1
+1) z = −1, 0, −1, 0 → p̂ = .269, .5, .269, .5 → bien <b>2/4</b> (ej. 1 y 4; con ≥.5).
+2) L = −¼[ln(.731)+ln(.5)+ln(.269)+ln(.5)] = <b>.753</b>
+3) p̂−y = .269, .5, −.731, −.5 → ∂w₁=¼Σ(p̂−y)x₁ = <b>−.731</b> · ∂w₂ = <b>−.847</b> · ∂b = <b>−.116</b>
+4) w₁=.5−.5(−.731)=<b>.866</b> · w₂=−.5−.5(−.847)=<b>−.077</b> · b=−.5−.5(−.116)=<b>−.442</b>
+5) z = .27, 1.21, 1.85, 2.79 → p̂ = .567, .771, .864, .942 → L = <b>.629</b> (bajó) · todas → 1 → bien <b>2/4</b> (3 y 4).</div>
+
+<div class="c"><h>H Gini en un árbol (última tarea)</h>Por nodo: contar clases → <b>Gini=1−Σp²</b>. Hoja: clase mayoritaria + qué ejemplos caen (seguir las reglas por fila).
+Ej. 8 pacientes 4E/4S: raíz 1−.25−.25=<b>.5</b>. Fiebre alta 3E1S: 1−(3/4)²−(1/4)²=<b>.375</b>; baja 1E3S=.375 → ponderado .375; ganancia .125. Empate con tos/dolor → <b>fiebre</b> (la 1.ª). Alta+tos 2E → Gini 0 hoja; mixtos 1/1 → .5 → se parten con dolor de cabeza → 6 hojas.
+Edad ≤35 (1s/1n) .5 · &gt;35 (1s/2n) .444 → (2/5).5+(3/5).444 = <b>.466</b>.</div>
+
+<div class="c"><h>I Red de 3 neuronas, escalón (última tarea)</h>φ(z)=1 si z≥0, si no 0. Cada neurona = recta. <b>XOR</b> = 2 ocultas + 1 salida:
+h₁ = <b>OR</b>: φ(x₁+x₂−0.5) · h₂ = <b>NAND</b>: φ(−x₁−x₂+1.5) · y = <b>AND</b>(h₁,h₂): φ(h₁+h₂−1.5)
+<table><tr><th>x₁x₂</th><th>h₁</th><th>h₂</th><th>y</th></tr><tr><td>00</td><td>0</td><td>1</td><td>0</td></tr><tr><td>01</td><td>1</td><td>1</td><td>1</td></tr><tr><td>10</td><td>1</td><td>1</td><td>1</td></tr><tr><td>11</td><td>1</td><td>0</td><td>0</td></tr></table>
+XNOR: salida OR de (AND, NOR): h₁=φ(x₁+x₂−1.5), h₂=φ(−x₁−x₂+0.5), y=φ(h₁+h₂−0.5). Comprobar siempre la tabla de verdad.</div>
+
+<div class="c"><h>J Errores típicos</h>d=ε sí cuenta · minPts incluye al punto · Laplace a todas las clases · x₀=1 al <b>inicio</b> · logística con MSE · α muy grande · pesar características en vez de clases · olvidar estandarizar en KNN/SVM (árboles no) · γ de GB está en log-odds → pasar por σ · capas ocultas lineales · LayerNorm ≠ BatchNorm · convolución ≠ correlación cruzada.</div>
+</div>
+
+</div></body></html>
