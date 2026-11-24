@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-23T11:51:23+00:00",
+ "generatedAt": "2026-11-24T01:28:49+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -1063,6 +1063,11 @@
  },
  "gitlog": [
   {
+   "hash": "6912ca5",
+   "fecha": "2026-11-23T05:51:23-06:00",
+   "mensaje": "RP acordeón: Tarea 4 resuelta (Gini del árbol x1/x2/x3 y red XNOR con la fe de erratas)"
+  },
+  {
    "hash": "edb87f7",
    "fecha": "2026-11-23T05:50:11-06:00",
    "mensaje": "RP: acordeón para el segundo examen parcial (DBSCAN → Transformers + ejercicios de las Tareas 2 y 3 resueltos)"
@@ -1356,11 +1361,6 @@
    "hash": "5975c3d",
    "fecha": "2026-10-26T12:22:22-06:00",
    "mensaje": "MD: Práctica 3.4 (Clasificación, Equipo 7) entregada — versión final del notebook tomada de Drive (la copia local del 21 oct pasa a version-previa), presentación PDF, guías, resumen y guion; pendiente quitado; SIB-T03 apunta a SIB-Clase13"
-  },
-  {
-   "hash": "a5145cc",
-   "fecha": "2026-10-26T12:11:37-06:00",
-   "mensaje": "SIB: audios verificados contra el cuaderno nuevo (ids y nombres alineados con la hoja); fuente de audio en las Clases 1-15; tarea de atacantes ligada a SIB-Clase13; CLAUDE.md sin la excepción de desfase"
   }
  ]
 }
