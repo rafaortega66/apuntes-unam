@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="formato" content="no-aplica">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estudiar hoy — Examen final SIB</title>
+<link rel="stylesheet" href="../../assets/style.css?v=20261118a">
+<script>try{var f=localStorage.getItem('sib-fs');if(f)document.documentElement.dataset.fs=f}catch(e){}</script>
+<script src="../../assets/app.js?v=20261118a" defer></script>
+<style>
+:root { --c:#E8735C; --ok:#45B8A8; --warn:#D65C8A; --fs:20px; }
+:root[data-fs="1"]{--fs:17px} :root[data-fs="2"]{--fs:20px} :root[data-fs="3"]{--fs:23px} :root[data-fs="4"]{--fs:26px}
+body { padding: 46px 0 120px; }
+.eh { max-width: 900px; margin: 0 auto; padding: 0 20px; font-size: var(--fs); line-height: 1.65; }
+.eh p, .eh li { font-size: var(--fs); line-height: 1.65; }
+.eh strong { color: #fff; }
+.eh code, .eh pre { font-family: 'IBM Plex Mono', monospace; }
+.eh code { font-size: .88em; background: rgba(255,255,255,.08); padding: .05em .35em; border-radius: 5px; }
+
+/* cabecera con cuenta regresiva */
+.eh-head { padding: 26px 0 18px; }
+.eh-head .back { font-size: 15px; }
+.eh-head h1 { font-family: 'Fraunces', serif; font-size: clamp(32px, 6vw, 50px); line-height: 1.05; margin: 14px 0 6px; }
+.eh-head .sub { color: var(--ink-soft); font-size: 16px; margin: 0; }
+.eh-count { display: flex; flex-wrap: wrap; gap: 12px; margin: 18px 0 4px; }
+.eh-count .box { background: var(--white); border: 1px solid rgba(255,255,255,.08); border-top: 4px solid var(--c); border-radius: 14px; padding: 12px 18px; }
+.eh-count .big { font: 700 34px 'IBM Plex Mono', monospace; color: var(--c); line-height: 1.1; }
+.eh-count .lbl { font-size: 14px; color: var(--ink-soft); }
+.eh-src { font-size: 14.5px !important; color: var(--ink-soft); margin-top: 10px; }
+.eh-src a { color: var(--c); }
+
+/* pestañas pegadas */
+.eh-tabs { position: sticky; top: 46px; z-index: 40; background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,.07); }
+.eh-tabs-in { max-width: 900px; margin: 0 auto; padding: 10px 20px; display: flex; gap: 8px; align-items: center; overflow-x: auto; }
+.eh-tabs button { flex: none; font: 600 15px 'Inter', sans-serif; color: var(--ink); background: var(--white); border: 1.5px solid rgba(255,255,255,.13); border-radius: 999px; padding: 9px 16px; cursor: pointer; }
+.eh-tabs button.on { background: var(--c); color: #0d1020; border-color: var(--c); }
+.eh-tabs .sp { flex: 1; }
+.eh-tabs .fs button { padding: 9px 12px; border-radius: 10px; }
+
+.panel { display: none; padding-top: 22px; }
+.panel.on { display: block; }
+h2.t { font-family: 'Fraunces', serif; font-size: calc(var(--fs) * 1.5); margin: 10px 0 6px; }
+.lead { color: var(--ink-soft); margin: 0 0 18px; }
+
+/* plan */
+.plan { list-style: none; padding: 0; margin: 0; }
+.plan li { display: flex; gap: 14px; align-items: flex-start; background: var(--white); border: 1px solid rgba(255,255,255,.07); border-radius: 14px; padding: 14px 18px; margin: 0 0 10px; cursor: pointer; }
+.plan li .h { flex: none; font: 600 15px 'IBM Plex Mono', monospace; color: var(--c); width: 6.2em; padding-top: .25em; }
+.plan li .chk { flex: none; width: 26px; height: 26px; border-radius: 8px; border: 2px solid var(--c); margin-top: .15em; display: grid; place-items: center; font-weight: 700; color: #0d1020; }
+.plan li.done { opacity: .5; }
+.plan li.done .chk { background: var(--ok); border-color: var(--ok); }
+.plan li.done .chk::after { content: '✓'; }
+.plan li.now { border-color: var(--c); box-shadow: 0 0 0 2px color-mix(in srgb, var(--c) 40%, transparent); }
+.plan li b { display: block; }
+.plan li span.d { color: var(--ink-soft); font-size: .88em; }
+
+/* tarjetas de tema */
+.u { background: var(--white); border: 1px solid rgba(255,255,255,.07); border-left: 5px solid var(--c); border-radius: 16px; padding: 20px 24px; margin: 0 0 18px; }
+.u h3 { font-family: 'Fraunces', serif; font-size: calc(var(--fs) * 1.25); margin: 0 0 4px; line-height: 1.25; }
+.u .why { font-size: .82em; color: var(--ink-soft); margin: 0 0 12px; }
+.u .why b { color: var(--warn); }
+.u ul { padding-left: 1.2em; margin: .4em 0; }
+.u li { margin: .3em 0; }
+.u li::marker { color: var(--c); }
+.u details { margin-top: 10px; }
+.u details > summary { cursor: pointer; color: var(--c); font-weight: 600; font-size: .9em; }
+.tbl { overflow-x: auto; margin: 10px 0; border: 1px solid rgba(255,255,255,.08); border-radius: 10px; }
+.tbl table { width: 100%; border-collapse: collapse; }
+.tbl th, .tbl td { font-size: calc(var(--fs) * .82); line-height: 1.45; padding: .55em .8em; text-align: left; vertical-align: top; border-bottom: 1px solid rgba(255,255,255,.07); }
+.tbl th { background: color-mix(in srgb, var(--c) 16%, transparent); }
+.tbl td:first-child { font-family: 'IBM Plex Mono', monospace; color: var(--c); white-space: nowrap; }
+.quote { border-left: 4px solid var(--warn); background: color-mix(in srgb, var(--warn) 9%, transparent); padding: .6em 1em; border-radius: 0 10px 10px 0; margin: 10px 0; font-size: .92em; }
+
+/* pizarrón */
+.board { background: #1f2a24; border: 10px solid #5a4632; border-radius: 12px; padding: 20px 24px; margin: 0 0 20px; box-shadow: inset 0 0 40px rgba(0,0,0,.4); }
+.board h3 { font-family: 'Fraunces', serif; color: #f4f1de; margin: 0 0 6px; font-size: calc(var(--fs) * 1.2); }
+.board .task { color: #e8e4c9; margin: 0 0 10px; }
+.board .task b { color: #ffd166; }
+.board details > summary { cursor: pointer; display: inline-block; font-weight: 600; font-size: .9em; color: #1f2a24; background: #ffd166; border-radius: 999px; padding: 6px 14px; list-style: none; }
+.board details > summary::-webkit-details-marker { display: none; }
+.board details[open] > summary { background: #e8e4c9; }
+.board pre { white-space: pre-wrap; font-size: calc(var(--fs) * .78); line-height: 1.55; color: #f4f1de; background: rgba(0,0,0,.25); border-radius: 8px; padding: 14px 16px; margin: 12px 0 0; overflow-x: auto; }
+.board .time { float: right; font: 600 13px 'IBM Plex Mono', monospace; color: #ffd166; }
+
+/* tarjetas de memoria */
+.fc-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 14px; }
+.fc-bar select, .fc-bar button { font: 600 15px 'Inter', sans-serif; color: var(--ink); background: var(--white); border: 1.5px solid rgba(255,255,255,.13); border-radius: 10px; padding: 9px 12px; }
+.fc-bar .st { margin-left: auto; font: 600 14px 'IBM Plex Mono', monospace; color: var(--ink-soft); }
+.fc { min-height: 300px; background: var(--white); border: 1px solid rgba(255,255,255,.08); border-top: 5px solid var(--c); border-radius: 18px; padding: 26px 28px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; }
+.fc .tag { font: 600 13px 'IBM Plex Mono', monospace; color: var(--c); margin-bottom: 10px; }
+.fc .q { font-family: 'Fraunces', serif; font-size: calc(var(--fs) * 1.3); line-height: 1.3; }
+.fc .a { display: none; margin-top: 18px; padding-top: 16px; border-top: 1px dashed rgba(255,255,255,.18); font-size: var(--fs); }
+.fc.show .a { display: block; }
+.fc .hint { margin-top: 18px; font-size: 14px; color: var(--ink-soft); }
+.fc.show .hint { display: none; }
+.fc-act { display: flex; gap: 10px; margin-top: 14px; }
+.fc-act button { flex: 1; font: 700 17px 'Inter', sans-serif; border-radius: 14px; padding: 16px; cursor: pointer; border: 0; }
+.fc-act .no { background: color-mix(in srgb, var(--warn) 25%, var(--white)); color: #fff; }
+.fc-act .si { background: color-mix(in srgb, var(--ok) 30%, var(--white)); color: #fff; }
+.fc { position: relative; touch-action: pan-y; user-select: none; -webkit-user-select: none; transition: transform .18s ease, opacity .18s ease; }
+.fc.out-l { transform: translateX(-40px); opacity: 0; } .fc.out-r { transform: translateX(40px); opacity: 0; }
+.fc .mark { position: absolute; top: 14px; right: 18px; font: 700 13px 'IBM Plex Mono', monospace; }
+.fc .mark.ok { color: var(--ok); } .fc .mark.no { color: var(--warn); }
+.fc-nav { display: flex; gap: 10px; margin-top: 12px; }
+.fc-nav button { font: 700 26px 'Inter', sans-serif; color: var(--ink); background: var(--white); border: 1.5px solid rgba(255,255,255,.14); border-radius: 14px; padding: 10px 0; width: 72px; cursor: pointer; line-height: 1; }
+.fc-nav .rev { flex: 1; width: auto; font-size: 17px; color: var(--paper); background: var(--c); border: 0; }
+.fc-nav button:disabled { opacity: .35; cursor: default; }
+@media (max-width: 600px) { .fc { min-height: 56vh; padding: 22px 20px; } .fc-nav button { width: 64px; padding: 14px 0; } .fc-act button { padding: 18px; } }
+.fc-keys { font-size: 13.5px !important; color: var(--ink-soft); margin-top: 10px; text-align: center; }
+
+/* código */
+pre.code { white-space: pre; font-size: calc(var(--fs) * .72); line-height: 1.55; background: #0E1015; border: 1px solid rgba(255,255,255,.08); border-radius: 10px; padding: 14px 16px; overflow-x: auto; color: #C9D1D9; }
+
+
+/* pizarrón guiado */
+.pz-top { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin:0 0 12px; }
+.pz-n { font:600 15px 'IBM Plex Mono', monospace; color:var(--c); }
+.pz-dots { display:flex; gap:5px; flex-wrap:wrap; }
+.pz-dots i { width:14px; height:14px; border-radius:50%; background:rgba(255,255,255,.12); cursor:pointer; }
+.pz-dots i.ok { background:var(--ok); } .pz-dots i.rep { background:var(--warn); } .pz-dots i.cur { outline:2px solid #ffd166; outline-offset:2px; }
+.board.pz { min-height: 360px; }
+.pz-pri { display:inline-block; font:700 13px 'IBM Plex Mono', monospace; color:#1f2a24; background:#ffd166; border-radius:999px; padding:4px 12px; margin-bottom:10px; }
+.pz-why { color:#bfc8b8; font-size:.82em; margin:0 0 12px; font-style:italic; }
+.pz-step { font:700 calc(var(--fs) * .85) 'Inter', sans-serif; color:#ffd166; margin:6px 0 0; }
+.board.pz pre { font-size: calc(var(--fs) * .78); }
+.pz-hidden { display:none; margin-top:14px; padding:40px 16px; text-align:center; border:2px dashed rgba(255,255,255,.25); border-radius:10px; color:#e8e4c9; }
+.pz-act { display:flex; gap:10px; margin:14px 0 10px; }
+.pz-act button { flex:1; font:700 18px 'Inter', sans-serif; border:0; border-radius:14px; padding:18px 12px; cursor:pointer; color:#fff; background:color-mix(in srgb, var(--c) 35%, var(--white)); }
+.pz-act button.si { background:color-mix(in srgb, var(--ok) 35%, var(--white)); }
+.pz-act button.no { background:color-mix(in srgb, var(--warn) 30%, var(--white)); }
+.pz-nav { display:flex; gap:8px; }
+.pz-nav button { flex:1; font:600 15px 'Inter', sans-serif; color:var(--ink); background:var(--white); border:1.5px solid rgba(255,255,255,.13); border-radius:10px; padding:10px; cursor:pointer; }
+.pz-all { display:none; margin:14px 0 0; padding-left:1.4em; }
+.pz-all.open { display:block; }
+.pz-all li { margin:.3em 0; cursor:pointer; }
+.pz-all li.ok { color:var(--ok); } .pz-all li.rep { color:var(--warn); }
+
+/* respuesta lista para copiar */
+.pz-ans { margin-top:14px; background:rgba(0,0,0,.22); border-radius:10px; padding:16px 18px; color:#f4f1de; font-size:calc(var(--fs) * .85); line-height:1.5; }
+.pz-ans table { width:100%; border-collapse:collapse; margin:10px 0; }
+.pz-ans th { text-align:left; color:#ffd166; font-size:.85em; padding:6px 10px; border-bottom:2px solid rgba(255,209,102,.5); }
+.pz-ans td { padding:6px 10px; border-bottom:1px solid rgba(255,255,255,.12); vertical-align:top; }
+.pz-ans td:first-child { font-weight:700; color:#fff; white-space:nowrap; }
+.pz-ans .def { background:rgba(255,255,255,.06); border-radius:8px; padding:10px 14px; margin:0 0 10px; }
+.pz-ans .trap { border-left:4px solid #ffd166; padding:6px 12px; margin:10px 0; background:rgba(255,209,102,.1); border-radius:0 8px 8px 0; }
+.pz-ans .flow { font-weight:600; color:#a8e6cf; margin:8px 0; }
+.pz-ans .k { color:#ffd166; font-weight:700; }
+.pz-ans b { color:#fff; }
+.pz-ans h4 { color:#ffd166; font-family:'Fraunces', serif; margin:14px 0 4px; font-size:1em; }
+.pz-ans ul { margin:4px 0; padding-left:1.3em; } .pz-ans li { margin:3px 0; font-size:1em; line-height:1.5; }
+.pz-ans pre.sql { white-space:pre; overflow-x:auto; font-size:.82em; line-height:1.5; background:rgba(0,0,0,.3); padding:12px 14px; border-radius:8px; margin:8px 0; color:#f4f1de; }
+.pz-ans code { background:rgba(255,255,255,.1); color:#fff; }
+@media (max-width:600px){ .pz-ans { padding:12px; } .pz-ans td, .pz-ans th { padding:5px 6px; } .pz-ans td:first-child { white-space:normal; } }
+
+@media (max-width: 600px) {
+  :root { --fs: 18px; } :root[data-fs="2"]{--fs:18px} :root[data-fs="3"]{--fs:21px} :root[data-fs="4"]{--fs:24px}
+  body { padding-top: 44px; } .eh-tabs { top: 44px; }
+  .eh, .eh-tabs-in { padding-left: 16px; padding-right: 16px; }
+  .u, .board { padding: 16px 16px; } .fc { padding: 22px 18px; }
+  .plan li .h { width: 4.8em; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+<div class="eh">
+<header class="eh-head">
+  <a class="back" href="index.html">← Seguridad Informática Básica</a>
+  <h1>Examen final de SIB: mañana</h1>
+  <p class="sub">Martes 24 nov 2026 · 9:00 · salón de siempre (A206) · individual · entra todo el curso.</p>
+  <div class="eh-count">
+    <div class="box"><div class="big" id="cd">--:--</div><div class="lbl">para el examen (9:00)</div></div>
+    <div class="box"><div class="big" id="fcst">0/0</div><div class="lbl">tarjetas que ya sabes</div></div>
+  </div>
+  <p class="eh-src">Hecha con la <a href="guia-final.html">guía del examen final</a> (NotebookLM, Clases 1–20) y los <a href="resumenes.html">apuntes de la Clase 21</a>. No se agregó nada que no esté en esas fuentes. También tienes el <a href="test-final.html">test de opción múltiple (136 preguntas)</a>.</p>
+</header>
+</div>
+
+<nav class="eh-tabs"><div class="eh-tabs-in">
+  <button data-p="tarjetas" class="on">🃏 Tarjetas</button>
+  <button data-p="plan">⏱ Plan</button>
+  <a href="test-final.html" style="flex:none;font:600 15px Inter,sans-serif;color:var(--ink);background:var(--white);border:1.5px solid rgba(255,255,255,.13);border-radius:999px;padding:9px 16px;text-decoration:none">✅ Test</a>
+  <span class="sp"></span>
+  <span class="fs"><button data-d="-1">A−</button> <button data-d="1">A+</button></span>
+</div></nav>
+
+<div class="eh">
+
+<section class="panel" id="p-plan">
+  <h2 class="t">Plan: unas 2 horas esta noche y repaso mañana</h2>
+  <p class="lead">Bloques en orden; toca uno cuando lo termines. En cada bloque: tarjetas de ese tema (elígelo arriba) y luego el test filtrado por ese tema. Si algo no queda claro, ve a la <a href="guia-final.html">guía</a>.</p>
+  <ol class="plan" id="plan">
+    <li data-s="0"><span class="chk"></span><span class="h">20 min</span><span><b>Fundamentos + normas</b><span class="d">En Tarjetas elige esos temas. Lo clave: PDCA continuo (el error del examen pasado), auditorías de 3 niveles y hallazgos, TCSEC → ITSEC → CTCPEC → Common Criteria, 27001 contra 27002.</span></span></li>
+    <li data-s="1"><span class="chk"></span><span class="h">20 min</span><span><b>Servicios, mecanismos, amenazas y vulnerabilidades</b><span class="d">Los 6 servicios, los 3 factores, las 4 clasificaciones de mecanismos. Amenaza contra vulnerabilidad («¿qué me falta?»), las 5 fuentes, CVE/NVD/CVSS.</span></span></li>
+    <li data-s="2"><span class="chk"></span><span class="h">15 min</span><span><b>Ataques</b><span class="d">Agente amenazante, atacante y ataque (lo preguntó antes). Las 3 etapas, perpetradores y mitigación.</span></span></li>
+    <li data-s="3"><span class="chk"></span><span class="h">20 min</span><span><b>Políticas + modelos</b><span class="d">Los 7 principios implícitos, filosofías, sin «no», las 7 etapas. Matriz, HRU, Take-Grant, Bell-LaPadula, Biba, Clark-Wilson y entropía.</span></span></li>
+    <li data-s="4"><span class="chk"></span><span class="h">15 min</span><span><b>Planes de contingencia</b><span class="d">4 fases, 3 subplanes (antes, durante, después), preventivos y correctivos, 5 pasos.</span></span></li>
+    <li data-s="5"><span class="chk"></span><span class="h">20 min</span><span><b>Riesgos</b><span class="d">Desigualdad económica, 8 pasos, 5 técnicas, y haz a mano una matriz NIST 5 × 5 con rangos que no se traslapen.</span></span></li>
+    <li data-s="6"><span class="chk"></span><span class="h">10 min</span><span><b>Auditoría y ética</b><span class="d">Clase 21: 4 objetivos, ISO 9000 contra 27000, reglas ante el auditor, código deontológico. De la LFPDPPP (Clase 22) no hay apuntes.</span></span></li>
+    <li data-s="7"><span class="chk"></span><span class="h">A dormir</span><span><b>Dormir</b><span class="d">Dormir fija en la memoria lo que repasaste; desvelarse más resta.</span></span></li>
+    <li data-s="8"><span class="chk"></span><span class="h">Mañana</span><span><b>30 min antes de entrar</b><span class="d"><a href="test-final.html">Test</a> con «Solo las que fallé» y las tarjetas marcadas «Repasar».</span></span></li>
+  </ol>
+  <div class="quote"><b>Lo que dijo la profesora (audios, vía NotebookLM):</b> «para el siguiente examen lo que tengo que evaluar es todo» (Clase 19) · individual: «es muy sencillo, muy rápido… expedito» (Clase 21) · sobre el formato: «no me den ideas» (no dijo si es abierto u opción múltiple, ni duración ni material) · el único error que marcó del examen anterior: creer que el PDCA es solo para auditorías (Clase 14).</div>
+</section>
+
+<section class="panel" id="p-tarjetas">
+  <h2 class="t">Tarjetas de memoria</h2>
+  <p class="lead">57 tarjetas con las listas y definiciones clave. Lee la pregunta, contesta en voz alta o por escrito, y luego voltea la tarjeta. Márcala «Lo sé» o «Repasar»; luego «Solo las que fallé» te deja repetir las de repasar.</p>
+  <div class="fc-bar">
+    <select id="fc-u"><option value="">Todos los temas</option></select>
+    <button id="fc-mix">🔀 Desordenar</button>
+    <button id="fc-fail">Solo las que fallé</button>
+    <button id="fc-reset">Reiniciar</button>
+    <span class="st" id="fc-pos"></span>
+  </div>
+  <div class="fc" id="fc"><div class="tag" id="fc-tag"></div><div class="q" id="fc-q"></div><div class="a" id="fc-a"></div><div class="hint">Toca la tarjeta para ver la respuesta · desliza ← → para cambiar</div><div class="mark" id="fc-mark"></div></div>
+  <div class="fc-nav"><button id="fc-prev" aria-label="Anterior">‹</button><button class="rev" id="fc-rev">Ver respuesta</button><button id="fc-next" aria-label="Siguiente">›</button></div>
+  <div class="fc-act"><button class="no" id="fc-no">↺ Repasar</button><button class="si" id="fc-si">✓ Lo sé</button></div>
+  <p class="fc-keys">Teclado: espacio = ver respuesta · ← anterior · → siguiente · ↑ lo sé · ↓ repasar<br>Touch: toca para voltear · desliza a la izquierda = siguiente, a la derecha = anterior</p>
+</section>
+
+</div>
+
+<script>
+(function(){
+  function get(k,d){try{var v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}}
+  function put(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+  var root=document.documentElement;
+  function setFs(v){v=Math.max(1,Math.min(4,v));root.dataset.fs=v;try{localStorage.setItem('sib-fs',v)}catch(e){}}
+  setFs(+(root.dataset.fs||2));
+  document.querySelectorAll('.fs button').forEach(function(b){b.onclick=function(){setFs(+root.dataset.fs+ +b.dataset.d)}});
+  var tabs=document.querySelectorAll('.eh-tabs button[data-p]');
+  function show(p){tabs.forEach(function(t){t.classList.toggle('on',t.dataset.p===p)});
+    document.querySelectorAll('.panel').forEach(function(s){s.classList.toggle('on',s.id==='p-'+p)});put('sib-tab',p);window.scrollTo(0,0)}
+  tabs.forEach(function(t){t.onclick=function(){show(t.dataset.p)}});
+  show(get('sib-tab','tarjetas'));
+  var EX=new Date('2026-11-24T09:00:00-06:00');
+  function tick(){var ms=EX-new Date(),el=document.getElementById('cd');
+    if(ms<=0){el.textContent='¡Ya!'}else{var h=Math.floor(ms/36e5),m=Math.floor(ms%36e5/6e4);el.textContent=h+' h '+(m<10?'0':'')+m+' min'}}
+  tick(); setInterval(tick,30000);
+  var done=get('sib-plan',{});
+  document.querySelectorAll('#plan li').forEach(function(li){
+    if(done[li.dataset.s])li.classList.add('done');
+    li.onclick=function(e){if(e.target.tagName==='A')return;li.classList.toggle('done');done[li.dataset.s]=li.classList.contains('done');put('sib-plan',done)};
+  });
+
+  // tarjetas (fuentes: guía del examen final y apuntes de la Clase 21)
+  var C=[["Fundamentos", "Las 3 preguntas de seguridad, en orden", "1) ¿Qué quiero proteger? → 2) ¿De qué lo quiero proteger? → 3) ¿Cómo lo voy a proteger?"], ["Fundamentos", "Elementos del contexto de seguridad", "Propietarios/dueños/responsables · bienes/activos (tangibles e intangibles) · mecanismos · vulnerabilidades · amenazas · agentes amenazantes · riesgos."], ["Fundamentos", "Ciclo PDCA: qué se hace en cada fase", "<b>P</b> planear (bienes, jerarquía, riesgos, presupuesto) · <b>D</b> hacer (ejecutar, p. ej. los simulacros) · <b>C</b> verificar (monitorear y auditar) · <b>A</b> actuar (cambiar, actualizar, retirar lo obsoleto) y reiniciar."], ["Fundamentos", "⚠ El error del 1.er examen sobre el PDCA", "Decir que el PDCA solo se aplica cuando hay auditorías. <b>Es continuo</b>; la auditoría es la herramienta para verificar que se cumpla."], ["Fundamentos", "Los 3 niveles de auditoría", "<b>1.º interna</b>: personal de la misma entidad, sin pago. <b>2.º externa</b>: otra institución que evalúa sin certificar. <b>3.º externa</b>: certificadora acreditada que emite el certificado."], ["Fundamentos", "Los 3 tipos de hallazgo de auditoría", "<b>Oportunidad de mejora</b>: cumple, se puede optimizar (opcional). <b>Observación</b>: algo que dices hacer y no haces; pide plan de corrección. <b>No conformidad</b>: grave; impide obtener o mantener el certificado."], ["Fundamentos", "Datos numéricos de auditorías (Clase 1)", "Mínimo <b>2 al año</b> (cada 6 meses). 31 laboratorios → 33. Si uno incumple, toda la empresa pierde el certificado. Una externa dura toda una semana."], ["Normas y estándares", "Norma contra estándar (y NOM / NMX)", "Norma = obligatoria por ley. Estándar = recomendación voluntaria. <b>NOM</b> obligatoria · <b>NMX</b> no obligatoria."], ["Normas y estándares", "TCSEC: apodo, enfoque y niveles", "«Libro Naranja», EE. UU. (1983/85), militar, <b>confidencialidad de SO</b>, TCB. Niveles: D → C1, C2 → B1, B2, B3 → A1. Cancelado en 2002."], ["Normas y estándares", "ITSEC y CTCPEC", "<b>ITSEC</b> («Libro Blanco», Europa, 1990/91): funcionalidad F1–F10 y garantía E0–E6. <b>CTCPEC</b> (Canadá, 1988–93): tríada CIA + controlabilidad; T-0 a T-6 en el PDF (T-7 según un alumno)."], ["Normas y estándares", "Common Criteria: norma, qué evalúa y siglas", "<b>ISO/IEC 15408</b>, fusión de TCSEC + ITSEC + CTCPEC. Evalúa <b>productos TIC, no empresas</b>. TOE = objeto evaluado · PP = perfil de protección · ST = meta de seguridad · <b>EAL1–EAL7</b> · 3 partes."], ["Normas y estándares", "ISO 27001 contra ISO 27002", "<b>27001</b> (de BS 7799-2): requisitos del SGSI, <b>qué hacer</b>, <b>certificable</b>, 10 cláusulas. <b>27002</b> (de BS 7799-1 → 17799): controles, <b>cómo hacerlo</b>, <b>no certificable</b>; 2022 = 4 secciones, 93 controles."], ["Normas y estándares", "HIPAA, NIST y COBIT", "<b>HIPAA</b>: ley de EE. UU. de 1996, información médica PHI/ePHI. <b>NIST</b>: SP 800, CSF 2.0, matrices de riesgo. <b>COBIT</b>: ISACA, gobierno de TI, dominios EDM, APO, BAI, DSS, MEA."], ["Servicios y mecanismos", "Los 6 servicios de seguridad", "Confidencialidad · integridad · disponibilidad · control de acceso · autenticación · no repudio. (OSI 7498 contempla 5: da por sentada la disponibilidad.)"], ["Servicios y mecanismos", "Los 3 factores de autenticación", "Algo que <b>se sabe</b> (contraseña) · algo que <b>se tiene</b> (credencial, tarjeta, firma digital) · algo que <b>se es</b> (huella, iris, ID de proceso)."], ["Servicios y mecanismos", "Servicio contra mecanismo", "Servicio = <b>necesidad</b> de protección. Mecanismo = <b>herramienta</b> que la satisface (app, técnica, objeto, regla, perro guardián, persona)."], ["Servicios y mecanismos", "Las 4 clasificaciones de mecanismos", "1) Por <b>servicio</b> · 2) por <b>importancia</b>: requeridos y discrecionales · 3) por <b>cobertura</b>: generales y específicos · 4) por <b>acción</b>: preventivos, correctivos, detectores y disuasivos."], ["Servicios y mecanismos", "Principio de profundidad y síndrome del bolero", "<b>Profundidad</b>: varias capas coordinadas que no se bloqueen entre sí. <b>Bolero</b>: subestimar a personas cotidianas y hablar de lo confidencial frente a ellas."], ["Servicios y mecanismos", "Cómo se redacta un objetivo de seguridad", "Con verbos (acción), en máximo 2 renglones, con perfiles y horarios exactos. En los perfiles de protección: la necesidad, nunca la marca."], ["Amenazas y vulnerabilidades", "Amenaza, vulnerabilidad y riesgo", "<b>Amenaza</b>: evento latente que puede dañar. <b>Vulnerabilidad</b>: carencia u omisión explotable («¿qué me falta?»). <b>Riesgo</b> = ocurrencia × consecuencia."], ["Amenazas y vulnerabilidades", "Las 5 fuentes de amenaza", "1) <b>Factor humano</b> (principal) · 2) hardware · 3) software · 4) red · 5) desastres naturales."], ["Amenazas y vulnerabilidades", "Clasificación de amenazas por flujo", "Intercepción (ver sin tocar) · interrupción (disponibilidad) · modificación (integridad) · suplantación (emisor falso). 85–95 % son intencionadas e internas."], ["Amenazas y vulnerabilidades", "Las 6 categorías de vulnerabilidades", "Humanas (se cruzan con todas) · hardware · red · software · naturales · físicas (construcción)."], ["Amenazas y vulnerabilidades", "Tipos de análisis de vulnerabilidades", "<b>Estático</b> (SAST, código sin ejecutar) · <b>dinámico</b> (DAST, en ejecución con cargas extremas) · <b>SCA</b> (librerías y dependencias) · <b>basado en red</b> (firmware obsoleto)."], ["Amenazas y vulnerabilidades", "CVE, NVD y CVSS", "<b>CVE</b>: ID único CVE-AÑO-CONSECUTIVO. <b>NVD</b>: base del NIST que pondera. <b>CVSS</b>: puntaje de 0 a 10; v2 = bajo, mediano y alto; v3/v4 desde 0.1, con Alto (7–8.9) y Crítico (9–10)."], ["Ataques", "Agente amenazante, atacante y ataque", "<b>Agente amenazante</b>: podría dañar. <b>Atacante/perpetrador</b>: ya comete el ilícito. <b>Ataque</b>: la acción consumada. ⚠ Lo preguntó en el examen anterior."], ["Ataques", "Las etapas de un ataque", "Intencionado: <b>preparación</b> (la más larga) → <b>activación</b> → <b>ejecución</b> (análisis de resultados). No intencionado: sin preparación."], ["Ataques", "Clasificación de ataques", "Por objetivo: intencionados y no intencionados · por lugar: internos y externos · por visibilidad: pasivos y activos · por acción: modificación, interrupción, intercepción y suplantación."], ["Ataques", "Tipos de perpetradores", "Insiders (los más peligrosos) y outsiders. Spammer, spoofer, phisher, cracker (recompensa), hacktivista, lamer/script kiddie, carder. Sombrero blanco, negro, gris y azul; Blue Team y Red Team."], ["Ataques", "Técnicas de intrusión y su mitigación", "Redes (escaneo, MITM, sniffing, DoS) → firewall, IDS/IPS. Software (exploits, buffer overflow, SQLi) → parches y sandbox. Ingeniería social → MFA. Malware → un solo antivirus y listas blancas. Físicos → control de acceso."], ["Ataques", "Regla económica de los ataques", "Recuperarse cuesta más que prevenir. En ransomware, más del 50 % paga y nunca recupera la clave."], ["Políticas", "Los 7 principios fundamentales de las políticas", "Autorización · mínimo privilegio · separación de funciones · reglas de auditoría · redundancia (positiva o negativa) · reducción del riesgo · <b>responsabilidad individual</b> (obligatoria). Van implícitos, sin nombrarlos."], ["Políticas", "Filosofía restrictiva contra permisiva", "<b>Restrictiva</b>: todo prohibido salvo lo permitido («Solo se permite…»). <b>Permisiva</b>: todo permitido salvo lo prohibido («Se prohíbe…»)."], ["Políticas", "Reglas de redacción de una política", "En presente · sin la palabra «no» · sujeto exacto (incluye servicio social, prácticas, invitados y auditores) · sin tecnicismos ni siglas sin definir · respetar leyes superiores."], ["Políticas", "Las 7 etapas de una política", "1 objetivos · 2 preparación · 3 redacción · 4 edición · 5 <b>aprobación</b> (comisión independiente, control de versiones) · 6 difusión · 7 aplicación y revisión."], ["Políticas", "Vigencia de las políticas y quién las redacta", "Vigencia permanente; se actualizan solo con cambios significativos. Las redacta un equipo: autoridad, jurídico, redacción, psicólogo laboral, administrador de sistemas y usuario típico."], ["Modelos de seguridad", "Los modelos de control de acceso", "<b>Matriz</b> (sujetos × objetos) · <b>HRU</b> (matriz + condiciones en el tiempo) · <b>Take-Grant</b> (take = el superior toma; grant = el superior delega) · <b>Bell-LaPadula</b> (confidencialidad: el inferior no accede arriba)."], ["Modelos de seguridad", "Biba contra Clark-Wilson", "<b>Biba</b> (1977, integridad): mismo nivel exacto para modificar. <b>Clark-Wilson</b>: transacciones bien formadas + separación de funciones (integridad + confidencialidad)."], ["Modelos de seguridad", "Entropía y modelo abstracto contra concreto", "<b>Entropía</b> = incertidumbre; a mayor entropía, menos deduce el atacante. <b>Abstracto</b>: reglas generales. <b>Concreto</b>: con nombres y apellidos."], ["Planes de contingencia", "Las 4 fases de un plan de contingencias", "Evaluación · planeación (basada en el análisis de riesgos) · ejecución · pruebas de viabilidad (simulacros)."], ["Planes de contingencia", "Los 3 subplanes temporales", "<b>Respaldo</b> (antes, preventivo) · <b>emergencia</b> (durante, correctivo planificado) · <b>recuperación</b> (después, restablecer)."], ["Planes de contingencia", "Procedimientos preventivos y correctivos", "Preventivos: evitan (revisar el extintor, cursos). Correctivos <b>planificados</b> (persona certificada usa el extintor) y <b>no planificados</b> (gritar, empujar, agua a fuego eléctrico)."], ["Planes de contingencia", "Los 5 pasos para planificar un DRP", "1 identificar riesgos · 2 evaluarlos · 3 estrategias (planeadas, sin generar problemas) · 4 procedimientos · 5 pruebas, mantenimiento y documentación."], ["Planes de contingencia", "Ventajas y desventajas del DRP", "+ elimina el caos, permite actuar la primera vez, crea cultura y resiliencia. − menos flexibilidad, consume tiempo, no prevé todo, exceso de confianza, desactualización y <b>delegar roles críticos a servicio social</b> («importantísimo»)."], ["Riesgos", "Terminología de riesgos", "Aceptación (el dueño decide tolerar) · manejo (controles; nunca más caro que el bien) · evaluación (contra el último análisis) · pérdidas esperadas (el peor escenario) · riesgo residual (lo que queda y se acepta)."], ["Riesgos", "Desigualdad económica de la seguridad", "<b>Costo del ataque > valor del bien > costo de la protección.</b> Celular de $10,000: no protegerlo con $50,000. Las personas son priceless."], ["Riesgos", "Los 8 pasos del análisis de riesgos", "1 bienes y su valor · 2 amenazas · 3 vulnerabilidades · 4 impacto y frecuencia · 5 controles actuales · 6 riesgos residuales · 7 recomendaciones sin marcas · 8 informe con evidencias."], ["Riesgos", "Las 5 técnicas rápidas", "What if · APR (línea base) · cinco porqués (exactamente 5, causa raíz) · FMEA (frecuencia, gravedad, detección) · checklist (Sí/No)."], ["Riesgos", "Matriz de riesgos NIST", "Riesgo = probabilidad × impacto (5 × 5 → 1–25). Rangos <b>mutuamente excluyentes</b>: 1–5 bajo (verde), 6–12 medio (amarillo), 15–25 alto (rojo). Sin traslapes y sin quitar los números."], ["Riesgos", "Cuantitativo contra cualitativo, y cuándo se hace", "Cuantitativo (dinero, %, ALE) + cualitativo (colores, figuras, palabras): <b>los dos juntos</b>. Se hace con cada cambio significativo, por departamento y de abajo hacia arriba."], ["Riesgos", "Infraestructuras y procesos críticos", "Infraestructura crítica: lo vital para operar (en casa: luz, agua, internet, gas). Proceso crítico: lo que no puede parar (McDonald’s: <b>cobranza</b>, refrigeración, pedidos…)."], ["Auditoría y ética", "Auditoría informática: definición y sus 4 objetivos", "Evaluación <b>preventiva</b> de procesos y controles contra los objetivos del negocio. Objetivos: control de procesos · objetivos de la organización · normatividad (checklists por cláusula) · gestión eficaz de recursos (ROI)."], ["Auditoría y ética", "ISO 9000 contra ISO 27000 y el caso 3.1 / 3.2", "ISO 9000 = calidad; ISO/IEC 27000 = SGSI. Un formato 3.1 cuando ya existe la 3.2 → <b>observación</b>, que puede escalar a no conformidad."], ["Auditoría y ética", "Pasos de la auditoría y el equipo auditor", "Planeación → entrevistas preliminares → diagnóstico y alcance → plan definitivo → ejecución, evidencia, reunión del equipo e informe. Equipo: auditor líder, auditores y observadores (no preguntan)."], ["Auditoría y ética", "Reglas al ser auditado", "Contestar solo lo que se pregunta · no contestar por un compañero · no prometer lo que no hay presupuesto para pagar · si no entiendes, dilo."], ["Auditoría y ética", "Código deontológico y decálogo", "<b>Código deontológico</b>: deberes éticos de una profesión («no es dental»); sirve para armonizar convenios (UNAM–Cisco). <b>Decálogo</b>: 10 reglas obligatorias. 10 mandamientos: Computer Ethics Institute."], ["Auditoría y ética", "Principios de ética informática (Clase 21)", "Confidencialidad · lealtad · bien común · capacitación continua · integridad · transmisión expedita y disponibilidad · privacidad · propiedad intelectual."]];
+  var units=[]; C.forEach(function(c){if(units.indexOf(c[0])<0)units.push(c[0])});
+  var sel=document.getElementById('fc-u'); units.forEach(function(u){var o=document.createElement('option');o.value=u;o.textContent=u;sel.appendChild(o)});
+  var known=get('sib-known',{}), failed=get('sib-failed',{}), deck=[], i=0, onlyFail=false;
+  var el=document.getElementById('fc');
+  function build(mix){
+    deck=C.map(function(c,k){return k}).filter(function(k){return (!sel.value||C[k][0]===sel.value)&&(!onlyFail||failed[k])});
+    if(mix)for(var j=deck.length-1;j>0;j--){var r=Math.floor(Math.random()*(j+1)),t=deck[j];deck[j]=deck[r];deck[r]=t}
+    i=0; render();
+  }
+  function stat(){var n=Object.keys(known).filter(function(k){return known[k]}).length;document.getElementById('fcst').textContent=n+'/'+C.length}
+  function render(){
+    stat(); el.classList.remove('show');
+    var mk=document.getElementById('fc-mark');
+    if(!deck.length){document.getElementById('fc-tag').textContent='';document.getElementById('fc-q').textContent=onlyFail?'No hay tarjetas falladas. 🎉':'No hay tarjetas.';document.getElementById('fc-a').innerHTML='';document.getElementById('fc-pos').textContent='';mk.textContent='';return}
+    if(i<0)i=0; if(i>=deck.length)i=deck.length-1;
+    var k=deck[i], c=C[k];
+    document.getElementById('fc-tag').textContent=c[0];
+    document.getElementById('fc-q').textContent=c[1];
+    document.getElementById('fc-a').innerHTML=c[2];
+    document.getElementById('fc-pos').textContent=(i+1)+' / '+deck.length;
+    mk.className='mark'+(failed[k]?' no':known[k]?' ok':''); mk.textContent=failed[k]?'↺ repasar':known[k]?'✓ la sé':'';
+    document.getElementById('fc-prev').disabled=i===0;
+    document.getElementById('fc-next').disabled=i===deck.length-1;
+    document.getElementById('fc-rev').textContent='Ver respuesta';
+  }
+  function go(d){
+    if(!deck.length)return; var n=i+d; if(n<0||n>=deck.length)return;
+    el.classList.add(d>0?'out-l':'out-r');
+    setTimeout(function(){i=n;render();el.classList.remove('out-l','out-r')},140);
+  }
+  function flip(){el.classList.toggle('show');document.getElementById('fc-rev').textContent=el.classList.contains('show')?'Ocultar respuesta':'Ver respuesta'}
+  function answer(ok){
+    if(!deck.length)return; var k=deck[i];
+    if(ok){known[k]=true;delete failed[k]}else{failed[k]=true;known[k]=false}
+    put('sib-known',known);put('sib-failed',failed);
+    if(i<deck.length-1)go(1); else render();
+  }
+  // toque y deslizamiento
+  var sx=0,sy=0,moved=false;
+  el.addEventListener('touchstart',function(e){var t=e.touches[0];sx=t.clientX;sy=t.clientY;moved=false},{passive:true});
+  el.addEventListener('touchmove',function(e){var t=e.touches[0];var dx=t.clientX-sx;if(Math.abs(dx)>10&&Math.abs(dx)>Math.abs(t.clientY-sy)){moved=true;el.style.transform='translateX('+dx*0.6+'px)'}},{passive:true});
+  el.addEventListener('touchend',function(e){var t=e.changedTouches[0];var dx=t.clientX-sx,dy=t.clientY-sy;el.style.transform='';
+    if(moved&&Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){go(dx<0?1:-1)} else if(!moved&&Math.abs(dx)<10&&Math.abs(dy)<10){flip()}
+    e.preventDefault()});
+  el.onclick=function(){flip()};
+  document.getElementById('fc-prev').onclick=function(){go(-1)};
+  document.getElementById('fc-next').onclick=function(){go(1)};
+  document.getElementById('fc-rev').onclick=function(){flip()};
+  document.getElementById('fc-si').onclick=function(){answer(true)};
+  document.getElementById('fc-no').onclick=function(){answer(false)};
+  document.getElementById('fc-mix').onclick=function(){build(true)};
+  document.getElementById('fc-fail').onclick=function(){onlyFail=!onlyFail;this.textContent=onlyFail?'Todas':'Solo las que fallé';build(false)};
+  document.getElementById('fc-reset').onclick=function(){known={};failed={};put('sib-known',known);put('sib-failed',failed);build(false)};
+  sel.onchange=function(){build(false)};
+  document.addEventListener('keydown',function(e){
+    if(!document.getElementById('p-tarjetas').classList.contains('on')||e.target.tagName==='SELECT'||e.target.tagName==='INPUT')return;
+    if(e.key===' '){e.preventDefault();flip()}
+    else if(e.key==='ArrowRight'){e.preventDefault();go(1)}
+    else if(e.key==='ArrowLeft'){e.preventDefault();go(-1)}
+    else if(e.key==='ArrowUp'){e.preventDefault();answer(true)}
+    else if(e.key==='ArrowDown'){e.preventDefault();answer(false)}
+  });
+  build(false);
+})();
+</script>
+</body>
+</html>
