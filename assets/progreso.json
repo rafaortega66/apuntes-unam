@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-24T05:38:47+00:00",
+ "generatedAt": "2026-11-25T00:59:12+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -1063,6 +1063,11 @@
  },
  "gitlog": [
   {
+   "hash": "ed66732",
+   "fecha": "2026-11-23T23:38:27-06:00",
+   "mensaje": "SIB: test del examen final (136 preguntas) y Estudiar hoy (57 tarjetas + plan) para el final del 24 nov"
+  },
+  {
    "hash": "5e7254f",
    "fecha": "2026-11-23T19:28:59-06:00",
    "mensaje": "SIB: apuntes de las clases 16-21 enlazados en sus páginas; el del 17 nov renombrado a Clase21"
@@ -1356,11 +1361,6 @@
    "hash": "ddf2660",
    "fecha": "2026-10-27T07:47:37-06:00",
    "mensaje": "Resúmenes en PDF por clase (estilo del resumen de FSE U1–U2): clases del 1 al 26 oct, con su fuente .md y scripts/build_resumenes.py"
-  },
-  {
-   "hash": "b7b3c97",
-   "fecha": "2026-10-26T12:32:16-06:00",
-   "mensaje": "Pasar al repo lo que seguía suelto en el escritorio: apuntes de clase (SIB 7–15 + PDF Clase 15, OAC 14, FSE 15), Lab OAC P4 (reporte y proyecto Quartus) y P5, material de Lab OAC, versión enviada de OAC-T02, presentación de MD 3.2, p03p01.py; Lab OAC P4 entregada"
   }
  ]
 }

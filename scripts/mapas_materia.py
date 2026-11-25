@@ -32,14 +32,15 @@ EXAMENES = {
                 fecha="martes 24 nov 2026, 9:00 (lo confirmó el usuario el 18 nov 2026)",
                 formato="Entra TODO el curso («para el siguiente examen lo que tengo que evaluar es todo», "
                         "audio SIB-Clase19); aún por definir si es individual o en equipo"),
-    "FSE": dict(n=2, desde=13, hasta=None, fecha="",
+    "FSE": dict(n=2, desde=13, hasta=None, fecha="miércoles 25 nov 2026 (Classroom: «Segundo examen parcial», vence 2:30 PM)",
                 formato="Entra la Unidad 3 (sistemas operativos embebidos). Ningún audio da fecha ni formato "
                         "(NotebookLM, 14 nov 2026); el 1.er parcial fue de 50 preguntas, 25 abiertas y 25 de opción múltiple",
                 dicho=["6 pasos de una llamada a servicio (Clase 13)",
                        "Programa vs. programa en ejecución vs. proceso (Clase 13)",
+                       "Orden de atención de las colas con prioridad: analogías «para que se acuerden en el examen» (Clase 17)",
                        "Ejercicios de Minimal Laxity First y la regla de oro de tiempo real; la demostración del 70 % de Rate Monotonic NO viene (Clase 18)",
                        "Los 5 algoritmos de asignación de memoria: First, Next, Best, Worst y Quick Fit (Clase 19)",
-                       "Temporizador asíncrono periódico sincronizado con semáforo binario (Clase 20)",
+                       "Temporizador asíncrono periódico sincronizado con semáforo binario: «pregunta para entrar a Google», no dijo examen (Clase 20)",
                        "Controladores dedicados vs. genéricos: «esto es pregunta de examen» (Clase 21)",
                        "Sistemas de archivos embebidos; initramfs «sí se lo tienen que saber» (Clase 21)"]),
     "ASI": dict(n=2, desde=1, hasta=None, titulo="examen final",

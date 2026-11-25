@@ -25,7 +25,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 
 ## ASI — Administración de Servicios de Internet
 
-- **ASI-Material**: 22 archivos (ASI/ASI-Material/)
+- **ASI-Material**: 16 archivos (ASI/ASI-Material/)
 
 
 ### ASI-EjerciciosClase
@@ -63,7 +63,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 
 ## FSE — Fundamentos de Sistemas Embebidos (+ Lab)
 
-- **FSE-Material**: 11 archivos (FSE/FSE-Material/)
+- **FSE-Material**: 21 archivos (FSE/FSE-Material/)
 
 
 ### FSE-Examenes
@@ -71,6 +71,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 | Entrega | Indicaciones | Entregado | Adicionales |
 |---|---|---|---|
 | FSE-E01 | [FSE-E01-indicaciones.md](FSE/FSE-Examenes/FSE-E01/FSE-E01-indicaciones.md) | [FSE-E01-examen-escaneado.pdf](FSE/FSE-Examenes/FSE-E01/FSE-E01-entregables/FSE-E01-examen-escaneado.pdf) | 1 |
+| FSE-E02 | [FSE-E02-indicaciones.md](FSE/FSE-Examenes/FSE-E02/FSE-E02-indicaciones.md) | _(sin entrega aún)_ | 1 |
 
 ### FSE-Lab
 
@@ -168,7 +169,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 | Entrega | Indicaciones | Entregado | Adicionales |
 |---|---|---|---|
 | RP-E01 | [RP-E01-indicaciones.md](RP/RP-Examenes/RP-E01/RP-E01-indicaciones.md) | [RP-E01-examen-escaneado.pdf](RP/RP-Examenes/RP-E01/RP-E01-entregables/RP-E01-examen-escaneado.pdf) | 1 |
-| RP-E02 | [RP-E02-indicaciones.md](RP/RP-Examenes/RP-E02/RP-E02-indicaciones.md) | _(sin entrega aún)_ | 5 |
+| RP-E02 | [RP-E02-indicaciones.md](RP/RP-Examenes/RP-E02/RP-E02-indicaciones.md) | _(sin entrega aún)_ | 2 |
 
 ### RP-Practicas
 
