@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-25T00:59:12+00:00",
+ "generatedAt": "2026-11-25T02:06:45+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -1063,6 +1063,11 @@
  },
  "gitlog": [
   {
+   "hash": "b3cf327",
+   "fecha": "2026-11-24T18:59:24-06:00",
+   "mensaje": "FSE: diapositivas U3 (Clase 09-18) de Classroom, FSE-E02 (25 nov) con lo que el profesor dijo que viene y mapa de clases 13-21 desde NotebookLM"
+  },
+  {
    "hash": "ed66732",
    "fecha": "2026-11-23T23:38:27-06:00",
    "mensaje": "SIB: test del examen final (136 preguntas) y Estudiar hoy (57 tarjetas + plan) para el final del 24 nov"
@@ -1356,11 +1361,6 @@
    "hash": "636a897",
    "fecha": "2026-10-27T08:02:46-06:00",
    "mensaje": "Resúmenes en PDF por clase: avance hasta el 22 sep (58 clases)"
-  },
-  {
-   "hash": "ddf2660",
-   "fecha": "2026-10-27T07:47:37-06:00",
-   "mensaje": "Resúmenes en PDF por clase (estilo del resumen de FSE U1–U2): clases del 1 al 26 oct, con su fuente .md y scripts/build_resumenes.py"
   }
  ]
 }

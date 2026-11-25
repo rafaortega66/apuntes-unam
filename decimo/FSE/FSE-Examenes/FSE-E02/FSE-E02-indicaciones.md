@@ -25,3 +25,10 @@ y NotebookLM, cuaderno FSE, audios FSE-Clase13 a FSE-Clase21 (consultado el 24 n
 | 20 | Temporizador asíncrono periódico con semáforo binario (bar() cada 10 ms que dura más que su periodo) | «Es pregunta para entrar a Google»: no dijo «examen», pero lo marcó como el problema clave del tema | Diseño/ejercicio |
 
 Mapa completo de las clases 13–21: `FSE-E02-adicionales/FSE-E02-mapeo-notebooklm.md`.
+
+## Lectura para estudiar (24 nov 2026)
+
+`FSE-E02-adicionales/FSE-E02-lectura-unidad3-lamina-por-lamina.pdf` (66 págs.): las 474 láminas de las presentaciones 09–18,
+cada una con lo que dice la lámina + lo que explicó el profesor (audios de las clases 13–21), con índice y glosario.
+Fuente en `lectura-fuente/` (un `.md` por presentación; se arma con `build_lectura.py`). Energía (presentación 17) y parte
+de la 16 y la 18 no tienen audio: van solo con el texto de las láminas.
