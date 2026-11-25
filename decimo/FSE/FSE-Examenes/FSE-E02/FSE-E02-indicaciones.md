@@ -32,3 +32,10 @@ Mapa completo de las clases 13–21: `FSE-E02-adicionales/FSE-E02-mapeo-notebook
 cada una con lo que dice la lámina + lo que explicó el profesor (audios de las clases 13–21), con índice y glosario.
 Fuente en `lectura-fuente/` (un `.md` por presentación; se arma con `build_lectura.py`). Energía (presentación 17) y parte
 de la 16 y la 18 no tienen audio: van solo con el texto de las láminas.
+
+## Guía de estudio por concepto (25 nov 2026), la buena para estudiar
+
+`FSE-E02-adicionales/FSE-E02-guia-de-estudio-unidad3.pdf` (52 págs.): toda la Unidad 3 por concepto, juntando la presentación
+y lo que explicó el profesor, sin remitir a ninguna lámina, con los ejemplos burdos que él mismo usó («😂 Para acordarte»,
+sacados de NotebookLM, audios FSE-Clase13 a 21, el 25 nov 2026), índice y glosario. Fuente en `guia-fuente/` (`build_guia.py`).
+La lectura lámina por lámina del 24 nov se conserva como referencia.
