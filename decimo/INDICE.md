@@ -22,10 +22,11 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 | ACS-T02 | [ACS-T02-indicaciones.pdf](ACS/ACS-Tareas/ACS-T02/ACS-T02-indicaciones.pdf) | [ACS-T02-420054085.pdf](ACS/ACS-Tareas/ACS-T02/ACS-T02-entregables/ACS-T02-420054085.pdf) | — |
 | ACS-T03 | [ACS-T03-indicaciones.pdf](ACS/ACS-Tareas/ACS-T03/ACS-T03-indicaciones.pdf) | [ACS-T03-420054085.pdf](ACS/ACS-Tareas/ACS-T03/ACS-T03-entregables/ACS-T03-420054085.pdf) | — |
 | ACS-T04 | [ACS-T04-indicaciones.md](ACS/ACS-Tareas/ACS-T04/ACS-T04-indicaciones.md) | [ACS-T04-420054085.pdf](ACS/ACS-Tareas/ACS-T04/ACS-T04-entregables/ACS-T04-420054085.pdf) | 1 |
+| ACS-T05 | [ACS-T05-indicaciones.md](ACS/ACS-Tareas/ACS-T05/ACS-T05-indicaciones.md) | [ACS-T05-420054085.pdf](ACS/ACS-Tareas/ACS-T05/ACS-T05-entregables/ACS-T05-420054085.pdf) | 1 |
 
 ## ASI — Administración de Servicios de Internet
 
-- **ASI-Material**: 16 archivos (ASI/ASI-Material/)
+- **ASI-Material**: 22 archivos (ASI/ASI-Material/)
 
 
 ### ASI-EjerciciosClase
@@ -60,6 +61,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 | ASI-Sprint1 | [ASI-Sprint1-indicaciones.md](ASI/ASI-Proyecto/ASI-Sprint1/ASI-Sprint1-indicaciones.md) | [Sprint1_Formatos_Scrum_Proyecto_Final_Equipo10.pdf](ASI/ASI-Proyecto/ASI-Sprint1/ASI-Sprint1-entregables/Sprint1_Formatos_Scrum_Proyecto_Final_Equipo10.pdf) | — |
 | ASI-Sprint2 | [ASI-Sprint2-indicaciones.md](ASI/ASI-Proyecto/ASI-Sprint2/ASI-Sprint2-indicaciones.md) | [ASI-Sprint2-semana1.pdf](ASI/ASI-Proyecto/ASI-Sprint2/ASI-Sprint2-entregables/ASI-Sprint2-semana1.pdf)<br>[ASI-Sprint2-semana2.pdf](ASI/ASI-Proyecto/ASI-Sprint2/ASI-Sprint2-entregables/ASI-Sprint2-semana2.pdf) | — |
 | ASI-Sprint3 | [ASI-Sprint3-indicaciones.md](ASI/ASI-Proyecto/ASI-Sprint3/ASI-Sprint3-indicaciones.md) | [Sprint 3 Equipo 10.pdf](ASI/ASI-Proyecto/ASI-Sprint3/ASI-Sprint3-entregables/Sprint%203%20Equipo%2010.pdf) | 1 |
+| ASI-Sprint4 | [ASI-Sprint4-indicaciones.md](ASI/ASI-Proyecto/ASI-Sprint4/ASI-Sprint4-indicaciones.md) | [ASI-docTec-E10.pdf](ASI/ASI-Proyecto/ASI-Sprint4/ASI-Sprint4-entregables/ASI-docTec-E10.pdf)<br>[ASI-manual-E10.pdf](ASI/ASI-Proyecto/ASI-Sprint4/ASI-Sprint4-entregables/ASI-manual-E10.pdf)<br>[ASI-sprint4-E10.pdf](ASI/ASI-Proyecto/ASI-Sprint4/ASI-Sprint4-entregables/ASI-sprint4-E10.pdf) | 1 |
 
 ## FSE — Fundamentos de Sistemas Embebidos (+ Lab)
 
@@ -84,7 +86,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 | FSE-P05 | [FSE-P05-indicaciones.pdf](FSE/FSE-Lab/FSE-P05/FSE-P05-indicaciones.pdf) | [19-OEPR-L05-adicionales.zip](FSE/FSE-Lab/FSE-P05/FSE-P05-entregables/19-OEPR-L05-adicionales.zip)<br>[19-OEPR-L05.pdf](FSE/FSE-Lab/FSE-P05/FSE-P05-entregables/19-OEPR-L05.pdf) | 1 |
 | FSE-P06 | [FSE-P06-indicaciones.pdf](FSE/FSE-Lab/FSE-P06/FSE-P06-indicaciones.pdf) | [19-OEPR-L06-adicionales.zip](FSE/FSE-Lab/FSE-P06/FSE-P06-entregables/19-OEPR-L06-adicionales.zip)<br>[19-OEPR-L06.pdf](FSE/FSE-Lab/FSE-P06/FSE-P06-entregables/19-OEPR-L06.pdf) | 10 |
 | FSE-P07 | [FSE-P07-indicaciones.pdf](FSE/FSE-Lab/FSE-P07/FSE-P07-indicaciones.pdf) | [19-OEPR-L07-adicionales.zip](FSE/FSE-Lab/FSE-P07/FSE-P07-entregables/19-OEPR-L07-adicionales.zip)<br>[19-OEPR-L07.pdf](FSE/FSE-Lab/FSE-P07/FSE-P07-entregables/19-OEPR-L07.pdf) | 22 |
-| FSE-P08 | [FSE-P08-indicaciones.pdf](FSE/FSE-Lab/FSE-P08/FSE-P08-indicaciones.pdf) | _(sin entrega aún)_ | 7 |
+| FSE-P08 | [FSE-P08-indicaciones.pdf](FSE/FSE-Lab/FSE-P08/FSE-P08-indicaciones.pdf) | _(sin entrega aún)_ | 45 |
 | FSE-ProyFinal | [FSE-ProyFinal-indicaciones.pdf](FSE/FSE-Lab/FSE-ProyFinal/FSE-ProyFinal-indicaciones.pdf) | _(sin entrega aún)_ | — |
 
 ### FSE-Tareas
@@ -112,6 +114,7 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 |---|---|---|---|
 | MD-E01 | [MD-E01-indicaciones.md](MD/MD-Examenes/MD-E01/MD-E01-indicaciones.md) | [MineriaExamen1OrtegadelaPazRafael.pdf](MD/MD-Examenes/MD-E01/MD-E01-entregables/MineriaExamen1OrtegadelaPazRafael.pdf) | — |
 | MD-E02 | [MD-E02-indicaciones.md](MD/MD-Examenes/MD-E02/MD-E02-indicaciones.md) | [Examen2OrtegadelaPazRafael.pdf](MD/MD-Examenes/MD-E02/MD-E02-entregables/Examen2OrtegadelaPazRafael.pdf) | — |
+| MD-E03 | [MD-E03-indicaciones.md](MD/MD-Examenes/MD-E03/MD-E03-indicaciones.md) | [mineria-examen3-OrtegadelaPaz.pdf](MD/MD-Examenes/MD-E03/MD-E03-entregables/mineria-examen3-OrtegadelaPaz.pdf) | — |
 
 ### MD-Practicas
 
@@ -216,6 +219,12 @@ archivos hay en `-adicionales`. Material independiente del profesor: carpetas `*
 | SIB-EC08 | [SIB-EC08-indicaciones.md](SIB/SIB-EjerciciosClase/SIB-EC08/SIB-EC08-indicaciones.md) | [SIB-EC08-politicas-equipo4.pdf](SIB/SIB-EjerciciosClase/SIB-EC08/SIB-EC08-entregables/SIB-EC08-politicas-equipo4.pdf) | — |
 | SIB-EC09 | [SIB-EC09-indicaciones.md](SIB/SIB-EjerciciosClase/SIB-EC09/SIB-EC09-indicaciones.md) | [SIB-EC09-modelos-de-seguridad-equipo4.pdf](SIB/SIB-EjerciciosClase/SIB-EC09/SIB-EC09-entregables/SIB-EC09-modelos-de-seguridad-equipo4.pdf) | 2 |
 | SIB-EC10 | [SIB-EC10-indicaciones.md](SIB/SIB-EjerciciosClase/SIB-EC10/SIB-EC10-indicaciones.md) | [SIB-analisis-de-riesgos-salon.pdf](SIB/SIB-EjerciciosClase/SIB-EC10/SIB-EC10-entregables/SIB-analisis-de-riesgos-salon.pdf) | — |
+
+### SIB-Examenes
+
+| Entrega | Indicaciones | Entregado | Adicionales |
+|---|---|---|---|
+| SIB-E02 | [SIB-E02-indicaciones.md](SIB/SIB-Examenes/SIB-E02/SIB-E02-indicaciones.md) | _(sin entrega aún)_ | 3 |
 
 ### SIB-Exposiciones
 

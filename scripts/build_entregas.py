@@ -74,6 +74,8 @@ TITULOS = {
     'SIB-EC09': 'Ejercicio de clase — Modelos de seguridad (Equipo 4; 29 oct, sin clase)',
     'SIB-EC10': 'Ejercicio de clase — Análisis de riesgos en el salón (Clase 20, 12 nov)',
     'ACS-E01': 'Examen parcial — cliente-servidor TCP (de casa)',
+    'ACS-T05': 'Tarea 5 — Sniffer de red en capa 2 con raw sockets', 'MD-E03': 'Examen 3',
+    'SIB-E02': 'Examen final', 'ASI-Sprint4': 'Documentación integral — «3ª entrega del Proyecto Final»',
 }
 # Estado verificado en Google Classroom el 15 oct 2026 (las materias sin Classroom se marcan aparte).
 ESTADO = {
@@ -91,6 +93,8 @@ ESTADO = {
     'ASI-Sprint0': 'Entregadas (20 y 21 sep)', 'ASI-Sprint1': 'Entregada (28 sep)', 'ASI-Sprint2': 'Entregadas (5 y 13 oct)',
     'ASI-Sprint3': 'Entregada (19 oct)',
     'ACS-E01': 'Entregada por correo (18 oct 2026, 18:34)',
+    'ACS-T05': 'Entregada por correo (26 nov 2026, 12:56)', 'MD-E03': 'Entregada (por confirmar en Classroom)',
+    'SIB-E02': 'Examen final del 24 nov 2026 · sin archivo entregado en el repo', 'ASI-Sprint4': 'Sin confirmar en Classroom',
     'FSE-E01': 'Presentado en papel (14 oct 2026) · 101 (36 + 65, incluye punto extra)',
     'FSE-E02': 'Pendiente: miércoles 25 nov 2026 (Classroom, vence 2:30 PM)',
     'SIB-EC02': 'Resuelto en mis apuntes · sin confirmar si se entregó',
