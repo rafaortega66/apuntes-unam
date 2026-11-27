@@ -21,4 +21,4 @@ Lo que contiene el documento (3 páginas):
   celular, salida con tutor, pase de salida) y *Para toda persona dentro de la institución* (9–15: respeto, alcohol/tabaco/vapeadores/sustancias,
   permanencia fuera de horario, rutas de evacuación, animales, armas y objetos punzocortantes, daños al inmueble).
 
-Estado: documento del equipo con fecha del 27 oct 2026; falta confirmar cuándo y por dónde se entregó.
+Estado: entregado; el equipo ya tiene su calificación (grupo de WhatsApp del equipo, revisado el 27 nov 2026).

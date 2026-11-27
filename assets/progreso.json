@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-27T06:21:08+00:00",
+ "generatedAt": "2026-11-27T09:09:24+00:00",
  "materias": {
   "reconocimiento-de-patrones": [
    {
@@ -1063,6 +1063,11 @@
  },
  "gitlog": [
   {
+   "hash": "a8ae502",
+   "fecha": "2026-11-27T00:21:14-06:00",
+   "mensaje": "Cierre de semestre: ACS-T05, MD-E03, ASI Sprint 4, SIB examen final y fuentes de cavilOS (FSE-P08)"
+  },
+  {
    "hash": "e57f7e7",
    "fecha": "2026-11-25T01:39:30-06:00",
    "mensaje": "FSE-E02: glosario de la guía sin referencias a láminas"
@@ -1356,11 +1361,6 @@
    "hash": "9b6ba5f",
    "fecha": "2026-10-27T08:48:31-06:00",
    "mensaje": "Resúmenes en PDF: sesiones previas de RP (0, −1, −2) y días de examen (RP 10, FSE 14, ASI 12, SIB 11, MD 5); el script acepta \\| en celdas y separa tablas pegadas"
-  },
-  {
-   "hash": "94ac758",
-   "fecha": "2026-10-27T08:45:23-06:00",
-   "mensaje": "Resúmenes en PDF por clase: del 31 al 25 ago (11 clases más)"
   }
  ]
 }
